@@ -29,6 +29,35 @@ async function load() {
   render();
 }
 
+// --- shareable URL state: filter / sort / hidden tiers live in the query string ---
+
+function readState() {
+  const p = new URLSearchParams(location.search);
+  state.filterText = p.get('filter') || '';
+  const hide = p.get('hide');
+  if (hide) state.hidden = new Set(hide.split(',').filter(s => STATUS[s]));
+  const col = p.get('sort');
+  if (col && SORT_KEYS[col]) {
+    state.sortBy = col;
+    const dir = p.get('dir');
+    // No explicit dir -> the column's natural default (date/constraint read
+    // largest-first, others ascending), matching a header click.
+    state.sortDesc = dir ? dir !== 'asc' : (col === 'date' || col === 'constraint');
+  }
+}
+
+function syncUrl() {
+  const p = new URLSearchParams();
+  if (state.filterText.trim()) p.set('filter', state.filterText.trim());
+  if (state.hidden.size) p.set('hide', [...state.hidden].join(','));
+  if (state.sortBy !== 'date' || state.sortDesc !== true) {  // non-default sort
+    p.set('sort', state.sortBy);
+    p.set('dir', state.sortDesc ? 'desc' : 'asc');
+  }
+  const qs = p.toString();
+  history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+}
+
 function matchesText(r, q) {
   if (!q) return true;
   return (r.puzzle_title || '').toLowerCase().includes(q)
@@ -63,6 +92,7 @@ function render() {
     th.classList.toggle('sorted', on);
     th.classList.toggle('desc', on && state.sortDesc);
   }
+  syncUrl();   // every state change flows through render, so mirror it to the URL here
 }
 
 function buildLegend() {
@@ -77,6 +107,7 @@ function buildLegend() {
     const item = document.createElement('span');
     item.className = `legend-item ${m.cls}`;
     item.title = `Toggle ${m.label}`;
+    if (state.hidden.has(status)) item.classList.add('off');   // restore from URL
     item.innerHTML =
       `<span class="dot">${m.icon}</span>${m.label}<span class="count">${counts[status]}</span>`;
     item.addEventListener('click', () => {
@@ -118,6 +149,8 @@ function wire() {
   }
 }
 
+readState();
+dom.filter.value = state.filterText;
 wire();
 load().catch(err => {
   dom.empty.hidden = false;

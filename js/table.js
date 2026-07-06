@@ -6,9 +6,15 @@
 // link is ready by the time it's clicked.
 
 import { statusMeta, hueFor } from './status.js';
+import { openScriptModal } from './script_modal.js';
 
 const YOUTUBE_ICON = 'https://www.youtube.com/favicon.ico';
 const ISS_BASE = 'https://sigh.github.io/Interactive-Sudoku-Solver/';
+
+// GitHub Pages / Fastly rejects request URLs past ~8 KB with 414 "URI Too Long".
+// The Solve URL is ISS_BASE + the .iss verbatim (its chars — . ~ - _ and URL-safe
+// base64 — aren't escaped by encodeURIComponent), so gate Solve on the .iss size.
+const SOLVE_URL_LIMIT = 8000;
 
 // --- formatting helpers ---
 
@@ -190,16 +196,48 @@ function linksCell(row) {
   return td;
 }
 
-// The two ISS actions (Solve / Script) with their sizes.
+// Script action: a button that opens the source in an in-page modal (with Copy /
+// Open-in-ISS). A modal, not a link, because a large script's ?code= URL blows
+// past the URL length limit — this way it stays viewable and copyable.
+function scriptButton(row) {
+  const btn = el('button', 'iss-link script', 'Script');
+  btn.type = 'button';
+  btn.title = 'View the sandbox script';
+  btn.addEventListener('click', () => openScriptModal({
+    title: row.puzzle_title || 'Sandbox script',
+    fileUrl: `${row.dir}/puzzle.js`,
+    buildIssHref: t => ISS_BASE + '?code=' + urlSafeB64(t),
+  }));
+  return btn;
+}
+
+// A non-clickable, muted stand-in for an action that can't work (with a reason).
+function disabledLink(label, title) {
+  const span = el('span', 'iss-link disabled', label);
+  span.title = title;
+  return span;
+}
+
+// Solve opens the constraint string as a ?q= URL — unless that URL would be too
+// long for the server (large .iss), in which case it's disabled with a pointer to
+// the Script, whose modal stays usable via Copy.
+function solveAction(row) {
+  if (row.iss_size > SOLVE_URL_LIMIT) {
+    return disabledLink('Solve',
+      `Constraint string too large for a URL (${fmtSize(row.iss_size)}) — use Script instead`);
+  }
+  return lazyIssLink('Solve', 'Open the puzzle in ISS', `${row.dir}/puzzle.iss`,
+    t => ISS_BASE + '?q=' + encodeURIComponent(t.trim()));
+}
+
+// The two ISS actions (Solve link / Script modal) with their sizes.
 function constraintCell(row) {
   const td = el('td', 'col-constraint');
   if (row.iss_size && row.dir) {
     const stack = el('div', 'iss-links');
     stack.append(
-      issRow(lazyIssLink('Solve', 'Open the puzzle in ISS', `${row.dir}/puzzle.iss`,
-        t => ISS_BASE + '?q=' + encodeURIComponent(t.trim())), row.iss_size),
-      issRow(lazyIssLink('Script', 'Open the sandbox script in ISS', `${row.dir}/puzzle.js`,
-        t => ISS_BASE + '?code=' + urlSafeB64(t), 'script'), row.script_size),
+      issRow(solveAction(row), row.iss_size),
+      issRow(scriptButton(row), row.script_size),
     );
     td.append(stack);
   }

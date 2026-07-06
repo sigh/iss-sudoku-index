@@ -163,14 +163,17 @@ td.col-num.na { color: var(--text-muted); }
 .favicon { width: 16px; height: 16px; border-radius: 3px; }
 .iss-link {
   font-size: var(--fs-small);
+  font-family: inherit;
   padding: 1px 9px;
   border: 1px solid var(--color-primary);
   border-radius: 10px;
   background: var(--color-primary);
   color: #fff;
   white-space: nowrap;
+  cursor: pointer;                 /* the Script action + modal Copy are <button>s */
   transition: background 0.1s, color 0.1s, border-color 0.1s;
 }
+.iss-link:disabled { opacity: 0.5; cursor: default; }
 /* Solve = primary: filled blue button. */
 .iss-link:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); text-decoration: none; }
 /* Script = secondary: blue outline — still obviously a button, not greyed out. */
@@ -183,6 +186,54 @@ td.col-num.na { color: var(--text-muted); }
   text-decoration: line-through;
   pointer-events: none;
 }
+/* Disabled action (e.g. Solve when the .iss is too big for a URL) — muted, keeps
+   its tooltip (so no pointer-events:none), not clickable. */
+.iss-link.disabled {
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  border-color: var(--border);
+  cursor: default;
+}
+
+/* --- Script modal --- */
+body.modal-open { overflow: hidden; }
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: center;
+  padding: 24px;
+  background: rgba(0, 0, 0, 0.5);
+}
+.modal-overlay[hidden] { display: none; }
+.modal {
+  background: var(--bg-surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  width: min(820px, 100%);
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.25);
+}
+.modal-head, .modal-foot {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 10px 16px;
+}
+.modal-head { border-bottom: 1px solid var(--border); }
+.modal-foot { border-top: 1px solid var(--border); }
+.modal-title {
+  font-size: var(--fs-base); font-weight: 600; color: var(--text);
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.modal-close {
+  border: none; background: none; cursor: pointer;
+  font-size: 15px; color: var(--text-muted); line-height: 1; padding: 4px;
+}
+.modal-close:hover { color: var(--text); }
+/* The code panel is the Prism "Tomorrow" theme (dark bg + syntax colours, as in
+   ISS); override only the layout so it sits flush inside the modal. */
+pre.modal-code { flex: 1; min-height: 0; margin: 0; }
+.modal-hint { font-size: var(--fs-small); }
+.modal-actions { display: flex; gap: 8px; flex-shrink: 0; }
 
 .empty { color: var(--text-muted); padding: var(--gap); }
 

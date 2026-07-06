@@ -2,7 +2,7 @@
 // (best → worst) shared by the table sort and the legend order.
 
 export const STATUS = {
-  validated:       { icon: '●', label: 'Validated',     cls: 'ok',   rank: 0 },
+  validated:       { icon: '●', label: 'Solved',        cls: 'ok',   rank: 0 },
   partial:         { icon: '◐', label: 'Partial',       cls: 'warn', rank: 1 },
   'too-slow':      { icon: '◑', label: 'Too slow',      cls: 'warn', rank: 2 },
   unsupported:     { icon: '✕', label: 'Unsupported',   cls: 'bad',  rank: 3 },
