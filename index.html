@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTC Sudoku → ISS Index</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2SQH4BL89R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-2SQH4BL89R');
+  </script>
+
+  <script type="module" src="js/app.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="titles">
+      <h1>Sudoku Videos → ISS</h1>
+      <p class="subtitle">
+        <a href="https://www.youtube.com/@CrackingTheCryptic" target="_blank"
+          rel="noopener noreferrer">Cracking&nbsp;The&nbsp;Cryptic</a>
+        puzzles mapped to AI&#8209;generated
+        <a href="https://sigh.github.io/Interactive-Sudoku-Solver/" target="_blank"
+          rel="noopener noreferrer">Interactive Sudoku Solver</a> constraints.
+      </p>
+    </div>
+    <nav class="attribution">
+      [<a href="https://github.com/sigh/iss-sudoku-index" target="_blank" rel="noopener noreferrer">source code</a>]
+      [<a href="https://sigh.github.io/" target="_blank" rel="noopener noreferrer">sigh.github.io</a>]
+    </nav>
+  </header>
+
+  <section id="controls">
+    <input type="search" id="filter" placeholder="Filter by puzzle, author, or constraint…" autocomplete="off">
+    <div class="status-controls">
+      <div id="legend" class="legend"><!-- status filter chips, populated by JS --></div>
+      <span id="count" class="count"></span>
+    </div>
+  </section>
+
+  <main>
+    <table id="index">
+      <thead>
+        <tr>
+          <th data-sort="status" class="col-status">Status</th>
+          <th data-sort="title" class="col-puzzle">Puzzle</th>
+          <th data-sort="date" class="col-date">Date</th>
+          <th data-sort="guesses" class="col-num">Guesses</th>
+          <th data-sort="runtime" class="col-num">Runtime</th>
+          <th class="col-links">Links</th>
+          <th data-sort="constraint" class="col-constraint">Constraint</th>
+        </tr>
+      </thead>
+      <tbody id="rows"><!-- rows populated by JS --></tbody>
+    </table>
+    <p id="empty" class="empty" hidden>No puzzles match.</p>
+  </main>
+</body>
+
+</html>
