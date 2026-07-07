@@ -36,10 +36,26 @@
           rel="noopener noreferrer">Interactive Sudoku Solver</a> constraints.
       </p>
     </div>
-    <nav class="attribution">
-      [<a href="https://github.com/sigh/iss-sudoku-index" target="_blank" rel="noopener noreferrer">source code</a>]
-      [<a href="https://sigh.github.io/" target="_blank" rel="noopener noreferrer">sigh.github.io</a>]
-    </nav>
+    <div class="header-side">
+      <nav class="attribution">
+        [<a href="https://github.com/sigh/iss-sudoku-index" target="_blank" rel="noopener noreferrer">source code</a>]
+        [<a href="https://sigh.github.io/" target="_blank" rel="noopener noreferrer">sigh.github.io</a>]
+      </nav>
+      <div class="density-control" role="group" aria-label="Row density">
+        <label>
+          <input type="radio" name="density" value="compact">
+          <span>Compact</span>
+        </label>
+        <label>
+          <input type="radio" name="density" value="medium" checked>
+          <span>Medium</span>
+        </label>
+        <label>
+          <input type="radio" name="density" value="spacious">
+          <span>Spacious</span>
+        </label>
+      </div>
+    </div>
   </header>
 
   <section id="controls">
@@ -52,14 +68,19 @@
 
   <main>
     <table id="index">
+      <colgroup>
+        <col class="col-video">
+        <col class="col-puzzle">
+        <col class="col-status">
+        <col class="col-guesses">
+        <col class="col-constraint">
+      </colgroup>
       <thead>
         <tr>
-          <th data-sort="status" class="col-status">Status</th>
+          <th data-sort="date" class="col-video">Video/Date</th>
           <th data-sort="title" class="col-puzzle">Puzzle</th>
-          <th data-sort="date" class="col-date">Date</th>
+          <th data-sort="status" class="col-status">Status</th>
           <th data-sort="guesses" class="col-num">Guesses</th>
-          <th data-sort="runtime" class="col-num">Runtime</th>
-          <th class="col-links">Links</th>
           <th data-sort="constraint" class="col-constraint">Constraint</th>
         </tr>
       </thead>

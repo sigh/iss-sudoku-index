@@ -17,6 +17,7 @@
   --status-ok: #00ad40;
   --status-warn: #f97316;
   --status-bad: #d0451b;
+  --status-oversized: #9f5b4f;
   --status-idle: #999999;
 
   --font-body: "Arial", sans-serif;
@@ -25,6 +26,8 @@
   --fs-small: 12px;
   --fs-title: 18px;
   --gap: 10px;
+  --page-x: calc(var(--gap) * 1.5);
+  --sticky-controls-height: 0px;
 }
 
 body {
@@ -33,13 +36,93 @@ body {
   color: var(--text);
   background: var(--bg);
   line-height: 1.4;
-  padding: var(--gap) calc(var(--gap) * 1.5) calc(var(--gap) * 3);
+  padding: var(--gap) var(--page-x) calc(var(--gap) * 3);
   max-width: 1100px;
   margin: 0 auto;
 }
 
 a { color: var(--color-primary-dark); text-decoration: none; }
 a:hover { text-decoration: underline; }
+
+/* Toggle switch — same visual language as ISS's own toggles. */
+.switch {
+  --switch-width: 34px;
+  --switch-height: 18px;
+  --switch-bg-off: var(--border-strong);
+  --switch-bg-on: var(--color-primary-dark);
+}
+.switch label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+  user-select: none;
+}
+.switch input { display: none; }
+.switch input + span {
+  position: relative;
+  display: inline-block;
+  flex: none;
+  width: var(--switch-width);
+  height: var(--switch-height);
+  background-color: var(--switch-bg-off);
+  border-radius: var(--switch-height);
+  transition: background-color 0.15s;
+}
+.switch input + span::before {
+  content: "";
+  position: absolute;
+  height: calc(var(--switch-height) - 4px);
+  width: calc(var(--switch-height) - 4px);
+  left: 2px;
+  bottom: 2px;
+  background-color: #fff;
+  border-radius: 50%;
+  transition: transform 0.15s;
+}
+.switch input:checked + span { background-color: var(--switch-bg-on); }
+.switch input:checked + span::before {
+  transform: translateX(calc(var(--switch-width) - var(--switch-height)));
+}
+.switch input:focus-visible + span { box-shadow: 0 0 0 2px var(--switch-bg-on); }
+.switch.inline-switch { display: inline-flex; }
+
+.density-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-small);
+  color: var(--text-muted);
+}
+.density-control label { cursor: pointer; }
+.density-control input { position: absolute; opacity: 0; pointer-events: none; }
+.density-control label span {
+  display: inline-flex;
+  align-items: center;
+  min-height: 22px;
+  padding: 2px 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-surface);
+  color: var(--text-muted);
+  user-select: none;
+}
+.density-control label:first-of-type span { border-radius: 11px 0 0 11px; }
+.density-control label:last-of-type span { border-radius: 0 11px 11px 0; }
+.density-control label + label span { margin-left: -5px; }
+.density-control input:checked + span {
+  position: relative;
+  z-index: 1;
+  background: var(--color-primary);
+  border-color: var(--color-primary);
+  color: #fff;
+}
+.density-control input:focus-visible + span {
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 0 0 2px var(--color-primary);
+}
 
 /* --- Header --- */
 header {
@@ -53,15 +136,22 @@ header {
 }
 h1 { font-size: var(--fs-title); font-weight: bold; }
 .subtitle { color: var(--text-muted); font-size: var(--fs-small); max-width: 60ch; margin-top: 2px; }
+.header-side { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
 .attribution { font-size: var(--fs-small); color: var(--text-muted); white-space: nowrap; }
 
 /* --- Controls --- */
 #controls {
+  position: sticky;
+  top: 0;
+  z-index: 20;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
   gap: var(--gap);
-  margin: var(--gap) 0;
+  margin: 0 calc(var(--page-x) * -1);
+  padding: var(--gap) var(--page-x);
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
 }
 #filter {
   flex: 1 1 240px;
@@ -94,10 +184,16 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
 .legend-item .count { color: var(--text-muted); font-variant-numeric: tabular-nums; }
 
 /* --- Table --- */
-table { width: 100%; border-collapse: collapse; }
+table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+col.col-video { width: 140px; }
+#index.density-spacious col.col-video { width: 260px; }
+col.col-status { width: 98px; }
+col.col-guesses { width: 112px; }
+col.col-constraint { width: 136px; }
 thead th {
   position: sticky;
-  top: 0;
+  top: var(--sticky-controls-height);
+  z-index: 10;
   background: var(--bg-header);
   text-align: left;
   font-weight: bold;
@@ -117,14 +213,57 @@ tbody tr:hover { background: var(--bg-hover); }
 .col-num { text-align: right; font-variant-numeric: tabular-nums; }
 td.col-num { color: var(--text); }
 td.col-num.na { color: var(--text-muted); }
-.qual-label { font-style: italic; }
-.qual-bound { font-size: 0.85em; line-height: 1.2; }
-.col-date { white-space: nowrap; color: var(--text-muted); }
+.stat-main { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.stat-sub { font-size: 0.85em; color: var(--text-muted); line-height: 1.2; }
+/* Solution-count qualifier — sits last (below the numbers), so the values read first. */
+.qual-label { font-style: italic; font-size: 0.85em; margin-top: 1px; }
+td.col-num .qual-label { white-space: nowrap; }
 
 /* Puzzle cell */
+.puzzle-title-row { display: flex; align-items: center; gap: 7px; }
+.puzzle-title-row a { display: inline-flex; align-items: center; flex: none; }
 .puzzle-title { font-weight: bold; }
 .puzzle-author { color: var(--text-muted); font-size: var(--fs-small); }
+.puzzle-author.inline { white-space: nowrap; }
 .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
+.density-medium .chips {
+  max-height: 58px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+.density-compact .puzzle-title-row {
+  width: 100%;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.density-compact .puzzle-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.density-compact .chips {
+  display: block;
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  width: 100%;
+  max-width: 100%;
+  height: 24px;
+  white-space: nowrap;
+}
+.density-compact .chips-clip {
+  display: block;
+  position: absolute;
+  inset: 0;
+  overflow: visible;
+  width: 100%;
+  min-width: 0;
+  text-overflow: clip;
+  white-space: nowrap;
+}
+.density-compact .chip { display: inline-block; margin-right: 4px; }
 .chip {
   padding: 0 6px;
   border-radius: 10px;
@@ -153,14 +292,70 @@ td.col-num.na { color: var(--text-muted); }
 .badge.bad { background: hsl(12 75% 95%); color: var(--status-bad); border-color: hsl(12 60% 84%); }
 .badge.idle { background: hsl(210 15% 95%); color: var(--status-idle); border-color: var(--border); }
 
-/* Links (favicons) cell + Constraint (stacked ISS actions) cell. */
-.favicons { display: flex; align-items: center; gap: 8px; }
+/* Video cell (favicons or thumbnail, + date) and Constraint (stacked ISS actions). */
+.col-video { text-align: center; }
+.favicons { display: flex; align-items: center; justify-content: center; gap: 8px; }
 .favicons a { display: inline-flex; align-items: center; }
+.favicon { width: 16px; height: 16px; border-radius: 3px; flex-shrink: 0; }
+.video-date { font-size: var(--fs-small); color: var(--text-muted); margin-top: 3px; text-align: center; }
+
+/* Thumbnails-on variant: a thumbnail (the video link itself, replacing the plain
+   YouTube favicon) with a subtle play affordance. */
+.density-medium { --thumb-w: 120px; --thumb-h: 68px; }
+.density-spacious { --thumb-w: 240px; --thumb-h: 135px; }
+.thumb-link {
+  position: relative;
+  display: block;
+  width: var(--thumb-w);
+  margin: 0 auto 4px;
+}
+.thumb-link::before,
+.thumb-link::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.12s, transform 0.12s;
+}
+.thumb-link::before {
+  width: 24px;
+  height: 18px;
+  border-radius: 5px;
+  background: rgba(0, 0, 0, 0.34);
+  transform: translate(-50%, -50%);
+}
+.thumb-link::after {
+  border-top: 4px solid transparent;
+  border-bottom: 4px solid transparent;
+  border-left: 7px solid rgba(255, 255, 255, 0.86);
+  transform: translate(-35%, -50%);
+}
+.thumb-link:hover::before,
+.thumb-link:hover::after,
+.thumb-link:focus-visible::before,
+.thumb-link:focus-visible::after { opacity: 0.82; }
+.thumb-link:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
+.thumb-link:hover::before { background: rgba(0, 0, 0, 0.46); }
+.thumb-link:focus-visible::before { background: rgba(0, 0, 0, 0.46); }
+.thumb-link:hover::before { transform: translate(-50%, -50%) scale(1.04); }
+.thumb-link:focus-visible::before { transform: translate(-50%, -50%) scale(1.04); }
+.thumb {
+  display: block;
+  width: var(--thumb-w);
+  height: var(--thumb-h);           /* 16:9, matching YouTube thumbnails */
+  object-fit: cover;
+  border-radius: 4px;
+  background: var(--bg-header);      /* placeholder colour while it loads */
+}
+
 .iss-links { display: flex; flex-direction: column; gap: 4px; align-items: flex-start; }
 .iss-row { display: flex; align-items: center; gap: 6px; }
 .iss-links .iss-link { justify-content: center; min-width: 3.6em; }
-.iss-row .size { color: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; }
-.favicon { width: 16px; height: 16px; border-radius: 3px; }
+.iss-row .size { color: var(--text-muted); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+/* The size is why Solve is disabled — colour it as the visible reason. */
+.iss-row .size.oversized { color: var(--status-oversized); font-weight: bold; }
 .iss-link {
   font-size: var(--fs-small);
   font-family: inherit;
@@ -239,7 +434,8 @@ pre.modal-code { flex: 1; min-height: 0; margin: 0; }
 
 /* Narrow screens: drop status label + chips to keep the row compact. */
 @media (max-width: 640px) {
+  :root { --page-x: var(--gap); }
   .badge .label { display: none; }
   .chips { display: none; }
-  body { padding: var(--gap); }
+  body { padding: var(--gap) var(--page-x); }
 }

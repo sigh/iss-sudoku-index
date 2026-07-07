@@ -3,22 +3,35 @@
 import { STATUS, statusMeta } from './status.js';
 import { buildRow, SORT_KEYS } from './table.js';
 
+const DENSITIES = new Set(['compact', 'medium', 'spacious']);
+
 const state = {
   rows: [],
   filterText: '',
   hidden: new Set(),      // status tiers toggled off in the legend
   sortBy: 'date',
   sortDesc: true,
+  density: 'medium',      // medium thumbnails by default
 };
 
 const dom = {
+  controls: document.getElementById('controls'),
+  table: document.getElementById('index'),
   rows: document.getElementById('rows'),
   empty: document.getElementById('empty'),
   filter: document.getElementById('filter'),
   legend: document.getElementById('legend'),
   count: document.getElementById('count'),
+  density: [...document.querySelectorAll('input[name="density"]')],
   headers: [...document.querySelectorAll('th[data-sort]')],
 };
+
+function syncStickyOffset() {
+  document.documentElement.style.setProperty(
+    '--sticky-controls-height',
+    `${Math.ceil(dom.controls.getBoundingClientRect().height)}px`,
+  );
+}
 
 async function load() {
   const res = await fetch('data/mappings.json');
@@ -44,6 +57,8 @@ function readState() {
     // largest-first, others ascending), matching a header click.
     state.sortDesc = dir ? dir !== 'asc' : (col === 'date' || col === 'constraint');
   }
+  const density = p.get('density');
+  if (DENSITIES.has(density)) state.density = density;
 }
 
 function syncUrl() {
@@ -54,6 +69,7 @@ function syncUrl() {
     p.set('sort', state.sortBy);
     p.set('dir', state.sortDesc ? 'desc' : 'asc');
   }
+  if (state.density !== 'medium') p.set('density', state.density);
   const qs = p.toString();
   history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
 }
@@ -82,7 +98,8 @@ function visibleRows() {
 
 function render() {
   const rows = visibleRows();
-  dom.rows.replaceChildren(...rows.map(buildRow));
+  dom.table.className = `density-${state.density}`;
+  dom.rows.replaceChildren(...rows.map(r => buildRow(r, { density: state.density })));
   dom.empty.hidden = rows.length > 0;
   dom.count.textContent = rows.length === state.rows.length
     ? `${state.rows.length} puzzles`
@@ -126,7 +143,22 @@ function setFilter(text) {
 }
 
 function wire() {
+  syncStickyOffset();
+  if ('ResizeObserver' in window) {
+    new ResizeObserver(syncStickyOffset).observe(dom.controls);
+  } else {
+    window.addEventListener('resize', syncStickyOffset);
+  }
+
   dom.filter.addEventListener('input', () => setFilter(dom.filter.value));
+
+  for (const input of dom.density) {
+    input.addEventListener('change', () => {
+      if (!input.checked) return;
+      state.density = input.value;
+      render();
+    });
+  }
 
   // Click a constraint chip to filter by that type.
   dom.rows.addEventListener('click', e => {
@@ -151,6 +183,7 @@ function wire() {
 
 readState();
 dom.filter.value = state.filterText;
+for (const input of dom.density) input.checked = input.value === state.density;
 wire();
 load().catch(err => {
   dom.empty.hidden = false;

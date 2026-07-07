@@ -31,6 +31,12 @@ function fmtGuesses(n) {
   return n == null ? '' : n.toLocaleString('en-US');
 }
 
+function fmtSolutions(n, lowerBound) {
+  if (n == null) return '';
+  const text = `${n.toLocaleString('en-US')} solution${n === 1 ? '' : 's'}`;
+  return lowerBound ? `≥ ${text}` : text;
+}
+
 function fmtSize(n) {
   if (n == null) return '';
   return n < 1024 ? `${n} B` : `${(n / 1024).toFixed(1)} kB`;
@@ -52,10 +58,11 @@ export const SORT_KEYS = {
   title: r => (r.puzzle_title || '').toLowerCase(),
   constraint: r => (r.iss_size == null ? -Infinity : r.iss_size),
   date: r => r.date || '',
-  // Capped (didn't finish) and non-unique (counters are for a 2nd solution) rows
-  // aren't a clean solve magnitude — sort them to the end with the number-less ones.
-  guesses: r => (r.hit_cap || r.unique_solution === false || r.guesses == null ? Infinity : r.guesses),
-  runtime: r => (r.hit_cap || r.unique_solution === false || r.solve_ms == null ? Infinity : r.solve_ms),
+  // Incomplete searches and non-unique rows aren't a clean solve magnitude -- sort
+  // them to the end with the number-less ones.
+  // Runtime isn't independently sortable — it tracks guesses closely enough that a
+  // second sort key isn't worth the header clutter; it rides along in the same cell.
+  guesses: r => (r.search_completed !== true || r.unique_solution === false || r.guesses == null ? Infinity : r.guesses),
 };
 
 // --- element builders ---
@@ -125,74 +132,115 @@ function statusCell(status) {
   return td;
 }
 
-function puzzleCell(row) {
+function puzzleCell(row, density) {
   const td = el('td', 'col-puzzle');
-  td.append(el('div', 'puzzle-title', row.puzzle_title || '(untitled)'));
-  if (row.author) td.append(el('div', 'puzzle-author', `by ${row.author}`));
+  const titleRow = el('div', 'puzzle-title-row');
+  if (row.source_url) {
+    const icon = faviconOf(row.source_url);
+    if (icon) titleRow.append(iconLink(row.source_url, icon, `Puzzle source (${row.provider || 'link'})`));
+  }
+  titleRow.append(el('div', 'puzzle-title', row.puzzle_title || '(untitled)'));
+  if (density === 'compact' && row.author) titleRow.append(el('span', 'puzzle-author inline', `by ${row.author}`));
+  td.append(titleRow);
+  if (density !== 'compact' && row.author) td.append(el('div', 'puzzle-author', `by ${row.author}`));
   if (row.constraint_types && row.constraint_types.length) {
     const chips = el('div', 'chips');
+    const chipTarget = density === 'compact' ? el('span', 'chips-clip') : chips;
     for (const name of row.constraint_types) {
       const chip = el('span', 'chip', name);
       chip.dataset.name = name;               // click-to-filter (delegated in app.js)
       chip.title = `Filter by ${name}`;
       chip.style.setProperty('--tag-hue', hueFor(name));
-      chips.append(chip);
+      chipTarget.append(chip);
     }
+    if (chipTarget !== chips) chips.append(chipTarget);
     td.append(chips);
   }
   return td;
 }
 
-function numCell(text) {
-  const td = el('td', 'col-num', text || '—');
-  if (!text) td.classList.add('na');
-  return td;
-}
+// Guesses + runtime merged into one cell (only guesses is sortable — the two track
+// each other closely enough that a second sort column isn't worth the clutter).
+// Always guesses-then-runtime, each on its own line; an incomplete/non-unique run
+// adds the observed solution count at the BOTTOM, so the numbers themselves still
+// read first.
+function statsCell(row) {
+  const capped = row.hit_cap === true;
+  const incomplete = row.search_completed !== true;
+  const nonUnique = row.unique_solution === false;
+  const bound = t => (incomplete && t ? `≥ ${t}` : t);
+  const guesses = bound(fmtGuesses(row.guesses));
+  const runtime = bound(fmtRuntime(row.solve_ms));
+  const solutions = incomplete
+    ? fmtSolutions(row.solutions_found, true)
+    : (nonUnique ? fmtSolutions(row.solutions_found, false) : '');
 
-// A muted two-line cell for counters that aren't a clean "solved uniquely"
-// magnitude: a status label over the (qualified) number. Used for capped runs
-// (didn't finish -> lower bound) and non-unique runs (counters are for finding a
-// 2nd solution, not a uniqueness proof).
-function qualifiedNumCell(label, text, title) {
   const td = el('td', 'col-num');
-  td.classList.add('na');
-  td.title = title;
-  td.append(el('div', 'qual-label', label));
-  if (text) td.append(el('div', 'qual-bound', text));
+  if (!guesses && !runtime) { td.classList.add('na'); td.textContent = '—'; return td; }
+  td.append(el('div', 'stat-main', guesses || '—'));
+  if (runtime) td.append(el('div', 'stat-sub', runtime));
+
+  if (incomplete) {
+    td.classList.add('na');
+    td.title = capped
+      ? 'Search hit the backtrack cap without completing -- values are lower bounds'
+      : 'Search did not complete -- values may be partial';
+    if (solutions) td.append(el('div', 'qual-label', solutions));
+  } else if (nonUnique) {
+    td.classList.add('na');
+    td.title = 'Multiple solutions exist';
+    if (solutions) td.append(el('div', 'qual-label', solutions));
+  }
   return td;
 }
 
-// Pick the right cell for a counter given how the solve ended.
-function counterCell(row, text) {
-  if (row.hit_cap) {
-    return qualifiedNumCell('capped', text ? `≥ ${text}` : '',
-      'Solve hit the backtrack cap without finishing — value is a lower bound');
-  }
-  if (row.unique_solution === false) {
-    return qualifiedNumCell('non-unique', text,
-      'Multiple solutions exist — counters are for finding a 2nd solution, not a uniqueness proof');
-  }
-  return numCell(text);
-}
-
-// One ISS link plus a muted size label beside it.
-function issRow(link, size) {
+// One ISS link plus a size label beside it — coloured as a warning when that size
+// is *why* the link is disabled (oversizedReason), so the number visibly explains
+// the greyed-out button next to it.
+function issRow(link, size, oversizedReason) {
   const row = el('span', 'iss-row');
   row.append(link);
-  if (size != null) row.append(el('span', 'size', fmtSize(size)));
+  if (size != null) {
+    const sizeEl = el('span', 'size', fmtSize(size));
+    if (oversizedReason) {
+      sizeEl.classList.add('oversized');
+      sizeEl.title = oversizedReason;
+    }
+    row.append(sizeEl);
+  }
   return row;
 }
 
-// Video + puzzle-source favicons.
-function linksCell(row) {
-  const td = el('td', 'col-links');
-  const icons = el('div', 'favicons');
-  icons.append(iconLink(row.video_url, YOUTUBE_ICON, 'YouTube video'));
-  if (row.source_url) {
-    const icon = faviconOf(row.source_url);
-    if (icon) icons.append(iconLink(row.source_url, icon, `Puzzle source (${row.provider || 'link'})`));
+// The thumbnail itself IS the video link; spacious mode uses maxresdefault for a
+// clearer puzzle preview, while medium keeps the lighter mqdefault image.
+function thumbnailLink(row, density) {
+  const a = el('a', 'thumb-link');
+  a.href = row.video_url;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.title = row.video_title || 'YouTube video';
+  const img = el('img', 'thumb');
+  const thumbQuality = density === 'spacious' ? 'maxresdefault' : 'mqdefault';
+  img.src = `https://img.youtube.com/vi/${row.video_id}/${thumbQuality}.jpg`;
+  img.alt = '';
+  img.loading = 'lazy';
+  a.append(img);
+  return a;
+}
+
+// Video cell: video link plus the date — sortable by date. Medium/spacious show
+// a thumbnail; compact keeps the old favicon-sized row.
+function videoCell(row, density) {
+  const td = el('td', `col-video density-${density}`);
+  if (density !== 'compact') {
+    td.append(thumbnailLink(row, density));
+    td.append(el('div', 'video-date', row.date || ''));
+  } else {
+    const icons = el('div', 'favicons');
+    icons.append(iconLink(row.video_url, YOUTUBE_ICON, 'YouTube video'));
+    td.append(icons);
   }
-  td.append(icons);
+  if (density === 'compact') td.append(el('div', 'video-date', row.date || ''));
   return td;
 }
 
@@ -234,9 +282,11 @@ function solveAction(row) {
 function constraintCell(row) {
   const td = el('td', 'col-constraint');
   if (row.iss_size && row.dir) {
+    const oversized = row.iss_size > SOLVE_URL_LIMIT;
     const stack = el('div', 'iss-links');
     stack.append(
-      issRow(solveAction(row), row.iss_size),
+      issRow(solveAction(row), row.iss_size,
+        oversized && 'Too large for a URL — this is why Solve is disabled'),
       issRow(scriptButton(row), row.script_size),
     );
     td.append(stack);
@@ -244,16 +294,14 @@ function constraintCell(row) {
   return td;
 }
 
-export function buildRow(row) {
+export function buildRow(row, { density = 'medium' } = {}) {
   const tr = document.createElement('tr');
+  tr.className = `density-${density}`;
   tr.append(
+    videoCell(row, density),
+    puzzleCell(row, density),
     statusCell(row.status),
-    puzzleCell(row),
-    el('td', 'col-date', row.date || ''),
-    // A capped solve didn't finish — show "capped ≥ <counter>", not a plain number.
-    counterCell(row, fmtGuesses(row.guesses)),
-    counterCell(row, fmtRuntime(row.solve_ms)),
-    linksCell(row),
+    statsCell(row),
     constraintCell(row),
   );
   return tr;
