@@ -1,7 +1,8 @@
-// One and Only by PrissyP
-// https://sudokupad.app/sxsm_PrissyP_dd0fc95c45b8fd8c4e505d249ef8efaf
-// https://www.youtube.com/watch?v=P32Jqq-FyFc
-//
+// Title: One and Only
+// Author: PrissyP
+// Video: https://www.youtube.com/watch?v=P32Jqq-FyFc
+// Source: https://sudokupad.app/kj2qd0ug0d
+
 // Normal Sudoku. A single unknown value X (deduced by the solver) ties every
 // constraint together:
 //   - Pink Renban lines: each is a set of consecutive digits; ALL Renban digits

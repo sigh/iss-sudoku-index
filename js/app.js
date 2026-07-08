@@ -7,6 +7,7 @@ const DENSITIES = new Set(['compact', 'medium', 'spacious']);
 
 const state = {
   rows: [],
+  authorCounts: new Map(),
   filterText: '',
   hidden: new Set(),      // status tiers toggled off in the legend
   sortBy: 'date',
@@ -38,8 +39,18 @@ async function load() {
   if (!res.ok) throw new Error(`failed to load index: ${res.status}`);
   const data = await res.json();
   state.rows = data.rows;
+  state.authorCounts = countAuthors(state.rows);
   buildLegend();
   render();
+}
+
+function countAuthors(rows) {
+  const counts = new Map();
+  for (const row of rows) {
+    if (!row.author) continue;
+    counts.set(row.author, (counts.get(row.author) || 0) + 1);
+  }
+  return counts;
 }
 
 // --- shareable URL state: filter / sort / hidden tiers live in the query string ---
@@ -99,7 +110,10 @@ function visibleRows() {
 function render() {
   const rows = visibleRows();
   dom.table.className = `density-${state.density}`;
-  dom.rows.replaceChildren(...rows.map(r => buildRow(r, { density: state.density })));
+  dom.rows.replaceChildren(...rows.map(r => buildRow(r, {
+    density: state.density,
+    authorCounts: state.authorCounts,
+  })));
   dom.empty.hidden = rows.length > 0;
   dom.count.textContent = rows.length === state.rows.length
     ? `${state.rows.length} puzzles`
@@ -162,6 +176,12 @@ function wire() {
 
   // Click a constraint chip to filter by that type.
   dom.rows.addEventListener('click', e => {
+    const author = e.target.closest('.author-filter');
+    if (author) {
+      setFilter(author.dataset.author);
+      return;
+    }
+
     const chip = e.target.closest('.chip');
     if (chip) setFilter(chip.dataset.name);
   });

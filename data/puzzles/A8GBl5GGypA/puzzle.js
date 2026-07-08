@@ -1,7 +1,8 @@
-// Nordschleife by Qodec
-// https://sudokupad.app/0pshsj5ykr
-// https://www.youtube.com/watch?v=A8GBl5GGypA
-//
+// Title: Nordschleife
+// Author: Qodec
+// Video: https://www.youtube.com/watch?v=A8GBl5GGypA
+// Source: https://sudokupad.app/0pshsj5ykr
+
 // Standard 9x9 sudoku. Draw a single 1-cell-wide loop of orthogonally connected
 // cells that does not branch or touch itself, not even diagonally. Circled cells
 // are off the loop; a circle's digit counts how many of its up-to-8 king

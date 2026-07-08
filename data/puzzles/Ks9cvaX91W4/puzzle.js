@@ -1,6 +1,8 @@
-// Loss for Words by Br1312te
-// https://www.youtube.com/watch?v=Ks9cvaX91W4
-//
+// Title: Loss for Words
+// Author: Br1312te
+// Video: https://www.youtube.com/watch?v=Ks9cvaX91W4
+// Source: https://sudokupad.app/y0vht5ywm4
+
 // Rules:
 // Normal sudoku rules apply.
 // German Whisper (green) lines: adjacent cells differ by at least 5.

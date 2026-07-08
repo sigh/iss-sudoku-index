@@ -1,7 +1,8 @@
-// Sulla Via Della Gloria by Playmaker6174
-// https://sudokupad.app/sxsm_Playmaker6174_fbf1f8c319ff831179e920620371dd86
-// https://www.youtube.com/watch?v=xlk19YzgMCM
-//
+// Title: Sulla Via Della Gloria
+// Author: Playmaker6174
+// Video: https://www.youtube.com/watch?v=xlk19YzgMCM
+// Source: https://sudokupad.app/et4mh85g07
+
 // Normal Sudoku. Blue diamond = even, red diamond = odd. Two yellow squares
 // hold the same digit; the two yellow circles likewise. Thin gray arrows sum
 // to their pink circle. The pink line between two pink circles sums to the two

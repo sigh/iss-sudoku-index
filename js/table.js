@@ -132,7 +132,22 @@ function statusCell(status) {
   return td;
 }
 
-function puzzleCell(row, density) {
+function authorLine(author, authorCounts, inline = false) {
+  const wrap = el('span', `puzzle-author${inline ? ' inline' : ''}`);
+  wrap.append('by ');
+  if ((authorCounts.get(author) || 0) > 1) {
+    const button = el('button', 'author-filter', author);
+    button.type = 'button';
+    button.dataset.author = author;
+    button.title = `Filter by ${author}`;
+    wrap.append(button);
+  } else {
+    wrap.append(author);
+  }
+  return wrap;
+}
+
+function puzzleCell(row, density, authorCounts) {
   const td = el('td', 'col-puzzle');
   const titleRow = el('div', 'puzzle-title-row');
   if (row.source_url) {
@@ -140,9 +155,9 @@ function puzzleCell(row, density) {
     if (icon) titleRow.append(iconLink(row.source_url, icon, `Puzzle source (${row.provider || 'link'})`));
   }
   titleRow.append(el('div', 'puzzle-title', row.puzzle_title || '(untitled)'));
-  if (density === 'compact' && row.author) titleRow.append(el('span', 'puzzle-author inline', `by ${row.author}`));
+  if (density === 'compact' && row.author) titleRow.append(authorLine(row.author, authorCounts, true));
   td.append(titleRow);
-  if (density !== 'compact' && row.author) td.append(el('div', 'puzzle-author', `by ${row.author}`));
+  if (density !== 'compact' && row.author) td.append(authorLine(row.author, authorCounts));
   if (row.constraint_types && row.constraint_types.length) {
     const chips = el('div', 'chips');
     const chipTarget = density === 'compact' ? el('span', 'chips-clip') : chips;
@@ -294,12 +309,12 @@ function constraintCell(row) {
   return td;
 }
 
-export function buildRow(row, { density = 'medium' } = {}) {
+export function buildRow(row, { density = 'medium', authorCounts = new Map() } = {}) {
   const tr = document.createElement('tr');
   tr.className = `density-${density}`;
   tr.append(
     videoCell(row, density),
-    puzzleCell(row, density),
+    puzzleCell(row, density, authorCounts),
     statusCell(row.status),
     statsCell(row),
     constraintCell(row),

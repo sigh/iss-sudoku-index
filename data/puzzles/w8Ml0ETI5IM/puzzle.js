@@ -1,7 +1,8 @@
-// Puzzle: Proximity by zetamath
-// https://sudokupad.app/encxi3ci5i
-// CTC video: https://www.youtube.com/watch?v=w8Ml0ETI5IM
-//
+// Title: Proximity
+// Author: zetamath
+// Video: https://www.youtube.com/watch?v=w8Ml0ETI5IM
+// Source: https://sudokupad.app/encxi3ci5i
+
 // Normal sudoku. Arrows: digits along an arrow sum to the digit in its circle
 // (repeats allowed). Quadruples: the shown digits must each appear at least once
 // among the four cells around the circle.

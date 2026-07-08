@@ -1,3 +1,8 @@
+// Title: SUGOKU
+// Author: Hancker
+// Video: https://www.youtube.com/watch?v=QSvdF_EMck4
+// Source: https://sudokupad.app/uoyv9ny78e
+
 const plus = [
   'R1C2', 'R1C5', 'R1C7',
   'R2C7',

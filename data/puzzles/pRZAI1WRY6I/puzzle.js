@@ -1,7 +1,8 @@
-// Surrounded by oddness by Jonesy
-// https://sudokupad.app/sxsm_Jonesy_2f6c172993418e41c32c837e410402ed
-// https://www.youtube.com/watch?v=pRZAI1WRY6I
-//
+// Title: Surrounded by oddness
+// Author: Jonesy
+// Video: https://www.youtube.com/watch?v=pRZAI1WRY6I
+// Source: https://sudokupad.app/3fb9325t0p
+
 // Rules:
 // Normal Sudoku rules apply.
 // Orthogonally adjacent cells may not both contain even digits.

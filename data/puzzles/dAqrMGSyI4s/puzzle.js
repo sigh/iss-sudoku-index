@@ -1,7 +1,8 @@
-// Lupin's Loop 4 - Surrounded by Rab3aron
-// https://sudokupad.app/0do1zxouyi
-// https://www.youtube.com/watch?v=dAqrMGSyI4s
-//
+// Title: Lupin's Loop 4 - Surrounded
+// Author: Rab3aron
+// Video: https://www.youtube.com/watch?v=dAqrMGSyI4s
+// Source: https://sudokupad.app/0do1zxouyi
+
 // Normal sudoku. A greater-than symbol points at the smaller number. Draw two
 // orthogonal metro-line loops that never branch, cross, or overlap themselves or
 // each other; they close into two loops, one lying entirely inside the other.

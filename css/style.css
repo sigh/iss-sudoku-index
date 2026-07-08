@@ -229,6 +229,19 @@ td.col-num .qual-label { white-space: nowrap; }
 .puzzle-title { font-weight: bold; }
 .puzzle-author { color: var(--text-muted); font-size: var(--fs-small); }
 .puzzle-author.inline { white-space: nowrap; }
+.author-filter {
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--color-primary-dark);
+  background: none;
+  cursor: pointer;
+}
+.author-filter:hover { text-decoration: underline; }
+.author-filter:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
 .chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 3px; }
 .density-medium .chips {
   max-height: 58px;

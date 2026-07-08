@@ -1,7 +1,8 @@
-// Rising Regions by Derek LeClair
-// https://sudokupad.app/pyvvk21c84
-// https://www.youtube.com/watch?v=GSyQiFEF_3w
-//
+// Title: Rising Regions
+// Author: Derek LeClair
+// Video: https://www.youtube.com/watch?v=GSyQiFEF_3w
+// Source: https://sudokupad.app/pyvvk21c84
+
 // Normal 9x9 sudoku. The blue line is split by 3x3 box borders into segments.
 // Segment sums strictly increase along the line, and adjacent segments share no
 // digits. Black Kropki dots mark 2:1 pairs.

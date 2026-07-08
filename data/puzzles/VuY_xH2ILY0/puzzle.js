@@ -1,6 +1,7 @@
-// Quadrants by Daniel Hanson
-// https://sudokupad.app/1b7rrbig2u
-// https://www.youtube.com/watch?v=VuY_xH2ILY0
+// Title: Quadrants
+// Author: Daniel Hanson
+// Video: https://www.youtube.com/watch?v=VuY_xH2ILY0
+// Source: https://sudokupad.app/1b7rrbig2u
 
 const SIZE = 9;
 const graph = cellGraph("9x9");

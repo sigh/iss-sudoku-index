@@ -1,7 +1,8 @@
-// Reborn hooligan ghost by Lithium-Ion
-// https://sudokupad.app/1b5i3a2d2d
-// https://www.youtube.com/watch?v=q43M_ngwQtw
-//
+// Title: Reborn hooligan ghost
+// Author: Lithium-Ion
+// Video: https://www.youtube.com/watch?v=q43M_ngwQtw
+// Source: https://sudokupad.app/1b5i3a2d2d
+
 // Normal sudoku. A circled digit equals the sum of all orthogonally adjacent cells.
 
 const circles = [

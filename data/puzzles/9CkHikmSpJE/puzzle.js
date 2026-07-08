@@ -1,7 +1,8 @@
-// RAT RUN 22: Copyrat by Marty Sears
-// https://sudokupad.app/m9qm0m5qj0
-// https://www.youtube.com/watch?v=9CkHikmSpJE
-//
+// Title: RAT RUN 22: Copyrat
+// Author: Marty Sears
+// Video: https://www.youtube.com/watch?v=9CkHikmSpJE
+// Source: https://sudokupad.app/m9qm0m5qj0
+
 // Normal sudoku. Two rats (Finkz, Phinx) each trace a self-avoiding maze path
 // from a rat to a cupcake; the paths never cross, share cells, or pass through
 // thick maze walls. COPYCAT CELLS: nine cells (one per row, column and box, all

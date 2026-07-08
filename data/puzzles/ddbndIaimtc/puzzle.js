@@ -1,7 +1,8 @@
-// Clone Count by Marty Sears
-// https://www.youtube.com/watch?v=ddbndIaimtc
-// SudokuMaker v2026.02.22 (embedded, no external share link)
-//
+// Title: Clone Count
+// Author: Marty Sears
+// Video: https://www.youtube.com/watch?v=ddbndIaimtc
+// Source: https://sudokupad.app/ib9r4zuejw
+
 // STATUS: too-slow. The full ruleset AND the symbol givens are now encoded, and
 // verify_solution ACCEPTS the known answer -- so this is a complete, correct
 // encoding (bar the single occluded given R3C2). It is however too slow to solve:

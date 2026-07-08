@@ -1,7 +1,8 @@
-// Just Sum Long Lines by HalfBakedLunatic (aka David Workman)
-// https://sudokupad.app/sxsm_HalfBakedLunaticakaD_13dbc99249d615b64379716c3c3d5f6d
-// https://www.youtube.com/watch?v=rSMMWRaKq8M
-//
+// Title: Just Sum Long Lines
+// Author: HalfBakedLunatic (aka David Workman)
+// Video: https://www.youtube.com/watch?v=rSMMWRaKq8M
+// Source: https://sudokupad.app/gcyif48z31
+
 // Rules:
 // Normal Sudoku rules apply.
 // Box borders divide the blue Region Sum Lines into segments with the

@@ -1,7 +1,8 @@
-// Puzzle: Counting Killer Cells by Sir Algee
-// https://sudokupad.app/zxy9eyqoob
-// CTC: https://www.youtube.com/watch?v=moRsJVncQps
-//
+// Title: Counting Killer Cells
+// Author: Sir Algee
+// Video: https://www.youtube.com/watch?v=moRsJVncQps
+// Source: https://sudokupad.app/zxy9eyqoob
+
 // 9x9 anti-knight. Killer cages (some with sums, some without). Letter cages are
 // singletons that share a digit. Global counting: across the 45 caged cells each
 // digit d appears exactly d times.

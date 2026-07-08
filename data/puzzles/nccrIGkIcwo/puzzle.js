@@ -1,7 +1,8 @@
-// Come Clarity by DarthSillious72
-// https://sudokupad.app/avw3cs3lro
-// https://www.youtube.com/watch?v=nccrIGkIcwo
-//
+// Title: Come Clarity
+// Author: DarthSillious72
+// Video: https://www.youtube.com/watch?v=nccrIGkIcwo
+// Source: https://sudokupad.app/avw3cs3lro
+
 // Normal Sudoku. Killer cages: digits distinct, sum to the top-left total (Cage).
 // Gray lines read the same from both ends (Palindrome). Blue lines are split into
 // segments by box borders; every segment of a line shares the same sum

@@ -1,7 +1,8 @@
-// Slow Arrows -- by billybeth
-// https://sudokupad.app/5542oxal82
-// https://www.youtube.com/watch?v=sTWSFmpOhTs
-//
+// Title: Slow Arrows
+// Author: billybeth
+// Video: https://www.youtube.com/watch?v=sTWSFmpOhTs
+// Source: https://sudokupad.app/5542oxal82
+
 // Normal Sudoku rules apply.
 // Each line is a "slow thermometer arrow": in one direction the digits are
 // non-decreasing (increase or stay the same) from end to end, and in the other

@@ -1,6 +1,8 @@
-// Magnificent Mansion by Calvinball and oskode
-// https://www.youtube.com/watch?v=1rt7kZsk8dg
-//
+// Title: Magnificent Mansion
+// Author: Calvinball and oskode
+// Video: https://www.youtube.com/watch?v=1rt7kZsk8dg
+// Source: https://sudokupad.app/2th0gtj8e1
+
 // The SudokuPad decode is an 11x11 frame around a normal 9x9 sudoku. The
 // outside frame cells are fillable clue digits, so they are modeled as Var
 // cells. Each outside digit uses ValueIndexing to say: the first grid digit

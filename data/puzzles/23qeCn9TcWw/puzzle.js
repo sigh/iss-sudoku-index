@@ -1,3 +1,8 @@
+// Title: Arithmetid Quiy
+// Author: mnasti2
+// Video: https://www.youtube.com/watch?v=23qeCn9TcWw
+// Source: https://sudokupad.app/gbpdlymn6r
+
 const offByOne = (lhs, rhs) => Math.abs(lhs - rhs) === 1;
 const pill = (a, b) => 10 * a + b;
 

@@ -1,7 +1,8 @@
-// Sums and Differences by alarark50
-// https://sudokupad.app/qj4kzxhp02
-// https://www.youtube.com/watch?v=a-jajrZJXr0
-//
+// Title: Sums and differences
+// Author: alarark50
+// Video: https://www.youtube.com/watch?v=a-jajrZJXr0
+// Source: https://sudokupad.app/qj4kzxhp02
+
 // Normal 9x9 sudoku + thermometers, Kropki black dots, little-killer diagonals,
 // and "sums and differences" navy lines. Counting cells from the circled end,
 // every n-th cell is the SUM of its two line-neighbours and every m-th cell is

@@ -1,7 +1,8 @@
-// Yes And by James Sinclair
-// https://sudokupad.app/james-sinclair/yes-and
-// https://www.youtube.com/watch?v=kt8J6ppyXDk
-//
+// Title: Yes And
+// Author: James Sinclair
+// Video: https://www.youtube.com/watch?v=kt8J6ppyXDk
+// Source: https://sudokupad.app/james-sinclair/yes-and
+
 // Normal sudoku. Standard arrows, renban lines, entropic lines, and odd cells.
 
 const renbans = [

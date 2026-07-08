@@ -1,3 +1,8 @@
+// Title: Poison Arrows
+// Author: billybeth
+// Video: https://www.youtube.com/watch?v=iAkuAoIgR4o
+// Source: https://sudokupad.app/ski1zlop0c
+
 const arrows = [
   ["R8C1", ["R8C2", "R8C3"], "R8C3"],
   ["R1C2", ["R1C1", "R2C1", "R3C1", "R2C2", "R3C2", "R3C3", "R2C3"], "R2C3"],

@@ -1,7 +1,8 @@
-// It's getting hot in here! by Kiwi Curt
-// https://sudokupad.app/9ajocm7gjs
-// https://www.youtube.com/watch?v=iDZ_suiHKps
-//
+// Title: It's getting hot in here!
+// Author: Kiwi Curt
+// Video: https://www.youtube.com/watch?v=iDZ_suiHKps
+// Source: https://sudokupad.app/9ajocm7gjs
+
 // Normal sudoku. Digits on thermometers strictly increase from bulb to tip
 // (all thermos are straight lines). White dot: the two joined digits are
 // consecutive. Black dot: one joined digit is double the other (1:2 ratio).

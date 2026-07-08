@@ -1,3 +1,8 @@
+// Title: Splatter Code
+// Author: Vythic
+// Video: https://www.youtube.com/watch?v=KN5Eobhkhe4
+// Source: https://sudokupad.app/0ugsgegaxv
+
 const graph = cellGraph('9x9');
 
 const summitLine = [

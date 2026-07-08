@@ -1,7 +1,8 @@
-// Count Some Dominoes by mellowrobinson
-// https://sudokupad.app/27qnv0oduh
-// https://www.youtube.com/watch?v=jgATrHS3pBg
-//
+// Title: Count Some Dominoes
+// Author: mellowrobinson
+// Video: https://www.youtube.com/watch?v=jgATrHS3pBg
+// Source: https://sudokupad.app/27qnv0oduh
+
 // Partial encoding: chaos construction, the given, and X/V clues. The
 // region-local domino-count clues are omitted; see notes.md.
 

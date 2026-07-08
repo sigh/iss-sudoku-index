@@ -1,7 +1,8 @@
-// Even Distribution by charmquark
-// https://sudokupad.app/wecos72fmn
-// https://www.youtube.com/watch?v=9emqPISSBEY
-//
+// Title: Even Distribution
+// Author: charmquark
+// Video: https://www.youtube.com/watch?v=9emqPISSBEY
+// Source: https://sudokupad.app/wecos72fmn
+
 // Normal sudoku. White dots are consecutive; black dots are 1:2 ratio.
 // Killer cages sum to the given total with no repeated digits. Grey squares are even.
 

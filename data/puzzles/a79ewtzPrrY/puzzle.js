@@ -1,7 +1,8 @@
-// Stishovite by bellsita and Wisteria Fall (supervised by XeonRisq)
-// https://sudokupad.app/sxsm_bellsitaandWisteriaF_c0b9808b6466534244a61e9e2fc83dd2
-// https://www.youtube.com/watch?v=a79ewtzPrrY
-//
+// Title: Stishovite
+// Author: bellsita and Wisteria Fall (supervised by XeonRisq)
+// Video: https://www.youtube.com/watch?v=a79ewtzPrrY
+// Source: https://sudokupad.app/1tzwquyhbb
+
 // Normal sudoku. No digit may repeat across all clues of a particular type.
 // Green = German whisper (adjacent diff >= 5). Purple = Renban (consecutive set).
 // Teal = every 3 adjacent cells are a complete mod-3 residue set. Red = digits

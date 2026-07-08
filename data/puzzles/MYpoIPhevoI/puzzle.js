@@ -1,6 +1,7 @@
-// Dutch Flat Mates: Multiple Lines by Marty Sears
-// https://www.youtube.com/watch?v=MYpoIPhevoI
-// Source: SudokuMaker v2026.02.22-5b9808d
+// Title: Dutch Flat Mates: Multiple Lines
+// Author: Marty Sears
+// Video: https://www.youtube.com/watch?v=MYpoIPhevoI
+// Source: https://sudokupad.app/191t7peym8
 
 // Rules:
 // Normal sudoku rules apply.

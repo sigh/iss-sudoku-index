@@ -1,7 +1,8 @@
-// World Cup 2026: Kick Off! by Sudoku Joker
-// https://sudokupad.app/8iktohgrmy
-// https://www.youtube.com/watch?v=KEEZblvYBm0
-//
+// Title: World Cup 2026: Kick Off!
+// Author: Sudoku Joker
+// Video: https://www.youtube.com/watch?v=KEEZblvYBm0
+// Source: https://sudokupad.app/8iktohgrmy
+
 // Normal sudoku. Given digits are coded as letters; the cipher (letter ->
 // alphabet position) is fixed by the clue "world cup" = 23,15,18,12,4,3,21,16.
 // The grid's letters all have positions 1-9: F=6, I=9, A=1, E=5.

@@ -1,8 +1,8 @@
-// Puzzle: Coldulo
-// https://sudokupad.app/8spurrnmcc
+// Title: Coldulo
 // Author: Kaktuslav
-// https://www.youtube.com/watch?v=_RKTa9QVEwA
-//
+// Video: https://www.youtube.com/watch?v=_RKTa9QVEwA
+// Source: https://sudokupad.app/8spurrnmcc
+
 // Normal sudoku. The nine marked cells (fixed positions) contain 1-9 once each.
 // If a marked cell holds N, then in ITS column every vertical run of N
 // consecutive cells has remainders 0..N-1 mod N (a complete residue system) --

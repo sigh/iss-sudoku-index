@@ -1,7 +1,8 @@
-// Good and Plenty by Blobz
-// https://sudokupad.app/blobz/good-and-plenty
-// https://www.youtube.com/watch?v=t7cZjAyU50s
-//
+// Title: Good and Plenty
+// Author: Blobz
+// Video: https://www.youtube.com/watch?v=t7cZjAyU50s
+// Source: https://sudokupad.app/blobz/good-and-plenty
+
 // Normal sudoku. Anti-knight. Digits in circles appear in cells touching the
 // circle. Digits joined by pink lines are consecutive.
 

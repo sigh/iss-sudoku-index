@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-08T13:10:34.953915+00:00",
-  "count": 35,
+  "generated_at": "2026-07-08T14:04:37.657311+00:00",
+  "count": 40,
   "rows": [
     {
       "video_id": "zKRn5WbmedA",
@@ -23,7 +23,7 @@
       "cap": null,
       "dir": "data/puzzles/zKRn5WbmedA",
       "iss_size": null,
-      "script_size": 290
+      "script_size": 444
     },
     {
       "video_id": "iAkuAoIgR4o",
@@ -50,7 +50,7 @@
       "cap": 10000,
       "dir": "data/puzzles/iAkuAoIgR4o",
       "iss_size": 28952,
-      "script_size": 1294
+      "script_size": 1438
     },
     {
       "video_id": "23qeCn9TcWw",
@@ -83,7 +83,7 @@
       "cap": 10000,
       "dir": "data/puzzles/23qeCn9TcWw",
       "iss_size": 5519,
-      "script_size": 5629
+      "script_size": 5773
     },
     {
       "video_id": "STXQn26IVHs",
@@ -106,7 +106,7 @@
       "cap": null,
       "dir": "data/puzzles/STXQn26IVHs",
       "iss_size": null,
-      "script_size": 279
+      "script_size": 414
     },
     {
       "video_id": "MYpoIPhevoI",
@@ -132,7 +132,7 @@
       "cap": 10000,
       "dir": "data/puzzles/MYpoIPhevoI",
       "iss_size": 554,
-      "script_size": 947
+      "script_size": 970
     },
     {
       "video_id": "moRsJVncQps",
@@ -161,7 +161,7 @@
       "cap": 10000,
       "dir": "data/puzzles/moRsJVncQps",
       "iss_size": 2618,
-      "script_size": 2109
+      "script_size": 2124
     },
     {
       "video_id": "_RKTa9QVEwA",
@@ -188,7 +188,7 @@
       "cap": 10000,
       "dir": "data/puzzles/_RKTa9QVEwA",
       "iss_size": 5422,
-      "script_size": 1822
+      "script_size": 1834
     },
     {
       "video_id": "xlk19YzgMCM",
@@ -218,7 +218,7 @@
       "cap": 10000,
       "dir": "data/puzzles/xlk19YzgMCM",
       "iss_size": 354,
-      "script_size": 1632
+      "script_size": 1619
     },
     {
       "video_id": "a-jajrZJXr0",
@@ -247,7 +247,7 @@
       "cap": 10000,
       "dir": "data/puzzles/a-jajrZJXr0",
       "iss_size": 2508,
-      "script_size": 2957
+      "script_size": 2985
     },
     {
       "video_id": "dAqrMGSyI4s",
@@ -280,7 +280,7 @@
       "cap": 213447,
       "dir": "data/puzzles/dAqrMGSyI4s",
       "iss_size": 11893,
-      "script_size": 7146
+      "script_size": 7174
     },
     {
       "video_id": "CNGyml7iu_I",
@@ -306,7 +306,7 @@
       "cap": 10000,
       "dir": "data/puzzles/CNGyml7iu_I",
       "iss_size": 313,
-      "script_size": 1089
+      "script_size": 1117
     },
     {
       "video_id": "P32Jqq-FyFc",
@@ -342,7 +342,7 @@
       "cap": 10000,
       "dir": "data/puzzles/P32Jqq-FyFc",
       "iss_size": 6068,
-      "script_size": 4273
+      "script_size": 4266
     },
     {
       "video_id": "KEEZblvYBm0",
@@ -369,7 +369,7 @@
       "cap": 10000,
       "dir": "data/puzzles/KEEZblvYBm0",
       "iss_size": 4501,
-      "script_size": 4496
+      "script_size": 4524
     },
     {
       "video_id": "Ks9cvaX91W4",
@@ -395,7 +395,7 @@
       "cap": 10000,
       "dir": "data/puzzles/Ks9cvaX91W4",
       "iss_size": 503,
-      "script_size": 1122
+      "script_size": 1186
     },
     {
       "video_id": "iDZ_suiHKps",
@@ -422,7 +422,7 @@
       "cap": 10000,
       "dir": "data/puzzles/iDZ_suiHKps",
       "iss_size": 384,
-      "script_size": 1142
+      "script_size": 1170
     },
     {
       "video_id": "pRZAI1WRY6I",
@@ -449,7 +449,7 @@
       "cap": 10000,
       "dir": "data/puzzles/pRZAI1WRY6I",
       "iss_size": 273,
-      "script_size": 1251
+      "script_size": 1245
     },
     {
       "video_id": "a79ewtzPrrY",
@@ -480,7 +480,7 @@
       "cap": 10000,
       "dir": "data/puzzles/a79ewtzPrrY",
       "iss_size": 855,
-      "script_size": 2090
+      "script_size": 2070
     },
     {
       "video_id": "nccrIGkIcwo",
@@ -507,7 +507,7 @@
       "cap": 10000,
       "dir": "data/puzzles/nccrIGkIcwo",
       "iss_size": 530,
-      "script_size": 1476
+      "script_size": 1504
     },
     {
       "video_id": "ddbndIaimtc",
@@ -618,7 +618,7 @@
       "cap": 10000,
       "dir": "data/puzzles/ddbndIaimtc",
       "iss_size": 96322,
-      "script_size": 6150
+      "script_size": 6152
     },
     {
       "video_id": "rSMMWRaKq8M",
@@ -643,7 +643,7 @@
       "cap": 10000,
       "dir": "data/puzzles/rSMMWRaKq8M",
       "iss_size": 312,
-      "script_size": 941
+      "script_size": 921
     },
     {
       "video_id": "KN5Eobhkhe4",
@@ -673,7 +673,7 @@
       "cap": 10000,
       "dir": "data/puzzles/KN5Eobhkhe4",
       "iss_size": 1265,
-      "script_size": 2798
+      "script_size": 2939
     },
     {
       "video_id": "QSvdF_EMck4",
@@ -703,7 +703,7 @@
       "cap": 675219,
       "dir": "data/puzzles/QSvdF_EMck4",
       "iss_size": 2374,
-      "script_size": 1668
+      "script_size": 1803
     },
     {
       "video_id": "w8Ml0ETI5IM",
@@ -729,7 +729,7 @@
       "cap": 10000,
       "dir": "data/puzzles/w8Ml0ETI5IM",
       "iss_size": 317,
-      "script_size": 1070
+      "script_size": 1079
     },
     {
       "video_id": "1rt7kZsk8dg",
@@ -756,7 +756,7 @@
       "cap": 10000,
       "dir": "data/puzzles/1rt7kZsk8dg",
       "iss_size": 1813,
-      "script_size": 2319
+      "script_size": 2383
     },
     {
       "video_id": "jgATrHS3pBg",
@@ -784,7 +784,7 @@
       "cap": 10000,
       "dir": "data/puzzles/jgATrHS3pBg",
       "iss_size": 127,
-      "script_size": 661
+      "script_size": 689
     },
     {
       "video_id": "9emqPISSBEY",
@@ -811,7 +811,7 @@
       "cap": 10000,
       "dir": "data/puzzles/9emqPISSBEY",
       "iss_size": 767,
-      "script_size": 1458
+      "script_size": 1486
     },
     {
       "video_id": "kt8J6ppyXDk",
@@ -838,7 +838,7 @@
       "cap": 10000,
       "dir": "data/puzzles/kt8J6ppyXDk",
       "iss_size": 499,
-      "script_size": 1121
+      "script_size": 1149
     },
     {
       "video_id": "VuY_xH2ILY0",
@@ -871,7 +871,7 @@
       "cap": 10000,
       "dir": "data/puzzles/VuY_xH2ILY0",
       "iss_size": 1213,
-      "script_size": 3404
+      "script_size": 3434
     },
     {
       "video_id": "HzCLLNmYC6s",
@@ -897,7 +897,7 @@
       "cap": 10000,
       "dir": "data/puzzles/HzCLLNmYC6s",
       "iss_size": 688,
-      "script_size": 1005
+      "script_size": 1033
     },
     {
       "video_id": "q43M_ngwQtw",
@@ -924,7 +924,7 @@
       "cap": 10000,
       "dir": "data/puzzles/q43M_ngwQtw",
       "iss_size": 4205,
-      "script_size": 2191
+      "script_size": 2219
     },
     {
       "video_id": "t7cZjAyU50s",
@@ -951,7 +951,7 @@
       "cap": 10000,
       "dir": "data/puzzles/t7cZjAyU50s",
       "iss_size": 607,
-      "script_size": 819
+      "script_size": 847
     },
     {
       "video_id": "sTWSFmpOhTs",
@@ -979,7 +979,7 @@
       "cap": 10000,
       "dir": "data/puzzles/sTWSFmpOhTs",
       "iss_size": 1807,
-      "script_size": 2230
+      "script_size": 2255
     },
     {
       "video_id": "GSyQiFEF_3w",
@@ -1006,7 +1006,203 @@
       "cap": 30555,
       "dir": "data/puzzles/GSyQiFEF_3w",
       "iss_size": 202489,
-      "script_size": 1638
+      "script_size": 1666
+    },
+    {
+      "video_id": "sZ-KRO-82og",
+      "puzzle_title": "\"SIGMA\"tized",
+      "video_title": "In Plenty of Ways, this Puzzle is Approachable",
+      "author": "Purab Pal",
+      "video_url": "https://www.youtube.com/watch?v=sZ-KRO-82og",
+      "source_url": "https://sudokupad.app/yffxa7cuz1",
+      "provider": "sudokupad",
+      "date": "2026-06-21",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "X",
+        "V",
+        "BlackDot",
+        "WhiteDot",
+        "Whisper",
+        "Renban",
+        "Pair: not a hidden V",
+        "Pair: exactly 5 apart"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "backtracks": 2,
+      "solve_ms": 6.6,
+      "cap": 10000,
+      "dir": "data/puzzles/sZ-KRO-82og",
+      "iss_size": 8062,
+      "script_size": 2292
+    },
+    {
+      "video_id": "8e8NrFkUqT8",
+      "puzzle_title": "The reckoning",
+      "video_title": "Another Candidate For Sudoku Of The Year",
+      "author": "Nicolas Duhail",
+      "video_url": "https://www.youtube.com/watch?v=8e8NrFkUqT8",
+      "source_url": "https://sudokupad.app/9702l0djmf",
+      "provider": "sudokupad",
+      "date": "2026-06-21",
+      "status": "too-slow",
+      "constraint_types": [
+        "AllDifferent",
+        "Or",
+        "And",
+        "NFA: only cage sums 3,4,5,11",
+        "NFA: exactly 4 cages sum 4",
+        "NFA: exactly 3 cages sum 3",
+        "NFA: exactly 5 cages sum 5",
+        "NFA: exactly 11 cages sum 11",
+        "NFA: only cage sums 3,4,6,10",
+        "NFA: exactly 6 cages sum 6",
+        "NFA: exactly 10 cages sum 10",
+        "NFA: only cage sums 3,4,7,9",
+        "NFA: exactly 7 cages sum 7",
+        "NFA: exactly 9 cages sum 9",
+        "NFA: only cage sums 3,4,16",
+        "NFA: exactly 16 cages sum 16",
+        "NFA: only cage sums 3,5,6,9",
+        "NFA: only cage sums 3,5,7,8",
+        "NFA: exactly 8 cages sum 8",
+        "NFA: only cage sums 3,5,15",
+        "NFA: exactly 15 cages sum 15",
+        "NFA: only cage sums 3,6,14",
+        "NFA: exactly 14 cages sum 14",
+        "NFA: only cage sums 3,7,13",
+        "NFA: exactly 13 cages sum 13",
+        "NFA: only cage sums 3,8,12",
+        "NFA: exactly 12 cages sum 12",
+        "NFA: only cage sums 3,9,11",
+        "NFA: only cage sums 3,20",
+        "NFA: exactly 20 cages sum 20",
+        "NFA: only cage sums 4,5,6,8",
+        "NFA: only cage sums 4,5,14",
+        "NFA: only cage sums 4,6,13",
+        "NFA: only cage sums 4,7,12",
+        "NFA: only cage sums 4,8,11",
+        "NFA: only cage sums 4,9,10",
+        "NFA: only cage sums 4,19",
+        "NFA: exactly 19 cages sum 19",
+        "NFA: only cage sums 5,6,12",
+        "NFA: only cage sums 5,7,11",
+        "NFA: only cage sums 5,8,10",
+        "NFA: only cage sums 5,18",
+        "NFA: exactly 18 cages sum 18",
+        "NFA: only cage sums 6,7,10",
+        "NFA: only cage sums 6,8,9",
+        "NFA: only cage sums 6,17",
+        "NFA: exactly 17 cages sum 17",
+        "NFA: only cage sums 7,16",
+        "NFA: only cage sums 8,15",
+        "NFA: only cage sums 9,14",
+        "NFA: only cage sums 10,13",
+        "NFA: only cage sums 11,12",
+        "NFA: only cage sums 23",
+        "NFA: exactly 23 cages sum 23"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 1,
+      "guesses": 10003,
+      "backtracks": 10000,
+      "solve_ms": 11448.4,
+      "cap": 10000,
+      "dir": "data/puzzles/8e8NrFkUqT8",
+      "iss_size": 318279,
+      "script_size": 2650
+    },
+    {
+      "video_id": "TB1CIfZeOyU",
+      "puzzle_title": "No, the other side",
+      "video_title": "No - Look on The Other Side!",
+      "author": "Scott Strosahl",
+      "video_url": "https://www.youtube.com/watch?v=TB1CIfZeOyU",
+      "source_url": "https://sudokupad.app/znt0i5zouc",
+      "provider": "sudokupad",
+      "date": "2026-06-20",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 24,
+      "backtracks": 25,
+      "solve_ms": 14.2,
+      "cap": 10000,
+      "dir": "data/puzzles/TB1CIfZeOyU",
+      "iss_size": 7039,
+      "script_size": 914
+    },
+    {
+      "video_id": "qrLbRCZQeSk",
+      "puzzle_title": "Forty-Four",
+      "video_title": "The 44 Sudoku Challenge",
+      "author": "James Sinclair",
+      "video_url": "https://www.youtube.com/watch?v=qrLbRCZQeSk",
+      "source_url": "https://sudokupad.app/james-sinclair/forty-four",
+      "provider": "sudokupad",
+      "date": "2026-06-20",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Renban"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 16,
+      "backtracks": 17,
+      "solve_ms": 9.6,
+      "cap": 10000,
+      "dir": "data/puzzles/qrLbRCZQeSk",
+      "iss_size": 569,
+      "script_size": 1128
+    },
+    {
+      "video_id": "4OJFWdvh_Mw",
+      "puzzle_title": "Red Dead Difference",
+      "video_title": "Football or Sudoku? Easy Decision!",
+      "author": "Mateo99",
+      "video_url": "https://www.youtube.com/watch?v=4OJFWdvh_Mw",
+      "source_url": "https://sudokupad.app/30nule6bb2",
+      "provider": "sudokupad",
+      "date": "2026-06-19",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "AllDifferent",
+        "Or",
+        "And",
+        "Sum",
+        "WhiteDot",
+        "BlackDot",
+        "Pair: slow thermo"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 534,
+      "backtracks": 535,
+      "solve_ms": 26.9,
+      "cap": 10000,
+      "dir": "data/puzzles/4OJFWdvh_Mw",
+      "iss_size": 1413,
+      "script_size": 1496
     },
     {
       "video_id": "9CkHikmSpJE",
@@ -1044,7 +1240,7 @@
       "cap": 10000,
       "dir": "data/puzzles/9CkHikmSpJE",
       "iss_size": 15777,
-      "script_size": 6288
+      "script_size": 6316
     },
     {
       "video_id": "A8GBl5GGypA",
@@ -1074,7 +1270,7 @@
       "cap": 263713,
       "dir": "data/puzzles/A8GBl5GGypA",
       "iss_size": 39258,
-      "script_size": 5596
+      "script_size": 5624
     }
   ]
 }

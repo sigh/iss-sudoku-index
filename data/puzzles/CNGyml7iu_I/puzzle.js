@@ -1,7 +1,8 @@
-// Green and Blue by Souradip Das
-// https://sudokupad.app/x1ssacf45h
-// https://www.youtube.com/watch?v=CNGyml7iu_I
-//
+// Title: Green and Blue
+// Author: Souradip Das
+// Video: https://www.youtube.com/watch?v=CNGyml7iu_I
+// Source: https://sudokupad.app/x1ssacf45h
+
 // Classic sudoku. Box borders divide a blue line into segments which have the
 // same sum (RegionSumLine). Neighbouring digits along a green line differ by at
 // least 5 (Whisper).

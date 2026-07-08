@@ -1,7 +1,8 @@
-// Auralis by Rab3aron
-// https://sudokupad.app/8s7d1v9agq
-// https://www.youtube.com/watch?v=HzCLLNmYC6s
-//
+// Title: Auralis
+// Author: Rab3aron
+// Video: https://www.youtube.com/watch?v=HzCLLNmYC6s
+// Source: https://sudokupad.app/8s7d1v9agq
+
 // Normal sudoku. Blue lines are region sum lines. Yellow dots join
 // nonconsecutive digits.
 
