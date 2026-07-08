@@ -275,7 +275,7 @@ function solveAction(row) {
       `Constraint string too large for a URL (${fmtSize(row.iss_size)}) — use Script instead`);
   }
   return lazyIssLink('Solve', 'Open the puzzle in ISS', `${row.dir}/puzzle.iss`,
-    t => ISS_BASE + '?q=' + encodeURIComponent(t.trim()));
+    t => ISS_BASE + '?q=' + encodeURIComponent(t.trim().replace(/\n/g, '')));
 }
 
 // The two ISS actions (Solve link / Script modal) with their sizes.
