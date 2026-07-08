@@ -1,0 +1,12 @@
+.~R5C5_8
+.DutchFlatmates
+.Pair~_fVlcRR4EBZRFE~_multiples~R1C7~R1C8~R2C8~R1C7
+.Pair~_fVlcRR4EBZRFE~_multiples~R8C2~R9C3~R9C2~R8C2
+.Pair~_fVlcRR4EBZRFE~_multiples~R2C4~R2C5
+.Pair~_fVlcRR4EBZRFE~_multiples~R3C5~R3C6
+.Pair~_fVlcRR4EBZRFE~_multiples~R7C4~R7C5
+.Pair~_fVlcRR4EBZRFE~_multiples~R8C5~R8C6
+.Pair~_fVlcRR4EBZRFE~_multiples~R5C3~R4C3~R3C4~R4C5~R5C6
+.Pair~_fVlcRR4EBZRFE~_multiples~R5C4~R6C5~R7C6~R6C7~R5C7
+.Pair~_fVlcRR4EBZRFE~_multiples~R9C1~R8C1~R7C1~R6C1~R5C1~R4C1~R3C1~R2C1
+.Pair~_fVlcRR4EBZRFE~_multiples~R8C9~R7C9~R6C9~R5C9~R4C9~R3C9~R2C9~R1C9

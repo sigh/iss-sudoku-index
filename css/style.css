@@ -144,9 +144,8 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
   position: sticky;
   top: 0;
   z-index: 20;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 1fr;
   gap: var(--gap);
   margin: 0 calc(var(--page-x) * -1);
   padding: var(--gap) var(--page-x);
@@ -154,8 +153,8 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
   border-bottom: 1px solid var(--border);
 }
 #filter {
-  flex: 1 1 240px;
-  min-width: 180px;
+  width: 100%;
+  min-width: 0;
   padding: 6px 10px;
   font: inherit;
   border: 1px solid var(--border-strong);
@@ -163,10 +162,15 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
 }
 #filter:focus { outline: 2px solid var(--color-primary); outline-offset: -1px; }
 
-.status-controls { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.status-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
 #count { font-size: var(--fs-small); color: var(--text-muted); white-space: nowrap; }
 
-.legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.legend { display: flex; flex: 1 1 auto; flex-wrap: wrap; gap: 6px; min-width: 0; }
 .legend-item {
   display: inline-flex;
   align-items: center;
