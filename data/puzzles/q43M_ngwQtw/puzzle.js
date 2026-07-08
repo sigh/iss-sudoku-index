@@ -17,27 +17,8 @@ const circles = [
 ];
 
 const circleCells = new Set(circles.map(([center]) => center));
-
-const cells = [];
-for (let r = 1; r <= 9; r++) {
-  for (let c = 1; c <= 9; c++) {
-    cells.push(`R${r}C${c}`);
-  }
-}
-
-function orthogonalNeighbours(cell) {
-  const match = /^R(\d)C(\d)$/.exec(cell);
-  const r = Number(match[1]);
-  const c = Number(match[2]);
-  return [
-    [r - 1, c],
-    [r + 1, c],
-    [r, c - 1],
-    [r, c + 1],
-  ]
-    .filter(([rr, cc]) => rr >= 1 && rr <= 9 && cc >= 1 && cc <= 9)
-    .map(([rr, cc]) => `R${rr}C${cc}`);
-}
+const graph = cellGraph('9x9');
+const cells = graph.cells();
 
 const notCircle = NFA.encodeSpec({
   startState: { i: 0, center: 0, sum: 0 },
@@ -53,10 +34,31 @@ const notCircle = NFA.encodeSpec({
   maxDepth: 5,
 }, 9);
 
+const notCircleAt = cell => new NFA(notCircle, 'not-circle', cell, ...graph.neighbours(cell));
+const nonCircleTargets = targets => targets.filter(cell => !circleCells.has(cell));
+const replicateNotCircle = (origin, targets) => {
+  const filtered = nonCircleTargets(targets);
+  return new Replicate([notCircleAt(origin)],
+    Replicate.encodeTargetCells(filtered, origin, graph), origin);
+};
+
+const corners = ['R1C1', 'R1C9', 'R9C1', 'R9C9'];
+const topEdge = graph.row('R1C1').slice(1, -1);
+const bottomEdge = graph.row('R9C1').slice(1, -1);
+const leftEdge = graph.column('R1C1').slice(1, -1);
+const rightEdge = graph.column('R1C9').slice(1, -1);
+const interiors = cells.filter(cell => {
+  const { row, col } = parseCellId(cell);
+  return row > 1 && row < 9 && col > 1 && col < 9;
+});
+
 return [
   new Shape('9x9'),
   ...circles.map(([center, ...orthogonal]) => new Arrow(center, ...orthogonal)),
-  ...cells
-    .filter(cell => !circleCells.has(cell))
-    .map(cell => new NFA(notCircle, 'not-circle', cell, ...orthogonalNeighbours(cell))),
+  ...nonCircleTargets(corners).map(notCircleAt),
+  replicateNotCircle('R1C2', topEdge),
+  replicateNotCircle('R9C2', bottomEdge),
+  replicateNotCircle('R2C1', leftEdge),
+  replicateNotCircle('R2C9', rightEdge),
+  replicateNotCircle('R2C2', interiors),
 ];

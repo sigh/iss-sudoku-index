@@ -43,7 +43,7 @@ const add = (...cs) => constraints.push(...cs);
 // 180-degree opposite cell (1-indexed r,c -> 10-r, 10-c).
 const opposite = cell => {
   const { row, col } = parseCellId(cell);
-  return `R${10 - row}C${10 - col}`;
+  return makeCellId(10 - row, 10 - col);
 };
 
 // --- Copycat flag domain: every cell is PLAIN or COPY. ---
@@ -60,16 +60,12 @@ const oneCopy = NFA.encodeSpec({
 }, numValues);
 const houses = [];
 for (let i = 1; i <= 9; i++) {
-  houses.push(Array.from({ length: 9 }, (_, j) => `R${i}C${j + 1}`)); // rows
-  houses.push(Array.from({ length: 9 }, (_, j) => `R${j + 1}C${i}`)); // cols
+  houses.push(graph.row(makeCellId(i, 1)));
+  houses.push(graph.column(makeCellId(1, i)));
 }
 for (let br = 0; br < 3; br++) {
   for (let bc = 0; bc < 3; bc++) {
-    const box = [];
-    for (let r = 0; r < 3; r++)
-      for (let c = 0; c < 3; c++)
-        box.push(`R${br * 3 + r + 1}C${bc * 3 + c + 1}`);
-    houses.push(box);
+    houses.push(graph.block(makeCellId(br * 3 + 1, bc * 3 + 1), 3, 3));
   }
 }
 for (const house of houses) {

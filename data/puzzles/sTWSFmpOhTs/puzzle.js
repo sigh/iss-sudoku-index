@@ -11,7 +11,7 @@
 // direction points at it). Each line is therefore an Or over the two
 // orientations: Arrow(tip = sum of arm) AND a non-decreasing chain toward tip.
 
-const cid = (r, c) => `R${r + 1}C${c + 1}`;
+const cid = (r, c) => makeCellId(r + 1, c + 1);
 
 // Lines as ordered 0-indexed [row, col], one endpoint to the other, including
 // the intermediate cells crossed by diagonal segments.

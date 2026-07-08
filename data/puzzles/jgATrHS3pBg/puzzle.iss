@@ -1,0 +1,11 @@
+
+.NoBoxes
+.ChaosConstruction
+.~R1C5_6
+.V~R1C1~R1C2
+.V~R1C3~R2C3
+.V~R2C1~R3C1
+.V~R3C2~R3C3
+.V~R8C3~R8C4
+.X~R3C6~R3C7
+.X~R5C2~R5C3

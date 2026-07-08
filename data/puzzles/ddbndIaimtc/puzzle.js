@@ -39,7 +39,9 @@ const constraints = [new Shape('9x9'), blob.toVar('blob')];
 const add = (...cs) => constraints.push(...cs);
 
 // Blob state is one of NONE/LEFT/RIGHT.
-for (const cell of gridCells) add(new Given(bs(cell), NONE, LEFT, RIGHT));
+const blobOrigin = blob.cells()[0];
+add(new Replicate([new Given(blobOrigin, NONE, LEFT, RIGHT)],
+  Replicate.encodeTargetCells(blob.cells(), blobOrigin, blob), blobOrigin));
 
 // Shown blobs: fix the left/right cells. [leftCell, rightCell].
 const shown = [
@@ -69,7 +71,7 @@ const rowMachine = NFA.encodeSpec({
 }, 9);
 for (let r = 1; r <= 9; r++) {
   add(new NFA(rowMachine, 'tiling',
-    ...Array.from({ length: 9 }, (_, c) => bs(`R${r}C${c + 1}`))));
+    ...Array.from({ length: 9 }, (_, c) => bs(makeCellId(r, c + 1)))));
 }
 
 // --- Clone-count: for each ordered pair (x,y), the number of blobs reading (x,y)

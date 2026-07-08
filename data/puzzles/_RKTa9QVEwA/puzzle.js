@@ -18,7 +18,7 @@ const MARKS = [
   [1, 3], [2, 6], [3, 2], [4, 3],
 ];
 
-const cid = (r, c) => `R${r + 1}C${c + 1}`;
+const cid = (r, c) => makeCellId(r + 1, c + 1);
 const column = (c) => Array.from({ length: 9 }, (_, r) => cid(r, c));
 
 const constraints = [];

@@ -36,6 +36,7 @@ const gridCells = graph.cells();
 
 const constraints = [new Shape('9x9'), shape.toVar('shape')];
 const add = (...c) => constraints.push(...c);
+const ALL_SHAPES = [OFF, HORIZ, VERT, UL, UR, DL, DR];
 
 // --- Clue reconstruction from the decode. ---
 const stations = ['R9C8', 'R8C7', 'R7C5', 'R8C2', 'R6C6', 'R4C9', 'R1C7', 'R2C3', 'R5C8'];
@@ -66,15 +67,17 @@ for (const [a, b] of walls) {
   if (ra.row === rb.row) { forbidden.get(a).add('R'); forbidden.get(b).add('L'); }
   else { forbidden.get(a).add('D'); forbidden.get(b).add('U'); }
 }
-const ALL_SHAPES = [OFF, HORIZ, VERT, UL, UR, DL, DR];
 const stationSet = new Set(stations);
+const shapeOrigin = shape.cells()[0];
+add(new Replicate([new Given(shapeOrigin, ...ALL_SHAPES)],
+  Replicate.encodeTargetCells(shape.cells(), shapeOrigin, shape), shapeOrigin));
 for (const cell of gridCells) {
   const f = forbidden.get(cell);
   const allowed = ALL_SHAPES.filter(s =>
     !(f.has('U') && usesUp(s)) && !(f.has('D') && usesDown(s)) &&
     !(f.has('L') && usesLeft(s)) && !(f.has('R') && usesRight(s)) &&
     !(stationSet.has(cell) && s === OFF));
-  add(new Given(shapeCell(cell), ...allowed));
+  if (allowed.length !== ALL_SHAPES.length) add(new Given(shapeCell(cell), ...allowed));
 }
 
 // --- Edge agreement: neighbours agree on the shared edge, so used edges are
@@ -88,6 +91,12 @@ const edgeAgree = (toB, toA) => NFA.encodeSpec({
 }, geometry.numValues);
 const edgeRight = edgeAgree(usesRight, usesLeft);
 const edgeDown = edgeAgree(usesDown, usesUp);
+const rightTargets = gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell);
+const downTargets = gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell);
+add(new Replicate([new NFA(edgeRight, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
+  Replicate.encodeTargetCells(rightTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')));
+add(new Replicate([new NFA(edgeDown, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
+  Replicate.encodeTargetCells(downTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')));
 
 // --- Per-loop parity: two cells joined by a loop edge share parity. The mirror
 // cell contributes its opposite parity. Reads [shapeA, digitA, digitB]. ---
@@ -111,12 +120,10 @@ for (const cell of gridCells) {
   const right = graph.step(cell, 0, 1);
   const down = graph.step(cell, 1, 0);
   if (right) {
-    add(new NFA(edgeRight, 'edge-h', shapeCell(cell), shapeCell(right)));
     add(new NFA(parityEdge(usesRight, isMirror(cell), isMirror(right)),
       'par-h', shapeCell(cell), cell, right));
   }
   if (down) {
-    add(new NFA(edgeDown, 'edge-v', shapeCell(cell), shapeCell(down)));
     add(new NFA(parityEdge(usesDown, isMirror(cell), isMirror(down)),
       'par-v', shapeCell(cell), cell, down));
   }

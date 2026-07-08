@@ -18,15 +18,17 @@ const arrows = [
 
 const graph = cellGraph();
 
-// Every orthogonally-adjacent pair, once: the horizontal and vertical dominoes
-// starting at each cell.
-const dominoes = graph.cells()
-  .flatMap(cell => [graph.block(cell, 1, 2), graph.block(cell, 2, 1)])
-  .filter(domino => domino !== null);
+// Every orthogonally-adjacent pair, once: replicated horizontal and vertical
+// templates starting at each valid cell.
+const horizontalStarts = graph.cells().filter(cell => graph.step(cell, 0, 1));
+const verticalStarts = graph.cells().filter(cell => graph.step(cell, 1, 0));
 
 const notBothEven = Pair.fnToKey((a, b) => !(a % 2 === 0 && b % 2 === 0), 9);
 
 return [
   ...arrows.map(cells => new Arrow(...cells)),
-  ...dominoes.map(domino => new Pair(notBothEven, '', ...domino)),
+  new Replicate([new Pair(notBothEven, '', 'R1C1', 'R1C2')],
+    Replicate.encodeTargetCells(horizontalStarts, 'R1C1', graph), 'R1C1'),
+  new Replicate([new Pair(notBothEven, '', 'R1C1', 'R2C1')],
+    Replicate.encodeTargetCells(verticalStarts, 'R1C1', graph), 'R1C1'),
 ];

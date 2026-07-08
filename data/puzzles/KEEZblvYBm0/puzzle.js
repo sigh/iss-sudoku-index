@@ -16,7 +16,7 @@
 // The "Substitute"/fog rule (R1C9 hidden until triggered) is cosmetic and carries
 // no logical constraint, so it is not encoded.
 
-const cid = (r, c) => `R${r}C${c}`;
+const cid = makeCellId;
 
 // --- Givens (decoded letters) ---
 const givens = [
