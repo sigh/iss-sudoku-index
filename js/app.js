@@ -20,6 +20,7 @@ const dom = {
   table: document.getElementById('index'),
   rows: document.getElementById('rows'),
   empty: document.getElementById('empty'),
+  clearEmpty: document.getElementById('clear-empty'),
   filter: document.getElementById('filter'),
   legend: document.getElementById('legend'),
   count: document.getElementById('count'),
@@ -114,6 +115,7 @@ function render() {
     density: state.density,
     authorCounts: state.authorCounts,
   })));
+  markScrollableChips();
   dom.empty.hidden = rows.length > 0;
   dom.count.textContent = rows.length === state.rows.length
     ? `${state.rows.length} puzzles`
@@ -124,6 +126,23 @@ function render() {
     th.classList.toggle('desc', on && state.sortDesc);
   }
   syncUrl();   // every state change flows through render, so mirror it to the URL here
+}
+
+function markScrollableChips() {
+  for (const chips of dom.rows.querySelectorAll('.density-medium .chips, .density-compact .chips')) {
+    const horizontal = chips.matches('.density-compact .chips');
+    const update = () => {
+      const hasOverflow = horizontal
+        ? chips.scrollWidth > chips.clientWidth + 1
+        : chips.scrollHeight > chips.clientHeight + 1;
+      const atEnd = horizontal
+        ? chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 1
+        : chips.scrollTop + chips.clientHeight >= chips.scrollHeight - 1;
+      chips.classList.toggle('overflowing', hasOverflow && !atEnd);
+    };
+    update();
+    chips.addEventListener('scroll', update);
+  }
 }
 
 function buildLegend() {
@@ -156,6 +175,13 @@ function setFilter(text) {
   render();
 }
 
+function clearFilters() {
+  state.hidden.clear();
+  setFilter('');
+  for (const item of dom.legend.querySelectorAll('.legend-item')) item.classList.remove('off');
+  dom.filter.focus();
+}
+
 function wire() {
   syncStickyOffset();
   if ('ResizeObserver' in window) {
@@ -165,6 +191,7 @@ function wire() {
   }
 
   dom.filter.addEventListener('input', () => setFilter(dom.filter.value));
+  dom.clearEmpty.addEventListener('click', clearFilters);
 
   for (const input of dom.density) {
     input.addEventListener('change', () => {
@@ -207,5 +234,6 @@ for (const input of dom.density) input.checked = input.value === state.density;
 wire();
 load().catch(err => {
   dom.empty.hidden = false;
-  dom.empty.textContent = err.message;
+  dom.empty.firstElementChild.textContent = err.message;
+  dom.clearEmpty.hidden = true;
 });

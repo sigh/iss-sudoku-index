@@ -5,6 +5,8 @@
 
 // Each cage has no repeated digits. For every possible cage total N, the
 // number of cages summing to N is either 0 or exactly N.
+//
+// Model each cage total as a Var cell, then use CountingCircles on those Vars.
 
 const cages = [
   ["R7C1", "R7C2", "R7C3"],
@@ -31,31 +33,37 @@ const cages = [
   ["R4C1", "R5C1"],
 ];
 
-function cageCountNFA(target) {
-  return NFA.encodeSpec({
-    startState: { sum: 0, count: 0 },
-    transition: ({ sum, count }, value) => {
-      if (value === SEGMENT_BREAK) {
-        const nextCount = count + (sum === target ? 1 : 0);
-        if (nextCount > target) return [];
-        return { sum: 0, count: nextCount };
-      }
-      return { sum: Math.min(target + 1, sum + value), count };
-    },
-    accept: ({ sum, count }) => {
-      const finalCount = count + (sum === target ? 1 : 0);
-      return finalCount === 0 || finalCount === target;
-    },
-  }, 9, { multiSegment: true });
+const graph = cellGraph("9x9");
+
+function range(from, to) {
+  return Array.from({ length: to - from + 1 }, (_, i) => from + i);
+}
+
+function cageTotalVar(index) {
+  return `VK${index + 1}`;
+}
+
+function cageTotalSum(cells, index) {
+  return new Sum(
+    `0_=_${[...cells.map(() => 1), -1].join("_")}`,
+    ...cells,
+    cageTotalVar(index),
+  );
 }
 
 const constraints = [
-  new Shape("9x9"),
-  ...cages.map(cells => new AllDifferent(...cells)),
+  new Shape("9x9", 16),
+  new Var("K", "cage totals", cages.length),
+  ...graph.cells().map(cell => new Given(cell, ...range(1, 9))),
 ];
 
-for (let total = 3; total <= 24; total++) {
-  constraints.push(new NFA(cageCountNFA(total), `count cages summing to ${total}`, ...cages));
+for (const [index, cells] of cages.entries()) {
+  constraints.push(
+    new AllDifferent(...cells),
+    cageTotalSum(cells, index),
+  );
 }
+
+constraints.push(new CountingCircles(...cages.map((_, index) => cageTotalVar(index))));
 
 return constraints;
