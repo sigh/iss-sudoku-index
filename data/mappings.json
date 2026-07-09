@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-08T23:22:12.590113+00:00",
+  "generated_at": "2026-07-09T07:17:56.298363+00:00",
   "count": 65,
   "rows": [
     {
@@ -1479,21 +1479,25 @@
       "date": "2026-06-14",
       "status": "partial",
       "constraint_types": [
+        "1-11",
+        "Var",
         "WhiteDot",
         "SameValues",
+        "Pair: path-edge",
+        "NFA: maze-whisper",
         "Pair: arrow points to smaller digit"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 9940,
-      "guesses": 10039,
-      "backtracks": 10000,
-      "solve_ms": 79.6,
-      "cap": 10000,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 86586,
+      "backtracks": 86587,
+      "solve_ms": 4037.8,
+      "cap": 203665,
       "dir": "data/puzzles/l8XOG9Vg6Q0",
-      "iss_size": 111,
-      "script_size": 558
+      "iss_size": 29291,
+      "script_size": 5980
     },
     {
       "video_id": "nLu0P3VYz4c",

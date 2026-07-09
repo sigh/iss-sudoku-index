@@ -59,10 +59,16 @@
   </header>
 
   <section id="controls">
-    <input type="search" id="filter" placeholder="Filter by puzzle, author, or constraint…" autocomplete="off">
+    <div class="filter-row">
+      <input type="search" id="filter" placeholder="Filter by puzzle, author, or constraint…" autocomplete="off">
+      <button id="reset-filters" class="reset-filters" type="button" hidden>Reset all</button>
+    </div>
     <div class="status-controls">
       <div id="legend" class="legend"><!-- status filter chips, populated by JS --></div>
-      <span id="count" class="count"></span>
+      <div id="active-filters" class="active-filters" hidden></div>
+      <div class="count-actions">
+        <span id="count" class="count"></span>
+      </div>
     </div>
   </section>
 

@@ -9,6 +9,7 @@ const state = {
   rows: [],
   authorCounts: new Map(),
   filterText: '',
+  activeFilters: [],
   hidden: new Set(),      // status tiers toggled off in the legend
   sortBy: 'date',
   sortDesc: true,
@@ -22,8 +23,10 @@ const dom = {
   empty: document.getElementById('empty'),
   clearEmpty: document.getElementById('clear-empty'),
   filter: document.getElementById('filter'),
+  activeFilters: document.getElementById('active-filters'),
   legend: document.getElementById('legend'),
   count: document.getElementById('count'),
+  resetFilters: document.getElementById('reset-filters'),
   density: [...document.querySelectorAll('input[name="density"]')],
   headers: [...document.querySelectorAll('th[data-sort]')],
 };
@@ -59,6 +62,7 @@ function countAuthors(rows) {
 function readState() {
   const p = new URLSearchParams(location.search);
   state.filterText = p.get('filter') || '';
+  state.activeFilters = readActiveFilters(p);
   const hide = p.get('hide');
   if (hide) state.hidden = new Set(hide.split(',').filter(s => STATUS[s]));
   const col = p.get('sort');
@@ -76,6 +80,9 @@ function readState() {
 function syncUrl() {
   const p = new URLSearchParams();
   if (state.filterText.trim()) p.set('filter', state.filterText.trim());
+  for (const filter of state.activeFilters) {
+    p.append(`${filter.exclude ? 'not-' : ''}${filter.type}`, filter.value);
+  }
   if (state.hidden.size) p.set('hide', [...state.hidden].join(','));
   if (state.sortBy !== 'date' || state.sortDesc !== true) {  // non-default sort
     p.set('sort', state.sortBy);
@@ -93,6 +100,34 @@ function matchesText(r, q) {
     || (r.constraint_types || []).some(c => c.toLowerCase().includes(q));
 }
 
+function readActiveFilters(params) {
+  const filters = [
+    ...params.getAll('constraint').map(value => ({ type: 'constraint', value, exclude: false })),
+    ...params.getAll('author').map(value => ({ type: 'author', value, exclude: false })),
+    ...params.getAll('not-constraint').map(value => ({ type: 'constraint', value, exclude: true })),
+    ...params.getAll('not-author').map(value => ({ type: 'author', value, exclude: true })),
+  ];
+  const seen = new Set();
+  return filters.filter(filter => {
+    if (!filter.value) return false;
+    const key = `${filter.exclude ? 'not-' : ''}${activeFilterKey(filter)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function activeFilterKey(filter) {
+  return `${filter.type}:${filter.value}`;
+}
+
+function matchesActiveFilter(row, filter) {
+  const matched = filter.type === 'author'
+    ? row.author === filter.value
+    : (row.constraint_types || []).includes(filter.value);
+  return filter.exclude ? !matched : matched;
+}
+
 function visibleRows() {
   const q = state.filterText.trim().toLowerCase();
   const key = SORT_KEYS[state.sortBy];
@@ -100,6 +135,7 @@ function visibleRows() {
   return state.rows
     .filter(r => !state.hidden.has(r.status))
     .filter(r => matchesText(r, q))
+    .filter(r => state.activeFilters.every(filter => matchesActiveFilter(r, filter)))
     .sort((a, b) => {
       const ka = key(a), kb = key(b);
       if (ka < kb) return -1 * dir;
@@ -115,17 +151,48 @@ function render() {
     density: state.density,
     authorCounts: state.authorCounts,
   })));
+  renderActiveFilters();
   markScrollableChips();
   dom.empty.hidden = rows.length > 0;
   dom.count.textContent = rows.length === state.rows.length
     ? `${state.rows.length} puzzles`
     : `${rows.length} of ${state.rows.length} puzzles`;
+  dom.resetFilters.hidden = !hasSearchState();
   for (const th of dom.headers) {
     const on = th.dataset.sort === state.sortBy;
     th.classList.toggle('sorted', on);
     th.classList.toggle('desc', on && state.sortDesc);
   }
   syncUrl();   // every state change flows through render, so mirror it to the URL here
+}
+
+function hasSearchState() {
+  return !!state.filterText.trim() || state.activeFilters.length > 0 || state.hidden.size > 0;
+}
+
+function renderActiveFilters() {
+  dom.activeFilters.replaceChildren(...state.activeFilters.map(filter => {
+    const item = document.createElement('span');
+    item.className = `active-filter${filter.exclude ? ' negative' : ''}`;
+    item.dataset.key = activeFilterKey(filter);
+
+    const toggle = document.createElement('button');
+    toggle.className = 'active-filter-toggle';
+    toggle.type = 'button';
+    toggle.title = `${filter.exclude ? 'Include' : 'Exclude'} ${filter.value}`;
+    toggle.textContent = `${filter.exclude ? 'NOT ' : ''}${filter.value}`;
+
+    const remove = document.createElement('button');
+    remove.className = 'active-filter-remove';
+    remove.type = 'button';
+    remove.title = `Remove ${filter.value}`;
+    remove.setAttribute('aria-label', `Remove ${filter.value}`);
+    remove.textContent = '×';
+
+    item.append(toggle, remove);
+    return item;
+  }));
+  dom.activeFilters.hidden = state.activeFilters.length === 0;
 }
 
 function markScrollableChips() {
@@ -175,8 +242,29 @@ function setFilter(text) {
   render();
 }
 
+function addActiveFilter(type, value) {
+  const filter = { type, value };
+  const key = activeFilterKey(filter);
+  if (!state.activeFilters.some(existing => activeFilterKey(existing) === key)) {
+    state.activeFilters.push(filter);
+  }
+  render();
+}
+
+function removeActiveFilter(key) {
+  state.activeFilters = state.activeFilters.filter(filter => activeFilterKey(filter) !== key);
+  render();
+}
+
+function toggleActiveFilter(key) {
+  const filter = state.activeFilters.find(item => activeFilterKey(item) === key);
+  if (filter) filter.exclude = !filter.exclude;
+  render();
+}
+
 function clearFilters() {
   state.hidden.clear();
+  state.activeFilters = [];
   setFilter('');
   for (const item of dom.legend.querySelectorAll('.legend-item')) item.classList.remove('off');
   dom.filter.focus();
@@ -191,6 +279,16 @@ function wire() {
   }
 
   dom.filter.addEventListener('input', () => setFilter(dom.filter.value));
+  dom.activeFilters.addEventListener('click', e => {
+    const pill = e.target.closest('.active-filter');
+    if (!pill) return;
+    if (e.target.closest('.active-filter-remove')) {
+      removeActiveFilter(pill.dataset.key);
+      return;
+    }
+    if (e.target.closest('.active-filter-toggle')) toggleActiveFilter(pill.dataset.key);
+  });
+  dom.resetFilters.addEventListener('click', clearFilters);
   dom.clearEmpty.addEventListener('click', clearFilters);
 
   for (const input of dom.density) {
@@ -205,12 +303,12 @@ function wire() {
   dom.rows.addEventListener('click', e => {
     const author = e.target.closest('.author-filter');
     if (author) {
-      setFilter(author.dataset.author);
+      addActiveFilter('author', author.dataset.author);
       return;
     }
 
     const chip = e.target.closest('.chip');
-    if (chip) setFilter(chip.dataset.name);
+    if (chip) addActiveFilter('constraint', chip.dataset.name);
   });
 
   for (const th of dom.headers) {
@@ -236,4 +334,5 @@ load().catch(err => {
   dom.empty.hidden = false;
   dom.empty.firstElementChild.textContent = err.message;
   dom.clearEmpty.hidden = true;
+  dom.resetFilters.hidden = true;
 });
