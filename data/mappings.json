@@ -1,8 +1,9 @@
 {
-  "generated_at": "2026-07-09T07:17:56.298363+00:00",
-  "count": 65,
+  "generated_at": "2026-07-10T16:20:27.906900+00:00",
+  "count": 74,
   "rows": [
     {
+      "puzzle_id": "zKRn5WbmedA",
       "video_id": "zKRn5WbmedA",
       "puzzle_title": "GCHQ's Puzzle Of The Year",
       "video_title": "GCHQ's Puzzle Of The Year",
@@ -21,11 +22,12 @@
       "backtracks": null,
       "solve_ms": null,
       "cap": null,
-      "dir": "data/puzzles/zKRn5WbmedA",
+      "dir": null,
       "iss_size": null,
-      "script_size": 444
+      "script_size": null
     },
     {
+      "puzzle_id": "iAkuAoIgR4o",
       "video_id": "iAkuAoIgR4o",
       "puzzle_title": "Poison Arrows",
       "video_title": "Are These Poison Arrows?",
@@ -53,6 +55,7 @@
       "script_size": 1438
     },
     {
+      "puzzle_id": "23qeCn9TcWw",
       "video_id": "23qeCn9TcWw",
       "puzzle_title": "Arithmetid Quiy",
       "video_title": "Everyone Fails This Simple Math Quiz!",
@@ -86,6 +89,7 @@
       "script_size": 5773
     },
     {
+      "puzzle_id": "STXQn26IVHs",
       "video_id": "STXQn26IVHs",
       "puzzle_title": "250!",
       "video_title": "250 Years Young!",
@@ -104,11 +108,12 @@
       "backtracks": null,
       "solve_ms": null,
       "cap": null,
-      "dir": "data/puzzles/STXQn26IVHs",
+      "dir": null,
       "iss_size": null,
-      "script_size": 414
+      "script_size": null
     },
     {
+      "puzzle_id": "MYpoIPhevoI",
       "video_id": "MYpoIPhevoI",
       "puzzle_title": "Dutch Flat Mates: Multiple Lines",
       "video_title": "Why Doesn't This Sudoku Have Two Solutions?",
@@ -135,6 +140,7 @@
       "script_size": 970
     },
     {
+      "puzzle_id": "moRsJVncQps",
       "video_id": "moRsJVncQps",
       "puzzle_title": "Counting Killer Cells",
       "video_title": "At least the Cage Cells have already been Counted!",
@@ -164,6 +170,7 @@
       "script_size": 2124
     },
     {
+      "puzzle_id": "_RKTa9QVEwA",
       "video_id": "_RKTa9QVEwA",
       "puzzle_title": "Coldulo",
       "video_title": "You're A Better Man Than I Am, Sudoku Genius (aka Kaktuslav!).",
@@ -191,6 +198,7 @@
       "script_size": 1834
     },
     {
+      "puzzle_id": "xlk19YzgMCM",
       "video_id": "xlk19YzgMCM",
       "puzzle_title": "Sulla Via Della Gloria",
       "video_title": "A Viewer Solves Sudoku With Simon: Episode 13",
@@ -221,6 +229,7 @@
       "script_size": 1619
     },
     {
+      "puzzle_id": "a-jajrZJXr0",
       "video_id": "a-jajrZJXr0",
       "puzzle_title": "Sums and differences",
       "video_title": "This Kind of Line might only Appear this Once",
@@ -250,6 +259,7 @@
       "script_size": 2985
     },
     {
+      "puzzle_id": "dAqrMGSyI4s",
       "video_id": "dAqrMGSyI4s",
       "puzzle_title": "Lupin's Loop 4 - Surrounded",
       "video_title": "The Most Requested Puzzle Of Recent Times!",
@@ -283,6 +293,7 @@
       "script_size": 7174
     },
     {
+      "puzzle_id": "CNGyml7iu_I",
       "video_id": "CNGyml7iu_I",
       "puzzle_title": "Green and Blue",
       "video_title": "What's Green, and Blue all over?",
@@ -309,6 +320,7 @@
       "script_size": 1117
     },
     {
+      "puzzle_id": "P32Jqq-FyFc",
       "video_id": "P32Jqq-FyFc",
       "puzzle_title": "One and Only",
       "video_title": "The One And Only Fog Sudoku!",
@@ -345,6 +357,7 @@
       "script_size": 4266
     },
     {
+      "puzzle_id": "KEEZblvYBm0",
       "video_id": "KEEZblvYBm0",
       "puzzle_title": "World Cup 2026: Kick Off!",
       "video_title": "Kick Off with Sudoku!",
@@ -372,6 +385,7 @@
       "script_size": 4524
     },
     {
+      "puzzle_id": "Ks9cvaX91W4",
       "video_id": "Ks9cvaX91W4",
       "puzzle_title": "Loss for Words",
       "video_title": "This Sudoku Will Leave You At A Loss For Words",
@@ -398,6 +412,7 @@
       "script_size": 1186
     },
     {
+      "puzzle_id": "iDZ_suiHKps",
       "video_id": "iDZ_suiHKps",
       "puzzle_title": "It's getting hot in here!",
       "video_title": "Is it Getting Hot in Here?",
@@ -425,6 +440,7 @@
       "script_size": 1170
     },
     {
+      "puzzle_id": "pRZAI1WRY6I",
       "video_id": "pRZAI1WRY6I",
       "puzzle_title": "Surrounded by oddness",
       "video_title": "Wait... That CANNOT Solve... Can It?",
@@ -452,6 +468,7 @@
       "script_size": 1245
     },
     {
+      "puzzle_id": "a79ewtzPrrY",
       "video_id": "a79ewtzPrrY",
       "puzzle_title": "Stishovite",
       "video_title": "This Puzzle Is EXTRAORDINARY.",
@@ -483,6 +500,7 @@
       "script_size": 2070
     },
     {
+      "puzzle_id": "nccrIGkIcwo",
       "video_id": "nccrIGkIcwo",
       "puzzle_title": "Come Clarity",
       "video_title": "Bring some Clarity to this Puzzle!",
@@ -510,6 +528,7 @@
       "script_size": 1504
     },
     {
+      "puzzle_id": "ddbndIaimtc",
       "video_id": "ddbndIaimtc",
       "puzzle_title": "Clone Count",
       "video_title": "This Sudoku Is \"Kind Of Insane\"!!",
@@ -621,6 +640,7 @@
       "script_size": 6152
     },
     {
+      "puzzle_id": "rSMMWRaKq8M",
       "video_id": "rSMMWRaKq8M",
       "puzzle_title": "Just Sum Long Lines",
       "video_title": "Are Long Lines Easier or Harder?",
@@ -646,6 +666,7 @@
       "script_size": 921
     },
     {
+      "puzzle_id": "KN5Eobhkhe4",
       "video_id": "KN5Eobhkhe4",
       "puzzle_title": "Splatter Code",
       "video_title": "Unlocking Sudoku's Secret Code",
@@ -676,6 +697,7 @@
       "script_size": 2939
     },
     {
+      "puzzle_id": "QSvdF_EMck4",
       "video_id": "QSvdF_EMck4",
       "puzzle_title": "SUGOKU",
       "video_title": "Sudoku that is also a Game of Go!",
@@ -706,6 +728,7 @@
       "script_size": 1803
     },
     {
+      "puzzle_id": "w8Ml0ETI5IM",
       "video_id": "w8Ml0ETI5IM",
       "puzzle_title": "Proximity",
       "video_title": "The Return Of Zetamath, A Sudoku Master!",
@@ -732,6 +755,7 @@
       "script_size": 1079
     },
     {
+      "puzzle_id": "1rt7kZsk8dg",
       "video_id": "1rt7kZsk8dg",
       "puzzle_title": "Magnificent Mansion",
       "video_title": "This Mansion is Magnificent",
@@ -759,6 +783,7 @@
       "script_size": 2383
     },
     {
+      "puzzle_id": "jgATrHS3pBg",
       "video_id": "jgATrHS3pBg",
       "puzzle_title": "Count Some Dominoes",
       "video_title": "Can You Count The Dominoes?!",
@@ -787,6 +812,7 @@
       "script_size": 689
     },
     {
+      "puzzle_id": "9emqPISSBEY",
       "video_id": "9emqPISSBEY",
       "puzzle_title": "Even Distribution",
       "video_title": "Even with these Rules ...",
@@ -814,6 +840,7 @@
       "script_size": 1486
     },
     {
+      "puzzle_id": "kt8J6ppyXDk",
       "video_id": "kt8J6ppyXDk",
       "puzzle_title": "Yes And",
       "video_title": "Easy Or Hard? THAT Is The Question!",
@@ -841,6 +868,7 @@
       "script_size": 1149
     },
     {
+      "puzzle_id": "VuY_xH2ILY0",
       "video_id": "VuY_xH2ILY0",
       "puzzle_title": "Quadrants",
       "video_title": "A Positive Outlook for Negative Constraints",
@@ -874,6 +902,7 @@
       "script_size": 3434
     },
     {
+      "puzzle_id": "HzCLLNmYC6s",
       "video_id": "HzCLLNmYC6s",
       "puzzle_title": "Auralis",
       "video_title": "This Sudoku Will Make You Feel Clever!",
@@ -900,6 +929,7 @@
       "script_size": 1033
     },
     {
+      "puzzle_id": "q43M_ngwQtw",
       "video_id": "q43M_ngwQtw",
       "puzzle_title": "Reborn hooligan ghost",
       "video_title": "Brilliant Grid Simplicity",
@@ -927,6 +957,7 @@
       "script_size": 2219
     },
     {
+      "puzzle_id": "t7cZjAyU50s",
       "video_id": "t7cZjAyU50s",
       "puzzle_title": "Good and Plenty",
       "video_title": "Do You Need Sudoku Theory To Solve This?",
@@ -954,6 +985,7 @@
       "script_size": 847
     },
     {
+      "puzzle_id": "sTWSFmpOhTs",
       "video_id": "sTWSFmpOhTs",
       "puzzle_title": "Slow Arrows",
       "video_title": "Slow Arrows ... Slow Solve!",
@@ -982,6 +1014,7 @@
       "script_size": 2255
     },
     {
+      "puzzle_id": "GSyQiFEF_3w",
       "video_id": "GSyQiFEF_3w",
       "puzzle_title": "Rising Regions",
       "video_title": "A New (And Blue) Sudoku Line!",
@@ -1009,6 +1042,7 @@
       "script_size": 1666
     },
     {
+      "puzzle_id": "sZ-KRO-82og",
       "video_id": "sZ-KRO-82og",
       "puzzle_title": "\"SIGMA\"tized",
       "video_title": "In Plenty of Ways, this Puzzle is Approachable",
@@ -1042,6 +1076,7 @@
       "script_size": 2292
     },
     {
+      "puzzle_id": "8e8NrFkUqT8",
       "video_id": "8e8NrFkUqT8",
       "puzzle_title": "The reckoning",
       "video_title": "Another Candidate For Sudoku Of The Year",
@@ -1120,6 +1155,7 @@
       "script_size": 2650
     },
     {
+      "puzzle_id": "TB1CIfZeOyU",
       "video_id": "TB1CIfZeOyU",
       "puzzle_title": "No, the other side",
       "video_title": "No - Look on The Other Side!",
@@ -1147,6 +1183,7 @@
       "script_size": 914
     },
     {
+      "puzzle_id": "qrLbRCZQeSk",
       "video_id": "qrLbRCZQeSk",
       "puzzle_title": "Forty-Four",
       "video_title": "The 44 Sudoku Challenge",
@@ -1173,6 +1210,7 @@
       "script_size": 1128
     },
     {
+      "puzzle_id": "4OJFWdvh_Mw",
       "video_id": "4OJFWdvh_Mw",
       "puzzle_title": "Red Dead Difference",
       "video_title": "Football or Sudoku? Easy Decision!",
@@ -1205,6 +1243,7 @@
       "script_size": 1496
     },
     {
+      "puzzle_id": "Qd8cn82k5nk",
       "video_id": "Qd8cn82k5nk",
       "puzzle_title": "Kelowna",
       "video_title": "Brainteasers In Sudoku Form!",
@@ -1247,6 +1286,7 @@
       "script_size": 4348
     },
     {
+      "puzzle_id": "-c9lo7lYxp8",
       "video_id": "-c9lo7lYxp8",
       "puzzle_title": "Medium Kropki Sudoku",
       "video_title": "So Much Sudoku to Do!",
@@ -1273,6 +1313,7 @@
       "script_size": 1283
     },
     {
+      "puzzle_id": "_M5lRitViHo",
       "video_id": "_M5lRitViHo",
       "puzzle_title": "Quiet Room",
       "video_title": "Where Has This Sudoku Maker Been All This Time?",
@@ -1305,6 +1346,7 @@
       "script_size": 1081
     },
     {
+      "puzzle_id": "ovnLIQzpdDY",
       "video_id": "ovnLIQzpdDY",
       "puzzle_title": "chi",
       "video_title": "Feeling the Chi despite the Pressure",
@@ -1333,6 +1375,7 @@
       "script_size": 1388
     },
     {
+      "puzzle_id": "z9T9kUTum1M",
       "video_id": "z9T9kUTum1M",
       "puzzle_title": "Nabnerfel",
       "video_title": "Trust Me. This Sudoku Will ASTONISH You.",
@@ -1360,6 +1403,7 @@
       "script_size": 1036
     },
     {
+      "puzzle_id": "yGgZHkP2lFs",
       "video_id": "yGgZHkP2lFs",
       "puzzle_title": "Dueling Cages",
       "video_title": "Surely it Should be EASY to Establish these Cage Totals?",
@@ -1390,6 +1434,7 @@
       "script_size": 2853
     },
     {
+      "puzzle_id": "vNfwa4wPliY",
       "video_id": "vNfwa4wPliY",
       "puzzle_title": "Four Octagons",
       "video_title": "A Sudoku With Only 4 Given Octagons??!",
@@ -1416,6 +1461,7 @@
       "script_size": 1049
     },
     {
+      "puzzle_id": "rilaoNyWiFs",
       "video_id": "rilaoNyWiFs",
       "puzzle_title": "Divisores Dubiationis",
       "video_title": "Cruelly Devised Torture",
@@ -1446,6 +1492,7 @@
       "script_size": 1806
     },
     {
+      "puzzle_id": "44bYOpPHJlQ",
       "video_id": "44bYOpPHJlQ",
       "puzzle_title": "Invisible Killers",
       "video_title": "Is This Puzzle Really As \"Brutal\" As People Say?",
@@ -1464,11 +1511,12 @@
       "backtracks": null,
       "solve_ms": null,
       "cap": null,
-      "dir": "data/puzzles/44bYOpPHJlQ",
+      "dir": null,
       "iss_size": null,
-      "script_size": 1036
+      "script_size": null
     },
     {
+      "puzzle_id": "l8XOG9Vg6Q0",
       "video_id": "l8XOG9Vg6Q0",
       "puzzle_title": "Whispers in the maze",
       "video_title": "Explore a New Maze!",
@@ -1481,6 +1529,7 @@
       "constraint_types": [
         "1-11",
         "Var",
+        "Replicate",
         "WhiteDot",
         "SameValues",
         "Pair: path-edge",
@@ -1493,13 +1542,14 @@
       "solutions_found": 1,
       "guesses": 86586,
       "backtracks": 86587,
-      "solve_ms": 4037.8,
-      "cap": 203665,
+      "solve_ms": 3625.9,
+      "cap": 290697,
       "dir": "data/puzzles/l8XOG9Vg6Q0",
-      "iss_size": 29291,
-      "script_size": 5980
+      "iss_size": 20072,
+      "script_size": 6898
     },
     {
+      "puzzle_id": "nLu0P3VYz4c",
       "video_id": "nLu0P3VYz4c",
       "puzzle_title": "Counterpoint",
       "video_title": "The Sudoku With The Simplest Rules!",
@@ -1525,6 +1575,7 @@
       "script_size": 720
     },
     {
+      "puzzle_id": "flgRSDPPU5Q",
       "video_id": "flgRSDPPU5Q",
       "puzzle_title": "Oddly Enough Even Digits Help",
       "video_title": "Getting Even in an Odd Way",
@@ -1565,6 +1616,7 @@
       "script_size": 3321
     },
     {
+      "puzzle_id": "aFdQkHxowPM",
       "video_id": "aFdQkHxowPM",
       "puzzle_title": "Border Lots",
       "video_title": "Huge Video Game Migrates To Sudoku [The Artisan Of Glimmith!]",
@@ -1592,6 +1644,7 @@
       "script_size": 355
     },
     {
+      "puzzle_id": "W3hGY3SuOnI.3",
       "video_id": "W3hGY3SuOnI",
       "puzzle_title": "Double Entropy",
       "video_title": "Three Puzzles, under Time Pressure!",
@@ -1617,11 +1670,12 @@
       "backtracks": 6,
       "solve_ms": 8.4,
       "cap": 1000,
-      "dir": "data/puzzles/W3hGY3SuOnI",
+      "dir": "data/puzzles/W3hGY3SuOnI.3",
       "iss_size": 3107,
       "script_size": 1172
     },
     {
+      "puzzle_id": "sfNjC1cCmwk",
       "video_id": "sfNjC1cCmwk",
       "puzzle_title": "Whispering Dominoes",
       "video_title": "One Of THE Great Sudoku Opening Ideas",
@@ -1648,6 +1702,7 @@
       "script_size": 2098
     },
     {
+      "puzzle_id": "BoPjMzjLpZ8",
       "video_id": "BoPjMzjLpZ8",
       "puzzle_title": "SVS #470 - Harmonious Thermos",
       "video_title": "470 Great Ideas for a Puzzle ... ?",
@@ -1675,29 +1730,7 @@
       "script_size": 833
     },
     {
-      "video_id": "i28jeABUr_g",
-      "puzzle_title": "RAT RUN 40: The Big One",
-      "video_title": "Our Longest Ever Video...!! Rat Run 40: The Big One (S3:E20)",
-      "author": "Marty Sears",
-      "video_url": "https://www.youtube.com/watch?v=i28jeABUr_g",
-      "source_url": "https://sudokupad.app/nfqumwpslw",
-      "provider": "sudokupad",
-      "date": "2026-06-11",
-      "status": "unsupported",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "backtracks": null,
-      "solve_ms": null,
-      "cap": null,
-      "dir": "data/puzzles/i28jeABUr_g",
-      "iss_size": null,
-      "script_size": 477
-    },
-    {
+      "puzzle_id": "Z30hHxCO7cA",
       "video_id": "Z30hHxCO7cA",
       "puzzle_title": "Mistyped",
       "video_title": "When Errors are Acceptable in Sudoku",
@@ -1761,6 +1794,7 @@
       "script_size": 4094
     },
     {
+      "puzzle_id": "bQJp4EhO5Sk",
       "video_id": "bQJp4EhO5Sk",
       "puzzle_title": "Bullseye!",
       "video_title": "Does So-called \"Sudoku Expert\" Make A  Mistake??",
@@ -1791,6 +1825,7 @@
       "script_size": 2235
     },
     {
+      "puzzle_id": "_Q1fvtndpsA",
       "video_id": "_Q1fvtndpsA",
       "puzzle_title": "Xin Yang v2",
       "video_title": "Colouring Grids is FUN!",
@@ -1823,6 +1858,7 @@
       "script_size": 3874
     },
     {
+      "puzzle_id": "vFZ7Vk6IWRY",
       "video_id": "vFZ7Vk6IWRY",
       "puzzle_title": "Lonely Fives",
       "video_title": "How To Use Colour To Solve Sudoku!",
@@ -1851,6 +1887,7 @@
       "script_size": 2496
     },
     {
+      "puzzle_id": "VMenmutpNMA",
       "video_id": "VMenmutpNMA",
       "puzzle_title": "Pent Up",
       "video_title": "Complete Madness with Pentominoes",
@@ -1869,11 +1906,12 @@
       "backtracks": null,
       "solve_ms": null,
       "cap": null,
-      "dir": "data/puzzles/VMenmutpNMA",
+      "dir": null,
       "iss_size": null,
-      "script_size": 869
+      "script_size": null
     },
     {
+      "puzzle_id": "xzXnxCeFSt4",
       "video_id": "xzXnxCeFSt4",
       "puzzle_title": "Counting Killers",
       "video_title": "The Simplest Extra Sudoku Rule",
@@ -1903,6 +1941,7 @@
       "script_size": 1631
     },
     {
+      "puzzle_id": "YeuTO9A1Prs",
       "video_id": "YeuTO9A1Prs",
       "puzzle_title": "Coded Pairs",
       "video_title": "Cracking the Code with Cracking the Cryptic",
@@ -1929,6 +1968,7 @@
       "script_size": 2162
     },
     {
+      "puzzle_id": "L5q_FWlkjLQ",
       "video_id": "L5q_FWlkjLQ",
       "puzzle_title": "Coral Corridor",
       "video_title": "The Symmetry Of Sudoku",
@@ -1957,6 +1997,7 @@
       "script_size": 993
     },
     {
+      "puzzle_id": "9CkHikmSpJE",
       "video_id": "9CkHikmSpJE",
       "puzzle_title": "RAT RUN 22: Copyrat",
       "video_title": "Copyrat: Get The Rats Through This Crazy Sudoku! (S3:E2)",
@@ -1995,6 +2036,62 @@
       "script_size": 6316
     },
     {
+      "puzzle_id": "Ux6LYrFtjFc",
+      "video_id": "Ux6LYrFtjFc",
+      "puzzle_title": "Paper Snowflake",
+      "video_title": "One Of Most Beautiful Sudokus You'll Ever Solve",
+      "author": "Kainapple",
+      "video_url": "https://www.youtube.com/watch?v=Ux6LYrFtjFc",
+      "source_url": "https://sudokupad.app/xaw5c7zbsi",
+      "provider": "sudokupad",
+      "date": "2026-01-08",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Var",
+        "SameValues",
+        "Pair: shade"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 254,
+      "backtracks": 255,
+      "solve_ms": 17.3,
+      "cap": 1000,
+      "dir": "data/puzzles/Ux6LYrFtjFc",
+      "iss_size": 3715,
+      "script_size": 1726
+    },
+    {
+      "puzzle_id": "r-T6gROn-tQ",
+      "video_id": "r-T6gROn-tQ",
+      "puzzle_title": "Cloister",
+      "video_title": "The Most Revealing Sudoku Digit Ever!",
+      "author": "Michael Lefkowitz",
+      "video_url": "https://www.youtube.com/watch?v=r-T6gROn-tQ",
+      "source_url": "https://sudokupad.app/xd3kuyn90z",
+      "provider": "sudokupad",
+      "date": "2025-06-21",
+      "status": "validated",
+      "constraint_types": [
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 572,
+      "backtracks": 573,
+      "solve_ms": 23.7,
+      "cap": 1000,
+      "dir": "data/puzzles/r-T6gROn-tQ",
+      "iss_size": 375,
+      "script_size": 2130
+    },
+    {
+      "puzzle_id": "A8GBl5GGypA",
       "video_id": "A8GBl5GGypA",
       "puzzle_title": "Nordschleife",
       "video_title": "Mind Blown by this Loop Sudoku",
@@ -2023,6 +2120,215 @@
       "dir": "data/puzzles/A8GBl5GGypA",
       "iss_size": 39258,
       "script_size": 5624
+    },
+    {
+      "puzzle_id": "-2BWnJHVV38",
+      "video_id": "-2BWnJHVV38",
+      "puzzle_title": "Lobster Dinner",
+      "video_title": "The Perfection of Sudoku Art",
+      "author": "Awedish",
+      "video_url": "https://www.youtube.com/watch?v=-2BWnJHVV38",
+      "source_url": "https://sudokupad.app/o7ukhot5zh",
+      "provider": "sudokupad",
+      "date": "2024-11-11",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "BlackDot",
+        "NFA: sum mod 3"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 148,
+      "backtracks": 149,
+      "solve_ms": 13.5,
+      "cap": 1000,
+      "dir": "data/puzzles/-2BWnJHVV38",
+      "iss_size": 644,
+      "script_size": 1288
+    },
+    {
+      "puzzle_id": "R6i558mDoNQ.1",
+      "video_id": "R6i558mDoNQ",
+      "puzzle_title": "Anti-Curse",
+      "video_title": "The Rollercoaster of GAS",
+      "author": "Bill Murphy",
+      "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
+      "source_url": "https://tinyurl.com/yvpbwbk7",
+      "provider": "shortlink",
+      "date": "2023-04-29",
+      "status": "validated",
+      "constraint_types": [],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 2.0,
+      "cap": 1000,
+      "dir": "data/puzzles/R6i558mDoNQ.1",
+      "iss_size": 233,
+      "script_size": 641
+    },
+    {
+      "puzzle_id": "R6i558mDoNQ.2",
+      "video_id": "R6i558mDoNQ",
+      "puzzle_title": "Snailed It!",
+      "video_title": "The Rollercoaster of GAS",
+      "author": "Philip Newman",
+      "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
+      "source_url": "https://tinyurl.com/2zzeuuan",
+      "provider": "shortlink",
+      "date": "2023-04-29",
+      "status": "validated",
+      "constraint_types": [],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 2.2,
+      "cap": 1000,
+      "dir": "data/puzzles/R6i558mDoNQ.2",
+      "iss_size": 206,
+      "script_size": 599
+    },
+    {
+      "puzzle_id": "R6i558mDoNQ.3",
+      "video_id": "R6i558mDoNQ",
+      "puzzle_title": "It's April, Phil",
+      "video_title": "The Rollercoaster of GAS",
+      "author": "Sam Cappleman-Lynes",
+      "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
+      "source_url": "https://tinyurl.com/4yat8h6w",
+      "provider": "shortlink",
+      "date": "2023-04-29",
+      "status": "validated",
+      "constraint_types": [
+        "WhiteDot",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 2.3,
+      "cap": 1000,
+      "dir": "data/puzzles/R6i558mDoNQ.3",
+      "iss_size": 529,
+      "script_size": 1004
+    },
+    {
+      "puzzle_id": "R6i558mDoNQ.4",
+      "video_id": "R6i558mDoNQ",
+      "puzzle_title": "Big Fish",
+      "video_title": "The Rollercoaster of GAS",
+      "author": "Bill Murphy",
+      "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
+      "source_url": "https://tinyurl.com/2uaaejfy",
+      "provider": "shortlink",
+      "date": "2023-04-29",
+      "status": "validated",
+      "constraint_types": [],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 2.3,
+      "cap": 1000,
+      "dir": "data/puzzles/R6i558mDoNQ.4",
+      "iss_size": 269,
+      "script_size": 725
+    },
+    {
+      "puzzle_id": "R6i558mDoNQ.5",
+      "video_id": "R6i558mDoNQ",
+      "puzzle_title": "March 31, 2023: Rossini",
+      "video_title": "The Rollercoaster of GAS",
+      "author": "clover!",
+      "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
+      "source_url": "https://tinyurl.com/2pjx8st8",
+      "provider": "shortlink",
+      "date": "2023-04-29",
+      "status": "validated",
+      "constraint_types": [
+        "And",
+        "Or",
+        "Pair: less than",
+        "Pair: greater than"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 3.5,
+      "cap": 1000,
+      "dir": "data/puzzles/R6i558mDoNQ.5",
+      "iss_size": 4987,
+      "script_size": 2183
+    },
+    {
+      "puzzle_id": "R6i558mDoNQ.6",
+      "video_id": "R6i558mDoNQ",
+      "puzzle_title": "3/30: The Art of Goodliffing",
+      "video_title": "The Rollercoaster of GAS",
+      "author": "Philip Newman",
+      "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
+      "source_url": "https://tinyurl.com/krbbjhd3",
+      "provider": "shortlink",
+      "date": "2023-04-29",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 2.4,
+      "cap": 1000,
+      "dir": "data/puzzles/R6i558mDoNQ.6",
+      "iss_size": 317,
+      "script_size": 802
+    },
+    {
+      "puzzle_id": "R6i558mDoNQ.7",
+      "video_id": "R6i558mDoNQ",
+      "puzzle_title": "Stuck in the Middle with You",
+      "video_title": "The Rollercoaster of GAS",
+      "author": "Bill Murphy",
+      "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
+      "source_url": "https://tinyurl.com/3sawpytz",
+      "provider": "shortlink",
+      "date": "2023-04-29",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "backtracks": 2,
+      "solve_ms": 4.9,
+      "cap": 1000,
+      "dir": "data/puzzles/R6i558mDoNQ.7",
+      "iss_size": 4796,
+      "script_size": 1876
     }
   ]
 }

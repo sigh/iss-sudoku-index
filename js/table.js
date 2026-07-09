@@ -6,10 +6,9 @@
 // link is ready by the time it's clicked.
 
 import { statusMeta, hueFor } from './status.js';
-import { openScriptModal } from './script_modal.js';
+import { ISS_BASE, el } from './util.js';
 
 const YOUTUBE_ICON = 'https://www.youtube.com/favicon.ico';
-const ISS_BASE = 'https://sigh.github.io/Interactive-Sudoku-Solver/';
 
 // GitHub Pages / Fastly rejects request URLs past ~8 KB with 414 "URI Too Long".
 // The Solve URL is ISS_BASE + the .iss verbatim (its chars — . ~ - _ and URL-safe
@@ -42,15 +41,6 @@ function fmtSize(n) {
   return n < 1024 ? `${n} B` : `${(n / 1024).toFixed(1)} kB`;
 }
 
-// URL-safe base64, matching ISS's Base64Codec.encodeString (btoa + -_ + no '=').
-// TextEncoder keeps ASCII scripts byte-identical to ISS and never throws on
-// stray non-ASCII in comments.
-function urlSafeB64(str) {
-  let bin = '';
-  for (const b of new TextEncoder().encode(str)) bin += String.fromCharCode(b);
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
-}
-
 // --- sort keys, one per sortable column ---
 
 export const SORT_KEYS = {
@@ -64,15 +54,6 @@ export const SORT_KEYS = {
   // second sort key isn't worth the header clutter; it rides along in the same cell.
   guesses: r => (r.search_completed !== true || r.unique_solution === false || r.guesses == null ? Infinity : r.guesses),
 };
-
-// --- element builders ---
-
-function el(tag, className, text) {
-  const node = document.createElement(tag);
-  if (className) node.className = className;
-  if (text != null) node.textContent = text;
-  return node;
-}
 
 function iconLink(href, iconSrc, title) {
   const a = el('a');
@@ -132,14 +113,14 @@ function statusCell(status) {
   return td;
 }
 
-function authorLine(author, authorCounts, inline = false) {
+function authorLine(author, authorCounts, actions, inline = false) {
   const wrap = el('span', `puzzle-author${inline ? ' inline' : ''}`);
   wrap.append('by ');
   if ((authorCounts.get(author) || 0) > 1) {
     const button = el('button', 'author-filter', author);
     button.type = 'button';
-    button.dataset.author = author;
     button.title = `Filter by ${author}`;
+    button.addEventListener('click', () => actions.onAuthorFilter?.(author));
     wrap.append(button);
   } else {
     wrap.append(author);
@@ -147,7 +128,7 @@ function authorLine(author, authorCounts, inline = false) {
   return wrap;
 }
 
-function puzzleCell(row, density, authorCounts) {
+function puzzleCell(row, density, authorCounts, actions) {
   const td = el('td', 'col-puzzle');
   const titleRow = el('div', 'puzzle-title-row');
   if (row.source_url) {
@@ -155,17 +136,19 @@ function puzzleCell(row, density, authorCounts) {
     if (icon) titleRow.append(iconLink(row.source_url, icon, `Puzzle source (${row.provider || 'link'})`));
   }
   titleRow.append(el('div', 'puzzle-title', row.puzzle_title || '(untitled)'));
-  if (density === 'compact' && row.author) titleRow.append(authorLine(row.author, authorCounts, true));
+  if (density === 'compact' && row.author) titleRow.append(authorLine(row.author, authorCounts, actions, true));
   td.append(titleRow);
-  if (density !== 'compact' && row.author) td.append(authorLine(row.author, authorCounts));
+  if (density !== 'compact' && row.author) td.append(authorLine(row.author, authorCounts, actions));
   if (row.constraint_types && row.constraint_types.length) {
     const chips = el('div', 'chips');
     const chipTarget = density === 'compact' ? el('span', 'chips-clip') : chips;
     for (const name of row.constraint_types) {
-      const chip = el('span', 'chip', name);
-      chip.dataset.name = name;               // click-to-filter (delegated in app.js)
+      const chip = el('button', 'chip', name);
+      chip.type = 'button';
       chip.title = `Filter by ${name}`;
+      chip.setAttribute('aria-label', `Filter by ${name}`);
       chip.style.setProperty('--tag-hue', hueFor(name));
+      chip.addEventListener('click', () => actions.onConstraintFilter?.(name));
       chipTarget.append(chip);
     }
     if (chipTarget !== chips) chips.append(chipTarget);
@@ -246,7 +229,7 @@ function thumbnailLink(row, density) {
 // Video cell: video link plus the date — sortable by date. Medium/spacious show
 // a thumbnail; compact keeps the old favicon-sized row.
 function videoCell(row, density) {
-  const td = el('td', `col-video density-${density}`);
+  const td = el('td', 'col-video');
   if (density !== 'compact') {
     td.append(thumbnailLink(row, density));
     td.append(el('div', 'video-date', row.date || ''));
@@ -259,18 +242,13 @@ function videoCell(row, density) {
   return td;
 }
 
-// Script action: a button that opens the source in an in-page modal (with Copy /
-// Open-in-ISS). A modal, not a link, because a large script's ?code= URL blows
-// past the URL length limit — this way it stays viewable and copyable.
-function scriptButton(row) {
+// Script action: table.js renders the control; app.js decides how to open it.
+// A button, not a link, because large script ?code= URLs can exceed URL limits.
+function scriptButton(row, onOpenScript) {
   const btn = el('button', 'iss-link script', 'Script');
   btn.type = 'button';
   btn.title = 'View the sandbox script';
-  btn.addEventListener('click', () => openScriptModal({
-    title: row.puzzle_title || 'Sandbox script',
-    fileUrl: `${row.dir}/puzzle.js`,
-    buildIssHref: t => ISS_BASE + '?code=' + urlSafeB64(t),
-  }));
+  btn.addEventListener('click', () => onOpenScript?.(row));
   return btn;
 }
 
@@ -293,8 +271,8 @@ function solveAction(row) {
     t => ISS_BASE + '?q=' + encodeURIComponent(t.trim().replace(/\n/g, '')));
 }
 
-// The two ISS actions (Solve link / Script modal) with their sizes.
-function constraintCell(row) {
+// The two ISS actions (Solve link / Script button) with their sizes.
+function constraintCell(row, actions) {
   const td = el('td', 'col-constraint');
   if (row.iss_size && row.dir) {
     const oversized = row.iss_size > SOLVE_URL_LIMIT;
@@ -302,22 +280,29 @@ function constraintCell(row) {
     stack.append(
       issRow(solveAction(row), row.iss_size,
         oversized && 'Too large for a URL — this is why Solve is disabled'),
-      issRow(scriptButton(row), row.script_size),
+      issRow(scriptButton(row, actions.onOpenScript), row.script_size),
     );
     td.append(stack);
   }
   return td;
 }
 
-export function buildRow(row, { density = 'medium', authorCounts = new Map() } = {}) {
+export function buildRow(row, {
+  density = 'medium',
+  authorCounts = new Map(),
+  onAuthorFilter,
+  onConstraintFilter,
+  onOpenScript,
+} = {}) {
+  const actions = { onAuthorFilter, onConstraintFilter, onOpenScript };
   const tr = document.createElement('tr');
-  tr.className = `density-${density}`;
+  tr.dataset.density = density;
   tr.append(
     videoCell(row, density),
-    puzzleCell(row, density, authorCounts),
+    puzzleCell(row, density, authorCounts, actions),
     statusCell(row.status),
     statsCell(row),
-    constraintCell(row),
+    constraintCell(row, actions),
   );
   return tr;
 }

@@ -23,7 +23,6 @@ const DL = 10;
 const DR = 11;
 const VALUE_COUNT = 11;
 
-const ALL_SHAPES = [OFF, U, D, L, R, HORIZ, VERT, UL, UR, DL, DR];
 const ENDPOINT_SHAPES = [U, D, L, R];
 const MIDDLE_SHAPES = [OFF, HORIZ, VERT, UL, UR, DL, DR];
 const GRID_DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
@@ -134,9 +133,7 @@ const edgeWhisper = (toB) => NFA.encodeSpec({
 const rightWhisper = edgeWhisper(usesRight);
 const downWhisper = edgeWhisper(usesDown);
 
-for (const cell of gridCells) {
-  add(new Given(cell, ...GRID_DIGITS));
-
+function shapeDomain(cell) {
   let shapes = allowedShapes(cell);
   if (wallEdges.has(`R:${cell}`)) shapes = shapes.filter(shapeValue => !canUse(shapeValue, 'R'));
   if (wallEdges.has(`D:${cell}`)) shapes = shapes.filter(shapeValue => !canUse(shapeValue, 'D'));
@@ -148,17 +145,54 @@ for (const cell of gridCells) {
   if (upNeighbour && wallEdges.has(`D:${upNeighbour}`)) {
     shapes = shapes.filter(shapeValue => !canUse(shapeValue, 'U'));
   }
-  add(new Given(shapeCell(cell), ...shapes));
+  return shapes;
+}
 
+add(new Replicate(
+  [new Given('R1C1', ...GRID_DIGITS)],
+  Replicate.encodeTargetCells(gridCells, 'R1C1', graph),
+  'R1C1',
+));
+
+const shapeDomainGroups = new Map();
+for (const cell of gridCells) {
+  const shapes = shapeDomain(cell);
+  const key = shapes.join('_');
+  if (!shapeDomainGroups.has(key)) shapeDomainGroups.set(key, { shapes, cells: [] });
+  shapeDomainGroups.get(key).cells.push(cell);
+}
+
+for (const { shapes, cells } of shapeDomainGroups.values()) {
+  const origin = shapeCell(cells[0]);
+  add(new Replicate(
+    [new Given(origin, ...shapes)],
+    Replicate.encodeTargetCells(cells.map(shapeCell), origin, shape),
+    origin,
+  ));
+}
+
+const rightCells = gridCells.filter(cell => graph.step(cell, 0, 1));
+add(new Replicate(
+  [new Pair(rightAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R1C2'))],
+  Replicate.encodeTargetCells(rightCells.map(shapeCell), shapeCell('R1C1'), shape),
+  shapeCell('R1C1'),
+));
+
+const downCells = gridCells.filter(cell => graph.step(cell, 1, 0));
+add(new Replicate(
+  [new Pair(downAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R2C1'))],
+  Replicate.encodeTargetCells(downCells.map(shapeCell), shapeCell('R1C1'), shape),
+  shapeCell('R1C1'),
+));
+
+for (const cell of gridCells) {
   const rightNeighbour = graph.step(cell, 0, 1);
   if (rightNeighbour) {
-    add(new Pair(rightAgree, 'path-edge', shapeCell(cell), shapeCell(rightNeighbour)));
     add(new NFA(rightWhisper, 'maze-whisper', shapeCell(cell), cell, rightNeighbour));
   }
 
   const downNeighbour = graph.step(cell, 1, 0);
   if (downNeighbour) {
-    add(new Pair(downAgree, 'path-edge', shapeCell(cell), shapeCell(downNeighbour)));
     add(new NFA(downWhisper, 'maze-whisper', shapeCell(cell), cell, downNeighbour));
   }
 }
