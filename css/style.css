@@ -237,7 +237,7 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
 /* --- Table --- */
 table { width: 100%; border-collapse: collapse; table-layout: fixed; }
 col.col-video { width: 140px; }
-#index[data-density="spacious"] col.col-video { width: 260px; }
+#index[data-density="large"] col.col-video { width: 260px; }
 col.col-status { width: 98px; }
 col.col-guesses { width: 112px; }
 col.col-constraint { width: 136px; }
@@ -383,7 +383,7 @@ tr[data-density="compact"] .chip { display: inline-block; margin-right: 4px; }
 /* Thumbnails-on variant: a thumbnail (the video link itself, replacing the plain
    YouTube favicon) with a subtle play affordance. */
 #index[data-density="medium"] { --thumb-w: 120px; --thumb-h: 68px; }
-#index[data-density="spacious"] { --thumb-w: 240px; --thumb-h: 135px; }
+#index[data-density="large"] { --thumb-w: 240px; --thumb-h: 135px; }
 .thumb-link {
   position: relative;
   display: block;

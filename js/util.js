@@ -1,6 +1,6 @@
 export const ISS_BASE = 'https://sigh.github.io/Interactive-Sudoku-Solver/';
 
-export const DENSITIES = new Set(['compact', 'medium', 'spacious']);
+export const DENSITIES = new Set(['compact', 'medium', 'large']);
 
 export function el(tag, options = {}, ...children) {
   const node = document.createElement(tag);

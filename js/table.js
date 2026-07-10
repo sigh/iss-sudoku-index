@@ -209,7 +209,7 @@ function issRow(link, size, oversizedReason) {
   return row;
 }
 
-// The thumbnail itself IS the video link; spacious mode uses maxresdefault for a
+// The thumbnail itself IS the video link; large mode uses maxresdefault for a
 // clearer puzzle preview, while medium keeps the lighter mqdefault image.
 function thumbnailLink(row, density) {
   const a = el('a', 'thumb-link');
@@ -218,7 +218,7 @@ function thumbnailLink(row, density) {
   a.rel = 'noopener noreferrer';
   a.title = row.video_title || 'YouTube video';
   const img = el('img', 'thumb');
-  const thumbQuality = density === 'spacious' ? 'maxresdefault' : 'mqdefault';
+  const thumbQuality = density === 'large' ? 'maxresdefault' : 'mqdefault';
   img.src = `https://img.youtube.com/vi/${row.video_id}/${thumbQuality}.jpg`;
   img.alt = '';
   img.loading = 'lazy';
@@ -226,7 +226,7 @@ function thumbnailLink(row, density) {
   return a;
 }
 
-// Video cell: video link plus the date — sortable by date. Medium/spacious show
+// Video cell: video link plus the date — sortable by date. Medium/large show
 // a thumbnail; compact keeps the old favicon-sized row.
 function videoCell(row, density) {
   const td = el('td', 'col-video');
