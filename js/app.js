@@ -5,6 +5,10 @@ import { buildRow, SORT_KEYS } from './table.js';
 import { openScriptModal } from './script_modal.js';
 import { DENSITIES, ISS_BASE, el, urlSafeB64 } from './util.js';
 
+// Rows are appended to the table in chunks as the user scrolls (windowed
+// rendering) so a large index doesn't stall filtering/sorting re-renders.
+const RENDER_CHUNK = 200;
+
 const DEFAULT_STATE = {
   filterText: '',
   activeFilters: [],
@@ -218,6 +222,10 @@ class IndexApp {
     this.state = createState();
     this.filterTimer = null;
     this.dom = this.collectDom();
+    this.pendingRows = [];
+    this.renderedCount = 0;
+    this.sentinelObserver = null;
+    this.chipObserver = null;
   }
 
   collectDom() {
@@ -225,6 +233,7 @@ class IndexApp {
       controls: document.getElementById('controls'),
       table: document.getElementById('index'),
       rows: document.getElementById('rows'),
+      sentinel: document.getElementById('sentinel'),
       empty: document.getElementById('empty'),
       clearEmpty: document.getElementById('clear-empty'),
       filter: document.getElementById('filter'),
@@ -278,14 +287,32 @@ class IndexApp {
 
   renderRows(rows) {
     this.dom.table.dataset.density = this.state.density;
-    this.dom.rows.replaceChildren(...rows.map(row => buildRow(row, {
+    this.pendingRows = rows;
+    this.renderedCount = 0;
+    this.chipObserver?.disconnect();
+    this.dom.rows.replaceChildren();
+    this.appendNextChunk();
+  }
+
+  appendNextChunk() {
+    // Re-observing after each append makes the sentinel re-fire if it is still
+    // within range, so one long scroll keeps pulling chunks until it isn't.
+    this.sentinelObserver?.unobserve(this.dom.sentinel);
+    const limit = this.sentinelObserver ? RENDER_CHUNK : Infinity;
+    const chunk = this.pendingRows.slice(this.renderedCount, this.renderedCount + limit);
+    this.renderedCount += chunk.length;
+    const els = chunk.map(row => buildRow(row, {
       density: this.state.density,
       authorCounts: this.state.authorCounts,
       onAuthorFilter: author => this.addActiveFilter('author', author),
       onConstraintFilter: name => this.addActiveFilter('constraint', name),
       onOpenScript: scriptRow => this.openScript(scriptRow),
-    })));
-    this.markScrollableChips();
+    }));
+    this.dom.rows.append(...els);
+    for (const rowEl of els) this.observeRowChips(rowEl);
+    if (this.renderedCount < this.pendingRows.length) {
+      this.sentinelObserver.observe(this.dom.sentinel);
+    }
   }
 
   renderControls(visibleCount) {
@@ -341,21 +368,29 @@ class IndexApp {
     this.dom.activeFilters.hidden = this.state.activeFilters.length === 0;
   }
 
-  markScrollableChips() {
-    for (const chips of this.dom.rows.querySelectorAll('tr[data-density="medium"] .chips, tr[data-density="compact"] .chips')) {
-      const horizontal = chips.closest('tr')?.dataset.density === 'compact';
-      const update = () => {
-        const hasOverflow = horizontal
-          ? chips.scrollWidth > chips.clientWidth + 1
-          : chips.scrollHeight > chips.clientHeight + 1;
-        const atEnd = horizontal
-          ? chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 1
-          : chips.scrollTop + chips.clientHeight >= chips.scrollHeight - 1;
-        chips.classList.toggle('overflowing', hasOverflow && !atEnd);
-      };
-      update();
-      chips.addEventListener('scroll', update);
+  // Overflow detection reads scrollWidth/Height (forced layout), so it only
+  // runs once a row's chips approach the viewport, not for every rendered row.
+  observeRowChips(rowEl) {
+    if (rowEl.dataset.density === 'large') return;
+    for (const chips of rowEl.querySelectorAll('.chips')) {
+      if (this.chipObserver) this.chipObserver.observe(chips);
+      else this.setupChipOverflow(chips);
     }
+  }
+
+  setupChipOverflow(chips) {
+    const horizontal = chips.closest('tr')?.dataset.density === 'compact';
+    const update = () => {
+      const hasOverflow = horizontal
+        ? chips.scrollWidth > chips.clientWidth + 1
+        : chips.scrollHeight > chips.clientHeight + 1;
+      const atEnd = horizontal
+        ? chips.scrollLeft + chips.clientWidth >= chips.scrollWidth - 1
+        : chips.scrollTop + chips.clientHeight >= chips.scrollHeight - 1;
+      chips.classList.toggle('overflowing', hasOverflow && !atEnd);
+    };
+    update();
+    chips.addEventListener('scroll', update, { passive: true });
   }
 
   buildLegend() {
@@ -483,6 +518,19 @@ class IndexApp {
 
   wire() {
     this.syncStickyOffset();
+    if ('IntersectionObserver' in window) {
+      this.sentinelObserver = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) this.appendNextChunk();
+      }, { rootMargin: '1200px 0px' });
+      this.chipObserver = new IntersectionObserver(entries => {
+        for (const entry of entries) {
+          if (!entry.isIntersecting) continue;
+          this.chipObserver.unobserve(entry.target);
+          this.setupChipOverflow(entry.target);
+        }
+      }, { rootMargin: '200px 0px' });
+    }
+
     if ('ResizeObserver' in window) {
       new ResizeObserver(() => this.syncStickyOffset()).observe(this.dom.controls);
     } else {
