@@ -47,11 +47,98 @@ function readActiveFilters(params) {
   });
 }
 
-function matchesText(row, q) {
-  if (!q) return true;
-  return (row.puzzle_title || '').toLowerCase().includes(q)
-    || (row.author || '').toLowerCase().includes(q)
-    || (row.constraint_types || []).some(c => c.toLowerCase().includes(q));
+function parseUrlLike(text) {
+  const trimmed = text.trim();
+  if (!trimmed) return null;
+  try {
+    return new URL(trimmed);
+  } catch (_) {
+    if (!/^[a-z][a-z0-9+.-]*:\/\//i.test(trimmed) && /^[^/\s]+\.[^/\s]+/i.test(trimmed)) {
+      try {
+        return new URL(`https://${trimmed}`);
+      } catch (_) {
+        return null;
+      }
+    }
+    return null;
+  }
+}
+
+function youtubeHost(url) {
+  const host = url.hostname.toLowerCase().replace(/^www\./, '').replace(/^m\./, '');
+  return host === 'youtu.be' || host.endsWith('youtube.com') || host.endsWith('youtube-nocookie.com')
+    ? host
+    : '';
+}
+
+function normalizedUrlToken(text) {
+  const url = parseUrlLike(text);
+  if (!url) return '';
+  if (youtubeHost(url)) return '';
+  url.hash = '';
+  url.search = '';
+  return url.href.replace(/\/$/, '').toLowerCase();
+}
+
+function youtubeVideoIdToken(text) {
+  const url = parseUrlLike(text);
+  if (!url) return '';
+
+  const host = youtubeHost(url);
+  if (host === 'youtu.be') return url.pathname.split('/').filter(Boolean)[0] || '';
+  if (!host) return '';
+
+  const watchId = url.searchParams.get('v');
+  if (watchId) return watchId;
+
+  const parts = url.pathname.split('/').filter(Boolean);
+  if (['embed', 'shorts', 'live', 'v'].includes(parts[0])) return parts[1] || '';
+  return '';
+}
+
+function searchNeedles(query) {
+  const needles = [];
+  const q = query.trim().toLowerCase();
+  if (!q) return needles;
+  needles.push(q);
+
+  const normalizedUrl = normalizedUrlToken(query);
+  if (normalizedUrl && normalizedUrl !== q) needles.push(normalizedUrl);
+
+  const youtubeId = youtubeVideoIdToken(query).toLowerCase();
+  if (youtubeId && youtubeId !== q) needles.push(youtubeId);
+
+  return needles;
+}
+
+function rowSearchHaystack(row) {
+  return [
+    row.puzzle_title,
+    row.video_title,
+    row.author,
+    row.puzzle_id,
+    row.video_id,
+    row.video_url,
+    row.source_url,
+    normalizedUrlToken(row.video_url || ''),
+    normalizedUrlToken(row.source_url || ''),
+    ...(row.constraint_types || []),
+  ]
+    .filter(Boolean)
+    .join('\n')
+    .toLowerCase();
+}
+
+function buildSearchIndex(rows) {
+  const index = new WeakMap();
+  for (const row of rows) index.set(row, rowSearchHaystack(row));
+  return index;
+}
+
+function matchesText(row, needles, searchIndex) {
+  if (!needles.length) return true;
+  const haystack = searchIndex.get(row);
+  return needles.some(needle => haystack.includes(needle));
 }
 
 function matchesActiveFilter(row, filter) {
@@ -65,6 +152,7 @@ function createState() {
   return {
     ...DEFAULT_STATE,
     rows: [],
+    searchIndex: new WeakMap(),
     authorCounts: new Map(),
     hiddenStatuses: new Set(),
   };
@@ -106,25 +194,29 @@ function writeStateToUrl(state) {
 }
 
 function queryRows(state) {
-  const q = state.filterText.trim().toLowerCase();
+  const needles = searchNeedles(state.filterText);
   const sortKey = SORT_KEYS[state.sortBy];
   const dir = state.sortDesc ? -1 : 1;
-  return state.rows
-    .filter(row => !state.hiddenStatuses.has(row.status))
-    .filter(row => matchesText(row, q))
-    .filter(row => state.activeFilters.every(filter => matchesActiveFilter(row, filter)))
-    .sort((a, b) => {
+  const rows = [];
+  for (const row of state.rows) {
+    if (state.hiddenStatuses.has(row.status)) continue;
+    if (!matchesText(row, needles, state.searchIndex)) continue;
+    if (!state.activeFilters.every(filter => matchesActiveFilter(row, filter))) continue;
+    rows.push(row);
+  }
+  return rows.sort((a, b) => {
       const ka = sortKey(a);
       const kb = sortKey(b);
       if (ka < kb) return -1 * dir;
       if (ka > kb) return 1 * dir;
       return 0;
-    });
+  });
 }
 
 class IndexApp {
   constructor() {
     this.state = createState();
+    this.filterTimer = null;
     this.dom = this.collectDom();
   }
 
@@ -158,6 +250,7 @@ class IndexApp {
     if (!res.ok) throw new Error(`failed to load index: ${res.status}`);
     const data = await res.json();
     this.state.rows = data.rows;
+    this.state.searchIndex = buildSearchIndex(this.state.rows);
     this.state.authorCounts = countAuthors(this.state.rows);
     this.buildLegend();
     this.render();
@@ -313,9 +406,16 @@ class IndexApp {
   }
 
   setFilter(text) {
+    clearTimeout(this.filterTimer);
+    this.filterTimer = null;
     this.state.filterText = text;
     this.dom.filter.value = text;
     this.render();
+  }
+
+  queueFilter(text) {
+    clearTimeout(this.filterTimer);
+    this.filterTimer = setTimeout(() => this.setFilter(text), 100);
   }
 
   addActiveFilter(type, value) {
@@ -389,7 +489,7 @@ class IndexApp {
       window.addEventListener('resize', () => this.syncStickyOffset());
     }
 
-    this.dom.filter.addEventListener('input', () => this.setFilter(this.dom.filter.value));
+    this.dom.filter.addEventListener('input', () => this.queueFilter(this.dom.filter.value));
     this.dom.activeFilters.addEventListener('click', e => this.handleActiveFilterClick(e));
     this.dom.resetFilters.addEventListener('click', () => this.clearFilters());
     this.dom.clearEmpty.addEventListener('click', () => this.clearFilters());
