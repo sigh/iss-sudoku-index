@@ -211,7 +211,9 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
   outline-offset: 2px;
 }
 
-.legend { display: flex; flex: 0 1 auto; flex-wrap: wrap; gap: 6px; min-width: 0; }
+/* min-height reserves the chips' height pre-load so the sticky bar doesn't
+   grow (and shift the table) when the legend populates. */
+.legend { display: flex; flex: 0 1 auto; flex-wrap: wrap; gap: 6px; min-width: 0; min-height: 23px; }
 .legend-item {
   display: inline-flex;
   align-items: center;
@@ -511,6 +513,10 @@ body.modal-open { overflow: hidden; }
 pre.modal-code { flex: 1; min-height: 0; margin: 0; }
 .modal-hint { font-size: var(--fs-small); }
 .modal-actions { display: flex; gap: 8px; flex-shrink: 0; }
+
+/* The pre-load "Loading…" message (and load failures) share the empty-state
+   styling and position, so data arriving reads like a filter change. */
+.empty.error { color: var(--status-bad); }
 
 .empty {
   display: flex;

@@ -236,6 +236,7 @@ class IndexApp {
   collectDom() {
     return {
       controls: document.getElementById('controls'),
+      loading: document.getElementById('loading'),
       table: document.getElementById('index'),
       rows: document.getElementById('rows'),
       sentinel: document.getElementById('sentinel'),
@@ -262,11 +263,12 @@ class IndexApp {
 
   async load() {
     const res = await fetch('data/mappings.json');
-    if (!res.ok) throw new Error(`failed to load index: ${res.status}`);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
     this.state.rows = data.rows;
     this.state.searchIndex = buildSearchIndex(this.state.rows);
     this.state.authorCounts = countAuthors(this.state.rows);
+    this.dom.loading.hidden = true;
     this.buildLegend();
     this.render();
   }
@@ -592,10 +594,8 @@ class IndexApp {
   }
 
   showLoadError(err) {
-    this.dom.empty.hidden = false;
-    this.dom.empty.firstElementChild.textContent = err.message;
-    this.dom.clearEmpty.hidden = true;
-    this.dom.resetFilters.hidden = true;
+    this.dom.loading.textContent = `Failed to load index: ${err.message}`;
+    this.dom.loading.classList.add('error');
   }
 }
 
