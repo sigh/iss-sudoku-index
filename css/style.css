@@ -536,6 +536,31 @@ pre.modal-code { flex: 1; min-height: 0; margin: 0; }
   outline-offset: 2px;
 }
 
+/* Floating back-to-top button — appears once the list is a couple of screens deep. */
+.to-top {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 30;
+  width: 38px;
+  height: 38px;
+  border: 1px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--bg-surface);
+  color: var(--text);
+  font: inherit;
+  font-size: 16px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+.to-top:hover { background: var(--bg-hover); }
+.to-top:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+.to-top[hidden] { display: none; }
+
 /* Narrow screens: drop status label + chips to keep the row compact. */
 @media (max-width: 640px) {
   :root { --page-x: var(--gap); }

@@ -197,24 +197,29 @@ function writeStateToUrl(state) {
   history.replaceState(null, '', location.pathname + (qs ? `?${qs}` : ''));
 }
 
+// statusCounts ignores hiddenStatuses so each legend chip reports what
+// toggling it would show, not what it currently shows.
 function queryRows(state) {
   const needles = searchNeedles(state.filterText);
   const sortKey = SORT_KEYS[state.sortBy];
   const dir = state.sortDesc ? -1 : 1;
   const rows = [];
+  const statusCounts = {};
   for (const row of state.rows) {
-    if (state.hiddenStatuses.has(row.status)) continue;
     if (!matchesText(row, needles, state.searchIndex)) continue;
     if (!state.activeFilters.every(filter => matchesActiveFilter(row, filter))) continue;
+    statusCounts[row.status] = (statusCounts[row.status] || 0) + 1;
+    if (state.hiddenStatuses.has(row.status)) continue;
     rows.push(row);
   }
-  return rows.sort((a, b) => {
+  rows.sort((a, b) => {
       const ka = sortKey(a);
       const kb = sortKey(b);
       if (ka < kb) return -1 * dir;
       if (ka > kb) return 1 * dir;
       return 0;
   });
+  return { rows, statusCounts };
 }
 
 class IndexApp {
@@ -234,6 +239,7 @@ class IndexApp {
       table: document.getElementById('index'),
       rows: document.getElementById('rows'),
       sentinel: document.getElementById('sentinel'),
+      toTop: document.getElementById('to-top'),
       empty: document.getElementById('empty'),
       clearEmpty: document.getElementById('clear-empty'),
       filter: document.getElementById('filter'),
@@ -273,15 +279,11 @@ class IndexApp {
     writeStateToUrl(this.state);
   }
 
-  visibleRows() {
-    return queryRows(this.state);
-  }
-
   render() {
-    const rows = this.visibleRows();
+    const { rows, statusCounts } = queryRows(this.state);
     this.renderRows(rows);
     this.renderActiveFilters();
-    this.renderControls(rows.length);
+    this.renderControls(rows.length, statusCounts);
     this.syncBrowserState();
   }
 
@@ -315,9 +317,9 @@ class IndexApp {
     }
   }
 
-  renderControls(visibleCount) {
+  renderControls(visibleCount, statusCounts) {
     this.renderSearchSummary(visibleCount);
-    this.syncLegendButtons();
+    this.syncLegendButtons(statusCounts);
     this.syncSortHeaders();
   }
 
@@ -420,10 +422,13 @@ class IndexApp {
     this.syncLegendButtons();
   }
 
-  syncLegendButtons() {
+  syncLegendButtons(statusCounts) {
     for (const item of this.dom.legend.querySelectorAll('.legend-item')) {
       const meta = statusMeta(item.dataset.status);
       const hidden = this.state.hiddenStatuses.has(item.dataset.status);
+      if (statusCounts) {
+        item.querySelector('.count').textContent = statusCounts[item.dataset.status] || 0;
+      }
       item.classList.toggle('off', hidden);
       item.setAttribute('aria-pressed', hidden ? 'false' : 'true');
       item.title = hidden ? `Show ${meta.label}` : `Hide ${meta.label}`;
@@ -536,6 +541,13 @@ class IndexApp {
     } else {
       window.addEventListener('resize', () => this.syncStickyOffset());
     }
+
+    const syncToTop = () => {
+      this.dom.toTop.hidden = window.scrollY <= 0;
+    };
+    window.addEventListener('scroll', syncToTop, { passive: true });
+    syncToTop();
+    this.dom.toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
     this.dom.filter.addEventListener('input', () => this.queueFilter(this.dom.filter.value));
     this.dom.activeFilters.addEventListener('click', e => this.handleActiveFilterClick(e));
