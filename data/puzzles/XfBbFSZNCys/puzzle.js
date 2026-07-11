@@ -13,10 +13,12 @@ const ON = 1;
 const OFF = 2;
 
 const graph = cellGraph('9x9');
+const horizontalVar = new Var('H', 'horizontal gap edges', 90);
+const verticalVar = new Var('V', 'vertical gap edges', 90);
 const constraints = [
   new Shape('9x9'),
-  new Var('H', 'horizontal gap edges', 90),
-  new Var('V', 'vertical gap edges', 90),
+  horizontalVar,
+  verticalVar,
 ];
 
 const add = (...newConstraints) => constraints.push(...newConstraints);
@@ -27,12 +29,12 @@ function cell(row, col) {
 
 // Horizontal edge on row boundary rb=0..9, spanning column c=1..9.
 function h(rb, c) {
-  return `VH${rb * 9 + c}`;
+  return horizontalVar.cell(rb * 9 + c);
 }
 
 // Vertical edge in row r=1..9, on column boundary cb=0..9.
 function v(r, cb) {
-  return `VV${(r - 1) * 10 + cb + 1}`;
+  return verticalVar.cell((r - 1) * 10 + cb + 1);
 }
 
 function edgeId(edge) {
@@ -40,7 +42,7 @@ function edgeId(edge) {
 }
 
 for (let i = 1; i <= 90; i++) {
-  add(new Given(`VH${i}`, ON, OFF), new Given(`VV${i}`, ON, OFF));
+  add(new Given(horizontalVar.cell(i), ON, OFF), new Given(verticalVar.cell(i), ON, OFF));
 }
 
 const safetyStripEdges = [

@@ -3,10 +3,15 @@
 // Video: https://www.youtube.com/watch?v=TB1CIfZeOyU
 // Source: https://sudokupad.app/znt0i5zouc
 
+// Normal sudoku rules apply. No given digits.
+// Opposite X-Sums: each clue outside the grid gives the sum of the last N
+// digits in its row/column (the N digits furthest from the clue), where N is
+// the first digit in that row/column read from the clue side.
+
 const graph = cellGraph('9x9');
 
-const row = r => graph.row(`R${r}C1`);
-const col = c => graph.column(`R1C${c}`);
+const row = r => graph.row(r);
+const col = c => graph.column(c);
 
 function oppositeXSum(clue, cells) {
   return new Or(Array.from({ length: 9 }, (_, i) => i + 1).map(n => new And([

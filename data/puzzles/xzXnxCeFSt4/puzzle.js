@@ -39,21 +39,19 @@ function range(from, to) {
   return Array.from({ length: to - from + 1 }, (_, i) => from + i);
 }
 
+const cageTotalsVar = new Var("K", "cage totals", cages.length);
+
 function cageTotalVar(index) {
-  return `VK${index + 1}`;
+  return cageTotalsVar.cell(index + 1);
 }
 
 function cageTotalSum(cells, index) {
-  return new Sum(
-    `0_=_${[...cells.map(() => 1), -1].join("_")}`,
-    ...cells,
-    cageTotalVar(index),
-  );
+  return new EqualSum(cells, [cageTotalVar(index)]);
 }
 
 const constraints = [
   new Shape("9x9", 16),
-  new Var("K", "cage totals", cages.length),
+  cageTotalsVar,
   ...graph.cells().map(cell => new Given(cell, ...range(1, 9))),
 ];
 

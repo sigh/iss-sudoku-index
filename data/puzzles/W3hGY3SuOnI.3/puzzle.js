@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=W3hGY3SuOnI
 // Source: https://sudokupad.app/edz9ll8csv
 
+// 6x6 sudoku with 2x3 boxes, no givens. Global entropy: every 2x2 area has
+// at least one digit from each of {1,2}, {3,4}, and {5,6} (encoded with
+// per-band NFAs since GlobalEntropy is 9x9-only). Renban lines, and a little
+// killer diagonal summing to 13.
+
 const constraints = [
   new Shape('6x6'),
 

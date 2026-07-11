@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=R6i558mDoNQ
 // Source: https://tinyurl.com/2uaaejfy
 
+// Normal sudoku. The visible clues are jokey glyphs that transform into
+// givens: 1 stays 1, 2 becomes 5, 5 becomes 2, 6 becomes 9, epsilon marks
+// rotate into 3s, orange cells become 6s, and R9C9 is an 8. Only the
+// transformed givens below are encoded; the remaining rule text is noise.
+
 const givens = [
   ['R1C2', 1],
   ['R1C3', 2],

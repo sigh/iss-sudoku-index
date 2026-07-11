@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=z9T9kUTum1M
 // Source: https://sudokupad.app/6y7vhnhdof
 
+// Normal sudoku, no givens. Digits along each arrow sum to the digit in the
+// circled cell. On each golden nabner loop (a 2x2 set of cells), no two
+// digits may be consecutive. White dots join consecutive digits; not all
+// possible white dots are shown.
+
 const nabnerKey = PairX.fnToKey((a, b) => Math.abs(a - b) > 1, 9);
 
 const nabnerSets = [

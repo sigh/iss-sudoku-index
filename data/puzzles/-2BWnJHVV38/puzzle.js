@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=-2BWnJHVV38
 // Source: https://sudokupad.app/o7ukhot5zh
 
+// Normal sudoku, no givens. Adjacent digits along each green line differ by
+// at least 5. Digits on each orange line sum to a multiple of 3. Black dots
+// mark 1:2 ratio pairs (not all dots given). Orange loops repeat their first
+// cell in the raw data; the closing repeat is dropped before encoding.
+
 const whispers = [
   ['R1C5', 'R2C4'],
   ['R2C6', 'R3C5'],

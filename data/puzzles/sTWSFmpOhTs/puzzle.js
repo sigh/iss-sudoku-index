@@ -12,22 +12,20 @@
 // direction points at it). Each line is therefore an Or over the two
 // orientations: Arrow(tip = sum of arm) AND a non-decreasing chain toward tip.
 
-const cid = (r, c) => makeCellId(r + 1, c + 1);
-
-// Lines as ordered 0-indexed [row, col], one endpoint to the other, including
+// Lines as ordered 1-indexed [row, col], one endpoint to the other, including
 // the intermediate cells crossed by diagonal segments.
 const lines = [
-  [[8, 5], [7, 6], [6, 7], [7, 8]],
-  [[7, 3], [7, 4], [8, 4]],
-  [[7, 2], [6, 3], [5, 4], [6, 5]],
-  [[5, 0], [4, 1], [5, 2]],
-  [[2, 0], [1, 1], [0, 2], [1, 3]],
-  [[3, 0], [2, 1], [1, 2], [2, 3], [3, 4], [4, 5]],
-  [[4, 2], [3, 3], [4, 4], [5, 5], [6, 6]],
-  [[3, 5], [2, 6], [3, 7], [4, 8]],
-  [[2, 5], [1, 6], [2, 7]],
-  [[1, 5], [0, 6], [1, 7]],
-  [[5, 1], [6, 2], [7, 1]],
+  [[9, 6], [8, 7], [7, 8], [8, 9]],
+  [[8, 4], [8, 5], [9, 5]],
+  [[8, 3], [7, 4], [6, 5], [7, 6]],
+  [[6, 1], [5, 2], [6, 3]],
+  [[3, 1], [2, 2], [1, 3], [2, 4]],
+  [[4, 1], [3, 2], [2, 3], [3, 4], [4, 5], [5, 6]],
+  [[5, 3], [4, 4], [5, 5], [6, 6], [7, 7]],
+  [[4, 6], [3, 7], [4, 8], [5, 9]],
+  [[3, 6], [2, 7], [3, 8]],
+  [[2, 6], [1, 7], [2, 8]],
+  [[6, 2], [7, 3], [8, 2]],
 ];
 
 // Non-decreasing / non-increasing chains along consecutive cells (a "slow"
@@ -38,7 +36,7 @@ const geKey = Pair.fnToKey((a, b) => a >= b, 9); // cells[i] >= cells[i+1]
 const constraints = [new Shape('9x9')];
 
 for (const line of lines) {
-  const cells = line.map(([r, c]) => cid(r, c));
+  const cells = line.map(([r, c]) => makeCellId(r, c));
   const first = cells[0];
   const last = cells[cells.length - 1];
 

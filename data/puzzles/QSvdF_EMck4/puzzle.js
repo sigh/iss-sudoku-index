@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=QSvdF_EMck4
 // Source: https://sudokupad.app/uoyv9ny78e
 
+// Normal sudoku rules apply. A Go position is drawn on the grid with two kinds
+// of pieces: plus (black) pieces and white circle pieces, at the cells listed
+// below. In each row and column, the digits on the same kind of piece contain
+// no two consecutive digits. In each 3x3 box, the digits on the same kind of
+// piece all share the same parity. One given digit: R5C5 = 1 (a plus piece).
+
 const plus = [
   'R1C2', 'R1C5', 'R1C7',
   'R2C7',
@@ -36,6 +42,7 @@ function col(cell) {
   return parseCellId(cell).col;
 }
 
+// Box index (0-8, row-major) of a cell; the API has no box-index helper.
 function box(cell) {
   const {row, col} = parseCellId(cell);
   return Math.floor((row - 1) / 3) * 3 + Math.floor((col - 1) / 3);

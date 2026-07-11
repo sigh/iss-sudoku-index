@@ -3,6 +3,9 @@
 // Video: https://www.youtube.com/watch?v=R6i558mDoNQ
 // Source: https://tinyurl.com/krbbjhd3
 
+// Normal sudoku with given digits. Standard thermometers: digits strictly
+// increase from bulb to tip.
+
 const givens = [
   ['R1C1', 1],
   ['R1C4', 2],

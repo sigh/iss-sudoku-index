@@ -15,16 +15,21 @@ const SELECTED_VALUES = '1_2_3_4_5_6_7_8_9_10';
 const TOTAL_TENS = '1_2_3_4'; // encoded as 0, 1, 2, 3
 const TOTAL_ONES = '1_2_3_4_5_6_7_8_9_10'; // encoded as 0, 1, ..., 9
 
-const effectCell = (r, c) => `VE${(r - 1) * 9 + c}`;
-const selectedCell = (r, c) => `VS${(r - 1) * 9 + c}`;
-const totalTensCell = (i) => `VT${i + 1}`;
-const totalOnesCell = (i) => `VO${i + 1}`;
+const effectVar = new Var('E', 'Effective value', 81);
+const selectedVar = new Var('S', 'Loose-ten digit marker', 81);
+const totalTensVar = new Var('T', 'Cage total tens', 24);
+const totalOnesVar = new Var('O', 'Cage total ones', 24);
+
+const effectCell = (r, c) => effectVar.cell((r - 1) * 9 + c);
+const selectedCell = (r, c) => selectedVar.cell((r - 1) * 9 + c);
+const totalTensCell = (i) => totalTensVar.cell(i + 1);
+const totalOnesCell = (i) => totalOnesVar.cell(i + 1);
 
 constraints.push(new Shape('9x9', 16));
-constraints.push(new Var('E', 'Effective value', 81));
-constraints.push(new Var('S', 'Loose-ten digit marker', 81));
-constraints.push(new Var('T', 'Cage total tens', 24));
-constraints.push(new Var('O', 'Cage total ones', 24));
+constraints.push(effectVar);
+constraints.push(selectedVar);
+constraints.push(totalTensVar);
+constraints.push(totalOnesVar);
 constraints.push(new SearchPriority(100, ...graph.cells()));
 
 for (const gridCell of graph.cells()) {
@@ -70,16 +75,12 @@ for (let c = 1; c <= 9; c++) {
   constraints.push(new ContainExact('10', ...Array.from({ length: 9 }, (_, i) => effectCell(i + 1, c))));
 }
 
-for (let br = 0; br < 3; br++) {
-  for (let bc = 0; bc < 3; bc++) {
-    const box = [];
-    for (let dr = 1; dr <= 3; dr++) {
-      for (let dc = 1; dc <= 3; dc++) {
-        box.push(effectCell(br * 3 + dr, bc * 3 + dc));
-      }
-    }
-    constraints.push(new ContainExact('10', ...box));
-  }
+for (const boxCells of graph.boxes()) {
+  const box = boxCells.map((cell) => {
+    const { row, col } = parseCellId(cell);
+    return effectCell(row, col);
+  });
+  constraints.push(new ContainExact('10', ...box));
 }
 
 for (let digit = 1; digit <= 9; digit++) {
@@ -130,7 +131,7 @@ for (let i = 0; i < cages.length; i++) {
   const ones = totalOnesCell(i);
   constraints.push(new Given(tens, TOTAL_TENS));
   constraints.push(new Given(ones, TOTAL_ONES));
-  constraints.push(new Sum(`-11_=_${[...cage.map(() => 1), -10, -1].join('_')}`, ...cage, tens, ones));
+  constraints.push(new Sum(-11, ...cage, [tens, -10], [ones, -1]));
 }
 
 const notEqualKey = Pair.fnToKey((a, b) => a !== b, 16);

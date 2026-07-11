@@ -3,13 +3,19 @@
 // Video: https://www.youtube.com/watch?v=Z30hHxCO7cA
 // Source: https://sudokupad.app/9mqofo6f7g
 
+// Normal sudoku. Color exactly 9 cells, one per row, column, and box. Each
+// outside clue gives the sum of the digits before the colored cell reading
+// inward along its row or column (colored cell excluded); the top-left clue
+// reads the main diagonal from R1C1 and sums before the first colored cell
+// (the whole diagonal if none is colored). Exactly 4 of the outside clues
+// are typographical errors and are incorrect.
+
 const graph = cellGraph("9x9");
 const color = graph.makeOverlay("VCL");
 const indices = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const row = (r) => graph.row(makeCellId(r, 1));
-const col = (c) => graph.column(makeCellId(1, c));
-const box = (r, c) => graph.block(makeCellId(r, c), 3, 3);
+const row = (r) => graph.row(r);
+const col = (c) => graph.column(c);
 
 const lineClues = [
   { name: "L1", total: 28, cells: row(1) },
@@ -96,19 +102,20 @@ const interleaveDigitAndColor = (cells) => (
   cells.flatMap(cell => [color.at(cell), cell])
 );
 
-const errorCells = lineClues.map((_, i) => `VE${i + 1}`);
+const typoVar = new Var("E", "Typo", lineClues.length);
+const errorCells = typoVar.cells();
 
 return [
   new Shape("9x9"),
   color.toVar("Color"),
-  new Var("E", "Typo", lineClues.length),
+  typoVar,
 
   ...indices.map(r => row(r)).map(cells =>
     new ContainExact("1", ...cells.map(cell => color.at(cell)))),
   ...indices.map(c => col(c)).map(cells =>
     new ContainExact("1", ...cells.map(cell => color.at(cell)))),
-  ...[1, 4, 7].flatMap(r => [1, 4, 7].map(c =>
-    new ContainExact("1", ...box(r, c).map(cell => color.at(cell))))),
+  ...graph.boxes().map(cells =>
+    new ContainExact("1", ...cells.map(cell => color.at(cell)))),
 
   new ContainExact(Array(33).fill(1).join("_"), ...errorCells),
 

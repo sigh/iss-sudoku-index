@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=qrLbRCZQeSk
 // Source: https://sudokupad.app/james-sinclair/forty-four
 
+// Normal sudoku, no givens. Killer cages: digits do not repeat and sum to
+// the cage total; all seven cages sum to 44. Purple renban lines hold
+// non-repeating consecutive digits in any order. The dynamic fog is
+// SudokuPad reveal behavior only and adds no constraint, so it is not
+// encoded.
+
 return [
   new Shape('9x9'),
 

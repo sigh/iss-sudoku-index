@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=zzDjoDoDck4
 // Source: https://sudokupad.app/1aqyjbwx38
 
+// 6x6 irregular sudoku: place 1-6 once each in every row, column, and
+// jigsaw region. Exes: each outside clue gives the sum of the first X
+// digits in its row or column, where X is the digit in the cell next to
+// the clue (encoded as native XSum constraints).
+
 const regions = [
   ['R1C1', 'R1C2', 'R2C2', 'R2C3', 'R3C3', 'R4C3'],
   ['R2C1', 'R3C1', 'R3C2', 'R4C1', 'R5C1', 'R6C1'],

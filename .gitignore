@@ -1,3 +1,5 @@
 # OS cruft
 .DS_Store
 .claude
+_site
+.jekyll-cache

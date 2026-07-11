@@ -3,6 +3,9 @@
 // Video: https://www.youtube.com/watch?v=BoPjMzjLpZ8
 // Source: https://sudokupad.app/0wffw5dssm
 
+// Normal sudoku, no givens. Standard thermometers, and the sum of the digits
+// on each thermometer is divisible by the number of cells on that thermometer.
+
 const thermos = [
   ["R4C6", "R5C5", "R6C5", "R6C4", "R5C3", "R5C4", "R4C5", "R4C4"],
   ["R6C8", "R5C7", "R5C8", "R4C7"],

@@ -43,7 +43,6 @@ const constraints = [
 ];
 const add = (...newConstraints) => constraints.push(...newConstraints);
 
-const lessThan = Pair.fnToKey((a, b) => a < b, VALUE_COUNT);
 const rightAgree = Pair.fnToKey((a, b) => usesRight(a) === usesLeft(b), VALUE_COUNT);
 const downAgree = Pair.fnToKey((a, b) => usesDown(a) === usesUp(b), VALUE_COUNT);
 
@@ -199,7 +198,8 @@ for (const cell of gridCells) {
 
 add(
   new WhiteDot('R4C6', 'R5C6'),
-  new Pair(lessThan, 'arrow points to smaller digit', 'R1C1', 'R1C2'),
+  // Arrow points to the smaller digit: R1C2 > R1C1.
+  new GreaterThan('R1C2', 'R1C1'),
   new SameValues(2, 'R2C9', 'R9C8'),
 );
 

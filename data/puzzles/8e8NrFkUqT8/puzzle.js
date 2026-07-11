@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=8e8NrFkUqT8
 // Source: https://sudokupad.app/9702l0djmf
 
+// Normal sudoku, no givens. Digits do not repeat within a cage. Self-counting
+// cages: if the digits in a cage sum to N, exactly N of the 23 cages sum to N.
+// Encoded as an Or over the possible sets of cage sums, with NFAs enforcing
+// the exact count for each sum in the set.
+
 const cages = [
   ['R5C1', 'R5C2'],
   ['R5C3', 'R5C4'],

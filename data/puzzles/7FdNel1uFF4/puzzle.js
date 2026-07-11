@@ -92,25 +92,14 @@ const noConsecSetSpec = {
 };
 const noConsecSetNFA = NFA.encodeSpec(noConsecSetSpec, /* numValues= */ 9);
 
+const graph = cellGraph('9x9');
 const boxRowColTrios = [];
-for (let br = 0; br < 3; br++) {
-  for (let bc = 0; bc < 3; bc++) {
-    const r0 = br * 3 + 1;
-    const c0 = bc * 3 + 1;
-    for (let i = 0; i < 3; i++) {
-      // Row-within-box.
-      boxRowColTrios.push([
-        makeCellId(r0 + i, c0),
-        makeCellId(r0 + i, c0 + 1),
-        makeCellId(r0 + i, c0 + 2),
-      ]);
-      // Column-within-box.
-      boxRowColTrios.push([
-        makeCellId(r0, c0 + i),
-        makeCellId(r0 + 1, c0 + i),
-        makeCellId(r0 + 2, c0 + i),
-      ]);
-    }
+for (const box of graph.boxes()) {
+  for (let i = 0; i < 3; i++) {
+    // Row-within-box.
+    boxRowColTrios.push(box.slice(3 * i, 3 * i + 3));
+    // Column-within-box.
+    boxRowColTrios.push([box[i], box[i + 3], box[i + 6]]);
   }
 }
 

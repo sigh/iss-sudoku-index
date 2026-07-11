@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=r-T6gROn-tQ
 // Source: https://sudokupad.app/xd3kuyn90z
 
+// Normal 9x9 sudoku rules apply; no given digits.
+// Chess sums: a digit on a chess-piece cell equals the sum of the digits in
+// all cells that piece could move to in one move. Bishops and the king only
+// move within their own 3x3 box; knights may jump into other boxes.
+// Dynamic fog is presentation-only reveal behavior and is not encoded.
+
 const pieces = [
   { type: "bishop", cell: "R7C3" },
   { type: "bishop", cell: "R7C7" },
@@ -66,9 +72,7 @@ function destinations(type, cell) {
 
 function chessSum({ type, cell }) {
   const targets = destinations(type, cell);
-  const cells = [cell, ...targets];
-  const coeffs = [-1, ...targets.map(() => 1)].join("_");
-  return new Sum(`0_=_${coeffs}`, ...cells);
+  return new EqualSum([cell], targets);
 }
 
 return [

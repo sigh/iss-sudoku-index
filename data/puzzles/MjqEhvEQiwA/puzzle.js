@@ -4,8 +4,8 @@
 // Source: https://sudokupad.app/jfpflqk7pr
 
 // Each gold cage is equal-pressure: the sum of inside cells equals the sum of
-// unique outside edge-neighbour cells. Cage digits may repeat, so use Sum rather
-// than Cage.
+// unique outside edge-neighbour cells. Cage digits may repeat, so use EqualSum
+// rather than Cage.
 
 const cages = [
   {
@@ -66,11 +66,7 @@ const cages = [
 ];
 
 function equalPressure({ inside, outside }) {
-  const coeffs = [
-    ...inside.map(() => 1),
-    ...outside.map(() => -1),
-  ].join("_");
-  return new Sum(`0_=_${coeffs}`, ...inside, ...outside);
+  return new EqualSum(inside, outside);
 }
 
 return [

@@ -3,6 +3,10 @@
 // Video: https://www.youtube.com/watch?v=vNfwa4wPliY
 // Source: https://sudokupad.app/sd02li6q2c
 
+// Normal sudoku. Digits in a cage do not repeat and sum to the cage total.
+// Adjacent digits along each rose octagon loop differ by at least 6; the
+// octagons are closed loops, so the last cell also pairs with the first.
+
 const constraints = [
   new Shape('9x9'),
 

@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=qkMGbyeLDaM
 // Source: https://sudokupad.app/vc62zmuo08
 
+// Normal sudoku, anti-king: digits a king's move apart must differ. Adjacent
+// digits on a green line differ by at least 5. Purple renban lines hold
+// non-repeating consecutive digits in any order. On a black dot, one digit
+// is double the other. Red cells index their own column number: if a red
+// cell RrCc contains v, then RrCv contains c.
+
 // Red cells use column indexing: if RrCc is red and contains v, then RrCv is c.
 const redCells = [
   'R5C2', 'R4C2', 'R3C3', 'R4C4', 'R6C3', 'R7C4', 'R8C4', 'R9C3',

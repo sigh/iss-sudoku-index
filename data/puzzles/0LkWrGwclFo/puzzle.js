@@ -16,7 +16,7 @@ function add(constraint) {
 }
 
 function equality(a, b) {
-  return new Sum('0_=_1_-1', a, b);
+  return new SameValues(2, a, b);
 }
 
 function circleContainsDigits(cells, a, b) {
@@ -34,12 +34,7 @@ function circleContainsDigits(cells, a, b) {
 }
 
 function arrowSum(cells, a, b) {
-  const coeffs = [
-    ...cells.map(() => 1),
-    -10,
-    -1,
-  ].join('_');
-  return new Sum(`0_=_${coeffs}`, ...cells, a, b);
+  return new Sum(0, ...cells, [a, -10], [b, -1]);
 }
 
 function arrowFromCircle(cells, a, b) {

@@ -3,6 +3,14 @@
 // Video: https://www.youtube.com/watch?v=sZ-KRO-82og
 // Source: https://sudokupad.app/yffxa7cuz1
 
+// Normal sudoku; digits on both marked main diagonals do not repeat. On a
+// black dot one digit is double the other; on a white dot the digits are
+// consecutive (dots have no negative constraint). Digits separated by a V
+// sum to 5, and all V dominoes are given (the negative V constraint is
+// encoded); X pairs sum to 10, but not all Xs are given. Adjacent digits on
+// green lines differ by at least 5, exactly 5 on 2-cell green lines. Purple
+// renban lines hold non-repeating consecutive digits in any order.
+
 const givens = [];
 
 const xMarks = [

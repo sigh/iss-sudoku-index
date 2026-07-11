@@ -3,6 +3,13 @@
 // Video: https://www.youtube.com/watch?v=bQJp4EhO5Sk
 // Source: https://sudokupad.app/rrhrws2x7f
 
+// Sudoku with digits 0-9: no repeats in any row, column, or marked 3x3 box
+// (the standard boxes). White dots join consecutive digits; black dots join
+// digits in a 2:1 ratio. Grey palindrome lines read the same in both
+// directions; adjacent digits on green whisper lines differ by at least 5.
+// The fog/digit-reveal mechanic is a solve-path rule and is not encoded;
+// digit 2 never becomes available, so cells are restricted to 0, 1, 3-9.
+
 const givens = {
   R1C3: 0, R1C5: 1, R1C8: 4,
   R2C5: 7, R2C6: 0, R2C8: 5,

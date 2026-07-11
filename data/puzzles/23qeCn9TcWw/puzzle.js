@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=23qeCn9TcWw
 // Source: https://sudokupad.app/gbpdlymn6r
 
+// Normal sudoku. R1C1-R8C1 are given 1-8. Rows 1-8 contain off-by-one
+// equations: the right-hand side is exactly 1 more or 1 less than the
+// left-hand side, with two-cell pills read as two-digit numbers. Adjacent
+// digits along each red line differ by at most 2. Each equation is encoded
+// as an NFA over its row's cells.
+
 const offByOne = (lhs, rhs) => Math.abs(lhs - rhs) === 1;
 const pill = (a, b) => 10 * a + b;
 

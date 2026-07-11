@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=KN5Eobhkhe4
 // Source: https://sudokupad.app/0ugsgegaxv
 
+// Chaos construction: nine hidden orthogonally-connected nine-cell regions,
+// with rows, columns, and regions containing 1-9. No givens. A digit on a
+// small arrow counts the cells immediately beyond the arrow that belong to
+// the arrow cell's region. The blue summit loop ascends or descends, with 1
+// and 9 reversing the direction of travel. X pairs sum to 10, V pairs to 5.
+
 const graph = cellGraph('9x9');
 
 const summitLine = [

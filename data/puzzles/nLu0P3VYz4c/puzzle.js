@@ -3,6 +3,9 @@
 // Video: https://www.youtube.com/watch?v=nLu0P3VYz4c
 // Source: https://sudokupad.app/c13vkow4p3
 
+// Normal sudoku. Digits along each arrow sum to the digit in the attached
+// circle. Several circles have two arrows; each arm is its own sum.
+
 return [
   new Shape('9x9'),
   new Given('R9C5', 9),

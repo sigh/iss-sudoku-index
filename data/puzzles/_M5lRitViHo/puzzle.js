@@ -3,6 +3,10 @@
 // Video: https://www.youtube.com/watch?v=_M5lRitViHo
 // Source: https://sudokupad.app/mea9u6amrt
 
+// Normal sudoku. Along each line occupying N cells, every pair of adjacent
+// digits on the line differs by at least N. A black dot between two cells
+// means one digit is double the other.
+
 const linePaths = [
   ['R9C2', 'R8C3', 'R7C4', 'R6C5', 'R5C6', 'R4C7', 'R3C8', 'R2C9'],
   ['R9C4', 'R8C5', 'R7C6', 'R6C7', 'R5C8', 'R4C9'],

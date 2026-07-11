@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=ovnLIQzpdDY
 // Source: https://sudokupad.app/6jqxfbbrtz
 
+// Normal killer sudoku: cage digits do not repeat, and each cage's sum is
+// the two-digit number formed by its first two cells in grid reading order
+// (the cages are self-clued; no totals are printed). Digits on the green
+// line are even, digits on the blue line are odd, and digits do not repeat
+// on a line. Cells joined by an X sum to 10.
+
 const cages = [
   ["R3C8", "R3C9", "R4C9", "R5C9", "R6C9"],
   ["R7C8", "R7C9", "R8C9", "R9C9"],

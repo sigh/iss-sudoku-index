@@ -15,9 +15,10 @@ const DIRS = [
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
+const dotDirectionsVar = new Var('D', 'bumped dot directions', 20);
 const constraints = [
   new Shape('9x9'),
-  new Var('D', 'bumped dot directions', 20),
+  dotDirectionsVar,
 ];
 const add = (...items) => constraints.push(...items);
 
@@ -38,7 +39,7 @@ const dots = [
   ['white', 'R8C3'], ['white', 'R5C2'], ['white', 'R4C2'],
   ['black', 'R4C9'], ['white', 'R9C2'], ['white', 'R3C7'],
   ['white', 'R4C8'], ['white', 'R5C4'], ['white', 'R3C5'],
-].map(([color, cell], index) => ({ color, cell, varCell: `VD${index + 1}` }));
+].map(([color, cell], index) => ({ color, cell, varCell: dotDirectionsVar.cell(index + 1) }));
 
 const sameEdge = (a, b) => a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3];
 const edgeKey = (cell, dir) => {

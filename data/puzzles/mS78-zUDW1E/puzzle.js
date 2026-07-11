@@ -6,6 +6,8 @@
 // North Side is the main 9x9 ISS grid. South Side is encoded as 81 Var cells
 // with explicit domains and explicit row, column, and box constraints.
 
+const southVar = new Var('S', 'South Side grid', 81);
+
 const constraints = [
   new Shape('9x9'),
 
@@ -13,11 +15,11 @@ const constraints = [
   new Given('R6C2', 8),
   new Given('R7C4', 4),
 
-  new Var('S', 'South Side grid', 81),
+  southVar,
 ];
 
 function southCell(row, col) {
-  return `VS${(row - 1) * 9 + col}`;
+  return southVar.cell((row - 1) * 9 + col);
 }
 
 function southCells(cells) {

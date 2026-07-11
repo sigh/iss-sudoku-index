@@ -3,6 +3,8 @@
 // Video: https://www.youtube.com/watch?v=R6i558mDoNQ
 // Source: https://tinyurl.com/2zzeuuan
 
+// Normal sudoku with given digits; no other constraints.
+
 const givens = [
   ['R1C1', 1],
   ['R1C6', 7],

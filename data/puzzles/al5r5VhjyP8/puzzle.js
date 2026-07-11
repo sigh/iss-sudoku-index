@@ -62,14 +62,10 @@ const oneCopy = NFA.encodeSpec({
 }, numValues);
 const houses = [];
 for (let i = 1; i <= 9; i++) {
-  houses.push(graph.row(makeCellId(i, 1)));
-  houses.push(graph.column(makeCellId(1, i)));
+  houses.push(graph.row(i));
+  houses.push(graph.column(i));
 }
-for (let br = 0; br < 3; br++) {
-  for (let bc = 0; bc < 3; bc++) {
-    houses.push(graph.block(makeCellId(br * 3 + 1, bc * 3 + 1), 3, 3));
-  }
-}
+houses.push(...graph.boxes());
 for (const house of houses) {
   add(new NFA(oneCopy, 'one-copycat', ...house.map(flagOf)));
 }

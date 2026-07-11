@@ -3,6 +3,16 @@
 // Video: https://www.youtube.com/watch?v=yGgZHkP2lFs
 // Source: https://sudokupad.app/sxsm_Deckatron_6dd0c5a868bfce8cc0c0a826862b141b
 
+// Normal sudoku, no givens. Dueling killer cages are drawn without printed
+// totals: digits in a cage do not repeat, and every cage sums to one of TWO
+// hidden values determined by the solver, with both hidden totals used by
+// at least one cage. The Or over sum pairs plus the cage-sum NFA encodes
+// exactly that hidden-two-totals rule. White dots mark consecutive digits;
+// black dots mark a 1:2 ratio. The negative Kropki rule is scoped to cage
+// interiors: all dots inside cages are given, so unmarked adjacent pairs in
+// the same cage are neither consecutive nor 1:2; dots on cage borders or
+// outside cages are not necessarily given.
+
 const cages = [
   ['R1C7', 'R1C8'],
   ['R2C7', 'R2C8', 'R2C9'],

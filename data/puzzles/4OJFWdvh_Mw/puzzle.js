@@ -29,17 +29,19 @@ const slowThermo = line => new Or([
   new Pair(slowThermoKey, 'slow thermo', ...line.slice().reverse()),
 ]);
 
+const redLineVar = new Var('L', 'Red line value', 5);
+
 const lineValue = (line, index) => new Or(
   valueOptions[index].map(([value, sum]) => new And([
     new Sum(sum, ...line),
-    new Given(`VL${index + 1}`, value),
+    new Given(redLineVar.cell(index + 1), value),
   ]))
 );
 
 return [
   new Shape('9x9'),
-  new Var('L', 'Red line value', 5),
-  new AllDifferent('VL1', 'VL2', 'VL3', 'VL4', 'VL5'),
+  redLineVar,
+  new AllDifferent(...redLineVar.cells()),
   ...redLines.map(lineValue),
   ...redLines.map(slowThermo),
   new WhiteDot('R4C1', 'R4C2'),

@@ -75,10 +75,10 @@ const constraints = [
 
 for (const cell of gridCells) constraints.push(new Given(flag(cell), 1, 2));
 
-for (let r = 1; r <= 9; r++) constraints.push(new Sum(10, ...graph.row(`R${r}C1`).map(flag)));
-for (let c = 1; c <= 9; c++) constraints.push(new Sum(10, ...graph.column(`R1C${c}`).map(flag)));
-for (const topLeft of ['R1C1', 'R1C4', 'R1C7', 'R4C1', 'R4C4', 'R4C7', 'R7C1', 'R7C4', 'R7C7']) {
-  constraints.push(new Sum(10, ...graph.block(topLeft, 3, 3).map(flag)));
+for (let r = 1; r <= 9; r++) constraints.push(new Sum(10, ...graph.row(r).map(flag)));
+for (let c = 1; c <= 9; c++) constraints.push(new Sum(10, ...graph.column(c).map(flag)));
+for (const box of graph.boxes()) {
+  constraints.push(new Sum(10, ...box.map(flag)));
 }
 
 for (let digit = 1; digit <= 9; digit++) {

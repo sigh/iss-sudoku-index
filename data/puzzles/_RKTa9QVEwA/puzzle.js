@@ -12,14 +12,13 @@
 // Modular(N, col) means "every N consecutive cells differ mod N", which for a
 // group of exactly N cells is exactly "remainders 0..N-1 in some order".
 
-// Marked cells as [row, col], 0-indexed. Each constrains its own column.
+// Marked cells as [row, col], 1-indexed. Each constrains its own column.
 const MARKS = [
-  [6, 4], [6, 1], [6, 7], [3, 5], [0, 4],
-  [1, 3], [2, 6], [3, 2], [4, 3],
+  [7, 5], [7, 2], [7, 8], [4, 6], [1, 5],
+  [2, 4], [3, 7], [4, 3], [5, 4],
 ];
 
-const cid = (r, c) => makeCellId(r + 1, c + 1);
-const column = (c) => Array.from({ length: 9 }, (_, r) => cid(r, c));
+const column = (c) => Array.from({ length: 9 }, (_, r) => makeCellId(r + 1, c));
 
 const constraints = [];
 
@@ -27,13 +26,13 @@ const constraints = [];
 constraints.push(new Given('R4C6', 1));
 
 // The nine marked cells are a permutation of 1-9.
-constraints.push(new AllDifferent(...MARKS.map(([r, c]) => cid(r, c))));
+constraints.push(new AllDifferent(...MARKS.map(([r, c]) => makeCellId(r, c))));
 
 // Self-referential modular rule.
 // N=1 (Modular(1) always true) and N=9 (whole-column permutation always
 // distinct mod 9) impose nothing, so skip them; keep N=2..8.
 for (const [r, c] of MARKS) {
-  const m = cid(r, c);
+  const m = makeCellId(r, c);
   const col = column(c);
   for (let N = 2; N <= 8; N++) {
     const notN = [];

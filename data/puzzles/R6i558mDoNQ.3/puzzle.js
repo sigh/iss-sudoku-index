@@ -3,6 +3,10 @@
 // Video: https://www.youtube.com/watch?v=R6i558mDoNQ
 // Source: https://tinyurl.com/4yat8h6w
 
+// Normal sudoku with given digits. Kropki dots: digits on a white dot are
+// consecutive, digits on a black dot are in a 1:2 ratio. No negative
+// constraint.
+
 const givens = [
   ['R1C1', 1],
   ['R1C2', 4],

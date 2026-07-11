@@ -1,0 +1,10 @@
+
+.RegionSumLine~R3C1~R4C2~R4C3~R5C3~R6C4
+.RegionSumLine~R6C1~R6C2~R7C3
+.RegionSumLine~R9C3~R8C4~R7C4~R7C5~R6C6
+.RegionSumLine~R7C9~R6C8~R6C7~R5C7~R4C6
+.RegionSumLine~R5C9~R4C8~R3C9
+.RegionSumLine~R1C7~R2C6~R3C6~R3C5~R4C4
+.RegionSumLine~R2C4~R3C3
+.RegionSumLine~R8C7~R8C6~R9C5
+.GreaterThan~R2C1~R1C1

@@ -3,6 +3,9 @@
 // Video: https://www.youtube.com/watch?v=R6i558mDoNQ
 // Source: https://tinyurl.com/3sawpytz
 
+// Normal sudoku with given digits. Clues outside the grid give the middle
+// (median) of the first three digits seen from that direction.
+
 const givens = [
   ['R2C2', 8],
   ['R2C8', 6],

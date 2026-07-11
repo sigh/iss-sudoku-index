@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=Ux6LYrFtjFc
 // Source: https://sudokupad.app/xaw5c7zbsi
 
+// Normal sudoku, no givens. Standard arrows. Shade some cells so that 1, 2,
+// and 3 are always shaded, 7, 8, and 9 are never shaded, and the shading is
+// symmetrical under reflection in row 5 and in the positive diagonal (/).
+// Shading is encoded as a Var overlay tied to digits and symmetry orbits.
+
 const graph = cellGraph('9x9');
 const shade = graph.makeOverlay('VS');
 

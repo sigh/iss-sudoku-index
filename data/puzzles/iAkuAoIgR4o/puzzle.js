@@ -3,6 +3,11 @@
 // Video: https://www.youtube.com/watch?v=iAkuAoIgR4o
 // Source: https://sudokupad.app/ski1zlop0c
 
+// Normal sudoku, no givens. On each poison arrow, the digit in the circle
+// times the digit on the arrow tip equals the sum of the digits on the line,
+// excluding the circle and including the tip (i.e. the circle shows the line
+// sum divided by the tip digit).
+
 const arrows = [
   ["R8C1", ["R8C2", "R8C3"], "R8C3"],
   ["R1C2", ["R1C1", "R2C1", "R3C1", "R2C2", "R3C2", "R3C3", "R2C3"], "R2C3"],

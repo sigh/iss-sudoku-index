@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=R6i558mDoNQ
 // Source: https://tinyurl.com/2pjx8st8
 
+// Normal sudoku. Rossini: an arrow outside a row/column shows the direction in
+// which the three nearest digits in that row/column strictly increase. All
+// possible arrows are given, so every row/column end without an arrow means
+// the three nearest digits from that end are not strictly monotonic (neither
+// all increasing nor all decreasing read from that side).
+
 const givens = [
   ['R1C4', 6],
   ['R1C7', 5],
@@ -69,25 +75,23 @@ const noArrows = [
   ['R1C9', 'R2C9', 'R3C9'],
 ];
 
-const lt = Pair.fnToKey((a, b) => a < b, 9);
-const gt = Pair.fnToKey((a, b) => a > b, 9);
-
+// GreaterThan(x, y) on two adjacent cells: x > y.
 function increasing([a, b, c]) {
   return new And([
-    new Pair(lt, 'less than', a, b),
-    new Pair(lt, 'less than', b, c),
+    new GreaterThan(b, a),
+    new GreaterThan(c, b),
   ]);
 }
 
 function notMonotonic([a, b, c]) {
   return new Or([
     new And([
-      new Pair(lt, 'less than', a, b),
-      new Pair(gt, 'greater than', b, c),
+      new GreaterThan(b, a),
+      new GreaterThan(b, c),
     ]),
     new And([
-      new Pair(gt, 'greater than', a, b),
-      new Pair(lt, 'less than', b, c),
+      new GreaterThan(a, b),
+      new GreaterThan(c, b),
     ]),
   ]);
 }

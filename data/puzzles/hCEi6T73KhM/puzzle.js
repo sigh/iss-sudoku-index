@@ -14,8 +14,8 @@ const constraints = [
 ];
 
 const splitPeas = (a, b, interior) => {
-  const sumAB = new Sum(`0_=_${interior.map(() => 1).concat([-10, -1]).join('_')}`, ...interior, a, b);
-  const sumBA = new Sum(`0_=_${interior.map(() => 1).concat([-1, -10]).join('_')}`, ...interior, a, b);
+  const sumAB = new Sum(0, ...interior, [a, -10], [b, -1]);
+  const sumBA = new Sum(0, ...interior, [a, -1], [b, -10]);
   return new Or([sumAB, sumBA]);
 };
 

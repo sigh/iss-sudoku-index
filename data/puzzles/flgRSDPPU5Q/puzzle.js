@@ -3,6 +3,13 @@
 // Video: https://www.youtube.com/watch?v=flgRSDPPU5Q
 // Source: https://sudokupad.app/hignojf8ll
 
+// Normal sudoku. Grey squares hold even digits; grey circles hold odd digits.
+// In any row or column, at most two consecutive cells share a parity. Green
+// dots join same-parity cells; red dots join opposite-parity cells; white
+// dots join consecutive digits; black dots join digits in a 2:1 ratio. Each
+// outside clue gives the sum of the digits along its diagonal that share the
+// parity of the first cell on that diagonal.
+
 const parityRunNFA = NFA.encodeSpec({
   startState: { parity: -1, run: 0 },
   transition: (state, value) => {

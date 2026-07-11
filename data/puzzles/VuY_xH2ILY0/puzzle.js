@@ -3,6 +3,12 @@
 // Video: https://www.youtube.com/watch?v=VuY_xH2ILY0
 // Source: https://sudokupad.app/1b7rrbig2u
 
+// Normal sudoku, no givens. Four overlapping 6x6 quadrants, each rule scoped
+// to its quadrant only: NW is anti-knight; NE has all possible black (1:2)
+// dots given; SW has all possible white (consecutive) dots given; SE has all
+// possible V (sum 5) and X (sum 10) marks given. The quadrant-scoped negative
+// constraints are encoded as custom Pair constraints on unmarked edges.
+
 const SIZE = 9;
 const graph = cellGraph("9x9");
 

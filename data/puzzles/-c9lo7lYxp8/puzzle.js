@@ -3,6 +3,10 @@
 // Video: https://www.youtube.com/watch?v=-c9lo7lYxp8
 // Source: https://sudokupad.app/abqgxi5fg2
 
+// Normal sudoku with given digits. Kropki dots: digits on a white dot are
+// consecutive, digits on a black dot are in a 1:2 ratio. No negative
+// constraint.
+
 const blackDots = [
   ['R5C1', 'R5C2'],
   ['R5C8', 'R5C9'],

@@ -114,9 +114,7 @@ const atLeastOneOnMachine = NFA.encodeSpec({
   transition: ({ seen }, value) => ({ seen: seen || value === ON }),
   accept: ({ seen }) => seen,
 }, geometry.numValues);
-const boxOrigins = ['R1C1', 'R1C4', 'R1C7', 'R4C1', 'R4C4', 'R4C7', 'R7C1', 'R7C4', 'R7C7'];
-for (const origin of boxOrigins) {
-  const cells = graph.block(origin, 3, 3);
+for (const cells of graph.boxes()) {
   add(new NFA(atLeastOneOnMachine, 'box-coverage', ...cells.map(pathCell)));
 }
 
