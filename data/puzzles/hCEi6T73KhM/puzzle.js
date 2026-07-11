@@ -3,7 +3,7 @@
 // Video: https://www.youtube.com/watch?v=hCEi6T73KhM
 // Source: https://sudokupad.app/23phi9d5m7
 
-// STATUS: partial.
+// Partial encoding.
 //
 // Encoded: standard sudoku, visible XV marks, and split-peas sums for the
 // fixed line segments. Omitted: chocolate/banana area rectangularity, circle

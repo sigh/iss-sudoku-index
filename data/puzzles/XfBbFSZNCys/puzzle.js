@@ -7,7 +7,7 @@
 // A partial gap model uses Var cells for all grid-edge segments: visible gap and
 // safety-strip edges are forced on, and orthogonally adjacent digits of opposite
 // parity must have a gap edge between them. This leaves the gap-loop topology
-// and the Pathfinder rule omitted; see notes.md.
+// and the Pathfinder rule omitted.
 
 const ON = 1;
 const OFF = 2;

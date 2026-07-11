@@ -3,15 +3,15 @@
 // Video: https://www.youtube.com/watch?v=ddbndIaimtc
 // Source: https://sudokupad.app/ib9r4zuejw
 
-// STATUS: too-slow. The full ruleset AND the symbol givens are now encoded, and
-// verify_solution ACCEPTS the known answer -- so this is a complete, correct
-// encoding (bar the single occluded given R3C2). It is however too slow to solve:
+// The full ruleset AND the symbol givens are encoded, and the encoding accepts
+// the known answer -- so this is a complete, correct encoding (bar the single
+// occluded given R3C2). It is however too slow to solve:
 // ~20k backtracks / ~35 s without even a first solution, and a 500k-backtrack cap
 // does not complete in 10 min. The bottleneck is the 81 whole-grid counting NFAs
 // combined with the free blob-tiling search. The earlier "unsupported / impossible
 // to express" verdict was wrong on every count: the blob tiling, the grid-wide
 // clone count, and the symbol givens are all expressible -- the real limit is
-// solver performance on this encoding (see notes.md).
+// solver performance on this encoding.
 //
 // RULES:
 //  1. Normal sudoku.

@@ -12,7 +12,7 @@
 // station's digit = the total number of stations holding that digit. The mirror
 // cell (R4C1) is treated with the opposite of its real parity.
 //
-// Model (see notes.md): a wendezaune-style "shape" Var per cell records which of
+// Model: a wendezaune-style "shape" Var per cell records which of
 // its four edges a loop uses (off / straight / one of four turns). Edge agreement
 // between neighbours stitches the shapes into a disjoint union of orthogonal
 // cycles -- which automatically enforces no-branch / no-cross / no-overlap and

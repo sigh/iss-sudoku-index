@@ -4,7 +4,7 @@
 // Source: https://sudokupad.app/84h1epyqqj
 
 // Partial encoding: standard 6x6 chaos construction rules only.
-// The Region Border Lots diamond counts are omitted; see notes.md.
+// The Region Border Lots diamond counts are omitted.
 
 return [
   new Shape('6x6'),

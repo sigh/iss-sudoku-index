@@ -4,7 +4,7 @@
 // Source: https://sudokupad.app/up5nrki10o
 
 // Partial encoding. ISS represents the normal Sudoku grid plus the static
-// digit clues. The discovered two-path maze rule is documented in notes.md.
+// digit clues. The discovered two-path maze rule is not encoded.
 return [
   new Shape('9x9'),
 

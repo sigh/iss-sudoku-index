@@ -4,7 +4,7 @@
 // Source: https://sudokupad.app/27qnv0oduh
 
 // Partial encoding: chaos construction, the given, and X/V clues. The
-// region-local domino-count clues are omitted; see notes.md.
+// region-local domino-count clues are omitted.
 
 const graph = cellGraph('9x9');
 

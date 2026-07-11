@@ -6,7 +6,7 @@
 // Partial encoding. ISS can faithfully model the normal sudoku grid and the
 // local fruit edge clues below. The two unknown rat paths, thick maze walls,
 // diagonal movement rule, button distance clues, and path-adjacent
-// non-consecutive rule are omitted; see notes.md.
+// non-consecutive rule are omitted.
 
 const grapeKey = Pair.fnToKey((a, b) => Math.abs(a - b) >= 5, 9);
 

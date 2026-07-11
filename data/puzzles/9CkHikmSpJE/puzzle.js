@@ -18,7 +18,7 @@
 // pairs evaluated on those substituted VALUES. The two rat paths (movement,
 // self-avoidance, non-crossing, wall-blocking, the diagonal-through-2x2 /
 // round-wall-spot rule, and rat->cupcake connectivity) and the per-box TEST
-// constraint that depends on path membership are OMITTED -- see notes.md. This
+// constraint that depends on path membership are OMITTED. This
 // is therefore a PARTIAL encoding: it never rejects the true solution but does
 // not pin the digits down on its own.
 //
