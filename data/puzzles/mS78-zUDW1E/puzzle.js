@@ -136,8 +136,13 @@ constraints.push(
 );
 
 constraints.push(
-  // Three-cell loop overlap recovered from the loop markers and the source
-  // example N R9C7 = S R1C6.
+  // Loop overlap recovered from the source example N R9C7 = S R1C6 and the
+  // loop marker alignment N R9C9 = S R1C8.
+  new SameValues(2, 'R9C2', southCell(1, 1)),
+  new SameValues(2, 'R9C3', southCell(1, 2)),
+  new SameValues(2, 'R9C4', southCell(1, 3)),
+  new SameValues(2, 'R9C5', southCell(1, 4)),
+  new SameValues(2, 'R9C6', southCell(1, 5)),
   new SameValues(2, 'R9C7', southCell(1, 6)),
   new SameValues(2, 'R9C8', southCell(1, 7)),
   new SameValues(2, 'R9C9', southCell(1, 8)),

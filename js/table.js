@@ -70,6 +70,16 @@ function iconLink(href, iconSrc, title) {
   return a;
 }
 
+// Fallback for a source whose favicon origin can't be derived (e.g. a non-URL link).
+function textLink(href, title) {
+  const a = el('a', 'source-text', '🔗');
+  a.href = href;
+  a.target = '_blank';
+  a.rel = 'noopener noreferrer';
+  a.title = title;
+  return a;
+}
+
 // Turn a placeholder <a> into one whose href is built from a fetched file, loaded
 // on first hover/focus (or on click, as a fallback for keyboard/touch).
 function lazyIssLink(label, title, fileUrl, buildHref, variant) {
@@ -131,9 +141,14 @@ function authorLine(author, authorCounts, actions, inline = false) {
 function puzzleCell(row, density, authorCounts, actions) {
   const td = el('td', 'col-puzzle');
   const titleRow = el('div', 'puzzle-title-row');
-  if (row.source_url) {
-    const icon = faviconOf(row.source_url);
-    if (icon) titleRow.append(iconLink(row.source_url, icon, `Puzzle source (${row.provider || 'link'})`));
+  const sources = row.sources || [];
+  if (sources.length) {
+    const icons = el('span', 'source-links');
+    for (const url of sources) {
+      const icon = faviconOf(url);
+      icons.append(icon ? iconLink(url, icon, 'Puzzle source') : textLink(url, 'Puzzle source'));
+    }
+    titleRow.append(icons);
   }
   titleRow.append(el('div', 'puzzle-title', row.puzzle_title || '(untitled)'));
   if (density === 'compact' && row.author) titleRow.append(authorLine(row.author, authorCounts, actions, true));

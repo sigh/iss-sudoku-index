@@ -126,6 +126,11 @@
 .Whisper~4~VS17~VS25~VS33~VS41~VS49~VS58~VS67~VS66~VS65~VS73
 .Pair~qqqqqqqqqqqqqC~_alternating%20parity~VS76~VS77~VS78~VS69~VS70~VS71~VS62~VS53~VS44~VS35~VS26~VS17
 .Whisper~5~VS61~VS62~VS63~VS54~VS45~VS36~VS27
+.SameValues~2~R9C2~VS1
+.SameValues~2~R9C3~VS2
+.SameValues~2~R9C4~VS3
+.SameValues~2~R9C5~VS4
+.SameValues~2~R9C6~VS5
 .SameValues~2~R9C7~VS6
 .SameValues~2~R9C8~VS7
 .SameValues~2~R9C9~VS8

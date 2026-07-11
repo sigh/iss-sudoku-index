@@ -119,9 +119,9 @@ function rowSearchHaystack(row) {
     row.puzzle_id,
     row.video_id,
     row.video_url,
-    row.source_url,
+    ...(row.sources || []),
     normalizedUrlToken(row.video_url || ''),
-    normalizedUrlToken(row.source_url || ''),
+    ...(row.sources || []).map(u => normalizedUrlToken(u)),
     ...(row.constraint_types || []),
   ]
     .filter(Boolean)

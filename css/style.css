@@ -277,6 +277,7 @@ td.col-num .qual-label { white-space: nowrap; }
 /* Puzzle cell */
 .puzzle-title-row { display: flex; align-items: center; gap: 7px; }
 .puzzle-title-row a { display: inline-flex; align-items: center; flex: none; }
+.source-links { display: inline-flex; align-items: center; gap: 5px; flex: none; }
 .puzzle-title { font-weight: bold; }
 .puzzle-author { color: var(--text-muted); font-size: var(--fs-small); }
 .puzzle-author.inline { white-space: nowrap; }

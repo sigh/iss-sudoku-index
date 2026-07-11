@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-11T05:29:40.199935+00:00",
+  "generated_at": "2026-07-11T07:51:25.871284+00:00",
   "count": 112,
   "rows": [
     {
@@ -9,8 +9,9 @@
       "video_title": "No Shame in the Struggle and Perseverance",
       "author": "Aad van de Wetering",
       "video_url": "https://www.youtube.com/watch?v=0ASRXrrz-K4",
-      "source_url": "https://sudokupad.app/inhwpyj59k",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/inhwpyj59k"
+      ],
       "date": "2026-07-08",
       "status": "validated",
       "constraint_types": [
@@ -35,8 +36,9 @@
       "video_title": "God-Tier Fog Sudoku Makes My Brain Hurt!",
       "author": "Kaktuslav",
       "video_url": "https://www.youtube.com/watch?v=ehi5FkxgrWs",
-      "source_url": "https://sudokupad.app/gf8l5f4s64",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/gf8l5f4s64"
+      ],
       "date": "2026-07-08",
       "status": "partial",
       "constraint_types": [
@@ -70,8 +72,9 @@
       "video_title": "GCHQ's Puzzle Of The Year",
       "author": null,
       "video_url": "https://www.youtube.com/watch?v=zKRn5WbmedA",
-      "source_url": "https://sudokupad.app/LBB7QD7RTj",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/LBB7QD7RTj"
+      ],
       "date": "2026-07-08",
       "status": "unsupported",
       "constraint_types": [],
@@ -94,8 +97,9 @@
       "video_title": "Are These Poison Arrows?",
       "author": "billybeth",
       "video_url": "https://www.youtube.com/watch?v=iAkuAoIgR4o",
-      "source_url": "https://sudokupad.app/ski1zlop0c",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/ski1zlop0c"
+      ],
       "date": "2026-07-07",
       "status": "validated",
       "constraint_types": [
@@ -122,8 +126,9 @@
       "video_title": "Everyone Fails This Simple Math Quiz!",
       "author": "mnasti2",
       "video_url": "https://www.youtube.com/watch?v=23qeCn9TcWw",
-      "source_url": "https://sudokupad.app/gbpdlymn6r",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/gbpdlymn6r"
+      ],
       "date": "2026-07-07",
       "status": "validated",
       "constraint_types": [
@@ -156,8 +161,9 @@
       "video_title": "250 Years Young!",
       "author": "RockyRoer",
       "video_url": "https://www.youtube.com/watch?v=STXQn26IVHs",
-      "source_url": "https://sudokupad.app/q5iopoxvbm",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/q5iopoxvbm"
+      ],
       "date": "2026-07-06",
       "status": "unsupported",
       "constraint_types": [],
@@ -180,8 +186,9 @@
       "video_title": "Why Doesn't This Sudoku Have Two Solutions?",
       "author": "Marty Sears",
       "video_url": "https://www.youtube.com/watch?v=MYpoIPhevoI",
-      "source_url": "https://sudokupad.app/191t7peym8",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/191t7peym8"
+      ],
       "date": "2026-07-06",
       "status": "validated",
       "constraint_types": [
@@ -207,8 +214,9 @@
       "video_title": "At least the Cage Cells have already been Counted!",
       "author": "Sir Algee",
       "video_url": "https://www.youtube.com/watch?v=moRsJVncQps",
-      "source_url": "https://sudokupad.app/zxy9eyqoob",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/zxy9eyqoob"
+      ],
       "date": "2026-07-05",
       "status": "validated",
       "constraint_types": [
@@ -237,8 +245,9 @@
       "video_title": "You're A Better Man Than I Am, Sudoku Genius (aka Kaktuslav!).",
       "author": "Kaktuslav",
       "video_url": "https://www.youtube.com/watch?v=_RKTa9QVEwA",
-      "source_url": "https://sudokupad.app/8spurrnmcc",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/8spurrnmcc"
+      ],
       "date": "2026-07-05",
       "status": "validated",
       "constraint_types": [
@@ -265,8 +274,9 @@
       "video_title": "A Viewer Solves Sudoku With Simon: Episode 13",
       "author": "Playmaker6174",
       "video_url": "https://www.youtube.com/watch?v=xlk19YzgMCM",
-      "source_url": "https://sudokupad.app/et4mh85g07",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/et4mh85g07"
+      ],
       "date": "2026-07-05",
       "status": "validated",
       "constraint_types": [
@@ -296,8 +306,9 @@
       "video_title": "This Kind of Line might only Appear this Once",
       "author": "alarark50",
       "video_url": "https://www.youtube.com/watch?v=a-jajrZJXr0",
-      "source_url": "https://sudokupad.app/qj4kzxhp02",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/qj4kzxhp02"
+      ],
       "date": "2026-07-04",
       "status": "validated",
       "constraint_types": [
@@ -326,8 +337,9 @@
       "video_title": "The Most Requested Puzzle Of Recent Times!",
       "author": "Rab3aron",
       "video_url": "https://www.youtube.com/watch?v=dAqrMGSyI4s",
-      "source_url": "https://sudokupad.app/0do1zxouyi",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/0do1zxouyi"
+      ],
       "date": "2026-07-04",
       "status": "too-slow",
       "constraint_types": [
@@ -360,8 +372,9 @@
       "video_title": "What's Green, and Blue all over?",
       "author": "Souradip Das",
       "video_url": "https://www.youtube.com/watch?v=CNGyml7iu_I",
-      "source_url": "https://sudokupad.app/x1ssacf45h",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/x1ssacf45h"
+      ],
       "date": "2026-07-03",
       "status": "validated",
       "constraint_types": [
@@ -387,8 +400,9 @@
       "video_title": "The One And Only Fog Sudoku!",
       "author": "PrissyP",
       "video_url": "https://www.youtube.com/watch?v=P32Jqq-FyFc",
-      "source_url": "https://sudokupad.app/kj2qd0ug0d",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/kj2qd0ug0d"
+      ],
       "date": "2026-07-03",
       "status": "validated",
       "constraint_types": [
@@ -424,8 +438,9 @@
       "video_title": "Kick Off with Sudoku!",
       "author": "Sudoku Joker",
       "video_url": "https://www.youtube.com/watch?v=KEEZblvYBm0",
-      "source_url": "https://sudokupad.app/8iktohgrmy",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/8iktohgrmy"
+      ],
       "date": "2026-07-02",
       "status": "validated",
       "constraint_types": [
@@ -452,8 +467,9 @@
       "video_title": "This Sudoku Will Leave You At A Loss For Words",
       "author": "Br1312te",
       "video_url": "https://www.youtube.com/watch?v=Ks9cvaX91W4",
-      "source_url": "https://sudokupad.app/y0vht5ywm4",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/y0vht5ywm4"
+      ],
       "date": "2026-07-02",
       "status": "validated",
       "constraint_types": [
@@ -479,8 +495,9 @@
       "video_title": "Is it Getting Hot in Here?",
       "author": "Kiwi Curt",
       "video_url": "https://www.youtube.com/watch?v=iDZ_suiHKps",
-      "source_url": "https://sudokupad.app/9ajocm7gjs",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/9ajocm7gjs"
+      ],
       "date": "2026-07-01",
       "status": "validated",
       "constraint_types": [
@@ -507,8 +524,9 @@
       "video_title": "Wait... That CANNOT Solve... Can It?",
       "author": "Jonesy",
       "video_url": "https://www.youtube.com/watch?v=pRZAI1WRY6I",
-      "source_url": "https://sudokupad.app/3fb9325t0p",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/3fb9325t0p"
+      ],
       "date": "2026-07-01",
       "status": "validated",
       "constraint_types": [
@@ -535,8 +553,9 @@
       "video_title": "This Puzzle Is EXTRAORDINARY.",
       "author": "bellsita and Wisteria Fall (supervised by XeonRisq)",
       "video_url": "https://www.youtube.com/watch?v=a79ewtzPrrY",
-      "source_url": "https://sudokupad.app/1tzwquyhbb",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/1tzwquyhbb"
+      ],
       "date": "2026-06-30",
       "status": "validated",
       "constraint_types": [
@@ -567,8 +586,9 @@
       "video_title": "Bring some Clarity to this Puzzle!",
       "author": "DarthSillious72",
       "video_url": "https://www.youtube.com/watch?v=nccrIGkIcwo",
-      "source_url": "https://sudokupad.app/avw3cs3lro",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/avw3cs3lro"
+      ],
       "date": "2026-06-29",
       "status": "validated",
       "constraint_types": [
@@ -595,8 +615,9 @@
       "video_title": "This Sudoku Is \"Kind Of Insane\"!!",
       "author": "Marty Sears",
       "video_url": "https://www.youtube.com/watch?v=ddbndIaimtc",
-      "source_url": "https://sudokupad.app/ib9r4zuejw",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/ib9r4zuejw"
+      ],
       "date": "2026-06-29",
       "status": "too-slow",
       "constraint_types": [
@@ -707,8 +728,9 @@
       "video_title": "Are Long Lines Easier or Harder?",
       "author": "HalfBakedLunatic (aka David Workman)",
       "video_url": "https://www.youtube.com/watch?v=rSMMWRaKq8M",
-      "source_url": "https://sudokupad.app/gcyif48z31",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/gcyif48z31"
+      ],
       "date": "2026-06-28",
       "status": "validated",
       "constraint_types": [
@@ -733,8 +755,9 @@
       "video_title": "Unlocking Sudoku's Secret Code",
       "author": "Vythic",
       "video_url": "https://www.youtube.com/watch?v=KN5Eobhkhe4",
-      "source_url": "https://sudokupad.app/0ugsgegaxv",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/0ugsgegaxv"
+      ],
       "date": "2026-06-28",
       "status": "validated",
       "constraint_types": [
@@ -764,8 +787,9 @@
       "video_title": "Sudoku that is also a Game of Go!",
       "author": "Hancker",
       "video_url": "https://www.youtube.com/watch?v=QSvdF_EMck4",
-      "source_url": "https://sudokupad.app/uoyv9ny78e",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/uoyv9ny78e"
+      ],
       "date": "2026-06-27",
       "status": "validated",
       "constraint_types": [
@@ -795,8 +819,9 @@
       "video_title": "The Return Of Zetamath, A Sudoku Master!",
       "author": "zetamath",
       "video_url": "https://www.youtube.com/watch?v=w8Ml0ETI5IM",
-      "source_url": "https://sudokupad.app/encxi3ci5i",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/encxi3ci5i"
+      ],
       "date": "2026-06-27",
       "status": "validated",
       "constraint_types": [
@@ -822,8 +847,9 @@
       "video_title": "This Mansion is Magnificent",
       "author": "Calvinball and oskode",
       "video_url": "https://www.youtube.com/watch?v=1rt7kZsk8dg",
-      "source_url": "https://sudokupad.app/2th0gtj8e1",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/2th0gtj8e1"
+      ],
       "date": "2026-06-26",
       "status": "validated",
       "constraint_types": [
@@ -850,8 +876,9 @@
       "video_title": "Can You Count The Dominoes?!",
       "author": "mellowrobinson",
       "video_url": "https://www.youtube.com/watch?v=jgATrHS3pBg",
-      "source_url": "https://sudokupad.app/27qnv0oduh",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/27qnv0oduh"
+      ],
       "date": "2026-06-26",
       "status": "partial",
       "constraint_types": [
@@ -879,8 +906,9 @@
       "video_title": "Even with these Rules ...",
       "author": "charmquark",
       "video_url": "https://www.youtube.com/watch?v=9emqPISSBEY",
-      "source_url": "https://sudokupad.app/wecos72fmn",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/wecos72fmn"
+      ],
       "date": "2026-06-25",
       "status": "validated",
       "constraint_types": [
@@ -907,8 +935,9 @@
       "video_title": "Easy Or Hard? THAT Is The Question!",
       "author": "James Sinclair",
       "video_url": "https://www.youtube.com/watch?v=kt8J6ppyXDk",
-      "source_url": "https://sudokupad.app/james-sinclair/yes-and",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/yes-and"
+      ],
       "date": "2026-06-25",
       "status": "validated",
       "constraint_types": [
@@ -935,8 +964,9 @@
       "video_title": "A Positive Outlook for Negative Constraints",
       "author": "Daniel Hanson",
       "video_url": "https://www.youtube.com/watch?v=VuY_xH2ILY0",
-      "source_url": "https://sudokupad.app/1b7rrbig2u",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/1b7rrbig2u"
+      ],
       "date": "2026-06-24",
       "status": "validated",
       "constraint_types": [
@@ -969,8 +999,9 @@
       "video_title": "This Sudoku Will Make You Feel Clever!",
       "author": "Rab3aron",
       "video_url": "https://www.youtube.com/watch?v=HzCLLNmYC6s",
-      "source_url": "https://sudokupad.app/8s7d1v9agq",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/8s7d1v9agq"
+      ],
       "date": "2026-06-24",
       "status": "validated",
       "constraint_types": [
@@ -996,8 +1027,9 @@
       "video_title": "Brilliant Grid Simplicity",
       "author": "Lithium-Ion",
       "video_url": "https://www.youtube.com/watch?v=q43M_ngwQtw",
-      "source_url": "https://sudokupad.app/1b5i3a2d2d",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/1b5i3a2d2d"
+      ],
       "date": "2026-06-23",
       "status": "validated",
       "constraint_types": [
@@ -1024,8 +1056,9 @@
       "video_title": "Do You Need Sudoku Theory To Solve This?",
       "author": "Blobz",
       "video_url": "https://www.youtube.com/watch?v=t7cZjAyU50s",
-      "source_url": "https://sudokupad.app/blobz/good-and-plenty",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/blobz/good-and-plenty"
+      ],
       "date": "2026-06-23",
       "status": "validated",
       "constraint_types": [
@@ -1052,8 +1085,9 @@
       "video_title": "Slow Arrows ... Slow Solve!",
       "author": "billybeth",
       "video_url": "https://www.youtube.com/watch?v=sTWSFmpOhTs",
-      "source_url": "https://sudokupad.app/5542oxal82",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/5542oxal82"
+      ],
       "date": "2026-06-22",
       "status": "validated",
       "constraint_types": [
@@ -1081,8 +1115,9 @@
       "video_title": "A New (And Blue) Sudoku Line!",
       "author": "Derek LeClair",
       "video_url": "https://www.youtube.com/watch?v=GSyQiFEF_3w",
-      "source_url": "https://sudokupad.app/pyvvk21c84",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/pyvvk21c84"
+      ],
       "date": "2026-06-22",
       "status": "too-slow",
       "constraint_types": [
@@ -1109,8 +1144,9 @@
       "video_title": "In Plenty of Ways, this Puzzle is Approachable",
       "author": "Purab Pal",
       "video_url": "https://www.youtube.com/watch?v=sZ-KRO-82og",
-      "source_url": "https://sudokupad.app/yffxa7cuz1",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/yffxa7cuz1"
+      ],
       "date": "2026-06-21",
       "status": "validated",
       "constraint_types": [
@@ -1143,8 +1179,9 @@
       "video_title": "Another Candidate For Sudoku Of The Year",
       "author": "Nicolas Duhail",
       "video_url": "https://www.youtube.com/watch?v=8e8NrFkUqT8",
-      "source_url": "https://sudokupad.app/9702l0djmf",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/9702l0djmf"
+      ],
       "date": "2026-06-21",
       "status": "too-slow",
       "constraint_types": [
@@ -1222,8 +1259,9 @@
       "video_title": "No - Look on The Other Side!",
       "author": "Scott Strosahl",
       "video_url": "https://www.youtube.com/watch?v=TB1CIfZeOyU",
-      "source_url": "https://sudokupad.app/znt0i5zouc",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/znt0i5zouc"
+      ],
       "date": "2026-06-20",
       "status": "validated",
       "constraint_types": [
@@ -1250,8 +1288,9 @@
       "video_title": "The 44 Sudoku Challenge",
       "author": "James Sinclair",
       "video_url": "https://www.youtube.com/watch?v=qrLbRCZQeSk",
-      "source_url": "https://sudokupad.app/james-sinclair/forty-four",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/forty-four"
+      ],
       "date": "2026-06-20",
       "status": "validated",
       "constraint_types": [
@@ -1277,8 +1316,9 @@
       "video_title": "Football or Sudoku? Easy Decision!",
       "author": "Mateo99",
       "video_url": "https://www.youtube.com/watch?v=4OJFWdvh_Mw",
-      "source_url": "https://sudokupad.app/30nule6bb2",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/30nule6bb2"
+      ],
       "date": "2026-06-19",
       "status": "validated",
       "constraint_types": [
@@ -1310,8 +1350,9 @@
       "video_title": "Brainteasers In Sudoku Form!",
       "author": "Oddlyeven",
       "video_url": "https://www.youtube.com/watch?v=Qd8cn82k5nk",
-      "source_url": "https://sudokupad.app/vrblr4abgp",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/vrblr4abgp"
+      ],
       "date": "2026-06-19",
       "status": "too-slow",
       "constraint_types": [
@@ -1353,8 +1394,9 @@
       "video_title": "So Much Sudoku to Do!",
       "author": "Adrian Klausen",
       "video_url": "https://www.youtube.com/watch?v=-c9lo7lYxp8",
-      "source_url": "https://sudokupad.app/abqgxi5fg2",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/abqgxi5fg2"
+      ],
       "date": "2026-06-18",
       "status": "validated",
       "constraint_types": [
@@ -1380,8 +1422,9 @@
       "video_title": "Where Has This Sudoku Maker Been All This Time?",
       "author": "Marty Sears",
       "video_url": "https://www.youtube.com/watch?v=_M5lRitViHo",
-      "source_url": "https://sudokupad.app/mea9u6amrt",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/mea9u6amrt"
+      ],
       "date": "2026-06-18",
       "status": "validated",
       "constraint_types": [
@@ -1413,8 +1456,9 @@
       "video_title": "Feeling the Chi despite the Pressure",
       "author": "MOORESUDOKU90",
       "video_url": "https://www.youtube.com/watch?v=ovnLIQzpdDY",
-      "source_url": "https://sudokupad.app/6jqxfbbrtz",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/6jqxfbbrtz"
+      ],
       "date": "2026-06-17",
       "status": "validated",
       "constraint_types": [
@@ -1442,8 +1486,9 @@
       "video_title": "Trust Me. This Sudoku Will ASTONISH You.",
       "author": "Antiknight",
       "video_url": "https://www.youtube.com/watch?v=z9T9kUTum1M",
-      "source_url": "https://sudokupad.app/6y7vhnhdof",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/6y7vhnhdof"
+      ],
       "date": "2026-06-17",
       "status": "validated",
       "constraint_types": [
@@ -1470,8 +1515,9 @@
       "video_title": "Surely it Should be EASY to Establish these Cage Totals?",
       "author": "Deckatron",
       "video_url": "https://www.youtube.com/watch?v=yGgZHkP2lFs",
-      "source_url": "https://sudokupad.app/2n0vfka6dk",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/2n0vfka6dk"
+      ],
       "date": "2026-06-16",
       "status": "validated",
       "constraint_types": [
@@ -1501,8 +1547,9 @@
       "video_title": "A Sudoku With Only 4 Given Octagons??!",
       "author": "Aad van de Wetering",
       "video_url": "https://www.youtube.com/watch?v=vNfwa4wPliY",
-      "source_url": "https://sudokupad.app/sd02li6q2c",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/sd02li6q2c"
+      ],
       "date": "2026-06-16",
       "status": "validated",
       "constraint_types": [
@@ -1528,8 +1575,9 @@
       "video_title": "Cruelly Devised Torture",
       "author": "Dr Logic",
       "video_url": "https://www.youtube.com/watch?v=rilaoNyWiFs",
-      "source_url": "https://sudokupad.app/8n4fl3eo28",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/8n4fl3eo28"
+      ],
       "date": "2026-06-15",
       "status": "validated",
       "constraint_types": [
@@ -1559,8 +1607,9 @@
       "video_title": "Is This Puzzle Really As \"Brutal\" As People Say?",
       "author": "yttrio",
       "video_url": "https://www.youtube.com/watch?v=44bYOpPHJlQ",
-      "source_url": "https://sudokupad.app/k01vyssa50",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/k01vyssa50"
+      ],
       "date": "2026-06-15",
       "status": "unsupported",
       "constraint_types": [],
@@ -1583,8 +1632,9 @@
       "video_title": "Explore a New Maze!",
       "author": "Ryan Adams",
       "video_url": "https://www.youtube.com/watch?v=l8XOG9Vg6Q0",
-      "source_url": "https://sudokupad.app/zyutsxhylp",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/zyutsxhylp"
+      ],
       "date": "2026-06-14",
       "status": "partial",
       "constraint_types": [
@@ -1616,8 +1666,9 @@
       "video_title": "The Sudoku With The Simplest Rules!",
       "author": "SeveNateNine",
       "video_url": "https://www.youtube.com/watch?v=nLu0P3VYz4c",
-      "source_url": "https://sudokupad.app/c13vkow4p3",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/c13vkow4p3"
+      ],
       "date": "2026-06-14",
       "status": "validated",
       "constraint_types": [
@@ -1642,8 +1693,9 @@
       "video_title": "Getting Even in an Odd Way",
       "author": "DC",
       "video_url": "https://www.youtube.com/watch?v=flgRSDPPU5Q",
-      "source_url": "https://sudokupad.app/hignojf8ll",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/hignojf8ll"
+      ],
       "date": "2026-06-13",
       "status": "validated",
       "constraint_types": [
@@ -1683,8 +1735,9 @@
       "video_title": "Huge Video Game Migrates To Sudoku [The Artisan Of Glimmith!]",
       "author": "DubiousMobius",
       "video_url": "https://www.youtube.com/watch?v=aFdQkHxowPM",
-      "source_url": "https://sudokupad.app/84h1epyqqj",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/84h1epyqqj"
+      ],
       "date": "2026-06-13",
       "status": "partial",
       "constraint_types": [
@@ -1711,8 +1764,9 @@
       "video_title": "Three Puzzles, under Time Pressure!",
       "author": "Enchanter73",
       "video_url": "https://www.youtube.com/watch?v=W3hGY3SuOnI",
-      "source_url": "https://sudokupad.app/fd6onhy5dj",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/fd6onhy5dj"
+      ],
       "date": "2026-06-12",
       "status": "validated",
       "constraint_types": [
@@ -1739,8 +1793,9 @@
       "video_title": "Three Puzzles, under Time Pressure!",
       "author": "Enchanter73",
       "video_url": "https://www.youtube.com/watch?v=W3hGY3SuOnI",
-      "source_url": "https://sudokupad.app/cotvgns3r5",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/cotvgns3r5"
+      ],
       "date": "2026-06-12",
       "status": "validated",
       "constraint_types": [
@@ -1770,8 +1825,9 @@
       "video_title": "Three Puzzles, under Time Pressure!",
       "author": "Enchanter73",
       "video_url": "https://www.youtube.com/watch?v=W3hGY3SuOnI",
-      "source_url": "https://sudokupad.app/edz9ll8csv",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/edz9ll8csv"
+      ],
       "date": "2026-06-12",
       "status": "validated",
       "constraint_types": [
@@ -1801,8 +1857,9 @@
       "video_title": "One Of THE Great Sudoku Opening Ideas",
       "author": "Kaktuslav",
       "video_url": "https://www.youtube.com/watch?v=sfNjC1cCmwk",
-      "source_url": "https://sudokupad.app/17j9j9bf82",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/17j9j9bf82"
+      ],
       "date": "2026-06-12",
       "status": "too-slow",
       "constraint_types": [
@@ -1828,8 +1885,9 @@
       "video_title": "470 Great Ideas for a Puzzle ... ?",
       "author": "Richard",
       "video_url": "https://www.youtube.com/watch?v=BoPjMzjLpZ8",
-      "source_url": "https://sudokupad.app/0wffw5dssm",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/0wffw5dssm"
+      ],
       "date": "2026-06-11",
       "status": "validated",
       "constraint_types": [
@@ -1856,8 +1914,9 @@
       "video_title": "When Errors are Acceptable in Sudoku",
       "author": "Gabriel Kammer",
       "video_url": "https://www.youtube.com/watch?v=Z30hHxCO7cA",
-      "source_url": "https://sudokupad.app/9mqofo6f7g",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/9mqofo6f7g"
+      ],
       "date": "2026-06-10",
       "status": "too-slow",
       "constraint_types": [
@@ -1920,8 +1979,9 @@
       "video_title": "Does So-called \"Sudoku Expert\" Make A  Mistake??",
       "author": "Lorena",
       "video_url": "https://www.youtube.com/watch?v=bQJp4EhO5Sk",
-      "source_url": "https://sudokupad.app/rrhrws2x7f",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/rrhrws2x7f"
+      ],
       "date": "2026-06-10",
       "status": "validated",
       "constraint_types": [
@@ -1951,8 +2011,9 @@
       "video_title": "Colouring Grids is FUN!",
       "author": "PuzzleTank",
       "video_url": "https://www.youtube.com/watch?v=_Q1fvtndpsA",
-      "source_url": "https://sudokupad.app/qc37ejydvj",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/qc37ejydvj"
+      ],
       "date": "2026-06-09",
       "status": "partial",
       "constraint_types": [
@@ -1984,8 +2045,9 @@
       "video_title": "A Sudoku With Only 7 Given Digits?",
       "author": "Aad van de Wetering",
       "video_url": "https://www.youtube.com/watch?v=Yv_RMyYTeRU",
-      "source_url": "https://sudokupad.app/8df315rarb",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/8df315rarb"
+      ],
       "date": "2026-06-09",
       "status": "validated",
       "constraint_types": [
@@ -2011,8 +2073,9 @@
       "video_title": "Happy Birthday Simon!",
       "author": "olima",
       "video_url": "https://www.youtube.com/watch?v=qkMGbyeLDaM",
-      "source_url": "https://sudokupad.app/vc62zmuo08",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/vc62zmuo08"
+      ],
       "date": "2026-06-08",
       "status": "validated",
       "constraint_types": [
@@ -2041,8 +2104,9 @@
       "video_title": "An Electric Birthday For This Sudoku Solver",
       "author": "Rab3aron",
       "video_url": "https://www.youtube.com/watch?v=HFiQBcazPFU",
-      "source_url": "https://sudokupad.app/zsmtekox43",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/zsmtekox43"
+      ],
       "date": "2026-06-08",
       "status": "partial",
       "constraint_types": [
@@ -2072,8 +2136,9 @@
       "video_title": "Are You Hot or Cold about Sudoku?",
       "author": "James Kopp",
       "video_url": "https://www.youtube.com/watch?v=Rn_svsVv_FA",
-      "source_url": "https://sudokupad.app/58u9d7sohd",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/58u9d7sohd"
+      ],
       "date": "2026-06-07",
       "status": "validated",
       "constraint_types": [
@@ -2099,8 +2164,9 @@
       "video_title": "Only Solved 10 Times Ever... Can He Make It 11?",
       "author": "Pulsar & FischmitFahrrad",
       "video_url": "https://www.youtube.com/watch?v=hvOl5kg76ME",
-      "source_url": "https://sudokupad.app/euq3xbt4hm",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/euq3xbt4hm"
+      ],
       "date": "2026-06-07",
       "status": "validated",
       "constraint_types": [
@@ -2138,8 +2204,9 @@
       "video_title": "Sudoku  - On Tilt!",
       "author": "Simply Spicy",
       "video_url": "https://www.youtube.com/watch?v=wDJAhLRxVSo",
-      "source_url": "https://sudokupad.app/qxb9u5g20y",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/qxb9u5g20y"
+      ],
       "date": "2026-06-06",
       "status": "validated",
       "constraint_types": [
@@ -2171,8 +2238,9 @@
       "video_title": "How To Use Colour To Solve Sudoku!",
       "author": "Scojo",
       "video_url": "https://www.youtube.com/watch?v=vFZ7Vk6IWRY",
-      "source_url": "https://sudokupad.app/1f53g3ay0v",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/1f53g3ay0v"
+      ],
       "date": "2026-06-06",
       "status": "validated",
       "constraint_types": [
@@ -2200,8 +2268,9 @@
       "video_title": "Complete Madness with Pentominoes",
       "author": "Daniel Buckeldee",
       "video_url": "https://www.youtube.com/watch?v=VMenmutpNMA",
-      "source_url": "https://sudokupad.app/f0t3wo1l0n",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/f0t3wo1l0n"
+      ],
       "date": "2026-06-05",
       "status": "unsupported",
       "constraint_types": [],
@@ -2224,8 +2293,9 @@
       "video_title": "The Simplest Extra Sudoku Rule",
       "author": "Yawnus",
       "video_url": "https://www.youtube.com/watch?v=xzXnxCeFSt4",
-      "source_url": "https://sudokupad.app/aaardvutyh",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/aaardvutyh"
+      ],
       "date": "2026-06-05",
       "status": "too-slow",
       "constraint_types": [
@@ -2254,8 +2324,9 @@
       "video_title": "Cracking the Code with Cracking the Cryptic",
       "author": "Mr.Menace",
       "video_url": "https://www.youtube.com/watch?v=YeuTO9A1Prs",
-      "source_url": "https://sudokupad.app/2vyd84g6u0",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/2vyd84g6u0"
+      ],
       "date": "2026-06-04",
       "status": "validated",
       "constraint_types": [
@@ -2281,8 +2352,9 @@
       "video_title": "The Symmetry Of Sudoku",
       "author": "Sotehr",
       "video_url": "https://www.youtube.com/watch?v=L5q_FWlkjLQ",
-      "source_url": "https://sudokupad.app/9pbfrrmznf",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/9pbfrrmznf"
+      ],
       "date": "2026-06-04",
       "status": "validated",
       "constraint_types": [
@@ -2310,8 +2382,9 @@
       "video_title": "How to End the Dream Sequence",
       "author": "Cassinii",
       "video_url": "https://www.youtube.com/watch?v=XS4c1OoSmEg",
-      "source_url": "https://sudokupad.app/dq0yiosab8",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/dq0yiosab8"
+      ],
       "date": "2026-06-03",
       "status": "validated",
       "constraint_types": [
@@ -2346,8 +2419,9 @@
       "video_title": "How to End the Dream Sequence",
       "author": "Cassinii",
       "video_url": "https://www.youtube.com/watch?v=XS4c1OoSmEg",
-      "source_url": "https://sudokupad.app/jqg2me00dc",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/jqg2me00dc"
+      ],
       "date": "2026-06-03",
       "status": "validated",
       "constraint_types": [
@@ -2375,8 +2449,9 @@
       "video_title": "A Sudoku With Only 1 Given Digit?!",
       "author": "Aad van de Wetering",
       "video_url": "https://www.youtube.com/watch?v=XmtIOoVaMzY",
-      "source_url": "https://sudokupad.app/oso53h7rd2",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/oso53h7rd2"
+      ],
       "date": "2026-06-03",
       "status": "validated",
       "constraint_types": [
@@ -2402,8 +2477,9 @@
       "video_title": "Follow the Sudoku Trail",
       "author": "WickedlyRested",
       "video_url": "https://www.youtube.com/watch?v=sPNsf_XKvPc",
-      "source_url": "https://sudokupad.app/bzxfyaldby",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/bzxfyaldby"
+      ],
       "date": "2026-06-02",
       "status": "validated",
       "constraint_types": [
@@ -2430,8 +2506,9 @@
       "video_title": "One Of The All-Time Great Sudokus.",
       "author": "RockyRoer",
       "video_url": "https://www.youtube.com/watch?v=ceQrS_1Fa0U",
-      "source_url": "https://sudokupad.app/2mltluk4bn",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/2mltluk4bn"
+      ],
       "date": "2026-06-02",
       "status": "too-slow",
       "constraint_types": [
@@ -2456,8 +2533,9 @@
       "video_title": "FIghting with the Cages!",
       "author": "Blabarskaka",
       "video_url": "https://www.youtube.com/watch?v=4GK0bWCsTgM",
-      "source_url": "https://sudokupad.app/72xo00v9n2",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/72xo00v9n2"
+      ],
       "date": "2026-06-01",
       "status": "validated",
       "constraint_types": [
@@ -2484,8 +2562,9 @@
       "video_title": "This Sudoku Is \"Just Absolutely Excellent\".",
       "author": "Nicolas Duhail",
       "video_url": "https://www.youtube.com/watch?v=-YrYrnwz3bA",
-      "source_url": "https://sudokupad.app/g4olqfawhb",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/g4olqfawhb"
+      ],
       "date": "2026-06-01",
       "status": "validated",
       "constraint_types": [
@@ -2517,8 +2596,9 @@
       "video_title": "Is This the New Most Important Total?",
       "author": "Lithium-Ion",
       "video_url": "https://www.youtube.com/watch?v=pMu4A-xNuiU",
-      "source_url": "https://sudokupad.app/jl4sby2gl2",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/jl4sby2gl2"
+      ],
       "date": "2026-05-31",
       "status": "validated",
       "constraint_types": [
@@ -2550,8 +2630,9 @@
       "video_title": "This 97% Rated Sudoku Is \"Criminally UNDER-rated\"!",
       "author": "Michael Lefkowitz",
       "video_url": "https://www.youtube.com/watch?v=XfBbFSZNCys",
-      "source_url": "https://sudokupad.app/tl8tkze8mn",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/tl8tkze8mn"
+      ],
       "date": "2026-05-31",
       "status": "partial",
       "constraint_types": [
@@ -2578,8 +2659,9 @@
       "video_title": "Beautiful, Beautiful Sudoku",
       "author": "oskode & Calvinball",
       "video_url": "https://www.youtube.com/watch?v=0LkWrGwclFo",
-      "source_url": "https://sudokupad.app/65spa2e9w3",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/65spa2e9w3"
+      ],
       "date": "2026-05-30",
       "status": "validated",
       "constraint_types": [
@@ -2609,8 +2691,9 @@
       "video_title": "Help NASA! Solve This Puzzle.",
       "author": "Rab3aron",
       "video_url": "https://www.youtube.com/watch?v=LYNLwiEYIYA",
-      "source_url": "https://sudokupad.app/l00604nlbr",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/l00604nlbr"
+      ],
       "date": "2026-05-30",
       "status": "partial",
       "constraint_types": [
@@ -2645,8 +2728,9 @@
       "video_title": "Pressure? They say it's a Privilege!",
       "author": "bellal",
       "video_url": "https://www.youtube.com/watch?v=MjqEhvEQiwA",
-      "source_url": "https://sudokupad.app/jfpflqk7pr",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/jfpflqk7pr"
+      ],
       "date": "2026-05-29",
       "status": "validated",
       "constraint_types": [
@@ -2671,8 +2755,9 @@
       "video_title": "This Sudoku Has Many Lines!!",
       "author": "Nicolas Duhail",
       "video_url": "https://www.youtube.com/watch?v=2W_fjFG3hs4",
-      "source_url": "https://sudokupad.app/du9fe2vznz",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/du9fe2vznz"
+      ],
       "date": "2026-05-29",
       "status": "validated",
       "constraint_types": [
@@ -2697,8 +2782,9 @@
       "video_title": "Do Battle with this Sudoku!",
       "author": "Scott Williams",
       "video_url": "https://www.youtube.com/watch?v=m3oLHY0zkF4",
-      "source_url": "https://sudokupad.app/ofafbe2382",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/ofafbe2382"
+      ],
       "date": "2026-05-28",
       "status": "validated",
       "constraint_types": [
@@ -2724,8 +2810,9 @@
       "video_title": "The Return Of Choco Banana!! Fog Sudoku At Its Finest",
       "author": "SamuPiano",
       "video_url": "https://www.youtube.com/watch?v=hCEi6T73KhM",
-      "source_url": "https://sudokupad.app/23phi9d5m7",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/23phi9d5m7"
+      ],
       "date": "2026-05-28",
       "status": "partial",
       "constraint_types": [
@@ -2753,8 +2840,9 @@
       "video_title": "Time for a Sneaky Palindrome",
       "author": "Daniel Hanson",
       "video_url": "https://www.youtube.com/watch?v=R1G2sLLsu1U",
-      "source_url": "https://sudokupad.app/ib3ewxrhep",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/ib3ewxrhep"
+      ],
       "date": "2026-05-27",
       "status": "validated",
       "constraint_types": [
@@ -2782,8 +2870,9 @@
       "video_title": "A Foggy Secret Revealed... Rat Run 39: Together Apart (S3:E19)",
       "author": "Marty Sears",
       "video_url": "https://www.youtube.com/watch?v=JXd8YgWYFFw",
-      "source_url": "https://sudokupad.app/pja7uaxak9",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/pja7uaxak9"
+      ],
       "date": "2026-05-27",
       "status": "partial",
       "constraint_types": [
@@ -2810,8 +2899,9 @@
       "video_title": "Part 4 of the Dreamiest Dream Sequence",
       "author": "Cassinii",
       "video_url": "https://www.youtube.com/watch?v=zzDjoDoDck4",
-      "source_url": "https://sudokupad.app/1aqyjbwx38",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/1aqyjbwx38"
+      ],
       "date": "2026-05-26",
       "status": "validated",
       "constraint_types": [
@@ -2839,8 +2929,9 @@
       "video_title": "Part 4 of the Dreamiest Dream Sequence",
       "author": "Cassinii",
       "video_url": "https://www.youtube.com/watch?v=zzDjoDoDck4",
-      "source_url": "https://sudokupad.app/3bo6pr2r62",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/3bo6pr2r62"
+      ],
       "date": "2026-05-26",
       "status": "validated",
       "constraint_types": [
@@ -2871,8 +2962,9 @@
       "video_title": "American Math Teacher's New Sudoku Idea",
       "author": "RockyRoer",
       "video_url": "https://www.youtube.com/watch?v=Ld1TRj4Zjxc",
-      "source_url": "https://sudokupad.app/74acwb3vkq",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/74acwb3vkq"
+      ],
       "date": "2026-05-26",
       "status": "too-slow",
       "constraint_types": [
@@ -2907,10 +2999,12 @@
       "video_title": "The Amazing Sudoku Map",
       "author": "haleypro",
       "video_url": "https://www.youtube.com/watch?v=mS78-zUDW1E",
-      "source_url": "https://sudokupad.app/3xdi7kf6ab",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/3xdi7kf6ab",
+        "https://sudokupad.app/d05ho9qchh"
+      ],
       "date": "2026-05-25",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "AllDifferent",
@@ -2926,15 +3020,15 @@
       ],
       "search_completed": true,
       "hit_cap": false,
-      "unique_solution": false,
-      "solutions_found": 442,
-      "guesses": 782,
-      "backtracks": 783,
-      "solve_ms": 29.5,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 253,
+      "backtracks": 254,
+      "solve_ms": 26.7,
       "cap": 1000,
       "dir": "data/puzzles/mS78-zUDW1E",
-      "iss_size": 4442,
-      "script_size": 3806
+      "iss_size": 4557,
+      "script_size": 4050
     },
     {
       "puzzle_id": "IrrtMa7XMDM",
@@ -2943,8 +3037,9 @@
       "video_title": "How Does He Keep Doing This?! Rat Run 38: Synchonicity (S3:E18)",
       "author": "Marty Sears",
       "video_url": "https://www.youtube.com/watch?v=IrrtMa7XMDM",
-      "source_url": "https://sudokupad.app/up5nrki10o",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/up5nrki10o"
+      ],
       "date": "2026-05-25",
       "status": "partial",
       "constraint_types": [
@@ -2970,8 +3065,9 @@
       "video_title": "A New Twist on Region Sums",
       "author": "Derek LeClair",
       "video_url": "https://www.youtube.com/watch?v=g7YE5xR5-G4",
-      "source_url": "https://sudokupad.app/61g1ssiok4",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/61g1ssiok4"
+      ],
       "date": "2026-05-24",
       "status": "validated",
       "constraint_types": [
@@ -2997,8 +3093,9 @@
       "video_title": "What If All The Sudoku Totals Were Unique?",
       "author": "SamuPiano",
       "video_url": "https://www.youtube.com/watch?v=UY7fvwAnuck",
-      "source_url": "https://sudokupad.app/sg7gob420m",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/sg7gob420m"
+      ],
       "date": "2026-05-24",
       "status": "too-slow",
       "constraint_types": [
@@ -3033,8 +3130,9 @@
       "video_title": "Mmm ... Donuts ...",
       "author": "Sq4nder",
       "video_url": "https://www.youtube.com/watch?v=lY9YsqOO19E",
-      "source_url": "https://sudokupad.app/u2jrdq2b7p",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/u2jrdq2b7p"
+      ],
       "date": "2026-05-23",
       "status": "validated",
       "constraint_types": [
@@ -3064,8 +3162,9 @@
       "video_title": "The Clever Version Of LinkedIn's Mini Sudoku!!",
       "author": "Kaktuslav",
       "video_url": "https://www.youtube.com/watch?v=Lg5qgYMuKpI",
-      "source_url": "https://sudokupad.app/9mthkftlh5",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/9mthkftlh5"
+      ],
       "date": "2026-05-23",
       "status": "validated",
       "constraint_types": [
@@ -3091,8 +3190,9 @@
       "video_title": "Bumping the Table is Dangerous!",
       "author": "PhyDraLey",
       "video_url": "https://www.youtube.com/watch?v=Epygh1J4Vvw",
-      "source_url": "https://sudokupad.app/vnd2slg4jx",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/vnd2slg4jx"
+      ],
       "date": "2026-05-22",
       "status": "validated",
       "constraint_types": [
@@ -3126,8 +3226,9 @@
       "video_title": "Copyrat: Get The Rats Through This Crazy Sudoku! (S3:E2)",
       "author": "Marty Sears",
       "video_url": "https://www.youtube.com/watch?v=9CkHikmSpJE",
-      "source_url": "https://sudokupad.app/m9qm0m5qj0",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/m9qm0m5qj0"
+      ],
       "date": "2026-01-21",
       "status": "partial",
       "constraint_types": [
@@ -3165,8 +3266,9 @@
       "video_title": "One Of Most Beautiful Sudokus You'll Ever Solve",
       "author": "Kainapple",
       "video_url": "https://www.youtube.com/watch?v=Ux6LYrFtjFc",
-      "source_url": "https://sudokupad.app/xaw5c7zbsi",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/xaw5c7zbsi"
+      ],
       "date": "2026-01-08",
       "status": "validated",
       "constraint_types": [
@@ -3194,8 +3296,9 @@
       "video_title": "The Most Revealing Sudoku Digit Ever!",
       "author": "Michael Lefkowitz",
       "video_url": "https://www.youtube.com/watch?v=r-T6gROn-tQ",
-      "source_url": "https://sudokupad.app/xd3kuyn90z",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/xd3kuyn90z"
+      ],
       "date": "2025-06-21",
       "status": "validated",
       "constraint_types": [
@@ -3220,8 +3323,9 @@
       "video_title": "Mind Blown by this Loop Sudoku",
       "author": "Qodec",
       "video_url": "https://www.youtube.com/watch?v=A8GBl5GGypA",
-      "source_url": "https://sudokupad.app/0pshsj5ykr",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/0pshsj5ykr"
+      ],
       "date": "2024-12-10",
       "status": "validated",
       "constraint_types": [
@@ -3251,8 +3355,9 @@
       "video_title": "The Perfection of Sudoku Art",
       "author": "Awedish",
       "video_url": "https://www.youtube.com/watch?v=-2BWnJHVV38",
-      "source_url": "https://sudokupad.app/o7ukhot5zh",
-      "provider": "sudokupad",
+      "sources": [
+        "https://sudokupad.app/o7ukhot5zh"
+      ],
       "date": "2024-11-11",
       "status": "validated",
       "constraint_types": [
@@ -3279,8 +3384,9 @@
       "video_title": "The Rollercoaster of GAS",
       "author": "Bill Murphy",
       "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
-      "source_url": "https://tinyurl.com/yvpbwbk7",
-      "provider": "shortlink",
+      "sources": [
+        "https://tinyurl.com/yvpbwbk7"
+      ],
       "date": "2023-04-29",
       "status": "validated",
       "constraint_types": [],
@@ -3303,8 +3409,9 @@
       "video_title": "The Rollercoaster of GAS",
       "author": "Philip Newman",
       "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
-      "source_url": "https://tinyurl.com/2zzeuuan",
-      "provider": "shortlink",
+      "sources": [
+        "https://tinyurl.com/2zzeuuan"
+      ],
       "date": "2023-04-29",
       "status": "validated",
       "constraint_types": [],
@@ -3327,8 +3434,9 @@
       "video_title": "The Rollercoaster of GAS",
       "author": "Sam Cappleman-Lynes",
       "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
-      "source_url": "https://tinyurl.com/4yat8h6w",
-      "provider": "shortlink",
+      "sources": [
+        "https://tinyurl.com/4yat8h6w"
+      ],
       "date": "2023-04-29",
       "status": "validated",
       "constraint_types": [
@@ -3354,8 +3462,9 @@
       "video_title": "The Rollercoaster of GAS",
       "author": "Bill Murphy",
       "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
-      "source_url": "https://tinyurl.com/2uaaejfy",
-      "provider": "shortlink",
+      "sources": [
+        "https://tinyurl.com/2uaaejfy"
+      ],
       "date": "2023-04-29",
       "status": "validated",
       "constraint_types": [],
@@ -3378,8 +3487,9 @@
       "video_title": "The Rollercoaster of GAS",
       "author": "clover!",
       "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
-      "source_url": "https://tinyurl.com/2pjx8st8",
-      "provider": "shortlink",
+      "sources": [
+        "https://tinyurl.com/2pjx8st8"
+      ],
       "date": "2023-04-29",
       "status": "validated",
       "constraint_types": [
@@ -3407,8 +3517,9 @@
       "video_title": "The Rollercoaster of GAS",
       "author": "Philip Newman",
       "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
-      "source_url": "https://tinyurl.com/krbbjhd3",
-      "provider": "shortlink",
+      "sources": [
+        "https://tinyurl.com/krbbjhd3"
+      ],
       "date": "2023-04-29",
       "status": "validated",
       "constraint_types": [
@@ -3433,8 +3544,9 @@
       "video_title": "The Rollercoaster of GAS",
       "author": "Bill Murphy",
       "video_url": "https://www.youtube.com/watch?v=R6i558mDoNQ",
-      "source_url": "https://tinyurl.com/3sawpytz",
-      "provider": "shortlink",
+      "sources": [
+        "https://tinyurl.com/3sawpytz"
+      ],
       "date": "2023-04-29",
       "status": "validated",
       "constraint_types": [
@@ -3460,8 +3572,9 @@
       "video_title": "Solving The Times Deadly Killer Sudoku 26 August",
       "author": "The Times",
       "video_url": "https://www.youtube.com/watch?v=f54CZrQUxMo",
-      "source_url": "https://app.crackingthecryptic.com/sudoku/mDQ322B9Jt",
-      "provider": "ctc-app",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/mDQ322B9Jt"
+      ],
       "date": "2017-08-26",
       "status": "validated",
       "constraint_types": [
