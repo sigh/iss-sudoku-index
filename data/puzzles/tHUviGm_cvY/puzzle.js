@@ -77,10 +77,17 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
   },
   accept: ({ block }) => block === null,
 }, geometry.numValues);
-for (const cell of gridCells) {
-  const block = graph.block(cell, 2, 2);
-  if (block) add(new NFA(noDiagonalTouchMachine, 'no-touch', ...block.map(loopCell)));
-}
+// Every 2x2 block is a shifted copy of the same template (top-left,
+// top-right, bottom-left, bottom-right), so replicate it instead of adding
+// one NFA per block.
+const noTouchOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
+const noTouchOrigin = noTouchOrigins[0];
+add(new Replicate(
+  [new NFA(noDiagonalTouchMachine, 'no-touch',
+    ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
+  Replicate.encodeTargetCells(
+    noTouchOrigins.map(loopCell), loopCell(noTouchOrigin), loop),
+  loopCell(noTouchOrigin)));
 
 // --- Loop self-count: for each digit v, the number of on-loop cells holding
 // v is either 0 (v never appears on the loop) or exactly v (v appears on the

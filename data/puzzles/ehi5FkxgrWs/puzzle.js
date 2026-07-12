@@ -167,11 +167,15 @@ const firstShade = shade.cells()[0];
 constraints.push(new Replicate([new Given(firstShade, SHADED, UNSHADED)],
   Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade));
 
-for (const cell of gridCells) {
-  const block = graph.block(cell, 2, 2);
-  if (block) constraints.push(new NFA(noMono2x2NFA, 'no-mono-2x2',
-    ...block.map(shadeCell)));
-}
+// The no-mono-2x2 NFA is the same machine at every valid 2x2 anchor
+// (R1C1..R8C8), each a uniform translation of the same relative cell
+// pattern over the shade overlay, so Replicate shortens the 64 stamped
+// copies to one template.
+const monoOrigin = shadeCell('R1C1');
+constraints.push(new Replicate(
+  [new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.block(monoOrigin, 2, 2))],
+  Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
+  monoOrigin));
 
 for (const [kind, target, cells] of cages) {
   constraints.push(cageConstraint(kind, target, cells));

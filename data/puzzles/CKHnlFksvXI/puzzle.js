@@ -27,6 +27,31 @@ function peakOrValley(a, b, c) {
   ]);
 }
 
+// The "no arrow" ends are the same peakOrValley template stamped onto every
+// row-triple (horizontal) and column-triple (vertical) whose end lacks an
+// arrow. Each is a pure translation of one template, so Replicate applies:
+// one group per orientation (offset direction).
+const graph = cellGraph('9x9');
+
+const horizNoArrowStarts = [
+  'R1C1', 'R1C7', 'R4C1', 'R4C7', 'R8C1', 'R8C7', 'R9C1', 'R6C7',
+];
+const vertNoArrowStarts = [
+  'R1C1', 'R1C2', 'R7C2', 'R1C3', 'R7C3', 'R1C4', 'R7C4',
+  'R1C5', 'R7C6', 'R1C7', 'R7C7', 'R1C8', 'R7C9',
+];
+
+const horizNoArrow = new Replicate(
+  [peakOrValley('R1C1', 'R1C2', 'R1C3')],
+  Replicate.encodeTargetCells(horizNoArrowStarts, 'R1C1', graph),
+  'R1C1',
+);
+const vertNoArrow = new Replicate(
+  [peakOrValley('R1C1', 'R2C1', 'R3C1')],
+  Replicate.encodeTargetCells(vertNoArrowStarts, 'R1C1', graph),
+  'R1C1',
+);
+
 return [
   new Shape('9x9'),
 
@@ -59,28 +84,9 @@ return [
   new GreaterThan('R1C6', 'R2C6', 'R3C6'),
   new GreaterThan('R1C9', 'R2C9', 'R3C9'),
 
-  // Row ends with no arrow.
-  peakOrValley('R1C1', 'R1C2', 'R1C3'),
-  peakOrValley('R1C7', 'R1C8', 'R1C9'),
-  peakOrValley('R4C1', 'R4C2', 'R4C3'),
-  peakOrValley('R4C7', 'R4C8', 'R4C9'),
-  peakOrValley('R8C1', 'R8C2', 'R8C3'),
-  peakOrValley('R8C7', 'R8C8', 'R8C9'),
-  peakOrValley('R9C1', 'R9C2', 'R9C3'),
-  peakOrValley('R6C7', 'R6C8', 'R6C9'),
+  // Row ends with no arrow (horizontal row-triples).
+  horizNoArrow,
 
-  // Column ends with no arrow.
-  peakOrValley('R1C1', 'R2C1', 'R3C1'),
-  peakOrValley('R1C2', 'R2C2', 'R3C2'),
-  peakOrValley('R7C2', 'R8C2', 'R9C2'),
-  peakOrValley('R1C3', 'R2C3', 'R3C3'),
-  peakOrValley('R7C3', 'R8C3', 'R9C3'),
-  peakOrValley('R1C4', 'R2C4', 'R3C4'),
-  peakOrValley('R7C4', 'R8C4', 'R9C4'),
-  peakOrValley('R1C5', 'R2C5', 'R3C5'),
-  peakOrValley('R7C6', 'R8C6', 'R9C6'),
-  peakOrValley('R1C7', 'R2C7', 'R3C7'),
-  peakOrValley('R7C7', 'R8C7', 'R9C7'),
-  peakOrValley('R1C8', 'R2C8', 'R3C8'),
-  peakOrValley('R7C9', 'R8C9', 'R9C9'),
+  // Column ends with no arrow (vertical column-triples).
+  vertNoArrow,
 ];

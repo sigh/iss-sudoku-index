@@ -73,7 +73,13 @@ const constraints = [
   new Given('R4C1', 7),
 ];
 
-for (const cell of gridCells) constraints.push(new Given(flag(cell), 1, 2));
+const flagTargets = gridCells.map(flag);
+const flagOrigin = flagTargets[0];
+constraints.push(new Replicate(
+  [new Given(flagOrigin, 1, 2)],
+  Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
+  flagOrigin,
+));
 
 for (let r = 1; r <= 9; r++) constraints.push(new Sum(10, ...graph.row(r).map(flag)));
 for (let c = 1; c <= 9; c++) constraints.push(new Sum(10, ...graph.column(c).map(flag)));

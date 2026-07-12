@@ -25,6 +25,9 @@
 //   15 from R1C4: R1C4 R2C3 R3C2 R4C1 (4 cells)
 //   15 from R4C6: R4C6 R3C5 R2C4 R1C3 (4 cells)
 
+const geometry = cellGeometry('6x6');
+const graph = cellGraph('6x6');
+
 return [
   new Shape('6x6'),
   new NoBoxes(),
@@ -36,8 +39,8 @@ return [
   new Jigsaw('6x6', 'R5C3', 'R5C4', 'R5C5', 'R6C1', 'R6C2', 'R6C3'),
   new Jigsaw('6x6', 'R3C1', 'R4C1', 'R4C2', 'R4C3', 'R5C1', 'R5C2'),
 
-  new LittleKiller('R1C1', 22),
-  new LittleKiller('R1C6', 17),
-  new LittleKiller('R1C4', 15),
-  new LittleKiller('R4C6', 15),
+  LittleKiller.fromCells(22, graph.ray('R1C1', 1, 1), geometry),
+  LittleKiller.fromCells(17, graph.ray('R1C6', 1, -1), geometry),
+  LittleKiller.fromCells(15, graph.ray('R1C4', 1, -1), geometry),
+  LittleKiller.fromCells(15, graph.ray('R4C6', -1, -1), geometry),
 ];

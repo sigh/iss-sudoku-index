@@ -44,11 +44,18 @@ constraints.push(negVals.toVar('negative half'));
 for (const cell of graph.row(1)) constraints.push(new Given(flag(cell), 0));
 
 // Every other cell's flag is boolean and tied to the cell above it.
+const flagTargets = [];
 for (let r = 2; r <= 9; r++) {
   for (let c = 1; c <= 9; c++) {
-    constraints.push(new Given(flag(makeCellId(r, c)), 0, 1));
+    flagTargets.push(flag(makeCellId(r, c)));
   }
 }
+const flagOrigin = flagTargets[0];
+constraints.push(new Replicate(
+  [new Given(flagOrigin, 0, 1)],
+  Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
+  flagOrigin,
+));
 const subZeroKey = Pair.fnToKey((above, f) => (above === 0) === (f === 1), shape);
 for (let r = 2; r <= 9; r++) {
   for (let c = 1; c <= 9; c++) {
@@ -138,17 +145,19 @@ const lines = [
   ['R5C9', 'R4C9', 'R3C9'],
 ];
 
+// Each pairwise equality (signedSum(segA) == signedSum(segB)) is a genuine
+// equal-sum relation once regrouped by sign: the cells with a +1 coefficient
+// (segA's positive half plus segB's negative half) must sum to the same total
+// as the cells with a -1 coefficient (segA's negative half plus segB's
+// positive half).
 for (const [i, line] of lines.entries()) {
   const segments = splitByBox(line);
   for (let s = 1; s < segments.length; s++) {
     const segA = segments[s - 1];
     const segB = segments[s];
-    constraints.push(new Sum(
-      0,
-      ...segA.map(posVal),
-      ...segA.map(cell => [negVal(cell), -1]),
-      ...segB.map(cell => [posVal(cell), -1]),
-      ...segB.map(negVal)));
+    constraints.push(new EqualSum(
+      [...segA.map(posVal), ...segB.map(negVal)],
+      [...segA.map(negVal), ...segB.map(posVal)]));
   }
 }
 

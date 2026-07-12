@@ -49,10 +49,17 @@ function cageTotalSum(cells, index) {
   return new EqualSum(cells, [cageTotalVar(index)]);
 }
 
+const givenTargets = graph.cells();
+const givenOrigin = givenTargets[0];
+
 const constraints = [
   new Shape("9x9", 16),
   cageTotalsVar,
-  ...graph.cells().map(cell => new Given(cell, ...range(1, 9))),
+  new Replicate(
+    [new Given(givenOrigin, ...range(1, 9))],
+    Replicate.encodeTargetCells(givenTargets, givenOrigin, graph),
+    givenOrigin,
+  ),
 ];
 
 for (const [index, cells] of cages.entries()) {

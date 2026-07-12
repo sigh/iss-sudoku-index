@@ -74,10 +74,14 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
   },
   accept: ({ block }) => block === null,
 }, geometry.numValues);
-for (const cell of gridCells) {
-  const block = graph.block(cell, 2, 2);
-  if (block) add(new NFA(noDiagonalTouchMachine, 'no-touch', ...block.map(loopCell)));
-}
+const noTouchOrigin = gridCells.find(cell => graph.block(cell, 2, 2));
+const noTouchTargets = gridCells.filter(cell => graph.block(cell, 2, 2));
+add(new Replicate(
+  [new NFA(noDiagonalTouchMachine, 'no-touch',
+    ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
+  Replicate.encodeTargetCells(
+    noTouchTargets.map(loopCell), loopCell(noTouchOrigin), loop),
+  loopCell(noTouchOrigin)));
 
 // --- Circle counts: the circle's digit equals the number of its king neighbours
 // that are on the loop. Reads the digit, then each neighbour's membership.

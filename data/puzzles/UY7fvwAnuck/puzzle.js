@@ -32,12 +32,40 @@ constraints.push(totalTensVar);
 constraints.push(totalOnesVar);
 constraints.push(new SearchPriority(100, ...graph.cells()));
 
-for (const gridCell of graph.cells()) {
-  const { row, col } = parseCellId(gridCell);
-  constraints.push(new Given(gridCell, DIGITS));
-  constraints.push(new Given(effectCell(row, col), EFFECTIVE_VALUES));
-  constraints.push(new Given(selectedCell(row, col), SELECTED_VALUES));
-}
+// Grid-digit domain givens: all 81 grid cells share the DIGITS value set, so
+// stamp one Given via Replicate instead of 81 hand-written copies.
+const gridOrigin = graph.cells()[0];
+constraints.push(new Replicate(
+  [new Given(gridOrigin, DIGITS)],
+  Replicate.encodeTargetCells(graph.cells(), gridOrigin, graph),
+  gridOrigin,
+));
+
+// Effective-value domain givens: all 81 effect-Var cells share EFFECTIVE_VALUES.
+const effectTargets = graph.cells().map((cell) => {
+  const { row, col } = parseCellId(cell);
+  return effectCell(row, col);
+});
+const effectLocator = graph.makeOverlay('VE');
+const effectOrigin = effectTargets[0];
+constraints.push(new Replicate(
+  [new Given(effectOrigin, EFFECTIVE_VALUES)],
+  Replicate.encodeTargetCells(effectTargets, effectOrigin, effectLocator),
+  effectOrigin,
+));
+
+// Loose-ten marker domain givens: all 81 selected-Var cells share SELECTED_VALUES.
+const selectedTargets = graph.cells().map((cell) => {
+  const { row, col } = parseCellId(cell);
+  return selectedCell(row, col);
+});
+const selectedLocator = graph.makeOverlay('VS');
+const selectedOrigin = selectedTargets[0];
+constraints.push(new Replicate(
+  [new Given(selectedOrigin, SELECTED_VALUES)],
+  Replicate.encodeTargetCells(selectedTargets, selectedOrigin, selectedLocator),
+  selectedOrigin,
+));
 
 const effectiveValueKey = Pair.fnToKey((digit, effective) => {
   return effective === digit || effective === 10;
@@ -125,21 +153,30 @@ const effectiveCages = cages.map((cage) => cage.map((gridCell) => {
     return effectCell(row, col);
 }));
 
+// Cage-total ones-digit domain givens: all 24 total-ones-Var cells share
+// TOTAL_ONES (the same value set as EFFECTIVE_VALUES/SELECTED_VALUES above).
+const totalOnesTargets = cages.map((_, i) => totalOnesCell(i));
+const totalOnesLocator = graph.makeOverlay('VO', graph.cells().slice(0, cages.length));
+const totalOnesOrigin = totalOnesTargets[0];
+constraints.push(new Replicate(
+  [new Given(totalOnesOrigin, TOTAL_ONES)],
+  Replicate.encodeTargetCells(totalOnesTargets, totalOnesOrigin, totalOnesLocator),
+  totalOnesOrigin,
+));
+
 for (let i = 0; i < cages.length; i++) {
   const cage = effectiveCages[i];
   const tens = totalTensCell(i);
   const ones = totalOnesCell(i);
   constraints.push(new Given(tens, TOTAL_TENS));
-  constraints.push(new Given(ones, TOTAL_ONES));
   constraints.push(new Sum(-11, ...cage, [tens, -10], [ones, -1]));
 }
 
-const notEqualKey = Pair.fnToKey((a, b) => a !== b, 16);
 for (let i = 0; i < cages.length; i++) {
   for (let j = i + 1; j < cages.length; j++) {
     constraints.push(new Or([
-      new Pair(notEqualKey, 'different total tens', totalTensCell(i), totalTensCell(j)),
-      new Pair(notEqualKey, 'different total ones', totalOnesCell(i), totalOnesCell(j)),
+      new AllDifferent(totalTensCell(i), totalTensCell(j)),
+      new AllDifferent(totalOnesCell(i), totalOnesCell(j)),
     ]));
   }
 }

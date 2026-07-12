@@ -65,12 +65,22 @@ const blackDots = [
   ["R8C9", "R9C9"],
 ];
 
-const cells = cellGraph("9x9").cells();
+const graph = cellGraph("9x9");
+const cells = graph.cells();
 const availableDigits = [0, 1, 3, 4, 5, 6, 7, 8, 9];
+
+// Every cell is restricted to the same available-digit set, so Replicate
+// stamps the template instead of hand-rolling each identical copy.
+const availableOrigin = cells[0];
+const availableTemplate = [new Given(availableOrigin, ...availableDigits)];
 
 return [
   new Shape("9x9", "0-9"),
-  ...cells.map(cell => new Given(cell, ...availableDigits)),
+  new Replicate(
+    availableTemplate,
+    Replicate.encodeTargetCells(cells, availableOrigin, graph),
+    availableOrigin,
+  ),
   ...Object.entries(givens).map(([cell, value]) => new Given(cell, value)),
   ...boxes.map(cells => new Jigsaw("9x9~0-9", ...cells)),
   ...whispers.map(cells => new Whisper(5, ...cells)),

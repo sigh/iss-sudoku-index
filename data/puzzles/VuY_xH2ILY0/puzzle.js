@@ -120,7 +120,7 @@ const xMarks = [
 ];
 
 return [
-  ...pairwise("NW knight move", (a, b) => a !== b, knightEdges(nw)),
+  ...knightEdges(nw).map(([a, b]) => new AllDifferent(a, b)),
 
   ...blackDots.map(edge => new BlackDot(...edge)),
   ...pairwise("NE no absent black dot", (a, b) => a !== 2 * b && b !== 2 * a,

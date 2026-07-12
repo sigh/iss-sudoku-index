@@ -49,16 +49,23 @@ const notAllSameNFA = NFA.encodeSpec({
   accept: (state) => state !== null && !state.allSame,
 }, SHADED);
 
-// No 2x2 block is entirely shaded or entirely unshaded.
+// No 2x2 block is entirely shaded or entirely unshaded. Every block is a
+// uniform-offset shift of the top-left block, so encode it once and
+// replicate it over every anchor cell whose block stays on-grid.
+const monoBlockOrigin = shadeOf('R1C1');
+const monoBlockTemplate = new NFA(notAllSameNFA, 'no-monochrome-2x2',
+  shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2'));
+const monoBlockAnchors = [];
 for (let r = 1; r <= 8; r++) {
   for (let c = 1; c <= 8; c++) {
-    const block = [
-      makeCellId(r, c), makeCellId(r, c + 1),
-      makeCellId(r + 1, c), makeCellId(r + 1, c + 1),
-    ].map(shadeOf);
-    add(new NFA(notAllSameNFA, 'no-monochrome-2x2', ...block));
+    monoBlockAnchors.push(shadeOf(makeCellId(r, c)));
   }
 }
+add(new Replicate(
+  [monoBlockTemplate],
+  Replicate.encodeTargetCells(monoBlockAnchors, monoBlockOrigin, shade),
+  monoBlockOrigin,
+));
 
 // Every line contains shaded and unshaded cells -- applied to the 9 lines
 // whose geometry is unambiguous (see the header comment for the 2 excluded

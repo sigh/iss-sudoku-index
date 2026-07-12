@@ -90,16 +90,42 @@ const hitNFASpec = (n, negate) => ({
 
 const SPEC_FOR_TYPE = { thermo: thermoNFASpec, index: indexNFASpec, hit: hitNFASpec };
 
-const ruleConstraint = (type, negate, label, cells) =>
-  new NFA(NFA.encodeSpec(SPEC_FOR_TYPE[type](cells.length, negate), 9), label, ...cells);
+// Closed-form binary relations for the n=2 case of each rule, derived by
+// hand-tracing the NFA specs above at maxDepth 2 (hexagon cell `a`, second
+// cell `b`):
+//  - thermo: strictly increasing, so just b > a.
+//  - index: only the swap {a,b} = {1,2} is a valid self-inverse permutation
+//    of length 2 (a==b==1 or a==b==2 both fail the "expected" bookkeeping).
+//  - hit: hex is `a`; matches = (a==1) + (b==2); accept iff matches === a,
+//    which reduces to a==1 && b!=2 (a>=2 can never reach its own count).
+const PAIR_FN_FOR_TYPE = {
+  thermo: (a, b) => b > a,
+  index: (a, b) => (a === 1 && b === 2) || (a === 2 && b === 1),
+  hit: (a, b) => a === 1 && b !== 2,
+};
 
-const neqKey = Pair.fnToKey((a, b) => a !== b, 9);
+// 2-cell lines are a genuine binary relation on their two cells; use Pair
+// instead of an NFA for the same semantics. The direct (non-negated) thermo
+// case on 2 cells is plain "second cell > first cell", which is exactly the
+// native GreaterThan relation (reversed cell order gives that direction).
+const ruleConstraint = (type, negate, label, cells) => {
+  if (cells.length === 2) {
+    if (type === 'thermo' && !negate) {
+      return new GreaterThan(cells[1], cells[0]);
+    }
+    const base = PAIR_FN_FOR_TYPE[type];
+    const fn = negate ? (a, b) => !base(a, b) : base;
+    return new Pair(Pair.fnToKey(fn, 9), label, cells[0], cells[1]);
+  }
+  return new NFA(NFA.encodeSpec(SPEC_FOR_TYPE[type](cells.length, negate), 9), label, ...cells);
+};
+
 
 // Whether the line's cells contain the mischief digit VM.
 const containsMischief = (cells) =>
   new Or(cells.map(c => new SameValues(2, 'VM', c)));
 const notContainsMischief = (cells) =>
-  new And(cells.map(c => new Pair(neqKey, 'NotMischief', 'VM', c)));
+  new And(cells.map(c => new AllDifferent('VM', c)));
 
 const LINES = [
   ['thermo', ['R1C3', 'R2C4', 'R3C4', 'R4C4', 'R4C3', 'R3C2', 'R2C2', 'R2C3', 'R3C3']],

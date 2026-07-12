@@ -66,17 +66,9 @@ for (const cell of gridCells) {
 // --- Traffic-light borders: the road cannot cross that edge, i.e. the two
 // cells either side of it cannot both be on the loop (since, under degree-2,
 // any orthogonally-adjacent on-on pair is necessarily a used loop edge).
-const noCrossMachine = NFA.encodeSpec({
-  startState: { phase: 'a' },
-  transition: (state, value) => {
-    if (state.phase === 'a') return { phase: 'b', aOn: value === ON };
-    if (state.aOn && value === ON) return undefined;
-    return { phase: 'done' };
-  },
-  accept: ({ phase }) => phase === 'done',
-}, geometry.numValues);
+const noCrossKey = Pair.fnToKey((a, b) => !(a === ON && b === ON), geometry.numValues);
 for (const [a, b] of trafficLightEdges) {
-  add(new NFA(noCrossMachine, 'no-cross', loopCell(a), loopCell(b)));
+  add(new Pair(noCrossKey, 'no-cross', loopCell(a), loopCell(b)));
 }
 
 // --- Speed cameras: the camera cell's digit equals the number of on-loop

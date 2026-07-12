@@ -42,6 +42,7 @@ const periodMachine = (relation) => NFA.encodeSpec({
   accept: () => true,
 }, 9, { multiSegment: true });
 
+const graph = cellGraph('9x9');
 return [
   new Shape('9x9'),
 
@@ -64,6 +65,6 @@ return [
   new BlackDot('R4C9', 'R5C9'),
 
   // Little killer diagonals (sum along the diagonal, digits may repeat).
-  new LittleKiller('R7C1', 14),
-  new LittleKiller('R2C9', 10),
+  LittleKiller.fromCells(14, graph.ray('R7C1', 1, 1), cellGeometry('9x9')),
+  LittleKiller.fromCells(10, graph.ray('R2C9', -1, -1), cellGeometry('9x9')),
 ];

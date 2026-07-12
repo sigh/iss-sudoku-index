@@ -100,16 +100,13 @@ for (const cell of planets) add(new Given(shapeCell(cell), HORIZ, VERT, UL, UR, 
 
 for (const [a, b] of whiteDotEdges) add(new WhiteDot(a, b));
 
-const edgeAgree = (fromA, fromB) => NFA.encodeSpec({
-  startState: { aUses: null },
-  transition: ({ aUses }, value) => aUses === null
-    ? { aUses: fromA(value) }
-    : (aUses === fromB(value) ? { done: true } : undefined),
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
+// 2-cell relation: the first cell uses the edge (fromA) iff the second uses
+// it back (fromB).
+const edgeAgreeKey = (fromA, fromB) =>
+  Pair.fnToKey((a, b) => fromA(a) === fromB(b), geometry.numValues);
 
-const edgeRight = edgeAgree(usesRight, usesLeft);
-const edgeDown = edgeAgree(usesDown, usesUp);
+const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
+const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 
 const loopNonConsecutive = (fromA, isWhiteDot) => NFA.encodeSpec({
   startState: { phase: 'shape' },
@@ -136,12 +133,12 @@ for (const cell of gridCells) {
   const down = graph.step(cell, 1, 0);
   if (right) {
     const isWhiteDot = whiteDotKeys.has(edgeKey(cell, right));
-    add(new NFA(edgeRight, 'edge-h', shapeCell(cell), shapeCell(right)));
+    add(new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)));
     add(new NFA(nonConsecutiveRight[isWhiteDot ? 1 : 0], 'loop-nc-h', shapeCell(cell), cell, right));
   }
   if (down) {
     const isWhiteDot = whiteDotKeys.has(edgeKey(cell, down));
-    add(new NFA(edgeDown, 'edge-v', shapeCell(cell), shapeCell(down)));
+    add(new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)));
     add(new NFA(nonConsecutiveDown[isWhiteDot ? 1 : 0], 'loop-nc-v', shapeCell(cell), cell, down));
   }
 }
@@ -149,30 +146,20 @@ for (const cell of gridCells) {
 // The Or makes the parity-to-turn mapping global:
 //   ODD_TURNS means odd digits turn and even digits go straight.
 //   EVEN_TURNS means even digits turn and odd digits go straight.
-const parityMachine = selector => NFA.encodeSpec({
-  startState: { phase: 'shape' },
-  transition: (state, value) => {
-    if (state.phase === 'shape') return { phase: 'digit', shapeValue: value };
-    const { shapeValue } = state;
-    if (shapeValue === OFF) return { done: true };
-    const digitIsOdd = value % 2 === 1;
-    if (selector === ODD_TURNS) {
-      return (isTurn(shapeValue) && digitIsOdd) || (isStraight(shapeValue) && !digitIsOdd)
-        ? { done: true }
-        : undefined;
-    }
-    return (isTurn(shapeValue) && !digitIsOdd) || (isStraight(shapeValue) && digitIsOdd)
-      ? { done: true }
-      : undefined;
-  },
-  accept: ({ done }) => done === true,
+// A pure 2-cell relation between a cell's shape and its digit.
+const parityKey = selector => Pair.fnToKey((shapeValue, value) => {
+  if (shapeValue === OFF) return true;
+  const digitIsOdd = value % 2 === 1;
+  return selector === ODD_TURNS
+    ? (isTurn(shapeValue) && digitIsOdd) || (isStraight(shapeValue) && !digitIsOdd)
+    : (isTurn(shapeValue) && !digitIsOdd) || (isStraight(shapeValue) && digitIsOdd);
 }, geometry.numValues);
 
-const oddTurnsParity = parityMachine(ODD_TURNS);
-const evenTurnsParity = parityMachine(EVEN_TURNS);
+const oddTurnsKey = parityKey(ODD_TURNS);
+const evenTurnsKey = parityKey(EVEN_TURNS);
 add(new Or([
-  new And(gridCells.map(cell => new NFA(oddTurnsParity, 'odd-turns', shapeCell(cell), cell))),
-  new And(gridCells.map(cell => new NFA(evenTurnsParity, 'even-turns', shapeCell(cell), cell))),
+  new And(gridCells.map(cell => new Pair(oddTurnsKey, 'odd-turns', shapeCell(cell), cell))),
+  new And(gridCells.map(cell => new Pair(evenTurnsKey, 'even-turns', shapeCell(cell), cell))),
 ]));
 
 const satelliteMachine = NFA.encodeSpec({

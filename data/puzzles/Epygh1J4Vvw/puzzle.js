@@ -72,15 +72,12 @@ const relationMachine = (selectedDir, color) => NFA.encodeSpec({
   accept: ({ done }) => done === true,
 }, geometry.numValues);
 
-const noSameEdgeMachine = (dotA, dotB) => NFA.encodeSpec({
-  startState: { phase: 'a' },
-  transition: (state, value) => {
-    if (state.phase === 'a') return { phase: 'b', a: value };
-    const ca = dotA.candidates.find(candidate => candidate.dir.value === state.a);
-    const cb = dotB.candidates.find(candidate => candidate.dir.value === value);
-    return ca && cb && sameEdge(ca.edge, cb.edge) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
+// Two dots must not select the same original edge. This is a plain binary
+// relation between the two dots' direction Vars, so it is a Pair.
+const noSameEdgeKey = (dotA, dotB) => Pair.fnToKey((a, b) => {
+  const ca = dotA.candidates.find(candidate => candidate.dir.value === a);
+  const cb = dotB.candidates.find(candidate => candidate.dir.value === b);
+  return !(ca && cb && sameEdge(ca.edge, cb.edge));
 }, geometry.numValues);
 
 for (const dot of dots) {
@@ -98,7 +95,7 @@ for (const dot of dots) {
 for (let i = 0; i < dots.length; i++) {
   for (let j = i + 1; j < dots.length; j++) {
     if (dots[i].candidates.some(a => dots[j].candidates.some(b => sameEdge(a.edge, b.edge)))) {
-      add(new NFA(noSameEdgeMachine(dots[i], dots[j]), 'distinct-edge', dots[i].varCell, dots[j].varCell));
+      add(new Pair(noSameEdgeKey(dots[i], dots[j]), 'distinct-edge', dots[i].varCell, dots[j].varCell));
     }
   }
 }

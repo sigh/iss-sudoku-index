@@ -46,10 +46,16 @@ const add = (...newConstraints) => constraints.push(...newConstraints);
 
 // Restrict every category Var to the 6 real category codes (the Var's
 // default domain otherwise runs 1-9, matching the main grid's value range).
-for (const cell of gridCells) {
-  add(new Given(catCell(cell), CATEGORY.NONE, CATEGORY.ARROW, CATEGORY.RSUM,
-    CATEGORY.RENBAN, CATEGORY.DUTCH, CATEGORY.PARITY));
-}
+// All 81 Givens share the same value set, so Replicate stamps the template
+// instead of hand-rolling each copy.
+const domainTargets = gridCells.map(catCell);
+const domainOrigin = domainTargets[0];
+add(new Replicate(
+  [new Given(domainOrigin, CATEGORY.NONE, CATEGORY.ARROW, CATEGORY.RSUM,
+    CATEGORY.RENBAN, CATEGORY.DUTCH, CATEGORY.PARITY)],
+  Replicate.encodeTargetCells(domainTargets, domainOrigin, category),
+  domainOrigin,
+));
 
 // Known circled cells (color from the source drawing), fixed to their line
 // category. Exact line paths from each circle are not known.

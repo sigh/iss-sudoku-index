@@ -88,21 +88,26 @@ for (const cell of gridCells) {
   add(new Given(shapeCell(cell), ...allowed));
 }
 
-// --- Edge agreement: neighbours must agree on the shared edge. ---
-const edgeAgree = (toB, toA) => NFA.encodeSpec({
-  startState: { aUses: null },
-  transition: ({ aUses }, value) => aUses === null
-    ? { aUses: toB(value) }
-    : (aUses === toA(value) ? { done: true } : undefined),
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const edgeRight = edgeAgree(usesRight, usesLeft), edgeDown = edgeAgree(usesDown, usesUp);
-for (const cell of gridCells) {
-  const right = graph.step(cell, 0, 1);
-  const down = graph.step(cell, 1, 0);
-  if (right) add(new NFA(edgeRight, 'edge-h', shapeCell(cell), shapeCell(right)));
-  if (down) add(new NFA(edgeDown, 'edge-v', shapeCell(cell), shapeCell(down)));
-}
+// --- Edge agreement: neighbours must agree on the shared edge. This is a
+// plain binary relation between two shape cells (a Pair), and every
+// instance is the same template shifted by a uniform offset (+1 column for
+// edge-h, +1 row for edge-v) over shape cells only -- both entirely within
+// the VS overlay subgraph -- so each direction is one Replicate.
+const edgeAgreeKey = (toB, toA) => Pair.fnToKey((a, b) => toB(a) === toA(b), geometry.numValues);
+const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
+const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
+const rightBases = gridCells.filter(cell => graph.step(cell, 0, 1));
+const downBases = gridCells.filter(cell => graph.step(cell, 1, 0));
+add(new Replicate(
+  [new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
+  Replicate.encodeTargetCells(rightBases.map(shapeCell), shapeCell('R1C1'), shape),
+  shapeCell('R1C1'),
+));
+add(new Replicate(
+  [new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
+  Replicate.encodeTargetCells(downBases.map(shapeCell), shapeCell('R1C1'), shape),
+  shapeCell('R1C1'),
+));
 
 // --- Ambiguous-Kropki digit rule along loop edges: reads [shapeA, digitA,
 // digitB]; `toB` says whether A uses the edge to B (edge agreement

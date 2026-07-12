@@ -17,11 +17,12 @@ const regions = [
   ['R1C3', 'R1C4', 'R1C5', 'R2C4', 'R2C5', 'R3C4'],
 ];
 
+const graph = cellGraph('6x6');
 return [
   new Shape('6x6', '1-6'),
   new NoBoxes(),
   ...regions.map(region => new Jigsaw('6x6', ...region)),
-  new XSum('C2,1', 15),
-  new XSum('C5,1', 15),
-  new XSum('R5,1', 12),
+  XSum.fromCells(15, graph.column(2), cellGeometry('6x6')),
+  XSum.fromCells(15, graph.column(5), cellGeometry('6x6')),
+  XSum.fromCells(12, graph.row(5), cellGeometry('6x6')),
 ];

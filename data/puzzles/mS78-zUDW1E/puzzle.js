@@ -28,11 +28,19 @@ function southCells(cells) {
 
 const allDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-for (let row = 1; row <= 9; row++) {
-  for (let col = 1; col <= 9; col++) {
-    constraints.push(new Given(southCell(row, col), ...allDigits));
-  }
-}
+// South Side domain givens: every south cell allows all nine digits. All 81
+// are identical Given(cell, 1..9) stamps, so Replicate stamps the template
+// instead of hand-rolling each copy. `southLocator` is a pure position
+// locator (never added to `constraints`) whose 'VS1'..'VS81' ids and
+// row-major ordering exactly match `southVar.cell(n)` / southCell(row, col).
+const southLocator = cellGraph('9x9').makeOverlay('VS');
+const southTargets = southLocator.cells();
+const southOrigin = southTargets[0];
+constraints.push(new Replicate(
+  [new Given(southOrigin, ...allDigits)],
+  Replicate.encodeTargetCells(southTargets, southOrigin, southLocator),
+  southOrigin,
+));
 
 constraints.push(
   new Given(southCell(5, 1), 1),

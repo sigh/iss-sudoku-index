@@ -8,6 +8,9 @@
 // Palindrome (gray lines): digits read the same in both directions.
 // Little Killer: outside clue gives the sum of digits along its diagonal.
 // Kropki white dots: joined digits are consecutive.
+const geometry = cellGeometry('9x9');
+const graph = cellGraph('9x9');
+
 return [
   new Shape('9x9'),
 
@@ -34,7 +37,7 @@ return [
   new WhiteDot('R7C7', 'R8C7'),
 
   // Little Killer diagonal sums.
-  new LittleKiller('R1C4', 27),
-  new LittleKiller('R6C9', 28),
-  new LittleKiller('R4C1', 28),
+  LittleKiller.fromCells(27, graph.ray('R1C4', 1, -1), geometry),
+  LittleKiller.fromCells(28, graph.ray('R6C9', -1, -1), geometry),
+  LittleKiller.fromCells(28, graph.ray('R4C1', 1, 1), geometry),
 ];

@@ -49,7 +49,15 @@ const opposite = cell => {
 };
 
 // --- Copycat flag domain: every cell is PLAIN or COPY. ---
-for (const cell of gridCells) add(new Given(flagOf(cell), PLAIN, COPY));
+{
+  const targets = gridCells.map(flagOf);
+  const origin = targets[0];
+  add(new Replicate(
+    [new Given(origin, PLAIN, COPY)],
+    Replicate.encodeTargetCells(targets, origin, flags),
+    origin,
+  ));
+}
 
 // --- Exactly one copycat per row, per column, and per box. ---
 const oneCopy = NFA.encodeSpec({

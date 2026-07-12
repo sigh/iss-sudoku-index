@@ -47,15 +47,14 @@ const notAllSameNFA = NFA.encodeSpec({
     : { first: state.first, allSame: state.allSame && v === state.first },
   accept: (state) => state !== null && !state.allSame,
 }, YANG);
-for (let r = 1; r <= 8; r++) {
-  for (let c = 1; c <= 8; c++) {
-    const block = [
-      makeCellId(r, c), makeCellId(r, c + 1),
-      makeCellId(r + 1, c), makeCellId(r + 1, c + 1),
-    ].map(shadeOf);
-    add(new NFA(notAllSameNFA, 'no-monochrome-2x2', ...block));
-  }
-}
+const monoOrigin = shadeOf('R1C1');
+add(new Replicate(
+  [new NFA(
+    notAllSameNFA, 'no-monochrome-2x2',
+    shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2'))],
+  Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
+  monoOrigin,
+));
 
 // --- Lines: drawn as thick white/grey strokes; each pair of cells here is a
 // segment of one such line, read off the decoded waypoints. ---

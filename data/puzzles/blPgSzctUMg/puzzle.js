@@ -24,18 +24,19 @@ const renbanLines = [
 ];
 
 const sandwichClues = [
-  ['R2,1', 16],
-  ['R5,1', 20],
-  ['R8,1', 16],
-  ['C2,1', 17],
-  ['C5,1', 20],
-  ['C8,1', 17],
+  [16, ['R2C1', 'R2C2', 'R2C3', 'R2C4', 'R2C5', 'R2C6', 'R2C7', 'R2C8', 'R2C9']],
+  [20, ['R5C1', 'R5C2', 'R5C3', 'R5C4', 'R5C5', 'R5C6', 'R5C7', 'R5C8', 'R5C9']],
+  [16, ['R8C1', 'R8C2', 'R8C3', 'R8C4', 'R8C5', 'R8C6', 'R8C7', 'R8C8', 'R8C9']],
+  [17, ['R1C2', 'R2C2', 'R3C2', 'R4C2', 'R5C2', 'R6C2', 'R7C2', 'R8C2', 'R9C2']],
+  [20, ['R1C5', 'R2C5', 'R3C5', 'R4C5', 'R5C5', 'R6C5', 'R7C5', 'R8C5', 'R9C5']],
+  [17, ['R1C8', 'R2C8', 'R3C8', 'R4C8', 'R5C8', 'R6C8', 'R7C8', 'R8C8', 'R9C8']],
 ];
 
+const geometry = cellGeometry('9x9');
 const constraints = [new Shape('9x9')];
 for (const cells of renbanLines) constraints.push(new Renban(...cells));
-for (const [arrowId, value] of sandwichClues) {
-  constraints.push(new Sandwich(arrowId, value));
+for (const [value, cells] of sandwichClues) {
+  constraints.push(Sandwich.fromCells(value, cells, geometry));
 }
 
 return constraints;

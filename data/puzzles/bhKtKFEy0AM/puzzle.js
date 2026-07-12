@@ -50,16 +50,12 @@ for (const cell of gridCells) {
   add(new Given(shapeCell(cell), ...allowed));
 }
 
-// --- Edge agreement: neighbours must agree on the shared edge. Reads the two
-// cells' shapes; the first uses the edge towards the second iff the second uses
-// the edge back. `toB`/`toA` say whether a shape uses that shared edge.
-const edgeAgree = (toB, toA) => NFA.encodeSpec({
-  startState: { aUses: null },
-  transition: ({ aUses }, value) => aUses === null
-    ? { aUses: toB(value) }
-    : (aUses === toA(value) ? { done: true } : undefined),
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
+// --- Edge agreement: neighbours must agree on the shared edge. A pure
+// 2-cell relation on the two cells' shapes: the first uses the edge towards
+// the second iff the second uses the edge back. `toB`/`toA` say whether a
+// shape uses that shared edge.
+const edgeAgreeKey = (toB, toA) =>
+  Pair.fnToKey((a, b) => toB(a) === toA(b), geometry.numValues);
 
 // --- Loop differences: two cells joined by a loop edge differ by at least 5.
 // Reads [shapeA, digitA, digitB]; `toB` says whether A uses the edge to B (edge
@@ -76,17 +72,17 @@ const diffEdge = (toB) => NFA.encodeSpec({
 }, geometry.numValues);
 
 // Apply both to every right and down neighbour pair.
-const edgeRight = edgeAgree(usesRight, usesLeft), edgeDown = edgeAgree(usesDown, usesUp);
+const edgeRightKey = edgeAgreeKey(usesRight, usesLeft), edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 const diffRight = diffEdge(usesRight), diffDown = diffEdge(usesDown);
 for (const cell of gridCells) {
   const right = graph.step(cell, 0, 1);
   const down = graph.step(cell, 1, 0);
   if (right) {
-    add(new NFA(edgeRight, 'edge-h', shapeCell(cell), shapeCell(right)));
+    add(new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)));
     add(new NFA(diffRight, 'diff-h', shapeCell(cell), cell, right));
   }
   if (down) {
-    add(new NFA(edgeDown, 'edge-v', shapeCell(cell), shapeCell(down)));
+    add(new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)));
     add(new NFA(diffDown, 'diff-v', shapeCell(cell), cell, down));
   }
 }

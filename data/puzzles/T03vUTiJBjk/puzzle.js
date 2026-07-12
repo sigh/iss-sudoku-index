@@ -82,10 +82,15 @@ const feasible = (topLeft, bottomRight, sum) => {
 
 const rectangleVar = new Var("R", "Rectangle", K);
 
+const allCells = rectangle("R1C1", "R9C9");
+const allCellsOrigin = allCells[0];
+
 return [
   new Shape("9x9", K),
-  ...rectangle("R1C1", "R9C9").map(cell =>
-    new Given(cell, ...rangeI(1, 9))
+  new Replicate(
+    [new Given(allCellsOrigin, ...rangeI(1, 9))],
+    Replicate.encodeTargetCells(allCells, allCellsOrigin, graph),
+    allCellsOrigin,
   ),
   rectangleVar,
   new AllDifferent(...rectangleVar.cells()),

@@ -22,15 +22,17 @@ const givens = [
 ];
 
 const littleKillers = [
-  ['R1C2', 6],
-  ['R1C3', 20],
-  ['R7C1', 10],
-  ['R8C1', 10],
-  ['R9C8', 6],
-  ['R9C7', 17],
-  ['R2C9', 6],
-  ['R3C9', 24],
+  [['R1C2', 'R2C1'], 6],
+  [['R1C3', 'R2C2', 'R3C1'], 20],
+  [['R7C1', 'R8C2', 'R9C3'], 10],
+  [['R8C1', 'R9C2'], 10],
+  [['R9C8', 'R8C9'], 6],
+  [['R9C7', 'R8C8', 'R7C9'], 17],
+  [['R2C9', 'R1C8'], 6],
+  [['R3C9', 'R2C8', 'R1C7'], 24],
 ];
+
+const geometry = cellGeometry('9x9');
 
 // Top-left cell of each 2x2 intersection that has a Battenburg marking.
 const battenburgMarked = new Set([
@@ -61,23 +63,40 @@ const constraints = [];
 
 for (const [cell, val] of givens) constraints.push(new Given(cell, val));
 
-for (const [cell, total] of littleKillers) {
-  constraints.push(new LittleKiller(cell, total));
+for (const [cells, total] of littleKillers) {
+  constraints.push(LittleKiller.fromCells(total, cells, geometry));
 }
 
+// Battenburg-marked intersections: only 8 of them, so they stay as individual
+// NFA constraints (Replicate is not worth it below that count).
 for (let row = 1; row <= 8; row++) {
   for (let col = 1; col <= 8; col++) {
     const tl = makeCellId(row, col);
-    const cells = [
-      tl, makeCellId(row, col + 1),
-      makeCellId(row + 1, col), makeCellId(row + 1, col + 1),
-    ];
-    const marked = battenburgMarked.has(tl);
+    if (!battenburgMarked.has(tl)) continue;
     constraints.push(new NFA(
-      marked ? battenburgMatchNFA : battenburgNoMatchNFA,
-      marked ? 'Battenburg' : 'NoBattenburg',
-      ...cells));
+      battenburgMatchNFA, 'Battenburg',
+      tl, makeCellId(row, col + 1),
+      makeCellId(row + 1, col), makeCellId(row + 1, col + 1)));
   }
 }
+
+// Battenburg-unmarked intersections: 56 shifted copies of the same 2x2
+// template (same relative TL/TR/BL/BR offsets everywhere), so replicate them
+// from the first unmarked corner instead of stamping each one by hand.
+const graph = cellGraph('9x9');
+const noBattenburgOrigin = 'R1C2';
+const noBattenburgTargets = [];
+for (let row = 1; row <= 8; row++) {
+  for (let col = 1; col <= 8; col++) {
+    const tl = makeCellId(row, col);
+    if (!battenburgMarked.has(tl)) noBattenburgTargets.push(tl);
+  }
+}
+constraints.push(new Replicate(
+  [new NFA(
+    battenburgNoMatchNFA, 'NoBattenburg',
+    noBattenburgOrigin, makeCellId(1, 3), makeCellId(2, 2), makeCellId(2, 3))],
+  Replicate.encodeTargetCells(noBattenburgTargets, noBattenburgOrigin, graph),
+  noBattenburgOrigin));
 
 return constraints;

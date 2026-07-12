@@ -35,12 +35,14 @@ const constraints = [new Shape('9x9', MAX_INDEX)];
 function add(c) { constraints.push(c); }
 
 // Restrict the real grid back to ordinary Sudoku digits (the extra index
-// Vars use the same extended range, up to MAX_INDEX).
-for (let r = 1; r <= 9; r++) {
-  for (let c = 1; c <= 9; c++) {
-    add(new Given(makeCellId(r, c), 1, 2, 3, 4, 5, 6, 7, 8, 9));
-  }
-}
+// Vars use the same extended range, up to MAX_INDEX). Every real cell gets
+// the identical restriction, so Replicate a single template across the grid.
+const graph = cellGraph('9x9');
+add(new Replicate(
+  [new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)],
+  Replicate.encodeTargetCells(graph.cells(), 'R1C1', graph),
+  'R1C1',
+));
 
 // Thermometers.
 add(new Thermo('R3C3', 'R2C3', 'R3C2'));

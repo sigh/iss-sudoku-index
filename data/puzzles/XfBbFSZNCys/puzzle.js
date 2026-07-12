@@ -41,8 +41,22 @@ function edgeId(edge) {
   return edge[0] === 'H' ? h(edge[1], edge[2]) : v(edge[1], edge[2]);
 }
 
-for (let i = 1; i <= 90; i++) {
-  add(new Given(horizontalVar.cell(i), ON, OFF), new Given(verticalVar.cell(i), ON, OFF));
+// horizontalVar/verticalVar are raw Var groups (not overlay-backed), so they
+// have no parseCellId of their own. A Var group's cell `${prefix}${n}` gets a
+// contiguous, sequential cellIndex in n, so a locator that reads the numeric
+// suffix reproduces the same offsets Replicate needs.
+const varLocator = (v) => ({
+  parseCellId: (id) => ({ cellIndex: Number(id.slice(v.prefix.length + 1)) }),
+});
+
+for (const v of [horizontalVar, verticalVar]) {
+  const targets = Array.from({ length: 90 }, (_, i) => v.cell(i + 1));
+  const origin = targets[0];
+  add(new Replicate(
+    [new Given(origin, ON, OFF)],
+    Replicate.encodeTargetCells(targets, origin, varLocator(v)),
+    origin,
+  ));
 }
 
 const safetyStripEdges = [

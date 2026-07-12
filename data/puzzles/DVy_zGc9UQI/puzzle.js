@@ -44,6 +44,13 @@ function colorCandidates(cell, i) {
   ].flat());
 }
 
+// The 50 uncoloured ("?") circles all start with the same candidate set
+// [1, 2, 3], so Replicate stamps that template instead of hand-rolling each
+// identical Given.
+function isUncoloredCircle(_cell, i) {
+  return circles[circleIndices[i]] === '?';
+}
+
 const graph = cellGraph();
 const allCells = graph.cells();
 
@@ -90,15 +97,24 @@ function colorDigitNFAs() {
   return constraints;
 }
 
+const coloredGivens = circleCells
+  .flatMap((c, i) => isUncoloredCircle(c, i) ? [] : [colorCandidates(c, i)]);
+const uncoloredTargets = circleCells
+  .filter((c, i) => isUncoloredCircle(c, i))
+  .map(c => color.at(c));
+const uncoloredOrigin = uncoloredTargets[0];
+
 return [
   ...base,
   color.toVar("Color"),
-  ...circleCells.map(colorCandidates),
+  ...coloredGivens,
+  new Replicate(
+    [new Given(uncoloredOrigin, 1, 2, 3)],
+    Replicate.encodeTargetCells(uncoloredTargets, uncoloredOrigin, color),
+    uncoloredOrigin,
+  ),
   new And([
-    ...circleAdjacencies().map(cells => new Pair(
-      Pair.fnToKey((a, b) => a != b, 9),
-      ``, ...cells
-    ))
+    ...circleAdjacencies().map(cells => new AllDifferent(...cells))
   ]),
   new And([...colorDigitNFAs()]),
 ];

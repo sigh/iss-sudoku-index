@@ -12,14 +12,17 @@ const regions = [
   ['R4C2', 'R4C3', 'R4C4', 'R5C4', 'R5C5', 'R5C6'],
 ];
 
+const geometry = cellGeometry('6x6');
+const graph = cellGraph('6x6');
+
 return [
   new Shape('6x6'),
   new NoBoxes(),
   ...regions.map(cells => new Jigsaw('6x6', ...cells)),
 
   // Top hotel-room clues. The first cell in the column supplies N.
-  new NumberedRoom('C3,1', 4),
-  new NumberedRoom('C4,1', 3),
-  new NumberedRoom('C5,1', 2),
-  new NumberedRoom('C6,1', 1),
+  NumberedRoom.fromCells(4, graph.column(3), geometry),
+  NumberedRoom.fromCells(3, graph.column(4), geometry),
+  NumberedRoom.fromCells(2, graph.column(5), geometry),
+  NumberedRoom.fromCells(1, graph.column(6), geometry),
 ];

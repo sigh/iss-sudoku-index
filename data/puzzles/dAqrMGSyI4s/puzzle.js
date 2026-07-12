@@ -82,21 +82,17 @@ for (const cell of gridCells) {
 }
 
 // --- Edge agreement: neighbours agree on the shared edge, so used edges are
-// mutual and every non-OFF cell has degree exactly two (=> loops). ---
-const edgeAgree = (toB, toA) => NFA.encodeSpec({
-  startState: { aUses: null },
-  transition: ({ aUses }, value) => aUses === null
-    ? { aUses: toB(value) }
-    : (aUses === toA(value) ? { done: true } : undefined),
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const edgeRight = edgeAgree(usesRight, usesLeft);
-const edgeDown = edgeAgree(usesDown, usesUp);
+// mutual and every non-OFF cell has degree exactly two (=> loops). A 2-cell
+// binary relation, so it is a Pair rather than an NFA. ---
+const edgeAgreeKey = (toB, toA) =>
+  Pair.fnToKey((a, b) => toB(a) === toA(b), geometry.numValues);
+const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
+const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 const rightTargets = gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell);
 const downTargets = gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell);
-add(new Replicate([new NFA(edgeRight, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
+add(new Replicate([new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
   Replicate.encodeTargetCells(rightTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')));
-add(new Replicate([new NFA(edgeDown, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
+add(new Replicate([new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
   Replicate.encodeTargetCells(downTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')));
 
 // --- Per-loop parity: two cells joined by a loop edge share parity. The mirror

@@ -16,6 +16,7 @@ const regions = [
   ['R4C6', 'R5C4', 'R5C5', 'R5C6', 'R6C5', 'R6C6'],
 ];
 
+const graph = cellGraph('6x6');
 return [
   new Shape('6x6'),
   new NoBoxes(),
@@ -29,7 +30,7 @@ return [
   new Thermo('R2C3', 'R2C4'),
 
   new Cage(7, 'R4C3', 'R4C4'),
-  new LittleKiller('R1C5', 25),
+  LittleKiller.fromCells(25, graph.ray('R1C5', 1, -1), cellGeometry('6x6')),
 
   new WhiteDot('R1C1', 'R1C2'),
   new BlackDot('R6C5', 'R6C6'),

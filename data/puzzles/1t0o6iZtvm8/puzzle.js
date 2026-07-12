@@ -110,15 +110,14 @@ function currantMachine(relation) {
 }
 const blackCurrantMachine = currantMachine((a, b) => a === 2 * b || b === 2 * a);
 const redCurrantMachine = currantMachine((a, b) => (a % 2) !== (b % 2));
-const sameZoneKey = Pair.fnToKey((a, b) => a === b, N);
 
 for (const [a, b] of blackCurrants) {
   add(new NFA(blackCurrantMachine, 'blackcurrant', a, zoneCell(a), b, zoneCell(b)));
-  add(new Pair(sameZoneKey, 'currant-same-zone', zoneCell(a), zoneCell(b)));
+  add(new SameValues(2, zoneCell(a), zoneCell(b)));
 }
 for (const [a, b] of redCurrants) {
   add(new NFA(redCurrantMachine, 'redcurrant', a, zoneCell(a), b, zoneCell(b)));
-  add(new Pair(sameZoneKey, 'currant-same-zone', zoneCell(a), zoneCell(b)));
+  add(new SameValues(2, zoneCell(a), zoneCell(b)));
 }
 
 return constraints;

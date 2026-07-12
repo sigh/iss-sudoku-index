@@ -42,7 +42,11 @@ const value = (digit, shadeValue) => 2 * digit - 2 + shadeValue;
 const dsOf = cell => [cell, shadeOf(cell)];
 const dsFlat = cells => cells.flatMap(dsOf);
 
-// No 2x2 block is entirely shaded or entirely unshaded.
+// No 2x2 block is entirely shaded or entirely unshaded. All 64 blocks are the
+// same 2x2 template (relative to its own top-left cell), translated across
+// every top-left position from R1C1 to R8C8 -- a uniform shift in the VS
+// overlay, which mirrors the grid's row-major layout. Replicate expresses
+// this as one template plus a target-cell set instead of 64 hand-written NFAs.
 const notAllSameNFA = NFA.encodeSpec({
   startState: null,
   transition: (state, v) => state === null
@@ -50,14 +54,21 @@ const notAllSameNFA = NFA.encodeSpec({
     : { first: state.first, allSame: state.allSame && v === state.first },
   accept: (state) => state !== null && !state.allSame,
 }, SHADED);
-for (let r = 1; r <= 8; r++) {
-  for (let c = 1; c <= 8; c++) {
-    const block = [
-      makeCellId(r, c), makeCellId(r, c + 1),
-      makeCellId(r + 1, c), makeCellId(r + 1, c + 1),
-    ].map(shadeOf);
-    add(new NFA(notAllSameNFA, 'no-monochrome-2x2', ...block));
+{
+  const blockOrigin = shadeOf(makeCellId(1, 1));
+  const blockTemplate = new NFA(notAllSameNFA, 'no-monochrome-2x2',
+    shadeOf(makeCellId(1, 1)), shadeOf(makeCellId(1, 2)),
+    shadeOf(makeCellId(2, 1)), shadeOf(makeCellId(2, 2)));
+  const blockTargets = [];
+  for (let r = 1; r <= 8; r++) {
+    for (let c = 1; c <= 8; c++) {
+      blockTargets.push(shadeOf(makeCellId(r, c)));
+    }
   }
+  add(new Replicate(
+    [blockTemplate],
+    Replicate.encodeTargetCells(blockTargets, blockOrigin, shade),
+    blockOrigin));
 }
 
 // --- Renban lines (purple): the cells' VALUES form a consecutive, non-

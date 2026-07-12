@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-12T09:58:43.209673+00:00",
-  "count": 230,
+  "generated_at": "2026-07-12T14:20:16.648707+00:00",
+  "count": 245,
   "rows": [
     {
       "puzzle_id": "0ASRXrrz-K4",
@@ -62,8 +62,8 @@
       "solve_ms": 1270.4,
       "cap": 8255,
       "dir": "data/puzzles/ehi5FkxgrWs",
-      "iss_size": 345150,
-      "script_size": 5631
+      "iss_size": 343874,
+      "script_size": 5939
     },
     {
       "puzzle_id": "zKRn5WbmedA",
@@ -330,7 +330,7 @@
       "cap": 10000,
       "dir": "data/puzzles/a-jajrZJXr0",
       "iss_size": 2508,
-      "script_size": 2985
+      "script_size": 3107
     },
     {
       "puzzle_id": "dAqrMGSyI4s",
@@ -349,8 +349,8 @@
         "Replicate",
         "CountingCircles",
         "GreaterThan",
-        "NFA: edge-h",
-        "NFA: edge-v",
+        "Pair: edge-h",
+        "Pair: edge-v",
         "NFA: par-h",
         "NFA: par-v",
         "NFA: sensor"
@@ -365,7 +365,7 @@
       "cap": 213447,
       "dir": "data/puzzles/dAqrMGSyI4s",
       "iss_size": 3780,
-      "script_size": 7159
+      "script_size": 7063
     },
     {
       "puzzle_id": "CNGyml7iu_I",
@@ -972,12 +972,12 @@
       "date": "2026-06-24",
       "status": "validated",
       "constraint_types": [
-        "Replicate",
+        "AllDifferent",
         "BlackDot",
+        "Replicate",
         "WhiteDot",
         "V",
         "X",
-        "Pair: NW knight move",
         "Pair: NE no absent black dot",
         "Pair: SW no absent white dot",
         "Pair: SE no absent V or X"
@@ -991,8 +991,8 @@
       "solve_ms": 7.3,
       "cap": 10000,
       "dir": "data/puzzles/VuY_xH2ILY0",
-      "iss_size": 1233,
-      "script_size": 3819
+      "iss_size": 2845,
+      "script_size": 3812
     },
     {
       "puzzle_id": "HzCLLNmYC6s",
@@ -1359,6 +1359,7 @@
       "status": "too-slow",
       "constraint_types": [
         "Var",
+        "Replicate",
         "Sum",
         "AllDifferent",
         "NFA: doubled-2",
@@ -1386,8 +1387,8 @@
       "solve_ms": 8869.4,
       "cap": 21000,
       "dir": "data/puzzles/Qd8cn82k5nk",
-      "iss_size": 14969,
-      "script_size": 4246
+      "iss_size": 14294,
+      "script_size": 4391
     },
     {
       "puzzle_id": "-c9lo7lYxp8",
@@ -1850,7 +1851,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W3hGY3SuOnI.3",
       "iss_size": 1787,
-      "script_size": 1434
+      "script_size": 1510
     },
     {
       "puzzle_id": "sfNjC1cCmwk",
@@ -1988,6 +1989,7 @@
       "status": "validated",
       "constraint_types": [
         "0-9",
+        "Replicate",
         "Jigsaw",
         "Whisper",
         "Palindrome",
@@ -2003,8 +2005,8 @@
       "solve_ms": 4.2,
       "cap": 1000,
       "dir": "data/puzzles/bQJp4EhO5Sk",
-      "iss_size": 2232,
-      "script_size": 2683
+      "iss_size": 793,
+      "script_size": 3026
     },
     {
       "puzzle_id": "_Q1fvtndpsA",
@@ -2022,10 +2024,10 @@
         "Var",
         "Replicate",
         "WhiteDot",
+        "AllDifferent",
         "PillArrow",
         "Or",
         "And",
-        "NFA: opposite-shade",
         "NFA: no-mono-2x2"
       ],
       "search_completed": false,
@@ -2037,8 +2039,8 @@
       "solve_ms": 16.4,
       "cap": 1000,
       "dir": "data/puzzles/_Q1fvtndpsA",
-      "iss_size": 16648,
-      "script_size": 3874
+      "iss_size": 15336,
+      "script_size": 3720
     },
     {
       "puzzle_id": "Yv_RMyYTeRU",
@@ -2114,8 +2116,8 @@
       "constraint_types": [
         "Var",
         "WhiteDot",
-        "NFA: loop edge agreement v",
-        "NFA: loop edge agreement h",
+        "Pair: loop edge agreement v",
+        "Pair: loop edge agreement h",
         "NFA: loop nonconsecutive v",
         "NFA: loop nonconsecutive h"
       ],
@@ -2129,7 +2131,7 @@
       "cap": 1000,
       "dir": "data/puzzles/HFiQBcazPFU",
       "iss_size": 5479,
-      "script_size": 3990
+      "script_size": 3905
     },
     {
       "puzzle_id": "Rn_svsVv_FA",
@@ -2303,6 +2305,7 @@
       "constraint_types": [
         "1-16",
         "Var",
+        "Replicate",
         "AllDifferent",
         "EqualSum",
         "CountingCircles"
@@ -2316,8 +2319,8 @@
       "solve_ms": 2061.5,
       "cap": 293255,
       "dir": "data/puzzles/xzXnxCeFSt4",
-      "iss_size": 3203,
-      "script_size": 1621
+      "iss_size": 1394,
+      "script_size": 1782
     },
     {
       "puzzle_id": "YeuTO9A1Prs",
@@ -2412,7 +2415,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XS4c1OoSmEg.1",
       "iss_size": 249,
-      "script_size": 1055
+      "script_size": 1132
     },
     {
       "puzzle_id": "XS4c1OoSmEg.2",
@@ -2442,7 +2445,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XS4c1OoSmEg.2",
       "iss_size": 144,
-      "script_size": 780
+      "script_size": 951
     },
     {
       "puzzle_id": "XmtIOoVaMzY",
@@ -2639,6 +2642,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
         "BlackDot",
         "NFA: gap-parity"
       ],
@@ -2651,8 +2655,8 @@
       "solve_ms": 14.6,
       "cap": 1000,
       "dir": "data/puzzles/XfBbFSZNCys",
-      "iss_size": 4090,
-      "script_size": 3102
+      "iss_size": 2805,
+      "script_size": 3668
     },
     {
       "puzzle_id": "0LkWrGwclFo",
@@ -2704,13 +2708,13 @@
         "WhiteDot",
         "Or",
         "And",
+        "Pair: edge-v",
+        "Pair: edge-h",
         "NFA: loop-nc-h",
         "NFA: loop-nc-v",
-        "NFA: edge-v",
-        "NFA: edge-h",
         "NFA: satellite",
-        "NFA: odd-turns",
-        "NFA: even-turns"
+        "Pair: odd-turns",
+        "Pair: even-turns"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -2721,8 +2725,8 @@
       "solve_ms": 8388.1,
       "cap": 87183,
       "dir": "data/puzzles/LYNLwiEYIYA",
-      "iss_size": 7488,
-      "script_size": 6780
+      "iss_size": 7464,
+      "script_size": 6433
     },
     {
       "puzzle_id": "MjqEhvEQiwA",
@@ -2923,7 +2927,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zzDjoDoDck4.1",
       "iss_size": 107,
-      "script_size": 937
+      "script_size": 1074
     },
     {
       "puzzle_id": "zzDjoDoDck4.2",
@@ -2971,6 +2975,7 @@
       "date": "2026-05-26",
       "status": "too-slow",
       "constraint_types": [
+        "Replicate",
         "Or",
         "And",
         "NFA: BXS1",
@@ -2992,8 +2997,8 @@
       "solve_ms": 7232.1,
       "cap": 40160,
       "dir": "data/puzzles/Ld1TRj4Zjxc",
-      "iss_size": 133859,
-      "script_size": 2087
+      "iss_size": 62547,
+      "script_size": 3462
     },
     {
       "puzzle_id": "mS78-zUDW1E",
@@ -3010,6 +3015,7 @@
       "status": "validated",
       "constraint_types": [
         "Var",
+        "Replicate",
         "AllDifferent",
         "RegionSumLine",
         "Whisper",
@@ -3030,8 +3036,8 @@
       "solve_ms": 26.7,
       "cap": 1000,
       "dir": "data/puzzles/mS78-zUDW1E",
-      "iss_size": 4274,
-      "script_size": 4086
+      "iss_size": 2548,
+      "script_size": 4611
     },
     {
       "puzzle_id": "IrrtMa7XMDM",
@@ -3105,14 +3111,14 @@
         "1-16",
         "Var",
         "SearchPriority",
+        "Replicate",
         "ContainExact",
         "Sum",
         "Or",
+        "AllDifferent",
         "Pair: selected iff ten",
         "Pair: digit or ten",
-        "Pair: selected digit",
-        "Pair: different total tens",
-        "Pair: different total ones"
+        "Pair: selected digit"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -3123,8 +3129,8 @@
       "solve_ms": 18804.7,
       "cap": 67430,
       "dir": "data/puzzles/UY7fvwAnuck",
-      "iss_size": 67009,
-      "script_size": 4838
+      "iss_size": 26345,
+      "script_size": 6225
     },
     {
       "puzzle_id": "lY9YsqOO19E",
@@ -3200,7 +3206,6 @@
       "status": "validated",
       "constraint_types": [
         "Var",
-        "NFA: distinct-edge",
         "NFA: black-L",
         "NFA: white-L",
         "NFA: black-D",
@@ -3208,7 +3213,8 @@
         "NFA: black-R",
         "NFA: white-R",
         "NFA: white-U",
-        "NFA: black-U"
+        "NFA: black-U",
+        "Pair: distinct-edge"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3219,8 +3225,8 @@
       "solve_ms": 113.7,
       "cap": 100000,
       "dir": "data/puzzles/Epygh1J4Vvw",
-      "iss_size": 2237,
-      "script_size": 3815
+      "iss_size": 2209,
+      "script_size": 3746
     },
     {
       "puzzle_id": "htJRav3X9Ik",
@@ -3277,7 +3283,7 @@
       "cap": 1000,
       "dir": "data/puzzles/X0DLMY9GRk8.1",
       "iss_size": 152,
-      "script_size": 1732
+      "script_size": 1939
     },
     {
       "puzzle_id": "X0DLMY9GRk8.2",
@@ -3502,70 +3508,8 @@
       "status": "partial",
       "constraint_types": [
         "Var",
-        "NFA: 2x2 1,1",
-        "NFA: 2x2 1,2",
-        "NFA: 2x2 1,3",
-        "NFA: 2x2 1,4",
-        "NFA: 2x2 1,5",
-        "NFA: 2x2 1,6",
-        "NFA: 2x2 1,7",
-        "NFA: 2x2 1,8",
-        "NFA: 2x2 2,1",
-        "NFA: 2x2 2,2",
-        "NFA: 2x2 2,3",
-        "NFA: 2x2 2,4",
-        "NFA: 2x2 2,5",
-        "NFA: 2x2 2,6",
-        "NFA: 2x2 2,7",
-        "NFA: 2x2 2,8",
-        "NFA: 2x2 3,1",
-        "NFA: 2x2 3,2",
-        "NFA: 2x2 3,3",
-        "NFA: 2x2 3,4",
-        "NFA: 2x2 3,5",
-        "NFA: 2x2 3,6",
-        "NFA: 2x2 3,7",
-        "NFA: 2x2 3,8",
-        "NFA: 2x2 4,1",
-        "NFA: 2x2 4,2",
-        "NFA: 2x2 4,3",
-        "NFA: 2x2 4,4",
-        "NFA: 2x2 4,5",
-        "NFA: 2x2 4,6",
-        "NFA: 2x2 4,7",
-        "NFA: 2x2 4,8",
-        "NFA: 2x2 5,1",
-        "NFA: 2x2 5,2",
-        "NFA: 2x2 5,3",
-        "NFA: 2x2 5,4",
-        "NFA: 2x2 5,5",
-        "NFA: 2x2 5,6",
-        "NFA: 2x2 5,7",
-        "NFA: 2x2 5,8",
-        "NFA: 2x2 6,1",
-        "NFA: 2x2 6,2",
-        "NFA: 2x2 6,3",
-        "NFA: 2x2 6,4",
-        "NFA: 2x2 6,5",
-        "NFA: 2x2 6,6",
-        "NFA: 2x2 6,7",
-        "NFA: 2x2 6,8",
-        "NFA: 2x2 7,1",
-        "NFA: 2x2 7,2",
-        "NFA: 2x2 7,3",
-        "NFA: 2x2 7,4",
-        "NFA: 2x2 7,5",
-        "NFA: 2x2 7,6",
-        "NFA: 2x2 7,7",
-        "NFA: 2x2 7,8",
-        "NFA: 2x2 8,1",
-        "NFA: 2x2 8,2",
-        "NFA: 2x2 8,3",
-        "NFA: 2x2 8,4",
-        "NFA: 2x2 8,5",
-        "NFA: 2x2 8,6",
-        "NFA: 2x2 8,7",
-        "NFA: 2x2 8,8",
+        "Replicate",
+        "NFA: 2x2 block",
         "NFA: no repeat 9",
         "NFA: no repeat 8",
         "NFA: no repeat 7",
@@ -3585,8 +3529,8 @@
       "solve_ms": 9254.1,
       "cap": 40176,
       "dir": "data/puzzles/_u1SXY_VatM",
-      "iss_size": 13200,
-      "script_size": 5172
+      "iss_size": 11168,
+      "script_size": 5522
     },
     {
       "puzzle_id": "ECyhFDcyaIc",
@@ -3619,7 +3563,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ECyhFDcyaIc",
       "iss_size": 728,
-      "script_size": 2440
+      "script_size": 2577
     },
     {
       "puzzle_id": "7FdNel1uFF4",
@@ -3634,6 +3578,7 @@
       "date": "2026-05-18",
       "status": "validated",
       "constraint_types": [
+        "Replicate",
         "NFA: ASCEND_TRIO",
         "NFA: NO_CONSEC_TRIO"
       ],
@@ -3646,8 +3591,8 @@
       "solve_ms": 239.9,
       "cap": 1000,
       "dir": "data/puzzles/7FdNel1uFF4",
-      "iss_size": 1706,
-      "script_size": 3815
+      "iss_size": 966,
+      "script_size": 4336
     },
     {
       "puzzle_id": "xY6peFT2Sw8",
@@ -3748,9 +3693,9 @@
         "Renban",
         "RegionSumLine",
         "WhiteDot",
+        "NFA: no-touch",
         "NFA: box-coverage",
         "NFA: degree",
-        "NFA: no-touch",
         "NFA: arrow-count",
         "NFA: circle-count",
         "NFA: mod4"
@@ -3764,8 +3709,8 @@
       "solve_ms": 52513.2,
       "cap": 300000,
       "dir": "data/puzzles/cHi8yZVepgQ",
-      "iss_size": 46924,
-      "script_size": 9375
+      "iss_size": 45648,
+      "script_size": 9823
     },
     {
       "puzzle_id": "al5r5VhjyP8",
@@ -3781,6 +3726,7 @@
       "status": "validated",
       "constraint_types": [
         "Var",
+        "Replicate",
         "NFA: one-copycat",
         "NFA: distinct-value-9",
         "NFA: distinct-value-8",
@@ -3805,8 +3751,8 @@
       "solve_ms": 197427.0,
       "cap": 2000000,
       "dir": "data/puzzles/al5r5VhjyP8",
-      "iss_size": 16949,
-      "script_size": 7196
+      "iss_size": 16272,
+      "script_size": 7331
     },
     {
       "puzzle_id": "MDx8QVOCub8.1",
@@ -3913,9 +3859,9 @@
       "status": "partial",
       "constraint_types": [
         "Var",
-        "NFA: no-cross",
         "NFA: degree",
-        "NFA: camera-row"
+        "NFA: camera-row",
+        "Pair: no-cross"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -3926,8 +3872,8 @@
       "solve_ms": 1407.0,
       "cap": 200000,
       "dir": "data/puzzles/KUswbPDx1Sg",
-      "iss_size": 2305,
-      "script_size": 3862
+      "iss_size": 2298,
+      "script_size": 3617
     },
     {
       "puzzle_id": "konQKbnvhoQ",
@@ -4163,6 +4109,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
         "NFA: coverage-PARITY",
         "NFA: coverage-DUTCH",
         "NFA: coverage-RENBAN",
@@ -4178,8 +4125,8 @@
       "solve_ms": 13472.4,
       "cap": 3418,
       "dir": "data/puzzles/PZkQtQow_MY",
-      "iss_size": 122439,
-      "script_size": 4619
+      "iss_size": 121463,
+      "script_size": 4889
     },
     {
       "puzzle_id": "L_my9XStVmo",
@@ -4340,10 +4287,11 @@
       "constraint_types": [
         "WhiteDot",
         "Var",
+        "Pair: tent-no-touch",
+        "Pair: tent-match",
         "NFA: tent-match",
         "NFA: tent-count",
-        "NFA: pair-diff",
-        "Pair: tent-no-touch"
+        "NFA: pair-diff"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4354,8 +4302,8 @@
       "solve_ms": 26373.8,
       "cap": 100000,
       "dir": "data/puzzles/ok-r1oK0fSk",
-      "iss_size": 14743,
-      "script_size": 7773
+      "iss_size": 14747,
+      "script_size": 8358
     },
     {
       "puzzle_id": "OF7CAtGkizk",
@@ -4465,6 +4413,7 @@
       "date": "2026-05-06",
       "status": "validated",
       "constraint_types": [
+        "Replicate",
         "NFA: Hotspot"
       ],
       "search_completed": true,
@@ -4476,8 +4425,8 @@
       "solve_ms": 117.3,
       "cap": 1000,
       "dir": "data/puzzles/KTu-Nu1gjjg",
-      "iss_size": 2408,
-      "script_size": 1627
+      "iss_size": 2961,
+      "script_size": 2620
     },
     {
       "puzzle_id": "CKHnlFksvXI",
@@ -4493,6 +4442,7 @@
       "status": "validated",
       "constraint_types": [
         "GreaterThan",
+        "Replicate",
         "Or",
         "And"
       ],
@@ -4505,8 +4455,8 @@
       "solve_ms": 7.7,
       "cap": 1000,
       "dir": "data/puzzles/CKHnlFksvXI",
-      "iss_size": 2997,
-      "script_size": 2997
+      "iss_size": 756,
+      "script_size": 3100
     },
     {
       "puzzle_id": "d7BhfgTXQrc",
@@ -4670,6 +4620,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
         "Sum",
         "NFA: no-monochrome-2x2",
         "NFA: x-sum-10",
@@ -4686,8 +4637,8 @@
       "solve_ms": 1088.1,
       "cap": 80645,
       "dir": "data/puzzles/jVMQiwCzc2k",
-      "iss_size": 10282,
-      "script_size": 7803
+      "iss_size": 9006,
+      "script_size": 8379
     },
     {
       "puzzle_id": "gk4rIG7COrg",
@@ -5034,7 +4985,7 @@
       "cap": 1000,
       "dir": "data/puzzles/blPgSzctUMg",
       "iss_size": 367,
-      "script_size": 1348
+      "script_size": 1794
     },
     {
       "puzzle_id": "GIVSl6pfT5Q",
@@ -5152,8 +5103,7 @@
         "Cage",
         "Or",
         "And",
-        "Pair: diffRow",
-        "Pair: diffCol"
+        "AllDifferent"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -5164,8 +5114,8 @@
       "solve_ms": 134.7,
       "cap": 1000,
       "dir": "data/puzzles/7iuxM-Xtsxw",
-      "iss_size": 18328,
-      "script_size": 2904
+      "iss_size": 17656,
+      "script_size": 2831
     },
     {
       "puzzle_id": "vVTSGvQZs3k",
@@ -5212,6 +5162,7 @@
       "status": "validated",
       "constraint_types": [
         "1-10",
+        "Replicate",
         "Var",
         "Or",
         "And",
@@ -5227,8 +5178,8 @@
       "solve_ms": 65.6,
       "cap": 1000,
       "dir": "data/puzzles/nsAmm8e6CfY",
-      "iss_size": 10815,
-      "script_size": 3079
+      "iss_size": 9008,
+      "script_size": 3177
     },
     {
       "puzzle_id": "M_BIYhV1jaQ",
@@ -5363,10 +5314,10 @@
         "Or",
         "And",
         "SameValues",
+        "GreaterThan",
         "NFA: Line1_notindex",
         "NFA: Line1_thermo",
         "NFA: Line1_nothit",
-        "Pair: NotMischief",
         "NFA: Line1_index",
         "NFA: Line1_notthermo",
         "NFA: Line1_hit",
@@ -5430,12 +5381,11 @@
         "NFA: Line11_index",
         "NFA: Line11_notthermo",
         "NFA: Line11_hit",
-        "NFA: Line12_nothit",
-        "NFA: Line12_notindex",
-        "NFA: Line12_thermo",
-        "NFA: Line12_index",
-        "NFA: Line12_notthermo",
-        "NFA: Line12_hit",
+        "Pair: Line12_notindex",
+        "Pair: Line12_nothit",
+        "Pair: Line12_notthermo",
+        "Pair: Line12_index",
+        "Pair: Line12_hit",
         "NFA: Line13_nothit",
         "NFA: Line13_notindex",
         "NFA: Line13_thermo",
@@ -5452,8 +5402,8 @@
       "solve_ms": 277.9,
       "cap": 41339,
       "dir": "data/puzzles/bal9xHVAFd4",
-      "iss_size": 95819,
-      "script_size": 5853
+      "iss_size": 95899,
+      "script_size": 7073
     },
     {
       "puzzle_id": "0cvA-XDiQNQ",
@@ -5496,6 +5446,7 @@
       "status": "validated",
       "constraint_types": [
         "LittleKiller",
+        "Replicate",
         "NFA: Battenburg",
         "NFA: NoBattenburg"
       ],
@@ -5508,8 +5459,8 @@
       "solve_ms": 12.7,
       "cap": 1000,
       "dir": "data/puzzles/b-MR1mLKgCk",
-      "iss_size": 1730,
-      "script_size": 2671
+      "iss_size": 609,
+      "script_size": 3652
     },
     {
       "puzzle_id": "DVy_zGc9UQI",
@@ -5526,8 +5477,9 @@
       "constraint_types": [
         "Renban",
         "Var",
+        "Replicate",
         "And",
-        "Pair",
+        "AllDifferent",
         "NFA: B1",
         "NFA: G1",
         "NFA: R1",
@@ -5565,8 +5517,8 @@
       "solve_ms": 11430.1,
       "cap": 12377,
       "dir": "data/puzzles/DVy_zGc9UQI",
-      "iss_size": 22392,
-      "script_size": 3242
+      "iss_size": 22844,
+      "script_size": 3857
     },
     {
       "puzzle_id": "vjXf8PHYA_k",
@@ -5669,6 +5621,7 @@
       "status": "validated",
       "constraint_types": [
         "1-15",
+        "Replicate",
         "Var",
         "AllDifferent",
         "Or",
@@ -5684,8 +5637,8 @@
       "solve_ms": 4647.3,
       "cap": 287356,
       "dir": "data/puzzles/T03vUTiJBjk",
-      "iss_size": 7119,
-      "script_size": 4385
+      "iss_size": 5310,
+      "script_size": 4539
     },
     {
       "puzzle_id": "TwD2L_HuzsE",
@@ -5822,6 +5775,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
         "Sum",
         "NFA: no-mono-2x2",
         "NFA: x-mark"
@@ -5835,8 +5789,8 @@
       "solve_ms": 12.3,
       "cap": 1000,
       "dir": "data/puzzles/oW7lNJCC0mw",
-      "iss_size": 2894,
-      "script_size": 3620
+      "iss_size": 1618,
+      "script_size": 4106
     },
     {
       "puzzle_id": "lfXT_8yHU6A",
@@ -6006,10 +5960,11 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
+        "Pair: edge-h",
+        "Pair: edge-v",
         "NFA: dot-mid-h",
         "NFA: dot-mid-v",
-        "NFA: edge-v",
-        "NFA: edge-h",
         "NFA: kropki-v",
         "NFA: kropki-h"
       ],
@@ -6022,8 +5977,8 @@
       "solve_ms": 48.6,
       "cap": 1000,
       "dir": "data/puzzles/wZps_EnRcNE",
-      "iss_size": 7009,
-      "script_size": 8791
+      "iss_size": 5537,
+      "script_size": 9186
     },
     {
       "puzzle_id": "Dj4jGu9PQcs",
@@ -6039,8 +5994,9 @@
       "status": "partial",
       "constraint_types": [
         "Var",
-        "NFA: line-both-shades",
-        "NFA: no-monochrome-2x2"
+        "Replicate",
+        "NFA: no-monochrome-2x2",
+        "NFA: line-both-shades"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -6051,8 +6007,8 @@
       "solve_ms": 23.2,
       "cap": 1000,
       "dir": "data/puzzles/Dj4jGu9PQcs",
-      "iss_size": 2353,
-      "script_size": 3278
+      "iss_size": 1090,
+      "script_size": 3629
     },
     {
       "puzzle_id": "3dv4CIY5Mk8",
@@ -6209,11 +6165,11 @@
       "constraint_types": [
         "Var",
         "Replicate",
+        "SameValues",
         "NFA: box-balance",
         "NFA: redcurrant",
         "NFA: no-mono-2x2",
-        "NFA: blackcurrant",
-        "Pair: currant-same-zone"
+        "NFA: blackcurrant"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -6224,8 +6180,8 @@
       "solve_ms": 4509.0,
       "cap": 16079,
       "dir": "data/puzzles/1t0o6iZtvm8",
-      "iss_size": 31482,
-      "script_size": 5134
+      "iss_size": 31664,
+      "script_size": 5028
     },
     {
       "puzzle_id": "vC0McY40Cjk",
@@ -6394,12 +6350,12 @@
       "constraint_types": [
         "Var",
         "Replicate",
+        "NFA: no-touch",
         "NFA: loop-count-1",
         "NFA: degree",
         "NFA: loop-count-3",
         "NFA: loop-count-4",
         "NFA: loop-count-2",
-        "NFA: no-touch",
         "NFA: arrow-count",
         "NFA: loop-count-9",
         "NFA: loop-count-5",
@@ -6416,8 +6372,8 @@
       "solve_ms": 7800.6,
       "cap": 21901,
       "dir": "data/puzzles/tHUviGm_cvY",
-      "iss_size": 12734,
-      "script_size": 5725
+      "iss_size": 11458,
+      "script_size": 6094
     },
     {
       "puzzle_id": "02ePdhC9Rzw",
@@ -6669,6 +6625,7 @@
       "status": "validated",
       "constraint_types": [
         "1-16",
+        "Replicate",
         "Thermo",
         "Var",
         "AllDifferent",
@@ -6686,8 +6643,8 @@
       "solve_ms": 218.2,
       "cap": 199600,
       "dir": "data/puzzles/i_LrY6Kc7pU",
-      "iss_size": 15735,
-      "script_size": 6020
+      "iss_size": 13928,
+      "script_size": 6160
     },
     {
       "puzzle_id": "01KC84S7FJ8",
@@ -6812,7 +6769,7 @@
       "cap": 1000,
       "dir": "data/puzzles/PDAmCIN-8n8",
       "iss_size": 453,
-      "script_size": 1376
+      "script_size": 1549
     },
     {
       "puzzle_id": "4NyCrykTZU8",
@@ -6885,9 +6842,9 @@
       "constraint_types": [
         "Var",
         "Quad",
+        "Pair: edge-v",
+        "Pair: edge-h",
         "NFA: circle-turns",
-        "NFA: edge-v",
-        "NFA: edge-h",
         "NFA: diff-v",
         "NFA: diff-h"
       ],
@@ -6901,7 +6858,7 @@
       "cap": 146412,
       "dir": "data/puzzles/bhKtKFEy0AM",
       "iss_size": 5893,
-      "script_size": 5110
+      "script_size": 4972
     },
     {
       "puzzle_id": "3srmjGZskE4",
@@ -6917,6 +6874,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
         "EqualSum",
         "WhiteDot",
         "NFA: no-monochrome-2x2",
@@ -6931,8 +6889,8 @@
       "solve_ms": 298.9,
       "cap": 157728,
       "dir": "data/puzzles/3srmjGZskE4",
-      "iss_size": 3228,
-      "script_size": 4344
+      "iss_size": 1952,
+      "script_size": 4350
     },
     {
       "puzzle_id": "DQBFJkGqYgo",
@@ -6948,71 +6906,9 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
         "Or",
-        "NFA: no2x2_R1C1",
-        "NFA: no2x2_R1C2",
-        "NFA: no2x2_R1C3",
-        "NFA: no2x2_R1C4",
-        "NFA: no2x2_R1C5",
-        "NFA: no2x2_R1C6",
-        "NFA: no2x2_R1C7",
-        "NFA: no2x2_R1C8",
-        "NFA: no2x2_R2C1",
-        "NFA: no2x2_R2C2",
-        "NFA: no2x2_R2C3",
-        "NFA: no2x2_R2C4",
-        "NFA: no2x2_R2C5",
-        "NFA: no2x2_R2C6",
-        "NFA: no2x2_R2C7",
-        "NFA: no2x2_R2C8",
-        "NFA: no2x2_R3C1",
-        "NFA: no2x2_R3C2",
-        "NFA: no2x2_R3C3",
-        "NFA: no2x2_R3C4",
-        "NFA: no2x2_R3C5",
-        "NFA: no2x2_R3C6",
-        "NFA: no2x2_R3C7",
-        "NFA: no2x2_R3C8",
-        "NFA: no2x2_R4C1",
-        "NFA: no2x2_R4C2",
-        "NFA: no2x2_R4C3",
-        "NFA: no2x2_R4C4",
-        "NFA: no2x2_R4C5",
-        "NFA: no2x2_R4C6",
-        "NFA: no2x2_R4C7",
-        "NFA: no2x2_R4C8",
-        "NFA: no2x2_R5C1",
-        "NFA: no2x2_R5C2",
-        "NFA: no2x2_R5C3",
-        "NFA: no2x2_R5C4",
-        "NFA: no2x2_R5C5",
-        "NFA: no2x2_R5C6",
-        "NFA: no2x2_R5C7",
-        "NFA: no2x2_R5C8",
-        "NFA: no2x2_R6C1",
-        "NFA: no2x2_R6C2",
-        "NFA: no2x2_R6C3",
-        "NFA: no2x2_R6C4",
-        "NFA: no2x2_R6C5",
-        "NFA: no2x2_R6C6",
-        "NFA: no2x2_R6C7",
-        "NFA: no2x2_R6C8",
-        "NFA: no2x2_R7C1",
-        "NFA: no2x2_R7C2",
-        "NFA: no2x2_R7C3",
-        "NFA: no2x2_R7C4",
-        "NFA: no2x2_R7C5",
-        "NFA: no2x2_R7C6",
-        "NFA: no2x2_R7C7",
-        "NFA: no2x2_R7C8",
-        "NFA: no2x2_R8C1",
-        "NFA: no2x2_R8C2",
-        "NFA: no2x2_R8C3",
-        "NFA: no2x2_R8C4",
-        "NFA: no2x2_R8C5",
-        "NFA: no2x2_R8C6",
-        "NFA: no2x2_R8C7",
-        "NFA: no2x2_R8C8",
+        "NFA: no2x2",
         "NFA: top1_color1",
         "NFA: top1_color2",
         "NFA: top3_color1",
@@ -7061,8 +6957,8 @@
       "solve_ms": 8428.2,
       "cap": 4331,
       "dir": "data/puzzles/DQBFJkGqYgo",
-      "iss_size": 434779,
-      "script_size": 6180
+      "iss_size": 432805,
+      "script_size": 6695
     },
     {
       "puzzle_id": "Qa9r_bEjVfk",
@@ -7108,8 +7004,10 @@
       "constraint_types": [
         "0-8",
         "Var",
+        "Replicate",
         "AllDifferent",
         "Sum",
+        "EqualSum",
         "Pair: sub-zero flag",
         "NFA: box 1 sub-zero",
         "NFA: box 2 sub-zero",
@@ -7158,8 +7056,8 @@
       "solve_ms": 292.6,
       "cap": 1000,
       "dir": "data/puzzles/jtQcQ-Y8Ur0",
-      "iss_size": 14191,
-      "script_size": 7372
+      "iss_size": 13438,
+      "script_size": 7832
     },
     {
       "puzzle_id": "tKGjkTJj9lU",
@@ -7253,6 +7151,545 @@
       "script_size": 1946
     },
     {
+      "puzzle_id": "txyVrI5MDDI",
+      "video_id": "txyVrI5MDDI",
+      "puzzle_title": "These Two Equal These Two",
+      "video_title": "Proving Two Equals Two",
+      "author": "Eric Rathbun",
+      "video_url": "https://www.youtube.com/watch?v=txyVrI5MDDI",
+      "sources": [
+        "https://sudokupad.app/yymnj1pfww"
+      ],
+      "date": "2026-03-22",
+      "status": "validated",
+      "constraint_types": [
+        "LittleKiller",
+        "Cage",
+        "AllDifferent",
+        "WhiteDot",
+        "AntiKing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 7386,
+      "backtracks": 7387,
+      "solve_ms": 150.3,
+      "cap": 246913,
+      "dir": "data/puzzles/txyVrI5MDDI",
+      "iss_size": 664,
+      "script_size": 2414
+    },
+    {
+      "puzzle_id": "OG9M9bq_Ies",
+      "video_id": "OG9M9bq_Ies",
+      "puzzle_title": "Two Truths And A Region",
+      "video_title": "Two Truths And A Lie: Fog Sudoku Goes Absolutely Mad!!",
+      "author": "gdc",
+      "video_url": "https://www.youtube.com/watch?v=OG9M9bq_Ies",
+      "sources": [
+        "https://sudokupad.app/4ssf9qr9l9"
+      ],
+      "date": "2026-03-22",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "ContainExact",
+        "AllDifferent",
+        "NFA: DAF3",
+        "NFA: VFL1",
+        "NFA: VFL2",
+        "NFA: VFL3",
+        "NFA: CGF1",
+        "NFA: ARW1",
+        "NFA: DOT1",
+        "NFA: DOT2",
+        "NFA: DOT3",
+        "NFA: DAF1",
+        "NFA: ARW2",
+        "NFA: ARW3",
+        "NFA: CGF3",
+        "NFA: REN1",
+        "NFA: REN2",
+        "NFA: REN3",
+        "NFA: DAF2",
+        "Pair: CGF2"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2131,
+      "backtracks": 2132,
+      "solve_ms": 81.2,
+      "cap": 187617,
+      "dir": "data/puzzles/OG9M9bq_Ies",
+      "iss_size": 4841,
+      "script_size": 8426
+    },
+    {
+      "puzzle_id": "1_sdlARfHcc",
+      "video_id": "1_sdlARfHcc",
+      "puzzle_title": "Ornithological Adjacency",
+      "video_title": "Put a little Birdlife in your Sudoku",
+      "author": "Jrosas",
+      "video_url": "https://www.youtube.com/watch?v=1_sdlARfHcc",
+      "sources": [
+        "https://sudokupad.app/n2v6rs916k"
+      ],
+      "date": "2026-03-21",
+      "status": "validated",
+      "constraint_types": [
+        "WhiteDot",
+        "NFA: dodo",
+        "NFA: dove",
+        "NFA: duck",
+        "NFA: flamingo",
+        "NFA: owl",
+        "NFA: parrot",
+        "NFA: peacock",
+        "NFA: penguin"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 863,
+      "backtracks": 864,
+      "solve_ms": 61.4,
+      "cap": 1000,
+      "dir": "data/puzzles/1_sdlARfHcc",
+      "iss_size": 826,
+      "script_size": 3537
+    },
+    {
+      "puzzle_id": "ICQ-7bCTVFo",
+      "video_id": "ICQ-7bCTVFo",
+      "puzzle_title": "EXclusiVe",
+      "video_title": "EXCLUSIVE Access To This Sudoku!!",
+      "author": "NurglesGift",
+      "video_url": "https://www.youtube.com/watch?v=ICQ-7bCTVFo",
+      "sources": [
+        "https://sudokupad.app/aixxhbtkvj"
+      ],
+      "date": "2026-03-21",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Thermo",
+        "Arrow",
+        "Cage",
+        "X",
+        "V",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 100,
+      "backtracks": 101,
+      "solve_ms": 13.3,
+      "cap": 1000,
+      "dir": "data/puzzles/ICQ-7bCTVFo",
+      "iss_size": 513,
+      "script_size": 2407
+    },
+    {
+      "puzzle_id": "4SC7itCISLg",
+      "video_id": "4SC7itCISLg",
+      "puzzle_title": "Modular Yin Yang",
+      "video_title": "Modular Yin Yang",
+      "author": "yttrio",
+      "video_url": "https://www.youtube.com/watch?v=4SC7itCISLg",
+      "sources": [
+        "https://sudokupad.app/yttrio/modular-yin-yang"
+      ],
+      "date": "2026-03-20",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "Sum",
+        "NFA: no-mono-2x2",
+        "NFA: mod3-2x2"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 968,
+      "guesses": 1035,
+      "backtracks": 1000,
+      "solve_ms": 24.0,
+      "cap": 1000,
+      "dir": "data/puzzles/4SC7itCISLg",
+      "iss_size": 3877,
+      "script_size": 4005
+    },
+    {
+      "puzzle_id": "n6eLrr5WNQU",
+      "video_id": "n6eLrr5WNQU",
+      "puzzle_title": "Catacomb",
+      "video_title": "Can You Escape From The Sudoku Catacomb?!",
+      "author": "Nicolas Duhail",
+      "video_url": "https://www.youtube.com/watch?v=n6eLrr5WNQU",
+      "sources": [
+        "https://sudokupad.app/swwi1ob4u3"
+      ],
+      "date": "2026-03-20",
+      "status": "validated",
+      "constraint_types": [
+        "RegionSumLine"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 65,
+      "backtracks": 66,
+      "solve_ms": 11.3,
+      "cap": 1000,
+      "dir": "data/puzzles/n6eLrr5WNQU",
+      "iss_size": 384,
+      "script_size": 1283
+    },
+    {
+      "puzzle_id": "GgmXRnvENZ8",
+      "video_id": "GgmXRnvENZ8",
+      "puzzle_title": "Delta Line",
+      "video_title": "A Strange Robotic Line",
+      "author": "Derek LeClair",
+      "video_url": "https://www.youtube.com/watch?v=GgmXRnvENZ8",
+      "sources": [
+        "https://sudokupad.app/07innbtid1"
+      ],
+      "date": "2026-03-19",
+      "status": "validated",
+      "constraint_types": [
+        "EqualSum",
+        "Pair: Delta line"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 57,
+      "backtracks": 58,
+      "solve_ms": 11.7,
+      "cap": 1000,
+      "dir": "data/puzzles/GgmXRnvENZ8",
+      "iss_size": 449,
+      "script_size": 2388
+    },
+    {
+      "puzzle_id": "OYg-DWiDRew",
+      "video_id": "OYg-DWiDRew",
+      "puzzle_title": "Dutch Summer",
+      "video_title": "Sudoku's Dutch Fog!",
+      "author": "Tim Hasselaar",
+      "video_url": "https://www.youtube.com/watch?v=OYg-DWiDRew",
+      "sources": [
+        "https://sudokupad.app/hrsm0gqb5o"
+      ],
+      "date": "2026-03-19",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "RegionSumLine",
+        "GlobalEntropy"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 101,
+      "backtracks": 102,
+      "solve_ms": 13.6,
+      "cap": 1000,
+      "dir": "data/puzzles/OYg-DWiDRew",
+      "iss_size": 586,
+      "script_size": 1318
+    },
+    {
+      "puzzle_id": "3s5hp5ymc7Y",
+      "video_id": "3s5hp5ymc7Y",
+      "puzzle_title": "Happy 30th Birthday",
+      "video_title": "Happy Birthday Isabel",
+      "author": "Marv",
+      "video_url": "https://www.youtube.com/watch?v=3s5hp5ymc7Y",
+      "sources": [
+        "https://sudokupad.app/its5y30p4k"
+      ],
+      "date": "2026-03-18",
+      "status": "validated",
+      "constraint_types": [
+        "Sandwich",
+        "LittleKiller",
+        "Cage",
+        "AllDifferent",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 368,
+      "backtracks": 369,
+      "solve_ms": 34.8,
+      "cap": 1000,
+      "dir": "data/puzzles/3s5hp5ymc7Y",
+      "iss_size": 1100,
+      "script_size": 2592
+    },
+    {
+      "puzzle_id": "zC7pD2wG2as",
+      "video_id": "zC7pD2wG2as",
+      "puzzle_title": "RAT RUN 30: Star Rats",
+      "video_title": "The Extending Palindromes!! Rat Run 30: Star Rats (S3:E10)",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=zC7pD2wG2as",
+      "sources": [
+        "https://sudokupad.app/axfuqiprqj"
+      ],
+      "date": "2026-03-18",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "backtracks": null,
+      "solve_ms": null,
+      "cap": null,
+      "dir": null,
+      "iss_size": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "S86fcufw2T8",
+      "video_id": "S86fcufw2T8",
+      "puzzle_title": "Haunted Mansion",
+      "video_title": "Haunted by a Tough Sudoku",
+      "author": "Eccentric Panda",
+      "video_url": "https://www.youtube.com/watch?v=S86fcufw2T8",
+      "sources": [
+        "https://sudokupad.app/l01qpi8oc3"
+      ],
+      "date": "2026-03-17",
+      "status": "partial",
+      "constraint_types": [
+        "NoBoxes",
+        "ChaosConstruction",
+        "Var",
+        "Replicate",
+        "AllDifferent",
+        "ChaosArrow",
+        "NFA: degree",
+        "NFA: passage-pairing",
+        "Pair: bat-ratio"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 90699,
+      "backtracks": 90661,
+      "solve_ms": 5071.1,
+      "cap": 90661,
+      "dir": "data/puzzles/S86fcufw2T8",
+      "iss_size": 5548,
+      "script_size": 6948
+    },
+    {
+      "puzzle_id": "OFuVsaFv1ZE",
+      "video_id": "OFuVsaFv1ZE",
+      "puzzle_title": "FUll Rankillers",
+      "video_title": "Only A Handful Of People Have Solved This Sudoku...",
+      "author": "Las4one",
+      "video_url": "https://www.youtube.com/watch?v=OFuVsaFv1ZE",
+      "sources": [
+        "https://sudokupad.app/kh62gdjsgt"
+      ],
+      "date": "2026-03-17",
+      "status": "partial",
+      "constraint_types": [
+        "FullRankTies"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 1000,
+      "guesses": 1042,
+      "backtracks": 1000,
+      "solve_ms": 25.2,
+      "cap": 1000,
+      "dir": "data/puzzles/OFuVsaFv1ZE",
+      "iss_size": 18,
+      "script_size": 904
+    },
+    {
+      "puzzle_id": "V4dYzQDM6R4",
+      "video_id": "V4dYzQDM6R4",
+      "puzzle_title": "Japanese Festival",
+      "video_title": "Japanese Festivities!",
+      "author": "Leon van Houwelingen",
+      "video_url": "https://www.youtube.com/watch?v=V4dYzQDM6R4",
+      "sources": [
+        "https://sudokupad.app/kc2ucszwlb"
+      ],
+      "date": "2026-03-16",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "X",
+        "NFA: row3",
+        "NFA: col1",
+        "NFA: row9",
+        "NFA: row4",
+        "NFA: col3",
+        "NFA: col6",
+        "NFA: row6",
+        "NFA: col2",
+        "NFA: col5",
+        "NFA: col8",
+        "NFA: row5",
+        "NFA: col9",
+        "NFA: col4",
+        "NFA: row1",
+        "NFA: row2",
+        "NFA: row8",
+        "NFA: row7",
+        "NFA: col7"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 123,
+      "backtracks": 124,
+      "solve_ms": 63.6,
+      "cap": 1000,
+      "dir": "data/puzzles/V4dYzQDM6R4",
+      "iss_size": 9733,
+      "script_size": 4885
+    },
+    {
+      "puzzle_id": "NvZ9HNCpeyM",
+      "video_id": "NvZ9HNCpeyM",
+      "puzzle_title": "Seven Ate Nine",
+      "video_title": "The Sudoku Where Seven Ate Nine!",
+      "author": "James Sinclair",
+      "video_url": "https://www.youtube.com/watch?v=NvZ9HNCpeyM",
+      "sources": [
+        "https://sudokupad.app/dnu167bzhz"
+      ],
+      "date": "2026-03-16",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 161,
+      "backtracks": 162,
+      "solve_ms": 12.5,
+      "cap": 1000,
+      "dir": "data/puzzles/NvZ9HNCpeyM",
+      "iss_size": 378,
+      "script_size": 1642
+    },
+    {
+      "puzzle_id": "njbxaVs-HgA",
+      "video_id": "njbxaVs-HgA",
+      "puzzle_title": "The Mystery Of The Three Chameleons",
+      "video_title": "Happy Pi Weekend!",
+      "author": "The Pi Guy",
+      "video_url": "https://www.youtube.com/watch?v=njbxaVs-HgA",
+      "sources": [
+        "https://sudokupad.app/5or0u7cv0o"
+      ],
+      "date": "2026-03-15",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Arrow",
+        "Whisper",
+        "Renban",
+        "Pair: chameleon value R7C6",
+        "Pair: chameleon value R8C4",
+        "Pair: chameleon value R8C5",
+        "Pair: chameleon value R8C9",
+        "Pair: chameleon value R8C7",
+        "Pair: chameleon value R8C8",
+        "Pair: chameleon value R9C4",
+        "Pair: chameleon value R9C5",
+        "Pair: chameleon value R9C6",
+        "Pair: chameleon value R9C9",
+        "Pair: chameleon value R9C7",
+        "Pair: chameleon value R9C8",
+        "Pair: chameleon value R9C3",
+        "Pair: chameleon value R7C2",
+        "Pair: chameleon value R9C2",
+        "Pair: chameleon value R1C4",
+        "Pair: chameleon value R1C5",
+        "Pair: chameleon value R1C6",
+        "Pair: chameleon value R1C7",
+        "Pair: chameleon value R1C8",
+        "Pair: chameleon value R1C3",
+        "Pair: chameleon value R1C1",
+        "Pair: chameleon value R1C2",
+        "Pair: chameleon value R2C4",
+        "Pair: chameleon value R2C5",
+        "Pair: chameleon value R2C6",
+        "Pair: chameleon value R2C8",
+        "Pair: chameleon value R2C3",
+        "Pair: chameleon value R2C1",
+        "Pair: chameleon value R2C2",
+        "Pair: chameleon value R3C6",
+        "Pair: chameleon value R3C8",
+        "Pair: chameleon value R3C1",
+        "Pair: chameleon value R3C2",
+        "Pair: chameleon value R6C4",
+        "Pair: chameleon value R6C5",
+        "Pair: chameleon value R6C6",
+        "Pair: chameleon value R6C3",
+        "Pair: chameleon value R6C2",
+        "Pair: chameleon value R4C9",
+        "Pair: chameleon value R4C7",
+        "Pair: chameleon value R4C8",
+        "Pair: chameleon value R4C3",
+        "Pair: chameleon value R4C2",
+        "Pair: chameleon value R5C4",
+        "Pair: chameleon value R5C5",
+        "Pair: chameleon value R5C3",
+        "Pair: chameleon value R5C2",
+        "Pair: chameleon black dot R1C3/R2C3",
+        "Pair: chameleon black dot R1C4/R2C4",
+        "Pair: chameleon black dot R1C5/R2C5",
+        "Pair: chameleon black dot R1C7/R1C8",
+        "Pair: chameleon black dot R5C4/R5C5",
+        "Pair: chameleon black dot R6C4/R6C5"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 364,
+      "backtracks": 365,
+      "solve_ms": 21.3,
+      "cap": 1000,
+      "dir": "data/puzzles/njbxaVs-HgA",
+      "iss_size": 3300,
+      "script_size": 4049
+    },
+    {
       "puzzle_id": "9CkHikmSpJE",
       "video_id": "9CkHikmSpJE",
       "puzzle_title": "RAT RUN 22: Copyrat",
@@ -7266,6 +7703,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "Replicate",
         "NFA: one-copycat",
         "NFA: distinct-9",
         "NFA: distinct-8",
@@ -7289,8 +7727,8 @@
       "solve_ms": 2955.3,
       "cap": 10000,
       "dir": "data/puzzles/9CkHikmSpJE",
-      "iss_size": 11030,
-      "script_size": 6155
+      "iss_size": 10353,
+      "script_size": 6300
     },
     {
       "puzzle_id": "Ux6LYrFtjFc",
@@ -7364,8 +7802,8 @@
       "constraint_types": [
         "Var",
         "Replicate",
-        "NFA: degree",
         "NFA: no-touch",
+        "NFA: degree",
         "NFA: count",
         "NFA: mult"
       ],
@@ -7378,8 +7816,8 @@
       "solve_ms": 2020.6,
       "cap": 263713,
       "dir": "data/puzzles/A8GBl5GGypA",
-      "iss_size": 7026,
-      "script_size": 5624
+      "iss_size": 5750,
+      "script_size": 5856
     },
     {
       "puzzle_id": "-2BWnJHVV38",

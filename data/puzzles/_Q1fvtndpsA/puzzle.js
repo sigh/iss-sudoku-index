@@ -40,17 +40,7 @@ const dots = [
 
 for (const [a, b] of dots) add(new WhiteDot(a, b));
 
-const oppositeShadeMachine = NFA.encodeSpec({
-  startState: { first: null },
-  transition: ({ first, done }, value) => done === true
-    ? { done: true }
-    : first === null
-    ? { first: value }
-    : (value !== first ? { done: true } : undefined),
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-for (const [a, b] of dots) add(new NFA(oppositeShadeMachine, 'opposite-shade',
-  shadeCell(a), shadeCell(b)));
+for (const [a, b] of dots) add(new AllDifferent(shadeCell(a), shadeCell(b)));
 
 // No 2x2 block may be all shaded or all unshaded.
 const noMono2x2Machine = NFA.encodeSpec({
@@ -64,11 +54,16 @@ const noMono2x2Machine = NFA.encodeSpec({
   },
   accept: ({ done }) => done === true,
 }, geometry.numValues);
-for (const cell of gridCells) {
-  const block = graph.block(cell, 2, 2);
-  if (block) add(new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...block.map(shadeCell)));
-}
+const mono2x2Origin = 'R1C1';
+const mono2x2Targets = gridCells
+  .filter(cell => graph.block(cell, 2, 2))
+  .map(shadeCell);
+add(new Replicate(
+  [new NFA(noMono2x2Machine, 'no-mono-2x2',
+    ...graph.block(mono2x2Origin, 2, 2).map(shadeCell))],
+  Replicate.encodeTargetCells(mono2x2Targets, shadeCell(mono2x2Origin), shade),
+  shadeCell(mono2x2Origin),
+));
 
 const arrows = [
   {

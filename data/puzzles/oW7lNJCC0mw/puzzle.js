@@ -44,10 +44,22 @@ const noMonoMachine = NFA.encodeSpec({
   },
   accept: ({ block }) => block === null,
 }, geometry.numValues);
-for (const cell of graph.cells()) {
-  const block = graph.block(cell, 2, 2);
-  if (block) add(new NFA(noMonoMachine, 'no-mono-2x2', ...block.map(shadingCell)));
+// Every 2x2 block is a uniform-offset shift of the top-left block, so encode
+// it once and replicate it over every anchor cell whose block stays on-grid.
+const monoBlockOrigin = shadingCell('R1C1');
+const monoBlockTemplate = new NFA(noMonoMachine, 'no-mono-2x2',
+  shadingCell('R1C1'), shadingCell('R1C2'), shadingCell('R2C1'), shadingCell('R2C2'));
+const monoBlockAnchors = [];
+for (let r = 1; r <= 8; r++) {
+  for (let c = 1; c <= 8; c++) {
+    monoBlockAnchors.push(shadingCell(makeCellId(r, c)));
+  }
 }
+add(new Replicate(
+  [monoBlockTemplate],
+  Replicate.encodeTargetCells(monoBlockAnchors, monoBlockOrigin, shading),
+  monoBlockOrigin,
+));
 
 // --- Arrows: fixed sea dead ends (positions confirmed from source geometry). ---
 // R1C9 is sea; its only other adjacent sea cell is R1C8 (points left).

@@ -134,7 +134,19 @@ const matchNFA = (codes) => NFA.encodeSpec({
   accept: (s) => s.done === true,
 }, numValues);
 
+// A cell with exactly one incoming tree is a plain binary relation between
+// that tree's pairDir and the cell's isTent (isTent = 2 iff pairDir ==
+// code), so it is a Pair. Two or more incoming trees still need the NFA to
+// also enforce the injective "no two trees claim the same cell" check.
+const matchPairKey = (code) => Pair.fnToKey(
+  (dir, isTent) => (dir === code) === (isTent === 2), numValues);
+
 for (const [cell, incoming] of incomingByCell) {
+  if (incoming.length === 1) {
+    const { tree, code } = incoming[0];
+    add(new Pair(matchPairKey(code), 'tent-match', pairDirCell(tree), tentCell(cell)));
+    continue;
+  }
   const codes = incoming.map(x => x.code);
   const args = incoming.map(x => pairDirCell(x.tree));
   args.push(tentCell(cell));

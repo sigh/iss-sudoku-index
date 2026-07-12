@@ -59,15 +59,14 @@ const pointerConstraints = pointerCages.map(([a, b]) => {
 
 // No two cages may point at the same cell: for every pair of cages, their
 // (X, Y) coordinate pairs must differ in the row cell or the column cell.
-const neqKey = Pair.fnToKey((a, b) => a !== b, 9);
 const distinctTargets = [];
 for (let i = 0; i < pointerCages.length; i++) {
   for (let j = i + 1; j < pointerCages.length; j++) {
     const [ai, bi] = pointerCages[i];
     const [aj, bj] = pointerCages[j];
     distinctTargets.push(new Or([
-      new Pair(neqKey, 'diffRow', ai, aj),
-      new Pair(neqKey, 'diffCol', bi, bj),
+      new AllDifferent(ai, aj),
+      new AllDifferent(bi, bj),
     ]));
   }
 }

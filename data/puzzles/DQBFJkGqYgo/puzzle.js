@@ -34,15 +34,24 @@ function no2x2Spec() {
   }, 9);
 }
 
+// The 64 windows are one template (the no-monochrome-2x2 NFA over a 2x2 block)
+// stamped at every top-left corner R1C1..R8C8 with a uniform grid offset, so a
+// single Replicate over the shade overlay expresses all of them. The template
+// reads the 2x2 shade window at R1C1; each target origin shifts that window by
+// the same relative offsets within the shade subgraph.
 function no2x2Constraints() {
-  const constraints = [];
+  const originCell = shadeAt(makeCellId(1, 1));
+  const window = graph.block(makeCellId(1, 1), 2, 2).map(shadeAt);
+  const targets = [];
   for (let r = 1; r <= 8; r++) {
     for (let c = 1; c <= 8; c++) {
-      const window = graph.block(makeCellId(r, c), 2, 2).map(shadeAt);
-      constraints.push(new NFA(no2x2Spec(), `no2x2_R${r}C${c}`, ...window));
+      targets.push(shadeAt(makeCellId(r, c)));
     }
   }
-  return constraints;
+  return [new Replicate(
+    [new NFA(no2x2Spec(), 'no2x2', ...window)],
+    Replicate.encodeTargetCells(targets, originCell, shade),
+    originCell)];
 }
 
 // X-Sum-of-one-color state machine: reads an interleaved [digit, shade,

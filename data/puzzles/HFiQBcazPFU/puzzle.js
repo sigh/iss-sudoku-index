@@ -75,14 +75,10 @@ for (const hut of huts) {
   add(new Given(loopCell(hut), HORIZ, VERT, UL, UR, DL, DR));
 }
 
-const edgeAgree = (fromA, fromB) => NFA.encodeSpec({
-  startState: { aUses: null },
-  transition: ({ aUses }, value) => {
-    if (aUses === null) return { aUses: fromA(value) };
-    return aUses === fromB(value) ? { done: true } : undefined;
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
+// 2-cell relation: the first cell uses the edge (fromA) iff the second uses
+// it back (fromB).
+const edgeAgreeKey = (fromA, fromB) =>
+  Pair.fnToKey((a, b) => fromA(a) === fromB(b), geometry.numValues);
 
 const nonConsecutiveWhenJoined = fromA => NFA.encodeSpec({
   startState: { phase: 'shape' },
@@ -95,8 +91,8 @@ const nonConsecutiveWhenJoined = fromA => NFA.encodeSpec({
   accept: ({ done }) => done === true,
 }, geometry.numValues);
 
-const edgeRight = edgeAgree(usesRight, usesLeft);
-const edgeDown = edgeAgree(usesDown, usesUp);
+const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
+const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 const notConsecutiveRight = nonConsecutiveWhenJoined(usesRight);
 const notConsecutiveDown = nonConsecutiveWhenJoined(usesDown);
 
@@ -104,13 +100,13 @@ for (const cell of gridCells) {
   const right = graph.step(cell, 0, 1);
   const down = graph.step(cell, 1, 0);
   if (right) {
-    add(new NFA(edgeRight, 'loop edge agreement h', loopCell(cell), loopCell(right)));
+    add(new Pair(edgeRightKey, 'loop edge agreement h', loopCell(cell), loopCell(right)));
     if (!whiteDotEdges.has(edgeKey(cell, right))) {
       add(new NFA(notConsecutiveRight, 'loop nonconsecutive h', loopCell(cell), cell, right));
     }
   }
   if (down) {
-    add(new NFA(edgeDown, 'loop edge agreement v', loopCell(cell), loopCell(down)));
+    add(new Pair(edgeDownKey, 'loop edge agreement v', loopCell(cell), loopCell(down)));
     if (!whiteDotEdges.has(edgeKey(cell, down))) {
       add(new NFA(notConsecutiveDown, 'loop nonconsecutive v', loopCell(cell), cell, down));
     }

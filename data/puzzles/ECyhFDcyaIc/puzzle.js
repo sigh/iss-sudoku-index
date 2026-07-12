@@ -63,13 +63,16 @@ const blackDots = [
 const greenKey = Pair.fnToKey((a, b) => Math.abs(a - b) >= 5, 9);
 const redKey = Pair.fnToKey((a, b) => (a % 2) !== (b % 2), 9);
 
+const geometry = cellGeometry('9x9');
+const graph = cellGraph('9x9');
+
 return [
   new Shape('9x9'),
 
   // Outside sandwich sum clues (sum of digits strictly between 1 and 9).
-  new Sandwich('R1,1', 10),
-  new Sandwich('R5,1', 20),
-  new Sandwich('R8,1', 2),
+  Sandwich.fromCells(10, graph.row(1), geometry),
+  Sandwich.fromCells(20, graph.row(5), geometry),
+  Sandwich.fromCells(2, graph.row(8), geometry),
 
   // Killer cages (distinct digits, given sum).
   new Cage(24, 'R8C1', 'R8C2', 'R9C2', 'R9C3'),

@@ -8,6 +8,7 @@
 // per-band NFAs since GlobalEntropy is 9x9-only). Renban lines, and a little
 // killer diagonal summing to 13.
 
+const graph = cellGraph('6x6');
 const constraints = [
   new Shape('6x6'),
 
@@ -17,7 +18,7 @@ const constraints = [
   new Renban('R2C2', 'R2C3', 'R2C4'),
   new Renban('R6C3', 'R5C3', 'R5C4'),
 
-  new LittleKiller('R3C1', 13),
+  LittleKiller.fromCells(13, graph.ray('R3C1', 1, 1), cellGeometry('6x6')),
 ];
 
 const entropySets = [

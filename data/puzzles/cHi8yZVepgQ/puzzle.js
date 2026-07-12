@@ -103,10 +103,16 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
   },
   accept: ({ block }) => block === null,
 }, geometry.numValues);
-for (const cell of gridCells) {
-  const block = graph.block(cell, 2, 2);
-  if (block) add(new NFA(noDiagonalTouchMachine, 'no-touch', ...block.map(pathCell)));
-}
+// All 2x2 blocks are the same NFA over a fixed relative shape (topLeft,
+// topRight, bottomLeft, bottomRight), translated by a uniform offset per
+// anchor cell, so Replicate shortens this to one template + target set.
+const noTouchAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
+const noTouchOrigin = pathCell(noTouchAnchors[0]);
+const noTouchTemplate = graph.block(noTouchAnchors[0], 2, 2).map(pathCell);
+add(new Replicate(
+  [new NFA(noDiagonalTouchMachine, 'no-touch', ...noTouchTemplate)],
+  Replicate.encodeTargetCells(noTouchAnchors.map(pathCell), noTouchOrigin, path),
+  noTouchOrigin));
 
 // --- Box coverage: at least one on-path cell in every box.
 const atLeastOneOnMachine = NFA.encodeSpec({

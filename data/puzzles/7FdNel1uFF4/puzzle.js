@@ -93,19 +93,31 @@ const noConsecSetSpec = {
 const noConsecSetNFA = NFA.encodeSpec(noConsecSetSpec, /* numValues= */ 9);
 
 const graph = cellGraph('9x9');
-const boxRowColTrios = [];
-for (const box of graph.boxes()) {
-  for (let i = 0; i < 3; i++) {
-    // Row-within-box.
-    boxRowColTrios.push(box.slice(3 * i, 3 * i + 3));
-    // Column-within-box.
-    boxRowColTrios.push([box[i], box[i + 3], box[i + 6]]);
-  }
-}
+const boxes = graph.boxes();
+const boxOrigins = boxes.map((box) => box[0]);
 
-const noConsecConstraints = boxRowColTrios.map(
+// Template: the 3 row-within-box and 3 column-within-box trios of the first
+// box, relative to its top-left cell. Every other box's trios are the exact
+// same local pattern, shifted by that box's top-left corner, so Replicate
+// applies the template once per box origin instead of stamping it 9 times.
+const boxTemplateCells = [];
+for (let i = 0; i < 3; i++) {
+  // Row-within-box.
+  boxTemplateCells.push(boxes[0].slice(3 * i, 3 * i + 3));
+  // Column-within-box.
+  boxTemplateCells.push([boxes[0][i], boxes[0][i + 3], boxes[0][i + 6]]);
+}
+const noConsecTemplate = boxTemplateCells.map(
   (cells) => new NFA(noConsecSetNFA, 'NO_CONSEC_TRIO', ...cells)
 );
+
+const noConsecConstraints = [
+  new Replicate(
+    noConsecTemplate,
+    Replicate.encodeTargetCells(boxOrigins, boxOrigins[0], graph),
+    boxOrigins[0],
+  ),
+];
 
 return [
   new Shape('9x9'),

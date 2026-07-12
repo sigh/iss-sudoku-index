@@ -63,15 +63,25 @@ const notAllSameSpec = NFA.encodeSpec({
   accept: (state) => state !== null && state.differs,
 }, 2);
 
+// All 64 blocks are the same NFA applied to a uniform (dRow, dCol) shift of
+// one template block, so Replicate stamps the template instead of hand-
+// rolling each shifted copy.
+const blockOrigin = shadeAt('R1C1');
+const blockTemplate = [
+  new NFA(notAllSameSpec, '2x2 block',
+    shadeAt('R1C1'), shadeAt('R1C2'), shadeAt('R2C1'), shadeAt('R2C2')),
+];
+const blockTargets = [];
 for (let r = 1; r <= 8; r++) {
   for (let c = 1; c <= 8; c++) {
-    const block = [
-      makeCellId(r, c), makeCellId(r, c + 1),
-      makeCellId(r + 1, c), makeCellId(r + 1, c + 1),
-    ];
-    constraints.push(new NFA(notAllSameSpec, `2x2 ${r},${c}`, ...block.map(shadeAt)));
+    blockTargets.push(shadeAt(makeCellId(r, c)));
   }
 }
+constraints.push(new Replicate(
+  blockTemplate,
+  Replicate.encodeTargetCells(blockTargets, blockOrigin, shade),
+  blockOrigin,
+));
 
 // The closed loop, in path order (55 cells).
 const loopCells = [

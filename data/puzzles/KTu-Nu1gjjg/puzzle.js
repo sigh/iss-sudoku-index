@@ -39,8 +39,32 @@ const constraints = [
   new Given('R9C9', 4),
 ];
 
+// The per-cell NFA's shape ([cell, ...neighbours] length and offsets) is
+// fixed by which grid sides the cell touches, so cells sharing that shape
+// are true uniform-offset copies: group by touched sides and let Replicate
+// shift one template across each group. The 4 corners are unique shapes
+// with only one member each, so Replicate would just wrap them without
+// shortening anything; leave those as plain per-cell NFAs.
+const sideGroups = new Map();
 for (const cell of graph.cells()) {
-  constraints.push(new NFA(encodedHotspot, 'Hotspot', cell, ...graph.neighbours(cell)));
+  const { row, col } = parseCellId(cell);
+  const key = [row === 1, row === 9, col === 1, col === 9].join(',');
+  if (!sideGroups.has(key)) sideGroups.set(key, []);
+  sideGroups.get(key).push(cell);
+}
+
+for (const cells of sideGroups.values()) {
+  if (cells.length === 1) {
+    const cell = cells[0];
+    constraints.push(new NFA(encodedHotspot, 'Hotspot', cell, ...graph.neighbours(cell)));
+    continue;
+  }
+  const origin = cells[0];
+  constraints.push(new Replicate(
+    [new NFA(encodedHotspot, 'Hotspot', origin, ...graph.neighbours(origin))],
+    Replicate.encodeTargetCells(cells, origin, graph),
+    origin,
+  ));
 }
 
 return constraints;
