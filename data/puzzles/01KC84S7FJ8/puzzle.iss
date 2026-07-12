@@ -1,4 +1,3 @@
-
 .AntiKnight
 .Sum~25~R4C1~R5C1~R5C2~R5C3
 .Sum~25~R8C3~R9C4~R9C5~R9C6

@@ -1,4 +1,3 @@
-
 .NoBoxes
 .ChaosConstruction
 .~R1C5_6

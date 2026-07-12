@@ -1,4 +1,3 @@
-
 .EqualSum~R7C3~-~R8C2~R9C1
 .EqualSum~R7C7~-~R8C8~R9C9
 .EqualSum~R9C1~-~R7C2~R8C3

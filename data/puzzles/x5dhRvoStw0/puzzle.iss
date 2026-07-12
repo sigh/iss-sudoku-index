@@ -1,4 +1,3 @@
-
 .AntiKnight
 .Thermo~R3C3~R3C4~R4C4
 .Thermo~R6C6~R5C6~R6C7~R7C8

@@ -1,4 +1,3 @@
-
 .Diagonal~1
 .DisjointSets
 .Cage~15~R1C1~R1C2~R2C1

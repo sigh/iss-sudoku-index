@@ -1,4 +1,3 @@
-
 .WhiteDot~R1C1~R1C2
 .WhiteDot~R1C8~R1C9
 .WhiteDot~R2C2~R3C2

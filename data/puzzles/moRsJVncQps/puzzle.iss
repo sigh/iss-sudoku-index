@@ -1,4 +1,3 @@
-
 .AntiKnight
 .Cage~9~R6C2~R7C2~R7C3
 .Cage~22~R1C3~R1C4~R2C4

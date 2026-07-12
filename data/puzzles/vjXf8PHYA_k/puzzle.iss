@@ -1,4 +1,3 @@
-
 .Cage~11~R6C1~R7C1
 .Cage~14~R9C1~R9C2
 .AllDifferent~R2C8~R3C8~R3C9

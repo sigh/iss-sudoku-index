@@ -4,5 +4,9 @@
 .Arrow~R9C1~R8C1~R8C2~R8C3
 .Arrow~R9C9~R8C8~R7C7
 .Arrow~R6C7~R6C6~R7C6
-.Replicate~_7f_7f_7f_7f_D.Pair~_vq_vq_vq_vq_H~_~R1C1~R1C2.End
-.Replicate~____________.Pair~_vq_vq_vq_vq_H~_~R1C1~R2C1.End
+.Replicate~_7f_7f_7f_7f_D
+.Pair~_vq_vq_vq_vq_H~_~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~_vq_vq_vq_vq_H~_~R1C1~R2C1
+.End

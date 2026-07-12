@@ -1,4 +1,3 @@
-
 .RegionSumLine~R4C3~R5C4~R6C4~R7C5~R6C5~R6C6
 .RegionSumLine~R6C8~R6C7~R5C6~R5C7~R4C7~R4C6~R5C5
 .RegionSumLine~R4C9~R5C9~R6C9~R7C9~R7C8
@@ -6,11 +5,4 @@
 .RegionSumLine~R7C1~R6C1~R6C2~R7C2~R7C3~R7C4~R8C4
 .RegionSumLine~R3C6~R3C7~R2C7
 .RegionSumLine~R8C6~R9C7
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R7C8~R7C9
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R2C5~R3C5
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R4C1~R4C2
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R4C8~R5C8
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R6C8~R7C8
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R6C2~R6C3
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R2C1~R2C2
-.Pair~8H_xf8H_xf8H_B~_non-consecutive~R2C6~R3C6
+.Pair~8H_xf8H_xf8H_B~_non-consecutive~R7C8~R7C9~~R2C5~R3C5~~R4C1~R4C2~~R4C8~R5C8~~R6C8~R7C8~~R6C2~R6C3~~R2C1~R2C2~~R2C6~R3C6

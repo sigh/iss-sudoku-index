@@ -1,4 +1,3 @@
-
 .~R1C9_1
 .Whisper~5~R4C4~R3C5~R2C4~R3C3
 .Whisper~5~R6C6~R7C5~R8C6~R7C7

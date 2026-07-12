@@ -1,4 +1,3 @@
-
 .NoBoxes
 .ChaosConstruction
 .ChaosArrow~R2C1~1~CC10~CC11~CC12~CC13~CC14~CC15~CC16~CC17~CC18

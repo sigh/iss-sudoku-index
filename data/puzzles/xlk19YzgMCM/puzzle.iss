@@ -1,5 +1,4 @@
-.~R5C4_2_4_6_8
-.~R6C5_1_3_5_7_9
+.~R5C4_2_4_6_8~R6C5_1_3_5_7_9
 .SameValues~2~R9C1~R3C7
 .SameValues~2~R5C1~R9C5
 .Cage~10~R1C2~R1C3

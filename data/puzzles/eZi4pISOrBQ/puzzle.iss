@@ -1,4 +1,3 @@
-
 .Arrow~R5C4~R5C3~R5C5
 .Arrow~R5C2~R5C1~R5C3
 .Arrow~R6C5~R5C5~R7C5

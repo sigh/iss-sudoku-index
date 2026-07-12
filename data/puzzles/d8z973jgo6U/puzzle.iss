@@ -1,4 +1,3 @@
-
 .RegionSumLine~R1C6~R1C7~R1C8
 .RegionSumLine~R1C3~R1C4~R2C5~R3C6~R4C6
 .RegionSumLine~R2C4~R3C3~R4C2~R5C1

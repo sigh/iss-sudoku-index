@@ -1,6 +1,4 @@
-
-.~R3C7_5
-.~R5C5_9
+.~R3C7_5~R5C5_9
 .Diagonal~1
 .Diagonal~-1
 .Whisper~5~R3C4~R3C3~R4C3~R4C2

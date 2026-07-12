@@ -1,4 +1,3 @@
-
 .~R4C6_5
 .Cage~5~R1C1~R2C1
 .Cage~13~R1C4~R2C4

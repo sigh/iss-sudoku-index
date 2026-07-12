@@ -1,4 +1,3 @@
-
 .AntiKing
 .Whisper~5~R4C6~R4C5~R4C4
 .Whisper~5~R4C7~R4C8~R5C9~R5C8

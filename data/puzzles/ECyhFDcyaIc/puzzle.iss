@@ -1,4 +1,3 @@
-
 .Sandwich~10~R1
 .Sandwich~20~R5
 .Sandwich~2~R8
@@ -25,16 +24,6 @@
 .BlackDot~R8C3~R9C3
 .BlackDot~R8C7~R9C7
 .BlackDot~R8C4~R8C5
-.Pair~gH4AGgAIAD4AP~_Green~R1C4~R1C5
-.Pair~gH4AGgAIAD4AP~_Green~R1C6~R1C7
-.Pair~gH4AGgAIAD4AP~_Green~R1C8~R1C9
-.Pair~gH4AGgAIAD4AP~_Green~R5C1~R5C2
-.Pair~gH4AGgAIAD4AP~_Green~R5C3~R5C4
-.Pair~gH4AGgAIAD4AP~_Green~R5C5~R5C6
-.Pair~gH4AGgAIAD4AP~_Green~R9C1~R9C2
-.Pair~qqqqqqqqqqqqqC~_Red~R3C4~R3C5
-.Pair~qqqqqqqqqqqqqC~_Red~R3C6~R3C7
-.Pair~qqqqqqqqqqqqqC~_Red~R7C3~R7C4
-.Pair~qqqqqqqqqqqqqC~_Red~R7C8~R7C9
-.Pair~qqqqqqqqqqqqqC~_Red~R9C8~R9C9
+.Pair~gH4AGgAIAD4AP~_Green~R1C4~R1C5~~R1C6~R1C7~~R1C8~R1C9~~R5C1~R5C2~~R5C3~R5C4~~R5C5~R5C6~~R9C1~R9C2
+.Pair~qqqqqqqqqqqqqC~_Red~R3C4~R3C5~~R3C6~R3C7~~R7C3~R7C4~~R7C8~R7C9~~R9C8~R9C9
 .Palindrome~R8C8~R7C7~R6C6~R6C5
