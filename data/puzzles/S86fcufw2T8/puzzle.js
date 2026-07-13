@@ -16,22 +16,24 @@
 // Encoding notes: ChaosConstruction and ChaosArrow are native ISS handlers
 // for the unknown regions and the region-relative visibility count. The
 // path is a Var overlay (VP) with local degree constraints (1 at the two
-// endpoints, 2 elsewhere when on). Doors are forced onto walls (AllDifferent
-// of the two CC cells on either side of each door), which is always true
-// regardless of routing. Omitted: which walls the path may cross (a room
-// wall may be crossed at a door, or by teleporting through a paired secret
-// passage without crossing a wall cell-to-cell at all -- a door-only-gate
-// NFA was tried and it rejected the known solution's digits at propagation
-// time, i.e. before any search, across several independently-tested
-// constraint subsets; the true path apparently needs at least one passage
-// jump, so gating on doors alone is an unsound over-tightening, not a
-// faithful relaxation, and was removed). The global single-connected-path
-// topology (only local degree is enforced) is the standard ISS unknown-path
-// connectivity gap. The entire "hot and cold" temperature-ordering rule
-// (digit sequence must decrease/increase relative to distance to the current
-// room's ghost, reset per room entry, plus "a ghost holds its room's lowest
-// path digit") is omitted -- this needs order/distance measured along an
-// unknown path through unknown regions, which
+// endpoints, 2 elsewhere when on) plus ConnectedValues('VP', ON), which
+// together force the on-path cells into exactly one simple orthogonal path
+// between the entry and the attic ghost (verified: the known solution's
+// on-path cells are fully orthogonally connected, so no secret-passage
+// teleport is needed to bridge them). Doors are forced onto walls
+// (AllDifferent of the two CC cells on either side of each door), which is
+// always true regardless of routing. Omitted: which walls the path may
+// cross (a room wall may be crossed at a door, or by teleporting through a
+// paired secret passage without crossing a wall cell-to-cell at all -- a
+// door-only-gate NFA was tried and it rejected the known solution's digits
+// at propagation time, i.e. before any search, across several
+// independently-tested constraint subsets; the true cause of that rejection
+// is unresolved). The entire "hot and cold" temperature-ordering rule
+// (digit sequence must
+// decrease/increase relative to distance to the current room's ghost, reset
+// per room entry, plus "a ghost holds its room's lowest path digit") is
+// omitted -- this needs order/distance measured along an unknown path
+// through unknown regions, which
 // iss-constraints/references/unknown-graphs.md documents as unsupported.
 // The secret-passage teleport topology (which two of the 6 cells are
 // actually paired, and that the path may jump between them) is also
@@ -46,13 +48,6 @@ const path = graph.makeOverlay('VP');   // path-membership cell per grid cell
 const ON = 1;    // path-membership values, stored in the Var cells
 const OFF = 2;
 
-const constraints = [
-  new Shape('9x9'),
-  new NoBoxes(),
-  new ChaosConstruction(),
-  path.toVar('path'),
-];
-const add = (...cs) => constraints.push(...cs);
 const pathCell = cell => path.at(cell);
 
 const DOORS = [
@@ -70,10 +65,12 @@ const ATTIC_GHOST = 'R3C9';
 // ghost cell are forced on (start, end, and "the path visits all the
 // ghosts").
 const originCell = path.cells()[0];
-add(new Replicate([new Given(originCell, ON, OFF)],
-  Replicate.encodeTargetCells(path.cells(), originCell, path), originCell));
-add(new Given(pathCell(ENTRY), ON));
-for (const g of GHOSTS) add(new Given(pathCell(g), ON));
+const pathMembership = [
+  new Replicate([new Given(originCell, ON, OFF)],
+    Replicate.encodeTargetCells(path.cells(), originCell, path), originCell),
+  new Given(pathCell(ENTRY), ON),
+  ...GHOSTS.map(g => new Given(pathCell(g), ON)),
+];
 
 // --- Degree: the two endpoints have exactly one on-path orthogonal
 // neighbour; every other on cell has exactly two; off cells are free.
@@ -91,27 +88,36 @@ const makeDegreeMachine = requiredDegree => NFA.encodeSpec({
 }, geometry.numValues);
 const degree1Machine = makeDegreeMachine(1);
 const degree2Machine = makeDegreeMachine(2);
+// Single connected path: ConnectedValues over the on-path cells (orthogonal
+// cell adjacency), combined with the degree NFAs below (two degree-1
+// endpoints, everything else on-path degree-2), forces exactly one simple
+// path between the entry and the attic ghost. The known solution's on-path
+// cells are fully connected under plain orthogonal adjacency, so no
+// secret-passage teleport is needed to keep this path connected.
 const endpoints = [ENTRY, ATTIC_GHOST];
-for (const cell of graph.cells()) {
-  const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
-  add(new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell)));
-}
+const pathDegree = [
+  new ConnectedValues('VP', ON),
+  ...graph.cells().map(cell => {
+    const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
+    return new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell));
+  }),
+];
 
 // --- Doors are always on walls: the two cells across a door are in
 // different rooms.
-for (const [a, b] of DOORS) add(new AllDifferent(cc.at(a), cc.at(b)));
+const doors = DOORS.map(([a, b]) => new AllDifferent(cc.at(a), cc.at(b)));
 
 // --- Ghost visibility: a ghost's digit equals the room-visibility run
 // length in all 4 orthogonal directions (including the ghost's own cell),
 // computed natively over the unknown Chaos Construction regions.
-for (const g of GHOSTS) add(new ChaosArrow(g, 0));
+const ghostVisibility = GHOSTS.map(g => new ChaosArrow(g, 0));
 
 // --- Ghost digits are all different from each other.
-add(new AllDifferent(...GHOSTS));
+const ghostUniqueness = [new AllDifferent(...GHOSTS)];
 
 // --- Bats: the two digits are in a 1:3 ratio.
 const ratio13Key = Pair.fnToKey((a, b) => a === 3 * b || b === 3 * a, geometry.numValues);
-for (const [a, b] of BATS) add(new Pair(ratio13Key, 'bat-ratio', a, b));
+const bats = BATS.map(([a, b]) => new Pair(ratio13Key, 'bat-ratio', a, b));
 
 // --- Secret passages: each of the 6 fixed passage cells shares its digit
 // with exactly one other passage cell (they pair up by equal value),
@@ -133,6 +139,18 @@ const passagePairSpec = {
   maxDepth: PASSAGES.length,
 };
 const passagePairMachine = NFA.encodeSpec(passagePairSpec, geometry.numValues);
-add(new NFA(passagePairMachine, 'passage-pairing', ...PASSAGES));
+const passages = [new NFA(passagePairMachine, 'passage-pairing', ...PASSAGES)];
 
-return constraints;
+return [
+  new Shape('9x9'),
+  new NoBoxes(),
+  new ChaosConstruction(),
+  path.toVar('path'),
+  ...pathMembership,
+  ...pathDegree,
+  ...doors,
+  ...ghostVisibility,
+  ...ghostUniqueness,
+  ...bats,
+  ...passages,
+];

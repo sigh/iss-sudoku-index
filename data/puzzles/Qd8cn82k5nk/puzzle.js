@@ -67,29 +67,8 @@ const doubledDigitNFA = (digit) => NFA.encodeSpec({
   accept: (state) => state.phase === 0 && state.count === 1,
 }, 9);
 
-const constraints = [
-  new Shape('9x9'),
-  flags.toVar('doubler flags'),
-  new Given('R4C1', 7),
-];
-
 const flagTargets = gridCells.map(flag);
 const flagOrigin = flagTargets[0];
-constraints.push(new Replicate(
-  [new Given(flagOrigin, 1, 2)],
-  Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
-  flagOrigin,
-));
-
-for (let r = 1; r <= 9; r++) constraints.push(new Sum(10, ...graph.row(r).map(flag)));
-for (let c = 1; c <= 9; c++) constraints.push(new Sum(10, ...graph.column(c).map(flag)));
-for (const box of graph.boxes()) {
-  constraints.push(new Sum(10, ...box.map(flag)));
-}
-
-for (let digit = 1; digit <= 9; digit++) {
-  constraints.push(new NFA(doubledDigitNFA(digit), `doubled-${digit}`, ...interleaveFlags(gridCells)));
-}
 
 const cages = [
   [13, ['R4C3', 'R4C4', 'R5C3']],
@@ -97,10 +76,6 @@ const cages = [
   [22, ['R5C5', 'R6C4', 'R6C5', 'R7C4']],
   [26, ['R8C9', 'R9C7', 'R9C8', 'R9C9']],
 ];
-for (const [total, cells] of cages) {
-  constraints.push(new AllDifferent(...cells));
-  constraints.push(new NFA(effectiveSumNFA(total), `value-sum-${total}`, ...interleaveFlags(cells)));
-}
 
 const lines = [
   ['R1C1', 'R1C2', 'R1C3', 'R1C4', 'R1C5', 'R1C6', 'R1C7', 'R1C8', 'R1C9'],
@@ -110,13 +85,36 @@ const lines = [
   ['R4C7', 'R4C8', 'R4C9', 'R3C9', 'R2C9', 'R2C8', 'R2C7'],
   ['R2C4', 'R3C5', 'R4C6', 'R5C7', 'R6C8', 'R7C9'],
 ];
-for (const line of lines) constraints.push(new NFA(sumLineNFA, 'sum-line-10', ...interleaveFlags(line)));
 
 const blackDots = [
   ['R7C1', 'R8C1'],
   ['R8C1', 'R9C1'],
   ['R4C5', 'R4C6'],
 ];
-for (const cells of blackDots) constraints.push(new NFA(blackDotValueNFA, 'black-dot-values', ...interleaveFlags(cells)));
 
-return constraints;
+return [
+  new Shape('9x9'),
+  flags.toVar('doubler flags'),
+  new Given('R4C1', 7),
+
+  new Replicate(
+    [new Given(flagOrigin, 1, 2)],
+    Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
+    flagOrigin,
+  ),
+
+  ...Array.from({length: 9}, (_, r) => new Sum(10, ...graph.row(r + 1).map(flag))),
+  ...Array.from({length: 9}, (_, c) => new Sum(10, ...graph.column(c + 1).map(flag))),
+  ...graph.boxes().map(box => new Sum(10, ...box.map(flag))),
+
+  ...Array.from({length: 9}, (_, digit) => new NFA(doubledDigitNFA(digit + 1), `doubled-${digit + 1}`, ...interleaveFlags(gridCells))),
+
+  ...cages.flatMap(([total, cells]) => [
+    new AllDifferent(...cells),
+    new NFA(effectiveSumNFA(total), `value-sum-${total}`, ...interleaveFlags(cells)),
+  ]),
+
+  ...lines.map(line => new NFA(sumLineNFA, 'sum-line-10', ...interleaveFlags(line))),
+
+  ...blackDots.map(cells => new NFA(blackDotValueNFA, 'black-dot-values', ...interleaveFlags(cells))),
+];

@@ -1,0 +1,12 @@
+.GreaterThan~R9C2~R8C2
+.GreaterThan~R9C9~R8C9
+.GreaterThan~R3C4~R3C5
+.GreaterThan~R1C1~R1C2
+.GreaterThan~R9C6~R9C7
+.Pair~gH4AGgAIAD4AP~_grape~R4C1~R4C2~~R7C1~R7C2~~R8C1~R8C2~~R8C2~R8C3~~R9C2~R9C3~~R8C6~R8C7~~R7C8~R7C9
+.SameValues~R1C1~R4C9
+.SameValues~R1C4~R7C5
+.SameValues~R1C9~R7C6
+.SameValues~R6C3~R9C1
+.SameValues~R7C7~R9C5
+.AllDifferent~R1C1~R1C4~R1C9~R6C3~R7C7

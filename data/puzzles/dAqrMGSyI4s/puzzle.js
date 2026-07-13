@@ -35,8 +35,6 @@ const shape = graph.makeOverlay('VS');
 const shapeCell = cell => shape.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), shape.toVar('shape')];
-const add = (...c) => constraints.push(...c);
 const ALL_SHAPES = [OFF, HORIZ, VERT, UL, UR, DL, DR];
 
 // --- Clue reconstruction from the decode. ---
@@ -70,16 +68,6 @@ for (const [a, b] of walls) {
 }
 const stationSet = new Set(stations);
 const shapeOrigin = shape.cells()[0];
-add(new Replicate([new Given(shapeOrigin, ...ALL_SHAPES)],
-  Replicate.encodeTargetCells(shape.cells(), shapeOrigin, shape), shapeOrigin));
-for (const cell of gridCells) {
-  const f = forbidden.get(cell);
-  const allowed = ALL_SHAPES.filter(s =>
-    !(f.has('U') && usesUp(s)) && !(f.has('D') && usesDown(s)) &&
-    !(f.has('L') && usesLeft(s)) && !(f.has('R') && usesRight(s)) &&
-    !(stationSet.has(cell) && s === OFF));
-  if (allowed.length !== ALL_SHAPES.length) add(new Given(shapeCell(cell), ...allowed));
-}
 
 // --- Edge agreement: neighbours agree on the shared edge, so used edges are
 // mutual and every non-OFF cell has degree exactly two (=> loops). A 2-cell
@@ -90,10 +78,6 @@ const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
 const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 const rightTargets = gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell);
 const downTargets = gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell);
-add(new Replicate([new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
-  Replicate.encodeTargetCells(rightTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')));
-add(new Replicate([new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
-  Replicate.encodeTargetCells(downTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')));
 
 // --- Per-loop parity: two cells joined by a loop edge share parity. The mirror
 // cell contributes its opposite parity. Reads [shapeA, digitA, digitB]. ---
@@ -113,19 +97,6 @@ const parityEdge = (toB, aMirror, bMirror) => NFA.encodeSpec({
   accept: ({ done }) => done === true,
 }, geometry.numValues);
 
-for (const cell of gridCells) {
-  const right = graph.step(cell, 0, 1);
-  const down = graph.step(cell, 1, 0);
-  if (right) {
-    add(new NFA(parityEdge(usesRight, isMirror(cell), isMirror(right)),
-      'par-h', shapeCell(cell), cell, right));
-  }
-  if (down) {
-    add(new NFA(parityEdge(usesDown, isMirror(cell), isMirror(down)),
-      'par-v', shapeCell(cell), cell, down));
-  }
-}
-
 // --- Sensors: the sensor's own digit = number of on-loop (non-OFF) cells in the
 // 3x3 box centred on it. Reads [sensorDigit, shape x9]. ---
 const sensorMachine = NFA.encodeSpec({
@@ -137,17 +108,46 @@ const sensorMachine = NFA.encodeSpec({
   },
   accept: ({ target, count }) => target !== null && count === target,
 }, geometry.numValues);
-for (const s of sensors) {
-  const box = graph.block(graph.step(s, -1, -1), 3, 3);
-  add(new NFA(sensorMachine, 'sensor', s, ...box.map(shapeCell)));
-}
 
-// --- A station's digit = total stations holding that digit. ---
-add(new CountingCircles(...stations));
-
-// --- Greater-than symbols (point at the smaller number). ---
-add(new GreaterThan('R6C3', 'R6C4'));
-add(new GreaterThan('R1C4', 'R1C5'));
-add(new GreaterThan('R2C9', 'R2C8'));
-
-return constraints;
+return [
+  new Shape('9x9'),
+  shape.toVar('shape'),
+  new Replicate([new Given(shapeOrigin, ...ALL_SHAPES)],
+    Replicate.encodeTargetCells(shape.cells(), shapeOrigin, shape), shapeOrigin),
+  ...gridCells.flatMap(cell => {
+    const f = forbidden.get(cell);
+    const allowed = ALL_SHAPES.filter(s =>
+      !(f.has('U') && usesUp(s)) && !(f.has('D') && usesDown(s)) &&
+      !(f.has('L') && usesLeft(s)) && !(f.has('R') && usesRight(s)) &&
+      !(stationSet.has(cell) && s === OFF));
+    return allowed.length !== ALL_SHAPES.length ? [new Given(shapeCell(cell), ...allowed)] : [];
+  }),
+  new Replicate([new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
+    Replicate.encodeTargetCells(rightTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')),
+  new Replicate([new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
+    Replicate.encodeTargetCells(downTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')),
+  ...gridCells.flatMap(cell => {
+    const result = [];
+    const right = graph.step(cell, 0, 1);
+    const down = graph.step(cell, 1, 0);
+    if (right) {
+      result.push(new NFA(parityEdge(usesRight, isMirror(cell), isMirror(right)),
+        'par-h', shapeCell(cell), cell, right));
+    }
+    if (down) {
+      result.push(new NFA(parityEdge(usesDown, isMirror(cell), isMirror(down)),
+        'par-v', shapeCell(cell), cell, down));
+    }
+    return result;
+  }),
+  ...sensors.map(s => {
+    const box = graph.block(graph.step(s, -1, -1), 3, 3);
+    return new NFA(sensorMachine, 'sensor', s, ...box.map(shapeCell));
+  }),
+  // --- A station's digit = total stations holding that digit. ---
+  new CountingCircles(...stations),
+  // --- Greater-than symbols (point at the smaller number). ---
+  new GreaterThan('R6C3', 'R6C4'),
+  new GreaterThan('R1C4', 'R1C5'),
+  new GreaterThan('R2C9', 'R2C8'),
+];

@@ -20,28 +20,25 @@ const MARKS = [
 
 const column = (c) => Array.from({ length: 9 }, (_, r) => makeCellId(r + 1, c));
 
-const constraints = [];
-
 // Given digit from the puzzle: marked cell R4C6 = 1.
-constraints.push(new Given('R4C6', 1));
-
 // The nine marked cells are a permutation of 1-9.
-constraints.push(new AllDifferent(...MARKS.map(([r, c]) => makeCellId(r, c))));
-
 // Self-referential modular rule.
 // N=1 (Modular(1) always true) and N=9 (whole-column permutation always
 // distinct mod 9) impose nothing, so skip them; keep N=2..8.
-for (const [r, c] of MARKS) {
-  const m = makeCellId(r, c);
-  const col = column(c);
-  for (let N = 2; N <= 8; N++) {
-    const notN = [];
-    for (let v = 1; v <= 9; v++) if (v !== N) notN.push(v);
-    constraints.push(new Or([
-      new Given(m, ...notN),          // marked cell != N ...
-      new Modular(N, ...col),         // ... or column is a Modular(N) line
-    ]));
-  }
-}
-
-return constraints;
+return [
+  new Shape('9x9'),
+  new Given('R4C6', 1),
+  new AllDifferent(...MARKS.map(([r, c]) => makeCellId(r, c))),
+  ...MARKS.flatMap(([r, c]) => {
+    const m = makeCellId(r, c);
+    const col = column(c);
+    return Array.from({ length: 7 }, (_, n) => {
+      const N = n + 2; // N from 2 to 8
+      const notN = Array.from({ length: 9 }, (_, v) => v + 1).filter(v => v !== N);
+      return new Or([
+        new Given(m, ...notN),          // marked cell != N ...
+        new Modular(N, ...col),         // ... or column is a Modular(N) line
+      ]);
+    });
+  }),
+];

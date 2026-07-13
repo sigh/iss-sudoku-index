@@ -27,18 +27,6 @@ const whiteDots = [
   ['R4C6', 'R5C6'],
 ];
 
-const constraints = [
-  new Shape('9x9'),
-];
-
-for (const cells of arrows) {
-  constraints.push(new Arrow(...cells));
-}
-
-for (const [a, b] of whiteDots) {
-  constraints.push(new WhiteDot(a, b));
-}
-
 // Golden cells are every cell that lies on an arrow.
 const goldenCells = new Set();
 for (const cells of arrows) {
@@ -49,15 +37,21 @@ for (const cells of arrows) {
 const graph = cellGraph('9x9');
 const notConsecutiveKey = Pair.fnToKey((a, b) => Math.abs(a - b) !== 1, 9);
 const seenEdges = new Set();
+const notConsecutiveConstraints = [];
 for (const cell of goldenCells) {
   for (const neighbour of graph.neighbours(cell)) {
     if (!goldenCells.has(neighbour)) continue;
     const edgeKey = [cell, neighbour].sort().join('-');
     if (seenEdges.has(edgeKey)) continue;
     seenEdges.add(edgeKey);
-    constraints.push(
+    notConsecutiveConstraints.push(
       new Pair(notConsecutiveKey, 'golden not consecutive', cell, neighbour));
   }
 }
 
-return constraints;
+return [
+  new Shape('9x9'),
+  ...arrows.map(cells => new Arrow(...cells)),
+  ...whiteDots.map(([a, b]) => new WhiteDot(a, b)),
+  ...notConsecutiveConstraints,
+];

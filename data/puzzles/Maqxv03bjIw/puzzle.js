@@ -31,7 +31,16 @@ const cages = [
   ['R8C2', 'R8C3'],
 ];
 
-const constraints = [
+// "small" is not a subset of "other": some cell of "small" differs from
+// every cell of "other".
+function notSubsetConstraint(small, other) {
+  if (small.length === 1) {
+    return new AllDifferent(small[0], ...other);
+  }
+  return new Or(small.map(cell => new AllDifferent(cell, ...other)));
+}
+
+return [
   new Shape('9x9'),
   new Given('R1C4', 3),
   new Given('R2C2', 2),
@@ -45,29 +54,18 @@ const constraints = [
   new Given('R8C7', 9),
   new Given('R8C8', 8),
   new Given('R9C6', 6),
+  // Digits within a cage do not repeat.
+  ...cages.map(cage => new AllDifferent(...cage)),
+  ...(() => {
+    const result = [];
+    for (let i = 0; i < cages.length; i++) {
+      for (let j = i + 1; j < cages.length; j++) {
+        const a = cages[i];
+        const b = cages[j];
+        const [small, other] = a.length <= b.length ? [a, b] : [b, a];
+        result.push(notSubsetConstraint(small, other));
+      }
+    }
+    return result;
+  })(),
 ];
-
-// Digits within a cage do not repeat.
-for (const cage of cages) {
-  constraints.push(new AllDifferent(...cage));
-}
-
-// "small" is not a subset of "other": some cell of "small" differs from
-// every cell of "other".
-function notSubsetConstraint(small, other) {
-  if (small.length === 1) {
-    return new AllDifferent(small[0], ...other);
-  }
-  return new Or(small.map(cell => new AllDifferent(cell, ...other)));
-}
-
-for (let i = 0; i < cages.length; i++) {
-  for (let j = i + 1; j < cages.length; j++) {
-    const a = cages[i];
-    const b = cages[j];
-    const [small, other] = a.length <= b.length ? [a, b] : [b, a];
-    constraints.push(notSubsetConstraint(small, other));
-  }
-}
-
-return constraints;

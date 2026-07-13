@@ -14,15 +14,15 @@
 // 2 = shaded); the local "no 2x2 area is monochrome" rule; and, for the 9
 // lines whose geometry is unambiguous, "the line contains both shades".
 //
-// OMITTED: (1) global orthogonal connectivity of the shaded region and of
-// the unshaded region -- ISS has no general "these Var-labelled cells form
-// one connected component" constraint. (2) Segment sums, the
-// no-repeat-digit-per-segment rule, and the segment-counter digits --
-// segment boundaries are dynamic (defined by the unknown shade Var along
-// each line), which needs NFA state well past the engine's fixed budget for
-// lines/loops of comparable size. (3) "Every line contains both shades" for
-// the two lines that cross at R1C3 -- their true drawn structure is
-// ambiguous, so both are left unconstrained.
+// ENCODED HERE (continued): global Yin-Yang connectivity -- one
+// ConnectedValues constraint per shade over the whole-grid shade overlay.
+//
+// OMITTED: (1) Segment sums, the no-repeat-digit-per-segment rule, and the
+// segment-counter digits -- segment boundaries are dynamic (defined by the
+// unknown shade Var along each line), which needs NFA state well past the
+// engine's fixed budget for lines/loops of comparable size. (2) "Every line
+// contains both shades" for the two lines that cross at R1C3 -- their true
+// drawn structure is ambiguous, so both are left unconstrained.
 
 const graph = cellGraph('9x9');
 const shade = graph.makeOverlay('VS');
@@ -31,14 +31,6 @@ const gridCells = graph.cells();
 
 const UNSHADED = 1;
 const SHADED = 2;
-
-const constraints = [
-  new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-];
-const add = (...cs) => constraints.push(...cs);
-
-for (const cell of gridCells) add(new Given(shadeOf(cell), UNSHADED, SHADED));
 
 // Reusable "not all the same value" NFA over a 2-valued domain.
 const notAllSameNFA = NFA.encodeSpec({
@@ -61,11 +53,6 @@ for (let r = 1; r <= 8; r++) {
     monoBlockAnchors.push(shadeOf(makeCellId(r, c)));
   }
 }
-add(new Replicate(
-  [monoBlockTemplate],
-  Replicate.encodeTargetCells(monoBlockAnchors, monoBlockOrigin, shade),
-  monoBlockOrigin,
-));
 
 // Every line contains shaded and unshaded cells -- applied to the 9 lines
 // whose geometry is unambiguous (see the header comment for the 2 excluded
@@ -81,8 +68,31 @@ const linesWithConfirmedShapeOnly = [
   ['R2C4', 'R3C4', 'R4C3', 'R4C4', 'R5C4'],
   ['R4C6', 'R4C5', 'R5C5', 'R6C5', 'R7C4', 'R7C3', 'R7C2', 'R8C2', 'R9C1'],
 ];
-for (const line of linesWithConfirmedShapeOnly) {
-  add(new NFA(notAllSameNFA, 'line-both-shades', ...line.map(shadeOf)));
+
+// Every cell is UNSHADED or SHADED: one Given template stamped over every
+// grid cell via the shade overlay.
+function shadeDomainConstraints() {
+  const targets = gridCells.map(shadeOf);
+  return [new Replicate(
+    [new Given(targets[0], UNSHADED, SHADED)],
+    Replicate.encodeTargetCells(targets, targets[0], shade),
+    targets[0])];
 }
 
-return constraints;
+return [
+  new Shape('9x9'),
+  shade.toVar('yin-yang shade'),
+  ...shadeDomainConstraints(),
+  new Replicate(
+    [monoBlockTemplate],
+    Replicate.encodeTargetCells(monoBlockAnchors, monoBlockOrigin, shade),
+    monoBlockOrigin,
+  ),
+  // Yin-Yang global connectivity: shaded cells form one orthogonally-connected
+  // region, and unshaded cells form another.
+  new ConnectedValues('VS', SHADED),
+  new ConnectedValues('VS', UNSHADED),
+  ...linesWithConfirmedShapeOnly.map(line =>
+    new NFA(notAllSameNFA, 'line-both-shades', ...line.map(shadeOf))
+  ),
+];

@@ -33,10 +33,14 @@ const sandwichClues = [
 ];
 
 const geometry = cellGeometry('9x9');
-const constraints = [new Shape('9x9')];
-for (const cells of renbanLines) constraints.push(new Renban(...cells));
-for (const [value, cells] of sandwichClues) {
-  constraints.push(Sandwich.fromCells(value, cells, geometry));
-}
 
-return constraints;
+const renban = renbanLines.map(cells => new Renban(...cells));
+const sandwiches = sandwichClues.map(([value, cells]) =>
+  Sandwich.fromCells(value, cells, geometry)
+);
+
+return [
+  new Shape('9x9'),
+  ...renban,
+  ...sandwiches,
+];

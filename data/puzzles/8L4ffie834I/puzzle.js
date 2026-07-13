@@ -104,64 +104,91 @@ function pairNFA(lo, hi) {
   }, SENTINEL);
 }
 
-const constraints = [new Shape('6x6', M), VBo.toVar('second digit'), VVo.toVar('cell value')];
-
-// Domains: A digits 0-6; VB digit or sentinel; VV value+1 (index cells <= value 6).
-for (const [r, c] of cells) constraints.push(new Given(cid(r, c), 1, 2, 3, 4, 5, 6, 7));
-for (const [r, c] of cells) constraints.push(new Given(b(cid(r, c)), 1, 2, 3, 4, 5, 6, 7, 8));
-for (const [r, c] of cells) {
-  const hi = (c <= 2) ? 7 : M;           // index cells (cols 1-2): value <= 6
-  const dom = []; for (let x = 1; x <= hi; x++) dom.push(x);
-  constraints.push(new Given(v(cid(r, c)), ...dom));
-}
-
 // Canonicalize the Schrodinger representation (second digit < first) so a pair
 // {x,y} has a single A/VB encoding, removing an A<->VB swap symmetry.
 const canonKey = Pair.fnToKey((a, x) => x === SENTINEL || x < a, M);
-for (const [r, c] of cells) constraints.push(new Pair(canonKey, 'canon', cid(r, c), b(cid(r, c))));
-
-// Value ties.
-for (const [r, c] of cells) {
-  constraints.push(new NFA(valNFA, 'val', cid(r, c), b(cid(r, c)), v(cid(r, c))));
-}
 
 // Group rules (row / column / box) over interleaved [A, VB].
 const inter = list => list.flatMap(([r, c]) => [cid(r, c), b(cid(r, c))]);
-for (let r = 1; r <= 6; r++) {
-  const l = []; for (let c = 1; c <= 6; c++) l.push([r, c]);
-  constraints.push(new NFA(groupNFA, `row${r}`, ...inter(l)));
-}
-for (let c = 1; c <= 6; c++) {
-  const l = []; for (let r = 1; r <= 6; r++) l.push([r, c]);
-  constraints.push(new NFA(groupNFA, `col${c}`, ...inter(l)));
-}
-for (const [br, r0] of [1, 3, 5].entries()) for (const [bc, c0] of [1, 4].entries()) {
-  const l = [];
-  for (let dr = 0; dr < 2; dr++) for (let dc = 0; dc < 3; dc++) l.push([r0 + dr, c0 + dc]);
-  constraints.push(new NFA(groupNFA, `box${br}${bc}`, ...inter(l)));
-}
-
-// Index cells: all of columns 1 and 2, one machine each per row.
-for (let r = 1; r <= 6; r++) {
-  const row = []; for (let c = 1; c <= 6; c++) row.push(v(cid(r, c)));
-  constraints.push(new NFA(idx1, `idx1r${r}`, ...row));
-  constraints.push(new NFA(idx2, `idx2r${r}`, ...row));
-}
 
 // Pair-distinctness across the whole grid.
 const allInter = inter(cells);
+
+// Domains: A digits 0-6; VB digit or sentinel; VV value+1 (index cells <= value 6).
+const domainConstraints = [
+  ...cells.map(([r, c]) => new Given(cid(r, c), 1, 2, 3, 4, 5, 6, 7)),
+  ...cells.map(([r, c]) => new Given(b(cid(r, c)), 1, 2, 3, 4, 5, 6, 7, 8)),
+  ...cells.map(([r, c]) => {
+    const hi = (c <= 2) ? 7 : M;           // index cells (cols 1-2): value <= 6
+    const dom = []; for (let x = 1; x <= hi; x++) dom.push(x);
+    return new Given(v(cid(r, c)), ...dom);
+  }),
+];
+
+const canonConstraints = cells.map(([r, c]) => new Pair(canonKey, 'canon', cid(r, c), b(cid(r, c))));
+
+// Value ties.
+const valueTieConstraints = cells.map(([r, c]) =>
+  new NFA(valNFA, 'val', cid(r, c), b(cid(r, c)), v(cid(r, c)))
+);
+
+// Group rules (row / column / box) over interleaved [A, VB].
+const rowConstraints = Array.from({length: 6}, (_, i) => {
+  const r = i + 1;
+  const l = Array.from({length: 6}, (_, j) => [r, j + 1]);
+  return new NFA(groupNFA, `row${r}`, ...inter(l));
+});
+
+const colConstraints = Array.from({length: 6}, (_, i) => {
+  const c = i + 1;
+  const l = Array.from({length: 6}, (_, j) => [j + 1, c]);
+  return new NFA(groupNFA, `col${c}`, ...inter(l));
+});
+
+const boxConstraints = [1, 3, 5].flatMap((r0, br) =>
+  [1, 4].map((c0, bc) => {
+    const l = [];
+    for (let dr = 0; dr < 2; dr++) for (let dc = 0; dc < 3; dc++) l.push([r0 + dr, c0 + dc]);
+    return new NFA(groupNFA, `box${br}${bc}`, ...inter(l));
+  })
+);
+
+// Index cells: all of columns 1 and 2, one machine each per row.
+const indexConstraints = Array.from({length: 6}, (_, i) => {
+  const r = i + 1;
+  const row = Array.from({length: 6}, (_, j) => v(cid(r, j + 1)));
+  return [
+    new NFA(idx1, `idx1r${r}`, ...row),
+    new NFA(idx2, `idx2r${r}`, ...row),
+  ];
+}).flat();
+
+// Pair-distinctness across the whole grid.
+const pairConstraints = [];
 for (let lo = 0; lo <= 6; lo++) for (let hi = lo + 1; hi <= 6; hi++) {
-  constraints.push(new NFA(pairNFA(lo, hi), `pair${lo}${hi}`, ...allInter));
+  pairConstraints.push(new NFA(pairNFA(lo, hi), `pair${lo}${hi}`, ...allInter));
 }
 
 // Arrows: sum of arm cell VALUES == circle VALUE. With VV = value + 1, the
 // linear form is sum(VV_arm) - VV_bulb = (armLength - 1).
-function arrow(bulb, arm) {
-  constraints.push(new Sum(arm.length - 1, ...arm.map(v), [v(bulb), -1]));
-}
-arrow(cid(5, 1), [cid(4, 2), cid(3, 2), cid(2, 1)]);
-arrow(cid(3, 3), [cid(4, 4), cid(3, 5)]);
-arrow(cid(4, 5), [cid(3, 6), cid(2, 5)]);
-arrow(cid(6, 6), [cid(5, 6), cid(4, 6)]);
+const arrowConstraints = [
+  { bulb: cid(5, 1), arm: [cid(4, 2), cid(3, 2), cid(2, 1)] },
+  { bulb: cid(3, 3), arm: [cid(4, 4), cid(3, 5)] },
+  { bulb: cid(4, 5), arm: [cid(3, 6), cid(2, 5)] },
+  { bulb: cid(6, 6), arm: [cid(5, 6), cid(4, 6)] },
+].map(({bulb, arm}) => new Sum(arm.length - 1, ...arm.map(v), [v(bulb), -1]));
 
-return constraints;
+return [
+  new Shape('6x6', M),
+  VBo.toVar('second digit'),
+  VVo.toVar('cell value'),
+  ...domainConstraints,
+  ...canonConstraints,
+  ...valueTieConstraints,
+  ...rowConstraints,
+  ...colConstraints,
+  ...boxConstraints,
+  ...indexConstraints,
+  ...pairConstraints,
+  ...arrowConstraints,
+];

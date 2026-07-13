@@ -51,7 +51,7 @@ const cages = [
 
 const uniqueCells = (pairs) => [...new Set(pairs.flat())];
 
-const constraints = [
+return [
   new Shape('9x9'),
 
   new Given('R9C5', 7),
@@ -77,5 +77,3 @@ const constraints = [
   ...cages.map((cells) => new Renban(...cells)),
   new AllDifferent(...uniqueCells(cages)),
 ];
-
-return constraints;

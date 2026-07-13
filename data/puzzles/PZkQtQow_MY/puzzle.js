@@ -41,21 +41,12 @@ const category = graph.makeOverlay('VC');
 const catCell = cell => category.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), category.toVar('category')];
-const add = (...newConstraints) => constraints.push(...newConstraints);
-
 // Restrict every category Var to the 6 real category codes (the Var's
 // default domain otherwise runs 1-9, matching the main grid's value range).
 // All 81 Givens share the same value set, so Replicate stamps the template
 // instead of hand-rolling each copy.
 const domainTargets = gridCells.map(catCell);
 const domainOrigin = domainTargets[0];
-add(new Replicate(
-  [new Given(domainOrigin, CATEGORY.NONE, CATEGORY.ARROW, CATEGORY.RSUM,
-    CATEGORY.RENBAN, CATEGORY.DUTCH, CATEGORY.PARITY)],
-  Replicate.encodeTargetCells(domainTargets, domainOrigin, category),
-  domainOrigin,
-));
 
 // Known circled cells (color from the source drawing), fixed to their line
 // category. Exact line paths from each circle are not known.
@@ -66,9 +57,6 @@ const circledCells = {
   RENBAN: ['R8C5', 'R9C1', 'R1C4', 'R2C8'],
   PARITY: ['R8C3', 'R2C2', 'R6C9', 'R8C9', 'R3C9'],
 };
-for (const [categoryName, cells] of Object.entries(circledCells)) {
-  for (const cell of cells) add(new Given(catCell(cell), CATEGORY[categoryName]));
-}
 
 // For a target category: scan all 81 cells in order, reading (category,
 // digit). While category != target, stay in the current mask. When
@@ -90,9 +78,22 @@ const makeCoverageMachine = target => NFA.encodeSpec({
 
 const coverageArgs = [];
 for (const cell of gridCells) coverageArgs.push(catCell(cell), cell);
-for (const [categoryName, target] of Object.entries(CATEGORY)) {
-  if (categoryName === 'NONE') continue;
-  add(new NFA(makeCoverageMachine(target), 'coverage-' + categoryName, ...coverageArgs));
-}
 
-return constraints;
+return [
+  new Shape('9x9'),
+  category.toVar('category'),
+  new Replicate(
+    [new Given(domainOrigin, CATEGORY.NONE, CATEGORY.ARROW, CATEGORY.RSUM,
+      CATEGORY.RENBAN, CATEGORY.DUTCH, CATEGORY.PARITY)],
+    Replicate.encodeTargetCells(domainTargets, domainOrigin, category),
+    domainOrigin,
+  ),
+  ...Object.entries(circledCells).flatMap(([categoryName, cells]) =>
+    cells.map(cell => new Given(catCell(cell), CATEGORY[categoryName]))
+  ),
+  ...Object.entries(CATEGORY)
+    .filter(([categoryName]) => categoryName !== 'NONE')
+    .map(([categoryName, target]) =>
+      new NFA(makeCoverageMachine(target), 'coverage-' + categoryName, ...coverageArgs)
+    ),
+];

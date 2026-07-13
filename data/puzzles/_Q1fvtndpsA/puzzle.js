@@ -3,8 +3,9 @@
 // Video: https://www.youtube.com/watch?v=_Q1fvtndpsA
 // Source: https://sudokupad.app/qc37ejydvj
 
-// Partial encoding: omits only global Yin-Yang connectivity for shaded and
-// unshaded cells. Local shading and clue rules are encoded below.
+// Full encoding. Global Yin-Yang connectivity is one ConnectedValues
+// constraint per shade over the shade overlay; local shading and clue rules
+// are encoded below.
 
 const SHADED = 1;
 const UNSHADED = 2;
@@ -15,32 +16,8 @@ const shade = graph.makeOverlay('VS');
 const shadeCell = cell => shade.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [
-  new Shape('9x9'),
-  shade.toVar('shade'),
-  new Given('R2C6', 6),
-  new Given('R2C8', 8),
-  new Given('R6C2', 7),
-  new Given('R7C6', 5),
-];
-const add = (...items) => constraints.push(...items);
-
 // Every shade Var is either shaded or unshaded.
 const firstShade = shade.cells()[0];
-add(new Replicate([new Given(firstShade, SHADED, UNSHADED)],
-  Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade));
-
-const dots = [
-  ['R1C4', 'R2C4'],
-  ['R4C3', 'R3C3'],
-  ['R7C3', 'R7C4'],
-  ['R7C7', 'R8C7'],
-  ['R3C6', 'R3C7'],
-];
-
-for (const [a, b] of dots) add(new WhiteDot(a, b));
-
-for (const [a, b] of dots) add(new AllDifferent(shadeCell(a), shadeCell(b)));
 
 // No 2x2 block may be all shaded or all unshaded.
 const noMono2x2Machine = NFA.encodeSpec({
@@ -58,12 +35,14 @@ const mono2x2Origin = 'R1C1';
 const mono2x2Targets = gridCells
   .filter(cell => graph.block(cell, 2, 2))
   .map(shadeCell);
-add(new Replicate(
-  [new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...graph.block(mono2x2Origin, 2, 2).map(shadeCell))],
-  Replicate.encodeTargetCells(mono2x2Targets, shadeCell(mono2x2Origin), shade),
-  shadeCell(mono2x2Origin),
-));
+
+const dots = [
+  ['R1C4', 'R2C4'],
+  ['R4C3', 'R3C3'],
+  ['R7C3', 'R7C4'],
+  ['R7C7', 'R8C7'],
+  ['R3C6', 'R3C7'],
+];
 
 const arrows = [
   {
@@ -92,33 +71,60 @@ const arrows = [
   },
 ];
 
-for (const { pill, line } of arrows) {
-  add(new PillArrow(2, ...pill, ...line.slice(1)));
-}
-
 function sightCountConstraint(digitCell, lineCells, index, targetShade) {
   const blocker = targetShade === SHADED ? UNSHADED : SHADED;
-  const branches = [];
-  for (let start = 0; start <= index; start++) {
-    for (let end = index; end < lineCells.length; end++) {
+  const branches = Array.from({ length: index + 1 }, (_, start) =>
+    Array.from({ length: lineCells.length - index }, (_, endOffset) => {
+      const end = index + endOffset;
       const length = end - start + 1;
-      const branch = [new Given(digitCell, length)];
-      for (let i = start; i <= end; i++) {
-        branch.push(new Given(shadeCell(lineCells[i]), targetShade));
-      }
-      if (start > 0) branch.push(new Given(shadeCell(lineCells[start - 1]), blocker));
-      if (end + 1 < lineCells.length) branch.push(new Given(shadeCell(lineCells[end + 1]), blocker));
-      branches.push(new And(branch));
-    }
-  }
+      return new And([
+        new Given(digitCell, length),
+        ...Array.from({ length: end - start + 1 }, (_, i) =>
+          new Given(shadeCell(lineCells[start + i]), targetShade)
+        ),
+        ...(start > 0 ? [new Given(shadeCell(lineCells[start - 1]), blocker)] : []),
+        ...(end + 1 < lineCells.length ? [new Given(shadeCell(lineCells[end + 1]), blocker)] : []),
+      ]);
+    })
+  ).flat();
   return new Or(branches);
 }
 
-for (const { pill } of arrows) {
+const whiteDots = dots.map(([a, b]) => new WhiteDot(a, b));
+
+const shadeDifferences = dots.map(([a, b]) => new AllDifferent(shadeCell(a), shadeCell(b)));
+
+const pillArrows = arrows.map(({ pill, line }) => new PillArrow(2, ...pill, ...line.slice(1)));
+
+const sightCounts = arrows.flatMap(({ pill }) => {
   const tens = parseCellId(pill[0]);
   const ones = parseCellId(pill[1]);
-  add(sightCountConstraint(pill[0], graph.row(pill[0]), tens.col - 1, SHADED));
-  add(sightCountConstraint(pill[1], graph.column(pill[1]), ones.row - 1, UNSHADED));
-}
+  return [
+    sightCountConstraint(pill[0], graph.row(pill[0]), tens.col - 1, SHADED),
+    sightCountConstraint(pill[1], graph.column(pill[1]), ones.row - 1, UNSHADED),
+  ];
+});
 
-return constraints;
+return [
+  new Shape('9x9'),
+  shade.toVar('shade'),
+  new Given('R2C6', 6),
+  new Given('R2C8', 8),
+  new Given('R6C2', 7),
+  new Given('R7C6', 5),
+  new Replicate([new Given(firstShade, SHADED, UNSHADED)],
+    Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade),
+  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
+  new ConnectedValues('VS', SHADED),
+  new ConnectedValues('VS', UNSHADED),
+  ...whiteDots,
+  ...shadeDifferences,
+  new Replicate(
+    [new NFA(noMono2x2Machine, 'no-mono-2x2',
+      ...graph.block(mono2x2Origin, 2, 2).map(shadeCell))],
+    Replicate.encodeTargetCells(mono2x2Targets, shadeCell(mono2x2Origin), shade),
+    shadeCell(mono2x2Origin),
+  ),
+  ...pillArrows,
+  ...sightCounts,
+];

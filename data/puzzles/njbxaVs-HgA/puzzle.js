@@ -40,28 +40,24 @@ const clueCells = [
 const values = graph.makeOverlay('VV', clueCells);
 const val = cell => values.at(cell);
 
-const constraints = [
-  new Shape('9x9'),
-  new Given('R4C6', 5),
-  values.toVar('chameleon value'),
-];
-
 // Bind each clue cell's value Var to its digit: 1-6 keep their digit, 7/8/9
 // take the cell's own row/column/box number.
-for (const cell of clueCells) {
+const chameleonBindings = clueCells.map(cell => {
   const { row, col } = parseCellId(cell);
   const box = boxOf(row, col);
   const key = Pair.fnToKey(
     (digit, value) => value === (
       digit === 7 ? row : digit === 8 ? col : digit === 9 ? box : digit),
     9);
-  constraints.push(new Pair(key, `chameleon value ${cell}`, cell, val(cell)));
-}
+  return new Pair(key, `chameleon value ${cell}`, cell, val(cell));
+});
 
 // Arrows: shaft values sum to the circle's value. (circle cell, then shaft)
-constraints.push(new Arrow(val('R3C1'), val('R2C1'), val('R1C1')));
-constraints.push(new Arrow(val('R6C3'), val('R5C3'), val('R4C3')));
-constraints.push(new Arrow(val('R8C7'), val('R8C8'), val('R8C9')));
+const arrows = [
+  new Arrow(val('R3C1'), val('R2C1'), val('R1C1')),
+  new Arrow(val('R6C3'), val('R5C3'), val('R4C3')),
+  new Arrow(val('R8C7'), val('R8C8'), val('R8C9')),
+];
 
 // Black dots: one value double the other. Decomposed by hand (see header)
 // since BlackDot requires real grid adjacency, which Var cells don't have.
@@ -74,23 +70,41 @@ const dots = [
   ['R5C4', 'R5C5'],
   ['R6C4', 'R6C5'],
 ];
-for (const [a, b] of dots) {
-  constraints.push(new Pair(doubleKey, `chameleon black dot ${a}/${b}`, val(a), val(b)));
-}
+const blackDots = dots.map(([a, b]) =>
+  new Pair(doubleKey, `chameleon black dot ${a}/${b}`, val(a), val(b))
+);
 
 // German whispers lines: adjacent values at least 5 apart (default difference).
-constraints.push(new Whisper(
-  val('R9C2'), val('R9C3'), val('R9C4'), val('R9C5'),
-  val('R9C6'), val('R9C7'), val('R9C8'), val('R9C9')));
-constraints.push(new Whisper(val('R4C7'), val('R4C8'), val('R4C9')));
-constraints.push(new Whisper(val('R6C6'), val('R7C6')));
+const whispers = [
+  new Whisper(
+    val('R9C2'), val('R9C3'), val('R9C4'), val('R9C5'),
+    val('R9C6'), val('R9C7'), val('R9C8'), val('R9C9')),
+  new Whisper(val('R4C7'), val('R4C8'), val('R4C9')),
+  new Whisper(val('R6C6'), val('R7C6')),
+];
 
 // Renban lines: consecutive run, no repeats, in any order.
-constraints.push(new Renban(
-  val('R1C2'), val('R2C2'), val('R3C2'), val('R4C2'),
-  val('R5C2'), val('R6C2'), val('R7C2')));
-constraints.push(new Renban(val('R1C6'), val('R2C6'), val('R3C6')));
-constraints.push(new Renban(val('R2C8'), val('R3C8')));
-constraints.push(new Renban(val('R8C4'), val('R8C5')));
+const renbans = [
+  new Renban(
+    val('R1C2'), val('R2C2'), val('R3C2'), val('R4C2'),
+    val('R5C2'), val('R6C2'), val('R7C2')),
+  new Renban(val('R1C6'), val('R2C6'), val('R3C6')),
+  new Renban(val('R2C8'), val('R3C8')),
+  new Renban(val('R8C4'), val('R8C5')),
+];
 
-return constraints;
+return [
+  new Shape('9x9'),
+  new Given('R4C6', 5),
+  values.toVar('chameleon value'),
+
+  ...chameleonBindings,
+
+  ...arrows,
+
+  ...blackDots,
+
+  ...whispers,
+
+  ...renbans,
+];

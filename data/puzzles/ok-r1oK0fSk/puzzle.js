@@ -35,16 +35,12 @@ const graph = cellGraph('9x9');
 const gridCells = graph.cells();
 const numValues = graph.gridGeometry().numValues;
 
-const constraints = [new Shape('9x9')];
-const add = (...cs) => constraints.push(...cs);
-
 // --- Givens -----------------------------------------------------------
 const givenDigits = {
   R1C3: 6, R1C6: 4, R2C9: 8, R3C1: 7, R7C3: 1,
 };
-for (const [cell, value] of Object.entries(givenDigits)) {
-  add(new Given(cell, value));
-}
+const givens = Object.entries(givenDigits).map(([cell, value]) =>
+  new Given(cell, value));
 
 // --- White dots (Kropki consecutive) -----------------------------------
 const whiteDots = [
@@ -55,7 +51,7 @@ const whiteDots = [
   ['R1C8', 'R2C8'],
   ['R8C4', 'R8C5'],
 ];
-for (const [a, b] of whiteDots) add(new WhiteDot(a, b));
+const whiteDotConstraints = whiteDots.map(([a, b]) => new WhiteDot(a, b));
 
 // --- Trees and tents ----------------------------------------------------
 const treeCells = [
@@ -74,12 +70,10 @@ const DIR_STEPS = [
 
 // pairDir: one Var per tree, values are direction codes toward its tent.
 const pairDirOverlay = graph.makeOverlay('VD', treeCells);
-add(pairDirOverlay.toVar('tree pair direction'));
 const pairDirCell = (tree) => pairDirOverlay.at(tree);
 
 // isTent: one Var per grid cell, 1 = not a tent, 2 = a tent.
 const tentOverlay = graph.makeOverlay('VT');
-add(tentOverlay.toVar('is tent'));
 const tentCell = (cell) => tentOverlay.at(cell);
 
 // For each tree, the candidate (direction, targetCell) pairs: an in-grid
@@ -92,8 +86,12 @@ for (const tree of treeCells) {
     if (target !== null && !treeSet.has(target)) candidates.push({ code, target });
   }
   treeCandidates.set(tree, candidates);
-  add(new Given(pairDirCell(tree), ...candidates.map(c => c.code)));
 }
+
+const pairDirGivens = Array.from(treeCells).map(tree => {
+  const candidates = treeCandidates.get(tree);
+  return new Given(pairDirCell(tree), ...candidates.map(c => c.code));
+});
 
 // Every non-tree cell next to at least one tree: collect the (tree, code)
 // pairs that would point at it.
@@ -106,16 +104,15 @@ for (const tree of treeCells) {
 }
 
 // isTent domain restriction, plus fixed "not a tent" givens.
-for (const cell of gridCells) {
-  add(new Given(tentCell(cell), 1, 2));
-}
-for (const tree of treeCells) {
-  add(new Given(tentCell(tree), 1));
-}
-for (const cell of gridCells) {
-  if (treeSet.has(cell)) continue;
-  if (!incomingByCell.has(cell)) add(new Given(tentCell(cell), 1));
-}
+const tentDomainGivens = Array.from(gridCells).map(cell =>
+  new Given(tentCell(cell), 1, 2));
+
+const treeTentNotTentGivens = Array.from(treeCells).map(tree =>
+  new Given(tentCell(tree), 1));
+
+const noTreeNotTentGivens = Array.from(gridCells)
+  .filter(cell => !treeSet.has(cell) && !incomingByCell.has(cell))
+  .map(cell => new Given(tentCell(cell), 1));
 
 // Matching NFA: reads the pairDir of each incoming tree, then this cell's
 // isTent value. Dies if two trees claim the cell; otherwise forces isTent
@@ -141,27 +138,27 @@ const matchNFA = (codes) => NFA.encodeSpec({
 const matchPairKey = (code) => Pair.fnToKey(
   (dir, isTent) => (dir === code) === (isTent === 2), numValues);
 
-for (const [cell, incoming] of incomingByCell) {
+const matchingConstraints = Array.from(incomingByCell).flatMap(([cell, incoming]) => {
   if (incoming.length === 1) {
     const { tree, code } = incoming[0];
-    add(new Pair(matchPairKey(code), 'tent-match', pairDirCell(tree), tentCell(cell)));
-    continue;
+    return [new Pair(matchPairKey(code), 'tent-match', pairDirCell(tree), tentCell(cell))];
   }
   const codes = incoming.map(x => x.code);
   const args = incoming.map(x => pairDirCell(x.tree));
   args.push(tentCell(cell));
-  add(new NFA(matchNFA(codes), 'tent-match', ...args));
-}
+  return [new NFA(matchNFA(codes), 'tent-match', ...args)];
+});
 
 // No-touch: no two king-adjacent cells are both tents.
 const noBothTents = Pair.fnToKey((a, b) => !(a === 2 && b === 2), numValues);
 const seenPairs = new Set();
+const noTouchConstraints = [];
 for (const cell of gridCells) {
   for (const neighbour of graph.kingNeighbours(cell)) {
     const key = [cell, neighbour].sort().join('|');
     if (seenPairs.has(key)) continue;
     seenPairs.add(key);
-    add(new Pair(noBothTents, 'tent-no-touch', tentCell(cell), tentCell(neighbour)));
+    noTouchConstraints.push(new Pair(noBothTents, 'tent-no-touch', tentCell(cell), tentCell(neighbour)));
   }
 }
 
@@ -179,9 +176,10 @@ const diffOnDirection = (code) => NFA.encodeSpec({
 }, numValues);
 const diffNFAByCode = new Map([LEFT, RIGHT, UP, DOWN].map(c => [c, diffOnDirection(c)]));
 
+const pairDiffConstraints = [];
 for (const tree of treeCells) {
   for (const { code, target } of treeCandidates.get(tree)) {
-    add(new NFA(diffNFAByCode.get(code), 'pair-diff', pairDirCell(tree), tree, target));
+    pairDiffConstraints.push(new NFA(diffNFAByCode.get(code), 'pair-diff', pairDirCell(tree), tree, target));
   }
 }
 
@@ -197,10 +195,25 @@ const countingNFA = (target) => NFA.encodeSpec({
   accept: (s) => s.phase === 'tent' && (s.count === 0 || s.count === target),
 }, numValues);
 
+const countingConstraints = [];
 for (let digit = 1; digit <= numValues; digit++) {
   const args = [];
   for (const cell of gridCells) { args.push(tentCell(cell), cell); }
-  add(new NFA(countingNFA(digit), 'tent-count', ...args));
+  countingConstraints.push(new NFA(countingNFA(digit), 'tent-count', ...args));
 }
 
-return constraints;
+return [
+  new Shape('9x9'),
+  pairDirOverlay.toVar('tree pair direction'),
+  tentOverlay.toVar('is tent'),
+  ...givens,
+  ...whiteDotConstraints,
+  ...pairDirGivens,
+  ...tentDomainGivens,
+  ...treeTentNotTentGivens,
+  ...noTreeNotTentGivens,
+  ...matchingConstraints,
+  ...noTouchConstraints,
+  ...pairDiffConstraints,
+  ...countingConstraints,
+];

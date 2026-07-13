@@ -31,13 +31,8 @@ const lines = [
   ['R9C3', 'R8C4', 'R7C5', 'R6C6', 'R5C7', 'R4C8', 'R3C9'],
 ];
 
-const constraints = [
+return [
   new Given('R4C2', 2),
   new Given('R8C6', 4),
+  ...lines.map(line => new NFA(increasingDifferenceNFA, 'increasing differences', ...line)),
 ];
-
-for (const line of lines) {
-  constraints.push(new NFA(increasingDifferenceNFA, 'increasing differences', ...line));
-}
-
-return constraints;

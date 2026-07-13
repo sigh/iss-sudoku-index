@@ -7,10 +7,10 @@
 //
 // Yin-Yang shading: shade some cells so that all shaded cells are orthogonally
 // connected and all unshaded cells are orthogonally connected. No 2x2 area may
-// be completely shaded or unshaded. This script encodes the local part (a
-// shade Var per cell, restricted to 2 states, plus "no monochrome 2x2").
-// Global single-component connectivity for each colour is a known ISS gap
-// and is NOT encoded here; it is an omitted rule.
+// be completely shaded or unshaded. This script encodes a shade Var per cell
+// (restricted to 2 states), "no monochrome 2x2", and global single-component
+// connectivity for each colour via one ConnectedValues per shade over the
+// whole-grid shade overlay.
 //
 // Line + shading interaction: there is one closed loop (55 of the 81 cells).
 // Walking the loop, every maximal run of consecutively-visited cells that
@@ -43,16 +43,6 @@ const graph = cellGraph('9x9');
 const shade = graph.makeOverlay('VS');
 const shadeAt = cell => shade.at(cell);
 
-const constraints = [
-  new Shape('9x9'),
-  shade.toVar('yin-yang shading'),
-];
-
-// Every cell is either shaded (2) or unshaded (1).
-for (const cell of graph.cells()) {
-  constraints.push(new Given(shadeAt(cell), 1, 2));
-}
-
 // No monochrome 2x2: for every 2x2 block of shade cells, not all four equal.
 const notAllSameSpec = NFA.encodeSpec({
   startState: null,
@@ -71,17 +61,6 @@ const blockTemplate = [
   new NFA(notAllSameSpec, '2x2 block',
     shadeAt('R1C1'), shadeAt('R1C2'), shadeAt('R2C1'), shadeAt('R2C2')),
 ];
-const blockTargets = [];
-for (let r = 1; r <= 8; r++) {
-  for (let c = 1; c <= 8; c++) {
-    blockTargets.push(shadeAt(makeCellId(r, c)));
-  }
-}
-constraints.push(new Replicate(
-  blockTemplate,
-  Replicate.encodeTargetCells(blockTargets, blockOrigin, shade),
-  blockOrigin,
-));
 
 // The closed loop, in path order (55 cells).
 const loopCells = [
@@ -100,29 +79,59 @@ const loopCells = [
 const lap = loopCells.flatMap(cell => [shadeAt(cell), cell]);
 const scanCells = [...lap, ...lap];
 
-// No digit repeats within a segment: one small NFA per digit value.
-for (let d = 1; d <= 9; d++) {
-  const repeatSpec = NFA.encodeSpec({
-    startState: { seenD: false, prevShade: null, awaitingDigit: false },
-    transition: (state, value) => {
-      const { seenD, prevShade, awaitingDigit } = state;
-      if (!awaitingDigit) {
-        // Shade read; the shade Var only ever holds 1 or 2.
-        const s = value;
-        if (s !== 1 && s !== 2) return [];
-        const broke = prevShade !== null && s !== prevShade;
-        return [{ seenD: broke ? false : seenD, prevShade: s, awaitingDigit: true }];
-      }
-      const digit = value;
-      if (digit === d) {
-        if (seenD) return [];
-        return [{ seenD: true, prevShade, awaitingDigit: false }];
-      }
-      return [{ seenD, prevShade, awaitingDigit: false }];
-    },
-    accept: () => true,
-  }, 9);
-  constraints.push(new NFA(repeatSpec, `no repeat ${d}`, ...scanCells));
+// Every cell is either shaded (2) or unshaded (1): one Given template
+// stamped over every grid cell via the shade overlay.
+function shadeDomainConstraints() {
+  const targets = Array.from(graph.cells()).map(shadeAt);
+  return [new Replicate(
+    [new Given(targets[0], 1, 2)],
+    Replicate.encodeTargetCells(targets, targets[0], shade),
+    targets[0])];
 }
 
-return constraints;
+return [
+  new Shape('9x9'),
+  shade.toVar('yin-yang shading'),
+  ...shadeDomainConstraints(),
+  // Global Yin-Yang connectivity: each shade forms one orthogonally-connected
+  // region over the whole-grid shade overlay.
+  new ConnectedValues('VS', 1),
+  new ConnectedValues('VS', 2),
+  new Replicate(
+    blockTemplate,
+    Replicate.encodeTargetCells(
+      Array.from({ length: 8 }, (_, r) =>
+        Array.from({ length: 8 }, (_, c) =>
+          shadeAt(makeCellId(r + 1, c + 1))
+        )
+      ).flat(),
+      blockOrigin,
+      shade
+    ),
+    blockOrigin,
+  ),
+  // No digit repeats within a segment: one small NFA per digit value.
+  ...Array.from({ length: 9 }, (_, d) => {
+    const repeatSpec = NFA.encodeSpec({
+      startState: { seenD: false, prevShade: null, awaitingDigit: false },
+      transition: (state, value) => {
+        const { seenD, prevShade, awaitingDigit } = state;
+        if (!awaitingDigit) {
+          // Shade read; the shade Var only ever holds 1 or 2.
+          const s = value;
+          if (s !== 1 && s !== 2) return [];
+          const broke = prevShade !== null && s !== prevShade;
+          return [{ seenD: broke ? false : seenD, prevShade: s, awaitingDigit: true }];
+        }
+        const digit = value;
+        if (digit === d + 1) {
+          if (seenD) return [];
+          return [{ seenD: true, prevShade, awaitingDigit: false }];
+        }
+        return [{ seenD, prevShade, awaitingDigit: false }];
+      },
+      accept: () => true,
+    }, 9);
+    return new NFA(repeatSpec, `no repeat ${d + 1}`, ...scanCells);
+  }),
+];

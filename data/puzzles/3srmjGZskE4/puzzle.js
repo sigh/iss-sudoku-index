@@ -10,18 +10,16 @@
 // from its even digits (one colour holds all the odds on that line, the
 // other holds all the evens). Digits joined by a white dot are consecutive.
 //
-// Model: a VS shade Var (YIN/YANG) per cell. No-monochrome-2x2 is a local
-// NFA over each 2x2 block of shade cells. The equal (unknown) line total is
-// EqualSum over the 17 lines. The per-line odd/even-by-colour split is
-// modelled as: for every cell, t = (digit parity) XOR (shade bit); a line
-// satisfies the rule exactly when t is the same for every one of its cells
-// (whichever colour ends up as "odds" and whichever as "evens" is free per
-// line, only self-consistency along that one line is required) -- enforced
-// by an NFA that reads each line's cells as interleaved (digit, shade) pairs
-// and checks t stays constant.
-// OMITTED: the global "each colour forms a single connected region"
-// requirement -- ISS has no general connected-component primitive; only the
-// local no-monochrome-2x2 rule is encoded (known constraint-gap).
+// Model: a VS shade Var (YIN/YANG) per cell. Global Yin-Yang connectivity is
+// one ConnectedValues constraint per shade over the shade overlay.
+// No-monochrome-2x2 is a local NFA over each 2x2 block of shade cells. The
+// equal (unknown) line total is EqualSum over the 17 lines. The per-line
+// odd/even-by-colour split is modelled as: for every cell, t = (digit
+// parity) XOR (shade bit); a line satisfies the rule exactly when t is the
+// same for every one of its cells (whichever colour ends up as "odds" and
+// whichever as "evens" is free per line, only self-consistency along that
+// one line is required) -- enforced by an NFA that reads each line's cells
+// as interleaved (digit, shade) pairs and checks t stays constant.
 
 const YIN = 1, YANG = 2;
 const DIGIT_VALUES = 9;
@@ -30,14 +28,6 @@ const graph = cellGraph('9x9');
 const shade = graph.makeOverlay('VS');
 const shadeOf = cell => shade.at(cell);
 const gridCells = graph.cells();
-
-const constraints = [
-  new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-];
-const add = (...cs) => constraints.push(...cs);
-
-for (const cell of gridCells) add(new Given(shadeOf(cell), YIN, YANG));
 
 // --- No 2x2 block of cells is entirely one colour. ---
 const notAllSameNFA = NFA.encodeSpec({
@@ -48,13 +38,14 @@ const notAllSameNFA = NFA.encodeSpec({
   accept: (state) => state !== null && !state.allSame,
 }, YANG);
 const monoOrigin = shadeOf('R1C1');
-add(new Replicate(
-  [new NFA(
-    notAllSameNFA, 'no-monochrome-2x2',
-    shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2'))],
-  Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
-  monoOrigin,
-));
+
+// Every cell is YIN or YANG: one Given template stamped over the whole grid
+// via Replicate instead of 81 identical Givens.
+const shadeCells = gridCells.map(cell => shadeOf(cell));
+const shadeGivens = new Replicate(
+  [new Given(shadeCells[0], YIN, YANG)],
+  Replicate.encodeTargetCells(shadeCells, shadeCells[0], shade),
+  shadeCells[0]);
 
 // --- Lines: drawn as thick white/grey strokes; each pair of cells here is a
 // segment of one such line, read off the decoded waypoints. ---
@@ -78,9 +69,6 @@ const lines = [
   ['R7C8', 'R8C8', 'R9C8'],
 ];
 
-// The digits along each line sum to the same (unknown, deduced) total.
-add(new EqualSum(...lines));
-
 // Along each line, the colouring separates odd digits from even digits: for
 // every cell, t = parity(digit) XOR shadeBit must be the same for every cell
 // on that line (either colour may hold the odds; only per-line consistency
@@ -98,9 +86,43 @@ const lineParityNFA = NFA.encodeSpec({
   },
   accept: (state) => state.phase === 'digit',
 }, DIGIT_VALUES);
-for (const line of lines) add(new NFA(lineParityNFA, 'line-parity-split', ...dsFlat(line)));
 
-// --- White dot: digits are consecutive. ---
-add(new WhiteDot('R5C6', 'R6C6'));
+return [
+  new Shape('9x9'),
+  shade.toVar('yin-yang shade'),
 
-return constraints;
+  shadeGivens,
+
+  // --- Global Yin-Yang connectivity: each colour forms one connected region. ---
+  new ConnectedValues('VS', YIN),
+  new ConnectedValues('VS', YANG),
+
+  // The rules never name which colour is which -- every constraint above is
+  // exactly invariant under swapping YIN<->YANG everywhere, so any solution's
+  // full swap is also a solution with the identical digit grid and physical
+  // partition, just the two arbitrary colour names exchanged. Pin one
+  // reference cell so the model reports that single canonical labeling
+  // instead of counting the meaningless relabeling as a second solution.
+  new Given(shadeOf('R1C1'), YIN),
+
+  // --- No 2x2 block of cells is entirely one colour. ---
+  new Replicate(
+    [new NFA(
+      notAllSameNFA, 'no-monochrome-2x2',
+      shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2'))],
+    Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
+    monoOrigin,
+  ),
+
+  // The digits along each line sum to the same (unknown, deduced) total.
+  new EqualSum(...lines),
+
+  // Along each line, the colouring separates odd digits from even digits: for
+  // every cell, t = parity(digit) XOR shadeBit must be the same for every cell
+  // on that line (either colour may hold the odds; only per-line consistency
+  // is required). Reads each line's cells as interleaved (digit, shade) pairs.
+  ...lines.map(line => new NFA(lineParityNFA, 'line-parity-split', ...dsFlat(line))),
+
+  // --- White dot: digits are consecutive. ---
+  new WhiteDot('R5C6', 'R6C6'),
+];

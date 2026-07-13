@@ -8,16 +8,6 @@
 
 const southVar = new Var('S', 'South Side grid', 81);
 
-const constraints = [
-  new Shape('9x9'),
-
-  new Given('R1C2', 5),
-  new Given('R6C2', 8),
-  new Given('R7C4', 4),
-
-  southVar,
-];
-
 function southCell(row, col) {
   return southVar.cell((row - 1) * 9 + col);
 }
@@ -36,41 +26,31 @@ const allDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const southLocator = cellGraph('9x9').makeOverlay('VS');
 const southTargets = southLocator.cells();
 const southOrigin = southTargets[0];
-constraints.push(new Replicate(
-  [new Given(southOrigin, ...allDigits)],
-  Replicate.encodeTargetCells(southTargets, southOrigin, southLocator),
-  southOrigin,
-));
 
-constraints.push(
-  new Given(southCell(5, 1), 1),
-  new Given(southCell(5, 6), 2),
-  new Given(southCell(8, 1), 3),
+const parityKey = Pair.fnToKey((a, b) => (a % 2) !== (b % 2), 9);
+const slowThermoKey = Pair.fnToKey((a, b) => a <= b, 9);
+const nabnerKey = PairX.fnToKey((a, b) => Math.abs(a - b) > 1, 9);
+
+const southRows = Array.from({ length: 9 }, (_, row) =>
+  new AllDifferent(...allDigits.map(col => southCell(row + 1, col)))
 );
 
-for (let row = 1; row <= 9; row++) {
-  constraints.push(new AllDifferent(...allDigits.map(col => southCell(row, col))));
-}
+const southCols = Array.from({ length: 9 }, (_, col) =>
+  new AllDifferent(...allDigits.map(row => southCell(row, col + 1)))
+);
 
-for (let col = 1; col <= 9; col++) {
-  constraints.push(new AllDifferent(...allDigits.map(row => southCell(row, col))));
-}
-
+const southBoxes = [];
 for (let row0 = 1; row0 <= 7; row0 += 3) {
   for (let col0 = 1; col0 <= 7; col0 += 3) {
     const box = [];
     for (let dr = 0; dr < 3; dr++) {
       for (let dc = 0; dc < 3; dc++) box.push(southCell(row0 + dr, col0 + dc));
     }
-    constraints.push(new AllDifferent(...box));
+    southBoxes.push(new AllDifferent(...box));
   }
 }
 
-const parityKey = Pair.fnToKey((a, b) => (a % 2) !== (b % 2), 9);
-const slowThermoKey = Pair.fnToKey((a, b) => a <= b, 9);
-const nabnerKey = PairX.fnToKey((a, b) => Math.abs(a - b) > 1, 9);
-
-constraints.push(
+const northConstraints = [
   // North brown slow thermo, from bulb R9C9.
   new Pair(
     slowThermoKey,
@@ -108,9 +88,9 @@ constraints.push(
 
   // North pink renban line.
   new Renban('R9C7', 'R9C8'),
-);
+];
 
-constraints.push(
+const southConstraints = [
   // South pink renban line.
   new Renban(...southCells([
     [1, 7], [1, 6], [1, 5], [2, 5], [3, 5], [3, 4], [3, 3], [3, 2],
@@ -143,9 +123,9 @@ constraints.push(
   new Whisper(...southCells([
     [7, 7], [7, 8], [7, 9], [6, 9], [5, 9], [4, 9], [3, 9],
   ])),
-);
+];
 
-constraints.push(
+const loopOverlap = [
   // Loop overlap recovered from the source example N R9C7 = S R1C6 and the
   // loop marker alignment N R9C9 = S R1C8.
   new SameValues(2, 'R9C2', southCell(1, 1)),
@@ -159,6 +139,36 @@ constraints.push(
 
   // Airplane cells match across both puzzles.
   new SameValues(2, 'R4C1', southCell(9, 1)),
-);
+];
 
-return constraints;
+return [
+  new Shape('9x9'),
+
+  new Given('R1C2', 5),
+  new Given('R6C2', 8),
+  new Given('R7C4', 4),
+
+  southVar,
+
+  new Replicate(
+    [new Given(southOrigin, ...allDigits)],
+    Replicate.encodeTargetCells(southTargets, southOrigin, southLocator),
+    southOrigin,
+  ),
+
+  new Given(southCell(5, 1), 1),
+  new Given(southCell(5, 6), 2),
+  new Given(southCell(8, 1), 3),
+
+  ...southRows,
+
+  ...southCols,
+
+  ...southBoxes,
+
+  ...northConstraints,
+
+  ...southConstraints,
+
+  ...loopOverlap,
+];

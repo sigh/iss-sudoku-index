@@ -4,8 +4,8 @@
 .Renban~R4C9~R3C9~R2C9~R1C9~R1C8~R1C7~R1C6
 .Var~C~Color~61
 .~VC1_2~VC5_2~VC9_2~VC19_1~VC29_3~VC32_2~VC34_2~VC49_2~VC53_2~VC57_2~VC61_2
-.Replicate~39f_36_f3d~VC2
-.~VC2_1_2_3
+.Replicate~__________B~VC1
+.~VC1_1_2_3
 .End
 .And
 .AllDifferent~VC1~VC2

@@ -55,46 +55,7 @@ const whisperKey = (positionA, positionB) => {
 
 const gatedKey = Pair.fnToKey((a, b) => Math.abs(a - b) < 5, 9);
 
-const constraints = [new Shape('9x9')];
 const cells = graph.cells();
-
-for (const top of graph.column('R1C1')) {
-  const row = graph.row(top);
-  constraints.push(new NFA(
-    exactOneDoublerKey(row.map(positionInBox)),
-    'one doubler in row',
-    ...row,
-  ));
-}
-
-for (const top of graph.row('R1C1')) {
-  const column = graph.column(top);
-  constraints.push(new NFA(
-    exactOneDoublerKey(column.map(positionInBox)),
-    'one doubler in column',
-    ...column,
-  ));
-}
-
-for (let digit = 1; digit <= 9; digit++) {
-  constraints.push(new NFA(
-    exactOneDigitDoubledKey(digit),
-    `digit ${digit} doubled once`,
-    ...cells.filter(cell => positionInBox(cell) === digit),
-  ));
-}
-
-for (const cell of cells) {
-  const positionA = positionInBox(cell);
-  constraints.push(new Or(graph.neighbours(cell).map(neighbour =>
-    new Pair(
-      whisperKey(positionA, positionInBox(neighbour)),
-      'whispering neighbours',
-      cell,
-      neighbour,
-    )
-  )));
-}
 
 const cageIndex = new Map();
 for (let i = 0; i < CAGES.length; i++) {
@@ -102,14 +63,53 @@ for (let i = 0; i < CAGES.length; i++) {
 }
 
 const seenBorders = new Set();
+const gatedBorders = [];
 for (const cell of cageIndex.keys()) {
   for (const neighbour of graph.neighbours(cell)) {
     if (cageIndex.get(neighbour) === cageIndex.get(cell)) continue;
     const edge = [cell, neighbour].sort().join('-');
     if (seenBorders.has(edge)) continue;
     seenBorders.add(edge);
-    constraints.push(new Pair(gatedKey, 'gated community border', cell, neighbour));
+    gatedBorders.push(new Pair(gatedKey, 'gated community border', cell, neighbour));
   }
 }
 
-return constraints;
+return [
+  new Shape('9x9'),
+  ...graph.column('R1C1').map(top => {
+    const row = graph.row(top);
+    return new NFA(
+      exactOneDoublerKey(row.map(positionInBox)),
+      'one doubler in row',
+      ...row,
+    );
+  }),
+  ...graph.row('R1C1').map(top => {
+    const column = graph.column(top);
+    return new NFA(
+      exactOneDoublerKey(column.map(positionInBox)),
+      'one doubler in column',
+      ...column,
+    );
+  }),
+  ...Array.from({ length: 9 }, (_, i) => {
+    const digit = i + 1;
+    return new NFA(
+      exactOneDigitDoubledKey(digit),
+      `digit ${digit} doubled once`,
+      ...cells.filter(cell => positionInBox(cell) === digit),
+    );
+  }),
+  ...cells.map(cell => {
+    const positionA = positionInBox(cell);
+    return new Or(graph.neighbours(cell).map(neighbour =>
+      new Pair(
+        whisperKey(positionA, positionInBox(neighbour)),
+        'whispering neighbours',
+        cell,
+        neighbour,
+      )
+    ));
+  }),
+  ...gatedBorders,
+];

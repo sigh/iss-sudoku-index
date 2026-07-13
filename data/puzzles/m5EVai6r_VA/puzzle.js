@@ -80,10 +80,10 @@ const pieceCountNFA = isMatch => NFA.encodeSpec({
 const whiteNFA = pieceCountNFA((value, target) => value !== target);
 const blackNFA = pieceCountNFA((value, target) => value === target);
 
-const constraints = [new Shape('9x9')];
-for (const { cell, color, piece, targets } of pieces) {
-  const spec = color === 'W' ? whiteNFA : blackNFA;
-  constraints.push(new NFA(spec, `${color === 'W' ? 'white' : 'black'}-${piece}-${cell}`, cell, ...targets));
-}
-
-return constraints;
+return [
+  new Shape('9x9'),
+  ...pieces.map(({ cell, color, piece, targets }) => {
+    const spec = color === 'W' ? whiteNFA : blackNFA;
+    return new NFA(spec, `${color === 'W' ? 'white' : 'black'}-${piece}-${cell}`, cell, ...targets);
+  }),
+];

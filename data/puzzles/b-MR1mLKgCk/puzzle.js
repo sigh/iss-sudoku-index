@@ -59,24 +59,18 @@ const battenburgNFA = (mustMatch) => NFA.encodeSpec({
 const battenburgMatchNFA = battenburgNFA(true);
 const battenburgNoMatchNFA = battenburgNFA(false);
 
-const constraints = [];
-
-for (const [cell, val] of givens) constraints.push(new Given(cell, val));
-
-for (const [cells, total] of littleKillers) {
-  constraints.push(LittleKiller.fromCells(total, cells, geometry));
-}
-
 // Battenburg-marked intersections: only 8 of them, so they stay as individual
 // NFA constraints (Replicate is not worth it below that count).
+const battenburgMarkedConstraints = [];
 for (let row = 1; row <= 8; row++) {
   for (let col = 1; col <= 8; col++) {
     const tl = makeCellId(row, col);
-    if (!battenburgMarked.has(tl)) continue;
-    constraints.push(new NFA(
-      battenburgMatchNFA, 'Battenburg',
-      tl, makeCellId(row, col + 1),
-      makeCellId(row + 1, col), makeCellId(row + 1, col + 1)));
+    if (battenburgMarked.has(tl)) {
+      battenburgMarkedConstraints.push(new NFA(
+        battenburgMatchNFA, 'Battenburg',
+        tl, makeCellId(row, col + 1),
+        makeCellId(row + 1, col), makeCellId(row + 1, col + 1)));
+    }
   }
 }
 
@@ -92,11 +86,17 @@ for (let row = 1; row <= 8; row++) {
     if (!battenburgMarked.has(tl)) noBattenburgTargets.push(tl);
   }
 }
-constraints.push(new Replicate(
+const battenburgNoMatchConstraint = new Replicate(
   [new NFA(
     battenburgNoMatchNFA, 'NoBattenburg',
     noBattenburgOrigin, makeCellId(1, 3), makeCellId(2, 2), makeCellId(2, 3))],
   Replicate.encodeTargetCells(noBattenburgTargets, noBattenburgOrigin, graph),
-  noBattenburgOrigin));
+  noBattenburgOrigin);
 
-return constraints;
+return [
+  new Shape('9x9'),
+  ...givens.map(([cell, val]) => new Given(cell, val)),
+  ...littleKillers.map(([cells, total]) => LittleKiller.fromCells(total, cells, geometry)),
+  ...battenburgMarkedConstraints,
+  battenburgNoMatchConstraint,
+];

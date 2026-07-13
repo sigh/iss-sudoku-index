@@ -3,8 +3,12 @@
 // Video: https://www.youtube.com/watch?v=LYNLwiEYIYA
 // Source: https://sudokupad.app/l00604nlbr
 
-// Partial ISS model: all local loop-shape rules are encoded, but ISS has no
-// native single-component connectivity constraint for the unknown loop.
+// The loop shape Var forces every on-loop cell to have exactly two on-loop
+// orthogonal neighbours (edge agreement + shape codes), so the on-loop cell
+// adjacency graph is exactly 2-regular. ConnectedValues over the same layer
+// forces that graph to be connected, and a connected 2-regular graph is
+// necessarily a single simple cycle -- this soundly and completely encodes
+// the "single route ... closes into a loop" rule.
 
 const OFF = 1;
 const HORIZ = 2;
@@ -30,12 +34,6 @@ const geometry = graph.gridGeometry();
 const shape = graph.makeOverlay('VS');
 const shapeCell = cell => shape.at(cell);
 const gridCells = graph.cells();
-
-const constraints = [
-  new Shape('9x9'),
-  shape.toVar('loop shape'),
-];
-const add = (...items) => constraints.push(...items);
 
 const whiteDotEdges = [
   ['R5C6', 'R5C7'],
@@ -95,10 +93,13 @@ function allowedShapes(cell) {
 
 // Every shape Var uses only loop-shape codes compatible with the border and
 // black-hole borders. Planets must be on the loop.
-for (const cell of gridCells) add(new Given(shapeCell(cell), ...allowedShapes(cell)));
-for (const cell of planets) add(new Given(shapeCell(cell), HORIZ, VERT, UL, UR, DL, DR));
+const shapeConstraints = gridCells.map(cell =>
+  new Given(shapeCell(cell), ...allowedShapes(cell)));
+const planetConstraints = planets.map(cell =>
+  new Given(shapeCell(cell), HORIZ, VERT, UL, UR, DL, DR));
 
-for (const [a, b] of whiteDotEdges) add(new WhiteDot(a, b));
+const whiteDotConstraints = whiteDotEdges.map(([a, b]) =>
+  new WhiteDot(a, b));
 
 // 2-cell relation: the first cell uses the edge (fromA) iff the second uses
 // it back (fromB).
@@ -128,20 +129,22 @@ const nonConsecutiveDown = [
   loopNonConsecutive(usesDown, true),
 ];
 
-for (const cell of gridCells) {
+const edgeConstraints = gridCells.flatMap(cell => {
+  const result = [];
   const right = graph.step(cell, 0, 1);
   const down = graph.step(cell, 1, 0);
   if (right) {
     const isWhiteDot = whiteDotKeys.has(edgeKey(cell, right));
-    add(new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)));
-    add(new NFA(nonConsecutiveRight[isWhiteDot ? 1 : 0], 'loop-nc-h', shapeCell(cell), cell, right));
+    result.push(new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)));
+    result.push(new NFA(nonConsecutiveRight[isWhiteDot ? 1 : 0], 'loop-nc-h', shapeCell(cell), cell, right));
   }
   if (down) {
     const isWhiteDot = whiteDotKeys.has(edgeKey(cell, down));
-    add(new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)));
-    add(new NFA(nonConsecutiveDown[isWhiteDot ? 1 : 0], 'loop-nc-v', shapeCell(cell), cell, down));
+    result.push(new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)));
+    result.push(new NFA(nonConsecutiveDown[isWhiteDot ? 1 : 0], 'loop-nc-v', shapeCell(cell), cell, down));
   }
-}
+  return result;
+});
 
 // The Or makes the parity-to-turn mapping global:
 //   ODD_TURNS means odd digits turn and even digits go straight.
@@ -157,10 +160,10 @@ const parityKey = selector => Pair.fnToKey((shapeValue, value) => {
 
 const oddTurnsKey = parityKey(ODD_TURNS);
 const evenTurnsKey = parityKey(EVEN_TURNS);
-add(new Or([
+const parityConstraint = [new Or([
   new And(gridCells.map(cell => new Pair(oddTurnsKey, 'odd-turns', shapeCell(cell), cell))),
   new And(gridCells.map(cell => new Pair(evenTurnsKey, 'even-turns', shapeCell(cell), cell))),
-]));
+])];
 
 const satelliteMachine = NFA.encodeSpec({
   startState: { target: null, count: 0 },
@@ -177,8 +180,22 @@ function centeredBlock(cell) {
   return graph.block(makeCellId(row - 1, col - 1), 3, 3);
 }
 
-for (const cell of satelliteDishes) {
-  add(new NFA(satelliteMachine, 'satellite', cell, ...centeredBlock(cell).map(shapeCell)));
-}
+const satelliteConstraints = satelliteDishes.map(cell =>
+  new NFA(satelliteMachine, 'satellite', cell, ...centeredBlock(cell).map(shapeCell)));
 
-return constraints;
+// Single connected loop: the on-loop cells (all shape codes except OFF) must
+// form one orthogonally-connected region. Combined with the degree-2 shape
+// model above, this forces exactly one simple cycle.
+const connectedLoop = [new ConnectedValues('VS', [HORIZ, VERT, UL, UR, DL, DR])];
+
+return [
+  new Shape('9x9'),
+  shape.toVar('loop shape'),
+  ...shapeConstraints,
+  ...planetConstraints,
+  ...whiteDotConstraints,
+  ...edgeConstraints,
+  ...parityConstraint,
+  ...satelliteConstraints,
+  ...connectedLoop,
+];

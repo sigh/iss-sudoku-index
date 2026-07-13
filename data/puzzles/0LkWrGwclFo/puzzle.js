@@ -5,32 +5,22 @@
 
 // Two Var cells model each unknown circle digit. Each arrow sum is allowed to
 // read those two digits in either order.
-const constraints = [
-  new Shape('9x9'),
-  new Var('Q', 'question mark circle digits', 14),
-];
 const NONDECREASING_PAIR = Pair.fnToKey((a, b) => a <= b, 9);
-
-function add(constraint) {
-  constraints.push(constraint);
-}
 
 function equality(a, b) {
   return new SameValues(2, a, b);
 }
 
 function circleContainsDigits(cells, a, b) {
-  const choices = [];
-  for (const first of cells) {
-    for (const second of cells) {
-      if (first === second) continue;
-      choices.push(new And([
+  const choices = cells.flatMap(first =>
+    cells.flatMap(second =>
+      first === second ? [] : [new And([
         equality(first, a),
         equality(second, b),
-      ]));
-    }
-  }
-  add(new Or(choices));
+      ])]
+    )
+  );
+  return new Or(choices);
 }
 
 function arrowSum(cells, a, b) {
@@ -38,17 +28,17 @@ function arrowSum(cells, a, b) {
 }
 
 function arrowFromCircle(cells, a, b) {
-  add(new Or([
+  return new Or([
     arrowSum(cells, a, b),
     arrowSum(cells, b, a),
-  ]));
+  ]);
 }
 
 function fixedArrowFromCircle(cells, a, b) {
-  add(new Or([
+  return new Or([
     new Sum(10 * a + b, ...cells),
     new Sum(10 * b + a, ...cells),
-  ]));
+  ]);
 }
 
 const circles = [
@@ -104,17 +94,20 @@ const circles = [
   },
 ];
 
-for (const circle of circles) {
+const circleConstraints = circles.flatMap(circle => {
   const [a, b] = circle.digits;
-  add(new Pair(NONDECREASING_PAIR, 'unordered circle digits', a, b));
-  circleContainsDigits(circle.surround, a, b);
-  for (const cells of circle.arrows) {
-    arrowFromCircle(cells, a, b);
-  }
-}
+  return [
+    new Pair(NONDECREASING_PAIR, 'unordered circle digits', a, b),
+    circleContainsDigits(circle.surround, a, b),
+    ...circle.arrows.map(cells => arrowFromCircle(cells, a, b)),
+  ];
+});
 
-add(new Quad('R4C5', 1, 4));
-fixedArrowFromCircle(['R4C6', 'R3C7', 'R3C8'], 1, 4);
-fixedArrowFromCircle(['R4C5', 'R4C4', 'R5C4', 'R6C3', 'R6C2'], 1, 4);
-
-return constraints;
+return [
+  new Shape('9x9'),
+  new Var('Q', 'question mark circle digits', 14),
+  ...circleConstraints,
+  new Quad('R4C5', 1, 4),
+  fixedArrowFromCircle(['R4C6', 'R3C7', 'R3C8'], 1, 4),
+  fixedArrowFromCircle(['R4C5', 'R4C4', 'R5C4', 'R6C3', 'R6C2'], 1, 4),
+];

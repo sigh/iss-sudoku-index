@@ -11,8 +11,12 @@
 // arrows applies the same digit independently to each direction.
 //
 // Loop membership is a Var cell per grid cell (1 = on, 2 = off), shaped into
-// a loop by degree-2 and no-diagonal-touch NFAs, following the same pattern
-// as nordschleife.js. The self-referential "digit on the loop counts itself"
+// a loop by degree-2 and no-diagonal-touch NFAs, plus a ConnectedValues over
+// the on-loop cells: a connected graph that is exactly 2-regular everywhere
+// is necessarily a single simple cycle, so connectivity plus the degree-2
+// NFA together force one loop, soundly ruling out multiple disjoint loops
+// (following the same pattern as nordschleife.js). The self-referential
+// "digit on the loop counts itself"
 // rule is one NFA per digit 1-9 scanning every (membership, digit) pair. Each
 // arrow is one NFA reading the cell's digit then the membership of the ray of
 // cells to the grid edge in that direction.
@@ -27,19 +31,11 @@ const loop = graph.makeOverlay('VL');
 const loopCell = cell => loop.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [
-  new Shape('9x9'),
-  loop.toVar('loop'),
-  new Given('R6C7', 8),
-  new Given('R8C7', 9),
-];
-const add = (...newConstraints) => constraints.push(...newConstraints);
-
 // --- Loop membership: every cell is on (1) or off (2), free unless later
 // rules pin it down.
 const originCell = loop.cells()[0];
-add(new Replicate([new Given(originCell, ON, OFF)],
-  Replicate.encodeTargetCells(loop.cells(), originCell, loop), originCell));
+const loopMembership = new Replicate([new Given(originCell, ON, OFF)],
+  Replicate.encodeTargetCells(loop.cells(), originCell, loop), originCell);
 
 // --- Degree 2: each on-loop cell has exactly two on-loop orthogonal
 // neighbours; off cells are unconstrained. Reads the cell's membership, then
@@ -56,10 +52,9 @@ const degreeMachine = NFA.encodeSpec({
   },
   accept: ({ phase, onNeighbours }) => phase === 'off' || onNeighbours === 2,
 }, geometry.numValues);
-for (const cell of gridCells) {
-  add(new NFA(degreeMachine, 'degree',
+const degreeConstraints = gridCells.map(cell =>
+  new NFA(degreeMachine, 'degree',
     loopCell(cell), ...graph.neighbours(cell).map(loopCell)));
-}
 
 // --- No diagonal self-touch: forbid a 2x2 whose only on cells are a
 // diagonal pair.
@@ -82,12 +77,12 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
 // one NFA per block.
 const noTouchOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noTouchOrigin = noTouchOrigins[0];
-add(new Replicate(
+const noTouchConstraint = new Replicate(
   [new NFA(noDiagonalTouchMachine, 'no-touch',
     ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
   Replicate.encodeTargetCells(
     noTouchOrigins.map(loopCell), loopCell(noTouchOrigin), loop),
-  loopCell(noTouchOrigin)));
+  loopCell(noTouchOrigin));
 
 // --- Loop self-count: for each digit v, the number of on-loop cells holding
 // v is either 0 (v never appears on the loop) or exactly v (v appears on the
@@ -105,10 +100,11 @@ const loopSelfCountMachine = (v) => NFA.encodeSpec({
   },
   accept: ({ phase, count }) => phase === 'mem' && (count === 0 || count === v),
 }, geometry.numValues);
-for (let v = 1; v <= 9; v++) {
-  add(new NFA(loopSelfCountMachine(v), `loop-count-${v}`,
-    ...gridCells.flatMap(cell => [loopCell(cell), cell])));
-}
+const loopSelfCountConstraints = Array.from({ length: 9 }, (_, i) => {
+  const v = i + 1;
+  return new NFA(loopSelfCountMachine(v), `loop-count-${v}`,
+    ...gridCells.flatMap(cell => [loopCell(cell), cell]));
+});
 
 // --- Arrow counts: the arrow cell's digit equals the number of on-loop
 // cells along the ray to the grid edge in the indicated direction, not
@@ -139,10 +135,26 @@ const arrowClues = [
   ['R8C1', 'right'],
   ['R9C5', 'left'],
 ];
-for (const [cell, dirName] of arrowClues) {
+const arrowConstraints = arrowClues.map(([cell, dirName]) => {
   const [dRow, dCol] = DIRS[dirName];
   const rayCells = graph.ray(cell, dRow, dCol).slice(1);
-  add(new NFA(arrowCountMachine, 'arrow-count', cell, ...rayCells.map(loopCell)));
-}
+  return new NFA(arrowCountMachine, 'arrow-count', cell, ...rayCells.map(loopCell));
+});
 
-return constraints;
+return [
+  new Shape('9x9'),
+  loop.toVar('loop'),
+  new Given('R6C7', 8),
+  new Given('R8C7', 9),
+  loopMembership,
+  // --- Single connected region: the on-loop cells form one connected blob.
+  // Combined with the degree-2 NFA below (every on-loop cell has exactly two
+  // on-loop orthogonal neighbours), this forces the on-loop cells to form a
+  // single simple cycle -- a connected graph that is 2-regular everywhere
+  // cannot be two or more disjoint cycles.
+  new ConnectedValues('VL', ON),
+  ...degreeConstraints,
+  noTouchConstraint,
+  ...loopSelfCountConstraints,
+  ...arrowConstraints,
+];

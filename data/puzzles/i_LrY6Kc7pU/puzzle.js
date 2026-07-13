@@ -31,23 +31,11 @@
 // equal-count structure).
 
 const MAX_INDEX = 16; // largest triangular index any cage here can reach.
-const constraints = [new Shape('9x9', MAX_INDEX)];
-function add(c) { constraints.push(c); }
 
 // Restrict the real grid back to ordinary Sudoku digits (the extra index
 // Vars use the same extended range, up to MAX_INDEX). Every real cell gets
 // the identical restriction, so Replicate a single template across the grid.
 const graph = cellGraph('9x9');
-add(new Replicate(
-  [new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)],
-  Replicate.encodeTargetCells(graph.cells(), 'R1C1', graph),
-  'R1C1',
-));
-
-// Thermometers.
-add(new Thermo('R3C3', 'R2C3', 'R3C2'));
-add(new Thermo('R3C7', 'R2C7', 'R3C8'));
-add(new Thermo('R8C3', 'R9C3', 'R8C4'));
 
 // --- Triangular-cage machinery -----------------------------------------
 
@@ -108,12 +96,6 @@ function uniqueCageIndices(n) {
 }
 
 const CAGE_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
-let indexVarCounter = 0;
-function indexVar(label) {
-  const name = 'K' + CAGE_LETTERS[indexVarCounter++];
-  add(new Var(name, label, 1));
-  return 'V' + name;
-}
 
 const cages = [
   {
@@ -144,32 +126,48 @@ const cages = [
   { cells: ['R7C5', 'R7C6'] },
 ];
 
-const indexCells = [];
-for (const cage of cages) {
+const cageConstraints = cages.map((cage, indexVarCounter) => {
   const n = cage.cells.length;
-  const idxCell = indexVar(`triangular index (${n}-cell cage)`);
-  indexCells.push(idxCell);
+  const name = 'K' + CAGE_LETTERS[indexVarCounter];
+  const idxCell = 'V' + name;
+  const cageConstraintsList = [new Var(name, `triangular index (${n}-cell cage)`, 1)];
 
   if (cage.unique) {
-    add(new AllDifferent(...cage.cells));
+    cageConstraintsList.push(new AllDifferent(...cage.cells));
     const idxs = uniqueCageIndices(n);
-    add(new Given(idxCell, ...idxs));
-    add(new Or(idxs.map(idx => new And([
+    cageConstraintsList.push(new Given(idxCell, ...idxs));
+    cageConstraintsList.push(new Or(idxs.map(idx => new And([
       new Given(idxCell, idx),
       new Cage(TRIANGULAR[idx - 1], ...cage.cells),
     ]))));
   } else {
     const branches = repeatCageBranches(n);
     const idxs = [...new Set(branches.map(b => b.idx))].sort((a, b) => a - b);
-    add(new Given(idxCell, ...idxs));
-    add(new Or(branches.map(b => new And([
+    cageConstraintsList.push(new Given(idxCell, ...idxs));
+    cageConstraintsList.push(new Or(branches.map(b => new And([
       new Given(idxCell, b.idx),
       new ContainExact(b.values.join('_'), ...cage.cells),
     ]))));
   }
-}
 
-// Every cage's triangular total must be unique across the puzzle.
-add(new AllDifferent(...indexCells));
+  return { idxCell, constraints: cageConstraintsList };
+});
 
-return constraints;
+const indexCells = cageConstraints.map(({ idxCell }) => idxCell);
+
+return [
+  new Shape('9x9', MAX_INDEX),
+  new Replicate(
+    [new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)],
+    Replicate.encodeTargetCells(graph.cells(), 'R1C1', graph),
+    'R1C1',
+  ),
+  // Thermometers.
+  new Thermo('R3C3', 'R2C3', 'R3C2'),
+  new Thermo('R3C7', 'R2C7', 'R3C8'),
+  new Thermo('R8C3', 'R9C3', 'R8C4'),
+  // --- Triangular-cage machinery -----------------------------------------
+  ...cageConstraints.flatMap(({ constraints }) => constraints),
+  // Every cage's triangular total must be unique across the puzzle.
+  new AllDifferent(...indexCells),
+];

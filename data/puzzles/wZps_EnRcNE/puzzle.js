@@ -35,15 +35,11 @@ const shape = graph.makeOverlay('VS');
 const shapeCell = cell => shape.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), shape.toVar('shape')];
-const add = (...newConstraints) => constraints.push(...newConstraints);
-
 // --- Givens ---
 const givens = {
   R1C5: 2, R2C2: 1, R2C8: 9, R3C8: 3, R4C3: 4, R4C6: 7, R5C9: 5,
   R7C2: 8, R7C8: 6,
 };
-for (const [cell, d] of Object.entries(givens)) add(new Given(cell, d));
 
 // --- Grey dots: each is the edge between two named cells. ---
 const dots = [
@@ -73,20 +69,6 @@ for (const [a, b] of dots) {
     requiredDirs[b].up = true;
   }
 }
-for (const cell of gridCells) {
-  const { row, col } = parseCellId(cell);
-  let allowed = ALL_SHAPES.filter(s =>
-    !(row === 1 && usesUp(s)) && !(row === geometry.numRows && usesDown(s)) &&
-    !(col === 1 && usesLeft(s)) && !(col === geometry.numCols && usesRight(s)));
-  const req = requiredDirs[cell];
-  if (req) {
-    if (req.up) allowed = allowed.filter(usesUp);
-    if (req.down) allowed = allowed.filter(usesDown);
-    if (req.left) allowed = allowed.filter(usesLeft);
-    if (req.right) allowed = allowed.filter(usesRight);
-  }
-  add(new Given(shapeCell(cell), ...allowed));
-}
 
 // --- Edge agreement: neighbours must agree on the shared edge. This is a
 // plain binary relation between two shape cells (a Pair), and every
@@ -98,16 +80,6 @@ const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
 const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 const rightBases = gridCells.filter(cell => graph.step(cell, 0, 1));
 const downBases = gridCells.filter(cell => graph.step(cell, 1, 0));
-add(new Replicate(
-  [new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
-  Replicate.encodeTargetCells(rightBases.map(shapeCell), shapeCell('R1C1'), shape),
-  shapeCell('R1C1'),
-));
-add(new Replicate(
-  [new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
-  Replicate.encodeTargetCells(downBases.map(shapeCell), shapeCell('R1C1'), shape),
-  shapeCell('R1C1'),
-));
 
 // --- Ambiguous-Kropki digit rule along loop edges: reads [shapeA, digitA,
 // digitB]; `toB` says whether A uses the edge to B (edge agreement
@@ -126,18 +98,6 @@ const relEdge = (toB, requireRel) => NFA.encodeSpec({
 }, geometry.numValues);
 const dotRight = relEdge(usesRight, true), dotDown = relEdge(usesDown, true);
 const noDotRight = relEdge(usesRight, false), noDotDown = relEdge(usesDown, false);
-for (const cell of gridCells) {
-  const right = graph.step(cell, 0, 1);
-  const down = graph.step(cell, 1, 0);
-  if (right) {
-    const machine = dotEdges.has(dotEdgeKey(cell, right)) ? dotRight : noDotRight;
-    add(new NFA(machine, 'kropki-h', shapeCell(cell), cell, right));
-  }
-  if (down) {
-    const machine = dotEdges.has(dotEdgeKey(cell, down)) ? dotDown : noDotDown;
-    add(new NFA(machine, 'kropki-v', shapeCell(cell), cell, down));
-  }
-}
 
 // --- Mid-loop symmetry: for each dot, the run of consecutive straight
 // (HORIZ, for a horizontal dot; VERT, for a vertical dot) cells extending
@@ -177,18 +137,71 @@ const straightSymmetryMachine = memo((key) => {
     },
   }, geometry.numValues);
 });
-for (const [a, b] of dots) {
-  const { row: ra, col: ca } = parseCellId(a);
-  const { row: rb, col: cb } = parseCellId(b);
-  if (ra === rb) { // horizontal dot: scan row ra, columns 1..9
-    const rowCells = [];
-    for (let c = 1; c <= geometry.numCols; c++) rowCells.push(shapeCell(makeCellId(ra, c)));
-    add(new NFA(straightSymmetryMachine(`${ca}:${HORIZ}:${geometry.numCols}`), 'dot-mid-h', ...rowCells));
-  } else { // vertical dot: scan column ca, rows 1..9
-    const colCells = [];
-    for (let r = 1; r <= geometry.numRows; r++) colCells.push(shapeCell(makeCellId(r, ca)));
-    add(new NFA(straightSymmetryMachine(`${ra}:${VERT}:${geometry.numRows}`), 'dot-mid-v', ...colCells));
-  }
-}
 
-return constraints;
+return [
+  new Shape('9x9'),
+  shape.toVar('shape'),
+  // --- Global connectivity: the non-OFF (on-loop) cells must form one
+  // connected cell region. Sound to add (a genuine single loop is always
+  // cell-connected) but only cell connectivity, not loop-edge connectivity --
+  // see the "Deliberate omission" note below for why this narrows, but does not
+  // close, the single-loop gap for this shape-Var + edge-agreement encoding.
+  new ConnectedValues('VS', [HORIZ, VERT, UL, UR, DL, DR]),
+  // --- Givens ---
+  ...Object.entries(givens).map(([cell, d]) => new Given(cell, d)),
+  // --- Shape domains
+  ...gridCells.map(cell => {
+    const { row, col } = parseCellId(cell);
+    let allowed = ALL_SHAPES.filter(s =>
+      !(row === 1 && usesUp(s)) && !(row === geometry.numRows && usesDown(s)) &&
+      !(col === 1 && usesLeft(s)) && !(col === geometry.numCols && usesRight(s)));
+    const req = requiredDirs[cell];
+    if (req) {
+      if (req.up) allowed = allowed.filter(usesUp);
+      if (req.down) allowed = allowed.filter(usesDown);
+      if (req.left) allowed = allowed.filter(usesLeft);
+      if (req.right) allowed = allowed.filter(usesRight);
+    }
+    return new Given(shapeCell(cell), ...allowed);
+  }),
+  // --- Edge agreement
+  new Replicate(
+    [new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
+    Replicate.encodeTargetCells(rightBases.map(shapeCell), shapeCell('R1C1'), shape),
+    shapeCell('R1C1'),
+  ),
+  new Replicate(
+    [new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
+    Replicate.encodeTargetCells(downBases.map(shapeCell), shapeCell('R1C1'), shape),
+    shapeCell('R1C1'),
+  ),
+  // --- Ambiguous-Kropki digit rule
+  ...gridCells.flatMap(cell => {
+    const right = graph.step(cell, 0, 1);
+    const down = graph.step(cell, 1, 0);
+    const result = [];
+    if (right) {
+      const machine = dotEdges.has(dotEdgeKey(cell, right)) ? dotRight : noDotRight;
+      result.push(new NFA(machine, 'kropki-h', shapeCell(cell), cell, right));
+    }
+    if (down) {
+      const machine = dotEdges.has(dotEdgeKey(cell, down)) ? dotDown : noDotDown;
+      result.push(new NFA(machine, 'kropki-v', shapeCell(cell), cell, down));
+    }
+    return result;
+  }),
+  // --- Mid-loop symmetry
+  ...dots.flatMap(([a, b]) => {
+    const { row: ra, col: ca } = parseCellId(a);
+    const { row: rb, col: cb } = parseCellId(b);
+    if (ra === rb) { // horizontal dot: scan row ra, columns 1..9
+      const rowCells = [];
+      for (let c = 1; c <= geometry.numCols; c++) rowCells.push(shapeCell(makeCellId(ra, c)));
+      return new NFA(straightSymmetryMachine(`${ca}:${HORIZ}:${geometry.numCols}`), 'dot-mid-h', ...rowCells);
+    } else { // vertical dot: scan column ca, rows 1..9
+      const colCells = [];
+      for (let r = 1; r <= geometry.numRows; r++) colCells.push(shapeCell(makeCellId(r, ca)));
+      return new NFA(straightSymmetryMachine(`${ra}:${VERT}:${geometry.numRows}`), 'dot-mid-v', ...colCells);
+    }
+  }),
+];

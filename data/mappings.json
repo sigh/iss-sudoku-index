@@ -1,7 +1,260 @@
 {
-  "generated_at": "2026-07-12T14:20:16.648707+00:00",
-  "count": 245,
+  "generated_at": "2026-07-13T07:14:50.134331+00:00",
+  "count": 303,
   "rows": [
+    {
+      "puzzle_id": "Ve81X9Ihgt8",
+      "video_id": "Ve81X9Ihgt8",
+      "puzzle_title": "A Very Small Flashlight",
+      "video_title": "A Very Small Flash of Light",
+      "author": "PhyDraLey",
+      "video_url": "https://www.youtube.com/watch?v=Ve81X9Ihgt8",
+      "sources": [
+        "https://sudokupad.app/bxd5hl6ipw"
+      ],
+      "date": "2026-07-12",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "BlackDot",
+        "V",
+        "Arrow",
+        "Thermo",
+        "Whisper",
+        "RegionSumLine",
+        "Pair: not 1:2"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 4.1,
+      "cap": 1000,
+      "dir": "data/puzzles/Ve81X9Ihgt8",
+      "iss_size": 2033,
+      "script_size": 2784
+    },
+    {
+      "puzzle_id": "p3pDjjp0cP0",
+      "video_id": "p3pDjjp0cP0",
+      "puzzle_title": "Fortress Yin Yang",
+      "video_title": "Rocky Balboa Solves Sudoku??",
+      "author": "yttrio",
+      "video_url": "https://www.youtube.com/watch?v=p3pDjjp0cP0",
+      "sources": [
+        "https://sudokupad.app/xug1fmiw9y"
+      ],
+      "date": "2026-07-12",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "Or",
+        "GreaterThan",
+        "Sum",
+        "NFA: no-mono-2x2"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 455,
+      "backtracks": 456,
+      "solve_ms": 274.1,
+      "cap": 1000,
+      "dir": "data/puzzles/p3pDjjp0cP0",
+      "iss_size": 15268,
+      "script_size": 4192
+    },
+    {
+      "puzzle_id": "vWyihZrZvU8",
+      "video_id": "vWyihZrZvU8",
+      "puzzle_title": "Liar Sudoku",
+      "video_title": "The Puzzle I did not Want to Do",
+      "author": "Czechia GP Authors",
+      "video_url": "https://www.youtube.com/watch?v=vWyihZrZvU8",
+      "sources": [
+        "https://sudokupad.app/hti4xerqfw"
+      ],
+      "date": "2026-07-11",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "ContainExact",
+        "Pair: Liar"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1566,
+      "backtracks": 1567,
+      "solve_ms": 25.8,
+      "cap": 312500,
+      "dir": "data/puzzles/vWyihZrZvU8",
+      "iss_size": 1981,
+      "script_size": 3012
+    },
+    {
+      "puzzle_id": "-pN0-1lMBpw",
+      "video_id": "-pN0-1lMBpw",
+      "puzzle_title": "A Longer Snake in the Grass",
+      "video_title": "The Rat And Cupcake Are Invisible!! Marty's Incredible Sudoku Snake",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=-pN0-1lMBpw",
+      "sources": [
+        "https://sudokupad.app/bq3bqqtcix"
+      ],
+      "date": "2026-07-11",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "backtracks": null,
+      "solve_ms": null,
+      "cap": null,
+      "dir": null,
+      "iss_size": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "00lxcgSGLBg",
+      "video_id": "00lxcgSGLBg",
+      "puzzle_title": "TDF: The Route",
+      "video_title": "Win the Yellow Jersey",
+      "author": "palpot",
+      "video_url": "https://www.youtube.com/watch?v=00lxcgSGLBg",
+      "sources": [
+        "https://sudokupad.app/7d9f9mb2y3"
+      ],
+      "date": "2026-07-10",
+      "status": "validated",
+      "constraint_types": [
+        "1-11",
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "Or",
+        "And",
+        "Sum",
+        "Pair: edge-v",
+        "Pair: edge-h",
+        "NFA: entropy",
+        "NFA: soigneur-count"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 11,
+      "backtracks": 12,
+      "solve_ms": 26.3,
+      "cap": 1000,
+      "dir": "data/puzzles/00lxcgSGLBg",
+      "iss_size": 72369,
+      "script_size": 13564
+    },
+    {
+      "puzzle_id": "JPGFsisxFlw",
+      "video_id": "JPGFsisxFlw",
+      "puzzle_title": "A Bouquet of Complements",
+      "video_title": "Maths Homework Has Never Been More Fun!",
+      "author": "RockyRoer",
+      "video_url": "https://www.youtube.com/watch?v=JPGFsisxFlw",
+      "sources": [
+        "https://sudokupad.app/pzl2b5oua1"
+      ],
+      "date": "2026-07-10",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Renban",
+        "Whisper",
+        "Modular",
+        "WhiteDot",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 879,
+      "backtracks": 880,
+      "solve_ms": 40.2,
+      "cap": 1000,
+      "dir": "data/puzzles/JPGFsisxFlw",
+      "iss_size": 468,
+      "script_size": 2277
+    },
+    {
+      "puzzle_id": "n0u4ShNakCI",
+      "video_id": "n0u4ShNakCI",
+      "puzzle_title": "Difference Of Opinion",
+      "video_title": "These Different Differences Hit Different!",
+      "author": "Alchemist",
+      "video_url": "https://www.youtube.com/watch?v=n0u4ShNakCI",
+      "sources": [
+        "https://sudokupad.app/jgpch3g0b5"
+      ],
+      "date": "2026-07-09",
+      "status": "validated",
+      "constraint_types": [
+        "GreaterThan",
+        "NFA: DifferenceMeter"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 16,
+      "backtracks": 17,
+      "solve_ms": 8.1,
+      "cap": 1000,
+      "dir": "data/puzzles/n0u4ShNakCI",
+      "iss_size": 748,
+      "script_size": 1904
+    },
+    {
+      "puzzle_id": "BfsapIsZX4o",
+      "video_id": "BfsapIsZX4o",
+      "puzzle_title": "Musically Keen",
+      "video_title": "The Music In The Fog: WHAT A Sudoku Puzzle!",
+      "author": "The Pi Guy",
+      "video_url": "https://www.youtube.com/watch?v=BfsapIsZX4o",
+      "sources": [
+        "https://sudokupad.app/jcj5nibbdm"
+      ],
+      "date": "2026-07-09",
+      "status": "validated",
+      "constraint_types": [
+        "EqualSum",
+        "Thermo",
+        "Renban",
+        "Whisper",
+        "AllDifferent",
+        "PairX: Nabner 1",
+        "PairX: Nabner 2",
+        "PairX: Nabner 3",
+        "PairX: Nabner 4"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2931,
+      "backtracks": 2932,
+      "solve_ms": 140.3,
+      "cap": 259067,
+      "dir": "data/puzzles/BfsapIsZX4o",
+      "iss_size": 700,
+      "script_size": 2341
+    },
     {
       "puzzle_id": "0ASRXrrz-K4",
       "video_id": "0ASRXrrz-K4",
@@ -27,7 +280,7 @@
       "cap": 1000,
       "dir": "data/puzzles/0ASRXrrz-K4",
       "iss_size": 365,
-      "script_size": 1228
+      "script_size": 1167
     },
     {
       "puzzle_id": "ehi5FkxgrWs",
@@ -40,10 +293,11 @@
         "https://sudokupad.app/gf8l5f4s64"
       ],
       "date": "2026-07-08",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "Or",
         "And",
         "NFA: no-mono-2x2",
@@ -53,17 +307,17 @@
         "NFA: product-1",
         "NFA: product-5"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 7093,
-      "guesses": 8291,
-      "backtracks": 8255,
-      "solve_ms": 1270.4,
-      "cap": 8255,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 304,
+      "backtracks": 305,
+      "solve_ms": 173.6,
+      "cap": 1000,
       "dir": "data/puzzles/ehi5FkxgrWs",
-      "iss_size": 343874,
-      "script_size": 5939
+      "iss_size": 343918,
+      "script_size": 6063
     },
     {
       "puzzle_id": "zKRn5WbmedA",
@@ -238,7 +492,7 @@
       "cap": 10000,
       "dir": "data/puzzles/moRsJVncQps",
       "iss_size": 2618,
-      "script_size": 2124
+      "script_size": 2263
     },
     {
       "puzzle_id": "_RKTa9QVEwA",
@@ -267,7 +521,7 @@
       "cap": 10000,
       "dir": "data/puzzles/_RKTa9QVEwA",
       "iss_size": 5611,
-      "script_size": 1811
+      "script_size": 1834
     },
     {
       "puzzle_id": "xlk19YzgMCM",
@@ -359,13 +613,13 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 213460,
-      "backtracks": 213447,
-      "solve_ms": 10467.8,
-      "cap": 213447,
+      "guesses": 182833,
+      "backtracks": 182815,
+      "solve_ms": 8744.2,
+      "cap": 182815,
       "dir": "data/puzzles/dAqrMGSyI4s",
       "iss_size": 3780,
-      "script_size": 7063
+      "script_size": 7090
     },
     {
       "puzzle_id": "CNGyml7iu_I",
@@ -393,7 +647,7 @@
       "cap": 10000,
       "dir": "data/puzzles/CNGyml7iu_I",
       "iss_size": 313,
-      "script_size": 1117
+      "script_size": 972
     },
     {
       "puzzle_id": "P32Jqq-FyFc",
@@ -431,7 +685,7 @@
       "cap": 10000,
       "dir": "data/puzzles/P32Jqq-FyFc",
       "iss_size": 6054,
-      "script_size": 4266
+      "script_size": 4163
     },
     {
       "puzzle_id": "KEEZblvYBm0",
@@ -579,7 +833,7 @@
       "cap": 10000,
       "dir": "data/puzzles/a79ewtzPrrY",
       "iss_size": 803,
-      "script_size": 2070
+      "script_size": 2036
     },
     {
       "puzzle_id": "nccrIGkIcwo",
@@ -721,7 +975,7 @@
       "cap": 10000,
       "dir": "data/puzzles/ddbndIaimtc",
       "iss_size": 96122,
-      "script_size": 6112
+      "script_size": 6139
     },
     {
       "puzzle_id": "rSMMWRaKq8M",
@@ -812,7 +1066,7 @@
       "cap": 675219,
       "dir": "data/puzzles/QSvdF_EMck4",
       "iss_size": 893,
-      "script_size": 2272
+      "script_size": 2176
     },
     {
       "puzzle_id": "w8Ml0ETI5IM",
@@ -869,7 +1123,7 @@
       "cap": 10000,
       "dir": "data/puzzles/1rt7kZsk8dg",
       "iss_size": 1813,
-      "script_size": 2383
+      "script_size": 2371
     },
     {
       "puzzle_id": "jgATrHS3pBg",
@@ -892,11 +1146,11 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 36,
-      "guesses": 10058,
-      "backtracks": 10000,
-      "solve_ms": 518.7,
-      "cap": 10000,
+      "solutions_found": 2,
+      "guesses": 1056,
+      "backtracks": 1000,
+      "solve_ms": 130.2,
+      "cap": 1000,
       "dir": "data/puzzles/jgATrHS3pBg",
       "iss_size": 127,
       "script_size": 675
@@ -1108,7 +1362,7 @@
       "cap": 10000,
       "dir": "data/puzzles/sTWSFmpOhTs",
       "iss_size": 1906,
-      "script_size": 2213
+      "script_size": 2203
     },
     {
       "puzzle_id": "GSyQiFEF_3w",
@@ -1388,7 +1642,7 @@
       "cap": 21000,
       "dir": "data/puzzles/Qd8cn82k5nk",
       "iss_size": 14294,
-      "script_size": 4391
+      "script_size": 4243
     },
     {
       "puzzle_id": "-c9lo7lYxp8",
@@ -1450,7 +1704,7 @@
       "cap": 10000,
       "dir": "data/puzzles/_M5lRitViHo",
       "iss_size": 935,
-      "script_size": 1273
+      "script_size": 1220
     },
     {
       "puzzle_id": "ovnLIQzpdDY",
@@ -1569,7 +1823,7 @@
       "cap": 10000,
       "dir": "data/puzzles/vNfwa4wPliY",
       "iss_size": 398,
-      "script_size": 1274
+      "script_size": 1214
     },
     {
       "puzzle_id": "rilaoNyWiFs",
@@ -1601,7 +1855,7 @@
       "cap": 10000,
       "dir": "data/puzzles/rilaoNyWiFs",
       "iss_size": 4131,
-      "script_size": 1806
+      "script_size": 1956
     },
     {
       "puzzle_id": "44bYOpPHJlQ",
@@ -1639,10 +1893,11 @@
         "https://sudokupad.app/zyutsxhylp"
       ],
       "date": "2026-06-14",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "1-11",
         "Var",
+        "ConnectedValues",
         "Replicate",
         "WhiteDot",
         "GreaterThan",
@@ -1654,13 +1909,13 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 86586,
-      "backtracks": 86587,
-      "solve_ms": 3577.9,
-      "cap": 303951,
+      "guesses": 28223,
+      "backtracks": 28224,
+      "solve_ms": 1598.7,
+      "cap": 169779,
       "dir": "data/puzzles/l8XOG9Vg6Q0",
-      "iss_size": 3440,
-      "script_size": 6854
+      "iss_size": 3763,
+      "script_size": 8183
     },
     {
       "puzzle_id": "nLu0P3VYz4c",
@@ -1787,7 +2042,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W3hGY3SuOnI.1",
       "iss_size": 720,
-      "script_size": 1181
+      "script_size": 1250
     },
     {
       "puzzle_id": "W3hGY3SuOnI.2",
@@ -1819,7 +2074,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W3hGY3SuOnI.2",
       "iss_size": 1744,
-      "script_size": 1258
+      "script_size": 1285
     },
     {
       "puzzle_id": "W3hGY3SuOnI.3",
@@ -1851,7 +2106,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W3hGY3SuOnI.3",
       "iss_size": 1787,
-      "script_size": 1510
+      "script_size": 1538
     },
     {
       "puzzle_id": "sfNjC1cCmwk",
@@ -1879,7 +2134,7 @@
       "cap": 21743,
       "dir": "data/puzzles/sfNjC1cCmwk",
       "iss_size": 8720,
-      "script_size": 2098
+      "script_size": 2199
     },
     {
       "puzzle_id": "BoPjMzjLpZ8",
@@ -2019,10 +2274,11 @@
         "https://sudokupad.app/qc37ejydvj"
       ],
       "date": "2026-06-09",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "WhiteDot",
         "AllDifferent",
         "PillArrow",
@@ -2030,17 +2286,17 @@
         "And",
         "NFA: no-mono-2x2"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 965,
-      "guesses": 1021,
-      "backtracks": 1000,
-      "solve_ms": 16.4,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 7.1,
       "cap": 1000,
       "dir": "data/puzzles/_Q1fvtndpsA",
-      "iss_size": 15336,
-      "script_size": 3720
+      "iss_size": 15380,
+      "script_size": 3998
     },
     {
       "puzzle_id": "Yv_RMyYTeRU",
@@ -2115,6 +2371,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "ConnectedValues",
         "WhiteDot",
         "Pair: loop edge agreement v",
         "Pair: loop edge agreement h",
@@ -2127,11 +2384,11 @@
       "solutions_found": 137,
       "guesses": 1073,
       "backtracks": 1000,
-      "solve_ms": 60.1,
+      "solve_ms": 49.6,
       "cap": 1000,
       "dir": "data/puzzles/HFiQBcazPFU",
-      "iss_size": 5479,
-      "script_size": 3905
+      "iss_size": 5511,
+      "script_size": 5166
     },
     {
       "puzzle_id": "Rn_svsVv_FA",
@@ -2199,7 +2456,7 @@
       "cap": 46168,
       "dir": "data/puzzles/hvOl5kg76ME",
       "iss_size": 19571,
-      "script_size": 3352
+      "script_size": 3405
     },
     {
       "puzzle_id": "wDJAhLRxVSo",
@@ -2263,7 +2520,7 @@
       "cap": 10000,
       "dir": "data/puzzles/vFZ7Vk6IWRY",
       "iss_size": 2135,
-      "script_size": 2496
+      "script_size": 2514
     },
     {
       "puzzle_id": "VMenmutpNMA",
@@ -2320,7 +2577,7 @@
       "cap": 293255,
       "dir": "data/puzzles/xzXnxCeFSt4",
       "iss_size": 1394,
-      "script_size": 1782
+      "script_size": 1736
     },
     {
       "puzzle_id": "YeuTO9A1Prs",
@@ -2348,7 +2605,7 @@
       "cap": 10000,
       "dir": "data/puzzles/YeuTO9A1Prs",
       "iss_size": 1273,
-      "script_size": 2162
+      "script_size": 2141
     },
     {
       "puzzle_id": "L5q_FWlkjLQ",
@@ -2652,11 +2909,11 @@
       "solutions_found": 1000,
       "guesses": 1120,
       "backtracks": 1000,
-      "solve_ms": 14.6,
+      "solve_ms": 23.3,
       "cap": 1000,
       "dir": "data/puzzles/XfBbFSZNCys",
       "iss_size": 2805,
-      "script_size": 3668
+      "script_size": 3636
     },
     {
       "puzzle_id": "0LkWrGwclFo",
@@ -2689,7 +2946,7 @@
       "cap": 282485,
       "dir": "data/puzzles/0LkWrGwclFo",
       "iss_size": 6004,
-      "script_size": 2713
+      "script_size": 2631
     },
     {
       "puzzle_id": "LYNLwiEYIYA",
@@ -2702,12 +2959,13 @@
         "https://sudokupad.app/l00604nlbr"
       ],
       "date": "2026-05-30",
-      "status": "partial",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "WhiteDot",
         "Or",
         "And",
+        "ConnectedValues",
         "Pair: edge-v",
         "Pair: edge-h",
         "NFA: loop-nc-h",
@@ -2720,13 +2978,13 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 87201,
-      "backtracks": 87183,
-      "solve_ms": 8388.1,
-      "cap": 87183,
+      "guesses": 218827,
+      "backtracks": 218818,
+      "solve_ms": 13353.1,
+      "cap": 218818,
       "dir": "data/puzzles/LYNLwiEYIYA",
-      "iss_size": 7464,
-      "script_size": 6433
+      "iss_size": 7496,
+      "script_size": 7259
     },
     {
       "puzzle_id": "MjqEhvEQiwA",
@@ -2834,11 +3092,11 @@
       "solutions_found": 7,
       "guesses": 1015,
       "backtracks": 1000,
-      "solve_ms": 36.8,
+      "solve_ms": 35.8,
       "cap": 1000,
       "dir": "data/puzzles/hCEi6T73KhM",
       "iss_size": 961,
-      "script_size": 1455
+      "script_size": 1359
     },
     {
       "puzzle_id": "R1G2sLLsu1U",
@@ -2890,14 +3148,14 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 9650,
-      "guesses": 10012,
-      "backtracks": 10000,
-      "solve_ms": 94.9,
-      "cap": 10000,
+      "solutions_found": 945,
+      "guesses": 1015,
+      "backtracks": 1000,
+      "solve_ms": 23.6,
+      "cap": 1000,
       "dir": "data/puzzles/JXd8YgWYFFw",
       "iss_size": 240,
-      "script_size": 1218
+      "script_size": 1184
     },
     {
       "puzzle_id": "zzDjoDoDck4.1",
@@ -2960,7 +3218,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zzDjoDoDck4.2",
       "iss_size": 319,
-      "script_size": 1646
+      "script_size": 1571
     },
     {
       "puzzle_id": "Ld1TRj4Zjxc",
@@ -3037,7 +3295,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mS78-zUDW1E",
       "iss_size": 2548,
-      "script_size": 4611
+      "script_size": 4722
     },
     {
       "puzzle_id": "IrrtMa7XMDM",
@@ -3052,20 +3310,27 @@
       "date": "2026-05-25",
       "status": "partial",
       "constraint_types": [
+        "Var",
         "BlackDot",
-        "GreaterThan"
+        "GreaterThan",
+        "Replicate",
+        "Or",
+        "And",
+        "ConnectedValues",
+        "NFA: degree",
+        "NFA: path-parity"
       ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 1000,
-      "guesses": 1039,
+      "solutions_found": 981,
+      "guesses": 1040,
       "backtracks": 1000,
-      "solve_ms": 21.0,
+      "solve_ms": 47.9,
       "cap": 1000,
       "dir": "data/puzzles/IrrtMa7XMDM",
-      "iss_size": 85,
-      "script_size": 585
+      "iss_size": 6624,
+      "script_size": 8241
     },
     {
       "puzzle_id": "g7YE5xR5-G4",
@@ -3130,7 +3395,7 @@
       "cap": 67430,
       "dir": "data/puzzles/UY7fvwAnuck",
       "iss_size": 26345,
-      "script_size": 6225
+      "script_size": 6733
     },
     {
       "puzzle_id": "lY9YsqOO19E",
@@ -3226,7 +3491,7 @@
       "cap": 100000,
       "dir": "data/puzzles/Epygh1J4Vvw",
       "iss_size": 2209,
-      "script_size": 3746
+      "script_size": 3772
     },
     {
       "puzzle_id": "htJRav3X9Ik",
@@ -3509,6 +3774,7 @@
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "NFA: 2x2 block",
         "NFA: no repeat 9",
         "NFA: no repeat 8",
@@ -3522,15 +3788,15 @@
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 40230,
-      "backtracks": 40176,
-      "solve_ms": 9254.1,
-      "cap": 40176,
+      "unique_solution": false,
+      "solutions_found": 871,
+      "guesses": 1077,
+      "backtracks": 1000,
+      "solve_ms": 196.0,
+      "cap": 1000,
       "dir": "data/puzzles/_u1SXY_VatM",
-      "iss_size": 11168,
-      "script_size": 5522
+      "iss_size": 10535,
+      "script_size": 5976
     },
     {
       "puzzle_id": "ECyhFDcyaIc",
@@ -3686,10 +3952,11 @@
         "https://sudokupad.app/v38zh5blzk"
       ],
       "date": "2026-05-16",
-      "status": "partial",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "Renban",
         "RegionSumLine",
         "WhiteDot",
@@ -3700,17 +3967,17 @@
         "NFA: circle-count",
         "NFA: mod4"
       ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": false,
-      "solutions_found": 16,
-      "guesses": 60479,
-      "backtracks": 60480,
-      "solve_ms": 52513.2,
-      "cap": 300000,
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 1,
+      "guesses": 16171,
+      "backtracks": 16157,
+      "solve_ms": 11726.2,
+      "cap": 16157,
       "dir": "data/puzzles/cHi8yZVepgQ",
-      "iss_size": 45648,
-      "script_size": 9823
+      "iss_size": 45670,
+      "script_size": 10355
     },
     {
       "puzzle_id": "al5r5VhjyP8",
@@ -3752,7 +4019,7 @@
       "cap": 2000000,
       "dir": "data/puzzles/al5r5VhjyP8",
       "iss_size": 16272,
-      "script_size": 7331
+      "script_size": 7653
     },
     {
       "puzzle_id": "MDx8QVOCub8.1",
@@ -3859,6 +4126,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "ConnectedValues",
         "NFA: degree",
         "NFA: camera-row",
         "Pair: no-cross"
@@ -3866,14 +4134,14 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 23620,
-      "guesses": 200086,
+      "solutions_found": 199048,
+      "guesses": 200081,
       "backtracks": 200000,
-      "solve_ms": 1407.0,
+      "solve_ms": 1491.7,
       "cap": 200000,
       "dir": "data/puzzles/KUswbPDx1Sg",
-      "iss_size": 2298,
-      "script_size": 3617
+      "iss_size": 2320,
+      "script_size": 4099
     },
     {
       "puzzle_id": "konQKbnvhoQ",
@@ -3991,7 +4259,7 @@
       "cap": 196078,
       "dir": "data/puzzles/Maqxv03bjIw",
       "iss_size": 3864,
-      "script_size": 2156
+      "script_size": 2187
     },
     {
       "puzzle_id": "lzcnEnB5tvo",
@@ -4018,7 +4286,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lzcnEnB5tvo",
       "iss_size": 299,
-      "script_size": 833
+      "script_size": 778
     },
     {
       "puzzle_id": "X_3eRoD7uYY",
@@ -4093,7 +4361,7 @@
       "cap": 1000,
       "dir": "data/puzzles/m5EVai6r_VA",
       "iss_size": 2118,
-      "script_size": 5525
+      "script_size": 5492
     },
     {
       "puzzle_id": "PZkQtQow_MY",
@@ -4120,13 +4388,13 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3487,
-      "backtracks": 3418,
-      "solve_ms": 13472.4,
-      "cap": 3418,
+      "guesses": 3594,
+      "backtracks": 3528,
+      "solve_ms": 12427.2,
+      "cap": 3528,
       "dir": "data/puzzles/PZkQtQow_MY",
       "iss_size": 121463,
-      "script_size": 4889
+      "script_size": 4811
     },
     {
       "puzzle_id": "L_my9XStVmo",
@@ -4214,7 +4482,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3fN2jrb6qHM.2",
       "iss_size": 431,
-      "script_size": 1297
+      "script_size": 1194
     },
     {
       "puzzle_id": "3fN2jrb6qHM.3",
@@ -4303,7 +4571,7 @@
       "cap": 100000,
       "dir": "data/puzzles/ok-r1oK0fSk",
       "iss_size": 14747,
-      "script_size": 8358
+      "script_size": 8911
     },
     {
       "puzzle_id": "OF7CAtGkizk",
@@ -4426,7 +4694,7 @@
       "cap": 1000,
       "dir": "data/puzzles/KTu-Nu1gjjg",
       "iss_size": 2961,
-      "script_size": 2620
+      "script_size": 2616
     },
     {
       "puzzle_id": "CKHnlFksvXI",
@@ -4485,7 +4753,7 @@
       "cap": 1000,
       "dir": "data/puzzles/d7BhfgTXQrc",
       "iss_size": 908,
-      "script_size": 1929
+      "script_size": 1895
     },
     {
       "puzzle_id": "HmYktrkXLCc",
@@ -4604,7 +4872,7 @@
       "cap": 1000,
       "dir": "data/puzzles/FtR_Qtg62b0",
       "iss_size": 548,
-      "script_size": 2827
+      "script_size": 2738
     },
     {
       "puzzle_id": "jVMQiwCzc2k",
@@ -4617,10 +4885,11 @@
         "https://sudokupad.app/yl0n45rfll"
       ],
       "date": "2026-05-02",
-      "status": "partial",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "Sum",
         "NFA: no-monochrome-2x2",
         "NFA: x-sum-10",
@@ -4630,15 +4899,15 @@
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 75194,
-      "guesses": 80676,
-      "backtracks": 80645,
-      "solve_ms": 1088.1,
-      "cap": 80645,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 47071,
+      "backtracks": 47058,
+      "solve_ms": 9096.5,
+      "cap": 47058,
       "dir": "data/puzzles/jVMQiwCzc2k",
-      "iss_size": 9006,
-      "script_size": 8379
+      "iss_size": 8373,
+      "script_size": 9100
     },
     {
       "puzzle_id": "gk4rIG7COrg",
@@ -4697,7 +4966,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nDOET-_1e4c",
       "iss_size": 457,
-      "script_size": 1120
+      "script_size": 1065
     },
     {
       "puzzle_id": "rIO26rioOLI",
@@ -4726,7 +4995,7 @@
       "cap": 1000,
       "dir": "data/puzzles/rIO26rioOLI",
       "iss_size": 673,
-      "script_size": 1807
+      "script_size": 1805
     },
     {
       "puzzle_id": "ktjNaziMZIg",
@@ -4749,7 +5018,7 @@
       "solutions_found": 988,
       "guesses": 1034,
       "backtracks": 1000,
-      "solve_ms": 16.9,
+      "solve_ms": 18.6,
       "cap": 1000,
       "dir": "data/puzzles/ktjNaziMZIg",
       "iss_size": 139,
@@ -4841,7 +5110,7 @@
       "cap": 1000,
       "dir": "data/puzzles/x5dhRvoStw0",
       "iss_size": 292,
-      "script_size": 1156
+      "script_size": 1082
     },
     {
       "puzzle_id": "z54K1xbazxg",
@@ -4900,7 +5169,7 @@
       "cap": 318471,
       "dir": "data/puzzles/kTB2LzuY3HQ",
       "iss_size": 342,
-      "script_size": 2081
+      "script_size": 1942
     },
     {
       "puzzle_id": "oVFrx5oJdYo",
@@ -4942,22 +5211,27 @@
         "https://sudokupad.app/kbrkvktac9"
       ],
       "date": "2026-04-26",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
         "Arrow",
-        "Pair: river-diff"
+        "NFA: degree",
+        "NFA: corner",
+        "NFA: river-diff"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 998,
-      "guesses": 1035,
-      "backtracks": 1000,
-      "solve_ms": 19.3,
-      "cap": 1000,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3650,
+      "backtracks": 3651,
+      "solve_ms": 302.4,
+      "cap": 104931,
       "dir": "data/puzzles/eZi4pISOrBQ",
-      "iss_size": 173,
-      "script_size": 2472
+      "iss_size": 5590,
+      "script_size": 8589
     },
     {
       "puzzle_id": "blPgSzctUMg",
@@ -4985,7 +5259,7 @@
       "cap": 1000,
       "dir": "data/puzzles/blPgSzctUMg",
       "iss_size": 367,
-      "script_size": 1794
+      "script_size": 1780
     },
     {
       "puzzle_id": "GIVSl6pfT5Q",
@@ -5039,7 +5313,7 @@
       "cap": 374531,
       "dir": "data/puzzles/1WoNu_Hze9k",
       "iss_size": 237,
-      "script_size": 1085
+      "script_size": 1051
     },
     {
       "puzzle_id": "Wq1n5wziTVo",
@@ -5079,7 +5353,7 @@
       "cap": 100000,
       "dir": "data/puzzles/Wq1n5wziTVo",
       "iss_size": 3010,
-      "script_size": 4341
+      "script_size": 4294
     },
     {
       "puzzle_id": "7iuxM-Xtsxw",
@@ -5146,7 +5420,7 @@
       "cap": 225733,
       "dir": "data/puzzles/vVTSGvQZs3k",
       "iss_size": 390,
-      "script_size": 1603
+      "script_size": 1569
     },
     {
       "puzzle_id": "nsAmm8e6CfY",
@@ -5294,7 +5568,7 @@
       "cap": 1000,
       "dir": "data/puzzles/2O7JJsAvLY4",
       "iss_size": 7358,
-      "script_size": 6038
+      "script_size": 6035
     },
     {
       "puzzle_id": "bal9xHVAFd4",
@@ -5403,7 +5677,7 @@
       "cap": 41339,
       "dir": "data/puzzles/bal9xHVAFd4",
       "iss_size": 95899,
-      "script_size": 7073
+      "script_size": 7068
     },
     {
       "puzzle_id": "0cvA-XDiQNQ",
@@ -5460,7 +5734,7 @@
       "cap": 1000,
       "dir": "data/puzzles/b-MR1mLKgCk",
       "iss_size": 609,
-      "script_size": 3652
+      "script_size": 3739
     },
     {
       "puzzle_id": "DVy_zGc9UQI",
@@ -5512,13 +5786,13 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 12418,
-      "backtracks": 12377,
-      "solve_ms": 11430.1,
-      "cap": 12377,
+      "guesses": 11366,
+      "backtracks": 11328,
+      "solve_ms": 13316.4,
+      "cap": 11328,
       "dir": "data/puzzles/DVy_zGc9UQI",
-      "iss_size": 22844,
-      "script_size": 3857
+      "iss_size": 22845,
+      "script_size": 3724
     },
     {
       "puzzle_id": "vjXf8PHYA_k",
@@ -5605,7 +5879,7 @@
       "cap": 1000,
       "dir": "data/puzzles/D_cULHb_br4",
       "iss_size": 14249,
-      "script_size": 3280
+      "script_size": 3313
     },
     {
       "puzzle_id": "T03vUTiJBjk",
@@ -5672,7 +5946,7 @@
       "cap": 1000,
       "dir": "data/puzzles/TwD2L_HuzsE",
       "iss_size": 1308,
-      "script_size": 2663
+      "script_size": 2638
     },
     {
       "puzzle_id": "mRtzcjaCntQ",
@@ -5776,6 +6050,7 @@
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "Sum",
         "NFA: no-mono-2x2",
         "NFA: x-mark"
@@ -5783,14 +6058,14 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 1000,
-      "guesses": 1082,
+      "solutions_found": 973,
+      "guesses": 1075,
       "backtracks": 1000,
-      "solve_ms": 12.3,
+      "solve_ms": 26.0,
       "cap": 1000,
       "dir": "data/puzzles/oW7lNJCC0mw",
-      "iss_size": 1618,
-      "script_size": 4106
+      "iss_size": 1026,
+      "script_size": 4734
     },
     {
       "puzzle_id": "lfXT_8yHU6A",
@@ -5850,7 +6125,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WvXfoztQZJc",
       "iss_size": 732,
-      "script_size": 2296
+      "script_size": 2262
     },
     {
       "puzzle_id": "us_d2RLkoDQ",
@@ -5889,7 +6164,7 @@
       "cap": 155763,
       "dir": "data/puzzles/us_d2RLkoDQ",
       "iss_size": 2848,
-      "script_size": 5567
+      "script_size": 5533
     },
     {
       "puzzle_id": "Aq_2DUcQhNs",
@@ -5917,7 +6192,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Aq_2DUcQhNs",
       "iss_size": 651,
-      "script_size": 2041
+      "script_size": 1926
     },
     {
       "puzzle_id": "xp6ozEjIhJ8",
@@ -5960,6 +6235,7 @@
       "status": "partial",
       "constraint_types": [
         "Var",
+        "ConnectedValues",
         "Replicate",
         "Pair: edge-h",
         "Pair: edge-v",
@@ -5971,14 +6247,14 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 807,
-      "guesses": 1009,
+      "solutions_found": 10,
+      "guesses": 1017,
       "backtracks": 1000,
-      "solve_ms": 48.6,
+      "solve_ms": 88.2,
       "cap": 1000,
       "dir": "data/puzzles/wZps_EnRcNE",
-      "iss_size": 5537,
-      "script_size": 9186
+      "iss_size": 5569,
+      "script_size": 9810
     },
     {
       "puzzle_id": "Dj4jGu9PQcs",
@@ -5995,20 +6271,21 @@
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "NFA: no-monochrome-2x2",
         "NFA: line-both-shades"
       ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 997,
-      "guesses": 1098,
+      "solutions_found": 973,
+      "guesses": 1067,
       "backtracks": 1000,
-      "solve_ms": 23.2,
+      "solve_ms": 45.8,
       "cap": 1000,
       "dir": "data/puzzles/Dj4jGu9PQcs",
-      "iss_size": 1090,
-      "script_size": 3629
+      "iss_size": 457,
+      "script_size": 4003
     },
     {
       "puzzle_id": "3dv4CIY5Mk8",
@@ -6065,7 +6342,7 @@
       "cap": 1000,
       "dir": "data/puzzles/yuIocr3HDtk",
       "iss_size": 793,
-      "script_size": 2006
+      "script_size": 1998
     },
     {
       "puzzle_id": "8L4ffie834I",
@@ -6148,7 +6425,7 @@
       "cap": 9053,
       "dir": "data/puzzles/8L4ffie834I",
       "iss_size": 15095,
-      "script_size": 7323
+      "script_size": 7787
     },
     {
       "puzzle_id": "1t0o6iZtvm8",
@@ -6165,23 +6442,24 @@
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "SameValues",
+        "NFA: no-mono-2x2",
         "NFA: box-balance",
         "NFA: redcurrant",
-        "NFA: no-mono-2x2",
         "NFA: blackcurrant"
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 500,
-      "guesses": 16116,
-      "backtracks": 16079,
-      "solve_ms": 4509.0,
-      "cap": 16079,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 26810,
+      "backtracks": 26788,
+      "solve_ms": 10582.3,
+      "cap": 26788,
       "dir": "data/puzzles/1t0o6iZtvm8",
-      "iss_size": 31664,
-      "script_size": 5028
+      "iss_size": 30432,
+      "script_size": 5753
     },
     {
       "puzzle_id": "vC0McY40Cjk",
@@ -6248,7 +6526,7 @@
       "cap": 1000,
       "dir": "data/puzzles/opsh74RHdGE",
       "iss_size": 956,
-      "script_size": 3049
+      "script_size": 3015
     },
     {
       "puzzle_id": "DY9HqMf94LQ",
@@ -6261,19 +6539,30 @@
         "https://sudokupad.app/uz9llk6x4x"
       ],
       "date": "2026-04-06",
-      "status": "unsupported",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "backtracks": null,
-      "solve_ms": null,
-      "cap": null,
-      "dir": null,
-      "iss_size": null,
-      "script_size": null
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "WhiteDot",
+        "BlackDot",
+        "NFA: wall-no-touch",
+        "Pair: black-dot-side",
+        "Pair: white-dot-side",
+        "NFA: wall-degree",
+        "NFA: wall-digit-rule"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 76,
+      "backtracks": 77,
+      "solve_ms": 28.5,
+      "cap": 1000,
+      "dir": "data/puzzles/DY9HqMf94LQ",
+      "iss_size": 6164,
+      "script_size": 7359
     },
     {
       "puzzle_id": "-xv-cA1BtGU",
@@ -6346,10 +6635,11 @@
         "https://sudokupad.app/bs3y9058h7"
       ],
       "date": "2026-04-05",
-      "status": "partial",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "NFA: no-touch",
         "NFA: loop-count-1",
         "NFA: degree",
@@ -6367,13 +6657,13 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 21929,
-      "backtracks": 21901,
-      "solve_ms": 7800.6,
-      "cap": 21901,
+      "guesses": 11601,
+      "backtracks": 11582,
+      "solve_ms": 5567.2,
+      "cap": 11582,
       "dir": "data/puzzles/tHUviGm_cvY",
-      "iss_size": 11458,
-      "script_size": 6094
+      "iss_size": 11480,
+      "script_size": 6884
     },
     {
       "puzzle_id": "02ePdhC9Rzw",
@@ -6445,7 +6735,7 @@
       "cap": 334448,
       "dir": "data/puzzles/PcJNQCckiKs",
       "iss_size": 751,
-      "script_size": 1282
+      "script_size": 1220
     },
     {
       "puzzle_id": "yIDjPjMU0Ro",
@@ -6496,7 +6786,7 @@
       "solutions_found": 997,
       "guesses": 1036,
       "backtracks": 1000,
-      "solve_ms": 21.2,
+      "solve_ms": 23.8,
       "cap": 1000,
       "dir": "data/puzzles/j7F6Po1fpWA",
       "iss_size": 79,
@@ -6644,7 +6934,7 @@
       "cap": 199600,
       "dir": "data/puzzles/i_LrY6Kc7pU",
       "iss_size": 13928,
-      "script_size": 6160
+      "script_size": 6385
     },
     {
       "puzzle_id": "01KC84S7FJ8",
@@ -6674,7 +6964,7 @@
       "cap": 1000,
       "dir": "data/puzzles/01KC84S7FJ8",
       "iss_size": 360,
-      "script_size": 1360
+      "script_size": 1289
     },
     {
       "puzzle_id": "aQm-Ew0MG2Y",
@@ -6739,7 +7029,7 @@
       "cap": 266666,
       "dir": "data/puzzles/PkPU_cSbrfs",
       "iss_size": 2118,
-      "script_size": 2808
+      "script_size": 2682
     },
     {
       "puzzle_id": "PDAmCIN-8n8",
@@ -6841,6 +7131,7 @@
       "status": "validated",
       "constraint_types": [
         "Var",
+        "ConnectedValues",
         "Quad",
         "Pair: edge-v",
         "Pair: edge-h",
@@ -6852,13 +7143,13 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 5484,
-      "backtracks": 5485,
-      "solve_ms": 246.8,
-      "cap": 146412,
+      "guesses": 82445,
+      "backtracks": 82446,
+      "solve_ms": 4706.2,
+      "cap": 128534,
       "dir": "data/puzzles/bhKtKFEy0AM",
-      "iss_size": 5893,
-      "script_size": 4972
+      "iss_size": 5925,
+      "script_size": 5784
     },
     {
       "puzzle_id": "3srmjGZskE4",
@@ -6871,26 +7162,27 @@
         "https://sudokupad.app/uoypkyxq4g"
       ],
       "date": "2026-03-26",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "EqualSum",
         "WhiteDot",
         "NFA: no-monochrome-2x2",
         "NFA: line-parity-split"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 155681,
-      "guesses": 157761,
-      "backtracks": 157728,
-      "solve_ms": 298.9,
-      "cap": 157728,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 9009,
+      "backtracks": 9010,
+      "solve_ms": 403.8,
+      "cap": 144508,
       "dir": "data/puzzles/3srmjGZskE4",
-      "iss_size": 1952,
-      "script_size": 4350
+      "iss_size": 1327,
+      "script_size": 5458
     },
     {
       "puzzle_id": "DQBFJkGqYgo",
@@ -6903,10 +7195,11 @@
         "https://sudokupad.app/n92swt0tdm"
       ],
       "date": "2026-03-25",
-      "status": "partial",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "Or",
         "NFA: no2x2",
         "NFA: top1_color1",
@@ -6952,13 +7245,13 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 4350,
-      "backtracks": 4331,
-      "solve_ms": 8428.2,
-      "cap": 4331,
+      "guesses": 2860,
+      "backtracks": 2826,
+      "solve_ms": 5433.3,
+      "cap": 2826,
       "dir": "data/puzzles/DQBFJkGqYgo",
-      "iss_size": 432805,
-      "script_size": 6695
+      "iss_size": 432172,
+      "script_size": 7152
     },
     {
       "puzzle_id": "Qa9r_bEjVfk",
@@ -6983,7 +7276,7 @@
       "solutions_found": 964,
       "guesses": 1033,
       "backtracks": 1000,
-      "solve_ms": 21.4,
+      "solve_ms": 28.4,
       "cap": 1000,
       "dir": "data/puzzles/Qa9r_bEjVfk",
       "iss_size": 208,
@@ -7053,11 +7346,11 @@
       "solutions_found": 1,
       "guesses": 353,
       "backtracks": 354,
-      "solve_ms": 292.6,
+      "solve_ms": 230.2,
       "cap": 1000,
       "dir": "data/puzzles/jtQcQ-Y8Ur0",
       "iss_size": 13438,
-      "script_size": 7832
+      "script_size": 8182
     },
     {
       "puzzle_id": "tKGjkTJj9lU",
@@ -7226,7 +7519,7 @@
       "cap": 187617,
       "dir": "data/puzzles/OG9M9bq_Ies",
       "iss_size": 4841,
-      "script_size": 8426
+      "script_size": 8309
     },
     {
       "puzzle_id": "1_sdlARfHcc",
@@ -7294,7 +7587,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ICQ-7bCTVFo",
       "iss_size": 513,
-      "script_size": 2407
+      "script_size": 2262
     },
     {
       "puzzle_id": "4SC7itCISLg",
@@ -7307,25 +7600,26 @@
         "https://sudokupad.app/yttrio/modular-yin-yang"
       ],
       "date": "2026-03-20",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "Sum",
         "NFA: no-mono-2x2",
         "NFA: mod3-2x2"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 968,
-      "guesses": 1035,
-      "backtracks": 1000,
-      "solve_ms": 24.0,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 667,
+      "backtracks": 668,
+      "solve_ms": 219.6,
       "cap": 1000,
       "dir": "data/puzzles/4SC7itCISLg",
-      "iss_size": 3877,
-      "script_size": 4005
+      "iss_size": 3921,
+      "script_size": 4127
     },
     {
       "puzzle_id": "n6eLrr5WNQU",
@@ -7352,7 +7646,7 @@
       "cap": 1000,
       "dir": "data/puzzles/n6eLrr5WNQU",
       "iss_size": 384,
-      "script_size": 1283
+      "script_size": 1235
     },
     {
       "puzzle_id": "GgmXRnvENZ8",
@@ -7440,7 +7734,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3s5hp5ymc7Y",
       "iss_size": 1100,
-      "script_size": 2592
+      "script_size": 2505
     },
     {
       "puzzle_id": "zC7pD2wG2as",
@@ -7484,6 +7778,7 @@
         "ChaosConstruction",
         "Var",
         "Replicate",
+        "ConnectedValues",
         "AllDifferent",
         "ChaosArrow",
         "NFA: degree",
@@ -7494,13 +7789,13 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 90699,
-      "backtracks": 90661,
-      "solve_ms": 5071.1,
-      "cap": 90661,
+      "guesses": 62986,
+      "backtracks": 62932,
+      "solve_ms": 3277.3,
+      "cap": 62932,
       "dir": "data/puzzles/S86fcufw2T8",
-      "iss_size": 5548,
-      "script_size": 6948
+      "iss_size": 5570,
+      "script_size": 7611
     },
     {
       "puzzle_id": "OFuVsaFv1ZE",
@@ -7603,7 +7898,7 @@
       "cap": 1000,
       "dir": "data/puzzles/NvZ9HNCpeyM",
       "iss_size": 378,
-      "script_size": 1642
+      "script_size": 1519
     },
     {
       "puzzle_id": "njbxaVs-HgA",
@@ -7687,7 +7982,1574 @@
       "cap": 1000,
       "dir": "data/puzzles/njbxaVs-HgA",
       "iss_size": 3300,
-      "script_size": 4049
+      "script_size": 4014
+    },
+    {
+      "puzzle_id": "sKg_1H2_e1U",
+      "video_id": "sKg_1H2_e1U",
+      "puzzle_title": "Dutch Flat Mates: Split Ends",
+      "video_title": "Just About Everybody Loves This Sudoku!!",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=sKg_1H2_e1U",
+      "sources": [
+        "https://sudokupad.app/n44kqgll5s"
+      ],
+      "date": "2026-03-15",
+      "status": "validated",
+      "constraint_types": [
+        "DutchFlatmates",
+        "Or",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1880,
+      "backtracks": 1881,
+      "solve_ms": 46.7,
+      "cap": 311526,
+      "dir": "data/puzzles/sKg_1H2_e1U",
+      "iss_size": 1356,
+      "script_size": 2942
+    },
+    {
+      "puzzle_id": "SHf6H6YHd6k",
+      "video_id": "SHf6H6YHd6k",
+      "puzzle_title": "Nearly \u03c0",
+      "video_title": "Celebrating Pi Day Properly!",
+      "author": "James Kopp",
+      "video_url": "https://www.youtube.com/watch?v=SHf6H6YHd6k",
+      "sources": [
+        "https://sudokupad.app/5ry14x9azl"
+      ],
+      "date": "2026-03-14",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Palindrome",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 39,
+      "backtracks": 40,
+      "solve_ms": 9.2,
+      "cap": 1000,
+      "dir": "data/puzzles/SHf6H6YHd6k",
+      "iss_size": 430,
+      "script_size": 1505
+    },
+    {
+      "puzzle_id": "k7MMOd13AdQ",
+      "video_id": "k7MMOd13AdQ",
+      "puzzle_title": "Wingspan",
+      "video_title": "PLEASE Try This Sudoku. You Won't Regret It.",
+      "author": "Kaktuslav",
+      "video_url": "https://www.youtube.com/watch?v=k7MMOd13AdQ",
+      "sources": [
+        "https://sudokupad.app/yj1g5x7n9f"
+      ],
+      "date": "2026-03-14",
+      "status": "validated",
+      "constraint_types": [
+        "RegionSumLine"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 53464,
+      "backtracks": 53465,
+      "solve_ms": 692.0,
+      "cap": 307692,
+      "dir": "data/puzzles/k7MMOd13AdQ",
+      "iss_size": 449,
+      "script_size": 1471
+    },
+    {
+      "puzzle_id": "VUelKDmaZvM",
+      "video_id": "VUelKDmaZvM",
+      "puzzle_title": "Frog Print",
+      "video_title": "\"Just\" Arrow Sudoku - but a Remarkable Puzzle!",
+      "author": "Walter Gr\u00f6nholm",
+      "video_url": "https://www.youtube.com/watch?v=VUelKDmaZvM",
+      "sources": [
+        "https://sudokupad.app/f9kpjvpt0p"
+      ],
+      "date": "2026-03-13",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 230,
+      "backtracks": 231,
+      "solve_ms": 15.8,
+      "cap": 1000,
+      "dir": "data/puzzles/VUelKDmaZvM",
+      "iss_size": 420,
+      "script_size": 1075
+    },
+    {
+      "puzzle_id": "I-2gLlYheHs",
+      "video_id": "I-2gLlYheHs",
+      "puzzle_title": "Dancing in a ring",
+      "video_title": "Another Candidate For The Sudoku Museum",
+      "author": "Fool on Hill",
+      "video_url": "https://www.youtube.com/watch?v=I-2gLlYheHs",
+      "sources": [
+        "https://sudokupad.app/b37xfe4xjf"
+      ],
+      "date": "2026-03-13",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "Whisper",
+        "BlackDot",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1216,
+      "backtracks": 1217,
+      "solve_ms": 48.0,
+      "cap": 225225,
+      "dir": "data/puzzles/I-2gLlYheHs",
+      "iss_size": 440,
+      "script_size": 2076
+    },
+    {
+      "puzzle_id": "SHoPEtcVGQA",
+      "video_id": "SHoPEtcVGQA",
+      "puzzle_title": "Basic Math",
+      "video_title": "You Couldn't Call This Math Advanced!",
+      "author": "charmquark",
+      "video_url": "https://www.youtube.com/watch?v=SHoPEtcVGQA",
+      "sources": [
+        "https://sudokupad.app/hq1yn5i2hq"
+      ],
+      "date": "2026-03-12",
+      "status": "validated",
+      "constraint_types": [
+        "X",
+        "V",
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "backtracks": 1,
+      "solve_ms": 4.4,
+      "cap": 1000,
+      "dir": "data/puzzles/SHoPEtcVGQA",
+      "iss_size": 461,
+      "script_size": 1161
+    },
+    {
+      "puzzle_id": "ueofJZ22joA",
+      "video_id": "ueofJZ22joA",
+      "puzzle_title": "Odd!",
+      "video_title": "A Sudoku With Only 3 Given Digits!",
+      "author": "Aad van de Wetering",
+      "video_url": "https://www.youtube.com/watch?v=ueofJZ22joA",
+      "sources": [
+        "https://sudokupad.app/23xbq0xofa"
+      ],
+      "date": "2026-03-12",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 7,
+      "backtracks": 8,
+      "solve_ms": 5.8,
+      "cap": 1000,
+      "dir": "data/puzzles/ueofJZ22joA",
+      "iss_size": 1311,
+      "script_size": 2268
+    },
+    {
+      "puzzle_id": "jKIeg9NhF_8",
+      "video_id": "jKIeg9NhF_8",
+      "puzzle_title": "Secret Killer",
+      "video_title": "(NOT) Just a Killer Sudoku?",
+      "author": "Wichu",
+      "video_url": "https://www.youtube.com/watch?v=jKIeg9NhF_8",
+      "sources": [
+        "https://sudokupad.app/9iwqmjap7n"
+      ],
+      "date": "2026-03-11",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKing",
+        "AntiConsecutive",
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "backtracks": 5,
+      "solve_ms": 27.5,
+      "cap": 1000,
+      "dir": "data/puzzles/jKIeg9NhF_8",
+      "iss_size": 280,
+      "script_size": 1122
+    },
+    {
+      "puzzle_id": "C59o3VPre2o",
+      "video_id": "C59o3VPre2o",
+      "puzzle_title": "RAT RUN 29: Counterbalance",
+      "video_title": "If There Was A Sudoku Museum, This Should Be In It. Rat Run 29: Counterbalance (S3:E9)",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=C59o3VPre2o",
+      "sources": [
+        "https://sudokupad.app/xipcvuhz9y"
+      ],
+      "date": "2026-03-11",
+      "status": "partial",
+      "constraint_types": [
+        "GreaterThan",
+        "Pair: redcurrant"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 994,
+      "guesses": 1036,
+      "backtracks": 1000,
+      "solve_ms": 24.2,
+      "cap": 1000,
+      "dir": "data/puzzles/C59o3VPre2o",
+      "iss_size": 177,
+      "script_size": 929
+    },
+    {
+      "puzzle_id": "H1OAzPyDAAY",
+      "video_id": "H1OAzPyDAAY",
+      "puzzle_title": "Make No Mistakes",
+      "video_title": "Mistakes be Human",
+      "author": "TY",
+      "video_url": "https://www.youtube.com/watch?v=H1OAzPyDAAY",
+      "sources": [
+        "https://sudokupad.app/b5awriwt7k"
+      ],
+      "date": "2026-03-10",
+      "status": "validated",
+      "constraint_types": [
+        "BlackDot",
+        "Whisper",
+        "GreaterThan",
+        "SameValues",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 23,
+      "backtracks": 24,
+      "solve_ms": 8.2,
+      "cap": 1000,
+      "dir": "data/puzzles/H1OAzPyDAAY",
+      "iss_size": 544,
+      "script_size": 2133
+    },
+    {
+      "puzzle_id": "nRUk80-7SvA",
+      "video_id": "nRUk80-7SvA",
+      "puzzle_title": "Exclusive Lines",
+      "video_title": "When The Fog Clears, The Sudoku Rules Change...!",
+      "author": "Nurator",
+      "video_url": "https://www.youtube.com/watch?v=nRUk80-7SvA",
+      "sources": [
+        "https://sudokupad.app/iovwq0jc5n"
+      ],
+      "date": "2026-03-10",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "WhiteDot",
+        "BlackDot",
+        "Or",
+        "And",
+        "RegionSumLine",
+        "Whisper",
+        "NFA: Parity",
+        "NFA: No repeats: type 3",
+        "NFA: No repeats: type 2",
+        "NFA: No repeats: type 1"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 2,
+      "guesses": 497,
+      "backtracks": 498,
+      "solve_ms": 243.0,
+      "cap": 1000,
+      "dir": "data/puzzles/nRUk80-7SvA",
+      "iss_size": 81497,
+      "script_size": 4155
+    },
+    {
+      "puzzle_id": "q3K76ZFz3mk",
+      "video_id": "q3K76ZFz3mk",
+      "puzzle_title": "In My Thirties",
+      "video_title": "Colouring a Killer?",
+      "author": "Ridhwan",
+      "video_url": "https://www.youtube.com/watch?v=q3K76ZFz3mk",
+      "sources": [
+        "https://sudokupad.app/rbt6j8bpbn"
+      ],
+      "date": "2026-03-09",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 140,
+      "backtracks": 141,
+      "solve_ms": 15.1,
+      "cap": 1000,
+      "dir": "data/puzzles/q3K76ZFz3mk",
+      "iss_size": 368,
+      "script_size": 957
+    },
+    {
+      "puzzle_id": "WbDuklPfeSQ",
+      "video_id": "WbDuklPfeSQ",
+      "puzzle_title": "Blockers",
+      "video_title": "Blockers: A New Sudoku Idea From An Olympic Athlete!",
+      "author": "Fenners",
+      "video_url": "https://www.youtube.com/watch?v=WbDuklPfeSQ",
+      "sources": [
+        "https://sudokupad.app/q6vqwmsp2k"
+      ],
+      "date": "2026-03-09",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "Whisper",
+        "RegionSumLine",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 267,
+      "backtracks": 268,
+      "solve_ms": 14.3,
+      "cap": 1000,
+      "dir": "data/puzzles/WbDuklPfeSQ",
+      "iss_size": 3462,
+      "script_size": 3165
+    },
+    {
+      "puzzle_id": "JAfswb4nVYU",
+      "video_id": "JAfswb4nVYU",
+      "puzzle_title": "Horsing Around",
+      "video_title": "Henry the Horse Jumps Through the Fog!",
+      "author": "Tim Hasselaar",
+      "video_url": "https://www.youtube.com/watch?v=JAfswb4nVYU",
+      "sources": [
+        "https://sudokupad.app/3di357jqj1"
+      ],
+      "date": "2026-03-08",
+      "status": "partial",
+      "constraint_types": [
+        "GreaterThan",
+        "BlackDot",
+        "Pair: red-parity"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 996,
+      "guesses": 1019,
+      "backtracks": 1000,
+      "solve_ms": 16.6,
+      "cap": 1000,
+      "dir": "data/puzzles/JAfswb4nVYU",
+      "iss_size": 576,
+      "script_size": 2349
+    },
+    {
+      "puzzle_id": "IDvrTDM-5ek",
+      "video_id": "IDvrTDM-5ek",
+      "puzzle_title": "Xerox",
+      "video_title": "Numberphile Math Guy Returns With A Crazy Sudoku!",
+      "author": "MathGuy_12",
+      "video_url": "https://www.youtube.com/watch?v=IDvrTDM-5ek",
+      "sources": [
+        "https://sudokupad.app/9qw21nnjuy"
+      ],
+      "date": "2026-03-08",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "backtracks": null,
+      "solve_ms": null,
+      "cap": null,
+      "dir": null,
+      "iss_size": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "8H98gtZSEVA",
+      "video_id": "8H98gtZSEVA",
+      "puzzle_title": "Lines of Time",
+      "video_title": "The Sands of Time tick by as I try to solve this Puzzle ...",
+      "author": "RandyDan",
+      "video_url": "https://www.youtube.com/watch?v=8H98gtZSEVA",
+      "sources": [
+        "https://sudokupad.app/60j7k2y8yv"
+      ],
+      "date": "2026-03-07",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "Whisper",
+        "Renban",
+        "Entropic",
+        "WhiteDot",
+        "BlackDot",
+        "Pair: Parity"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1278,
+      "backtracks": 1279,
+      "solve_ms": 32.8,
+      "cap": 366300,
+      "dir": "data/puzzles/8H98gtZSEVA",
+      "iss_size": 334,
+      "script_size": 2064
+    },
+    {
+      "puzzle_id": "XQzSE16SMfE",
+      "video_id": "XQzSE16SMfE",
+      "puzzle_title": "\u03a3",
+      "video_title": "The Sigma Sudoku",
+      "author": "Kaktuslav",
+      "video_url": "https://www.youtube.com/watch?v=XQzSE16SMfE",
+      "sources": [
+        "https://sudokupad.app/91jlsoujs1"
+      ],
+      "date": "2026-03-07",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "Var",
+        "Sum",
+        "AllDifferent",
+        "Pair"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1962,
+      "backtracks": 1963,
+      "solve_ms": 53.7,
+      "cap": 152905,
+      "dir": "data/puzzles/XQzSE16SMfE",
+      "iss_size": 2390,
+      "script_size": 2597
+    },
+    {
+      "puzzle_id": "gEK_cN8I0F4",
+      "video_id": "gEK_cN8I0F4",
+      "puzzle_title": "Kropki Drops",
+      "video_title": "Drops of Genius",
+      "author": "Michael Lefkowitz",
+      "video_url": "https://www.youtube.com/watch?v=gEK_cN8I0F4",
+      "sources": [
+        "https://sudokupad.app/tn30l4epty"
+      ],
+      "date": "2026-03-06",
+      "status": "validated",
+      "constraint_types": [
+        "NFA: BD",
+        "NFA: WD"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 38170,
+      "backtracks": 38171,
+      "solve_ms": 1169.3,
+      "cap": 143061,
+      "dir": "data/puzzles/gEK_cN8I0F4",
+      "iss_size": 1264,
+      "script_size": 3166
+    },
+    {
+      "puzzle_id": "MpFUTwgEJFc",
+      "video_id": "MpFUTwgEJFc",
+      "puzzle_title": "Ranked Quads",
+      "video_title": "The Miracle 6x6 Sudoku",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=MpFUTwgEJFc",
+      "sources": [
+        "https://sudokupad.app/0oajbse81h"
+      ],
+      "date": "2026-03-06",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "Var",
+        "Quad",
+        "ContainExact",
+        "NFA: QuadValuesDistinct",
+        "NFA: QuadRankOrder"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 293,
+      "backtracks": 294,
+      "solve_ms": 158.6,
+      "cap": 1000,
+      "dir": "data/puzzles/MpFUTwgEJFc",
+      "iss_size": 18840,
+      "script_size": 5945
+    },
+    {
+      "puzzle_id": "pGrD3QJBpKU",
+      "video_id": "pGrD3QJBpKU",
+      "puzzle_title": "Uniqueness, with a Nudge",
+      "video_title": "Quite a Unique Puzzle!",
+      "author": "R. Mullinix",
+      "video_url": "https://www.youtube.com/watch?v=pGrD3QJBpKU",
+      "sources": [
+        "https://sudokupad.app/j5947yd09n"
+      ],
+      "date": "2026-03-05",
+      "status": "validated",
+      "constraint_types": [
+        "1-10",
+        "Var",
+        "Replicate",
+        "Sum",
+        "Whisper",
+        "AllDifferent",
+        "WhiteDot",
+        "BlackDot",
+        "NFA: nudge-digit-9-unique",
+        "NFA: nudge-digit-8-unique",
+        "NFA: nudge-digit-7-unique",
+        "NFA: nudge-digit-6-unique",
+        "NFA: nudge-digit-5-unique",
+        "NFA: nudge-digit-4-unique",
+        "NFA: nudge-digit-3-unique",
+        "NFA: nudge-digit-2-unique",
+        "NFA: nudge-digit-1-unique"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 23155,
+      "backtracks": 23156,
+      "solve_ms": 7334.4,
+      "cap": 27555,
+      "dir": "data/puzzles/pGrD3QJBpKU",
+      "iss_size": 12611,
+      "script_size": 6393
+    },
+    {
+      "puzzle_id": "oyjQPDL4BjE",
+      "video_id": "oyjQPDL4BjE",
+      "puzzle_title": "Einstein Sudoku",
+      "video_title": "The Einstein Sudoku",
+      "author": "Synergenesis and mbumbee",
+      "video_url": "https://www.youtube.com/watch?v=oyjQPDL4BjE",
+      "sources": [
+        "https://sudokupad.app/dyg2otjpgb"
+      ],
+      "date": "2026-03-05",
+      "status": "partial",
+      "constraint_types": [
+        "V",
+        "X",
+        "BlackDot",
+        "Quad",
+        "Whisper",
+        "Renban",
+        "Thermo",
+        "Arrow",
+        "Var",
+        "AllDifferent",
+        "Pair: YellowIsStar",
+        "NFA: Color_red",
+        "NFA: Shape_circle",
+        "NFA: Color_orange",
+        "NFA: Shape_triangle",
+        "NFA: Shape_square",
+        "NFA: Color_green",
+        "NFA: Shape_star",
+        "NFA: Color_pink",
+        "NFA: Shape_crescent",
+        "NFA: Color_blue",
+        "NFA: Shape_diamond",
+        "NFA: Shape_heart",
+        "NFA: Color_brown",
+        "NFA: Shape_cross",
+        "NFA: Shape_pentagon"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 6,
+      "guesses": 32,
+      "backtracks": 33,
+      "solve_ms": 10.5,
+      "cap": 1000,
+      "dir": "data/puzzles/oyjQPDL4BjE",
+      "iss_size": 2364,
+      "script_size": 5705
+    },
+    {
+      "puzzle_id": "7_JVTn-UZQs",
+      "video_id": "7_JVTn-UZQs",
+      "puzzle_title": "Keep being you ",
+      "video_title": "Approachable and Thoughtful",
+      "author": "Chip Sounder",
+      "video_url": "https://www.youtube.com/watch?v=7_JVTn-UZQs",
+      "sources": [
+        "https://sudokupad.app/kqyga6lqbv"
+      ],
+      "date": "2026-03-04",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "Whisper",
+        "Arrow",
+        "BlackDot",
+        "V"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "backtracks": 6,
+      "solve_ms": 5.4,
+      "cap": 1000,
+      "dir": "data/puzzles/7_JVTn-UZQs",
+      "iss_size": 225,
+      "script_size": 1234
+    },
+    {
+      "puzzle_id": "WvmseoqJAAA",
+      "video_id": "WvmseoqJAAA",
+      "puzzle_title": "RAT RUN 28: Hypothesis",
+      "video_title": "The Most Beautiful Rat Run! Episode 28: Hypothesis (S3:E8)",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=WvmseoqJAAA",
+      "sources": [
+        "https://sudokupad.app/ydgn4bxilt"
+      ],
+      "date": "2026-03-04",
+      "status": "partial",
+      "constraint_types": [
+        "GreaterThan",
+        "SameValues",
+        "AllDifferent",
+        "Pair: grape"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 970,
+      "guesses": 1041,
+      "backtracks": 1000,
+      "solve_ms": 42.7,
+      "cap": 1000,
+      "dir": "data/puzzles/WvmseoqJAAA",
+      "iss_size": 366,
+      "script_size": 1477
+    },
+    {
+      "puzzle_id": "-dwKlM3DGXo",
+      "video_id": "-dwKlM3DGXo",
+      "puzzle_title": "Triple Threeat",
+      "video_title": "A Real Feast of Threes!",
+      "author": "FIT7Y",
+      "video_url": "https://www.youtube.com/watch?v=-dwKlM3DGXo",
+      "sources": [
+        "https://sudokupad.app/dp2qkgafww"
+      ],
+      "date": "2026-03-03",
+      "status": "off-grid",
+      "constraint_types": [
+        "1x1",
+        "1-7",
+        "Var",
+        "ContainExact",
+        "CountDistinct",
+        "NFA: cage sum 3",
+        "NFA: cage sum 7",
+        "NFA: cage sum 8",
+        "NFA: cage sum 10",
+        "NFA: cage sum 14",
+        "NFA: cage sum 15",
+        "NFA: cage sum 21",
+        "Pair: cage sum 1",
+        "Pair: cage sum 7"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 665360,
+      "backtracks": 665361,
+      "solve_ms": 2300.1,
+      "cap": 1973684,
+      "dir": "data/puzzles/-dwKlM3DGXo",
+      "iss_size": 2910,
+      "script_size": 4268
+    },
+    {
+      "puzzle_id": "Zb4OEMqW2dc",
+      "video_id": "Zb4OEMqW2dc",
+      "puzzle_title": "Spreading Through The Fog",
+      "video_title": "The Hardest 2/5 Difficulty Sudoku!!",
+      "author": "Rab3aron",
+      "video_url": "https://www.youtube.com/watch?v=Zb4OEMqW2dc",
+      "sources": [
+        "https://sudokupad.app/f4ec7xtau8"
+      ],
+      "date": "2026-03-03",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "backtracks": null,
+      "solve_ms": null,
+      "cap": null,
+      "dir": null,
+      "iss_size": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "1ICC9r-FNwE",
+      "video_id": "1ICC9r-FNwE",
+      "puzzle_title": "Counting to 7",
+      "video_title": "Finding a Room for All the Numbers!",
+      "author": "zetamath",
+      "video_url": "https://www.youtube.com/watch?v=1ICC9r-FNwE",
+      "sources": [
+        "https://sudokupad.app/fyn51hk3yu"
+      ],
+      "date": "2026-03-02",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "NumberedRoom"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 372,
+      "backtracks": 373,
+      "solve_ms": 20.0,
+      "cap": 1000,
+      "dir": "data/puzzles/1ICC9r-FNwE",
+      "iss_size": 439,
+      "script_size": 1985
+    },
+    {
+      "puzzle_id": "DvbnnTUdByY",
+      "video_id": "DvbnnTUdByY",
+      "puzzle_title": "Region Sum Circus",
+      "video_title": "The Three Colour Theorem",
+      "author": "Jeff Wajes",
+      "video_url": "https://www.youtube.com/watch?v=DvbnnTUdByY",
+      "sources": [
+        "https://sudokupad.app/73oh4m8m8m"
+      ],
+      "date": "2026-03-02",
+      "status": "too-slow",
+      "constraint_types": [
+        "RegionSumLine",
+        "Var",
+        "Replicate",
+        "And",
+        "AllDifferent",
+        "NFA: B1",
+        "NFA: G1",
+        "NFA: R1",
+        "NFA: B4",
+        "NFA: G4",
+        "NFA: R4",
+        "NFA: B3",
+        "NFA: G3",
+        "NFA: R3",
+        "NFA: B2",
+        "NFA: G2",
+        "NFA: R2",
+        "NFA: B9",
+        "NFA: G9",
+        "NFA: R9",
+        "NFA: B8",
+        "NFA: G8",
+        "NFA: R8",
+        "NFA: B7",
+        "NFA: G7",
+        "NFA: R7",
+        "NFA: B6",
+        "NFA: G6",
+        "NFA: R6",
+        "NFA: B5",
+        "NFA: G5",
+        "NFA: R5"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 13208,
+      "backtracks": 13164,
+      "solve_ms": 11916.0,
+      "cap": 13164,
+      "dir": "data/puzzles/DvbnnTUdByY",
+      "iss_size": 20351,
+      "script_size": 4925
+    },
+    {
+      "puzzle_id": "YL-Mf2KXR88",
+      "video_id": "YL-Mf2KXR88",
+      "puzzle_title": "Alleyway Dance",
+      "video_title": "The Blind Leading the Blind down a Dark Alley ...",
+      "author": "Ryan W.",
+      "video_url": "https://www.youtube.com/watch?v=YL-Mf2KXR88",
+      "sources": [
+        "https://sudokupad.app/3yhq2n7z2q"
+      ],
+      "date": "2026-03-01",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 37375,
+      "backtracks": 37376,
+      "solve_ms": 911.9,
+      "cap": 172711,
+      "dir": "data/puzzles/YL-Mf2KXR88",
+      "iss_size": 811,
+      "script_size": 1179
+    },
+    {
+      "puzzle_id": "va4P_5HUkuM",
+      "video_id": "va4P_5HUkuM",
+      "puzzle_title": "Something for Simon",
+      "video_title": "Who Is Hidden In The Sudoku Fog?",
+      "author": "Knightemaire",
+      "video_url": "https://www.youtube.com/watch?v=va4P_5HUkuM",
+      "sources": [
+        "https://sudokupad.app/6uqtssso3q"
+      ],
+      "date": "2026-03-01",
+      "status": "validated",
+      "constraint_types": [
+        "PillArrow",
+        "Whisper",
+        "Renban",
+        "Cage",
+        "BlackDot",
+        "WhiteDot",
+        "Pair: Parity"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 79,
+      "backtracks": 80,
+      "solve_ms": 14.2,
+      "cap": 1000,
+      "dir": "data/puzzles/va4P_5HUkuM",
+      "iss_size": 627,
+      "script_size": 2926
+    },
+    {
+      "puzzle_id": "mQM38sD3bRw",
+      "video_id": "mQM38sD3bRw",
+      "puzzle_title": "8s",
+      "video_title": "Super Eights all over the place",
+      "author": "Daniel Buckeldee",
+      "video_url": "https://www.youtube.com/watch?v=mQM38sD3bRw",
+      "sources": [
+        "https://sudokupad.app/iccr4xsar2"
+      ],
+      "date": "2026-02-28",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Sum",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: label-canonical-order",
+        "NFA: line-degree",
+        "NFA: label-8-sum",
+        "NFA: label-7-sum",
+        "NFA: label-6-sum",
+        "NFA: label-5-sum",
+        "NFA: label-4-sum",
+        "NFA: label-3-sum",
+        "NFA: label-2-sum",
+        "NFA: label-1-sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 352,
+      "backtracks": 353,
+      "solve_ms": 110.6,
+      "cap": 1000,
+      "dir": "data/puzzles/mQM38sD3bRw",
+      "iss_size": 7297,
+      "script_size": 8009
+    },
+    {
+      "puzzle_id": "oOBCZNrhJRY",
+      "video_id": "oOBCZNrhJRY",
+      "puzzle_title": "Sums Plus",
+      "video_title": "What Is The Sum Of This Sudoku?",
+      "author": "Cane_Puzzles",
+      "video_url": "https://www.youtube.com/watch?v=oOBCZNrhJRY",
+      "sources": [
+        "https://sudokupad.app/7sf4felfun"
+      ],
+      "date": "2026-02-28",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2199,
+      "backtracks": 2200,
+      "solve_ms": 42.4,
+      "cap": 386100,
+      "dir": "data/puzzles/oOBCZNrhJRY",
+      "iss_size": 288,
+      "script_size": 1065
+    },
+    {
+      "puzzle_id": "RJYpSZ0frQM",
+      "video_id": "RJYpSZ0frQM",
+      "puzzle_title": "Tree Squirrel",
+      "video_title": "What a Superb Squirrel Puzzle!",
+      "author": "Derek LeClair",
+      "video_url": "https://www.youtube.com/watch?v=RJYpSZ0frQM",
+      "sources": [
+        "https://sudokupad.app/pyufyvwwpw"
+      ],
+      "date": "2026-02-27",
+      "status": "validated",
+      "constraint_types": [
+        "Sum",
+        "Pair: non-consecutive"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 32014,
+      "backtracks": 32015,
+      "solve_ms": 431.3,
+      "cap": 265251,
+      "dir": "data/puzzles/RJYpSZ0frQM",
+      "iss_size": 1270,
+      "script_size": 2557
+    },
+    {
+      "puzzle_id": "cAj0gZA5ccE",
+      "video_id": "cAj0gZA5ccE",
+      "puzzle_title": "Chess-doku",
+      "video_title": "White To Play And Mate In 1. Er, What?!!",
+      "author": "masetab",
+      "video_url": "https://www.youtube.com/watch?v=cAj0gZA5ccE",
+      "sources": [
+        "https://sudokupad.app/p4f84nlzhv"
+      ],
+      "date": "2026-02-27",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "backtracks": null,
+      "solve_ms": null,
+      "cap": null,
+      "dir": null,
+      "iss_size": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "noCVJzMy9t4",
+      "video_id": "noCVJzMy9t4",
+      "puzzle_title": "Cantor's Blue!",
+      "video_title": "A Super Sudoku Lesson",
+      "author": "Mateo99",
+      "video_url": "https://www.youtube.com/watch?v=noCVJzMy9t4",
+      "sources": [
+        "https://sudokupad.app/6nqzhupznu"
+      ],
+      "date": "2026-02-26",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow",
+        "Palindrome"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 428,
+      "backtracks": 429,
+      "solve_ms": 36.3,
+      "cap": 1000,
+      "dir": "data/puzzles/noCVJzMy9t4",
+      "iss_size": 393,
+      "script_size": 1369
+    },
+    {
+      "puzzle_id": "OzEl2XRLtdU",
+      "video_id": "OzEl2XRLtdU",
+      "puzzle_title": "RAT RUN 27: Productivity",
+      "video_title": "The Hardest EVER Rat Run!! Episode 27: Productivity (S3:E7)",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=OzEl2XRLtdU",
+      "sources": [
+        "https://sudokupad.app/syu6xcezzm"
+      ],
+      "date": "2026-02-26",
+      "status": "partial",
+      "constraint_types": [
+        "Pair: goldenberry"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 998,
+      "guesses": 1041,
+      "backtracks": 1000,
+      "solve_ms": 30.6,
+      "cap": 1000,
+      "dir": "data/puzzles/OzEl2XRLtdU",
+      "iss_size": 120,
+      "script_size": 697
+    },
+    {
+      "puzzle_id": "N4LskHYSfCg",
+      "video_id": "N4LskHYSfCg",
+      "puzzle_title": "Quivers",
+      "video_title": "Quivering with Frustration!",
+      "author": "James Kopp",
+      "video_url": "https://www.youtube.com/watch?v=N4LskHYSfCg",
+      "sources": [
+        "https://sudokupad.app/d6pi3xs4wu"
+      ],
+      "date": "2026-02-25",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 270,
+      "backtracks": 271,
+      "solve_ms": 18.2,
+      "cap": 1000,
+      "dir": "data/puzzles/N4LskHYSfCg",
+      "iss_size": 420,
+      "script_size": 1230
+    },
+    {
+      "puzzle_id": "KKZTUBLzCto",
+      "video_id": "KKZTUBLzCto",
+      "puzzle_title": "Sixteen Quad Sums",
+      "video_title": "No Quadratics Needed for These Quads",
+      "author": "curlingclips",
+      "video_url": "https://www.youtube.com/watch?v=KKZTUBLzCto",
+      "sources": [
+        "https://sudokupad.app/c2a6l3i1vz"
+      ],
+      "date": "2026-02-24",
+      "status": "validated",
+      "constraint_types": [
+        "NFA: QD1",
+        "NFA: QD10",
+        "NFA: QD11",
+        "NFA: QD12",
+        "NFA: QD13",
+        "NFA: QD14",
+        "NFA: QD15",
+        "NFA: QD16",
+        "NFA: QD2",
+        "NFA: QD3",
+        "NFA: QD4",
+        "NFA: QD5",
+        "NFA: QD6",
+        "NFA: QD7",
+        "NFA: QD8",
+        "NFA: QD9"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4450,
+      "backtracks": 4451,
+      "solve_ms": 221.5,
+      "cap": 186915,
+      "dir": "data/puzzles/KKZTUBLzCto",
+      "iss_size": 792,
+      "script_size": 1860
+    },
+    {
+      "puzzle_id": "S5VVS9SSRek",
+      "video_id": "S5VVS9SSRek",
+      "puzzle_title": "Sources",
+      "video_title": "The Source Of Sudoku Brillliance",
+      "author": "Kaktuslav",
+      "video_url": "https://www.youtube.com/watch?v=S5VVS9SSRek",
+      "sources": [
+        "https://sudokupad.app/n5avmxmtyt"
+      ],
+      "date": "2026-02-24",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "RegionSumLine"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 23360,
+      "backtracks": 23361,
+      "solve_ms": 718.3,
+      "cap": 186567,
+      "dir": "data/puzzles/S5VVS9SSRek",
+      "iss_size": 5123,
+      "script_size": 2763
+    },
+    {
+      "puzzle_id": "pU9_2Id5HH0",
+      "video_id": "pU9_2Id5HH0",
+      "puzzle_title": "Ubiquity",
+      "video_title": "Unskew my Puzzle",
+      "author": "Michael Lefkowitz",
+      "video_url": "https://www.youtube.com/watch?v=pU9_2Id5HH0",
+      "sources": [
+        "https://sudokupad.app/bx62hwgndg"
+      ],
+      "date": "2026-02-23",
+      "status": "validated",
+      "constraint_types": [
+        "11x9",
+        "1-15",
+        "NoBoxes",
+        "Replicate",
+        "AllDifferent",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5562,
+      "backtracks": 5563,
+      "solve_ms": 60.3,
+      "cap": 534759,
+      "dir": "data/puzzles/pU9_2Id5HH0",
+      "iss_size": 1016,
+      "script_size": 5281
+    },
+    {
+      "puzzle_id": "RbjLl7O_Qx0",
+      "video_id": "RbjLl7O_Qx0",
+      "puzzle_title": "Quadratics",
+      "video_title": "The Sudoku With Invisible Clues!!",
+      "author": "Dorlir",
+      "video_url": "https://www.youtube.com/watch?v=RbjLl7O_Qx0",
+      "sources": [
+        "https://sudokupad.app/wobk83t65m"
+      ],
+      "date": "2026-02-23",
+      "status": "validated",
+      "constraint_types": [
+        "NFA: quad0",
+        "NFA: quad1",
+        "NFA: quad10",
+        "NFA: quad11",
+        "NFA: quad2",
+        "NFA: quad3",
+        "NFA: quad4",
+        "NFA: quad5",
+        "NFA: quad6",
+        "NFA: quad7",
+        "NFA: quad8",
+        "NFA: quad9"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 910,
+      "backtracks": 911,
+      "solve_ms": 63.1,
+      "cap": 1000,
+      "dir": "data/puzzles/RbjLl7O_Qx0",
+      "iss_size": 565,
+      "script_size": 2863
+    },
+    {
+      "puzzle_id": "AugLh4Y8XdA",
+      "video_id": "AugLh4Y8XdA",
+      "puzzle_title": "Hariyama",
+      "video_title": "Pokemon Sudoku?",
+      "author": "Justalilguy & Chefofdeath",
+      "video_url": "https://www.youtube.com/watch?v=AugLh4Y8XdA",
+      "sources": [
+        "https://sudokupad.app/d9fq0ll77a"
+      ],
+      "date": "2026-02-22",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "AllDifferent",
+        "EqualSum",
+        "RegionSumLine"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 490,
+      "backtracks": 491,
+      "solve_ms": 22.9,
+      "cap": 1000,
+      "dir": "data/puzzles/AugLh4Y8XdA",
+      "iss_size": 387,
+      "script_size": 1724
+    },
+    {
+      "puzzle_id": "VDFZ9Wlohik",
+      "video_id": "VDFZ9Wlohik",
+      "puzzle_title": "Bonds",
+      "video_title": "Sudoku Sees The Return Of An Old Friend",
+      "author": "Playmaker6174",
+      "video_url": "https://www.youtube.com/watch?v=VDFZ9Wlohik",
+      "sources": [
+        "https://sudokupad.app/r834e3uouc"
+      ],
+      "date": "2026-02-22",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 179,
+      "backtracks": 180,
+      "solve_ms": 16.8,
+      "cap": 1000,
+      "dir": "data/puzzles/VDFZ9Wlohik",
+      "iss_size": 307,
+      "script_size": 923
+    },
+    {
+      "puzzle_id": "HCeC3df8Lvk",
+      "video_id": "HCeC3df8Lvk",
+      "puzzle_title": "Fire and Water",
+      "video_title": "The Elements of Modified Sudoku",
+      "author": "Mad-Tyas",
+      "video_url": "https://www.youtube.com/watch?v=HCeC3df8Lvk",
+      "sources": [
+        "https://sudokupad.app/kglg9thtij"
+      ],
+      "date": "2026-02-21",
+      "status": "too-slow",
+      "constraint_types": [
+        "1-10",
+        "Replicate",
+        "Var",
+        "Sum",
+        "Or",
+        "And",
+        "AllDifferent"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 3594,
+      "backtracks": 3534,
+      "solve_ms": 4807.6,
+      "cap": 3534,
+      "dir": "data/puzzles/HCeC3df8Lvk",
+      "iss_size": 144363,
+      "script_size": 9413
+    },
+    {
+      "puzzle_id": "sFUTQioeDaw",
+      "video_id": "sFUTQioeDaw",
+      "puzzle_title": "Schubladen",
+      "video_title": "This Sudoku Is SO Clever.",
+      "author": "Myxo",
+      "video_url": "https://www.youtube.com/watch?v=sFUTQioeDaw",
+      "sources": [
+        "https://sudokupad.app/329yqbkq53"
+      ],
+      "date": "2026-02-21",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "Thermo"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 24,
+      "backtracks": 25,
+      "solve_ms": 5.3,
+      "cap": 1000,
+      "dir": "data/puzzles/sFUTQioeDaw",
+      "iss_size": 225,
+      "script_size": 823
+    },
+    {
+      "puzzle_id": "32_sR53VdHM",
+      "video_id": "32_sR53VdHM",
+      "puzzle_title": "G4G16",
+      "video_title": "What a Day to Celebrate!",
+      "author": "olima",
+      "video_url": "https://www.youtube.com/watch?v=32_sR53VdHM",
+      "sources": [
+        "https://sudokupad.app/1jiqahq6q7"
+      ],
+      "date": "2026-02-20",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Renban",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1101,
+      "backtracks": 1102,
+      "solve_ms": 47.7,
+      "cap": 234741,
+      "dir": "data/puzzles/32_sR53VdHM",
+      "iss_size": 445,
+      "script_size": 1253
+    },
+    {
+      "puzzle_id": "L4BKOaUr1GE",
+      "video_id": "L4BKOaUr1GE",
+      "puzzle_title": "Pinpoint",
+      "video_title": "Can You Pinpoint The Correct Sudoku Logic?",
+      "author": "RandyDan",
+      "video_url": "https://www.youtube.com/watch?v=L4BKOaUr1GE",
+      "sources": [
+        "https://sudokupad.app/6aq1xg9e6g"
+      ],
+      "date": "2026-02-20",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Renban",
+        "WhiteDot",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 196,
+      "backtracks": 197,
+      "solve_ms": 13.8,
+      "cap": 1000,
+      "dir": "data/puzzles/L4BKOaUr1GE",
+      "iss_size": 293,
+      "script_size": 1308
+    },
+    {
+      "puzzle_id": "csSsYQLECE8",
+      "video_id": "csSsYQLECE8",
+      "puzzle_title": "Was It A Cat I Saw?",
+      "video_title": "Was it a Cat I Saw?",
+      "author": "Mile Lemai\u0107",
+      "video_url": "https://www.youtube.com/watch?v=csSsYQLECE8",
+      "sources": [
+        "https://sudokupad.app/vnc80d8n88"
+      ],
+      "date": "2026-02-19",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Palindrome",
+        "LittleKiller"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 166861,
+      "backtracks": 166862,
+      "solve_ms": 1942.4,
+      "cap": 320512,
+      "dir": "data/puzzles/csSsYQLECE8",
+      "iss_size": 137,
+      "script_size": 944
+    },
+    {
+      "puzzle_id": "YypVfbIEfDE",
+      "video_id": "YypVfbIEfDE",
+      "puzzle_title": "Ubiquitous",
+      "video_title": "The Shortest Rules In Modern Sudoku History?",
+      "author": "Nicolas Duhail",
+      "video_url": "https://www.youtube.com/watch?v=YypVfbIEfDE",
+      "sources": [
+        "https://sudokupad.app/clz0fj2mwt"
+      ],
+      "date": "2026-02-19",
+      "status": "validated",
+      "constraint_types": [
+        "EqualSum",
+        "RegionSumLine"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 128700,
+      "backtracks": 128701,
+      "solve_ms": 1875.1,
+      "cap": 290697,
+      "dir": "data/puzzles/YypVfbIEfDE",
+      "iss_size": 364,
+      "script_size": 2263
+    },
+    {
+      "puzzle_id": "1Jlg1377b1I",
+      "video_id": "1Jlg1377b1I",
+      "puzzle_title": "Three-Fingered Jack",
+      "video_title": "Who is This Evil Genius?",
+      "author": "The Barg",
+      "video_url": "https://www.youtube.com/watch?v=1Jlg1377b1I",
+      "sources": [
+        "https://sudokupad.app/z17uly5rs6"
+      ],
+      "date": "2026-02-18",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Renban",
+        "WhiteDot",
+        "BlackDot",
+        "V"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 104,
+      "backtracks": 105,
+      "solve_ms": 11.8,
+      "cap": 1000,
+      "dir": "data/puzzles/1Jlg1377b1I",
+      "iss_size": 213,
+      "script_size": 1161
+    },
+    {
+      "puzzle_id": "wPq635rHE28",
+      "video_id": "wPq635rHE28",
+      "puzzle_title": "RAT RUN: Hit and Miss",
+      "video_title": "Marty's New Sudoku Maze! Rat Run 26: Hit And Miss (S3:E6)",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=wPq635rHE28",
+      "sources": [
+        "https://sudokupad.app/k4zgmts5h9"
+      ],
+      "date": "2026-02-18",
+      "status": "partial",
+      "constraint_types": [
+        "BlackDot",
+        "Pair: grape"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 1000,
+      "guesses": 1041,
+      "backtracks": 1000,
+      "solve_ms": 23.6,
+      "cap": 1000,
+      "dir": "data/puzzles/wPq635rHE28",
+      "iss_size": 140,
+      "script_size": 765
     },
     {
       "puzzle_id": "9CkHikmSpJE",
@@ -7721,14 +9583,14 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
-      "solutions_found": 1674,
-      "guesses": 10054,
-      "backtracks": 10000,
-      "solve_ms": 2955.3,
-      "cap": 10000,
+      "solutions_found": 25965,
+      "guesses": 40422,
+      "backtracks": 40371,
+      "solve_ms": 14441.3,
+      "cap": 40371,
       "dir": "data/puzzles/9CkHikmSpJE",
       "iss_size": 10353,
-      "script_size": 6300
+      "script_size": 6688
     },
     {
       "puzzle_id": "Ux6LYrFtjFc",
@@ -7802,6 +9664,7 @@
       "constraint_types": [
         "Var",
         "Replicate",
+        "ConnectedValues",
         "NFA: no-touch",
         "NFA: degree",
         "NFA: count",
@@ -7811,13 +9674,13 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 46464,
-      "backtracks": 46465,
-      "solve_ms": 2020.6,
-      "cap": 263713,
+      "guesses": 30989,
+      "backtracks": 30990,
+      "solve_ms": 1797.4,
+      "cap": 149253,
       "dir": "data/puzzles/A8GBl5GGypA",
-      "iss_size": 5750,
-      "script_size": 5856
+      "iss_size": 5772,
+      "script_size": 7207
     },
     {
       "puzzle_id": "-2BWnJHVV38",
@@ -7949,7 +9812,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.4",
       "iss_size": 211,
-      "script_size": 1019
+      "script_size": 993
     },
     {
       "puzzle_id": "R6i558mDoNQ.5",

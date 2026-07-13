@@ -43,7 +43,7 @@ const evenCells = ['R8C2', 'R8C8', 'R6C4', 'R6C6'];
 
 const parityKey = Pair.fnToKey((a, b) => a % 2 !== b % 2, 9);
 
-const constraints = [
+return [
   new Shape('9x9'),
 
   ...greenLines.map(cells => new Whisper(5, ...cells)),
@@ -66,5 +66,3 @@ const constraints = [
   new AllDifferent(...cages.flat()),
   new AllDifferent(...oddCells, ...evenCells),
 ];
-
-return constraints;

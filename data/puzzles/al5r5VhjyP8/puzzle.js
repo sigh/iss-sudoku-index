@@ -39,9 +39,6 @@ const flags = graph.makeOverlay('VC');           // one flag Var per grid cell
 const flagOf = cell => flags.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), flags.toVar('copycat')];
-const add = (...cs) => constraints.push(...cs);
-
 // 180-degree opposite cell (1-indexed r,c -> 10-r, 10-c).
 const opposite = cell => {
   const { row, col } = parseCellId(cell);
@@ -49,15 +46,15 @@ const opposite = cell => {
 };
 
 // --- Copycat flag domain: every cell is PLAIN or COPY. ---
-{
+const copycatDomain = (() => {
   const targets = gridCells.map(flagOf);
   const origin = targets[0];
-  add(new Replicate(
+  return new Replicate(
     [new Given(origin, PLAIN, COPY)],
     Replicate.encodeTargetCells(targets, origin, flags),
     origin,
-  ));
-}
+  );
+})();
 
 // --- Exactly one copycat per row, per column, and per box. ---
 const oneCopy = NFA.encodeSpec({
@@ -74,9 +71,9 @@ for (let i = 1; i <= 9; i++) {
   houses.push(graph.column(i));
 }
 houses.push(...graph.boxes());
-for (const house of houses) {
-  add(new NFA(oneCopy, 'one-copycat', ...house.map(flagOf)));
-}
+const oneCopyCopyatConstraints = houses.map(house =>
+  new NFA(oneCopy, 'one-copycat', ...house.map(flagOf))
+);
 
 // --- Every copycat cell holds the same digit X: scan [flag, digit] over the
 // whole grid, remembering the first copycat digit seen and requiring every
@@ -91,11 +88,8 @@ const sameDigit = NFA.encodeSpec({
   },
   accept: ({ phase }) => phase === 'flag',
 }, numValues);
-{
-  const scan = [];
-  for (const cell of gridCells) { scan.push(flagOf(cell), cell); }
-  add(new NFA(sameDigit, 'same-copycat-digit', ...scan));
-}
+const sameDigitScan = gridCells.flatMap(cell => [flagOf(cell), cell]);
+const sameDigitConstraint = new NFA(sameDigit, 'same-copycat-digit', ...sameDigitScan);
 
 // --- The nine copycat cells have nine different VALUES (opposite-cell
 // digits): for each digit, at most one copycat cell's opposite cell holds it.
@@ -111,11 +105,10 @@ const distinctValue = d => NFA.encodeSpec({
   },
   accept: ({ i }) => i === 0,
 }, numValues);
-for (let d = 1; d <= 9; d++) {
-  const scan = [];
-  for (const cell of gridCells) { scan.push(flagOf(cell), cell, opposite(cell)); }
-  add(new NFA(distinctValue(d), `distinct-value-${d}`, ...scan));
-}
+const distinctValueConstraints = Array.from({ length: 9 }, (_, d) => {
+  const scan = gridCells.flatMap(cell => [flagOf(cell), cell, opposite(cell)]);
+  return new NFA(distinctValue(d + 1), `distinct-value-${d + 1}`, ...scan);
+});
 
 // --- Value-pair rules: resolve each cell's value from [flag, ownDigit,
 // oppDigit] as soon as the three symbols are read, then check the pair rule.
@@ -142,9 +135,6 @@ const multipleNFA = valuePairNFA((a, b) => a % b === 0 || b % a === 0);
 const blackNFA = valuePairNFA((a, b) => a === 2 * b || b === 2 * a);
 const yellowNFA = valuePairNFA((a, b) => a !== b && Math.abs(a - b) !== 1);
 
-const addValuePair = (spec, label, a, b) =>
-  add(new NFA(spec, label, flagOf(a), a, opposite(a), flagOf(b), b, opposite(b)));
-
 // Multiple lines (grey): each adjacent pair divides evenly.
 const multiplePaths = [
   ['R3C2', 'R2C3', 'R1C3'],
@@ -155,11 +145,11 @@ const multiplePaths = [
   ['R8C1', 'R9C1', 'R9C2'],
   ['R3C1', 'R4C1'],
 ];
-for (const path of multiplePaths) {
-  for (let i = 0; i + 1 < path.length; i++) {
-    addValuePair(multipleNFA, 'multiple-line', path[i], path[i + 1]);
-  }
-}
+const multipleLineConstraints = multiplePaths.flatMap(path =>
+  Array.from({ length: path.length - 1 }, (_, i) =>
+    new NFA(multipleNFA, 'multiple-line', flagOf(path[i]), path[i], opposite(path[i]), flagOf(path[i + 1]), path[i + 1], opposite(path[i + 1]))
+  )
+);
 
 // Black dots: one value double the other.
 const blackDots = [
@@ -168,12 +158,26 @@ const blackDots = [
   ['R5C3', 'R5C4'],
   ['R3C1', 'R3C2'],
 ];
-for (const [a, b] of blackDots) addValuePair(blackNFA, 'black-dot', a, b);
+const blackDotConstraints = blackDots.map(([a, b]) =>
+  new NFA(blackNFA, 'black-dot', flagOf(a), a, opposite(a), flagOf(b), b, opposite(b))
+);
 
 // Yellow dot: values not equal and not consecutive.
 const yellowDots = [
   ['R8C8', 'R8C9'],
 ];
-for (const [a, b] of yellowDots) addValuePair(yellowNFA, 'yellow-dot', a, b);
+const yellowDotConstraints = yellowDots.map(([a, b]) =>
+  new NFA(yellowNFA, 'yellow-dot', flagOf(a), a, opposite(a), flagOf(b), b, opposite(b))
+);
 
-return constraints;
+return [
+  new Shape('9x9'),
+  flags.toVar('copycat'),
+  copycatDomain,
+  ...oneCopyCopyatConstraints,
+  sameDigitConstraint,
+  ...distinctValueConstraints,
+  ...multipleLineConstraints,
+  ...blackDotConstraints,
+  ...yellowDotConstraints,
+];

@@ -138,33 +138,29 @@ const kropkiDots = [
   ['R5C3', 'R5C4'],
 ];
 
-const constraints = [
+return [
   new Shape('9x9'),
   werewolfVar,
   new AllDifferent(...[1, 2, 3, 4, 5, 6, 7, 8, 9].map(wolfVar)),
+  // A wolf's value is selected from the remaining digits of its box: any
+  // digit except its own box number.
+  ...Array.from({ length: 9 }, (_, i) => {
+    const b = i + 1;
+    const allowed = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(v => v !== b);
+    return new Given(wolfVar(b), ...allowed);
+  }),
+  ...renbanLines.map((cells, i) =>
+    wolfAwareMarking(`RB${i + 1}`, cells, renbanAccept)),
+  ...kropkiDots.map((cells, i) =>
+    wolfAwareMarking(`KD${i + 1}`, cells, kropkiAccept)),
+  ...Array.from({ length: 9 }, (_, r) => {
+    const rowCells = [];
+    for (let c = 1; c <= 9; c++) rowCells.push(makeCellId(r + 1, c));
+    return exactlyOneWolf(rowCells);
+  }),
+  ...Array.from({ length: 9 }, (_, c) => {
+    const colCells = [];
+    for (let r = 1; r <= 9; r++) colCells.push(makeCellId(r, c + 1));
+    return exactlyOneWolf(colCells);
+  }),
 ];
-
-// A wolf's value is selected from the remaining digits of its box: any
-// digit except its own box number.
-for (let b = 1; b <= 9; b++) {
-  const allowed = [1, 2, 3, 4, 5, 6, 7, 8, 9].filter(v => v !== b);
-  constraints.push(new Given(wolfVar(b), ...allowed));
-}
-
-renbanLines.forEach((cells, i) =>
-  constraints.push(wolfAwareMarking(`RB${i + 1}`, cells, renbanAccept)));
-kropkiDots.forEach((cells, i) =>
-  constraints.push(wolfAwareMarking(`KD${i + 1}`, cells, kropkiAccept)));
-
-for (let r = 1; r <= 9; r++) {
-  const rowCells = [];
-  for (let c = 1; c <= 9; c++) rowCells.push(makeCellId(r, c));
-  constraints.push(exactlyOneWolf(rowCells));
-}
-for (let c = 1; c <= 9; c++) {
-  const colCells = [];
-  for (let r = 1; r <= 9; r++) colCells.push(makeCellId(r, c));
-  constraints.push(exactlyOneWolf(colCells));
-}
-
-return constraints;

@@ -3,9 +3,9 @@
 // Video: https://www.youtube.com/watch?v=4SC7itCISLg
 // Source: https://sudokupad.app/yttrio/modular-yin-yang
 
-// Partial encoding: Yin-Yang global orthogonal connectivity (all shaded
-// cells form one connected region, all unshaded cells form another) has no
-// ISS primitive and is omitted. Every other clause is encoded below.
+// Full encoding. Global Yin-Yang connectivity is one ConnectedValues
+// constraint per shade over the shade overlay; local shading and clue rules
+// are encoded below.
 
 const SHADED = 1;
 const UNSHADED = 2;
@@ -47,36 +47,9 @@ const mod3NFA = NFA.encodeSpec({
   accept: state => state.phase === 'digit',
 }, 9);
 
-const constraints = [
-  new Shape('9x9'),
-  shade.toVar('shade'),
-];
-
-// Domain: every shade cell is SHADED or UNSHADED.
-const firstShade = shade.cells()[0];
-constraints.push(new Replicate([new Given(firstShade, SHADED, UNSHADED)],
-  Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade));
-
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-
-// no-mono-2x2 only reads the shade overlay, so every block's 4 cells share
-// one cell group (VS) with a uniform (row, col) offset from block to block;
-// Replicate applies cleanly here.
+const firstShade = shade.cells()[0];
 const firstBlock = graph.block(blockOrigins[0], 2, 2);
-constraints.push(new Replicate(
-  [new NFA(noMono2x2NFA, 'no-mono-2x2', ...firstBlock.map(shadeCell))],
-  Replicate.encodeTargetCells(
-    blockOrigins.map(shadeCell), shadeCell(blockOrigins[0]), shade),
-  shadeCell(blockOrigins[0])));
-
-// mod3-2x2 interleaves grid cells and shade-overlay cells in one template,
-// spanning two cell groups; Replicate requires every referenced cell to
-// share the origin's cell group, so this cannot be expressed with Replicate.
-for (const cell of blockOrigins) {
-  const block = graph.block(cell, 2, 2);
-  const interleaved = block.flatMap(c => [c, shadeCell(c)]);
-  constraints.push(new NFA(mod3NFA, 'mod3-2x2', ...interleaved));
-}
 
 // Arrows: the digit in the arrow's cell counts shaded cells seen from that
 // cell to the grid edge along the arrow's direction, not counting itself.
@@ -101,10 +74,42 @@ const arrows = [
   ['R2C8', 'down'],
 ];
 
-for (const [cell, dir] of arrows) {
+const arrowConstraints = arrows.map(([cell, dir]) => {
   const [dRow, dCol] = DIRECTIONS[dir];
   const sight = graph.ray(cell, dRow, dCol).slice(1);
-  constraints.push(new Sum(2 * sight.length, cell, ...sight.map(shadeCell)));
-}
+  return new Sum(2 * sight.length, cell, ...sight.map(shadeCell));
+});
 
-return constraints;
+// mod3-2x2 interleaves grid cells and shade-overlay cells in one template,
+// spanning two cell groups; Replicate requires every referenced cell to
+// share the origin's cell group, so this cannot be expressed with Replicate.
+const mod3Constraints = blockOrigins.map(cell => {
+  const block = graph.block(cell, 2, 2);
+  const interleaved = block.flatMap(c => [c, shadeCell(c)]);
+  return new NFA(mod3NFA, 'mod3-2x2', ...interleaved);
+});
+
+return [
+  new Shape('9x9'),
+  shade.toVar('shade'),
+
+  // Domain: every shade cell is SHADED or UNSHADED.
+  new Replicate([new Given(firstShade, SHADED, UNSHADED)],
+    Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade),
+
+  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
+  new ConnectedValues('VS', SHADED),
+  new ConnectedValues('VS', UNSHADED),
+
+  // no-mono-2x2 only reads the shade overlay, so every block's 4 cells share
+  // one cell group (VS) with a uniform (row, col) offset from block to block;
+  // Replicate applies cleanly here.
+  new Replicate(
+    [new NFA(noMono2x2NFA, 'no-mono-2x2', ...firstBlock.map(shadeCell))],
+    Replicate.encodeTargetCells(
+      blockOrigins.map(shadeCell), shadeCell(blockOrigins[0]), shade),
+    shadeCell(blockOrigins[0])),
+
+  ...mod3Constraints,
+  ...arrowConstraints,
+];

@@ -37,16 +37,6 @@ const col = (c, reverse = false) => {
   return reverse ? cells.reverse() : cells;
 };
 
-for (const [key, cell] of outsideCells) {
-  const [r, c] = key.split(',').map(Number);
-  let sightLine;
-  if (r === 0) sightLine = col(c);
-  else if (r === 10) sightLine = col(c, true);
-  else if (c === 0) sightLine = row(r);
-  else sightLine = row(r, true);
-  constraints.push(new ValueIndexing(cell, sightLine[0], ...sightLine));
-}
-
 const arrowPaths = [
   [[1, 0], [2, 0], [3, 0]],
   [[3, 0], [2, 1], [1, 2], [0, 3]],
@@ -61,8 +51,16 @@ const arrowPaths = [
   [[9, 10], [9, 9], [10, 9], [10, 8], [9, 8], [9, 7], [10, 7], [10, 6], [9, 6]],
 ];
 
-for (const path of arrowPaths) {
-  constraints.push(new DoubleArrow(...path.map(([r, c]) => idAt(r, c))));
-}
-
-return constraints;
+return [
+  ...constraints,
+  ...outsideCells.map(([key, cell]) => {
+    const [r, c] = key.split(',').map(Number);
+    let sightLine;
+    if (r === 0) sightLine = col(c);
+    else if (r === 10) sightLine = col(c, true);
+    else if (c === 0) sightLine = row(r);
+    else sightLine = row(r, true);
+    return new ValueIndexing(cell, sightLine[0], ...sightLine);
+  }),
+  ...arrowPaths.map(path => new DoubleArrow(...path.map(([r, c]) => idAt(r, c)))),
+];

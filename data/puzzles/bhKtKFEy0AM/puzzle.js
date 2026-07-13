@@ -29,9 +29,6 @@ const shape = graph.makeOverlay('VS');
 const shapeCell = cell => shape.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), new Given('R1C1', 6), shape.toVar('shape')];
-const add = (...newConstraints) => constraints.push(...newConstraints);
-
 // Each circle sits on a grid vertex, keyed by the top-left cell of the 2x2 it
 // constrains; the value is the clue digit.
 const circleClues = {
@@ -42,13 +39,24 @@ const circleClues = {
 // --- Shape domains: a cell may use an edge only if the neighbour exists, so
 // border cells can't take shapes that point off the grid.
 const ALL_SHAPES = [OFF, HORIZ, VERT, UL, UR, DL, DR];
-for (const cell of gridCells) {
+const shapeDomainConstraints = gridCells.map(cell => {
   const { row, col } = parseCellId(cell);
   const allowed = ALL_SHAPES.filter(s =>
     !(row === 1 && usesUp(s)) && !(row === geometry.numRows && usesDown(s)) &&
     !(col === 1 && usesLeft(s)) && !(col === geometry.numCols && usesRight(s)));
-  add(new Given(shapeCell(cell), ...allowed));
-}
+  return new Given(shapeCell(cell), ...allowed);
+});
+
+// --- Global loop connectivity: the loop cells (shape != OFF) must form a
+// single orthogonally-connected region. `shape` is a whole grid layer (one
+// Var per cell), so ConnectedValues applies directly. This is CELL
+// connectivity, not edge/loop connectivity: the rules only forbid the loop
+// branching or crossing itself, not touching itself, so two disjoint loops
+// running cell-adjacent (without sharing a used edge) would still pass this
+// check. It is nonetheless a sound strengthening -- any genuine single loop
+// is cell-connected -- that rules out loop cells split into components that
+// never even touch.
+const loopConnectivity = new ConnectedValues('VS', [HORIZ, VERT, UL, UR, DL, DR]);
 
 // --- Edge agreement: neighbours must agree on the shared edge. A pure
 // 2-cell relation on the two cells' shapes: the first uses the edge towards
@@ -74,18 +82,20 @@ const diffEdge = (toB) => NFA.encodeSpec({
 // Apply both to every right and down neighbour pair.
 const edgeRightKey = edgeAgreeKey(usesRight, usesLeft), edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 const diffRight = diffEdge(usesRight), diffDown = diffEdge(usesDown);
-for (const cell of gridCells) {
+const edgeAndDiffConstraints = gridCells.flatMap(cell => {
   const right = graph.step(cell, 0, 1);
   const down = graph.step(cell, 1, 0);
-  if (right) {
-    add(new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)));
-    add(new NFA(diffRight, 'diff-h', shapeCell(cell), cell, right));
-  }
-  if (down) {
-    add(new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)));
-    add(new NFA(diffDown, 'diff-v', shapeCell(cell), cell, down));
-  }
-}
+  return [
+    ...(right ? [
+      new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)),
+      new NFA(diffRight, 'diff-h', shapeCell(cell), cell, right),
+    ] : []),
+    ...(down ? [
+      new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)),
+      new NFA(diffDown, 'diff-v', shapeCell(cell), cell, down),
+    ] : []),
+  ];
+});
 
 // --- Circle clues. Each vertex's clue does two things: at least one of the four
 // cells around it holds the clue digit (a Quad on that 2x2), and exactly that many
@@ -99,10 +109,18 @@ const turnsExactly = memo((target) => NFA.encodeSpec({
   },
   accept: ({ count }) => count === target,
 }, geometry.numValues));
-for (const [topLeft, d] of Object.entries(circleClues)) {
-  add(new Quad(topLeft, d));
-  add(new NFA(turnsExactly(d), 'circle-turns',
-    ...graph.block(topLeft, 2, 2).map(shapeCell)));
-}
+const circleConstraints = Object.entries(circleClues).flatMap(([topLeft, d]) => [
+  new Quad(topLeft, d),
+  new NFA(turnsExactly(d), 'circle-turns',
+    ...graph.block(topLeft, 2, 2).map(shapeCell)),
+]);
 
-return constraints;
+return [
+  new Shape('9x9'),
+  new Given('R1C1', 6),
+  shape.toVar('shape'),
+  ...shapeDomainConstraints,
+  loopConnectivity,
+  ...edgeAndDiffConstraints,
+  ...circleConstraints,
+];

@@ -52,7 +52,12 @@ function cageTotalSum(cells, index) {
 const givenTargets = graph.cells();
 const givenOrigin = givenTargets[0];
 
-const constraints = [
+const cageConstraints = cages.flatMap((cells, index) => [
+  new AllDifferent(...cells),
+  cageTotalSum(cells, index),
+]);
+
+return [
   new Shape("9x9", 16),
   cageTotalsVar,
   new Replicate(
@@ -60,15 +65,6 @@ const constraints = [
     Replicate.encodeTargetCells(givenTargets, givenOrigin, graph),
     givenOrigin,
   ),
+  ...cageConstraints,
+  new CountingCircles(...cages.map((_, index) => cageTotalVar(index))),
 ];
-
-for (const [index, cells] of cages.entries()) {
-  constraints.push(
-    new AllDifferent(...cells),
-    cageTotalSum(cells, index),
-  );
-}
-
-constraints.push(new CountingCircles(...cages.map((_, index) => cageTotalVar(index))));
-
-return constraints;

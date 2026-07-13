@@ -36,13 +36,9 @@ const gridCells = graph.cells();
 const blob = graph.makeOverlay('VB');       // one blob-state Var per grid cell
 const bs = cell => blob.at(cell);
 
-const constraints = [new Shape('9x9'), blob.toVar('blob')];
-const add = (...cs) => constraints.push(...cs);
 
 // Blob state is one of NONE/LEFT/RIGHT.
 const blobOrigin = blob.cells()[0];
-add(new Replicate([new Given(blobOrigin, NONE, LEFT, RIGHT)],
-  Replicate.encodeTargetCells(blob.cells(), blobOrigin, blob), blobOrigin));
 
 // Shown blobs: fix the left/right cells. [leftCell, rightCell].
 const shown = [
@@ -50,13 +46,10 @@ const shown = [
   ['R5C2', 'R5C3'], ['R6C7', 'R6C8'], ['R7C1', 'R7C2'], ['R7C3', 'R7C4'],
   ['R8C4', 'R8C5'], ['R9C5', 'R9C6'], ['R9C8', 'R9C9'],
 ];
-for (const [l, r] of shown) add(new Given(bs(l), LEFT), new Given(bs(r), RIGHT));
 
 // Circular labels: the sum of the blob's two cells (drawn as a symbol at centre).
 const labels = [['R3C1', 'R3C2'], ['R7C1', 'R7C2']];
 const sum = graph.makeOverlay('VL', labels.map(([l]) => l));  // a sum Var per label
-add(sum.toVar('sum'));
-for (const [l, r] of labels) add(new Arrow(sum.at(l), l, r));  // sumVar = l + r (<= 9)
 
 // --- Tiling: within each row, a LEFT is immediately followed by a RIGHT, a
 // RIGHT is immediately preceded by a LEFT, and nothing dangles.
@@ -70,10 +63,6 @@ const rowMachine = NFA.encodeSpec({
   },
   accept: ({ expectRight }) => !expectRight,    // no LEFT dangling at the row end
 }, 9);
-for (let r = 1; r <= 9; r++) {
-  add(new NFA(rowMachine, 'tiling',
-    ...Array.from({ length: 9 }, (_, c) => bs(makeCellId(r, c + 1)))));
-}
 
 // --- Clone-count: for each ordered pair (x,y), the number of blobs reading (x,y)
 // is 0 or x. Scan every cell row-major as interleaved (state, digit); a LEFT cell
@@ -92,9 +81,6 @@ const pairMachine = (x, y) => NFA.encodeSpec({
   },
   accept: ({ count }) => count === 0 || count === x,
 }, 9);
-for (let x = 1; x <= 9; x++)
-  for (let y = 1; y <= 9; y++)
-    add(new NFA(pairMachine(x, y), `k${x}_${y}`, ...stream));
 
 // --- Symbol givens. Recovered by clustering the coloured symbol overlays by
 // colour (the green #d5f09c blob-shading is stripped first). Cells sharing a
@@ -112,8 +98,24 @@ const symbolClasses = [
   ['R4C5'],           // symbol h  (#fbd0f8)
   ['R9C8'],           // symbol i  (#9fd7fc)
 ];
-for (const cls of symbolClasses)
-  if (cls.length > 1) add(new SameValues(cls.length, ...cls));  // same symbol => same digit
-add(new AllDifferent(...symbolClasses.map(cls => cls[0])));      // nine distinct symbols
 
-return constraints;
+return [
+  new Shape('9x9'),
+  blob.toVar('blob'),
+  new Replicate([new Given(blobOrigin, NONE, LEFT, RIGHT)],
+    Replicate.encodeTargetCells(blob.cells(), blobOrigin, blob), blobOrigin),
+  ...shown.flatMap(([l, r]) => [new Given(bs(l), LEFT), new Given(bs(r), RIGHT)]),
+  sum.toVar('sum'),
+  ...labels.map(([l, r]) => new Arrow(sum.at(l), l, r)),  // sumVar = l + r (<= 9)
+  ...Array.from({ length: 9 }, (_, r) => new NFA(rowMachine, 'tiling',
+    ...Array.from({ length: 9 }, (_, c) => bs(makeCellId(r + 1, c + 1))))),
+  ...Array.from({ length: 9 }, (_, xi) => {
+    const x = xi + 1;
+    return Array.from({ length: 9 }, (_, yi) => {
+      const y = yi + 1;
+      return new NFA(pairMachine(x, y), `k${x}_${y}`, ...stream);
+    });
+  }).flat(),
+  ...symbolClasses.filter(cls => cls.length > 1).map(cls => new SameValues(cls.length, ...cls)),  // same symbol => same digit
+  new AllDifferent(...symbolClasses.map(cls => cls[0])),      // nine distinct symbols
+];

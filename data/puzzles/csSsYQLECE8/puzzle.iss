@@ -1,0 +1,4 @@
+.AntiKnight
+.Palindrome~R3C5~R2C5~R1C6~R2C6~R3C7~R3C8~R4C7~R5C6~R6C5~R7C4~R7C3~R7C2~R8C2~R8C1
+.LittleKiller~25~R1C1
+.LittleKiller~44~R1C9

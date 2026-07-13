@@ -9,10 +9,6 @@
 // fixed line segments. Omitted: chocolate/banana area rectangularity, circle
 // area sizes, and line shading counts. Fog is UI, not a final-grid constraint.
 
-const constraints = [
-  new Shape('9x9'),
-];
-
 const splitPeas = (a, b, interior) => {
   const sumAB = new Sum(0, ...interior, [a, -10], [b, -1]);
   const sumBA = new Sum(0, ...interior, [a, -1], [b, -10]);
@@ -28,10 +24,6 @@ const splitPeaSegments = [
   ['R6C7', 'R8C7', ['R5C7', 'R4C7', 'R3C7', 'R3C8', 'R4C8', 'R5C8', 'R6C8', 'R7C8', 'R7C9', 'R8C9', 'R8C8']],
 ];
 
-for (const [a, b, interior] of splitPeaSegments) {
-  constraints.push(splitPeas(a, b, interior));
-}
-
 const xMarks = [
   ['R2C5', 'R2C6'],
   ['R3C3', 'R3C4'],
@@ -39,8 +31,10 @@ const xMarks = [
   ['R5C2', 'R6C2'],
   ['R8C8', 'R8C9'],
 ];
-for (const cells of xMarks) constraints.push(new X(...cells));
 
-constraints.push(new V('R4C3', 'R4C4'));
-
-return constraints;
+return [
+  new Shape('9x9'),
+  ...splitPeaSegments.map(([a, b, interior]) => splitPeas(a, b, interior)),
+  ...xMarks.map(cells => new X(...cells)),
+  new V('R4C3', 'R4C4'),
+];

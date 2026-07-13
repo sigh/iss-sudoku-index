@@ -60,18 +60,17 @@ const consecutiveKey = Pair.fnToKey((a, b) => a === b + 1 || a === b - 1, 9);
 // Builds the "X-sum equals the two missing digits" clue for one row/column.
 // `orderedCells` starts at the cell nearest the pill.
 function missingXSum(orderedCells, varA, varB) {
-  const branches = [];
-  for (let x = 1; x <= orderedCells.length; x++) {
+  return new Or(Array.from({ length: orderedCells.length }, (_, i) => {
+    const x = i + 1;
     const used = orderedCells.slice(0, x);
-    branches.push(new And([
+    return new And([
       new Given(orderedCells[0], x),
       new Sum(0, ...used, [varA, -10], [varB, -1]),
-    ]));
-  }
-  return new Or(branches);
+    ]);
+  }));
 }
 
-const constraints = [
+return [
   new Shape('7x7', 9),
   new NoBoxes(),
   ...boxes.map(cells => new AllDifferent(...cells)),
@@ -104,5 +103,3 @@ const constraints = [
   new Sum(10, colA(6), colB(6)),
   new Sum(10, colA(7), colB(7)),
 ];
-
-return constraints;

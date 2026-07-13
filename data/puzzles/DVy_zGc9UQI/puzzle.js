@@ -84,34 +84,30 @@ function colorDigitSpec(color, digit) {
 
 function colorDigitNFAs() {
   const colorNames = `RGB`;
-  const constraints = [];
-  for (const color of rangeI(1, 3)) {
-    for (const digit of rangeI(1, 9)) {
-      constraints.push(new NFA(
-        colorDigitSpec(color, digit),
-        `${colorNames[color - 1]}${digit}`,
+  return Array.from({length: 3}, (_, c) =>
+    Array.from({length: 9}, (_, d) =>
+      new NFA(
+        colorDigitSpec(c + 1, d + 1),
+        `${colorNames[c]}${d + 1}`,
         ...allCircleEntries,
-      ));
-    }
-  }
-  return constraints;
+      )
+    )
+  ).flat();
 }
 
 const coloredGivens = circleCells
   .flatMap((c, i) => isUncoloredCircle(c, i) ? [] : [colorCandidates(c, i)]);
-const uncoloredTargets = circleCells
-  .filter((c, i) => isUncoloredCircle(c, i))
-  .map(c => color.at(c));
-const uncoloredOrigin = uncoloredTargets[0];
+const circleTargets = circleCells.map(c => color.at(c));
+const circleOrigin = circleTargets[0];
 
 return [
   ...base,
   color.toVar("Color"),
   ...coloredGivens,
   new Replicate(
-    [new Given(uncoloredOrigin, 1, 2, 3)],
-    Replicate.encodeTargetCells(uncoloredTargets, uncoloredOrigin, color),
-    uncoloredOrigin,
+    [new Given(circleOrigin, 1, 2, 3)],
+    Replicate.encodeTargetCells(circleTargets, circleOrigin, color),
+    circleOrigin,
   ),
   new And([
     ...circleAdjacencies().map(cells => new AllDifferent(...cells))

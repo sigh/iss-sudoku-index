@@ -45,15 +45,11 @@ const divisorLine = cells => new Or([
 
 const parityKey = Pair.fnToKey((a, b) => a % 2 !== b % 2, 9);
 
-const constraints = [
-  new Shape('9x9'),
-  new Given('R6C7', 4),
-
-  ...greenLines.map(divisorLine),
-  ...greenLines.map(cells => new AllDifferent(...cells)),
-  ...purpleLines.map(divisorLine),
-  ...redLines.map(cells => new Pair(parityKey, 'parity line', ...cells)),
-
+const greenDivisors = greenLines.map(divisorLine);
+const greenAllDifferent = greenLines.map(cells => new AllDifferent(...cells));
+const purpleDivisors = purpleLines.map(divisorLine);
+const redParities = redLines.map(cells => new Pair(parityKey, 'parity line', ...cells));
+const dots = [
   new BlackDot('R1C8', 'R1C9'),
   new BlackDot('R3C1', 'R3C2'),
   new BlackDot('R4C3', 'R5C3'),
@@ -61,4 +57,14 @@ const constraints = [
   new WhiteDot('R5C3', 'R5C4'),
 ];
 
-return constraints;
+return [
+  new Shape('9x9'),
+  new Given('R6C7', 4),
+
+  ...greenDivisors,
+  ...greenAllDifferent,
+  ...purpleDivisors,
+  ...redParities,
+
+  ...dots,
+];

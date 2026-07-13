@@ -35,23 +35,21 @@ const shortLines = [
   ['R9C6', 'R8C5', 'R9C4', 'R9C5'],
 ];
 
-const constraints = [
+const longRenbans = longLines.flatMap(line =>
+  Array.from({length: line.length - 4}, (_, i) =>
+    new Renban(...line.slice(i, i + 5))
+  )
+);
+
+const shortRenbans = shortLines.map(line => new Renban(...line));
+
+return [
   new Shape('9x9'),
   new Given('R4C3', 6),
   new Given('R4C5', 1),
   new Given('R4C7', 9),
   new Given('R6C1', 1),
   new Given('R6C9', 7),
+  ...longRenbans,
+  ...shortRenbans,
 ];
-
-for (const line of longLines) {
-  for (let i = 0; i + 5 <= line.length; i++) {
-    constraints.push(new Renban(...line.slice(i, i + 5)));
-  }
-}
-
-for (const line of shortLines) {
-  constraints.push(new Renban(...line));
-}
-
-return constraints;

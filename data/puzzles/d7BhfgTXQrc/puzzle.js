@@ -53,11 +53,9 @@ function productLine(cells, target) {
   return new NFA(productLineNFA(target), `${target} product line`, ...cells);
 }
 
-const constraints = [
+return [
   new Shape('9x9'),
   ...orangeLines.map(cells => productLine(cells, 300)),
   ...modularLines.map(cells => new Modular(3, ...cells)),
   new Sum(300, ...modularLines.flat()),
 ];
-
-return constraints;

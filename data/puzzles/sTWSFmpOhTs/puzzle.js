@@ -33,27 +33,26 @@ const lines = [
 const leKey = Pair.fnToKey((a, b) => a <= b, 9); // cells[i] <= cells[i+1]
 const geKey = Pair.fnToKey((a, b) => a >= b, 9); // cells[i] >= cells[i+1]
 
-const constraints = [new Shape('9x9')];
+return [
+  new Shape('9x9'),
+  ...lines.map(line => {
+    const cells = line.map(([r, c]) => makeCellId(r, c));
+    const first = cells[0];
+    const last = cells[cells.length - 1];
 
-for (const line of lines) {
-  const cells = line.map(([r, c]) => makeCellId(r, c));
-  const first = cells[0];
-  const last = cells[cells.length - 1];
+    // Orientation A: last cell is the tip (sum of the rest); non-decreasing
+    // first -> last.
+    const tipLast = new And([
+      new Arrow(last, ...cells.slice(0, -1)),
+      new Pair(leKey, 'slow', ...cells),
+    ]);
 
-  // Orientation A: last cell is the tip (sum of the rest); non-decreasing
-  // first -> last.
-  const tipLast = new And([
-    new Arrow(last, ...cells.slice(0, -1)),
-    new Pair(leKey, 'slow', ...cells),
-  ]);
+    // Orientation B: first cell is the tip; non-decreasing last -> first.
+    const tipFirst = new And([
+      new Arrow(first, ...cells.slice(1)),
+      new Pair(geKey, 'slow', ...cells),
+    ]);
 
-  // Orientation B: first cell is the tip; non-decreasing last -> first.
-  const tipFirst = new And([
-    new Arrow(first, ...cells.slice(1)),
-    new Pair(geKey, 'slow', ...cells),
-  ]);
-
-  constraints.push(new Or([tipLast, tipFirst]));
-}
-
-return constraints;
+    return new Or([tipLast, tipFirst]);
+  }),
+];

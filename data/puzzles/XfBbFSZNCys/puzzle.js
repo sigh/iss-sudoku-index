@@ -15,13 +15,6 @@ const OFF = 2;
 const graph = cellGraph('9x9');
 const horizontalVar = new Var('H', 'horizontal gap edges', 90);
 const verticalVar = new Var('V', 'vertical gap edges', 90);
-const constraints = [
-  new Shape('9x9'),
-  horizontalVar,
-  verticalVar,
-];
-
-const add = (...newConstraints) => constraints.push(...newConstraints);
 
 function cell(row, col) {
   return makeCellId(row, col);
@@ -48,16 +41,6 @@ function edgeId(edge) {
 const varLocator = (v) => ({
   parseCellId: (id) => ({ cellIndex: Number(id.slice(v.prefix.length + 1)) }),
 });
-
-for (const v of [horizontalVar, verticalVar]) {
-  const targets = Array.from({ length: 90 }, (_, i) => v.cell(i + 1));
-  const origin = targets[0];
-  add(new Replicate(
-    [new Given(origin, ON, OFF)],
-    Replicate.encodeTargetCells(targets, origin, varLocator(v)),
-    origin,
-  ));
-}
 
 const safetyStripEdges = [
   ['H', 1, 2],
@@ -92,7 +75,6 @@ const visibleGreyEdges = [
 ];
 
 const forcedGapEdges = [...new Set([...safetyStripEdges, ...visibleGreyEdges].map(edgeId))];
-for (const edge of forcedGapEdges) add(new Given(edge, ON));
 
 const safetyStrips = [
   [cell(1, 2), cell(2, 2)],
@@ -102,7 +84,6 @@ const safetyStrips = [
   [cell(8, 6), cell(9, 6)],
   [cell(9, 8), cell(9, 9)],
 ];
-for (const strip of safetyStrips) add(new BlackDot(...strip));
 
 const parityGap = NFA.encodeSpec({
   startState: { phase: 'edge' },
@@ -119,16 +100,29 @@ const parityGap = NFA.encodeSpec({
   accept: ({ phase }) => phase === 'done',
 }, 9);
 
-for (let row = 1; row <= 8; row++) {
-  for (let col = 1; col <= 9; col++) {
-    add(new NFA(parityGap, 'gap-parity', h(row, col), cell(row, col), cell(row + 1, col)));
-  }
-}
-
-for (let row = 1; row <= 9; row++) {
-  for (let col = 1; col <= 8; col++) {
-    add(new NFA(parityGap, 'gap-parity', v(row, col), cell(row, col), cell(row, col + 1)));
-  }
-}
-
-return constraints;
+return [
+  new Shape('9x9'),
+  horizontalVar,
+  verticalVar,
+  ...[horizontalVar, verticalVar].map(v => {
+    const targets = Array.from({ length: 90 }, (_, i) => v.cell(i + 1));
+    const origin = targets[0];
+    return new Replicate(
+      [new Given(origin, ON, OFF)],
+      Replicate.encodeTargetCells(targets, origin, varLocator(v)),
+      origin,
+    );
+  }),
+  ...forcedGapEdges.map(edge => new Given(edge, ON)),
+  ...safetyStrips.map(strip => new BlackDot(...strip)),
+  ...Array.from({ length: 8 }, (_, row) =>
+    Array.from({ length: 9 }, (_, col) =>
+      new NFA(parityGap, 'gap-parity', h(row + 1, col + 1), cell(row + 1, col + 1), cell(row + 2, col + 1))
+    )
+  ).flat(),
+  ...Array.from({ length: 9 }, (_, row) =>
+    Array.from({ length: 8 }, (_, col) =>
+      new NFA(parityGap, 'gap-parity', v(row + 1, col + 1), cell(row + 1, col + 1), cell(row + 1, col + 2))
+    )
+  ).flat(),
+];

@@ -47,21 +47,17 @@ function digitCountSpec(digit) {
 }
 
 function mushroomSelfCountNFAs() {
-  const constraints = [];
-  for (let digit = 1; digit <= 9; digit++) {
-    constraints.push(new NFA(digitCountSpec(digit), `mushroom count ${digit}`, ...mushrooms));
-  }
-  return constraints;
+  return Array.from({length: 9}, (_, i) =>
+    new NFA(digitCountSpec(i + 1), `mushroom count ${i + 1}`, ...mushrooms)
+  );
 }
 
 function mushroomNoEchoPairs() {
   const graph = cellGraph('9x9');
-  const constraints = [];
-  for (const cell of mushrooms) {
+  return mushrooms.map(cell => {
     const cluster = [cell, ...graph.neighbours(cell)];
-    constraints.push(new AllDifferent(...cluster));
-  }
-  return constraints;
+    return new AllDifferent(...cluster);
+  });
 }
 
 return [

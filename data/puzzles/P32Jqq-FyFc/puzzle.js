@@ -98,25 +98,17 @@ function exclusivityNFA(v) {
   }, 9, { multiSegment: true });
 }
 
-const constraints = [];
-
-for (const [cell, val] of givens) constraints.push(new Given(cell, val));
-
-for (const line of renbanLines) constraints.push(new Renban(...line));
-
-// All sum-type totals equal (Addition line, each LK diagonal, combined Renban).
-constraints.push(new EqualSum(
-  additionLine, ...littleKillers, renbanAll));
-
-// Multiplication product == that shared total.
-constraints.push(new NFA(
-  productEqualsSumNFA, 'product=X', multLine, additionLine));
-
-// One-type-per-digit exclusivity, one machine per value.
-for (let v = 1; v <= 9; v++) {
-  constraints.push(new NFA(
-    exclusivityNFA(v), `excl${v}`,
-    additionLine, multLine, lkCells, renbanAll));
-}
-
-return constraints;
+return [
+  ...givens.map(([cell, val]) => new Given(cell, val)),
+  ...renbanLines.map(line => new Renban(...line)),
+  // All sum-type totals equal (Addition line, each LK diagonal, combined Renban).
+  new EqualSum(
+    additionLine, ...littleKillers, renbanAll),
+  // Multiplication product == that shared total.
+  new NFA(
+    productEqualsSumNFA, 'product=X', multLine, additionLine),
+  // One-type-per-digit exclusivity, one machine per value.
+  ...Array.from({length: 9}, (_, v) => new NFA(
+    exclusivityNFA(v + 1), `excl${v + 1}`,
+    additionLine, multLine, lkCells, renbanAll)),
+];

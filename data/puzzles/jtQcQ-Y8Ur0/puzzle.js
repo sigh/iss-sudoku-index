@@ -21,12 +21,9 @@ const shape = new Shape('9x9', '0-8');
 const graph = cellGraph('9x9');
 const DIGIT_MAX = 8;
 
-const constraints = [shape];
-
 // Sub-zero flag overlay: 1 iff the cell directly above holds 0, else 0.
 const flags = graph.makeOverlay('VF');
 const flag = cell => flags.at(cell);
-constraints.push(flags.toVar('sub-zero flags'));
 
 // A signed sum can't live in one 0-8 Var (the range 16-16..16 needed exceeds
 // ISS's 16-value cap), so split each cell's signed contribution into two
@@ -37,31 +34,29 @@ const posVals = graph.makeOverlay('VP');
 const posVal = cell => posVals.at(cell);
 const negVals = graph.makeOverlay('VN');
 const negVal = cell => negVals.at(cell);
-constraints.push(posVals.toVar('positive half'));
-constraints.push(negVals.toVar('negative half'));
 
-// Row 1 has no cell above it, so it can never be sub-zero.
-for (const cell of graph.row(1)) constraints.push(new Given(flag(cell), 0));
-
-// Every other cell's flag is boolean and tied to the cell above it.
+// Every cell's flag is boolean; row 1 gets pinned to 0 below (no cell above
+// it to be sub-zero under), and every other cell's flag is tied to the cell
+// above it.
 const flagTargets = [];
-for (let r = 2; r <= 9; r++) {
+for (let r = 1; r <= 9; r++) {
   for (let c = 1; c <= 9; c++) {
     flagTargets.push(flag(makeCellId(r, c)));
   }
 }
 const flagOrigin = flagTargets[0];
-constraints.push(new Replicate(
+const flagReplicate = new Replicate(
   [new Given(flagOrigin, 0, 1)],
   Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
   flagOrigin,
-));
+);
 const subZeroKey = Pair.fnToKey((above, f) => (above === 0) === (f === 1), shape);
+const subZeroPairs = [];
 for (let r = 2; r <= 9; r++) {
   for (let c = 1; c <= 9; c++) {
     const cell = makeCellId(r, c);
     const above = makeCellId(r - 1, c);
-    constraints.push(new Pair(subZeroKey, 'sub-zero flag', above, flag(cell)));
+    subZeroPairs.push(new Pair(subZeroKey, 'sub-zero flag', above, flag(cell)));
   }
 }
 
@@ -89,10 +84,9 @@ const halvesMachine = NFA.encodeSpec({
   accept: (state) => state.phase === 4,
   maxDepth: 4,
 }, shape);
-for (const cell of graph.cells()) {
-  constraints.push(new NFA(
-    halvesMachine, 'signed halves', cell, flag(cell), posVal(cell), negVal(cell)));
-}
+const halvesMachineNfas = graph.cells().map(cell =>
+  new NFA(halvesMachine, 'signed halves', cell, flag(cell), posVal(cell), negVal(cell))
+);
 
 // Killer cages: distinct digits, signed sum equals the corner total.
 const cages = [
@@ -103,13 +97,13 @@ const cages = [
   [['R8C4', 'R9C3', 'R9C4'], -3],
   [['R7C6', 'R7C7', 'R8C6'], 0],
 ];
-for (const [cells, total] of cages) {
-  constraints.push(new AllDifferent(...cells));
-  constraints.push(new Sum(
+const cageConstraints = cages.flatMap(([cells, total]) => [
+  new AllDifferent(...cells),
+  new Sum(
     total,
     ...cells.map(posVal),
-    ...cells.map(cell => [negVal(cell), -1])));
-}
+    ...cells.map(cell => [negVal(cell), -1])),
+]);
 
 // Blue equal-sum lines, split into segments at box-border crossings. Chain
 // each consecutive pair of segments with a signed-sum equality; transitively
@@ -150,16 +144,18 @@ const lines = [
 // (segA's positive half plus segB's negative half) must sum to the same total
 // as the cells with a -1 coefficient (segA's negative half plus segB's
 // positive half).
-for (const [i, line] of lines.entries()) {
+const lineEqualSums = lines.flatMap(line => {
   const segments = splitByBox(line);
+  const equalities = [];
   for (let s = 1; s < segments.length; s++) {
     const segA = segments[s - 1];
     const segB = segments[s];
-    constraints.push(new EqualSum(
+    equalities.push(new EqualSum(
       [...segA.map(posVal), ...segB.map(negVal)],
       [...segA.map(negVal), ...segB.map(posVal)]));
   }
-}
+  return equalities;
+});
 
 // No row, column, or box may contain more than one sub-zero (flag=1) cell.
 const atMostOneFlagMachine = NFA.encodeSpec({
@@ -172,12 +168,13 @@ const atMostOneFlagMachine = NFA.encodeSpec({
   accept: () => true,
   maxDepth: 9, // one row/column/box has 9 cells
 }, shape);
+const atMostOneFlagConstraints = [];
 for (let n = 1; n <= 9; n++) {
-  constraints.push(new NFA(
+  atMostOneFlagConstraints.push(new NFA(
     atMostOneFlagMachine, `row ${n} sub-zero`, ...graph.row(n).map(flag)));
-  constraints.push(new NFA(
+  atMostOneFlagConstraints.push(new NFA(
     atMostOneFlagMachine, `col ${n} sub-zero`, ...graph.column(n).map(flag)));
-  constraints.push(new NFA(
+  atMostOneFlagConstraints.push(new NFA(
     atMostOneFlagMachine, `box ${n} sub-zero`, ...graph.box(n).map(flag)));
 }
 
@@ -186,6 +183,7 @@ for (let n = 1; n <= 9; n++) {
 // the full pending digit) keeps this machine's state space tiny.
 const interleave = cells => cells.flatMap(cell => [cell, flag(cell)]);
 const allCellsInterleaved = interleave(graph.cells());
+const subZeroDigitConstraints = [];
 for (let v = 0; v <= DIGIT_MAX; v++) {
   const machine = NFA.encodeSpec({
     startState: { phase: 0, isV: false, seen: false },
@@ -201,7 +199,21 @@ for (let v = 0; v <= DIGIT_MAX; v++) {
     accept: () => true,
     maxDepth: allCellsInterleaved.length,
   }, shape);
-  constraints.push(new NFA(machine, `sub-zero digit ${v} at most once`, ...allCellsInterleaved));
+  subZeroDigitConstraints.push(new NFA(machine, `sub-zero digit ${v} at most once`, ...allCellsInterleaved));
 }
 
-return constraints;
+return [
+  shape,
+  flags.toVar('sub-zero flags'),
+  posVals.toVar('positive half'),
+  negVals.toVar('negative half'),
+  // Row 1 has no cell above it, so it can never be sub-zero.
+  ...graph.row(1).map(cell => new Given(flag(cell), 0)),
+  flagReplicate,
+  ...subZeroPairs,
+  ...halvesMachineNfas,
+  ...cageConstraints,
+  ...lineEqualSums,
+  ...atMostOneFlagConstraints,
+  ...subZeroDigitConstraints,
+];

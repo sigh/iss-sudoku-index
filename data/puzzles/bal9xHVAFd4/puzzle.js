@@ -145,14 +145,7 @@ const LINES = [
 
 const TYPES = ['thermo', 'index', 'hit'];
 
-const constraints = [
-  new Shape('9x9'),
-  new Var('M', 'Mischief digit', 1),
-];
-
-LINES.forEach(([paintedType, cells], i) => {
-  constraints.push(new AllDifferent(...cells));
-
+const lineConstraints = LINES.flatMap(([paintedType, cells], i) => {
   // For each candidate true type t: t holds AND neither other type holds
   // (the line's true rule is unique), combined with the colour-vs-mischief
   // requirement for that t (painted type needs no mischief digit present;
@@ -167,7 +160,14 @@ LINES.forEach(([paintedType, cells], i) => {
     return new And([exactlyT, colourTerm]);
   });
 
-  constraints.push(new Or(branches));
+  return [
+    new AllDifferent(...cells),
+    new Or(branches),
+  ];
 });
 
-return constraints;
+return [
+  new Shape('9x9'),
+  new Var('M', 'Mischief digit', 1),
+  ...lineConstraints,
+];

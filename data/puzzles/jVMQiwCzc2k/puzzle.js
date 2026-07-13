@@ -13,13 +13,12 @@
 // that type anywhere in the grid -- not just within one line or clue.
 //
 // ENCODED HERE: normal sudoku; a VS shade flag (1 = unshaded, 2 = shaded) per
-// cell; and, since values run 1-18 (too wide for a single ISS cell domain),
-// every value-consuming rule (2x2, renban, arrow, X, black dot, and the four
+// cell, with global Yin-Yang connectivity (each shade forms one orthogonally
+// connected region) via ConnectedValues over the whole-grid VS overlay; and,
+// since values run 1-18 (too wide for a single ISS cell domain), every
+// value-consuming rule (2x2, renban, arrow, X, black dot, and the four
 // cross-clue uniqueness groups) is an NFA that reads each cell's raw (digit,
-// shade) pair and computes 2*digit-2+shade internally. OMITTED: the global
-// orthogonal-connectivity requirement for the shaded region and for the
-// unshaded region -- ISS has no general "these Var-labelled cells form one
-// connected component" constraint, only local shading rules.
+// shade) pair and computes 2*digit-2+shade internally.
 
 const UNSHADED = 1;
 const SHADED = 2;
@@ -30,13 +29,13 @@ const shade = graph.makeOverlay('VS');
 const shadeOf = cell => shade.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [
-  new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-];
-const add = (...cs) => constraints.push(...cs);
-
-for (const cell of gridCells) add(new Given(shadeOf(cell), UNSHADED, SHADED));
+// Every cell is UNSHADED or SHADED: one Given template stamped over the
+// whole grid via Replicate instead of 81 identical Givens.
+const shadeCells = gridCells.map(cell => shadeOf(cell));
+const shadeGivens = new Replicate(
+  [new Given(shadeCells[0], UNSHADED, SHADED)],
+  Replicate.encodeTargetCells(shadeCells, shadeCells[0], shade),
+  shadeCells[0]);
 
 const value = (digit, shadeValue) => 2 * digit - 2 + shadeValue;
 const dsOf = cell => [cell, shadeOf(cell)];
@@ -54,22 +53,20 @@ const notAllSameNFA = NFA.encodeSpec({
     : { first: state.first, allSame: state.allSame && v === state.first },
   accept: (state) => state !== null && !state.allSame,
 }, SHADED);
-{
-  const blockOrigin = shadeOf(makeCellId(1, 1));
-  const blockTemplate = new NFA(notAllSameNFA, 'no-monochrome-2x2',
-    shadeOf(makeCellId(1, 1)), shadeOf(makeCellId(1, 2)),
-    shadeOf(makeCellId(2, 1)), shadeOf(makeCellId(2, 2)));
-  const blockTargets = [];
-  for (let r = 1; r <= 8; r++) {
-    for (let c = 1; c <= 8; c++) {
-      blockTargets.push(shadeOf(makeCellId(r, c)));
-    }
-  }
-  add(new Replicate(
-    [blockTemplate],
-    Replicate.encodeTargetCells(blockTargets, blockOrigin, shade),
-    blockOrigin));
-}
+
+const blockOrigin = shadeOf(makeCellId(1, 1));
+const blockTemplate = new NFA(notAllSameNFA, 'no-monochrome-2x2',
+  shadeOf(makeCellId(1, 1)), shadeOf(makeCellId(1, 2)),
+  shadeOf(makeCellId(2, 1)), shadeOf(makeCellId(2, 2)));
+const blockTargets = Array.from({ length: 8 }, (_, r) =>
+  Array.from({ length: 8 }, (_, c) =>
+    shadeOf(makeCellId(r + 1, c + 1))
+  )
+).flat();
+const blockReplicate = new Replicate(
+  [blockTemplate],
+  Replicate.encodeTargetCells(blockTargets, blockOrigin, shade),
+  blockOrigin);
 
 // --- Renban lines (purple): the cells' VALUES form a consecutive, non-
 // repeating set, in any order. Classic pairwise trick: n values are a
@@ -102,14 +99,15 @@ const renbanLines = [
   ['R1C2', 'R2C2'],
   ['R4C8', 'R4C9'],
 ];
-for (const line of renbanLines) {
+const renbanConstraints = renbanLines.flatMap(line => {
   const nfa = renbanPairNFA(line.length);
-  for (let i = 0; i < line.length; i++) {
-    for (let j = i + 1; j < line.length; j++) {
-      add(new NFA(nfa, 'renban', ...dsFlat([line[i], line[j]])));
-    }
-  }
-}
+  return Array.from({ length: line.length }, (_, i) =>
+    Array.from({ length: line.length - i - 1 }, (_, jOffset) => {
+      const j = i + jOffset + 1;
+      return new NFA(nfa, 'renban', ...dsFlat([line[i], line[j]]));
+    })
+  ).flat();
+});
 
 // --- Arrows: the VALUES along the arrow sum to the VALUE in the circle. Two
 // arrows share the R7C5 circle (two independent arms, both summing to it).
@@ -123,11 +121,10 @@ const arrows = [
   { bulb: 'R8C8', arm: ['R9C7', 'R8C7', 'R8C6'] },
   { bulb: 'R3C7', arm: ['R3C6', 'R2C6'] },
 ];
-for (const { bulb, arm } of arrows) {
-  add(new Sum(2 * arm.length - 2,
+const arrowConstraints = arrows.map(({ bulb, arm }) =>
+  new Sum(2 * arm.length - 2,
     [bulb, -2], [shadeOf(bulb), -1],
     ...arm.flatMap(cell => [[cell, 2], shadeOf(cell)])));
-}
 
 // --- X: the two VALUES joined by an X sum to 10. ---
 const xSumNFA = NFA.encodeSpec({
@@ -145,7 +142,7 @@ const xPairs = [
   ['R4C1', 'R5C1'],
   ['R4C2', 'R5C2'],
 ];
-for (const [a, b] of xPairs) add(new NFA(xSumNFA, 'x-sum-10', ...dsFlat([a, b])));
+const xConstraints = xPairs.map(([a, b]) => new NFA(xSumNFA, 'x-sum-10', ...dsFlat([a, b])));
 
 // --- Black dots: one VALUE is double the other. ---
 const blackDotNFA = NFA.encodeSpec({
@@ -167,7 +164,7 @@ const blackDots = [
   ['R5C7', 'R6C7'],
   ['R2C5', 'R3C5'],
 ];
-for (const [a, b] of blackDots) add(new NFA(blackDotNFA, 'black-dot-ratio', ...dsFlat([a, b])));
+const blackDotConstraints = blackDots.map(([a, b]) => new NFA(blackDotNFA, 'black-dot-ratio', ...dsFlat([a, b])));
 
 // --- Cross-clue uniqueness: within each constraint type, no VALUE repeats
 // across any cell that belongs to that type, anywhere in the grid. Modelled
@@ -187,26 +184,39 @@ const valuesDifferNFA = NFA.encodeSpec({
 
 function uniqueCells(cellLists) {
   const seen = new Set();
-  const cells = [];
+  const cellsArray = [];
   for (const list of cellLists) {
     for (const cell of list) {
-      if (!seen.has(cell)) { seen.add(cell); cells.push(cell); }
+      if (!seen.has(cell)) { seen.add(cell); cellsArray.push(cell); }
     }
   }
-  return cells;
+  return cellsArray;
 }
 
-function addGroupUniqueness(cells) {
-  for (let i = 0; i < cells.length; i++) {
-    for (let j = i + 1; j < cells.length; j++) {
-      add(new NFA(valuesDifferNFA, 'group-value-uniqueness', ...dsFlat([cells[i], cells[j]])));
-    }
-  }
+function groupUniquenessConstraints(cells) {
+  return Array.from({ length: cells.length }, (_, i) =>
+    Array.from({ length: cells.length - i - 1 }, (_, jOffset) => {
+      const j = i + jOffset + 1;
+      return new NFA(valuesDifferNFA, 'group-value-uniqueness', ...dsFlat([cells[i], cells[j]]));
+    })
+  ).flat();
 }
 
-addGroupUniqueness(uniqueCells(renbanLines));
-addGroupUniqueness(uniqueCells(arrows.map(({ bulb, arm }) => [bulb, ...arm])));
-addGroupUniqueness(uniqueCells(xPairs));
-addGroupUniqueness(uniqueCells(blackDots));
-
-return constraints;
+return [
+  new Shape('9x9'),
+  shade.toVar('yin-yang shade'),
+  shadeGivens,
+  // Global Yin-Yang connectivity: all shaded cells form one orthogonally
+  // connected region, and all unshaded cells form another.
+  new ConnectedValues('VS', SHADED),
+  new ConnectedValues('VS', UNSHADED),
+  blockReplicate,
+  ...renbanConstraints,
+  ...arrowConstraints,
+  ...xConstraints,
+  ...blackDotConstraints,
+  ...groupUniquenessConstraints(uniqueCells(renbanLines)),
+  ...groupUniquenessConstraints(uniqueCells(arrows.map(({ bulb, arm }) => [bulb, ...arm]))),
+  ...groupUniquenessConstraints(uniqueCells(xPairs)),
+  ...groupUniquenessConstraints(uniqueCells(blackDots)),
+];

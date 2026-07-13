@@ -11,8 +11,6 @@
 // digits on green lines differ by at least 5. Digits on a pink line form a
 // non-repeating consecutive set in any order.
 
-const constraints = [new Shape('9x9')];
-
 // Circles ("vessels"): each circle's four adjacent cells feed one global
 // counting-circles pool. If digit N appears anywhere in the pool, it must
 // appear exactly N times across the whole pool (CountingCircles enforces
@@ -28,23 +26,21 @@ const circleCellGroups = [
   ['R5C7', 'R5C8', 'R6C7', 'R6C8'],
 ];
 const circleCells = circleCellGroups.flat();
-constraints.push(new CountingCircles(...circleCells));
-
-// Blue line: box borders cut the line into segments, each segment along
-// the line sums to the same total.
-constraints.push(new RegionSumLine('R1C8', 'R1C7', 'R1C6'));
 
 // Red line: adjacent digits alternate odd/even.
 const oddEvenKey = Pair.fnToKey((a, b) => (a % 2) !== (b % 2), 9);
-constraints.push(
-  new Pair(oddEvenKey, 'OddEven', 'R9C2', 'R9C3', 'R9C4'));
 
-// Green lines: adjacent digits differ by at least 5 (default Whisper gap).
-constraints.push(new Whisper(5, 'R7C8', 'R7C9', 'R6C9'));
-constraints.push(new Whisper(5, 'R3C8', 'R4C9'));
-constraints.push(new Whisper(5, 'R6C5', 'R7C6'));
-
-// Pink line: non-repeating consecutive set, any order.
-constraints.push(new Renban('R6C2', 'R6C3', 'R7C4'));
-
-return constraints;
+return [
+  new Shape('9x9'),
+  new CountingCircles(...circleCells),
+  // Blue line: box borders cut the line into segments, each segment along
+  // the line sums to the same total.
+  new RegionSumLine('R1C8', 'R1C7', 'R1C6'),
+  new Pair(oddEvenKey, 'OddEven', 'R9C2', 'R9C3', 'R9C4'),
+  // Green lines: adjacent digits differ by at least 5 (default Whisper gap).
+  new Whisper(5, 'R7C8', 'R7C9', 'R6C9'),
+  new Whisper(5, 'R3C8', 'R4C9'),
+  new Whisper(5, 'R6C5', 'R7C6'),
+  // Pink line: non-repeating consecutive set, any order.
+  new Renban('R6C2', 'R6C3', 'R7C4'),
+];

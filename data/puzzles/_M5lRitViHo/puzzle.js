@@ -23,11 +23,9 @@ function lineGapConstraints(path) {
   const minimumDifference = path.length;
   const key = Pair.fnToKey((a, b) => Math.abs(a - b) >= minimumDifference, 9);
   const label = `adjacent line digits differ by at least ${minimumDifference}`;
-  const constraints = [];
-  for (let i = 0; i < path.length - 1; i++) {
-    constraints.push(new Pair(key, label, path[i], path[i + 1]));
-  }
-  return constraints;
+  return Array.from({ length: path.length - 1 }, (_, i) =>
+    new Pair(key, label, path[i], path[i + 1])
+  );
 }
 
 return [

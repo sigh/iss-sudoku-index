@@ -26,10 +26,11 @@ const lines = [
 // Nabner: no two cells on the line may hold consecutive or equal digits.
 const nabnerKey = PairX.fnToKey((a, b) => Math.abs(a - b) > 1, 9);
 
-const constraints = [new Shape('9x9')];
-for (const cells of lines) {
-  constraints.push(new Zipper(...cells));
-  constraints.push(new PairX(nabnerKey, 'Nabner', ...cells));
-}
+return [
+  new Shape('9x9'),
 
-return constraints;
+  ...lines.flatMap(cells => [
+    new Zipper(...cells),
+    new PairX(nabnerKey, 'Nabner', ...cells),
+  ]),
+];

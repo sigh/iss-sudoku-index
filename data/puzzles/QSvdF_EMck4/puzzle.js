@@ -59,16 +59,12 @@ function groupsBy(cells, keyFn) {
 }
 
 function pieceConstraints(name, cells) {
-  const constraints = [];
-  for (const [axis, keyFn] of [['row', row], ['column', col]]) {
-    for (const group of groupsBy(cells, keyFn)) {
-      constraints.push(new PairX(noConsecutive, `${name} ${axis}`, ...group));
-    }
-  }
-  for (const group of groupsBy(cells, box)) {
-    constraints.push(new PairX(sameParity, `${name} box parity`, ...group));
-  }
-  return constraints;
+  return [
+    ...[['row', row], ['column', col]].flatMap(([axis, keyFn]) =>
+      groupsBy(cells, keyFn).map(group => new PairX(noConsecutive, `${name} ${axis}`, ...group))
+    ),
+    ...groupsBy(cells, box).map(group => new PairX(sameParity, `${name} box parity`, ...group)),
+  ];
 }
 
 return [

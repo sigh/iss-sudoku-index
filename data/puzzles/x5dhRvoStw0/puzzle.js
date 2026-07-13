@@ -8,18 +8,12 @@
 // increase from the bulb end. Each purple line contains a set of
 // non-repeating, consecutive digits in any order (Renban).
 
-const constraints = [
-  new Shape('9x9'),
-  new AntiKnight(),
-];
-
 // Thermometers (bulb first, strictly increasing).
 const thermos = [
   ['R3C3', 'R3C4', 'R4C4'],
   ['R6C6', 'R5C6', 'R6C7', 'R7C8'],
   ['R2C8', 'R2C9'],
 ];
-for (const cells of thermos) constraints.push(new Thermo(...cells));
 
 // Purple lines: non-repeating consecutive digits, any order (Renban).
 const renbans = [
@@ -33,6 +27,10 @@ const renbans = [
   ['R5C4', 'R5C5', 'R4C6'],
   ['R2C1', 'R1C1'],
 ];
-for (const cells of renbans) constraints.push(new Renban(...cells));
 
-return constraints;
+return [
+  new Shape('9x9'),
+  new AntiKnight(),
+  ...thermos.map(cells => new Thermo(...cells)),
+  ...renbans.map(cells => new Renban(...cells)),
+];

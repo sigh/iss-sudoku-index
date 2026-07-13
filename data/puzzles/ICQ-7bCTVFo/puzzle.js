@@ -47,22 +47,20 @@ const vClues = [
   ['R8C8', 'R9C8'],
 ];
 
-const constraints = [new Shape('9x9'), new AntiKnight()];
-const add = (...newConstraints) => constraints.push(...newConstraints);
-
-for (const cells of thermos) add(new Thermo(...cells));
-for (const cells of arrows) add(new Arrow(...cells));
-for (const cells of cages) add(new Cage(CAGE_SUM, ...cells));
-for (const cells of xClues) add(new X(...cells));
-for (const cells of vClues) add(new V(...cells));
-
-// "EXclusiVe" gimmick: pool every cell that belongs to a given constraint
-// type and forbid repeats across the whole pool (not just within one
-// instance of that type, which Thermo/Arrow/Cage already enforce locally).
-add(new AllDifferent(...thermos.flat()));
-add(new AllDifferent(...arrows.map(([, ...arm]) => arm).flat()));
-add(new AllDifferent(...cages.flat()));
-add(new AllDifferent(...xClues.flat()));
-add(new AllDifferent(...vClues.flat()));
-
-return constraints;
+return [
+  new Shape('9x9'),
+  new AntiKnight(),
+  ...thermos.map(cells => new Thermo(...cells)),
+  ...arrows.map(cells => new Arrow(...cells)),
+  ...cages.map(cells => new Cage(CAGE_SUM, ...cells)),
+  ...xClues.map(cells => new X(...cells)),
+  ...vClues.map(cells => new V(...cells)),
+  // "EXclusiVe" gimmick: pool every cell that belongs to a given constraint
+  // type and forbid repeats across the whole pool (not just within one
+  // instance of that type, which Thermo/Arrow/Cage already enforce locally).
+  new AllDifferent(...thermos.flat()),
+  new AllDifferent(...arrows.map(([, ...arm]) => arm).flat()),
+  new AllDifferent(...cages.flat()),
+  new AllDifferent(...xClues.flat()),
+  new AllDifferent(...vClues.flat()),
+];

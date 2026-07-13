@@ -34,9 +34,6 @@ for (const cell of gridCells) {
   if (down && box(cell) !== box(down)) borderDominoes.push([cell, down]);
 }
 
-const constraints = [new Shape('9x9')];
-const add = (...cs) => constraints.push(...cs);
-
 // Reads (a1, b1, a2, b2): the two cells of one border domino, then the two
 // cells of another. Rejects if both dominoes carry the same unordered pair.
 const pairwiseDistinctMachine = NFA.encodeSpec({
@@ -64,26 +61,36 @@ const pairwiseDistinctMachine = NFA.encodeSpec({
   accept: (state) => state.step === 4,
 }, 9);
 
+const borderPairNFAs = [];
 for (let i = 0; i < borderDominoes.length; i++) {
   const [a1, b1] = borderDominoes[i];
   for (let j = i + 1; j < borderDominoes.length; j++) {
     const [a2, b2] = borderDominoes[j];
-    add(new NFA(pairwiseDistinctMachine, 'border-pair-distinct', a1, b1, a2, b2));
+    borderPairNFAs.push(new NFA(pairwiseDistinctMachine, 'border-pair-distinct', a1, b1, a2, b2));
   }
 }
 
-// --- Arrows: bulb cell first, then arm cells the arm digits sum to. ---
-add(new Arrow('R8C3', 'R7C3', 'R6C3', 'R6C4', 'R6C5', 'R7C6'));
-add(new Arrow('R3C7', 'R2C6', 'R3C6', 'R4C6', 'R4C7'));
-add(new Arrow('R2C7', 'R1C6'));
-add(new Arrow('R9C3', 'R8C4'));
-add(new Arrow('R4C3', 'R5C4'));
-add(new Arrow('R2C4', 'R1C3'));
+const arrows = [
+  // --- Arrows: bulb cell first, then arm cells the arm digits sum to. ---
+  new Arrow('R8C3', 'R7C3', 'R6C3', 'R6C4', 'R6C5', 'R7C6'),
+  new Arrow('R3C7', 'R2C6', 'R3C6', 'R4C6', 'R4C7'),
+  new Arrow('R2C7', 'R1C6'),
+  new Arrow('R9C3', 'R8C4'),
+  new Arrow('R4C3', 'R5C4'),
+  new Arrow('R2C4', 'R1C3'),
+];
 
-// --- White dots: consecutive digits; not all dots are given. ---
-add(new WhiteDot('R1C7', 'R2C7'));
-add(new WhiteDot('R7C7', 'R8C7'));
-add(new WhiteDot('R2C2', 'R2C3'));
-add(new WhiteDot('R7C9', 'R8C9'));
+const whiteDots = [
+  // --- White dots: consecutive digits; not all dots are given. ---
+  new WhiteDot('R1C7', 'R2C7'),
+  new WhiteDot('R7C7', 'R8C7'),
+  new WhiteDot('R2C2', 'R2C3'),
+  new WhiteDot('R7C9', 'R8C9'),
+];
 
-return constraints;
+return [
+  new Shape('9x9'),
+  ...borderPairNFAs,
+  ...arrows,
+  ...whiteDots,
+];

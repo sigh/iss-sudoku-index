@@ -41,5 +41,7 @@ const givens = [
   ['R9C9', 8],
 ];
 
-const constraints = [new Shape('9x9'), ...givens.map(([cell, value]) => new Given(cell, value))];
-return constraints;
+return [
+  new Shape('9x9'),
+  ...givens.map(([cell, value]) => new Given(cell, value)),
+];

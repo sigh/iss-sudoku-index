@@ -25,20 +25,11 @@ const renbanLines = [
   ['R6C5', 'R6C6'],
 ];
 
-const constraints = [
+return [
   new Shape('6x6'),
   new NoBoxes(),
+  ...regions.map(region => new AllDifferent(...region)),
+  ...renbanLines.map(line => new Renban(...line)),
+  // V clue between R5C6 and R6C6, pointing to the smaller digit: R6C6.
+  new GreaterThan('R5C6', 'R6C6'),
 ];
-
-for (const region of regions) {
-  constraints.push(new AllDifferent(...region));
-}
-
-for (const line of renbanLines) {
-  constraints.push(new Renban(...line));
-}
-
-// V clue between R5C6 and R6C6, pointing to the smaller digit: R6C6.
-constraints.push(new GreaterThan('R5C6', 'R6C6'));
-
-return constraints;

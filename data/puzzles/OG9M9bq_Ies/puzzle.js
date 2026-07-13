@@ -114,17 +114,14 @@ function singleCellFlagConstraint(name, flagCell, cell, coeff, target) {
 // exactly-one-liar ContainExact for one clue type.
 function truthOrLieGroup(prefix, clueSpecs, buildClueConstraint) {
   const flags = new Var(prefix, `${prefix} truth flags (1=correct,2=lying)`, 3);
-  const constraints = [flags];
-  for (let i = 0; i < 3; i++) {
-    constraints.push(new Given(flags.cell(i + 1), 1, 2));
-  }
-  clueSpecs.forEach((spec, i) => {
-    constraints.push(buildClueConstraint(`${prefix}${i + 1}`, flags.cell(i + 1), spec));
-  });
-  // Exactly two flags read "1" (correct) and one reads "2" (lying).
-  constraints.push(
-    new ContainExact('1_1_2', flags.cell(1), flags.cell(2), flags.cell(3)));
-  return constraints;
+  return [
+    flags,
+    ...Array.from({length: 3}, (_, i) => new Given(flags.cell(i + 1), 1, 2)),
+    ...clueSpecs.map((spec, i) =>
+      buildClueConstraint(`${prefix}${i + 1}`, flags.cell(i + 1), spec)),
+    // Exactly two flags read "1" (correct) and one reads "2" (lying).
+    new ContainExact('1_1_2', flags.cell(1), flags.cell(2), flags.cell(3)),
+  ];
 }
 
 const cageClues = [
@@ -167,7 +164,7 @@ const renbanClues = [
   ['R7C2', 'R8C1', 'R9C1'],
 ];
 
-const constraints = [
+return [
   new Shape('9x9'),
 
   ...truthOrLieGroup('CGF', cageClues, (name, flagCell, spec) =>
@@ -200,5 +197,3 @@ const constraints = [
   new AllDifferent(
     'R5C1', 'R3C3', 'R4C2', 'R5C8', 'R7C9', 'R6C8', 'R6C9', 'R8C3', 'R8C4'),
 ];
-
-return constraints;

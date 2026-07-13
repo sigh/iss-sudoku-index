@@ -19,14 +19,11 @@ const line6 = ['R2C3', 'R3C3', 'R4C3', 'R5C3', 'R5C4', 'R4C4', 'R3C4', 'R2C4']; 
 
 const lines = [line0, line1, line2, line3, line4, line5, line6];
 
-const constraints = [
+return [
   new Shape('9x9'),
   new Given('R5C5', 1),
+  ...lines.flatMap(line => [
+    new RegionSumLine(...line),
+    new AllDifferent(...line),
+  ]),
 ];
-
-for (const line of lines) {
-  constraints.push(new RegionSumLine(...line));
-  constraints.push(new AllDifferent(...line));
-}
-
-return constraints;

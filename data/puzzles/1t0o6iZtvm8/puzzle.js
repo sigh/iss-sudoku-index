@@ -5,11 +5,13 @@
 
 // Standard 9x9 sudoku, no givens.
 //
-// Hot/Cold zone: every cell is hot or cold (a free Var flag, VZ1..VZ81). No
-// 2x2 block may be a single zone. (Every wall is just a restatement of the
-// zone rule itself -- a wall exists exactly where two orthogonally adjacent
-// cells are in different zones -- so it needs no separate encoding; the few
-// drawn walls are solving UI, not extra information.)
+// Hot/Cold zone: every cell is hot or cold (a free Var flag, VZ1..VZ81). Each
+// zone is one orthogonally-connected region (ConnectedValues, one per zone
+// value over the whole-grid VZ overlay). No 2x2 block may be a single zone.
+// (Every wall is just a restatement of the zone rule itself -- a wall exists
+// exactly where two orthogonally adjacent cells are in different zones -- so
+// it needs no separate encoding; the few drawn walls are solving UI, not
+// extra information.)
 //
 // A cell's value is its digit+1 if hot, digit-1 if cold.
 //
@@ -24,9 +26,9 @@
 // zone. Each is one NFA over [digitA, zoneA, digitB, zoneB] checking the
 // value relation, plus a same-zone Pair.
 //
-// Not encoded: zone connectivity (each zone must itself be one orthogonally
-// connected region) and the Finkz/Phinx maze-path/cupcake fiction that rides
-// on it -- ISS has no general connected-component primitive.
+// Not encoded: the Finkz/Phinx maze-path/cupcake fiction (zone connectivity
+// alone does not pin which zone holds which mouse/cupcake pair) and the TEST
+// CONSTRAINT rat identity.
 
 const HOT = 1, COLD = 2;
 
@@ -37,16 +39,6 @@ const N = geometry.numValues; // 9
 
 const zone = graph.makeOverlay('VZ');
 const zoneCell = cell => zone.at(cell);
-
-const constraints = [
-  new Shape('9x9'),
-  zone.toVar('hot(1) / cold(2) zone'),
-];
-const add = (...cs) => constraints.push(...cs);
-
-// --- Restrict the zone flags to HOT/COLD. ---
-add(new Replicate([new Given(zone.cells()[0], HOT, COLD)],
-  Replicate.encodeTargetCells(zone.cells(), zone.cells()[0], zone), zone.cells()[0]));
 
 // --- No 2x2 block may be a single zone. ---
 const noMonoMachine = NFA.encodeSpec({
@@ -60,10 +52,6 @@ const noMonoMachine = NFA.encodeSpec({
   },
   accept: ({ block }) => block === null,
 }, N);
-for (const cell of gridCells) {
-  const block = graph.block(cell, 2, 2);
-  if (block) add(new NFA(noMonoMachine, 'no-mono-2x2', ...block.map(zoneCell)));
-}
 
 // --- Box balance: hot value = digit+1, cold value = digit-1; hot sum = cold sum. ---
 const MIN_SUM = -72, MAX_SUM = 90; // bounds a box's running signed total can reach
@@ -78,10 +66,6 @@ const boxBalanceMachine = NFA.encodeSpec({
   },
   accept: (state) => state.phase === 'digit' && state.sum === 0,
 }, N);
-for (const boxCells of graph.boxes()) {
-  const scan = boxCells.flatMap(cell => [cell, zoneCell(cell)]);
-  add(new NFA(boxBalanceMachine, 'box-balance', ...scan));
-}
 
 // --- Currants: relations on value (digit+1 hot / digit-1 cold), plus same-zone. ---
 const blackCurrants = [
@@ -111,13 +95,38 @@ function currantMachine(relation) {
 const blackCurrantMachine = currantMachine((a, b) => a === 2 * b || b === 2 * a);
 const redCurrantMachine = currantMachine((a, b) => (a % 2) !== (b % 2));
 
-for (const [a, b] of blackCurrants) {
-  add(new NFA(blackCurrantMachine, 'blackcurrant', a, zoneCell(a), b, zoneCell(b)));
-  add(new SameValues(2, zoneCell(a), zoneCell(b)));
-}
-for (const [a, b] of redCurrants) {
-  add(new NFA(redCurrantMachine, 'redcurrant', a, zoneCell(a), b, zoneCell(b)));
-  add(new SameValues(2, zoneCell(a), zoneCell(b)));
-}
+// No-mono-2x2 is the same shifted 2x2 check at every anchor (a block's
+// top-left cell); stamp it as one Replicate instead of 64 copies.
+const monoAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
+const monoOrigin = zoneCell(monoAnchors[0]);
+const noMonoReplicate = new Replicate(
+  [new NFA(noMonoMachine, 'no-mono-2x2', ...graph.block(monoAnchors[0], 2, 2).map(zoneCell))],
+  Replicate.encodeTargetCells(monoAnchors.map(zoneCell), monoOrigin, zone),
+  monoOrigin);
 
-return constraints;
+return [
+  new Shape('9x9'),
+  zone.toVar('hot(1) / cold(2) zone'),
+  // --- Restrict the zone flags to HOT/COLD. ---
+  new Replicate([new Given(zone.cells()[0], HOT, COLD)],
+    Replicate.encodeTargetCells(zone.cells(), zone.cells()[0], zone), zone.cells()[0]),
+  // --- Each zone is a single orthogonally-connected region. ---
+  new ConnectedValues('VZ', HOT),
+  new ConnectedValues('VZ', COLD),
+  // --- No 2x2 block may be a single zone. ---
+  noMonoReplicate,
+  // --- Box balance: hot value = digit+1, cold value = digit-1; hot sum = cold sum. ---
+  ...graph.boxes().flatMap(boxCells => {
+    const scan = boxCells.flatMap(cell => [cell, zoneCell(cell)]);
+    return [new NFA(boxBalanceMachine, 'box-balance', ...scan)];
+  }),
+  // --- Currants: relations on value (digit+1 hot / digit-1 cold), plus same-zone. ---
+  ...blackCurrants.flatMap(([a, b]) => [
+    new NFA(blackCurrantMachine, 'blackcurrant', a, zoneCell(a), b, zoneCell(b)),
+    new SameValues(2, zoneCell(a), zoneCell(b)),
+  ]),
+  ...redCurrants.flatMap(([a, b]) => [
+    new NFA(redCurrantMachine, 'redcurrant', a, zoneCell(a), b, zoneCell(b)),
+    new SameValues(2, zoneCell(a), zoneCell(b)),
+  ]),
+];

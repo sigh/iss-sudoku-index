@@ -20,9 +20,6 @@
 // whisper-difference lines and all four attached sums are satisfied. Nothing
 // is omitted.
 
-const constraints = [new Shape('9x9')];
-const add = (...cs) => constraints.push(...cs);
-
 // Each drawn stroke, exactly as it appears in the source (order along the
 // stroke matters only for which pairs are "adjacent"; closed loops repeat
 // their first cell at the end to include the closing edge).
@@ -50,7 +47,6 @@ const strokes = [
   ['R7C4', 'R7C5', 'R7C6', 'R7C7', 'R6C7', 'R5C7', 'R4C7', 'R3C7', 'R3C6',
     'R3C5', 'R3C4', 'R3C3', 'R4C3', 'R5C3', 'R6C3', 'R7C3', 'R7C4'],
 ];
-for (const stroke of strokes) add(new Whisper(...stroke));
 
 // Attached killer sums, one per green-line group (all of its strokes'
 // cells, deduplicated).
@@ -61,6 +57,9 @@ const sums = [
   [88, ['R7C4', 'R7C5', 'R7C6', 'R7C7', 'R6C7', 'R5C7', 'R4C7', 'R3C7',
     'R3C6', 'R3C5', 'R3C4', 'R3C3', 'R4C3', 'R5C3', 'R6C3', 'R7C3']],
 ];
-for (const [sum, cells] of sums) add(new Sum(sum, ...cells));
 
-return constraints;
+return [
+  new Shape('9x9'),
+  ...strokes.map(stroke => new Whisper(...stroke)),
+  ...sums.map(([sum, cells]) => new Sum(sum, ...cells)),
+];

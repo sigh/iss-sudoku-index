@@ -3,8 +3,9 @@
 // Video: https://www.youtube.com/watch?v=ehi5FkxgrWs
 // Source: https://sudokupad.app/gf8l5f4s64
 
-// Partial encoding: omits only global Yin-Yang connectivity for shaded and
-// unshaded cells. Local shading and reciprocal sum/product cages are encoded.
+// Full encoding. Global Yin-Yang connectivity is one ConnectedValues
+// constraint per shade over the shade overlay; local shading and reciprocal
+// sum/product cages are encoded below.
 
 const SHADED = 1;
 const UNSHADED = 2;
@@ -158,27 +159,25 @@ const cages = [
   ['product', 5, ['R1C2', 'R1C3', 'R2C3', 'R2C4', 'R2C5']],
 ];
 
-const constraints = [
+const firstShade = shade.cells()[0];
+const monoOrigin = shadeCell('R1C1');
+
+return [
   new Shape('9x9'),
   shade.toVar('shade'),
+  new Replicate([new Given(firstShade, SHADED, UNSHADED)],
+    Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade),
+  // Global Yin-Yang connectivity: each shade forms one orthogonally connected
+  // region.
+  new ConnectedValues('VS', SHADED),
+  new ConnectedValues('VS', UNSHADED),
+  // The no-mono-2x2 NFA is the same machine at every valid 2x2 anchor
+  // (R1C1..R8C8), each a uniform translation of the same relative cell
+  // pattern over the shade overlay, so Replicate shortens the 64 stamped
+  // copies to one template.
+  new Replicate(
+    [new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.block(monoOrigin, 2, 2))],
+    Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
+    monoOrigin),
+  ...cages.map(([kind, target, cells]) => cageConstraint(kind, target, cells)),
 ];
-
-const firstShade = shade.cells()[0];
-constraints.push(new Replicate([new Given(firstShade, SHADED, UNSHADED)],
-  Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade));
-
-// The no-mono-2x2 NFA is the same machine at every valid 2x2 anchor
-// (R1C1..R8C8), each a uniform translation of the same relative cell
-// pattern over the shade overlay, so Replicate shortens the 64 stamped
-// copies to one template.
-const monoOrigin = shadeCell('R1C1');
-constraints.push(new Replicate(
-  [new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.block(monoOrigin, 2, 2))],
-  Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
-  monoOrigin));
-
-for (const [kind, target, cells] of cages) {
-  constraints.push(cageConstraint(kind, target, cells));
-}
-
-return constraints;

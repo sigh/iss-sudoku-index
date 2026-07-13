@@ -15,7 +15,12 @@
 //
 // Path membership is a Var overlay per grid cell (ON=1/OFF=2), shaped by
 // degree constraints (1 at the two endpoints, 2 elsewhere when on, 0 when
-// off) and a no-diagonal-touch NFA, in the nordschleife/loop_entropic style.
+// off), a no-diagonal-touch NFA, and a ConnectedValues over the on-path
+// cells: a connected graph whose degree sequence is all-2 except for
+// exactly two degree-1 vertices is necessarily a single simple path between
+// those two vertices, so connectivity plus the degree rules together force
+// exactly one path from R9C9 to R1C1, soundly ruling out disjoint
+// path/cycle fragments.
 // Box coverage (>=1 on-path cell per box) is a small counting NFA per box.
 // Arrow/circle counts follow nordschleife's count machine, applied along a
 // ray for arrows and over king neighbours for circles. The mod-4 window rule
@@ -25,10 +30,10 @@
 // genuinely consecutive path cells, so this local, geometry-enumerated check
 // is sound without needing a global connectivity primitive.
 //
-// Omitted (a known ISS connectivity gap): the requirement that the on-path cells form exactly one
-// connected path from R9C9 to R1C1. The degree + no-touch rules only force a
-// disjoint union of simple paths/cycles; ISS has no primitive to force a
-// single connected component with fixed endpoints.
+// Single connected path: a ConnectedValues over the on-path cells, combined
+// with the degree rules above (degree 1 at exactly the two fixed endpoints,
+// degree 2 everywhere else on-path), forces the on-path cells to form
+// exactly one simple path between R9C9 and R1C1.
 
 const ON = 1;                  // path-membership values, stored in the Var cells
 const OFF = 2;
@@ -42,8 +47,6 @@ const pathCell = cell => path.at(cell);
 
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), path.toVar('path')];
-const add = (...newConstraints) => constraints.push(...newConstraints);
 
 const START = 'R9C9';
 const END = 'R1C1';
@@ -59,11 +62,12 @@ const circles = ['R4C6', 'R8C9'];
 // --- Path membership: every cell is on (1) or off (2); endpoints on, arrow
 // and circle cells off (they are off-path counting clues).
 const originCell = path.cells()[0];
-add(new Replicate([new Given(originCell, ON, OFF)],
-  Replicate.encodeTargetCells(path.cells(), originCell, path), originCell));
-for (const cell of endpoints) add(new Given(pathCell(cell), ON));
-for (const { cell } of arrows) add(new Given(pathCell(cell), OFF));
-for (const cell of circles) add(new Given(pathCell(cell), OFF));
+
+// --- Single connected path: the on-path cells form one connected region.
+// Combined with the degree rules below (degree 1 at the two endpoints,
+// degree 2 elsewhere on-path), this forces the on-path cells to form
+// exactly one simple path from R9C9 to R1C1 -- a connected graph with that
+// degree sequence cannot be two or more disjoint path/cycle fragments.
 
 // --- Degree: endpoints have exactly one on-path orthogonal neighbour;
 // every other on cell has exactly two; off cells are free. Reads the
@@ -82,10 +86,6 @@ const makeDegreeMachine = requiredDegree => NFA.encodeSpec({
 }, geometry.numValues);
 const degree1Machine = makeDegreeMachine(1);
 const degree2Machine = makeDegreeMachine(2);
-for (const cell of gridCells) {
-  const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
-  add(new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell)));
-}
 
 // --- No diagonal self-touch: forbid a 2x2 whose only on cells are a diagonal.
 // Reads the four membership cells of a 2x2 block, left-to-right, top-to-bottom.
@@ -109,10 +109,6 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
 const noTouchAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noTouchOrigin = pathCell(noTouchAnchors[0]);
 const noTouchTemplate = graph.block(noTouchAnchors[0], 2, 2).map(pathCell);
-add(new Replicate(
-  [new NFA(noDiagonalTouchMachine, 'no-touch', ...noTouchTemplate)],
-  Replicate.encodeTargetCells(noTouchAnchors.map(pathCell), noTouchOrigin, path),
-  noTouchOrigin));
 
 // --- Box coverage: at least one on-path cell in every box.
 const atLeastOneOnMachine = NFA.encodeSpec({
@@ -120,9 +116,6 @@ const atLeastOneOnMachine = NFA.encodeSpec({
   transition: ({ seen }, value) => ({ seen: seen || value === ON }),
   accept: ({ seen }) => seen,
 }, geometry.numValues);
-for (const cells of graph.boxes()) {
-  add(new NFA(atLeastOneOnMachine, 'box-coverage', ...cells.map(pathCell)));
-}
 
 // --- Arrow / circle counts: the clue's own digit equals the number of
 // on-path cells among the cells it inspects. Reads the clue's digit, then
@@ -136,13 +129,6 @@ const countMachine = NFA.encodeSpec({
   },
   accept: ({ target, count }) => target !== null && count === target,
 }, geometry.numValues);
-for (const { cell, dir: [dR, dC] } of arrows) {
-  const ray = graph.ray(cell, dR, dC).slice(1).map(pathCell);
-  add(new NFA(countMachine, 'arrow-count', cell, ...ray));
-}
-for (const cell of circles) {
-  add(new NFA(countMachine, 'circle-count', cell, ...graph.kingNeighbours(cell).map(pathCell)));
-}
 
 // --- Mod-4 windows: any 4 consecutive path cells cover all four residues
 // mod 4 ({1,5,9}->1, {2,6}->2, {3,7}->3, {4,8}->0). Enumerated over every
@@ -177,7 +163,7 @@ for (const a of gridCells) {
 // machine drops into a 'skip' sink that always accepts. On the last digit
 // (phase 7) the class-coverage decision is folded into the transition itself
 // (into an accepting 'done' sink, or reject), so the machine never needs a
-// phase 8 state — keeping the compiled state space finite and small (phase x
+// phase 8 state -- keeping the compiled state space finite and small (phase x
 // classes-bitmask, no per-window history array).
 const mod4Machine = NFA.encodeSpec({
   startState: { phase: 0, classes: 0 },
@@ -194,21 +180,38 @@ const mod4Machine = NFA.encodeSpec({
   },
   accept: ({ phase }) => phase === 'skip' || phase === 'done',
 }, geometry.numValues);
-for (const [a, b, c, d] of mod4Windows) {
-  add(new NFA(mod4Machine, 'mod4',
-    pathCell(a), a, pathCell(b), b, pathCell(c), c, pathCell(d), d));
-}
 
-// --- Renban line (purple): non-repeating consecutive sequence.
-add(new Renban('R5C7', 'R5C8', 'R5C9'));
-
-// --- Region Sum Line (blue): box borders divide the line into equal-sum
-// segments.
-add(new RegionSumLine('R6C5', 'R5C5', 'R4C5', 'R4C4', 'R3C4', 'R2C4', 'R3C3', 'R3C2'));
-
-// --- Kropki white dots (not all dots given, so no global negative Kropki).
-add(new WhiteDot('R8C1', 'R9C1'));
-add(new WhiteDot('R1C8', 'R1C9'));
-add(new WhiteDot('R4C5', 'R5C5'));
-
-return constraints;
+return [
+  new Shape('9x9'),
+  path.toVar('path'),
+  new Replicate([new Given(originCell, ON, OFF)],
+    Replicate.encodeTargetCells(path.cells(), originCell, path), originCell),
+  ...endpoints.map(cell => new Given(pathCell(cell), ON)),
+  ...arrows.map(({ cell }) => new Given(pathCell(cell), OFF)),
+  ...circles.map(cell => new Given(pathCell(cell), OFF)),
+  new ConnectedValues('VP', ON),
+  ...gridCells.map(cell => {
+    const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
+    return new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell));
+  }),
+  new Replicate(
+    [new NFA(noDiagonalTouchMachine, 'no-touch', ...noTouchTemplate)],
+    Replicate.encodeTargetCells(noTouchAnchors.map(pathCell), noTouchOrigin, path),
+    noTouchOrigin),
+  ...graph.boxes().map(cells => new NFA(atLeastOneOnMachine, 'box-coverage', ...cells.map(pathCell))),
+  ...arrows.map(({ cell, dir: [dR, dC] }) => {
+    const ray = graph.ray(cell, dR, dC).slice(1).map(pathCell);
+    return new NFA(countMachine, 'arrow-count', cell, ...ray);
+  }),
+  ...circles.map(cell => new NFA(countMachine, 'circle-count', cell, ...graph.kingNeighbours(cell).map(pathCell))),
+  ...mod4Windows.map(([a, b, c, d]) => new NFA(mod4Machine, 'mod4', pathCell(a), a, pathCell(b), b, pathCell(c), c, pathCell(d), d)),
+  // --- Renban line (purple): non-repeating consecutive sequence.
+  new Renban('R5C7', 'R5C8', 'R5C9'),
+  // --- Region Sum Line (blue): box borders divide the line into equal-sum
+  // segments.
+  new RegionSumLine('R6C5', 'R5C5', 'R4C5', 'R4C4', 'R3C4', 'R2C4', 'R3C3', 'R3C2'),
+  // --- Kropki white dots (not all dots given, so no global negative Kropki).
+  new WhiteDot('R8C1', 'R9C1'),
+  new WhiteDot('R1C8', 'R1C9'),
+  new WhiteDot('R4C5', 'R5C5'),
+];

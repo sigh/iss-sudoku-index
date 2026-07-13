@@ -62,24 +62,19 @@ const differentPairNFA = NFA.encodeSpec({
 }, 9);
 
 const labels = Object.keys(CAGES);
-const constraints = [
+
+return [
   new Shape('9x9'),
   ...GIVENS.map(([cell, value]) => new Given(cell, value)),
+  ...Object.values(CAGES).map(cages => new SameValues(cages.length, ...cages.flat())),
+  ...Array.from({ length: labels.length - 1 }, (_, i) =>
+    Array.from({ length: labels.length - i - 1 }, (_, j) =>
+      new NFA(
+        differentPairNFA,
+        'different letter pairs',
+        ...CAGES[labels[i]][0],
+        ...CAGES[labels[i + j + 1]][0],
+      )
+    )
+  ).flat(),
 ];
-
-for (const cages of Object.values(CAGES)) {
-  constraints.push(new SameValues(cages.length, ...cages.flat()));
-}
-
-for (let i = 0; i < labels.length; i++) {
-  for (let j = i + 1; j < labels.length; j++) {
-    constraints.push(new NFA(
-      differentPairNFA,
-      'different letter pairs',
-      ...CAGES[labels[i]][0],
-      ...CAGES[labels[j]][0],
-    ));
-  }
-}
-
-return constraints;

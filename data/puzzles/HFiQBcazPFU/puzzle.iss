@@ -1,4 +1,5 @@
 .Var~L~loop%20shape~81
+.ConnectedValues~VL~2_3_4_5_6_7
 .WhiteDot~R1C1~R1C2
 .WhiteDot~R2C4~R3C4
 .WhiteDot~R2C5~R3C5

@@ -108,7 +108,7 @@ function skyscraperLetter(orderedCells, letterCell, name) {
   return new NFA(NFA.encodeSpec(spec, 9), name, letterCell, ...orderedCells);
 }
 
-const constraints = [
+return [
   new Shape('9x9'),
 
   // Each letter A-H,Z is a different digit 1-9.
@@ -141,5 +141,3 @@ const constraints = [
   doorLetter(colCells(1, UP), L.Z, 'Door bottom C1'),
   doorLetter(rowCells(8, DOWN), L.D, 'Door left R8'),
 ];
-
-return constraints;

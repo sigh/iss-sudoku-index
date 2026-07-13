@@ -7,8 +7,11 @@
 // encode the 11 path shapes. Real grid cells are immediately restricted back
 // to 1-9. R5C5 and R3C1 are the degree-1 endpoints; every other cell is off the
 // path or has degree 2. Adjacent cells agree on shared edges, decoded wall
-// edges are forced off, and selected edges are German Whispers. This local
-// encoding does not forbid extra disconnected cycles.
+// edges are forced off, and selected edges are German Whispers. A
+// ConnectedValues over the on-path shape values forces every on-path cell into
+// one connected cell region, ruling out entirely separate extra path/cycle
+// components; it does not by itself rule out an extra piece that runs
+// cell-adjacent to the main path without sharing a used edge.
 
 const OFF = 1;
 const U = 2;
@@ -37,11 +40,7 @@ const geometry = graph.gridGeometry();
 const shape = graph.makeOverlay('VS');
 const shapeCell = cell => shape.at(cell);
 const gridCells = graph.cells();
-const constraints = [
-  new Shape('9x9', 11),
-  shape.toVar('path shape'),
-];
-const add = (...newConstraints) => constraints.push(...newConstraints);
+const ON_PATH_SHAPES = [...ENDPOINT_SHAPES, HORIZ, VERT, UL, UR, DL, DR];
 
 const rightAgree = Pair.fnToKey((a, b) => usesRight(a) === usesLeft(b), VALUE_COUNT);
 const downAgree = Pair.fnToKey((a, b) => usesDown(a) === usesUp(b), VALUE_COUNT);
@@ -147,60 +146,80 @@ function shapeDomain(cell) {
   return shapes;
 }
 
-add(new Replicate(
-  [new Given('R1C1', ...GRID_DIGITS)],
-  Replicate.encodeTargetCells(gridCells, 'R1C1', graph),
-  'R1C1',
-));
-
-const shapeDomainGroups = new Map();
-for (const cell of gridCells) {
-  const shapes = shapeDomain(cell);
-  const key = shapes.join('_');
-  if (!shapeDomainGroups.has(key)) shapeDomainGroups.set(key, { shapes, cells: [] });
-  shapeDomainGroups.get(key).cells.push(cell);
-}
-
-for (const { shapes, cells } of shapeDomainGroups.values()) {
-  const origin = shapeCell(cells[0]);
-  add(new Replicate(
-    [new Given(origin, ...shapes)],
-    Replicate.encodeTargetCells(cells.map(shapeCell), origin, shape),
-    origin,
-  ));
-}
-
 const rightCells = gridCells.filter(cell => graph.step(cell, 0, 1));
-add(new Replicate(
-  [new Pair(rightAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R1C2'))],
-  Replicate.encodeTargetCells(rightCells.map(shapeCell), shapeCell('R1C1'), shape),
-  shapeCell('R1C1'),
-));
-
 const downCells = gridCells.filter(cell => graph.step(cell, 1, 0));
-add(new Replicate(
-  [new Pair(downAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R2C1'))],
-  Replicate.encodeTargetCells(downCells.map(shapeCell), shapeCell('R1C1'), shape),
-  shapeCell('R1C1'),
-));
 
-for (const cell of gridCells) {
+// Base domain (before border/wall narrowing): the two endpoints get
+// ENDPOINT_SHAPES, every other cell gets MIDDLE_SHAPES. Stamp each base
+// domain over its whole cell group, then let narrower per-cell Givens (border
+// edges, decoded walls) intersect it down where the actual allowed set is
+// smaller -- Givens intersect, so the narrower one wins.
+function baseDomain(cell) {
+  return cell === 'R5C5' || cell === 'R3C1' ? ENDPOINT_SHAPES : MIDDLE_SHAPES;
+}
+const endpointCells = gridCells.filter(cell => cell === 'R5C5' || cell === 'R3C1');
+const middleCells = gridCells.filter(cell => cell !== 'R5C5' && cell !== 'R3C1');
+
+function baseDomainReplicate(cells, values) {
+  const targets = cells.map(shapeCell);
+  const origin = targets[0];
+  return new Replicate(
+    [new Given(origin, ...values)],
+    Replicate.encodeTargetCells(targets, origin, shape),
+    origin,
+  );
+}
+const shapeDomainReplicates = [
+  baseDomainReplicate(endpointCells, ENDPOINT_SHAPES),
+  baseDomainReplicate(middleCells, MIDDLE_SHAPES),
+];
+
+const narrowerShapeGivens = gridCells.flatMap(cell => {
+  const base = baseDomain(cell);
+  const actual = shapeDomain(cell);
+  return actual.length < base.length ? [new Given(shapeCell(cell), ...actual)] : [];
+});
+
+const whisperNfas = gridCells.flatMap(cell => {
+  const nfas = [];
   const rightNeighbour = graph.step(cell, 0, 1);
   if (rightNeighbour) {
-    add(new NFA(rightWhisper, 'maze-whisper', shapeCell(cell), cell, rightNeighbour));
+    nfas.push(new NFA(rightWhisper, 'maze-whisper', shapeCell(cell), cell, rightNeighbour));
   }
-
   const downNeighbour = graph.step(cell, 1, 0);
   if (downNeighbour) {
-    add(new NFA(downWhisper, 'maze-whisper', shapeCell(cell), cell, downNeighbour));
+    nfas.push(new NFA(downWhisper, 'maze-whisper', shapeCell(cell), cell, downNeighbour));
   }
-}
+  return nfas;
+});
 
-add(
+return [
+  new Shape('9x9', 11),
+  shape.toVar('path shape'),
+  // Every on-path cell (shape != OFF) forms one connected cell region. Sound
+  // to add (the genuine single path is cell-connected), and it rules out an
+  // extra path/cycle component that is entirely separate from the main path.
+  new ConnectedValues('VS', ON_PATH_SHAPES),
+  new Replicate(
+    [new Given('R1C1', ...GRID_DIGITS)],
+    Replicate.encodeTargetCells(gridCells, 'R1C1', graph),
+    'R1C1',
+  ),
+  ...shapeDomainReplicates,
+  ...narrowerShapeGivens,
+  new Replicate(
+    [new Pair(rightAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R1C2'))],
+    Replicate.encodeTargetCells(rightCells.map(shapeCell), shapeCell('R1C1'), shape),
+    shapeCell('R1C1'),
+  ),
+  new Replicate(
+    [new Pair(downAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R2C1'))],
+    Replicate.encodeTargetCells(downCells.map(shapeCell), shapeCell('R1C1'), shape),
+    shapeCell('R1C1'),
+  ),
+  ...whisperNfas,
   new WhiteDot('R4C6', 'R5C6'),
   // Arrow points to the smaller digit: R1C2 > R1C1.
   new GreaterThan('R1C2', 'R1C1'),
   new SameValues(2, 'R2C9', 'R9C8'),
-);
-
-return constraints;
+];

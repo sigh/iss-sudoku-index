@@ -11,7 +11,7 @@
 // digits in any order. The 3x3 box borders divide each thick blue line into
 // segments; each segment along an individual line must have the same sum.
 
-const constraints = [
+return [
   new Shape('9x9'),
 
   // Thin blue diagonal, R9C1-R1C9, non-repeating digits.
@@ -38,5 +38,3 @@ const constraints = [
   new RegionSumLine('R5C7', 'R5C6', 'R6C5', 'R7C5'),
   new RegionSumLine('R4C7', 'R5C8', 'R6C9', 'R7C8', 'R8C7', 'R9C6', 'R8C5', 'R7C4'),
 ];
-
-return constraints;

@@ -31,10 +31,8 @@ const lines = [
   ['R8C7', 'R9C7'],
 ];
 
-const constraints = [
+return [
   new Shape('9x9'),
   new Given('R7C2', 5),
   ...lines.map(cells => new Pair(squarePairKey, 'Square pair', ...cells)),
 ];
-
-return constraints;

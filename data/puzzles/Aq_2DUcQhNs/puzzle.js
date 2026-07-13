@@ -49,20 +49,9 @@ const purpleRenbanLines = [
 
 const scaleCells = [...new Set([...yellowLine, ...redLine])];
 
-const constraints = [
+return [
   new Shape('9x9'),
+  ...scaleCells.map(cell => new Given(cell, 1, 2, 3, 4, 5)),
+  ...greenWhisperLines.map(cells => new Whisper(5, ...cells)),
+  ...purpleRenbanLines.map(cells => new Renban(...cells)),
 ];
-
-for (const cell of scaleCells) {
-  constraints.push(new Given(cell, 1, 2, 3, 4, 5));
-}
-
-for (const cells of greenWhisperLines) {
-  constraints.push(new Whisper(5, ...cells));
-}
-
-for (const cells of purpleRenbanLines) {
-  constraints.push(new Renban(...cells));
-}
-
-return constraints;

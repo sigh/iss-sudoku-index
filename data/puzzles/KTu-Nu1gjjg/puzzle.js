@@ -28,17 +28,6 @@ const hotspotSpec = {
 };
 const encodedHotspot = NFA.encodeSpec(hotspotSpec, 9);
 
-const constraints = [
-  new Shape('9x9'),
-  new Given('R2C2', 1),
-  new Given('R3C6', 7),
-  new Given('R4C4', 5),
-  new Given('R5C6', 2),
-  new Given('R7C4', 6),
-  new Given('R9C5', 8),
-  new Given('R9C9', 4),
-];
-
 // The per-cell NFA's shape ([cell, ...neighbours] length and offsets) is
 // fixed by which grid sides the cell touches, so cells sharing that shape
 // are true uniform-offset copies: group by touched sides and let Replicate
@@ -53,18 +42,27 @@ for (const cell of graph.cells()) {
   sideGroups.get(key).push(cell);
 }
 
-for (const cells of sideGroups.values()) {
+const hotspotConstraints = Array.from(sideGroups.values()).flatMap(cells => {
   if (cells.length === 1) {
     const cell = cells[0];
-    constraints.push(new NFA(encodedHotspot, 'Hotspot', cell, ...graph.neighbours(cell)));
-    continue;
+    return [new NFA(encodedHotspot, 'Hotspot', cell, ...graph.neighbours(cell))];
   }
   const origin = cells[0];
-  constraints.push(new Replicate(
+  return [new Replicate(
     [new NFA(encodedHotspot, 'Hotspot', origin, ...graph.neighbours(origin))],
     Replicate.encodeTargetCells(cells, origin, graph),
     origin,
-  ));
-}
+  )];
+});
 
-return constraints;
+return [
+  new Shape('9x9'),
+  new Given('R2C2', 1),
+  new Given('R3C6', 7),
+  new Given('R4C4', 5),
+  new Given('R5C6', 2),
+  new Given('R7C4', 6),
+  new Given('R9C5', 8),
+  new Given('R9C9', 4),
+  ...hotspotConstraints,
+];

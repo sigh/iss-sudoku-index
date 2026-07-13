@@ -52,18 +52,22 @@ const compareCageTotals = (accept) => NFA.encodeSpec({
 const notEqualTotals = compareCageTotals(({ diff }) => diff !== 0);
 const whisperTotals = compareCageTotals(({ diff }) => Math.abs(diff) >= 7);
 const adjacent = new Set(adjacentPairs.map(([a, b]) => `${a}-${b}`));
-const constraints = [new Shape('9x9')];
 
-for (let a = 1; a <= cages.length; a++) {
-  for (let b = a + 1; b <= cages.length; b++) {
-    const isAdjacent = adjacent.has(`${a}-${b}`);
-    constraints.push(new NFA(
-      isAdjacent ? whisperTotals : notEqualTotals,
-      isAdjacent ? 'adjacent cage totals differ by at least 7' : 'cage totals differ',
-      cages[a - 1],
-      cages[b - 1],
-    ));
-  }
-}
-
-return constraints;
+return [
+  new Shape('9x9'),
+  ...(() => {
+    const cageComparisons = [];
+    for (let a = 1; a <= cages.length; a++) {
+      for (let b = a + 1; b <= cages.length; b++) {
+        const isAdjacent = adjacent.has(`${a}-${b}`);
+        cageComparisons.push(new NFA(
+          isAdjacent ? whisperTotals : notEqualTotals,
+          isAdjacent ? 'adjacent cage totals differ by at least 7' : 'cage totals differ',
+          cages[a - 1],
+          cages[b - 1],
+        ));
+      }
+    }
+    return cageComparisons;
+  })(),
+];

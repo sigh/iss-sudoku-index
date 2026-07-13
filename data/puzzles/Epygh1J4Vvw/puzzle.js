@@ -16,21 +16,14 @@ const DIRS = [
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const dotDirectionsVar = new Var('D', 'bumped dot directions', 20);
-const constraints = [
-  new Shape('9x9'),
-  dotDirectionsVar,
-];
-const add = (...items) => constraints.push(...items);
 
-for (const [cell, value] of [
-  ['R4C6', 2],
-  ['R5C3', 5],
-  ['R7C1', 4],
-  ['R8C9', 4],
-  ['R9C1', 2],
-]) {
-  add(new Given(cell, value));
-}
+const givens = [
+  new Given('R4C6', 2),
+  new Given('R5C3', 5),
+  new Given('R7C1', 4),
+  new Given('R8C9', 4),
+  new Given('R9C1', 2),
+];
 
 const dots = [
   ['black', 'R1C1'], ['black', 'R1C2'], ['black', 'R2C1'], ['black', 'R2C2'],
@@ -55,7 +48,6 @@ for (const dot of dots) {
   dot.candidates = DIRS
     .map(dir => ({ dir, other: neighbor(dot.cell, dir), edge: edgeKey(dot.cell, dir) }))
     .filter(candidate => candidate.other);
-  add(new Given(dot.varCell, ...dot.candidates.map(candidate => candidate.dir.value)));
 }
 
 const relationMachine = (selectedDir, color) => NFA.encodeSpec({
@@ -80,24 +72,36 @@ const noSameEdgeKey = (dotA, dotB) => Pair.fnToKey((a, b) => {
   return !(ca && cb && sameEdge(ca.edge, cb.edge));
 }, geometry.numValues);
 
-for (const dot of dots) {
-  for (const candidate of dot.candidates) {
-    add(new NFA(
+const dotGivens = dots.map(dot =>
+  new Given(dot.varCell, ...dot.candidates.map(candidate => candidate.dir.value))
+);
+
+const dotNFAs = dots.flatMap(dot =>
+  dot.candidates.map(candidate =>
+    new NFA(
       relationMachine(candidate.dir.value, dot.color),
       `${dot.color}-${candidate.dir.name}`,
       dot.varCell,
       dot.cell,
       candidate.other,
-    ));
-  }
-}
+    )
+  )
+);
 
+const dotPairs = [];
 for (let i = 0; i < dots.length; i++) {
   for (let j = i + 1; j < dots.length; j++) {
     if (dots[i].candidates.some(a => dots[j].candidates.some(b => sameEdge(a.edge, b.edge)))) {
-      add(new Pair(noSameEdgeKey(dots[i], dots[j]), 'distinct-edge', dots[i].varCell, dots[j].varCell));
+      dotPairs.push(new Pair(noSameEdgeKey(dots[i], dots[j]), 'distinct-edge', dots[i].varCell, dots[j].varCell));
     }
   }
 }
 
-return constraints;
+return [
+  new Shape('9x9'),
+  dotDirectionsVar,
+  ...givens,
+  ...dotGivens,
+  ...dotNFAs,
+  ...dotPairs,
+];

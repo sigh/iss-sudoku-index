@@ -10,7 +10,11 @@
 // larger is an integer multiple of the smaller. The rectangle cell is on the loop.
 //
 // Loop membership is a Var cell per grid cell (1 = on, 2 = off), shaped into a
-// loop by the same degree-2 + no-diagonal-touch NFAs as the other loop scripts.
+// loop by the same degree-2 + no-diagonal-touch NFAs as the other loop scripts,
+// plus a ConnectedValues over the on-loop cells: a connected graph that is
+// exactly 2-regular everywhere is necessarily a single simple cycle, so
+// connectivity plus the degree-2 NFA together force one loop, soundly ruling
+// out multiple disjoint loops.
 
 const ON = 1;                  // loop-membership values, stored in the Var cells
 const OFF = 2;
@@ -24,18 +28,11 @@ const loopCell = cell => loop.at(cell);
 
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), loop.toVar('loop')];
-const add = (...newConstraints) => constraints.push(...newConstraints);
-
 const circles = ['R2C8', 'R1C2', 'R2C1', 'R1C6', 'R2C6', 'R4C2', 'R8C7', 'R9C4'];
 const rectangle = 'R6C1';
 
 // --- Loop membership: every cell is on (1) or off (2); circles off, rectangle on.
 const originCell = loop.cells()[0];
-add(new Replicate([new Given(originCell, ON, OFF)],
-  Replicate.encodeTargetCells(loop.cells(), originCell, loop), originCell));
-for (const cell of circles) add(new Given(loopCell(cell), OFF));
-add(new Given(loopCell(rectangle), ON));
 
 // --- Degree 2: each on cell has exactly two on-loop orthogonal neighbours. ---
 // Reads the membership of the cell, then of each neighbour. Off cells are free.
@@ -51,10 +48,6 @@ const degreeMachine = NFA.encodeSpec({
   },
   accept: ({ phase, onNeighbours }) => phase === 'off' || onNeighbours === 2,
 }, geometry.numValues);
-for (const cell of gridCells) {
-  add(new NFA(degreeMachine, 'degree',
-    loopCell(cell), ...graph.neighbours(cell).map(loopCell)));
-}
 
 // --- No diagonal self-touch: forbid a 2x2 whose only on cells are a diagonal. ---
 // Reads the four membership cells of a 2x2 block, left-to-right, top-to-bottom.
@@ -76,12 +69,6 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
 }, geometry.numValues);
 const noTouchOrigin = gridCells.find(cell => graph.block(cell, 2, 2));
 const noTouchTargets = gridCells.filter(cell => graph.block(cell, 2, 2));
-add(new Replicate(
-  [new NFA(noDiagonalTouchMachine, 'no-touch',
-    ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
-  Replicate.encodeTargetCells(
-    noTouchTargets.map(loopCell), loopCell(noTouchOrigin), loop),
-  loopCell(noTouchOrigin)));
 
 // --- Circle counts: the circle's digit equals the number of its king neighbours
 // that are on the loop. Reads the digit, then each neighbour's membership.
@@ -94,9 +81,6 @@ const countMachine = NFA.encodeSpec({
   },
   accept: ({ target, count }) => target !== null && count === target,
 }, geometry.numValues);
-for (const cell of circles) {
-  add(new NFA(countMachine, 'count', cell, ...graph.kingNeighbours(cell).map(loopCell)));
-}
 
 // --- Loop multiples: for two orthogonally adjacent on-loop cells, the larger
 // digit must be a multiple of the smaller. Reads (membership, digit) for each
@@ -124,14 +108,58 @@ const multipleMachine = NFA.encodeSpec({
   },
   accept: ({ phase }) => phase === 'done',
 }, geometry.numValues);
-for (const cell of gridCells) {
-  for (const [dR, dC] of [[0, 1], [1, 0]]) {
-    const other = graph.step(cell, dR, dC);
-    if (other) {
-      add(new NFA(multipleMachine, 'mult',
-        loopCell(cell), cell, loopCell(other), other));
-    }
-  }
-}
 
-return constraints;
+// --- Multiple constraints for adjacent cells on the loop.
+const multipleConstraints = gridCells.flatMap(cell =>
+  [[0, 1], [1, 0]]
+    .map(([dR, dC]) => {
+      const other = graph.step(cell, dR, dC);
+      return other ? new NFA(multipleMachine, 'mult',
+        loopCell(cell), cell, loopCell(other), other) : null;
+    })
+    .filter(c => c !== null)
+);
+
+return [
+  new Shape('9x9'),
+  loop.toVar('loop'),
+
+  // Loop membership: every cell is on (1) or off (2); circles off, rectangle on.
+  new Replicate([new Given(originCell, ON, OFF)],
+    Replicate.encodeTargetCells(loop.cells(), originCell, loop), originCell),
+  ...circles.map(cell => new Given(loopCell(cell), OFF)),
+  new Given(loopCell(rectangle), ON),
+
+  // Single connected region: the on-loop cells form one connected blob.
+  // Combined with the degree-2 NFA below (every on-loop cell has exactly two
+  // on-loop orthogonal neighbours), this forces the on-loop cells to form a
+  // single simple cycle -- a connected graph that is 2-regular everywhere
+  // cannot be two or more disjoint cycles.
+  new ConnectedValues('VL', ON),
+
+  // Degree 2: each on cell has exactly two on-loop orthogonal neighbours.
+  ...gridCells.map(cell =>
+    new NFA(degreeMachine, 'degree',
+      loopCell(cell), ...graph.neighbours(cell).map(loopCell))
+  ),
+
+  // No diagonal self-touch: forbid a 2x2 whose only on cells are a diagonal.
+  new Replicate(
+    [new NFA(noDiagonalTouchMachine, 'no-touch',
+      ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
+    Replicate.encodeTargetCells(
+      noTouchTargets.map(loopCell), loopCell(noTouchOrigin), loop),
+    loopCell(noTouchOrigin)),
+
+  // Circle counts: the circle's digit equals the number of its king neighbours
+  // that are on the loop. Reads the digit, then each neighbour's membership.
+  ...circles.map(cell =>
+    new NFA(countMachine, 'count', cell, ...graph.kingNeighbours(cell).map(loopCell))
+  ),
+
+  // Loop multiples: for two orthogonally adjacent on-loop cells, the larger
+  // digit must be a multiple of the smaller. Reads (membership, digit) for each
+  // cell; if either is off the loop the pair is unconstrained. Off cells' remaining
+  // values are absorbed by a skip countdown.
+  ...multipleConstraints,
+];

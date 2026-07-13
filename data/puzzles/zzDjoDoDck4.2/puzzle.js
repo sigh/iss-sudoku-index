@@ -4,11 +4,6 @@
 // Source: https://sudokupad.app/3bo6pr2r62
 
 // 6x6 irregular sudoku with 1/6 sandwich clues and a directional V.
-const constraints = [
-  new Shape('6x6', '1-6'),
-  new NoBoxes(),
-];
-
 const regions = [
   ['R1C1', 'R1C2', 'R1C3', 'R1C4', 'R2C3', 'R3C3'],
   ['R2C1', 'R2C2', 'R3C1', 'R4C1', 'R5C1', 'R5C2'],
@@ -17,7 +12,6 @@ const regions = [
   ['R3C4', 'R3C5', 'R4C5', 'R4C6', 'R5C6', 'R6C6'],
   ['R1C5', 'R1C6', 'R2C4', 'R2C5', 'R2C6', 'R3C6'],
 ];
-for (const region of regions) constraints.push(new Jigsaw('6x6', ...region));
 
 const sandwichNfa = (target) => NFA.encodeSpec({
   startState: { seenEnd: false, done: false, sum: 0 },
@@ -38,11 +32,13 @@ const sandwichNfa = (target) => NFA.encodeSpec({
 }, 6);
 
 const graph = cellGraph('6x6');
-constraints.push(
+
+return [
+  new Shape('6x6', '1-6'),
+  new NoBoxes(),
+  ...regions.map(region => new Jigsaw('6x6', ...region)),
   new NFA(sandwichNfa(5), '1/6 sandwich 5', ...graph.column('R1C5')),
   new NFA(sandwichNfa(6), '1/6 sandwich 6', ...graph.row('R3C1')),
   new NFA(sandwichNfa(4), '1/6 sandwich 4', ...graph.row('R5C1')),
   new GreaterThan('R1C2', 'R1C3'),
-);
-
-return constraints;
+];

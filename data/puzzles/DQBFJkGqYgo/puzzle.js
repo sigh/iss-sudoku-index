@@ -5,9 +5,8 @@
 
 // Normal sudoku rules apply.
 //
-// Yin Yang: color the grid using two colors, such that no 2x2 area is fully
-// one color. (The "all cells of the same color are orthogonally connected"
-// half of Yin-Yang is not encoded here.)
+// Yin Yang: color the grid using two colors, such that all cells of the same
+// color are orthogonally connected, and no 2x2 area is fully one color.
 //
 // X-Sums: 19 outside clues. Each gives the sum of the first X digits of that
 // row/column, of a certain color, from the direction of the clue, where X is
@@ -148,10 +147,24 @@ function xsumConstraints() {
   });
 }
 
+// Every cell is shade 1 or 2: one Given template stamped over every grid
+// cell via the shade overlay.
+function shadeDomainConstraints() {
+  const targets = graph.cells().map(shadeAt);
+  return [new Replicate(
+    [new Given(targets[0], 1, 2)],
+    Replicate.encodeTargetCells(targets, targets[0], shade),
+    targets[0])];
+}
+
 return [
   new Shape('9x9'),
   shade.toVar('Shade'),
-  ...graph.cells().map(cell => new Given(shadeAt(cell), 1, 2)),
+  ...shadeDomainConstraints(),
   ...no2x2Constraints(),
+  // Global Yin-Yang connectivity: each shade forms one orthogonally
+  // connected region (closes the previously-omitted half of the rule).
+  new ConnectedValues('VS', 1),
+  new ConnectedValues('VS', 2),
   ...xsumConstraints(),
 ];

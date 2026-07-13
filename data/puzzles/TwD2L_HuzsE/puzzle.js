@@ -57,28 +57,24 @@ function inRange(v) {
 }
 
 function arrowConstraints([row, col, dr, dc]) {
-  const constraints = [];
   const arrowCell = makeCellId(row, col);
   let maxK = 0;
+  const pairs = [];
   for (let k = 1; k <= 9; k++) {
     const r = row + k * dr;
     const c = col + k * dc;
     if (!inRange(r) || !inRange(c)) break;
     maxK = k;
     const rayCell = makeCellId(r, c);
-    constraints.push(new Pair(
+    pairs.push(new Pair(
       Pair.fnToKey(echoRelation(k), 9),
       `Echo${k}`,
       arrowCell, rayCell,
     ));
   }
   // The arrow cell's own echo must land on the grid.
-  if (maxK < 9) {
-    const domain = [];
-    for (let v = 1; v <= maxK; v++) domain.push(v);
-    constraints.push(new Given(arrowCell, ...domain));
-  }
-  return constraints;
+  const domainConstraints = maxK < 9 ? [new Given(arrowCell, ...Array.from({ length: maxK }, (_, i) => i + 1))] : [];
+  return [...pairs, ...domainConstraints];
 }
 
 return [

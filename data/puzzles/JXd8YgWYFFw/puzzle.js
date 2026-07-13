@@ -10,7 +10,7 @@
 
 const grapeKey = Pair.fnToKey((a, b) => Math.abs(a - b) >= 5, 9);
 
-const constraints = [
+return [
   new Shape('9x9'),
 
   // Blackcurrants: one digit is double the other.
@@ -36,5 +36,3 @@ const constraints = [
     ['R7C3', 'R8C3'],
   ),
 ];
-
-return constraints;

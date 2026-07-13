@@ -38,9 +38,6 @@ const flags = graph.makeOverlay('VC');           // one flag Var per grid cell
 const flagOf = cell => flags.at(cell);
 const gridCells = graph.cells();
 
-const constraints = [new Shape('9x9'), flags.toVar('copycat')];
-const add = (...cs) => constraints.push(...cs);
-
 // 180-degree opposite cell (1-indexed r,c -> 10-r, 10-c).
 const opposite = cell => {
   const { row, col } = parseCellId(cell);
@@ -50,11 +47,6 @@ const opposite = cell => {
 // --- Copycat flag domain: every cell is PLAIN or COPY. ---
 const flagTargets = gridCells.map(flagOf);
 const flagOrigin = flagTargets[0];
-add(new Replicate(
-  [new Given(flagOrigin, PLAIN, COPY)],
-  Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
-  flagOrigin,
-));
 
 // --- Exactly one copycat per row, per column, and per box. ---
 const oneCopy = NFA.encodeSpec({
@@ -71,9 +63,6 @@ for (let i = 1; i <= 9; i++) {
   houses.push(graph.column(i));
 }
 houses.push(...graph.boxes());
-for (const house of houses) {
-  add(new NFA(oneCopy, 'one-copycat', ...house.map(flagOf)));
-}
 
 // --- The nine copycat cells contain nine different digits: for each digit, at
 // most one copycat cell holds it. Reads [flag, digit] for every cell. ---
@@ -86,11 +75,6 @@ const distinctDigit = d => NFA.encodeSpec({
   },
   accept: ({ phase }) => phase === 'flag',
 }, numValues);
-for (let d = 1; d <= 9; d++) {
-  const scan = [];
-  for (const cell of gridCells) { scan.push(flagOf(cell), cell); }
-  add(new NFA(distinctDigit(d), `distinct-${d}`, ...scan));
-}
 
 // --- Currants act on the substituted VALUE of each cell: a copycat cell's value
 // is the digit of its 180-opposite cell, a plain cell's value is its own digit.
@@ -120,28 +104,59 @@ const blackNFA = currantNFA((a, b) => a === 2 * b || b === 2 * a);
 const redNFA = currantNFA((a, b) => (a % 2) !== (b % 2));
 const grapeNFA = currantNFA((a, b) => Math.abs(a - b) >= 5);
 
-const addCurrant = (spec, label, a, b) =>
-  add(new NFA(spec, label, flagOf(a), a, opposite(a), flagOf(b), b, opposite(b)));
-
 // Blackcurrants: one value double the other.
 const blackcurrants = [
   ['R9C2', 'R9C3'], ['R8C2', 'R9C2'], ['R7C2', 'R8C2'],
   ['R7C1', 'R7C2'], ['R7C4', 'R8C4'], ['R8C6', 'R9C6'],
 ];
-for (const [a, b] of blackcurrants) addCurrant(blackNFA, 'blackcurrant', a, b);
 
 // Redcurrants: one value even, one odd.
 const redcurrants = [
   ['R2C8', 'R3C8'], ['R2C8', 'R2C9'], ['R1C8', 'R1C9'],
   ['R1C9', 'R2C9'], ['R7C3', 'R8C3'],
 ];
-for (const [a, b] of redcurrants) addCurrant(redNFA, 'redcurrant', a, b);
 
 // Grapes: values differ by at least 5.
 const grapes = [
   ['R1C7', 'R1C8'], ['R1C8', 'R2C8'], ['R3C3', 'R4C3'],
   ['R2C3', 'R3C3'], ['R1C1', 'R2C1'], ['R3C2', 'R4C2'],
 ];
-for (const [a, b] of grapes) addCurrant(grapeNFA, 'grape', a, b);
 
-return constraints;
+return [
+  new Shape('9x9'),
+  flags.toVar('copycat'),
+
+  // Copycat flag domain: every cell is PLAIN or COPY.
+  new Replicate(
+    [new Given(flagOrigin, PLAIN, COPY)],
+    Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
+    flagOrigin,
+  ),
+
+  // Exactly one copycat per row, per column, and per box.
+  ...houses.map(house => new NFA(oneCopy, 'one-copycat', ...house.map(flagOf))),
+
+  // The nine copycat cells contain nine different digits: for each digit, at
+  // most one copycat cell holds it. Reads [flag, digit] for every cell.
+  ...Array.from({length: 9}, (_, d) => {
+    d = d + 1;
+    const scan = [];
+    for (const cell of gridCells) { scan.push(flagOf(cell), cell); }
+    return new NFA(distinctDigit(d), `distinct-${d}`, ...scan);
+  }),
+
+  // Blackcurrants: one value double the other.
+  ...blackcurrants.map(([a, b]) =>
+    new NFA(blackNFA, 'blackcurrant', flagOf(a), a, opposite(a), flagOf(b), b, opposite(b))
+  ),
+
+  // Redcurrants: one value even, one odd.
+  ...redcurrants.map(([a, b]) =>
+    new NFA(redNFA, 'redcurrant', flagOf(a), a, opposite(a), flagOf(b), b, opposite(b))
+  ),
+
+  // Grapes: values differ by at least 5.
+  ...grapes.map(([a, b]) =>
+    new NFA(grapeNFA, 'grape', flagOf(a), a, opposite(a), flagOf(b), b, opposite(b))
+  ),
+];

@@ -41,7 +41,7 @@ function skyscraper(clueCell, orderedCells, name) {
   return new NFA(NFA.encodeSpec(spec, 6), name, clueCell, ...orderedCells);
 }
 
-const constraints = [
+return [
   new Shape('6x6'),
 
   // Ten outside skyscraper-clue cells (unknown digits, domain 1-6 default).
@@ -68,5 +68,3 @@ const constraints = [
   skyscraper(OC.B4, col(4, DEC), 'Skyscraper bottom C4'),
   skyscraper(OC.B5, col(5, DEC), 'Skyscraper bottom C5'),
 ];
-
-return constraints;

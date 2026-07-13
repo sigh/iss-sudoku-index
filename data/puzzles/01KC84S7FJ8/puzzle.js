@@ -36,11 +36,14 @@ const vClues = [
   ['R8C5', 'R8C6'],
 ];
 
-const constraints = [new Shape('9x9'), new AntiKnight()];
-const add = (...newConstraints) => constraints.push(...newConstraints);
+const sums = sumLines.map(cells => new Sum(LINE_SUM, ...cells));
+const xs = xClues.map(cells => new X(...cells));
+const vs = vClues.map(cells => new V(...cells));
 
-for (const cells of sumLines) add(new Sum(LINE_SUM, ...cells));
-for (const cells of xClues) add(new X(...cells));
-for (const cells of vClues) add(new V(...cells));
-
-return constraints;
+return [
+  new Shape('9x9'),
+  new AntiKnight(),
+  ...sums,
+  ...xs,
+  ...vs,
+];

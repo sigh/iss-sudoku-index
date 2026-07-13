@@ -33,22 +33,6 @@ const letterCages = [
   ['R9C5', 'R1C6'],           // Z
 ];
 
-const constraints = [
-  new Shape('9x9'),
-  new AntiKnight(),
-];
-
-for (const [sum, cells] of sumCages) {
-  constraints.push(new Cage(sum, ...cells));
-}
-for (const cells of noSumCages) {
-  if (cells.length > 1) constraints.push(new AllDifferent(...cells));
-}
-for (const cells of letterCages) {
-  // Singletons sharing a letter hold the same digit (one set per cell).
-  constraints.push(new SameValues(cells.length, ...cells));
-}
-
 // The union of every caged cell (rules 3, 4, 5) = 45 cells.
 const countedCells = [
   ...sumCages.flatMap(([, cells]) => cells),
@@ -62,10 +46,33 @@ if (new Set(countedCells).size !== 45) {
   throw new Error('caged cells are not distinct');
 }
 
-// Counting rule: digit d appears exactly d times among the 45 cells.
-for (let d = 1; d <= 9; d++) {
-  const values = Array(d).fill(d).join('_');
-  constraints.push(new ContainExact(values, ...countedCells));
-}
+const sumCageConstraints = sumCages.map(([sum, cells]) => new Cage(sum, ...cells));
 
-return constraints;
+const noSumCageConstraints = noSumCages
+  .filter(cells => cells.length > 1)
+  .map(cells => new AllDifferent(...cells));
+
+const letterCageConstraints = letterCages.map(cells =>
+  // Singletons sharing a letter hold the same digit (one set per cell).
+  new SameValues(cells.length, ...cells)
+);
+
+// Counting rule: digit d appears exactly d times among the 45 cells.
+const countingConstraints = Array.from({ length: 9 }, (_, i) => {
+  const d = i + 1;
+  const values = Array(d).fill(d).join('_');
+  return new ContainExact(values, ...countedCells);
+});
+
+return [
+  new Shape('9x9'),
+  new AntiKnight(),
+
+  ...sumCageConstraints,
+
+  ...noSumCageConstraints,
+
+  ...letterCageConstraints,
+
+  ...countingConstraints,
+];

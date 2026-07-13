@@ -18,9 +18,7 @@ const lines = [
   ['R3C7', 'R2C7', 'R2C6'],
 ];
 
-const constraints = [new Shape('9x9')];
-for (const line of lines) {
-  constraints.push(new RegionSumLine(...line));
-}
-
-return constraints;
+return [
+  new Shape('9x9'),
+  ...lines.map(line => new RegionSumLine(...line)),
+];
