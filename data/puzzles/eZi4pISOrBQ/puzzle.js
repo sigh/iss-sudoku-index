@@ -152,8 +152,7 @@ const seenEdges = new Set();
 return [
   new Shape('9x9'),
   river.toVar('river'),
-  new Replicate([new Given(originCell, ON, OFF)],
-    Replicate.encodeTargetCells(river.cells(), originCell, river), originCell),
+  river.makeReplicate(new Given(originCell, ON, OFF)),
   ...endpoints.map(cell => new Given(riverCell(cell), ON)),
   ...bridgeCells.map(cell => new Given(riverCell(cell), ON)),
   ...bridgeLandCells.map(cell => new Given(riverCell(cell), OFF)),

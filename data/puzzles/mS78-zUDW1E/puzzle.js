@@ -150,10 +150,9 @@ return [
 
   southVar,
 
-  new Replicate(
+  southLocator.makeReplicate(
     [new Given(southOrigin, ...allDigits)],
-    Replicate.encodeTargetCells(southTargets, southOrigin, southLocator),
-    southOrigin,
+    southTargets,
   ),
 
   new Given(southCell(5, 1), 1),

@@ -127,11 +127,7 @@ return [
   flags.toVar('copycat'),
 
   // Copycat flag domain: every cell is PLAIN or COPY.
-  new Replicate(
-    [new Given(flagOrigin, PLAIN, COPY)],
-    Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
-    flagOrigin,
-  ),
+  flags.makeReplicate(new Given(flagOrigin, PLAIN, COPY), flagTargets),
 
   // Exactly one copycat per row, per column, and per box.
   ...houses.map(house => new NFA(oneCopy, 'one-copycat', ...house.map(flagOf))),

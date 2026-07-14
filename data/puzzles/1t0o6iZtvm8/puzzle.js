@@ -98,18 +98,15 @@ const redCurrantMachine = currantMachine((a, b) => (a % 2) !== (b % 2));
 // No-mono-2x2 is the same shifted 2x2 check at every anchor (a block's
 // top-left cell); stamp it as one Replicate instead of 64 copies.
 const monoAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
-const monoOrigin = zoneCell(monoAnchors[0]);
-const noMonoReplicate = new Replicate(
-  [new NFA(noMonoMachine, 'no-mono-2x2', ...graph.block(monoAnchors[0], 2, 2).map(zoneCell))],
-  Replicate.encodeTargetCells(monoAnchors.map(zoneCell), monoOrigin, zone),
-  monoOrigin);
+const noMonoReplicate = zone.makeReplicate(
+  new NFA(noMonoMachine, 'no-mono-2x2', ...graph.block(monoAnchors[0], 2, 2).map(zoneCell)),
+  monoAnchors.map(zoneCell));
 
 return [
   new Shape('9x9'),
   zone.toVar('hot(1) / cold(2) zone'),
   // --- Restrict the zone flags to HOT/COLD. ---
-  new Replicate([new Given(zone.cells()[0], HOT, COLD)],
-    Replicate.encodeTargetCells(zone.cells(), zone.cells()[0], zone), zone.cells()[0]),
+  zone.makeReplicate(new Given(zone.cells()[0], HOT, COLD)),
   // --- Each zone is a single orthogonally-connected region. ---
   new ConnectedValues('VZ', HOT),
   new ConnectedValues('VZ', COLD),

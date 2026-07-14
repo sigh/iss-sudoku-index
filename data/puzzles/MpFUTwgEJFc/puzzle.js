@@ -117,6 +117,11 @@ for (let i = 0; i < quads.length; i++) {
 
 const OTHER_COUNT = quads.length - 1; // 24
 const flagVar = new Var('Q', 'quad-rank order flags', CLUES.length * OTHER_COUNT);
+// A 6x16 graph supplies the same 96-cell row-major ordering as VQ1..VQ96;
+// the overlay is a locator only, while flagVar remains the declared Var group.
+const flagGraph = cellGraph('6x16');
+const flagOverlay = flagGraph.makeOverlay('VQ');
+const flagDomain = flagOverlay.makeReplicate(new Given(flagVar.cell(1), 1, 2));
 
 const quadClueConstraints = [];
 const rankConstraints = [];
@@ -132,7 +137,6 @@ for (const clue of CLUES) {
     flagIndex += 1;
     const flag = flagVar.cell(flagIndex);
     flagsForClue.push(flag);
-    rankConstraints.push(new Given(flag, 1, 2));
     rankConstraints.push(new NFA(
       lexLessNFA, 'QuadRankOrder',
       target.tl, other.tl, target.tr, other.tr,
@@ -149,6 +153,7 @@ for (const clue of CLUES) {
 return [
   new Shape('6x6'),
   flagVar,
+  flagDomain,
   ...quadClueConstraints,
   ...distinctConstraints,
   ...rankConstraints,

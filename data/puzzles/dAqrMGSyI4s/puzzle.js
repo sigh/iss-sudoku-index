@@ -112,8 +112,7 @@ const sensorMachine = NFA.encodeSpec({
 return [
   new Shape('9x9'),
   shape.toVar('shape'),
-  new Replicate([new Given(shapeOrigin, ...ALL_SHAPES)],
-    Replicate.encodeTargetCells(shape.cells(), shapeOrigin, shape), shapeOrigin),
+  shape.makeReplicate(new Given(shapeOrigin, ...ALL_SHAPES)),
   ...gridCells.flatMap(cell => {
     const f = forbidden.get(cell);
     const allowed = ALL_SHAPES.filter(s =>
@@ -122,10 +121,12 @@ return [
       !(stationSet.has(cell) && s === OFF));
     return allowed.length !== ALL_SHAPES.length ? [new Given(shapeCell(cell), ...allowed)] : [];
   }),
-  new Replicate([new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
-    Replicate.encodeTargetCells(rightTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')),
-  new Replicate([new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
-    Replicate.encodeTargetCells(downTargets, shapeCell('R1C1'), shape), shapeCell('R1C1')),
+  shape.makeReplicate(
+    new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
+    rightTargets),
+  shape.makeReplicate(
+    new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
+    downTargets),
   ...gridCells.flatMap(cell => {
     const result = [];
     const right = graph.step(cell, 0, 1);

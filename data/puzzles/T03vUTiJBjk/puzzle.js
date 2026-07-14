@@ -87,10 +87,9 @@ const allCellsOrigin = allCells[0];
 
 return [
   new Shape("9x9", K),
-  new Replicate(
+  graph.makeReplicate(
     [new Given(allCellsOrigin, ...rangeI(1, 9))],
-    Replicate.encodeTargetCells(allCells, allCellsOrigin, graph),
-    allCellsOrigin,
+    allCells,
   ),
   rectangleVar,
   new AllDifferent(...rectangleVar.cells()),

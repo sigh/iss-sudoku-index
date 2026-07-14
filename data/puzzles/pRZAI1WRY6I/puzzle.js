@@ -28,8 +28,6 @@ const notBothEven = Pair.fnToKey((a, b) => !(a % 2 === 0 && b % 2 === 0), 9);
 
 return [
   ...arrows.map(cells => new Arrow(...cells)),
-  new Replicate([new Pair(notBothEven, '', 'R1C1', 'R1C2')],
-    Replicate.encodeTargetCells(horizontalStarts, 'R1C1', graph), 'R1C1'),
-  new Replicate([new Pair(notBothEven, '', 'R1C1', 'R2C1')],
-    Replicate.encodeTargetCells(verticalStarts, 'R1C1', graph), 'R1C1'),
+  graph.makeReplicate(new Pair(notBothEven, '', 'R1C1', 'R1C2'), horizontalStarts),
+  graph.makeReplicate(new Pair(notBothEven, '', 'R1C1', 'R2C1'), verticalStarts),
 ];

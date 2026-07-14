@@ -165,8 +165,7 @@ const monoOrigin = shadeCell('R1C1');
 return [
   new Shape('9x9'),
   shade.toVar('shade'),
-  new Replicate([new Given(firstShade, SHADED, UNSHADED)],
-    Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade),
+  shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED)),
   // Global Yin-Yang connectivity: each shade forms one orthogonally connected
   // region.
   new ConnectedValues('VS', SHADED),
@@ -175,9 +174,8 @@ return [
   // (R1C1..R8C8), each a uniform translation of the same relative cell
   // pattern over the shade overlay, so Replicate shortens the 64 stamped
   // copies to one template.
-  new Replicate(
-    [new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.block(monoOrigin, 2, 2))],
-    Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
-    monoOrigin),
+  shade.makeReplicate(
+    new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.block(monoOrigin, 2, 2)),
+    shade.block(monoOrigin, 8, 8)),
   ...cages.map(([kind, target, cells]) => cageConstraint(kind, target, cells)),
 ];

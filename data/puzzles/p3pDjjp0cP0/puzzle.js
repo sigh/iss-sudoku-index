@@ -91,16 +91,14 @@ const arrowConstraints = arrows.map(([cell, [dr, dc]]) => {
 return [
   new Shape('9x9'),
   shade.toVar('shade'),
-  new Replicate([new Given(firstShade, SHADED, UNSHADED)],
-    Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade),
+  shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED)),
   // Yin-Yang connectivity: each shade forms one orthogonally connected region.
   new ConnectedValues('VS', SHADED),
   new ConnectedValues('VS', UNSHADED),
-  new Replicate(
-    [new NFA(noMono2x2Machine, 'no-mono-2x2',
-      ...graph.block(gridCells[0], 2, 2).map(shadeCell))],
-    Replicate.encodeTargetCells(blockOrigins.map(shadeCell), firstShade, shade),
-    firstShade),
+  shade.makeReplicate(
+    new NFA(noMono2x2Machine, 'no-mono-2x2',
+      ...graph.block(gridCells[0], 2, 2).map(shadeCell)),
+    blockOrigins.map(shadeCell)),
   ...fortressConstraints,
   ...arrowConstraints,
 ];

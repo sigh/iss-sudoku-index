@@ -32,10 +32,7 @@ const gridCells = graph.cells();
 // Every cell is UNSHADED or SHADED: one Given template stamped over the
 // whole grid via Replicate instead of 81 identical Givens.
 const shadeCells = gridCells.map(cell => shadeOf(cell));
-const shadeGivens = new Replicate(
-  [new Given(shadeCells[0], UNSHADED, SHADED)],
-  Replicate.encodeTargetCells(shadeCells, shadeCells[0], shade),
-  shadeCells[0]);
+const shadeGivens = shade.makeReplicate(new Given(shadeCells[0], UNSHADED, SHADED));
 
 const value = (digit, shadeValue) => 2 * digit - 2 + shadeValue;
 const dsOf = cell => [cell, shadeOf(cell)];
@@ -54,7 +51,6 @@ const notAllSameNFA = NFA.encodeSpec({
   accept: (state) => state !== null && !state.allSame,
 }, SHADED);
 
-const blockOrigin = shadeOf(makeCellId(1, 1));
 const blockTemplate = new NFA(notAllSameNFA, 'no-monochrome-2x2',
   shadeOf(makeCellId(1, 1)), shadeOf(makeCellId(1, 2)),
   shadeOf(makeCellId(2, 1)), shadeOf(makeCellId(2, 2)));
@@ -63,10 +59,7 @@ const blockTargets = Array.from({ length: 8 }, (_, r) =>
     shadeOf(makeCellId(r + 1, c + 1))
   )
 ).flat();
-const blockReplicate = new Replicate(
-  [blockTemplate],
-  Replicate.encodeTargetCells(blockTargets, blockOrigin, shade),
-  blockOrigin);
+const blockReplicate = shade.makeReplicate(blockTemplate, blockTargets);
 
 // --- Renban lines (purple): the cells' VALUES form a consecutive, non-
 // repeating set, in any order. Classic pairwise trick: n values are a

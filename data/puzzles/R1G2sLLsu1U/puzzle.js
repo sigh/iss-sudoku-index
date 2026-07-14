@@ -33,6 +33,7 @@ function edgeId(a, b) {
 
 const blackDotEdges = new Set(blackDots.map(([a, b]) => edgeId(a, b)));
 const unmarkedEdges = [];
+const graph = cellGraph('9x9');
 
 for (let row = 1; row <= 9; row++) {
   for (let col = 1; col <= 9; col++) {
@@ -48,6 +49,14 @@ for (let row = 1; row <= 9; row++) {
 }
 
 const notBlackDot = Pair.fnToKey((a, b) => a !== 2 * b && b !== 2 * a, 9);
+const unmarkedEdgeConstraints = [
+  graph.makeReplicate(
+    new Pair(notBlackDot, 'not black dot', 'R1C1', 'R1C2'),
+    unmarkedEdges.filter(([a, b]) => parseCellId(a).row === parseCellId(b).row).map(([a]) => a)),
+  graph.makeReplicate(
+    new Pair(notBlackDot, 'not black dot', 'R1C1', 'R2C1'),
+    unmarkedEdges.filter(([a, b]) => parseCellId(a).col === parseCellId(b).col).map(([a]) => a)),
+];
 
 return [
   new Shape('9x9'),
@@ -57,5 +66,5 @@ return [
   new Arrow(...arrow),
 
   ...blackDots.map(cells => new BlackDot(...cells)),
-  ...unmarkedEdges.map(cells => new Pair(notBlackDot, 'not black dot', ...cells)),
+  ...unmarkedEdgeConstraints,
 ];

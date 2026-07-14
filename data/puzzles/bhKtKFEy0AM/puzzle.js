@@ -87,15 +87,22 @@ const edgeAndDiffConstraints = gridCells.flatMap(cell => {
   const down = graph.step(cell, 1, 0);
   return [
     ...(right ? [
-      new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)),
       new NFA(diffRight, 'diff-h', shapeCell(cell), cell, right),
     ] : []),
     ...(down ? [
-      new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)),
       new NFA(diffDown, 'diff-v', shapeCell(cell), cell, down),
     ] : []),
   ];
 });
+
+const edgeAgreementConstraints = [
+  shape.makeReplicate(
+    new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
+    gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell)),
+  shape.makeReplicate(
+    new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
+    gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell)),
+];
 
 // --- Circle clues. Each vertex's clue does two things: at least one of the four
 // cells around it holds the clue digit (a Quad on that 2x2), and exactly that many
@@ -121,6 +128,7 @@ return [
   shape.toVar('shape'),
   ...shapeDomainConstraints,
   loopConnectivity,
+  ...edgeAgreementConstraints,
   ...edgeAndDiffConstraints,
   ...circleConstraints,
 ];

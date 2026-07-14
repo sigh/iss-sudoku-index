@@ -72,8 +72,8 @@ const blackDotSideKey = dotSideKey(BLACK_SIDE);
 
 // Every side Var is one of {white side, black side, wall}.
 const firstSide = side.cells()[0];
-const replicateConstraint = new Replicate([new Given(firstSide, WHITE_SIDE, BLACK_SIDE, WALL)],
-  Replicate.encodeTargetCells(side.cells(), firstSide, side), firstSide);
+const replicateConstraint = side.makeReplicate(
+  [new Given(firstSide, WHITE_SIDE, BLACK_SIDE, WALL)]);
 
 // No branch: a wall cell has at most two orthogonal wall neighbours.
 const wallDegreeMachine = NFA.encodeSpec({
@@ -143,12 +143,10 @@ const wallDigitMachine = NFA.encodeSpec({
 // No self-touch is the same shifted 2x2 check at every anchor (a block's
 // top-left cell); stamp it as one Replicate instead of 64 copies.
 const noTouchAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noTouchOrigin = sideCell(noTouchAnchors[0]);
-const noTouchReplicate = new Replicate(
+const noTouchReplicate = side.makeReplicate(
   [new NFA(noDiagonalTouchMachine, 'wall-no-touch',
     ...graph.block(noTouchAnchors[0], 2, 2).map(sideCell))],
-  Replicate.encodeTargetCells(noTouchAnchors.map(sideCell), noTouchOrigin, side),
-  noTouchOrigin);
+  noTouchAnchors.map(sideCell));
 
 return [
   new Shape('9x9'),

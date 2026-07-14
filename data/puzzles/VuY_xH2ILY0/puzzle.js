@@ -59,6 +59,18 @@ function knightEdges(cells) {
   return edges;
 }
 
+// Fixed normalized templates for the six offsets used by this puzzle. Each
+// template fits in the grid from R1C1; targetShift moves an original edge's
+// first cell to the corresponding bounding-template anchor.
+const pairTemplates = new Map([
+  ['0,1', { templateStart: 'R1C1', targetShift: [0, 0] }],
+  ['1,0', { templateStart: 'R1C1', targetShift: [0, 0] }],
+  ['1,2', { templateStart: 'R1C1', targetShift: [0, 0] }],
+  ['2,1', { templateStart: 'R1C1', targetShift: [0, 0] }],
+  ['-1,2', { templateStart: 'R2C1', targetShift: [-1, 0] }],
+  ['2,-1', { templateStart: 'R1C2', targetShift: [0, -1] }],
+]);
+
 function pairwise(name, fn, edges) {
   const key = Pair.fnToKey(fn, SIZE);
   const grouped = new Map();
@@ -73,10 +85,12 @@ function pairwise(name, fn, edges) {
   return [...grouped].map(([offset, starts]) => {
     starts.sort();
     const [dr, dc] = offset.split(",").map(Number);
-    const origin = starts[0];
-    const { row, col } = parseCellId(origin);
-    return new Replicate([new Pair(key, name, origin, cell(row + dr, col + dc))],
-      Replicate.encodeTargetCells(starts, origin, graph), origin);
+    const { templateStart, targetShift } = pairTemplates.get(offset);
+    const constraint = new Pair(
+      key, name, templateStart, graph.step(templateStart, dr, dc));
+    const targets = starts.map(start =>
+      graph.step(start, targetShift[0], targetShift[1]));
+    return graph.makeReplicate(constraint, targets);
   });
 }
 

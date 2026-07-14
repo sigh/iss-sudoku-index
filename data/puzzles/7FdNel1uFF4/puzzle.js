@@ -112,11 +112,7 @@ const noConsecTemplate = boxTemplateCells.map(
 );
 
 const noConsecConstraints = [
-  new Replicate(
-    noConsecTemplate,
-    Replicate.encodeTargetCells(boxOrigins, boxOrigins[0], graph),
-    boxOrigins[0],
-  ),
+  graph.makeReplicate(noConsecTemplate, boxOrigins),
 ];
 
 return [

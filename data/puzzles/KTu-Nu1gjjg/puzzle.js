@@ -34,26 +34,30 @@ const encodedHotspot = NFA.encodeSpec(hotspotSpec, 9);
 // shift one template across each group. The 4 corners are unique shapes
 // with only one member each, so Replicate would just wrap them without
 // shortening anything; leave those as plain per-cell NFAs.
-const sideGroups = new Map();
-for (const cell of graph.cells()) {
-  const { row, col } = parseCellId(cell);
-  const key = [row === 1, row === 9, col === 1, col === 9].join(',');
-  if (!sideGroups.has(key)) sideGroups.set(key, []);
-  sideGroups.get(key).push(cell);
-}
-
-const hotspotConstraints = Array.from(sideGroups.values()).flatMap(cells => {
-  if (cells.length === 1) {
-    const cell = cells[0];
-    return [new NFA(encodedHotspot, 'Hotspot', cell, ...graph.neighbours(cell))];
-  }
-  const origin = cells[0];
-  return [new Replicate(
-    [new NFA(encodedHotspot, 'Hotspot', origin, ...graph.neighbours(origin))],
-    Replicate.encodeTargetCells(cells, origin, graph),
-    origin,
-  )];
-});
+const hotspotConstraints = [
+  // Top edge: center R1C2 inside an R1C1-anchored 2x3 template.
+  graph.makeReplicate(
+    new NFA(encodedHotspot, 'Hotspot', 'R1C2', 'R1C1', 'R1C3', 'R2C2'),
+    graph.row(1).slice(0, 7)),
+  // Bottom edge: center R2C2 inside an R1C1-anchored 2x3 template.
+  graph.makeReplicate(
+    new NFA(encodedHotspot, 'Hotspot', 'R2C2', 'R2C1', 'R2C3', 'R1C2'),
+    graph.row(8).slice(0, 7)),
+  // Left and right edges use fixed 3x2 bounding templates.
+  graph.makeReplicate(
+    new NFA(encodedHotspot, 'Hotspot', 'R2C1', 'R2C2', 'R1C1', 'R3C1'),
+    graph.column(1).slice(0, 7)),
+  graph.makeReplicate(
+    new NFA(encodedHotspot, 'Hotspot', 'R2C2', 'R2C1', 'R1C2', 'R3C2'),
+    graph.column(8).slice(0, 7)),
+  // Interior cells use the center and four neighbours of a fixed 3x3 box.
+  graph.makeReplicate(
+    new NFA(encodedHotspot, 'Hotspot', 'R2C2', 'R2C1', 'R2C3', 'R1C2', 'R3C2'),
+    graph.block('R1C1', 7, 7)),
+  // Corners are unique shapes, so keep their four direct NFAs.
+  ...['R1C1', 'R1C9', 'R9C1', 'R9C9'].map(cell =>
+    new NFA(encodedHotspot, 'Hotspot', cell, ...graph.neighbours(cell))),
+];
 
 return [
   new Shape('9x9'),

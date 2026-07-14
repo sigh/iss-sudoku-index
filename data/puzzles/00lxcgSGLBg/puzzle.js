@@ -70,8 +70,6 @@ const shapeCell = cell => shape.at(cell);
 
 // 11 codes need a wider value range than the grid's own 1-9; restrict every
 // real grid cell back to its true digit range afterwards.
-const gridOrigin = gridCells[0];
-
 // --- Given digit. ---
 // --- Clue cell geometry (from the drawn icons). ---
 const START = 'R1C9';       // rider
@@ -117,14 +115,16 @@ const fixedShapes = [
 // that edge is used (part of the path) or not.
 const eastAgree = Pair.fnToKey((a, b) => usesDir(a).E === usesDir(b).W, ALL_CODES.length);
 const southAgree = Pair.fnToKey((a, b) => usesDir(a).S === usesDir(b).N, ALL_CODES.length);
-const edges = gridCells.flatMap(cell => {
-  const edgeConstraints = [];
-  const east = graph.step(cell, 0, 1);
-  if (east) edgeConstraints.push(new Pair(eastAgree, 'edge-h', shapeCell(cell), shapeCell(east)));
-  const south = graph.step(cell, 1, 0);
-  if (south) edgeConstraints.push(new Pair(southAgree, 'edge-v', shapeCell(cell), shapeCell(south)));
-  return edgeConstraints;
-});
+const horizontalEdgeOrigins = gridCells.filter(cell => graph.step(cell, 0, 1));
+const verticalEdgeOrigins = gridCells.filter(cell => graph.step(cell, 1, 0));
+const edges = [
+  shape.makeReplicate(
+    new Pair(eastAgree, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
+    horizontalEdgeOrigins.map(shapeCell)),
+  shape.makeReplicate(
+    new Pair(southAgree, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
+    verticalEdgeOrigins.map(shapeCell)),
+];
 
 // --- Entropy path: for every non-endpoint on-path cell, its shape code names
 // its exactly two path-neighbours; the cell and those two neighbours - the 3
@@ -279,8 +279,7 @@ const soigneurConstraints = SOIGNEURS.map(cell =>
 return [
   new Shape('9x9', ALL_CODES.length),
   shape.toVar('shape'),
-  new Replicate([new Given(gridOrigin, 1, 2, 3, 4, 5, 6, 7, 8, 9)],
-    Replicate.encodeTargetCells(gridCells, gridOrigin, graph), gridOrigin),
+  graph.makeReplicate(new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
   new Given('R1C2', 5),
   ...shapeDomains,
   ...fixedShapes,

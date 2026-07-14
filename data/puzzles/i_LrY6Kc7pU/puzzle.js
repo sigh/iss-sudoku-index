@@ -157,11 +157,7 @@ const indexCells = cageConstraints.map(({ idxCell }) => idxCell);
 
 return [
   new Shape('9x9', MAX_INDEX),
-  new Replicate(
-    [new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)],
-    Replicate.encodeTargetCells(graph.cells(), 'R1C1', graph),
-    'R1C1',
-  ),
+  graph.makeReplicate(new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)),
   // Thermometers.
   new Thermo('R3C3', 'R2C3', 'R3C2'),
   new Thermo('R3C7', 'R2C7', 'R3C8'),

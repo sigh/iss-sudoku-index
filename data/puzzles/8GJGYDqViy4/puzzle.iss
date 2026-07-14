@@ -1,0 +1,12 @@
+.BlackDot~R1C1~R2C1
+.BlackDot~R5C9~R6C9
+.BlackDot~R7C9~R8C9
+.BlackDot~R8C3~R8C4
+.BlackDot~R8C7~R8C8
+.BlackDot~R8C1~R9C1
+.BlackDot~R9C5~R9C6
+.Pair~qqqqqqqqqqqqqC~_redcurrant~R1C9~R2C9~~R6C6~R6C7~~R7C3~R7C4~~R9C4~R9C5
+.Whisper~5~R6C9~R7C9
+.Whisper~5~R1C4~R1C5
+.Whisper~5~R2C7~R3C7
+.Whisper~5~R7C2~R7C3

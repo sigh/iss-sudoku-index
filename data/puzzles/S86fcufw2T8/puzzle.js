@@ -66,8 +66,7 @@ const ATTIC_GHOST = 'R3C9';
 // ghosts").
 const originCell = path.cells()[0];
 const pathMembership = [
-  new Replicate([new Given(originCell, ON, OFF)],
-    Replicate.encodeTargetCells(path.cells(), originCell, path), originCell),
+  path.makeReplicate(new Given(originCell, ON, OFF)),
   new Given(pathCell(ENTRY), ON),
   ...GHOSTS.map(g => new Given(pathCell(g), ON)),
 ];

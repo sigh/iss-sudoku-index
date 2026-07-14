@@ -1,0 +1,13 @@
+.Shape~6x6~1-9
+.RegionSameValues
+.X~R3C1~R3C2
+.X~R3C5~R3C6
+.V~R4C2~R4C3
+.V~R5C5~R6C5
+.WhiteDot~R4C1~R5C1
+.WhiteDot~R1C2~R1C3
+.WhiteDot~R1C2~R2C2
+.BlackDot~R3C2~R3C3
+.BlackDot~R6C2~R6C3
+.BlackDot~R1C4~R1C5
+.BlackDot~R3C4~R4C4

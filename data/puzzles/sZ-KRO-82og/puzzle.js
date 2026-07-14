@@ -68,6 +68,7 @@ const vEdges = new Set(vMarks.map(edge => edgeKey(...edge)));
 
 const notVKey = Pair.fnToKey((a, b) => a + b !== 5, 9);
 const exactFiveKey = Pair.fnToKey((a, b) => Math.abs(a - b) === 5, 9);
+const graph = cellGraph('9x9');
 
 const nonVEdges = [];
 for (let r = 1; r <= 9; r++) {
@@ -83,6 +84,15 @@ for (let r = 1; r <= 9; r++) {
   }
 }
 
+const nonVConstraints = [
+  graph.makeReplicate(
+    [new Pair(notVKey, 'not a hidden V', 'R1C1', 'R1C2')],
+    nonVEdges.filter(([a, b]) => parseCellId(a).row === parseCellId(b).row).map(([a]) => a)),
+  graph.makeReplicate(
+    [new Pair(notVKey, 'not a hidden V', 'R1C1', 'R2C1')],
+    nonVEdges.filter(([a, b]) => parseCellId(a).col === parseCellId(b).col).map(([a]) => a)),
+];
+
 return [
   new Shape('9x9'),
   ...givens.map(([cell, value]) => new Given(cell, value)),
@@ -92,7 +102,7 @@ return [
   ...vMarks.map(edge => new V(...edge)),
   ...blackDots.map(edge => new BlackDot(...edge)),
   ...whiteDots.map(edge => new WhiteDot(...edge)),
-  ...nonVEdges.map(edge => new Pair(notVKey, 'not a hidden V', ...edge)),
+  ...nonVConstraints,
   ...twoCellGreenLines.map(edge => new Pair(exactFiveKey, 'exactly 5 apart', ...edge)),
   ...longGreenLines.map(line => new Whisper(5, ...line)),
   ...renbans.map(line => new Renban(...line)),

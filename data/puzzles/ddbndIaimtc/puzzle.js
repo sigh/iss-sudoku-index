@@ -102,8 +102,7 @@ const symbolClasses = [
 return [
   new Shape('9x9'),
   blob.toVar('blob'),
-  new Replicate([new Given(blobOrigin, NONE, LEFT, RIGHT)],
-    Replicate.encodeTargetCells(blob.cells(), blobOrigin, blob), blobOrigin),
+  blob.makeReplicate(new Given(blobOrigin, NONE, LEFT, RIGHT)),
   ...shown.flatMap(([l, r]) => [new Given(bs(l), LEFT), new Given(bs(r), RIGHT)]),
   sum.toVar('sum'),
   ...labels.map(([l, r]) => new Arrow(sum.at(l), l, r)),  // sumVar = l + r (<= 9)

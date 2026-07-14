@@ -45,11 +45,7 @@ for (let r = 1; r <= 9; r++) {
   }
 }
 const flagOrigin = flagTargets[0];
-const flagReplicate = new Replicate(
-  [new Given(flagOrigin, 0, 1)],
-  Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
-  flagOrigin,
-);
+const flagReplicate = flags.makeReplicate(new Given(flagOrigin, 0, 1));
 const subZeroKey = Pair.fnToKey((above, f) => (above === 0) === (f === 1), shape);
 const subZeroPairs = [];
 for (let r = 2; r <= 9; r++) {

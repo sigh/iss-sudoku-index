@@ -47,12 +47,6 @@ const noThreeConsecutiveDigits = NFA.encodeSpec({
   accept: (state) => state.length === 3,
 }, 9);
 
-const targetCells = (template, origin, starts) =>
-  new Replicate(
-    [new NFA(noThreeConsecutiveDigits, 'no-3-consecutive', ...template)],
-    Replicate.encodeTargetCells(starts, origin, graph),
-    origin);
-
 const startsFor = (rowMin, rowMax, colMin, colMax) => {
   const cells = [];
   for (let r = rowMin; r <= rowMax; r++) {
@@ -63,12 +57,35 @@ const startsFor = (rowMin, rowMax, colMin, colMax) => {
   return cells;
 };
 
+const horizontalStarts = startsFor(1, 9, 1, 7);
+const verticalStarts = startsFor(1, 7, 1, 9);
+const diagonalBoundingAnchors = startsFor(1, 7, 1, 7);
+
+const horizontalTriples = graph.makeReplicate(
+  new NFA(noThreeConsecutiveDigits, 'no-3-consecutive',
+    'R1C1', 'R1C2', 'R1C3'),
+  horizontalStarts);
+const verticalTriples = graph.makeReplicate(
+  new NFA(noThreeConsecutiveDigits, 'no-3-consecutive',
+    'R1C1', 'R2C1', 'R3C1'),
+  verticalStarts);
+const downRightTriples = graph.makeReplicate(
+  new NFA(noThreeConsecutiveDigits, 'no-3-consecutive',
+    'R1C1', 'R2C2', 'R3C3'),
+  diagonalBoundingAnchors);
+// The up-right triple sits inside the R1C1-anchored 3x3 bounding template.
+// Its first scanned cell is R1C3; anchors identify bounding-box top-lefts.
+const upRightTriples = graph.makeReplicate(
+  new NFA(noThreeConsecutiveDigits, 'no-3-consecutive',
+    'R1C3', 'R2C2', 'R3C1'),
+  diagonalBoundingAnchors);
+
 return [
   new Shape('9x9'),
   ...givens.map(([cell, value]) => new Given(cell, value)),
   ...evenCells.map(cell => new Given(cell, 2, 4, 6, 8)),
-  targetCells(['R1C1', 'R1C2', 'R1C3'], 'R1C1', startsFor(1, 9, 1, 7)),
-  targetCells(['R1C1', 'R2C1', 'R3C1'], 'R1C1', startsFor(1, 7, 1, 9)),
-  targetCells(['R1C1', 'R2C2', 'R3C3'], 'R1C1', startsFor(1, 7, 1, 7)),
-  targetCells(['R1C3', 'R2C2', 'R3C1'], 'R1C3', startsFor(1, 7, 3, 9)),
+  horizontalTriples,
+  verticalTriples,
+  downRightTriples,
+  upRightTriples,
 ];

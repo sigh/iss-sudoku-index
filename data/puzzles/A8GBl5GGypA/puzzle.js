@@ -125,8 +125,7 @@ return [
   loop.toVar('loop'),
 
   // Loop membership: every cell is on (1) or off (2); circles off, rectangle on.
-  new Replicate([new Given(originCell, ON, OFF)],
-    Replicate.encodeTargetCells(loop.cells(), originCell, loop), originCell),
+  loop.makeReplicate(new Given(originCell, ON, OFF)),
   ...circles.map(cell => new Given(loopCell(cell), OFF)),
   new Given(loopCell(rectangle), ON),
 
@@ -144,12 +143,10 @@ return [
   ),
 
   // No diagonal self-touch: forbid a 2x2 whose only on cells are a diagonal.
-  new Replicate(
-    [new NFA(noDiagonalTouchMachine, 'no-touch',
-      ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
-    Replicate.encodeTargetCells(
-      noTouchTargets.map(loopCell), loopCell(noTouchOrigin), loop),
-    loopCell(noTouchOrigin)),
+  loop.makeReplicate(
+    new NFA(noDiagonalTouchMachine, 'no-touch',
+      ...graph.block(noTouchOrigin, 2, 2).map(loopCell)),
+    noTouchTargets.map(loopCell)),
 
   // Circle counts: the circle's digit equals the number of its king neighbours
   // that are on the loop. Reads the digit, then each neighbour's membership.

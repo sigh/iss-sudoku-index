@@ -104,11 +104,7 @@ return [
   ...base,
   color.toVar("Color"),
   ...coloredGivens,
-  new Replicate(
-    [new Given(circleOrigin, 1, 2, 3)],
-    Replicate.encodeTargetCells(circleTargets, circleOrigin, color),
-    circleOrigin,
-  ),
+  color.makeReplicate([new Given(circleOrigin, 1, 2, 3)], circleTargets),
   new And([
     ...circleAdjacencies().map(cells => new AllDifferent(...cells))
   ]),

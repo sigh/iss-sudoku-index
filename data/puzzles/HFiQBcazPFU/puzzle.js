@@ -111,18 +111,18 @@ return [
     return new Given(loopCell(cell), ...allowed);
   }),
   ...huts.map(hut => new Given(loopCell(hut), HORIZ, VERT, UL, UR, DL, DR)),
+  loop.makeReplicate(
+    new Pair(edgeRightKey, 'loop edge agreement h', loopCell('R1C1'), loopCell('R1C2')),
+    gridCells.filter(cell => graph.step(cell, 0, 1)).map(loopCell)),
+  loop.makeReplicate(
+    new Pair(edgeDownKey, 'loop edge agreement v', loopCell('R1C1'), loopCell('R2C1')),
+    gridCells.filter(cell => graph.step(cell, 1, 0)).map(loopCell)),
   ...gridCells.flatMap(cell => {
     const right = graph.step(cell, 0, 1);
     const down = graph.step(cell, 1, 0);
     return [
-      ...(right ? [
-        new Pair(edgeRightKey, 'loop edge agreement h', loopCell(cell), loopCell(right)),
-        ...(whiteDotEdges.has(edgeKey(cell, right)) ? [] : [new NFA(notConsecutiveRight, 'loop nonconsecutive h', loopCell(cell), cell, right)])
-      ] : []),
-      ...(down ? [
-        new Pair(edgeDownKey, 'loop edge agreement v', loopCell(cell), loopCell(down)),
-        ...(whiteDotEdges.has(edgeKey(cell, down)) ? [] : [new NFA(notConsecutiveDown, 'loop nonconsecutive v', loopCell(cell), cell, down)])
-      ] : [])
+      ...(right && !whiteDotEdges.has(edgeKey(cell, right)) ? [new NFA(notConsecutiveRight, 'loop nonconsecutive h', loopCell(cell), cell, right)] : []),
+      ...(down && !whiteDotEdges.has(edgeKey(cell, down)) ? [new NFA(notConsecutiveDown, 'loop nonconsecutive v', loopCell(cell), cell, down)] : []),
     ];
   }),
 ];

@@ -165,16 +165,12 @@ return [
     return new Given(shapeCell(cell), ...allowed);
   }),
   // --- Edge agreement
-  new Replicate(
-    [new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
-    Replicate.encodeTargetCells(rightBases.map(shapeCell), shapeCell('R1C1'), shape),
-    shapeCell('R1C1'),
-  ),
-  new Replicate(
-    [new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
-    Replicate.encodeTargetCells(downBases.map(shapeCell), shapeCell('R1C1'), shape),
-    shapeCell('R1C1'),
-  ),
+  shape.makeReplicate(
+    new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
+    rightBases.map(shapeCell)),
+  shape.makeReplicate(
+    new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
+    downBases.map(shapeCell)),
   // --- Ambiguous-Kropki digit rule
   ...gridCells.flatMap(cell => {
     const right = graph.step(cell, 0, 1);

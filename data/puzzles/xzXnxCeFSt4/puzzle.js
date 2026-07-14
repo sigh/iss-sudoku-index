@@ -60,11 +60,7 @@ const cageConstraints = cages.flatMap((cells, index) => [
 return [
   new Shape("9x9", 16),
   cageTotalsVar,
-  new Replicate(
-    [new Given(givenOrigin, ...range(1, 9))],
-    Replicate.encodeTargetCells(givenTargets, givenOrigin, graph),
-    givenOrigin,
-  ),
+  graph.makeReplicate(new Given(givenOrigin, ...range(1, 9))),
   ...cageConstraints,
   new CountingCircles(...cages.map((_, index) => cageTotalVar(index))),
 ];

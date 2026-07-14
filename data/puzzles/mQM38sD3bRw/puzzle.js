@@ -113,10 +113,8 @@ const labelValues = Array.from({ length: MAX_LABEL }, (_, i) => i + 1);
 // locates the cells).
 const stampDomain = (cells, values) => {
   const targets = cells.map(labelCell);
-  return new Replicate(
-    [new Given(targets[0], ...values)],
-    Replicate.encodeTargetCells(targets, targets[0], label),
-    targets[0]);
+  return label.makeReplicate(
+    new Given(label.cells()[0], ...values), targets);
 };
 
 const domainConstraints = [

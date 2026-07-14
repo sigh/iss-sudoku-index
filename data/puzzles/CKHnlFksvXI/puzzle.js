@@ -41,15 +41,13 @@ const vertNoArrowStarts = [
   'R1C5', 'R7C6', 'R1C7', 'R7C7', 'R1C8', 'R7C9',
 ];
 
-const horizNoArrow = new Replicate(
+const horizNoArrow = graph.makeReplicate(
   [peakOrValley('R1C1', 'R1C2', 'R1C3')],
-  Replicate.encodeTargetCells(horizNoArrowStarts, 'R1C1', graph),
-  'R1C1',
+  horizNoArrowStarts,
 );
-const vertNoArrow = new Replicate(
+const vertNoArrow = graph.makeReplicate(
   [peakOrValley('R1C1', 'R2C1', 'R3C1')],
-  Replicate.encodeTargetCells(vertNoArrowStarts, 'R1C1', graph),
-  'R1C1',
+  vertNoArrowStarts,
 );
 
 return [

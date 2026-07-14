@@ -34,13 +34,11 @@ function edgeId(edge) {
   return edge[0] === 'H' ? h(edge[1], edge[2]) : v(edge[1], edge[2]);
 }
 
-// horizontalVar/verticalVar are raw Var groups (not overlay-backed), so they
-// have no parseCellId of their own. A Var group's cell `${prefix}${n}` gets a
-// contiguous, sequential cellIndex in n, so a locator that reads the numeric
-// suffix reproduces the same offsets Replicate needs.
-const varLocator = (v) => ({
-  parseCellId: (id) => ({ cellIndex: Number(id.slice(v.prefix.length + 1)) }),
-});
+// Edge-grid locators match the raw Var groups' row-major numbering exactly:
+// horizontal edges form a 10x9 grid (VH1..VH90), vertical edges a 9x10 grid
+// (VV1..VV90). They are locators only; the Var constraints above own the cells.
+const horizontalEdges = cellGraph('10x9').makeOverlay('VH');
+const verticalEdges = cellGraph('9x10').makeOverlay('VV');
 
 const safetyStripEdges = [
   ['H', 1, 2],
@@ -104,15 +102,8 @@ return [
   new Shape('9x9'),
   horizontalVar,
   verticalVar,
-  ...[horizontalVar, verticalVar].map(v => {
-    const targets = Array.from({ length: 90 }, (_, i) => v.cell(i + 1));
-    const origin = targets[0];
-    return new Replicate(
-      [new Given(origin, ON, OFF)],
-      Replicate.encodeTargetCells(targets, origin, varLocator(v)),
-      origin,
-    );
-  }),
+  horizontalEdges.makeReplicate(new Given(horizontalEdges.cells()[0], ON, OFF)),
+  verticalEdges.makeReplicate(new Given(verticalEdges.cells()[0], ON, OFF)),
   ...forcedGapEdges.map(edge => new Given(edge, ON)),
   ...safetyStrips.map(strip => new BlackDot(...strip)),
   ...Array.from({ length: 8 }, (_, row) =>

@@ -49,10 +49,9 @@ const opposite = cell => {
 const copycatDomain = (() => {
   const targets = gridCells.map(flagOf);
   const origin = targets[0];
-  return new Replicate(
+  return flags.makeReplicate(
     [new Given(origin, PLAIN, COPY)],
-    Replicate.encodeTargetCells(targets, origin, flags),
-    origin,
+    targets,
   );
 })();
 

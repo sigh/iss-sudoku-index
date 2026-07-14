@@ -135,12 +135,10 @@ const edgeConstraints = gridCells.flatMap(cell => {
   const down = graph.step(cell, 1, 0);
   if (right) {
     const isWhiteDot = whiteDotKeys.has(edgeKey(cell, right));
-    result.push(new Pair(edgeRightKey, 'edge-h', shapeCell(cell), shapeCell(right)));
     result.push(new NFA(nonConsecutiveRight[isWhiteDot ? 1 : 0], 'loop-nc-h', shapeCell(cell), cell, right));
   }
   if (down) {
     const isWhiteDot = whiteDotKeys.has(edgeKey(cell, down));
-    result.push(new Pair(edgeDownKey, 'edge-v', shapeCell(cell), shapeCell(down)));
     result.push(new NFA(nonConsecutiveDown[isWhiteDot ? 1 : 0], 'loop-nc-v', shapeCell(cell), cell, down));
   }
   return result;
@@ -164,6 +162,15 @@ const parityConstraint = [new Or([
   new And(gridCells.map(cell => new Pair(oddTurnsKey, 'odd-turns', shapeCell(cell), cell))),
   new And(gridCells.map(cell => new Pair(evenTurnsKey, 'even-turns', shapeCell(cell), cell))),
 ])];
+
+const edgeAgreementConstraints = [
+  shape.makeReplicate(
+    new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
+    gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell)),
+  shape.makeReplicate(
+    new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
+    gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell)),
+];
 
 const satelliteMachine = NFA.encodeSpec({
   startState: { target: null, count: 0 },
@@ -194,6 +201,7 @@ return [
   ...shapeConstraints,
   ...planetConstraints,
   ...whiteDotConstraints,
+  ...edgeAgreementConstraints,
   ...edgeConstraints,
   ...parityConstraint,
   ...satelliteConstraints,

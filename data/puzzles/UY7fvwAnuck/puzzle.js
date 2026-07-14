@@ -28,10 +28,9 @@ const totalOnesCell = (i) => totalOnesVar.cell(i + 1);
 // stamp one Given via Replicate instead of 81 hand-written copies.
 const gridOrigin = graph.cells()[0];
 const gridDomainGivens = [
-  new Replicate(
+  graph.makeReplicate(
     [new Given(gridOrigin, DIGITS)],
-    Replicate.encodeTargetCells(graph.cells(), gridOrigin, graph),
-    gridOrigin,
+    graph.cells(),
   ),
 ];
 
@@ -43,10 +42,9 @@ const effectTargets = graph.cells().map((cell) => {
 const effectLocator = graph.makeOverlay('VE');
 const effectOrigin = effectTargets[0];
 const effectDomainGivens = [
-  new Replicate(
+  effectLocator.makeReplicate(
     [new Given(effectOrigin, EFFECTIVE_VALUES)],
-    Replicate.encodeTargetCells(effectTargets, effectOrigin, effectLocator),
-    effectOrigin,
+    effectTargets,
   ),
 ];
 
@@ -58,10 +56,9 @@ const selectedTargets = graph.cells().map((cell) => {
 const selectedLocator = graph.makeOverlay('VS');
 const selectedOrigin = selectedTargets[0];
 const selectedDomainGivens = [
-  new Replicate(
+  selectedLocator.makeReplicate(
     [new Given(selectedOrigin, SELECTED_VALUES)],
-    Replicate.encodeTargetCells(selectedTargets, selectedOrigin, selectedLocator),
-    selectedOrigin,
+    selectedTargets,
   ),
 ];
 
@@ -163,10 +160,9 @@ const totalOnesTargets = cages.map((_, i) => totalOnesCell(i));
 const totalOnesLocator = graph.makeOverlay('VO', graph.cells().slice(0, cages.length));
 const totalOnesOrigin = totalOnesTargets[0];
 const totalOnesDomainGivens = [
-  new Replicate(
+  totalOnesLocator.makeReplicate(
     [new Given(totalOnesOrigin, TOTAL_ONES)],
-    Replicate.encodeTargetCells(totalOnesTargets, totalOnesOrigin, totalOnesLocator),
-    totalOnesOrigin,
+    totalOnesTargets,
   ),
 ];
 

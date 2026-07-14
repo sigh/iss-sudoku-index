@@ -81,10 +81,8 @@ const dotPairs = [
 // --- Every cell is sea or land. --- One Given template stamped over the
 // whole grid via Replicate instead of 81 identical Givens.
 const seaOrLandCells = Array.from(graph.cells()).map(cell => shadingCell(cell));
-const eachCellSeaOrLand = new Replicate(
-  [new Given(seaOrLandCells[0], SEA, LAND)],
-  Replicate.encodeTargetCells(seaOrLandCells, seaOrLandCells[0], shading),
-  seaOrLandCells[0]);
+const eachCellSeaOrLand = shading.makeReplicate(
+  new Given(seaOrLandCells[0], SEA, LAND), seaOrLandCells);
 
 // --- Arrows: fixed sea dead ends (positions confirmed from source geometry). ---
 // R1C9 is sea; its only other adjacent sea cell is R1C8 (points left).
@@ -111,11 +109,7 @@ return [
   new Shape('9x9'),
   shading.toVar('shading'),
   eachCellSeaOrLand,
-  new Replicate(
-    [monoBlockTemplate],
-    Replicate.encodeTargetCells(monoBlockAnchors, monoBlockOrigin, shading),
-    monoBlockOrigin,
-  ),
+  shading.makeReplicate(monoBlockTemplate, monoBlockAnchors),
   // --- All sea cells are one orthogonally-connected region. ---
   // (Land is NOT given ConnectedValues: land forms several disjoint islands,
   // so forcing it into one region would be an unsound over-constraint.)

@@ -49,6 +49,7 @@ const DEAD_CELLS = {
 };
 
 const shape = new Shape('11x9', NUM_VALUES);
+const graph = cellGraph(shape);
 
 const realCells = [];
 const deadGivens = [];
@@ -67,10 +68,8 @@ for (let r = 1; r <= 11; r++) {
 // The same 1-9 restriction on all 81 real cells: one Given as the template,
 // stamped onto each real cell by Replicate (which shifts the template so the
 // origin lands on the target).
-const realCellRange = new Replicate(
-  [new Given(realCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)],
-  Replicate.encodeTargetCells(realCells, realCells[0], cellGeometry(shape)),
-  realCells[0]);
+const realCellRange = graph.makeReplicate(
+  new Given(realCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9), realCells);
 
 // 9 boxes: rowBand/colBand each 0-2, a normal 3x3 block staggered down by
 // one row per box-column (box(rowBand, colBand) starts at physical row

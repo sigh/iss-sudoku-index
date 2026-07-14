@@ -1,0 +1,8 @@
+.Shape~6x6~9
+.RegionSameValues
+.Thermo~R6C1~R6C2~R6C3~R5C3~R4C3~R4C4
+.Thermo~R1C2~R1C3~R1C4~R1C5~R1C6
+.Thermo~R3C1~R4C1~R5C1
+.Thermo~R5C5~R4C5~R3C5
+.BlackDot~R5C6~R6C6
+.BlackDot~R2C2~R2C3

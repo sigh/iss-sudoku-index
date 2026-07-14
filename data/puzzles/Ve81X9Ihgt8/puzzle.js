@@ -50,6 +50,15 @@ for (const cell of graph.cells()) {
   }
 }
 
+const negativeRatioConstraints = [
+  graph.makeReplicate(
+    new Pair(notRatioKey, 'not 1:2', 'R1C1', 'R1C2'),
+    negativeRatioPairs.filter(([a, b]) => parseCellId(a).row === parseCellId(b).row).map(([a]) => a)),
+  graph.makeReplicate(
+    new Pair(notRatioKey, 'not 1:2', 'R1C1', 'R2C1'),
+    negativeRatioPairs.filter(([a, b]) => parseCellId(a).col === parseCellId(b).col).map(([a]) => a)),
+];
+
 // V: digits sum to 5.
 const vPairs = [
   ['R3C3', 'R3C4'],
@@ -86,7 +95,7 @@ return [
   antiKnight,
 
   ...blackDots.map(([a, b]) => new BlackDot(a, b)),
-  ...negativeRatioPairs.map(([a, b]) => new Pair(notRatioKey, 'not 1:2', a, b)),
+  ...negativeRatioConstraints,
 
   ...vPairs.map(([a, b]) => new V(a, b)),
   ...arrows.map(cells => new Arrow(...cells)),

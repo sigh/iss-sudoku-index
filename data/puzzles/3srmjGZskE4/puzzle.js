@@ -42,10 +42,7 @@ const monoOrigin = shadeOf('R1C1');
 // Every cell is YIN or YANG: one Given template stamped over the whole grid
 // via Replicate instead of 81 identical Givens.
 const shadeCells = gridCells.map(cell => shadeOf(cell));
-const shadeGivens = new Replicate(
-  [new Given(shadeCells[0], YIN, YANG)],
-  Replicate.encodeTargetCells(shadeCells, shadeCells[0], shade),
-  shadeCells[0]);
+const shadeGivens = shade.makeReplicate(new Given(shadeCells[0], YIN, YANG));
 
 // --- Lines: drawn as thick white/grey strokes; each pair of cells here is a
 // segment of one such line, read off the decoded waypoints. ---
@@ -106,13 +103,11 @@ return [
   new Given(shadeOf('R1C1'), YIN),
 
   // --- No 2x2 block of cells is entirely one colour. ---
-  new Replicate(
-    [new NFA(
+  shade.makeReplicate(
+    new NFA(
       notAllSameNFA, 'no-monochrome-2x2',
-      shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2'))],
-    Replicate.encodeTargetCells(shade.block(monoOrigin, 8, 8), monoOrigin, shade),
-    monoOrigin,
-  ),
+      shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2')),
+    shade.block(monoOrigin, 8, 8)),
 
   // The digits along each line sum to the same (unknown, deduced) total.
   new EqualSum(...lines),

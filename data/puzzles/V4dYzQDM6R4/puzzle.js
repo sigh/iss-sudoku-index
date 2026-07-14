@@ -113,10 +113,9 @@ const shadeOrigin = shadeTargets[0];
 return [
   new Shape('9x9'),
   shade.toVar('Shading'),
-  new Replicate(
+  shade.makeReplicate(
     [new Given(shadeOrigin, 1, 2)],
-    Replicate.encodeTargetCells(shadeTargets, shadeOrigin, shade),
-    shadeOrigin,
+    shadeTargets,
   ),
   new X('R2C3', 'R2C4'),
   ...lineConstraints(ROW_CLUES, r => graph.row(r), 'row'),

@@ -34,8 +34,8 @@ const gridCells = graph.cells();
 // --- Loop membership: every cell is on (1) or off (2), free unless later
 // rules pin it down.
 const originCell = loop.cells()[0];
-const loopMembership = new Replicate([new Given(originCell, ON, OFF)],
-  Replicate.encodeTargetCells(loop.cells(), originCell, loop), originCell);
+const loopMembership = loop.makeReplicate(
+  [new Given(originCell, ON, OFF)], loop.cells());
 
 // --- Degree 2: each on-loop cell has exactly two on-loop orthogonal
 // neighbours; off cells are unconstrained. Reads the cell's membership, then
@@ -77,12 +77,10 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
 // one NFA per block.
 const noTouchOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noTouchOrigin = noTouchOrigins[0];
-const noTouchConstraint = new Replicate(
+const noTouchConstraint = loop.makeReplicate(
   [new NFA(noDiagonalTouchMachine, 'no-touch',
     ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
-  Replicate.encodeTargetCells(
-    noTouchOrigins.map(loopCell), loopCell(noTouchOrigin), loop),
-  loopCell(noTouchOrigin));
+  noTouchOrigins.map(loopCell));
 
 // --- Loop self-count: for each digit v, the number of on-loop cells holding
 // v is either 0 (v never appears on the loop) or exactly v (v appears on the

@@ -152,15 +152,55 @@ const matchingConstraints = Array.from(incomingByCell).flatMap(([cell, incoming]
 // No-touch: no two king-adjacent cells are both tents.
 const noBothTents = Pair.fnToKey((a, b) => !(a === 2 && b === 2), numValues);
 const seenPairs = new Set();
-const noTouchConstraints = [];
+const noTouchPairs = [];
 for (const cell of gridCells) {
   for (const neighbour of graph.kingNeighbours(cell)) {
     const key = [cell, neighbour].sort().join('|');
     if (seenPairs.has(key)) continue;
     seenPairs.add(key);
-    noTouchConstraints.push(new Pair(noBothTents, 'tent-no-touch', tentCell(cell), tentCell(neighbour)));
+    noTouchPairs.push([cell, neighbour]);
   }
 }
+const horizontalTentAnchors = noTouchPairs
+  .filter(([a, b]) => {
+    const from = parseCellId(a), to = parseCellId(b);
+    return to.row - from.row === 0 && to.col - from.col === 1;
+  })
+  .map(([cell]) => tentCell(cell));
+const downLeftBoundingAnchors = noTouchPairs
+  .filter(([a, b]) => {
+    const from = parseCellId(a), to = parseCellId(b);
+    return to.row - from.row === 1 && to.col - from.col === -1;
+  })
+  .map(([cell]) => tentCell(graph.step(cell, 0, -1)));
+const verticalTentAnchors = noTouchPairs
+  .filter(([a, b]) => {
+    const from = parseCellId(a), to = parseCellId(b);
+    return to.row - from.row === 1 && to.col - from.col === 0;
+  })
+  .map(([cell]) => tentCell(cell));
+const downRightTentAnchors = noTouchPairs
+  .filter(([a, b]) => {
+    const from = parseCellId(a), to = parseCellId(b);
+    return to.row - from.row === 1 && to.col - from.col === 1;
+  })
+  .map(([cell]) => tentCell(cell));
+
+const noTouchConstraints = [
+  tentOverlay.makeReplicate(
+    new Pair(noBothTents, 'tent-no-touch', tentCell('R1C1'), tentCell('R1C2')),
+    horizontalTentAnchors),
+  // The down-left pair sits away from its R1C1 bounding anchor: R1C2-R2C1.
+  tentOverlay.makeReplicate(
+    new Pair(noBothTents, 'tent-no-touch', tentCell('R1C2'), tentCell('R2C1')),
+    downLeftBoundingAnchors),
+  tentOverlay.makeReplicate(
+    new Pair(noBothTents, 'tent-no-touch', tentCell('R1C1'), tentCell('R2C1')),
+    verticalTentAnchors),
+  tentOverlay.makeReplicate(
+    new Pair(noBothTents, 'tent-no-touch', tentCell('R1C1'), tentCell('R2C2')),
+    downRightTentAnchors),
+];
 
 // German whispers on the paired tree/tent edge: only checked when that
 // direction is the chosen pairing.

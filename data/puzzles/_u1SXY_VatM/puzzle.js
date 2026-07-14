@@ -56,7 +56,6 @@ const notAllSameSpec = NFA.encodeSpec({
 // All 64 blocks are the same NFA applied to a uniform (dRow, dCol) shift of
 // one template block, so Replicate stamps the template instead of hand-
 // rolling each shifted copy.
-const blockOrigin = shadeAt('R1C1');
 const blockTemplate = [
   new NFA(notAllSameSpec, '2x2 block',
     shadeAt('R1C1'), shadeAt('R1C2'), shadeAt('R2C1'), shadeAt('R2C2')),
@@ -83,10 +82,7 @@ const scanCells = [...lap, ...lap];
 // stamped over every grid cell via the shade overlay.
 function shadeDomainConstraints() {
   const targets = Array.from(graph.cells()).map(shadeAt);
-  return [new Replicate(
-    [new Given(targets[0], 1, 2)],
-    Replicate.encodeTargetCells(targets, targets[0], shade),
-    targets[0])];
+  return [shade.makeReplicate([new Given(targets[0], 1, 2)], targets)];
 }
 
 return [
@@ -97,18 +93,13 @@ return [
   // region over the whole-grid shade overlay.
   new ConnectedValues('VS', 1),
   new ConnectedValues('VS', 2),
-  new Replicate(
+  shade.makeReplicate(
     blockTemplate,
-    Replicate.encodeTargetCells(
-      Array.from({ length: 8 }, (_, r) =>
-        Array.from({ length: 8 }, (_, c) =>
-          shadeAt(makeCellId(r + 1, c + 1))
-        )
-      ).flat(),
-      blockOrigin,
-      shade
-    ),
-    blockOrigin,
+    Array.from({ length: 8 }, (_, r) =>
+      Array.from({ length: 8 }, (_, c) =>
+        shadeAt(makeCellId(r + 1, c + 1))
+      )
+    ).flat(),
   ),
   // No digit repeats within a segment: one small NFA per digit value.
   ...Array.from({ length: 9 }, (_, d) => {

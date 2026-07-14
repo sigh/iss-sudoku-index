@@ -161,15 +161,12 @@ return [
   new Shape('9x9', RANGE),
   // Restrict every main-grid cell back to true digits 1-9 (the extended
   // Shape range above exists only for the auxiliary Vars below).
-  new Replicate(
-    [new Given(graph.cells()[0], ...range(1, 9))],
-    Replicate.encodeTargetCells(graph.cells(), graph.cells()[0], graph),
-    graph.cells()[0]),
+  graph.makeReplicate(new Given(graph.cells()[0], ...range(1, 9))),
 
   fire.toVar('fire cell flags (2 = fire)'),
   water.toVar('water cell flags (2 = water)'),
-  ...fire.cells().map((cell) => new Given(cell, 1, 2)),
-  ...water.cells().map((cell) => new Given(cell, 1, 2)),
+  fire.makeReplicate(new Given(fire.cells()[0], 1, 2)),
+  water.makeReplicate(new Given(water.cells()[0], 1, 2)),
   ...oneHotPerHouse(fire),
   ...oneHotPerHouse(water),
 

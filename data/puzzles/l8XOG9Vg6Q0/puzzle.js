@@ -162,12 +162,8 @@ const middleCells = gridCells.filter(cell => cell !== 'R5C5' && cell !== 'R3C1')
 
 function baseDomainReplicate(cells, values) {
   const targets = cells.map(shapeCell);
-  const origin = targets[0];
-  return new Replicate(
-    [new Given(origin, ...values)],
-    Replicate.encodeTargetCells(targets, origin, shape),
-    origin,
-  );
+  return shape.makeReplicate(
+    new Given(shape.cells()[0], ...values), targets);
 }
 const shapeDomainReplicates = [
   baseDomainReplicate(endpointCells, ENDPOINT_SHAPES),
@@ -200,22 +196,19 @@ return [
   // to add (the genuine single path is cell-connected), and it rules out an
   // extra path/cycle component that is entirely separate from the main path.
   new ConnectedValues('VS', ON_PATH_SHAPES),
-  new Replicate(
+  graph.makeReplicate(
     [new Given('R1C1', ...GRID_DIGITS)],
-    Replicate.encodeTargetCells(gridCells, 'R1C1', graph),
-    'R1C1',
+    gridCells,
   ),
   ...shapeDomainReplicates,
   ...narrowerShapeGivens,
-  new Replicate(
+  shape.makeReplicate(
     [new Pair(rightAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R1C2'))],
-    Replicate.encodeTargetCells(rightCells.map(shapeCell), shapeCell('R1C1'), shape),
-    shapeCell('R1C1'),
+    rightCells.map(shapeCell),
   ),
-  new Replicate(
+  shape.makeReplicate(
     [new Pair(downAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R2C1'))],
-    Replicate.encodeTargetCells(downCells.map(shapeCell), shapeCell('R1C1'), shape),
-    shapeCell('R1C1'),
+    downCells.map(shapeCell),
   ),
   ...whisperNfas,
   new WhiteDot('R4C6', 'R5C6'),

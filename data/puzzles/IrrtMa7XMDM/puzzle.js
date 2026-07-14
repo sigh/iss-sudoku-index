@@ -130,8 +130,7 @@ return [
   new GreaterThan('R8C9', 'R9C9'),
   // --- Path membership domain: every cell is Finkz's path, Phinx's path, or
   // off.
-  new Replicate([new Given(originCell, ON_A, ON_B, OFF)],
-    Replicate.encodeTargetCells(path.cells(), originCell, path), originCell),
+  path.makeReplicate(new Given(originCell, ON_A, ON_B, OFF)),
   // --- Fixed starts.
   new Given(pathCell('R1C1'), ON_A),
   new Given(pathCell('R9C9'), ON_B),

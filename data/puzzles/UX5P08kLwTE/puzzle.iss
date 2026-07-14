@@ -1,0 +1,17 @@
+.~R9C6_1
+.Thermo~R3C2~R4C3~R5C3
+.Thermo~R7C8~R6C9~R5C9
+.Thermo~R1C5~R2C6~R3C6
+.Thermo~R9C5~R8C4~R7C4
+.Thermo~R3C2~R4C1~R5C1~R6C1~R7C1
+.Thermo~R1C5~R2C4~R3C4~R4C4~R5C4
+.Thermo~R9C5~R8C6~R7C6~R6C6~R5C6
+.Thermo~R7C8~R6C7~R5C7~R4C7~R3C7
+.Thermo~R7C3~R8C3~R9C2~R9C1
+.Thermo~R1C7~R1C8~R2C9~R3C9
+.Thermo~R6C4~R5C5~R4C6
+.Skyscraper~C1~4~
+.Skyscraper~C4~4~4
+.Skyscraper~C9~4~
+.Skyscraper~C6~~6
+.Skyscraper~C7~~4

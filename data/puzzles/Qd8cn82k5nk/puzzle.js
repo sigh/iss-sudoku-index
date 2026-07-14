@@ -97,11 +97,7 @@ return [
   flags.toVar('doubler flags'),
   new Given('R4C1', 7),
 
-  new Replicate(
-    [new Given(flagOrigin, 1, 2)],
-    Replicate.encodeTargetCells(flagTargets, flagOrigin, flags),
-    flagOrigin,
-  ),
+  flags.makeReplicate(new Given(flagOrigin, 1, 2), flagTargets),
 
   ...Array.from({length: 9}, (_, r) => new Sum(10, ...graph.row(r + 1).map(flag))),
   ...Array.from({length: 9}, (_, c) => new Sum(10, ...graph.column(c + 1).map(flag))),

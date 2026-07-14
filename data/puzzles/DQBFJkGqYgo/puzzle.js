@@ -39,7 +39,6 @@ function no2x2Spec() {
 // reads the 2x2 shade window at R1C1; each target origin shifts that window by
 // the same relative offsets within the shade subgraph.
 function no2x2Constraints() {
-  const originCell = shadeAt(makeCellId(1, 1));
   const window = graph.block(makeCellId(1, 1), 2, 2).map(shadeAt);
   const targets = [];
   for (let r = 1; r <= 8; r++) {
@@ -47,10 +46,9 @@ function no2x2Constraints() {
       targets.push(shadeAt(makeCellId(r, c)));
     }
   }
-  return [new Replicate(
+  return [shade.makeReplicate(
     [new NFA(no2x2Spec(), 'no2x2', ...window)],
-    Replicate.encodeTargetCells(targets, originCell, shade),
-    originCell)];
+    targets)];
 }
 
 // X-Sum-of-one-color state machine: reads an interleaved [digit, shade,
@@ -151,10 +149,7 @@ function xsumConstraints() {
 // cell via the shade overlay.
 function shadeDomainConstraints() {
   const targets = graph.cells().map(shadeAt);
-  return [new Replicate(
-    [new Given(targets[0], 1, 2)],
-    Replicate.encodeTargetCells(targets, targets[0], shade),
-    targets[0])];
+  return [shade.makeReplicate([new Given(targets[0], 1, 2)], targets)];
 }
 
 return [

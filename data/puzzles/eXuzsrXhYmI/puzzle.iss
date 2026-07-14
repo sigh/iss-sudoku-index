@@ -1,0 +1,16 @@
+.~R2C5_7~R3C2_4~R7C3_9
+.AntiKnight
+.AllDifferent~R1C2~R2C2~R3C2~R4C2
+.AllDifferent~R4C1~R5C1~R6C1
+.AllDifferent~R5C3~R6C3
+.AllDifferent~R8C3~R8C4~R9C4
+.AllDifferent~R3C7~R4C7~R5C7~R6C7
+.AllDifferent~R3C8~R4C8
+.EqualSum~R1C2~R2C2~R3C2~R4C2~-~R4C1~R5C1~R6C1~-~R5C3~R6C3~-~R8C3~R8C4~R9C4~-~R3C7~R4C7~R5C7~R6C7~-~R3C8~R4C8
+.Sandwich~0~C1
+.Sandwich~5~C2
+.Sandwich~0~C5
+.Sandwich~27~C7
+.Sandwich~11~R2
+.Sandwich~7~R5
+.Sandwich~0~R8

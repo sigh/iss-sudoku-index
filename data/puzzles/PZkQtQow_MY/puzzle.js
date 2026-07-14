@@ -82,12 +82,10 @@ for (const cell of gridCells) coverageArgs.push(catCell(cell), cell);
 return [
   new Shape('9x9'),
   category.toVar('category'),
-  new Replicate(
-    [new Given(domainOrigin, CATEGORY.NONE, CATEGORY.ARROW, CATEGORY.RSUM,
-      CATEGORY.RENBAN, CATEGORY.DUTCH, CATEGORY.PARITY)],
-    Replicate.encodeTargetCells(domainTargets, domainOrigin, category),
-    domainOrigin,
-  ),
+  category.makeReplicate(
+    new Given(domainOrigin, CATEGORY.NONE, CATEGORY.ARROW, CATEGORY.RSUM,
+      CATEGORY.RENBAN, CATEGORY.DUTCH, CATEGORY.PARITY),
+    domainTargets),
   ...Object.entries(circledCells).flatMap(([categoryName, cells]) =>
     cells.map(cell => new Given(catCell(cell), CATEGORY[categoryName]))
   ),

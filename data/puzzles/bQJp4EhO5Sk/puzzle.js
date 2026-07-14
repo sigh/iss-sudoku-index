@@ -76,11 +76,7 @@ const availableTemplate = [new Given(availableOrigin, ...availableDigits)];
 
 return [
   new Shape("9x9", "0-9"),
-  new Replicate(
-    availableTemplate,
-    Replicate.encodeTargetCells(cells, availableOrigin, graph),
-    availableOrigin,
-  ),
+  graph.makeReplicate(availableTemplate),
   ...Object.entries(givens).map(([cell, value]) => new Given(cell, value)),
   ...boxes.map(cells => new Jigsaw("9x9~0-9", ...cells)),
   ...whispers.map(cells => new Whisper(5, ...cells)),

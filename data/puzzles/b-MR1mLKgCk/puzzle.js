@@ -78,7 +78,6 @@ for (let row = 1; row <= 8; row++) {
 // template (same relative TL/TR/BL/BR offsets everywhere), so replicate them
 // from the first unmarked corner instead of stamping each one by hand.
 const graph = cellGraph('9x9');
-const noBattenburgOrigin = 'R1C2';
 const noBattenburgTargets = [];
 for (let row = 1; row <= 8; row++) {
   for (let col = 1; col <= 8; col++) {
@@ -86,12 +85,13 @@ for (let row = 1; row <= 8; row++) {
     if (!battenburgMarked.has(tl)) noBattenburgTargets.push(tl);
   }
 }
-const battenburgNoMatchConstraint = new Replicate(
+// The template is anchored at R1C1 even though R1C1 itself is a marked
+// intersection and therefore absent from the target set.
+const battenburgNoMatchConstraint = graph.makeReplicate(
   [new NFA(
     battenburgNoMatchNFA, 'NoBattenburg',
-    noBattenburgOrigin, makeCellId(1, 3), makeCellId(2, 2), makeCellId(2, 3))],
-  Replicate.encodeTargetCells(noBattenburgTargets, noBattenburgOrigin, graph),
-  noBattenburgOrigin);
+    'R1C1', 'R1C2', 'R2C1', 'R2C2')],
+  noBattenburgTargets);
 
 return [
   new Shape('9x9'),

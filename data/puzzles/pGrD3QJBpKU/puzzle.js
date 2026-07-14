@@ -44,13 +44,11 @@ function unionValueCells(groups) {
 // Restrict the main grid back to true Sudoku digits (Shape widened the value
 // range to 10 so the effective-value overlay can hold a nudged 9 -> 10).
 const firstCell = allCells[0];
-const gridConstraint = new Replicate([new Given(firstCell, 1, 2, 3, 4, 5, 6, 7, 8, 9)],
-  Replicate.encodeTargetCells(allCells, firstCell, graph), firstCell);
+const gridConstraint = graph.makeReplicate(new Given(firstCell, 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
 // Restrict the flag overlay to {1 = natural, 2 = nudge}.
 const firstFlag = flag.cells()[0];
-const flagConstraint = new Replicate([new Given(firstFlag, 1, 2)],
-  Replicate.encodeTargetCells(flag.cells(), firstFlag, flag), firstFlag);
+const flagConstraint = flag.makeReplicate(new Given(firstFlag, 1, 2));
 
 // Link written digit + flag to the effective value: value = digit + flag - 1,
 // i.e. value - digit - flag = -1.

@@ -112,18 +112,16 @@ return [
   new Given('R2C8', 8),
   new Given('R6C2', 7),
   new Given('R7C6', 5),
-  new Replicate([new Given(firstShade, SHADED, UNSHADED)],
-    Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade),
+  shade.makeReplicate([new Given(firstShade, SHADED, UNSHADED)], shade.cells()),
   // Yin-Yang connectivity: each shade forms one orthogonally connected region.
   new ConnectedValues('VS', SHADED),
   new ConnectedValues('VS', UNSHADED),
   ...whiteDots,
   ...shadeDifferences,
-  new Replicate(
+  shade.makeReplicate(
     [new NFA(noMono2x2Machine, 'no-mono-2x2',
       ...graph.block(mono2x2Origin, 2, 2).map(shadeCell))],
-    Replicate.encodeTargetCells(mono2x2Targets, shadeCell(mono2x2Origin), shade),
-    shadeCell(mono2x2Origin),
+    mono2x2Targets,
   ),
   ...pillArrows,
   ...sightCounts,

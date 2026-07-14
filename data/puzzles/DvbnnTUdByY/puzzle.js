@@ -56,10 +56,7 @@ const color = graph.makeOverlay('VC', circleCells);
 // stated colour get their own Given on top -- Givens intersect, so the narrower
 // one wins and the domain need not exclude them.
 const colorCells = circleCells.map(cell => color.at(cell));
-const colorDomain = new Replicate(
-  [new Given(colorCells[0], 1, 2, 3)],
-  Replicate.encodeTargetCells(colorCells, colorCells[0], color),
-  colorCells[0]);
+const colorDomain = color.makeReplicate(new Given(colorCells[0], 1, 2, 3));
 
 const colorGivens = circleCells
   .filter(cell => circleColorGiven.get(cell))

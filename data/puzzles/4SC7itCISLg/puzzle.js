@@ -94,8 +94,7 @@ return [
   shade.toVar('shade'),
 
   // Domain: every shade cell is SHADED or UNSHADED.
-  new Replicate([new Given(firstShade, SHADED, UNSHADED)],
-    Replicate.encodeTargetCells(shade.cells(), firstShade, shade), firstShade),
+  shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED)),
 
   // Yin-Yang connectivity: each shade forms one orthogonally connected region.
   new ConnectedValues('VS', SHADED),
@@ -104,11 +103,9 @@ return [
   // no-mono-2x2 only reads the shade overlay, so every block's 4 cells share
   // one cell group (VS) with a uniform (row, col) offset from block to block;
   // Replicate applies cleanly here.
-  new Replicate(
-    [new NFA(noMono2x2NFA, 'no-mono-2x2', ...firstBlock.map(shadeCell))],
-    Replicate.encodeTargetCells(
-      blockOrigins.map(shadeCell), shadeCell(blockOrigins[0]), shade),
-    shadeCell(blockOrigins[0])),
+  shade.makeReplicate(
+    new NFA(noMono2x2NFA, 'no-mono-2x2', ...firstBlock.map(shadeCell)),
+    blockOrigins.map(shadeCell)),
 
   ...mod3Constraints,
   ...arrowConstraints,

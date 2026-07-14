@@ -107,7 +107,6 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
 // topRight, bottomLeft, bottomRight), translated by a uniform offset per
 // anchor cell, so Replicate shortens this to one template + target set.
 const noTouchAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noTouchOrigin = pathCell(noTouchAnchors[0]);
 const noTouchTemplate = graph.block(noTouchAnchors[0], 2, 2).map(pathCell);
 
 // --- Box coverage: at least one on-path cell in every box.
@@ -184,8 +183,7 @@ const mod4Machine = NFA.encodeSpec({
 return [
   new Shape('9x9'),
   path.toVar('path'),
-  new Replicate([new Given(originCell, ON, OFF)],
-    Replicate.encodeTargetCells(path.cells(), originCell, path), originCell),
+  path.makeReplicate(new Given(originCell, ON, OFF)),
   ...endpoints.map(cell => new Given(pathCell(cell), ON)),
   ...arrows.map(({ cell }) => new Given(pathCell(cell), OFF)),
   ...circles.map(cell => new Given(pathCell(cell), OFF)),
@@ -194,10 +192,9 @@ return [
     const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
     return new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell));
   }),
-  new Replicate(
-    [new NFA(noDiagonalTouchMachine, 'no-touch', ...noTouchTemplate)],
-    Replicate.encodeTargetCells(noTouchAnchors.map(pathCell), noTouchOrigin, path),
-    noTouchOrigin),
+  path.makeReplicate(
+    new NFA(noDiagonalTouchMachine, 'no-touch', ...noTouchTemplate),
+    noTouchAnchors.map(pathCell)),
   ...graph.boxes().map(cells => new NFA(atLeastOneOnMachine, 'box-coverage', ...cells.map(pathCell))),
   ...arrows.map(({ cell, dir: [dR, dC] }) => {
     const ray = graph.ray(cell, dR, dC).slice(1).map(pathCell);

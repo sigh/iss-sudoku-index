@@ -44,7 +44,6 @@ const notAllSameNFA = NFA.encodeSpec({
 // No 2x2 block is entirely shaded or entirely unshaded. Every block is a
 // uniform-offset shift of the top-left block, so encode it once and
 // replicate it over every anchor cell whose block stays on-grid.
-const monoBlockOrigin = shadeOf('R1C1');
 const monoBlockTemplate = new NFA(notAllSameNFA, 'no-monochrome-2x2',
   shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2'));
 const monoBlockAnchors = [];
@@ -73,21 +72,14 @@ const linesWithConfirmedShapeOnly = [
 // grid cell via the shade overlay.
 function shadeDomainConstraints() {
   const targets = gridCells.map(shadeOf);
-  return [new Replicate(
-    [new Given(targets[0], UNSHADED, SHADED)],
-    Replicate.encodeTargetCells(targets, targets[0], shade),
-    targets[0])];
+  return [shade.makeReplicate(new Given(targets[0], UNSHADED, SHADED))];
 }
 
 return [
   new Shape('9x9'),
   shade.toVar('yin-yang shade'),
   ...shadeDomainConstraints(),
-  new Replicate(
-    [monoBlockTemplate],
-    Replicate.encodeTargetCells(monoBlockAnchors, monoBlockOrigin, shade),
-    monoBlockOrigin,
-  ),
+  shade.makeReplicate(monoBlockTemplate, monoBlockAnchors),
   // Yin-Yang global connectivity: shaded cells form one orthogonally-connected
   // region, and unshaded cells form another.
   new ConnectedValues('VS', SHADED),

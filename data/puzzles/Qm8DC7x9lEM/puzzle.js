@@ -1,5 +1,5 @@
 // Title: Killers in Hiding
-// Author: Aron Lidé (Aspartagcus)
+// Author: Aron Lide (Aspartagcus)
 // Video: https://www.youtube.com/watch?v=Qm8DC7x9lEM
 // Source: https://sudokupad.app/5gyf7rj813
 
