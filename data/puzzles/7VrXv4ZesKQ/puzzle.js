@@ -1,0 +1,28 @@
+// Title: Banksy Wor-King at Queen's Mews
+// Author: olima
+// Video: https://www.youtube.com/watch?v=7VrXv4ZesKQ
+// Source: https://sudokupad.app/n7a6oi1gyy
+
+// Normal Sudoku rules apply. King's-move neighbours cannot repeat.
+// Green-line neighbours differ by at least 5. Thermometers strictly increase
+// from each bulb to its tips.
+
+const whisper = [
+  'R5C1', 'R4C1', 'R3C2', 'R2C3', 'R1C4', 'R1C5',
+  'R1C6', 'R2C7', 'R3C8', 'R4C9', 'R5C9',
+];
+
+const thermos = [
+  ['R8C7', 'R8C6', 'R8C5', 'R8C4', 'R8C3', 'R8C2', 'R8C1', 'R7C1'],
+  ['R8C7', 'R8C6', 'R8C5', 'R8C4', 'R8C3', 'R7C2', 'R6C2'],
+  ['R7C9', 'R7C8', 'R7C7', 'R7C6', 'R7C5', 'R7C4', 'R6C4'],
+  ['R7C9', 'R7C8', 'R7C7', 'R7C6', 'R6C5', 'R5C5'],
+  ['R7C9', 'R7C8', 'R7C7', 'R6C7', 'R5C7', 'R4C7'],
+];
+
+return [
+  new Shape('9x9'),
+  new AntiKing(),
+  new Whisper(5, ...whisper),
+  ...thermos.map(cells => new Thermo(...cells)),
+];

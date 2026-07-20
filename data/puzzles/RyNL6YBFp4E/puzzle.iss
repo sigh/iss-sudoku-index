@@ -1,0 +1,13 @@
+.~R1C7_8~R6C2_3~R6C8_7~R7C8_6~R8C5_1_3_5_7_9
+.Replicate~_7f_7f_7f_7f_D
+.Pair~_7v_-7v_-7v_-H~_adjacent%20cells%20do%20not%20sum%20to%2010~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~_7v_-7v_-7v_-H~_adjacent%20cells%20do%20not%20sum%20to%2010~R1C1~R2C1
+.End
+.Palindrome~R3C6~R4C5~R3C4~R4C3~R3C3~R2C3~R1C4~R1C5~R1C6~R2C7~R3C7~R4C7
+.Palindrome~R9C7~R8C7~R7C7~R6C6~R6C5~R6C4~R7C3~R8C3~R9C3~R8C4~R9C5~R8C6
+.BlackDot~R2C4~R2C5
+.BlackDot~R2C5~R2C6
+.BlackDot~R7C4~R7C5
+.BlackDot~R7C5~R7C6

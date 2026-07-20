@@ -1,0 +1,13 @@
+.AntiKnight
+.AntiKing
+.LittleKiller~33~R9C3
+.LittleKiller~33~R4C1
+.WhiteDot~R3C6~R3C7
+.WhiteDot~R3C6~R4C6
+.WhiteDot~R4C6~R4C7
+.WhiteDot~R6C5~R6C6
+.WhiteDot~R6C5~R7C5
+.WhiteDot~R7C5~R7C6
+.BlackDot~R3C7~R4C7
+.BlackDot~R6C6~R7C6
+.BlackDot~R4C5~R5C5

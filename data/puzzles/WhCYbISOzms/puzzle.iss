@@ -1,0 +1,12 @@
+.~R2C5_3~R2C6_2~R2C8_1~R3C8_3~R3C9_2~R4C1_3~R5C5_2~R6C9_1~R8C7_3~R8C8_2~R9C3_3~R9C4_2~R9C7_1
+.AntiKing
+.Cage~12~R1C7~R2C7
+.Cage~11~R5C2~R6C2
+.Cage~13~R7C3~R8C3
+.Cage~11~R4C8~R5C8
+.Replicate~_7f_7f_7f_7f_D
+.Pair~93-fvv_f___-_H~_not%201%3A2~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~93-fvv_f___-_H~_not%201%3A2~R1C1~R2C1
+.End

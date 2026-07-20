@@ -1,0 +1,30 @@
+// Title: Slow thermos
+// Author: Craig Henderson
+// Video: https://www.youtube.com/watch?v=vf_mbla-If4
+// Source: https://sudokupad.app/2w274202x7
+
+// Slow thermometers are nondecreasing from the bulb: each consecutive pair a,b
+// satisfies a <= b. Equal digits are allowed unless ordinary Sudoku forbids them.
+const slowThermoKey = Pair.fnToKey((a, b) => a <= b, 9);
+const thermometers = [
+  [
+    'R1C4', 'R2C3', 'R2C4', 'R3C3', 'R3C4', 'R4C3', 'R4C4', 'R5C3',
+    'R5C4', 'R6C3', 'R6C4', 'R7C3', 'R7C4', 'R8C3', 'R8C4', 'R9C3',
+  ],
+  [
+    'R9C6', 'R8C7', 'R8C6', 'R7C7', 'R7C6', 'R6C7', 'R6C6', 'R5C7',
+    'R5C6', 'R4C7', 'R4C6', 'R3C7',
+  ],
+  [
+    'R1C9', 'R2C8', 'R1C8', 'R2C7', 'R1C7', 'R2C6', 'R1C6', 'R2C5',
+    'R1C5',
+  ],
+  ['R7C1', 'R6C2', 'R5C1', 'R4C2', 'R3C1'],
+  ['R3C9', 'R4C8', 'R5C9', 'R6C8', 'R7C9'],
+  ['R7C8', 'R8C8', 'R9C8'],
+];
+
+return [
+  new Shape('9x9'),
+  ...thermometers.map(cells => new Pair(slowThermoKey, 'Slow thermo', ...cells)),
+];

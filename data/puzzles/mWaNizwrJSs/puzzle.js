@@ -9,9 +9,8 @@
 //
 // The almost-Sudoku groups permit a repeated digit, while the ISS main grid
 // always makes rows and columns all-different. The real puzzle therefore
-// lives in a Var group; the main grid is a pinned 1x9 placeholder. Nine
-// placeholder cells avoid an ISS sum-optimizer edge case for a one-cell main
-// grid whose actual sum constraints all refer only to Var cells.
+// lives in a Var group; the main grid is a pinned 1x9 placeholder. Its nine
+// columns make the Var grid render with the puzzle's natural row width.
 
 const N = 9;
 const GRID = new Var('G', 'Grid', N * N);

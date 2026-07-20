@@ -1,0 +1,11 @@
+.AntiKnight
+.Renban~R4C4~R5C4~R6C4~R7C5~R6C6
+.Renban~R3C6~R2C6~R1C6~R2C7~R3C8~R4C9~R4C8~R4C7
+.Renban~R7C6~R8C6
+.Renban~R4C2~R5C2
+.Sandwich~13~C2
+.Sandwich~30~C5
+.Sandwich~0~C6
+.Sandwich~23~C8
+.Sandwich~10~R7
+.Sandwich~3~R9
