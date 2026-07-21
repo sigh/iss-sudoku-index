@@ -162,6 +162,19 @@ class ScriptModal {
       return;
     }
     if (e.key === 'Tab') this.trapFocus(e);
+    if ((e.key === 'a' || e.key === 'A') && (e.ctrlKey || e.metaKey) && !e.altKey) {
+      e.preventDefault();
+      this.selectScript();
+    }
+  }
+
+  // Restrict select-all to the script text, rather than the whole page.
+  selectScript() {
+    const range = document.createRange();
+    range.selectNodeContents(this.codeEl);
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
   }
 
   trapFocus(e) {
