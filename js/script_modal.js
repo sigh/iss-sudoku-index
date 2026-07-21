@@ -95,7 +95,9 @@ class ScriptModal {
     this.copyBtn.textContent = 'Copy';
     this.copyText = '';
     this.issLink.removeAttribute('href');
+    this.issLink.removeAttribute('title');
     this.issLink.classList.add('lazy');
+    this.issLink.classList.remove('error');
 
     this.overlay.hidden = false;
     document.body.classList.add('modal-open');
@@ -120,8 +122,19 @@ class ScriptModal {
     }
     this.copyBtn.disabled = false;
     this.copyText = text;
-    this.issLink.href = buildIssHref(text);
-    this.issLink.classList.remove('lazy');
+    // Encoding is async (the payload is compressed), so the link stays lazy for
+    // a beat after the script renders.
+    Promise.resolve(buildIssHref(text))
+      .then(href => {
+        if (requestId !== this.requestId) return;
+        this.issLink.href = href;
+        this.issLink.classList.remove('lazy');
+      })
+      .catch(() => {
+        if (requestId !== this.requestId) return;
+        this.issLink.classList.add('error');
+        this.issLink.title = 'Failed to build the ISS link — use Copy instead';
+      });
   }
 
   copy(text) {
@@ -198,7 +211,8 @@ class ScriptModal {
   }
 }
 
-// Open the modal for a script. buildIssHref(text) -> the ?code= URL for that source.
+// Open the modal for a script. buildIssHref(text) -> the ?code= URL for that
+// source, either directly or as a promise.
 export function openScriptModal(args) {
   if (!singleton) singleton = new ScriptModal();
   singleton.open(args);

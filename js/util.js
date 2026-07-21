@@ -27,10 +27,26 @@ export function el(tag, options = {}, ...children) {
 }
 
 // URL-safe base64, matching ISS's Base64Codec.encodeString (btoa + -_ + no '=').
+function urlSafeB64(bytes) {
+  let bin = '';
+  for (const b of bytes) bin += String.fromCharCode(b);
+  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+}
+
+// ISS marks a compressed ?code= payload with a leading '.'; without it the value
+// is read as plain base64. Both forms are URL-safe as-is (no escaping by
+// URLSearchParams), and deflate typically cuts a script URL to well under half.
+const COMPRESSED_PREFIX = '.';
+
+// Encode a script for ISS's ?code= param. Falls back to the uncompressed legacy
+// form where CompressionStream is missing — ISS still decodes that.
 // TextEncoder keeps ASCII scripts byte-identical to ISS and never throws on
 // stray non-ASCII in comments.
-export function urlSafeB64(str) {
-  let bin = '';
-  for (const b of new TextEncoder().encode(str)) bin += String.fromCharCode(b);
-  return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=/g, '');
+export async function encodeCodeParam(text) {
+  const utf8 = new TextEncoder().encode(text);
+  if (typeof CompressionStream !== 'function') return urlSafeB64(utf8);
+  const stream = new Blob([utf8]).stream().pipeThrough(
+    new CompressionStream('deflate-raw'));
+  const bytes = new Uint8Array(await new Response(stream).arrayBuffer());
+  return COMPRESSED_PREFIX + urlSafeB64(bytes);
 }

@@ -3,7 +3,7 @@
 import { STATUS, statusMeta } from './status.js';
 import { buildRow, SORT_KEYS } from './table.js';
 import { openScriptModal } from './script_modal.js';
-import { DENSITIES, ISS_BASE, el, urlSafeB64 } from './util.js';
+import { DENSITIES, ISS_BASE, el, encodeCodeParam } from './util.js';
 
 // Rows are appended to the table in chunks as the user scrolls (windowed
 // rendering) so a large index doesn't stall filtering/sorting re-renders.
@@ -589,7 +589,7 @@ class IndexApp {
     openScriptModal({
       title: row.puzzle_title || 'Sandbox script',
       fileUrl: `${row.dir}/puzzle.js`,
-      buildIssHref: text => ISS_BASE + '?code=' + urlSafeB64(text),
+      buildIssHref: async text => ISS_BASE + '?code=' + await encodeCodeParam(text),
     });
   }
 
