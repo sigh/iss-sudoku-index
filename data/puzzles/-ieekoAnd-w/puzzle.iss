@@ -1,0 +1,14 @@
+.Sandwich~17~C1
+.Sandwich~20~C6
+.Sandwich~23~C7
+.Sandwich~21~R5
+.Sandwich~10~R9
+.Sandwich~8~R8
+.Renban~R1C1~R1C2~R2C2~R2C3
+.Renban~R4C1~R5C1~R5C2
+.Renban~R1C5~R2C5~R3C5~R4C5~R4C4
+.Renban~R6C6~R6C5~R7C5~R8C5~R9C5
+.Renban~R8C6~R8C7~R8C8~R7C8
+.Renban~R5C7~R5C8~R5C9
+.Renban~R2C6~R2C7~R2C8~R3C8
+.Renban~R8C3~R8C2~R9C2~R9C1

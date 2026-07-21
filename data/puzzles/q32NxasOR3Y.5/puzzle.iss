@@ -1,0 +1,9 @@
+.Shape~6x6
+.AllDifferent~R1C5~R2C3~R3C4~R4C3~R5C2~R5C6
+.BlackDot~R5C2~R5C3
+.BlackDot~R4C3~R5C3
+.BlackDot~R3C5~R3C6
+.WhiteDot~R1C2~R2C2
+.WhiteDot~R2C5~R2C6
+.WhiteDot~R2C4~R2C5
+.WhiteDot~R6C5~R6C6

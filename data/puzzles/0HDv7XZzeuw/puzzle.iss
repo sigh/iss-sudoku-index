@@ -1,0 +1,5 @@
+.Shape~6x9~9
+.AntiKnight
+.Indexing~C~R1C1~R2C1~R3C1~R1C5~R2C5~R3C5~R4C5~R5C5~R6C5
+.Whisper~5~R5C5~R4C4~R4C5~R4C6~R3C5
+.Whisper~5~R2C4~R2C5
