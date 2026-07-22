@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-07-22T07:57:42.972442+00:00",
-  "count": 814,
+  "generated_at": "2026-07-22T10:04:53.572707+00:00",
+  "count": 819,
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -39,6 +39,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XAI5NFO_jFs",
       "iss_size": 200870,
+      "iss_url_length": 190256,
       "script_size": 5799
     },
     {
@@ -69,6 +70,7 @@
       "cap": 1000,
       "dir": "data/puzzles/CSwuLgHwCDI",
       "iss_size": 589,
+      "iss_url_length": 636,
       "script_size": 1580
     },
     {
@@ -122,6 +124,7 @@
       "cap": 4699,
       "dir": "data/puzzles/sKNtEAIpyJM",
       "iss_size": 85965,
+      "iss_url_length": 86187,
       "script_size": 9168
     },
     {
@@ -154,6 +157,7 @@
       "cap": 1000,
       "dir": "data/puzzles/8NZ2zya2XjM",
       "iss_size": 7971,
+      "iss_url_length": 8002,
       "script_size": 3043
     },
     {
@@ -195,6 +199,7 @@
       "cap": 12543,
       "dir": "data/puzzles/AFI8CrN_RJg",
       "iss_size": 11781,
+      "iss_url_length": 11814,
       "script_size": 4283
     },
     {
@@ -224,6 +229,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7VrXv4ZesKQ",
       "iss_size": 285,
+      "iss_url_length": 331,
       "script_size": 892
     },
     {
@@ -252,6 +258,7 @@
       "cap": 204081,
       "dir": "data/puzzles/Tsi_mMAKMos",
       "iss_size": 2430,
+      "iss_url_length": 2479,
       "script_size": 2248
     },
     {
@@ -298,6 +305,7 @@
       "cap": 1000,
       "dir": "data/puzzles/KCdKUL5EjPM",
       "iss_size": 13065,
+      "iss_url_length": 13100,
       "script_size": 4617
     },
     {
@@ -327,6 +335,7 @@
       "cap": 115207,
       "dir": "data/puzzles/f-WiezGceTM",
       "iss_size": 2635,
+      "iss_url_length": 2680,
       "script_size": 2108
     },
     {
@@ -390,6 +399,7 @@
       "cap": 48971,
       "dir": "data/puzzles/DBOFq2sWdPI",
       "iss_size": 11494,
+      "iss_url_length": 11839,
       "script_size": 2597
     },
     {
@@ -418,6 +428,7 @@
       "cap": 1000,
       "dir": "data/puzzles/HHE3g108bj0",
       "iss_size": 1267,
+      "iss_url_length": 1286,
       "script_size": 1881
     },
     {
@@ -449,6 +460,7 @@
       "cap": 1000,
       "dir": "data/puzzles/f3oNryTCtK4",
       "iss_size": 917,
+      "iss_url_length": 944,
       "script_size": 1498
     },
     {
@@ -480,6 +492,7 @@
       "cap": 1000,
       "dir": "data/puzzles/stM9XApXLws",
       "iss_size": 1027,
+      "iss_url_length": 1081,
       "script_size": 2285
     },
     {
@@ -513,6 +526,7 @@
       "cap": 1000,
       "dir": "data/puzzles/_NOwlm2D_Lk",
       "iss_size": 1247,
+      "iss_url_length": 1281,
       "script_size": 2748
     },
     {
@@ -544,6 +558,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zs0gkry-4Wg",
       "iss_size": 497,
+      "iss_url_length": 538,
       "script_size": 1179
     },
     {
@@ -579,6 +594,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Ve81X9Ihgt8",
       "iss_size": 784,
+      "iss_url_length": 809,
       "script_size": 3133
     },
     {
@@ -612,6 +628,7 @@
       "cap": 1000,
       "dir": "data/puzzles/p3pDjjp0cP0",
       "iss_size": 15268,
+      "iss_url_length": 13862,
       "script_size": 4057
     },
     {
@@ -641,6 +658,7 @@
       "cap": 312500,
       "dir": "data/puzzles/vWyihZrZvU8",
       "iss_size": 1981,
+      "iss_url_length": 1998,
       "script_size": 3012
     },
     {
@@ -666,6 +684,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -703,6 +722,7 @@
       "cap": 1000,
       "dir": "data/puzzles/00lxcgSGLBg",
       "iss_size": 70897,
+      "iss_url_length": 68623,
       "script_size": 13533
     },
     {
@@ -735,6 +755,7 @@
       "cap": 1000,
       "dir": "data/puzzles/JPGFsisxFlw",
       "iss_size": 468,
+      "iss_url_length": 524,
       "script_size": 2277
     },
     {
@@ -763,6 +784,7 @@
       "cap": 1000,
       "dir": "data/puzzles/n0u4ShNakCI",
       "iss_size": 748,
+      "iss_url_length": 798,
       "script_size": 1904
     },
     {
@@ -798,6 +820,7 @@
       "cap": 259067,
       "dir": "data/puzzles/BfsapIsZX4o",
       "iss_size": 700,
+      "iss_url_length": 743,
       "script_size": 2341
     },
     {
@@ -825,6 +848,7 @@
       "cap": 1000,
       "dir": "data/puzzles/0ASRXrrz-K4",
       "iss_size": 365,
+      "iss_url_length": 418,
       "script_size": 1167
     },
     {
@@ -862,6 +886,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ehi5FkxgrWs",
       "iss_size": 343918,
+      "iss_url_length": 342990,
       "script_size": 5928
     },
     {
@@ -891,6 +916,7 @@
       "cap": 10000,
       "dir": "data/puzzles/iAkuAoIgR4o",
       "iss_size": 31407,
+      "iss_url_length": 28990,
       "script_size": 1704
     },
     {
@@ -926,6 +952,7 @@
       "cap": 10000,
       "dir": "data/puzzles/23qeCn9TcWw",
       "iss_size": 5444,
+      "iss_url_length": 5529,
       "script_size": 6102
     },
     {
@@ -969,6 +996,7 @@
       "cap": 420168,
       "dir": "data/puzzles/STXQn26IVHs",
       "iss_size": 3239,
+      "iss_url_length": 3282,
       "script_size": 6551
     },
     {
@@ -997,6 +1025,7 @@
       "cap": 10000,
       "dir": "data/puzzles/MYpoIPhevoI",
       "iss_size": 275,
+      "iss_url_length": 325,
       "script_size": 970
     },
     {
@@ -1028,6 +1057,7 @@
       "cap": 10000,
       "dir": "data/puzzles/moRsJVncQps",
       "iss_size": 2618,
+      "iss_url_length": 2648,
       "script_size": 2263
     },
     {
@@ -1057,6 +1087,7 @@
       "cap": 10000,
       "dir": "data/puzzles/_RKTa9QVEwA",
       "iss_size": 5611,
+      "iss_url_length": 5410,
       "script_size": 1834
     },
     {
@@ -1089,6 +1120,7 @@
       "cap": 10000,
       "dir": "data/puzzles/xlk19YzgMCM",
       "iss_size": 352,
+      "iss_url_length": 394,
       "script_size": 1619
     },
     {
@@ -1120,6 +1152,7 @@
       "cap": 10000,
       "dir": "data/puzzles/a-jajrZJXr0",
       "iss_size": 2508,
+      "iss_url_length": 2549,
       "script_size": 3107
     },
     {
@@ -1155,6 +1188,7 @@
       "cap": 182815,
       "dir": "data/puzzles/dAqrMGSyI4s",
       "iss_size": 3780,
+      "iss_url_length": 3813,
       "script_size": 6883
     },
     {
@@ -1183,6 +1217,7 @@
       "cap": 10000,
       "dir": "data/puzzles/CNGyml7iu_I",
       "iss_size": 313,
+      "iss_url_length": 358,
       "script_size": 972
     },
     {
@@ -1221,6 +1256,7 @@
       "cap": 10000,
       "dir": "data/puzzles/P32Jqq-FyFc",
       "iss_size": 6054,
+      "iss_url_length": 6088,
       "script_size": 4163
     },
     {
@@ -1250,6 +1286,7 @@
       "cap": 10000,
       "dir": "data/puzzles/KEEZblvYBm0",
       "iss_size": 3393,
+      "iss_url_length": 3441,
       "script_size": 4524
     },
     {
@@ -1278,6 +1315,7 @@
       "cap": 10000,
       "dir": "data/puzzles/Ks9cvaX91W4",
       "iss_size": 501,
+      "iss_url_length": 536,
       "script_size": 1186
     },
     {
@@ -1307,6 +1345,7 @@
       "cap": 10000,
       "dir": "data/puzzles/iDZ_suiHKps",
       "iss_size": 384,
+      "iss_url_length": 422,
       "script_size": 1170
     },
     {
@@ -1336,6 +1375,7 @@
       "cap": 10000,
       "dir": "data/puzzles/pRZAI1WRY6I",
       "iss_size": 277,
+      "iss_url_length": 318,
       "script_size": 1141
     },
     {
@@ -1366,6 +1406,7 @@
       "cap": 1000,
       "dir": "data/puzzles/h_ciilURoM8",
       "iss_size": 201,
+      "iss_url_length": 244,
       "script_size": 733
     },
     {
@@ -1399,6 +1440,7 @@
       "cap": 10000,
       "dir": "data/puzzles/a79ewtzPrrY",
       "iss_size": 803,
+      "iss_url_length": 835,
       "script_size": 2036
     },
     {
@@ -1428,6 +1470,7 @@
       "cap": 10000,
       "dir": "data/puzzles/nccrIGkIcwo",
       "iss_size": 530,
+      "iss_url_length": 564,
       "script_size": 1504
     },
     {
@@ -1541,6 +1584,7 @@
       "cap": 10000,
       "dir": "data/puzzles/ddbndIaimtc",
       "iss_size": 96122,
+      "iss_url_length": 96081,
       "script_size": 6065
     },
     {
@@ -1568,6 +1612,7 @@
       "cap": 10000,
       "dir": "data/puzzles/rSMMWRaKq8M",
       "iss_size": 310,
+      "iss_url_length": 360,
       "script_size": 921
     },
     {
@@ -1600,6 +1645,7 @@
       "cap": 10000,
       "dir": "data/puzzles/KN5Eobhkhe4",
       "iss_size": 1265,
+      "iss_url_length": 1285,
       "script_size": 3322
     },
     {
@@ -1632,6 +1678,7 @@
       "cap": 675219,
       "dir": "data/puzzles/QSvdF_EMck4",
       "iss_size": 893,
+      "iss_url_length": 959,
       "script_size": 2176
     },
     {
@@ -1660,6 +1707,7 @@
       "cap": 10000,
       "dir": "data/puzzles/w8Ml0ETI5IM",
       "iss_size": 317,
+      "iss_url_length": 354,
       "script_size": 1079
     },
     {
@@ -1689,6 +1737,7 @@
       "cap": 10000,
       "dir": "data/puzzles/1rt7kZsk8dg",
       "iss_size": 1813,
+      "iss_url_length": 1838,
       "script_size": 2371
     },
     {
@@ -1719,6 +1768,7 @@
       "cap": 1000,
       "dir": "data/puzzles/jgATrHS3pBg",
       "iss_size": 127,
+      "iss_url_length": 170,
       "script_size": 675
     },
     {
@@ -1748,6 +1798,7 @@
       "cap": 10000,
       "dir": "data/puzzles/9emqPISSBEY",
       "iss_size": 755,
+      "iss_url_length": 778,
       "script_size": 1486
     },
     {
@@ -1777,6 +1828,7 @@
       "cap": 10000,
       "dir": "data/puzzles/kt8J6ppyXDk",
       "iss_size": 491,
+      "iss_url_length": 527,
       "script_size": 1149
     },
     {
@@ -1812,6 +1864,7 @@
       "cap": 10000,
       "dir": "data/puzzles/VuY_xH2ILY0",
       "iss_size": 2835,
+      "iss_url_length": 2820,
       "script_size": 4518
     },
     {
@@ -1840,6 +1893,7 @@
       "cap": 10000,
       "dir": "data/puzzles/HzCLLNmYC6s",
       "iss_size": 429,
+      "iss_url_length": 474,
       "script_size": 1033
     },
     {
@@ -1869,6 +1923,7 @@
       "cap": 10000,
       "dir": "data/puzzles/q43M_ngwQtw",
       "iss_size": 2987,
+      "iss_url_length": 3015,
       "script_size": 2996
     },
     {
@@ -1898,6 +1953,7 @@
       "cap": 1000,
       "dir": "data/puzzles/t7cZjAyU50s",
       "iss_size": 244,
+      "iss_url_length": 291,
       "script_size": 847
     },
     {
@@ -1928,6 +1984,7 @@
       "cap": 10000,
       "dir": "data/puzzles/sTWSFmpOhTs",
       "iss_size": 1906,
+      "iss_url_length": 1849,
       "script_size": 2203
     },
     {
@@ -1957,6 +2014,7 @@
       "cap": 30555,
       "dir": "data/puzzles/GSyQiFEF_3w",
       "iss_size": 21058,
+      "iss_url_length": 21096,
       "script_size": 1666
     },
     {
@@ -1993,6 +2051,7 @@
       "cap": 10000,
       "dir": "data/puzzles/sZ-KRO-82og",
       "iss_size": 794,
+      "iss_url_length": 829,
       "script_size": 3173
     },
     {
@@ -2073,6 +2132,7 @@
       "cap": 10000,
       "dir": "data/puzzles/8e8NrFkUqT8",
       "iss_size": 318467,
+      "iss_url_length": 319346,
       "script_size": 2931
     },
     {
@@ -2102,6 +2162,7 @@
       "cap": 10000,
       "dir": "data/puzzles/TB1CIfZeOyU",
       "iss_size": 7631,
+      "iss_url_length": 7076,
       "script_size": 1162
     },
     {
@@ -2130,6 +2191,7 @@
       "cap": 10000,
       "dir": "data/puzzles/qrLbRCZQeSk",
       "iss_size": 569,
+      "iss_url_length": 606,
       "script_size": 1427
     },
     {
@@ -2164,6 +2226,7 @@
       "cap": 10000,
       "dir": "data/puzzles/4OJFWdvh_Mw",
       "iss_size": 1477,
+      "iss_url_length": 1474,
       "script_size": 1526
     },
     {
@@ -2209,6 +2272,7 @@
       "cap": 21000,
       "dir": "data/puzzles/Qd8cn82k5nk",
       "iss_size": 14294,
+      "iss_url_length": 14298,
       "script_size": 4170
     },
     {
@@ -2237,6 +2301,7 @@
       "cap": 10000,
       "dir": "data/puzzles/-c9lo7lYxp8",
       "iss_size": 758,
+      "iss_url_length": 776,
       "script_size": 1444
     },
     {
@@ -2271,6 +2336,7 @@
       "cap": 10000,
       "dir": "data/puzzles/_M5lRitViHo",
       "iss_size": 935,
+      "iss_url_length": 1077,
       "script_size": 1220
     },
     {
@@ -2301,6 +2367,7 @@
       "cap": 10000,
       "dir": "data/puzzles/ovnLIQzpdDY",
       "iss_size": 1188,
+      "iss_url_length": 1211,
       "script_size": 1736
     },
     {
@@ -2330,6 +2397,7 @@
       "cap": 10000,
       "dir": "data/puzzles/z9T9kUTum1M",
       "iss_size": 448,
+      "iss_url_length": 485,
       "script_size": 1295
     },
     {
@@ -2362,6 +2430,7 @@
       "cap": 10000,
       "dir": "data/puzzles/yGgZHkP2lFs",
       "iss_size": 197143,
+      "iss_url_length": 197866,
       "script_size": 3502
     },
     {
@@ -2390,6 +2459,7 @@
       "cap": 10000,
       "dir": "data/puzzles/vNfwa4wPliY",
       "iss_size": 398,
+      "iss_url_length": 446,
       "script_size": 1214
     },
     {
@@ -2422,6 +2492,7 @@
       "cap": 10000,
       "dir": "data/puzzles/rilaoNyWiFs",
       "iss_size": 4131,
+      "iss_url_length": 4143,
       "script_size": 1956
     },
     {
@@ -2447,6 +2518,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -2482,6 +2554,7 @@
       "cap": 169779,
       "dir": "data/puzzles/l8XOG9Vg6Q0",
       "iss_size": 3764,
+      "iss_url_length": 3795,
       "script_size": 7910
     },
     {
@@ -2509,6 +2582,7 @@
       "cap": 364963,
       "dir": "data/puzzles/nLu0P3VYz4c",
       "iss_size": 316,
+      "iss_url_length": 354,
       "script_size": 865
     },
     {
@@ -2551,6 +2625,7 @@
       "cap": 1000,
       "dir": "data/puzzles/flgRSDPPU5Q",
       "iss_size": 4735,
+      "iss_url_length": 4768,
       "script_size": 3754
     },
     {
@@ -2580,6 +2655,7 @@
       "cap": 5000,
       "dir": "data/puzzles/aFdQkHxowPM",
       "iss_size": 38,
+      "iss_url_length": 88,
       "script_size": 341
     },
     {
@@ -2609,6 +2685,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W3hGY3SuOnI.1",
       "iss_size": 720,
+      "iss_url_length": 768,
       "script_size": 1250
     },
     {
@@ -2641,6 +2718,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W3hGY3SuOnI.2",
       "iss_size": 1744,
+      "iss_url_length": 1788,
       "script_size": 1285
     },
     {
@@ -2673,6 +2751,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W3hGY3SuOnI.3",
       "iss_size": 1787,
+      "iss_url_length": 1830,
       "script_size": 1538
     },
     {
@@ -2701,6 +2780,7 @@
       "cap": 21743,
       "dir": "data/puzzles/sfNjC1cCmwk",
       "iss_size": 8720,
+      "iss_url_length": 8789,
       "script_size": 2199
     },
     {
@@ -2730,6 +2810,7 @@
       "cap": 1000,
       "dir": "data/puzzles/BoPjMzjLpZ8",
       "iss_size": 2545,
+      "iss_url_length": 2502,
       "script_size": 992
     },
     {
@@ -2795,6 +2876,7 @@
       "cap": 100000,
       "dir": "data/puzzles/Z30hHxCO7cA",
       "iss_size": 32579,
+      "iss_url_length": 32577,
       "script_size": 4416
     },
     {
@@ -2828,6 +2910,7 @@
       "cap": 1000,
       "dir": "data/puzzles/bQJp4EhO5Sk",
       "iss_size": 793,
+      "iss_url_length": 821,
       "script_size": 2938
     },
     {
@@ -2863,6 +2946,7 @@
       "cap": 1000,
       "dir": "data/puzzles/_Q1fvtndpsA",
       "iss_size": 15380,
+      "iss_url_length": 14705,
       "script_size": 3854
     },
     {
@@ -2891,6 +2975,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Yv_RMyYTeRU",
       "iss_size": 1548,
+      "iss_url_length": 1588,
       "script_size": 2877
     },
     {
@@ -2922,6 +3007,7 @@
       "cap": 1000,
       "dir": "data/puzzles/qkMGbyeLDaM",
       "iss_size": 425,
+      "iss_url_length": 465,
       "script_size": 1390
     },
     {
@@ -2956,6 +3042,7 @@
       "cap": 1000,
       "dir": "data/puzzles/HFiQBcazPFU",
       "iss_size": 4039,
+      "iss_url_length": 4099,
       "script_size": 5296
     },
     {
@@ -2984,6 +3071,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Rn_svsVv_FA",
       "iss_size": 1592,
+      "iss_url_length": 1572,
       "script_size": 1596
     },
     {
@@ -3024,6 +3112,7 @@
       "cap": 46168,
       "dir": "data/puzzles/hvOl5kg76ME",
       "iss_size": 19571,
+      "iss_url_length": 19828,
       "script_size": 3405
     },
     {
@@ -3058,6 +3147,7 @@
       "cap": 1000,
       "dir": "data/puzzles/wDJAhLRxVSo",
       "iss_size": 766,
+      "iss_url_length": 780,
       "script_size": 1495
     },
     {
@@ -3088,6 +3178,7 @@
       "cap": 10000,
       "dir": "data/puzzles/vFZ7Vk6IWRY",
       "iss_size": 2135,
+      "iss_url_length": 2181,
       "script_size": 2514
     },
     {
@@ -3113,6 +3204,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -3145,6 +3237,7 @@
       "cap": 293255,
       "dir": "data/puzzles/xzXnxCeFSt4",
       "iss_size": 1394,
+      "iss_url_length": 1399,
       "script_size": 1647
     },
     {
@@ -3173,6 +3266,7 @@
       "cap": 10000,
       "dir": "data/puzzles/YeuTO9A1Prs",
       "iss_size": 1273,
+      "iss_url_length": 1323,
       "script_size": 2141
     },
     {
@@ -3203,6 +3297,7 @@
       "cap": 10000,
       "dir": "data/puzzles/L5q_FWlkjLQ",
       "iss_size": 441,
+      "iss_url_length": 480,
       "script_size": 993
     },
     {
@@ -3240,6 +3335,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XS4c1OoSmEg.1",
       "iss_size": 249,
+      "iss_url_length": 290,
       "script_size": 1132
     },
     {
@@ -3270,6 +3366,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XS4c1OoSmEg.2",
       "iss_size": 144,
+      "iss_url_length": 190,
       "script_size": 951
     },
     {
@@ -3298,6 +3395,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XmtIOoVaMzY",
       "iss_size": 379,
+      "iss_url_length": 433,
       "script_size": 1613
     },
     {
@@ -3327,6 +3425,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sPNsf_XKvPc",
       "iss_size": 778,
+      "iss_url_length": 805,
       "script_size": 1677
     },
     {
@@ -3354,6 +3453,7 @@
       "cap": 44424,
       "dir": "data/puzzles/ceQrS_1Fa0U",
       "iss_size": 1043,
+      "iss_url_length": 1095,
       "script_size": 1446
     },
     {
@@ -3383,6 +3483,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4GK0bWCsTgM",
       "iss_size": 204,
+      "iss_url_length": 250,
       "script_size": 645
     },
     {
@@ -3417,6 +3518,7 @@
       "cap": 88105,
       "dir": "data/puzzles/-YrYrnwz3bA",
       "iss_size": 1998,
+      "iss_url_length": 2075,
       "script_size": 1616
     },
     {
@@ -3451,6 +3553,7 @@
       "cap": 1000,
       "dir": "data/puzzles/pMu4A-xNuiU",
       "iss_size": 576,
+      "iss_url_length": 617,
       "script_size": 1337
     },
     {
@@ -3481,6 +3584,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XfBbFSZNCys",
       "iss_size": 2805,
+      "iss_url_length": 2850,
       "script_size": 3442
     },
     {
@@ -3514,6 +3618,7 @@
       "cap": 282485,
       "dir": "data/puzzles/0LkWrGwclFo",
       "iss_size": 6004,
+      "iss_url_length": 5706,
       "script_size": 2631
     },
     {
@@ -3553,6 +3658,7 @@
       "cap": 218818,
       "dir": "data/puzzles/LYNLwiEYIYA",
       "iss_size": 6024,
+      "iss_url_length": 6055,
       "script_size": 7496
     },
     {
@@ -3580,6 +3686,7 @@
       "cap": 381679,
       "dir": "data/puzzles/MjqEhvEQiwA",
       "iss_size": 611,
+      "iss_url_length": 653,
       "script_size": 1846
     },
     {
@@ -3607,6 +3714,7 @@
       "cap": 243309,
       "dir": "data/puzzles/2W_fjFG3hs4",
       "iss_size": 619,
+      "iss_url_length": 657,
       "script_size": 1016
     },
     {
@@ -3635,6 +3743,7 @@
       "cap": 1000,
       "dir": "data/puzzles/m3oLHY0zkF4",
       "iss_size": 352,
+      "iss_url_length": 392,
       "script_size": 992
     },
     {
@@ -3665,6 +3774,7 @@
       "cap": 1000,
       "dir": "data/puzzles/hCEi6T73KhM",
       "iss_size": 961,
+      "iss_url_length": 1008,
       "script_size": 1359
     },
     {
@@ -3696,6 +3806,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R1G2sLLsu1U",
       "iss_size": 527,
+      "iss_url_length": 568,
       "script_size": 2021
     },
     {
@@ -3725,6 +3836,7 @@
       "cap": 1000,
       "dir": "data/puzzles/JXd8YgWYFFw",
       "iss_size": 240,
+      "iss_url_length": 287,
       "script_size": 1184
     },
     {
@@ -3755,6 +3867,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zzDjoDoDck4.1",
       "iss_size": 107,
+      "iss_url_length": 154,
       "script_size": 1074
     },
     {
@@ -3788,6 +3901,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zzDjoDoDck4.2",
       "iss_size": 319,
+      "iss_url_length": 383,
       "script_size": 1571
     },
     {
@@ -3826,6 +3940,7 @@
       "cap": 40160,
       "dir": "data/puzzles/Ld1TRj4Zjxc",
       "iss_size": 62533,
+      "iss_url_length": 62314,
       "script_size": 2272
     },
     {
@@ -3865,6 +3980,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mS78-zUDW1E",
       "iss_size": 2548,
+      "iss_url_length": 2557,
       "script_size": 4662
     },
     {
@@ -3900,6 +4016,7 @@
       "cap": 1000,
       "dir": "data/puzzles/IrrtMa7XMDM",
       "iss_size": 6624,
+      "iss_url_length": 6655,
       "script_size": 8167
     },
     {
@@ -3928,6 +4045,7 @@
       "cap": 304878,
       "dir": "data/puzzles/g7YE5xR5-G4",
       "iss_size": 598,
+      "iss_url_length": 628,
       "script_size": 1120
     },
     {
@@ -3965,6 +4083,7 @@
       "cap": 67430,
       "dir": "data/puzzles/UY7fvwAnuck",
       "iss_size": 26345,
+      "iss_url_length": 25283,
       "script_size": 6479
     },
     {
@@ -3997,6 +4116,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lY9YsqOO19E",
       "iss_size": 1089,
+      "iss_url_length": 1110,
       "script_size": 2678
     },
     {
@@ -4025,6 +4145,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Lg5qgYMuKpI",
       "iss_size": 255,
+      "iss_url_length": 302,
       "script_size": 751
     },
     {
@@ -4061,6 +4182,7 @@
       "cap": 100000,
       "dir": "data/puzzles/Epygh1J4Vvw",
       "iss_size": 2209,
+      "iss_url_length": 2252,
       "script_size": 3772
     },
     {
@@ -4088,6 +4210,7 @@
       "cap": 1000,
       "dir": "data/puzzles/htJRav3X9Ik",
       "iss_size": 344,
+      "iss_url_length": 383,
       "script_size": 909
     },
     {
@@ -4118,6 +4241,7 @@
       "cap": 1000,
       "dir": "data/puzzles/X0DLMY9GRk8.1",
       "iss_size": 152,
+      "iss_url_length": 198,
       "script_size": 1939
     },
     {
@@ -4148,6 +4272,7 @@
       "cap": 1000,
       "dir": "data/puzzles/X0DLMY9GRk8.2",
       "iss_size": 164,
+      "iss_url_length": 209,
       "script_size": 1287
     },
     {
@@ -4178,6 +4303,7 @@
       "cap": 1000,
       "dir": "data/puzzles/X0DLMY9GRk8.3",
       "iss_size": 409,
+      "iss_url_length": 444,
       "script_size": 1992
     },
     {
@@ -4223,6 +4349,7 @@
       "cap": 2000,
       "dir": "data/puzzles/ki-YVY1POFE",
       "iss_size": 7379,
+      "iss_url_length": 7391,
       "script_size": 2374
     },
     {
@@ -4256,6 +4383,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7VjrR28PwZc",
       "iss_size": 566,
+      "iss_url_length": 594,
       "script_size": 1783
     },
     {
@@ -4297,6 +4425,7 @@
       "cap": 400000,
       "dir": "data/puzzles/_jkTguG0XnU",
       "iss_size": 2668,
+      "iss_url_length": 2717,
       "script_size": 2106
     },
     {
@@ -4327,6 +4456,7 @@
       "cap": 1000,
       "dir": "data/puzzles/gdEp4SYcfTI",
       "iss_size": 481,
+      "iss_url_length": 517,
       "script_size": 1624
     },
     {
@@ -4366,6 +4496,7 @@
       "cap": 1000,
       "dir": "data/puzzles/_u1SXY_VatM",
       "iss_size": 10535,
+      "iss_url_length": 10610,
       "script_size": 5780
     },
     {
@@ -4399,6 +4530,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ECyhFDcyaIc",
       "iss_size": 728,
+      "iss_url_length": 752,
       "script_size": 2577
     },
     {
@@ -4428,6 +4560,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7FdNel1uFF4",
       "iss_size": 966,
+      "iss_url_length": 1014,
       "script_size": 4259
     },
     {
@@ -4481,6 +4614,7 @@
       "cap": 118906,
       "dir": "data/puzzles/xY6peFT2Sw8",
       "iss_size": 5393,
+      "iss_url_length": 5482,
       "script_size": 3064
     },
     {
@@ -4509,6 +4643,7 @@
       "cap": 1000,
       "dir": "data/puzzles/KOT6mg7QN_A",
       "iss_size": 755,
+      "iss_url_length": 786,
       "script_size": 1443
     },
     {
@@ -4547,6 +4682,7 @@
       "cap": 16157,
       "dir": "data/puzzles/cHi8yZVepgQ",
       "iss_size": 45670,
+      "iss_url_length": 45704,
       "script_size": 10164
     },
     {
@@ -4589,6 +4725,7 @@
       "cap": 2000000,
       "dir": "data/puzzles/al5r5VhjyP8",
       "iss_size": 16272,
+      "iss_url_length": 16307,
       "script_size": 7603
     },
     {
@@ -4619,6 +4756,7 @@
       "cap": 1000,
       "dir": "data/puzzles/MDx8QVOCub8.1",
       "iss_size": 154,
+      "iss_url_length": 199,
       "script_size": 1068
     },
     {
@@ -4650,6 +4788,7 @@
       "cap": 1000,
       "dir": "data/puzzles/MDx8QVOCub8.2",
       "iss_size": 192,
+      "iss_url_length": 236,
       "script_size": 975
     },
     {
@@ -4680,6 +4819,7 @@
       "cap": 1000,
       "dir": "data/puzzles/MDx8QVOCub8.3",
       "iss_size": 169,
+      "iss_url_length": 214,
       "script_size": 997
     },
     {
@@ -4711,6 +4851,7 @@
       "cap": 200000,
       "dir": "data/puzzles/KUswbPDx1Sg",
       "iss_size": 2320,
+      "iss_url_length": 2367,
       "script_size": 4099
     },
     {
@@ -4744,6 +4885,7 @@
       "cap": 1000,
       "dir": "data/puzzles/konQKbnvhoQ",
       "iss_size": 836,
+      "iss_url_length": 873,
       "script_size": 1959
     },
     {
@@ -4772,6 +4914,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Qm8DC7x9lEM",
       "iss_size": 1171,
+      "iss_url_length": 1224,
       "script_size": 1629
     },
     {
@@ -4801,6 +4944,7 @@
       "cap": 1000,
       "dir": "data/puzzles/d8z973jgo6U",
       "iss_size": 344,
+      "iss_url_length": 386,
       "script_size": 1083
     },
     {
@@ -4829,6 +4973,7 @@
       "cap": 196078,
       "dir": "data/puzzles/Maqxv03bjIw",
       "iss_size": 3864,
+      "iss_url_length": 3739,
       "script_size": 2187
     },
     {
@@ -4856,6 +5001,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lzcnEnB5tvo",
       "iss_size": 299,
+      "iss_url_length": 344,
       "script_size": 778
     },
     {
@@ -4885,6 +5031,7 @@
       "cap": 1000,
       "dir": "data/puzzles/X_3eRoD7uYY",
       "iss_size": 443,
+      "iss_url_length": 484,
       "script_size": 1806
     },
     {
@@ -4931,6 +5078,7 @@
       "cap": 1000,
       "dir": "data/puzzles/m5EVai6r_VA",
       "iss_size": 2118,
+      "iss_url_length": 2169,
       "script_size": 5492
     },
     {
@@ -4964,6 +5112,7 @@
       "cap": 3528,
       "dir": "data/puzzles/PZkQtQow_MY",
       "iss_size": 121463,
+      "iss_url_length": 121506,
       "script_size": 4743
     },
     {
@@ -4991,6 +5140,7 @@
       "cap": 1000,
       "dir": "data/puzzles/L_my9XStVmo",
       "iss_size": 449,
+      "iss_url_length": 487,
       "script_size": 1228
     },
     {
@@ -5021,6 +5171,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3fN2jrb6qHM.1",
       "iss_size": 214,
+      "iss_url_length": 259,
       "script_size": 1216
     },
     {
@@ -5052,6 +5203,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3fN2jrb6qHM.2",
       "iss_size": 431,
+      "iss_url_length": 470,
       "script_size": 1194
     },
     {
@@ -5083,6 +5235,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3fN2jrb6qHM.3",
       "iss_size": 184,
+      "iss_url_length": 228,
       "script_size": 1158
     },
     {
@@ -5108,6 +5261,7 @@
       "cap": 1000,
       "dir": "data/puzzles/hGCEG4_r9iI",
       "iss_size": 22,
+      "iss_url_length": 74,
       "script_size": 1009
     },
     {
@@ -5142,6 +5296,7 @@
       "cap": 100000,
       "dir": "data/puzzles/ok-r1oK0fSk",
       "iss_size": 12074,
+      "iss_url_length": 12089,
       "script_size": 10416
     },
     {
@@ -5180,6 +5335,7 @@
       "cap": 1000,
       "dir": "data/puzzles/OF7CAtGkizk",
       "iss_size": 23215,
+      "iss_url_length": 23259,
       "script_size": 7339
     },
     {
@@ -5208,6 +5364,7 @@
       "cap": 230414,
       "dir": "data/puzzles/12j4_BOirnY",
       "iss_size": 415,
+      "iss_url_length": 461,
       "script_size": 1304
     },
     {
@@ -5237,6 +5394,7 @@
       "cap": 1000,
       "dir": "data/puzzles/teAGa_9VV7U",
       "iss_size": 466,
+      "iss_url_length": 500,
       "script_size": 1536
     },
     {
@@ -5265,6 +5423,7 @@
       "cap": 1000,
       "dir": "data/puzzles/KTu-Nu1gjjg",
       "iss_size": 2947,
+      "iss_url_length": 2983,
       "script_size": 3054
     },
     {
@@ -5295,6 +5454,7 @@
       "cap": 1000,
       "dir": "data/puzzles/CKHnlFksvXI",
       "iss_size": 756,
+      "iss_url_length": 769,
       "script_size": 3004
     },
     {
@@ -5324,6 +5484,7 @@
       "cap": 1000,
       "dir": "data/puzzles/d7BhfgTXQrc",
       "iss_size": 908,
+      "iss_url_length": 947,
       "script_size": 1895
     },
     {
@@ -5355,6 +5516,7 @@
       "cap": 1000,
       "dir": "data/puzzles/HmYktrkXLCc",
       "iss_size": 476,
+      "iss_url_length": 514,
       "script_size": 1532
     },
     {
@@ -5383,6 +5545,7 @@
       "cap": 1000,
       "dir": "data/puzzles/FYaBR_jWnFs",
       "iss_size": 1239,
+      "iss_url_length": 1292,
       "script_size": 3222
     },
     {
@@ -5415,6 +5578,7 @@
       "cap": 10000,
       "dir": "data/puzzles/HVo4_EckxxY",
       "iss_size": 784,
+      "iss_url_length": 829,
       "script_size": 2990
     },
     {
@@ -5443,6 +5607,7 @@
       "cap": 1000,
       "dir": "data/puzzles/FtR_Qtg62b0",
       "iss_size": 548,
+      "iss_url_length": 585,
       "script_size": 2738
     },
     {
@@ -5478,6 +5643,7 @@
       "cap": 47058,
       "dir": "data/puzzles/jVMQiwCzc2k",
       "iss_size": 8373,
+      "iss_url_length": 8418,
       "script_size": 8907
     },
     {
@@ -5509,6 +5675,7 @@
       "cap": 1000,
       "dir": "data/puzzles/gk4rIG7COrg",
       "iss_size": 288,
+      "iss_url_length": 335,
       "script_size": 879
     },
     {
@@ -5537,6 +5704,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nDOET-_1e4c",
       "iss_size": 457,
+      "iss_url_length": 498,
       "script_size": 1065
     },
     {
@@ -5566,6 +5734,7 @@
       "cap": 1000,
       "dir": "data/puzzles/rIO26rioOLI",
       "iss_size": 673,
+      "iss_url_length": 718,
       "script_size": 1805
     },
     {
@@ -5593,6 +5762,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ktjNaziMZIg",
       "iss_size": 139,
+      "iss_url_length": 185,
       "script_size": 1121
     },
     {
@@ -5621,6 +5791,7 @@
       "cap": 178890,
       "dir": "data/puzzles/GggK620f52I",
       "iss_size": 1241,
+      "iss_url_length": 1292,
       "script_size": 2745
     },
     {
@@ -5652,6 +5823,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YsdA3pQaagU",
       "iss_size": 296,
+      "iss_url_length": 341,
       "script_size": 1619
     },
     {
@@ -5681,6 +5853,7 @@
       "cap": 1000,
       "dir": "data/puzzles/x5dhRvoStw0",
       "iss_size": 292,
+      "iss_url_length": 332,
       "script_size": 1082
     },
     {
@@ -5709,6 +5882,7 @@
       "cap": 1000,
       "dir": "data/puzzles/z54K1xbazxg",
       "iss_size": 323,
+      "iss_url_length": 367,
       "script_size": 1064
     },
     {
@@ -5740,6 +5914,7 @@
       "cap": 318471,
       "dir": "data/puzzles/kTB2LzuY3HQ",
       "iss_size": 342,
+      "iss_url_length": 388,
       "script_size": 1942
     },
     {
@@ -5769,6 +5944,7 @@
       "cap": 1000,
       "dir": "data/puzzles/oVFrx5oJdYo",
       "iss_size": 734,
+      "iss_url_length": 757,
       "script_size": 2361
     },
     {
@@ -5802,6 +5978,7 @@
       "cap": 104931,
       "dir": "data/puzzles/eZi4pISOrBQ",
       "iss_size": 5590,
+      "iss_url_length": 5627,
       "script_size": 8514
     },
     {
@@ -5830,6 +6007,7 @@
       "cap": 1000,
       "dir": "data/puzzles/blPgSzctUMg",
       "iss_size": 367,
+      "iss_url_length": 405,
       "script_size": 1780
     },
     {
@@ -5857,6 +6035,7 @@
       "cap": 1000,
       "dir": "data/puzzles/GIVSl6pfT5Q",
       "iss_size": 249,
+      "iss_url_length": 296,
       "script_size": 958
     },
     {
@@ -5884,6 +6063,7 @@
       "cap": 374531,
       "dir": "data/puzzles/1WoNu_Hze9k",
       "iss_size": 237,
+      "iss_url_length": 290,
       "script_size": 1051
     },
     {
@@ -5924,6 +6104,7 @@
       "cap": 100000,
       "dir": "data/puzzles/Wq1n5wziTVo",
       "iss_size": 3010,
+      "iss_url_length": 2992,
       "script_size": 4294
     },
     {
@@ -5960,6 +6141,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7iuxM-Xtsxw",
       "iss_size": 17656,
+      "iss_url_length": 16126,
       "script_size": 2831
     },
     {
@@ -5991,6 +6173,7 @@
       "cap": 225733,
       "dir": "data/puzzles/vVTSGvQZs3k",
       "iss_size": 390,
+      "iss_url_length": 429,
       "script_size": 1569
     },
     {
@@ -6024,6 +6207,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nsAmm8e6CfY",
       "iss_size": 9008,
+      "iss_url_length": 8817,
       "script_size": 3082
     },
     {
@@ -6052,6 +6236,7 @@
       "cap": 1000,
       "dir": "data/puzzles/M_BIYhV1jaQ",
       "iss_size": 251,
+      "iss_url_length": 292,
       "script_size": 858
     },
     {
@@ -6084,6 +6269,7 @@
       "cap": 126103,
       "dir": "data/puzzles/uYq9eYSRZRs",
       "iss_size": 1421,
+      "iss_url_length": 1447,
       "script_size": 1765
     },
     {
@@ -6139,6 +6325,7 @@
       "cap": 1000,
       "dir": "data/puzzles/2O7JJsAvLY4",
       "iss_size": 7358,
+      "iss_url_length": 7381,
       "script_size": 6035
     },
     {
@@ -6248,6 +6435,7 @@
       "cap": 41339,
       "dir": "data/puzzles/bal9xHVAFd4",
       "iss_size": 95899,
+      "iss_url_length": 95415,
       "script_size": 7068
     },
     {
@@ -6275,6 +6463,7 @@
       "cap": 380228,
       "dir": "data/puzzles/0cvA-XDiQNQ",
       "iss_size": 384,
+      "iss_url_length": 427,
       "script_size": 1034
     },
     {
@@ -6305,6 +6494,7 @@
       "cap": 1000,
       "dir": "data/puzzles/b-MR1mLKgCk",
       "iss_size": 604,
+      "iss_url_length": 644,
       "script_size": 3720
     },
     {
@@ -6363,6 +6553,7 @@
       "cap": 11328,
       "dir": "data/puzzles/DVy_zGc9UQI",
       "iss_size": 22845,
+      "iss_url_length": 22785,
       "script_size": 3649
     },
     {
@@ -6393,6 +6584,7 @@
       "cap": 178253,
       "dir": "data/puzzles/vjXf8PHYA_k",
       "iss_size": 1003,
+      "iss_url_length": 1034,
       "script_size": 1766
     },
     {
@@ -6421,6 +6613,7 @@
       "cap": 1000,
       "dir": "data/puzzles/00bV9KL-kco",
       "iss_size": 297,
+      "iss_url_length": 341,
       "script_size": 1104
     },
     {
@@ -6450,6 +6643,7 @@
       "cap": 1000,
       "dir": "data/puzzles/D_cULHb_br4",
       "iss_size": 14249,
+      "iss_url_length": 14291,
       "script_size": 3313
     },
     {
@@ -6483,6 +6677,7 @@
       "cap": 287356,
       "dir": "data/puzzles/T03vUTiJBjk",
       "iss_size": 5310,
+      "iss_url_length": 5183,
       "script_size": 4473
     },
     {
@@ -6517,6 +6712,7 @@
       "cap": 1000,
       "dir": "data/puzzles/TwD2L_HuzsE",
       "iss_size": 1308,
+      "iss_url_length": 1352,
       "script_size": 2638
     },
     {
@@ -6545,6 +6741,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mRtzcjaCntQ",
       "iss_size": 271,
+      "iss_url_length": 323,
       "script_size": 1478
     },
     {
@@ -6576,6 +6773,7 @@
       "cap": 1000,
       "dir": "data/puzzles/S4wS6UDKfdw",
       "iss_size": 509,
+      "iss_url_length": 541,
       "script_size": 1815
     },
     {
@@ -6604,6 +6802,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VUl7u_2sse0",
       "iss_size": 119,
+      "iss_url_length": 166,
       "script_size": 790
     },
     {
@@ -6636,6 +6835,7 @@
       "cap": 1000,
       "dir": "data/puzzles/oW7lNJCC0mw",
       "iss_size": 1026,
+      "iss_url_length": 1062,
       "script_size": 4577
     },
     {
@@ -6664,6 +6864,7 @@
       "cap": 304878,
       "dir": "data/puzzles/lfXT_8yHU6A",
       "iss_size": 396,
+      "iss_url_length": 436,
       "script_size": 1491
     },
     {
@@ -6696,6 +6897,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WvXfoztQZJc",
       "iss_size": 732,
+      "iss_url_length": 761,
       "script_size": 2262
     },
     {
@@ -6735,6 +6937,7 @@
       "cap": 155763,
       "dir": "data/puzzles/us_d2RLkoDQ",
       "iss_size": 2848,
+      "iss_url_length": 2975,
       "script_size": 5533
     },
     {
@@ -6763,6 +6966,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Aq_2DUcQhNs",
       "iss_size": 651,
+      "iss_url_length": 690,
       "script_size": 1926
     },
     {
@@ -6790,6 +6994,7 @@
       "cap": 277777,
       "dir": "data/puzzles/xp6ozEjIhJ8",
       "iss_size": 720,
+      "iss_url_length": 772,
       "script_size": 2094
     },
     {
@@ -6825,6 +7030,7 @@
       "cap": 1000,
       "dir": "data/puzzles/wZps_EnRcNE",
       "iss_size": 5569,
+      "iss_url_length": 5600,
       "script_size": 9654
     },
     {
@@ -6856,6 +7062,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Dj4jGu9PQcs",
       "iss_size": 457,
+      "iss_url_length": 502,
       "script_size": 3801
     },
     {
@@ -6886,6 +7093,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3dv4CIY5Mk8",
       "iss_size": 895,
+      "iss_url_length": 910,
       "script_size": 1677
     },
     {
@@ -6913,6 +7121,7 @@
       "cap": 1000,
       "dir": "data/puzzles/yuIocr3HDtk",
       "iss_size": 793,
+      "iss_url_length": 821,
       "script_size": 1998
     },
     {
@@ -6996,6 +7205,7 @@
       "cap": 9053,
       "dir": "data/puzzles/8L4ffie834I",
       "iss_size": 15095,
+      "iss_url_length": 15126,
       "script_size": 7787
     },
     {
@@ -7030,6 +7240,7 @@
       "cap": 26788,
       "dir": "data/puzzles/1t0o6iZtvm8",
       "iss_size": 30432,
+      "iss_url_length": 30464,
       "script_size": 5566
     },
     {
@@ -7058,6 +7269,7 @@
       "cap": 1000,
       "dir": "data/puzzles/vC0McY40Cjk",
       "iss_size": 391,
+      "iss_url_length": 429,
       "script_size": 1182
     },
     {
@@ -7097,6 +7309,7 @@
       "cap": 1000,
       "dir": "data/puzzles/opsh74RHdGE",
       "iss_size": 956,
+      "iss_url_length": 1046,
       "script_size": 3015
     },
     {
@@ -7133,6 +7346,7 @@
       "cap": 1000,
       "dir": "data/puzzles/DY9HqMf94LQ",
       "iss_size": 6164,
+      "iss_url_length": 6187,
       "script_size": 7181
     },
     {
@@ -7163,6 +7377,7 @@
       "cap": 1000,
       "dir": "data/puzzles/-xv-cA1BtGU",
       "iss_size": 425,
+      "iss_url_length": 462,
       "script_size": 1778
     },
     {
@@ -7193,6 +7408,7 @@
       "cap": 1000,
       "dir": "data/puzzles/SBV0hIBGvEs",
       "iss_size": 487,
+      "iss_url_length": 520,
       "script_size": 1618
     },
     {
@@ -7234,6 +7450,7 @@
       "cap": 11582,
       "dir": "data/puzzles/tHUviGm_cvY",
       "iss_size": 11480,
+      "iss_url_length": 11513,
       "script_size": 6744
     },
     {
@@ -7278,6 +7495,7 @@
       "cap": 238095,
       "dir": "data/puzzles/02ePdhC9Rzw",
       "iss_size": 1242,
+      "iss_url_length": 1293,
       "script_size": 2922
     },
     {
@@ -7306,6 +7524,7 @@
       "cap": 334448,
       "dir": "data/puzzles/PcJNQCckiKs",
       "iss_size": 751,
+      "iss_url_length": 789,
       "script_size": 1220
     },
     {
@@ -7333,6 +7552,7 @@
       "cap": 1000,
       "dir": "data/puzzles/yIDjPjMU0Ro",
       "iss_size": 438,
+      "iss_url_length": 491,
       "script_size": 1480
     },
     {
@@ -7361,6 +7581,7 @@
       "cap": 1000,
       "dir": "data/puzzles/j7F6Po1fpWA",
       "iss_size": 79,
+      "iss_url_length": 128,
       "script_size": 1046
     },
     {
@@ -7386,6 +7607,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -7411,6 +7633,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -7440,6 +7663,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1gnv6iM2sew",
       "iss_size": 398,
+      "iss_url_length": 447,
       "script_size": 860
     },
     {
@@ -7470,6 +7694,7 @@
       "cap": 353356,
       "dir": "data/puzzles/s4Sgt2unVSY",
       "iss_size": 306,
+      "iss_url_length": 348,
       "script_size": 1491
     },
     {
@@ -7505,6 +7730,7 @@
       "cap": 199600,
       "dir": "data/puzzles/i_LrY6Kc7pU",
       "iss_size": 13928,
+      "iss_url_length": 13394,
       "script_size": 6305
     },
     {
@@ -7535,6 +7761,7 @@
       "cap": 1000,
       "dir": "data/puzzles/01KC84S7FJ8",
       "iss_size": 360,
+      "iss_url_length": 394,
       "script_size": 1289
     },
     {
@@ -7560,6 +7787,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -7600,6 +7828,7 @@
       "cap": 266666,
       "dir": "data/puzzles/PkPU_cSbrfs",
       "iss_size": 2118,
+      "iss_url_length": 2184,
       "script_size": 2682
     },
     {
@@ -7630,6 +7859,7 @@
       "cap": 1000,
       "dir": "data/puzzles/PDAmCIN-8n8",
       "iss_size": 453,
+      "iss_url_length": 490,
       "script_size": 1549
     },
     {
@@ -7657,6 +7887,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4NyCrykTZU8",
       "iss_size": 332,
+      "iss_url_length": 368,
       "script_size": 864
     },
     {
@@ -7686,6 +7917,7 @@
       "cap": 1000,
       "dir": "data/puzzles/oURYwBKgVCM",
       "iss_size": 425,
+      "iss_url_length": 461,
       "script_size": 1580
     },
     {
@@ -7721,6 +7953,7 @@
       "cap": 128534,
       "dir": "data/puzzles/bhKtKFEy0AM",
       "iss_size": 4453,
+      "iss_url_length": 4481,
       "script_size": 6043
     },
     {
@@ -7754,6 +7987,7 @@
       "cap": 144508,
       "dir": "data/puzzles/3srmjGZskE4",
       "iss_size": 1327,
+      "iss_url_length": 1369,
       "script_size": 5313
     },
     {
@@ -7823,6 +8057,7 @@
       "cap": 2826,
       "dir": "data/puzzles/DQBFJkGqYgo",
       "iss_size": 432172,
+      "iss_url_length": 432140,
       "script_size": 6979
     },
     {
@@ -7852,6 +8087,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Qa9r_bEjVfk",
       "iss_size": 208,
+      "iss_url_length": 253,
       "script_size": 1076
     },
     {
@@ -7922,6 +8158,7 @@
       "cap": 1000,
       "dir": "data/puzzles/jtQcQ-Y8Ur0",
       "iss_size": 13438,
+      "iss_url_length": 13669,
       "script_size": 8104
     },
     {
@@ -7952,6 +8189,7 @@
       "cap": 1000,
       "dir": "data/puzzles/tKGjkTJj9lU",
       "iss_size": 712,
+      "iss_url_length": 749,
       "script_size": 2628
     },
     {
@@ -7983,6 +8221,7 @@
       "cap": 1000,
       "dir": "data/puzzles/LUtSGTShzNs",
       "iss_size": 357,
+      "iss_url_length": 389,
       "script_size": 1278
     },
     {
@@ -8013,6 +8252,7 @@
       "cap": 306748,
       "dir": "data/puzzles/1HuNjcLWlPE",
       "iss_size": 410,
+      "iss_url_length": 449,
       "script_size": 1946
     },
     {
@@ -8044,6 +8284,7 @@
       "cap": 246913,
       "dir": "data/puzzles/txyVrI5MDDI",
       "iss_size": 664,
+      "iss_url_length": 695,
       "script_size": 2414
     },
     {
@@ -8091,6 +8332,7 @@
       "cap": 187617,
       "dir": "data/puzzles/OG9M9bq_Ies",
       "iss_size": 4841,
+      "iss_url_length": 4935,
       "script_size": 8309
     },
     {
@@ -8126,6 +8368,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1_sdlARfHcc",
       "iss_size": 826,
+      "iss_url_length": 877,
       "script_size": 3537
     },
     {
@@ -8159,6 +8402,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ICQ-7bCTVFo",
       "iss_size": 513,
+      "iss_url_length": 545,
       "script_size": 2262
     },
     {
@@ -8191,6 +8435,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4SC7itCISLg",
       "iss_size": 3921,
+      "iss_url_length": 3949,
       "script_size": 3953
     },
     {
@@ -8218,6 +8463,7 @@
       "cap": 1000,
       "dir": "data/puzzles/n6eLrr5WNQU",
       "iss_size": 384,
+      "iss_url_length": 429,
       "script_size": 1235
     },
     {
@@ -8246,6 +8492,7 @@
       "cap": 1000,
       "dir": "data/puzzles/GgmXRnvENZ8",
       "iss_size": 449,
+      "iss_url_length": 502,
       "script_size": 2388
     },
     {
@@ -8275,6 +8522,7 @@
       "cap": 1000,
       "dir": "data/puzzles/OYg-DWiDRew",
       "iss_size": 586,
+      "iss_url_length": 624,
       "script_size": 1318
     },
     {
@@ -8306,6 +8554,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3s5hp5ymc7Y",
       "iss_size": 1100,
+      "iss_url_length": 1133,
       "script_size": 2505
     },
     {
@@ -8331,6 +8580,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -8367,6 +8617,7 @@
       "cap": 62932,
       "dir": "data/puzzles/S86fcufw2T8",
       "iss_size": 5570,
+      "iss_url_length": 5594,
       "script_size": 7537
     },
     {
@@ -8394,6 +8645,7 @@
       "cap": 1000,
       "dir": "data/puzzles/OFuVsaFv1ZE",
       "iss_size": 18,
+      "iss_url_length": 70,
       "script_size": 904
     },
     {
@@ -8441,6 +8693,7 @@
       "cap": 1000,
       "dir": "data/puzzles/V4dYzQDM6R4",
       "iss_size": 9733,
+      "iss_url_length": 9764,
       "script_size": 4825
     },
     {
@@ -8470,6 +8723,7 @@
       "cap": 1000,
       "dir": "data/puzzles/NvZ9HNCpeyM",
       "iss_size": 378,
+      "iss_url_length": 414,
       "script_size": 1519
     },
     {
@@ -8554,6 +8808,7 @@
       "cap": 1000,
       "dir": "data/puzzles/njbxaVs-HgA",
       "iss_size": 3300,
+      "iss_url_length": 3534,
       "script_size": 4014
     },
     {
@@ -8583,6 +8838,7 @@
       "cap": 311526,
       "dir": "data/puzzles/sKg_1H2_e1U",
       "iss_size": 1356,
+      "iss_url_length": 1408,
       "script_size": 2942
     },
     {
@@ -8612,6 +8868,7 @@
       "cap": 1000,
       "dir": "data/puzzles/SHf6H6YHd6k",
       "iss_size": 430,
+      "iss_url_length": 468,
       "script_size": 1505
     },
     {
@@ -8639,6 +8896,7 @@
       "cap": 307692,
       "dir": "data/puzzles/k7MMOd13AdQ",
       "iss_size": 449,
+      "iss_url_length": 493,
       "script_size": 1471
     },
     {
@@ -8666,6 +8924,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VUelKDmaZvM",
       "iss_size": 420,
+      "iss_url_length": 453,
       "script_size": 1075
     },
     {
@@ -8696,6 +8955,7 @@
       "cap": 225225,
       "dir": "data/puzzles/I-2gLlYheHs",
       "iss_size": 440,
+      "iss_url_length": 477,
       "script_size": 2076
     },
     {
@@ -8725,6 +8985,7 @@
       "cap": 1000,
       "dir": "data/puzzles/SHoPEtcVGQA",
       "iss_size": 461,
+      "iss_url_length": 490,
       "script_size": 1161
     },
     {
@@ -8753,6 +9014,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ueofJZ22joA",
       "iss_size": 1311,
+      "iss_url_length": 1347,
       "script_size": 2268
     },
     {
@@ -8782,6 +9044,7 @@
       "cap": 1000,
       "dir": "data/puzzles/jKIeg9NhF_8",
       "iss_size": 280,
+      "iss_url_length": 325,
       "script_size": 1122
     },
     {
@@ -8810,6 +9073,7 @@
       "cap": 1000,
       "dir": "data/puzzles/C59o3VPre2o",
       "iss_size": 177,
+      "iss_url_length": 226,
       "script_size": 929
     },
     {
@@ -8841,6 +9105,7 @@
       "cap": 1000,
       "dir": "data/puzzles/H1OAzPyDAAY",
       "iss_size": 544,
+      "iss_url_length": 578,
       "script_size": 2133
     },
     {
@@ -8878,6 +9143,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nRUk80-7SvA",
       "iss_size": 81497,
+      "iss_url_length": 81476,
       "script_size": 4155
     },
     {
@@ -8905,6 +9171,7 @@
       "cap": 1000,
       "dir": "data/puzzles/q3K76ZFz3mk",
       "iss_size": 368,
+      "iss_url_length": 410,
       "script_size": 957
     },
     {
@@ -8935,6 +9202,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WbDuklPfeSQ",
       "iss_size": 3462,
+      "iss_url_length": 3372,
       "script_size": 3165
     },
     {
@@ -8964,6 +9232,7 @@
       "cap": 1000,
       "dir": "data/puzzles/JAfswb4nVYU",
       "iss_size": 576,
+      "iss_url_length": 612,
       "script_size": 2349
     },
     {
@@ -8989,6 +9258,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -9022,6 +9292,7 @@
       "cap": 366300,
       "dir": "data/puzzles/8H98gtZSEVA",
       "iss_size": 334,
+      "iss_url_length": 376,
       "script_size": 2064
     },
     {
@@ -9053,6 +9324,7 @@
       "cap": 152905,
       "dir": "data/puzzles/XQzSE16SMfE",
       "iss_size": 2390,
+      "iss_url_length": 2440,
       "script_size": 2597
     },
     {
@@ -9081,6 +9353,7 @@
       "cap": 143061,
       "dir": "data/puzzles/gEK_cN8I0F4",
       "iss_size": 1264,
+      "iss_url_length": 1315,
       "script_size": 3166
     },
     {
@@ -9114,6 +9387,7 @@
       "cap": 1000,
       "dir": "data/puzzles/MpFUTwgEJFc",
       "iss_size": 18030,
+      "iss_url_length": 18072,
       "script_size": 6231
     },
     {
@@ -9157,6 +9431,7 @@
       "cap": 27555,
       "dir": "data/puzzles/pGrD3QJBpKU",
       "iss_size": 12611,
+      "iss_url_length": 12686,
       "script_size": 6257
     },
     {
@@ -9209,6 +9484,7 @@
       "cap": 1000,
       "dir": "data/puzzles/oyjQPDL4BjE",
       "iss_size": 2364,
+      "iss_url_length": 2394,
       "script_size": 5705
     },
     {
@@ -9240,6 +9516,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7_JVTn-UZQs",
       "iss_size": 225,
+      "iss_url_length": 269,
       "script_size": 1234
     },
     {
@@ -9270,6 +9547,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WvmseoqJAAA",
       "iss_size": 366,
+      "iss_url_length": 407,
       "script_size": 1477
     },
     {
@@ -9310,6 +9588,7 @@
       "cap": 1973684,
       "dir": "data/puzzles/-dwKlM3DGXo",
       "iss_size": 2910,
+      "iss_url_length": 2959,
       "script_size": 4268
     },
     {
@@ -9335,6 +9614,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -9363,6 +9643,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1ICC9r-FNwE",
       "iss_size": 439,
+      "iss_url_length": 472,
       "script_size": 1985
     },
     {
@@ -9421,6 +9702,7 @@
       "cap": 13164,
       "dir": "data/puzzles/DvbnnTUdByY",
       "iss_size": 20351,
+      "iss_url_length": 20302,
       "script_size": 4844
     },
     {
@@ -9449,6 +9731,7 @@
       "cap": 172711,
       "dir": "data/puzzles/YL-Mf2KXR88",
       "iss_size": 811,
+      "iss_url_length": 849,
       "script_size": 1179
     },
     {
@@ -9482,6 +9765,7 @@
       "cap": 1000,
       "dir": "data/puzzles/va4P_5HUkuM",
       "iss_size": 627,
+      "iss_url_length": 658,
       "script_size": 2926
     },
     {
@@ -9522,6 +9806,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mQM38sD3bRw",
       "iss_size": 7297,
+      "iss_url_length": 7324,
       "script_size": 7951
     },
     {
@@ -9550,6 +9835,7 @@
       "cap": 386100,
       "dir": "data/puzzles/oOBCZNrhJRY",
       "iss_size": 288,
+      "iss_url_length": 331,
       "script_size": 1065
     },
     {
@@ -9578,6 +9864,7 @@
       "cap": 265251,
       "dir": "data/puzzles/RJYpSZ0frQM",
       "iss_size": 1270,
+      "iss_url_length": 1335,
       "script_size": 2557
     },
     {
@@ -9603,6 +9890,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -9632,6 +9920,7 @@
       "cap": 1000,
       "dir": "data/puzzles/noCVJzMy9t4",
       "iss_size": 393,
+      "iss_url_length": 429,
       "script_size": 1369
     },
     {
@@ -9659,6 +9948,7 @@
       "cap": 1000,
       "dir": "data/puzzles/OzEl2XRLtdU",
       "iss_size": 120,
+      "iss_url_length": 172,
       "script_size": 697
     },
     {
@@ -9687,6 +9977,7 @@
       "cap": 1000,
       "dir": "data/puzzles/N4LskHYSfCg",
       "iss_size": 420,
+      "iss_url_length": 462,
       "script_size": 1230
     },
     {
@@ -9729,6 +10020,7 @@
       "cap": 186915,
       "dir": "data/puzzles/KKZTUBLzCto",
       "iss_size": 792,
+      "iss_url_length": 844,
       "script_size": 1860
     },
     {
@@ -9758,6 +10050,7 @@
       "cap": 186567,
       "dir": "data/puzzles/S5VVS9SSRek",
       "iss_size": 5123,
+      "iss_url_length": 4838,
       "script_size": 2763
     },
     {
@@ -9790,6 +10083,7 @@
       "cap": 534759,
       "dir": "data/puzzles/pU9_2Id5HH0",
       "iss_size": 1016,
+      "iss_url_length": 1043,
       "script_size": 5235
     },
     {
@@ -9828,6 +10122,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RbjLl7O_Qx0",
       "iss_size": 565,
+      "iss_url_length": 617,
       "script_size": 2863
     },
     {
@@ -9858,6 +10153,7 @@
       "cap": 1000,
       "dir": "data/puzzles/AugLh4Y8XdA",
       "iss_size": 387,
+      "iss_url_length": 428,
       "script_size": 1724
     },
     {
@@ -9886,6 +10182,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VDFZ9Wlohik",
       "iss_size": 307,
+      "iss_url_length": 349,
       "script_size": 923
     },
     {
@@ -9919,6 +10216,7 @@
       "cap": 3534,
       "dir": "data/puzzles/HCeC3df8Lvk",
       "iss_size": 143013,
+      "iss_url_length": 128037,
       "script_size": 9318
     },
     {
@@ -9947,6 +10245,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sFUTQioeDaw",
       "iss_size": 225,
+      "iss_url_length": 269,
       "script_size": 823
     },
     {
@@ -9976,6 +10275,7 @@
       "cap": 234741,
       "dir": "data/puzzles/32_sR53VdHM",
       "iss_size": 445,
+      "iss_url_length": 486,
       "script_size": 1253
     },
     {
@@ -10006,6 +10306,7 @@
       "cap": 1000,
       "dir": "data/puzzles/L4BKOaUr1GE",
       "iss_size": 293,
+      "iss_url_length": 337,
       "script_size": 1308
     },
     {
@@ -10035,6 +10336,7 @@
       "cap": 320512,
       "dir": "data/puzzles/csSsYQLECE8",
       "iss_size": 137,
+      "iss_url_length": 186,
       "script_size": 944
     },
     {
@@ -10063,6 +10365,7 @@
       "cap": 290697,
       "dir": "data/puzzles/YypVfbIEfDE",
       "iss_size": 364,
+      "iss_url_length": 412,
       "script_size": 2263
     },
     {
@@ -10094,6 +10397,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1Jlg1377b1I",
       "iss_size": 213,
+      "iss_url_length": 256,
       "script_size": 1161
     },
     {
@@ -10122,6 +10426,7 @@
       "cap": 1000,
       "dir": "data/puzzles/wPq635rHE28",
       "iss_size": 140,
+      "iss_url_length": 189,
       "script_size": 765
     },
     {
@@ -10154,6 +10459,7 @@
       "cap": 1000,
       "dir": "data/puzzles/kj16_BnT0J4",
       "iss_size": 610,
+      "iss_url_length": 638,
       "script_size": 3161
     },
     {
@@ -10190,6 +10496,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lRoIHses5nM",
       "iss_size": 668,
+      "iss_url_length": 706,
       "script_size": 3631
     },
     {
@@ -10219,6 +10526,7 @@
       "cap": 1000,
       "dir": "data/puzzles/6ybbET5VuyA",
       "iss_size": 2144,
+      "iss_url_length": 2035,
       "script_size": 2570
     },
     {
@@ -10253,6 +10561,7 @@
       "cap": 1000,
       "dir": "data/puzzles/uK4MaszybIM",
       "iss_size": 2289,
+      "iss_url_length": 2275,
       "script_size": 3787
     },
     {
@@ -10283,6 +10592,7 @@
       "cap": 1000,
       "dir": "data/puzzles/da7t19-CXGM",
       "iss_size": 644,
+      "iss_url_length": 679,
       "script_size": 2191
     },
     {
@@ -10308,6 +10618,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -10335,6 +10646,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YNTpvdIpA58",
       "iss_size": 244,
+      "iss_url_length": 287,
       "script_size": 1528
     },
     {
@@ -10364,6 +10676,7 @@
       "cap": 1000,
       "dir": "data/puzzles/eufKzsm19rU",
       "iss_size": 339,
+      "iss_url_length": 378,
       "script_size": 1895
     },
     {
@@ -10392,6 +10705,7 @@
       "cap": 1000,
       "dir": "data/puzzles/gcXEWkYN4qc",
       "iss_size": 2161,
+      "iss_url_length": 2214,
       "script_size": 2091
     },
     {
@@ -10420,6 +10734,7 @@
       "cap": 1000,
       "dir": "data/puzzles/DUQO4xkTojc",
       "iss_size": 341,
+      "iss_url_length": 383,
       "script_size": 1084
     },
     {
@@ -10448,6 +10763,7 @@
       "cap": 1000,
       "dir": "data/puzzles/IGrYT4f9t44",
       "iss_size": 204,
+      "iss_url_length": 243,
       "script_size": 1846
     },
     {
@@ -10476,6 +10792,7 @@
       "cap": 1000,
       "dir": "data/puzzles/iKIMhFo26Ws",
       "iss_size": 231,
+      "iss_url_length": 273,
       "script_size": 1072
     },
     {
@@ -10505,6 +10822,7 @@
       "cap": 1000,
       "dir": "data/puzzles/z1ZdqfIQdjE",
       "iss_size": 448,
+      "iss_url_length": 485,
       "script_size": 1826
     },
     {
@@ -10530,6 +10848,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -10565,6 +10884,7 @@
       "cap": 191204,
       "dir": "data/puzzles/bIKZry6ynX8",
       "iss_size": 14986,
+      "iss_url_length": 13230,
       "script_size": 5075
     },
     {
@@ -10689,6 +11009,7 @@
       "cap": 6845,
       "dir": "data/puzzles/CQGTFrTkthY",
       "iss_size": 225877,
+      "iss_url_length": 225350,
       "script_size": 6012
     },
     {
@@ -10720,6 +11041,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mXMdUyKvOVw",
       "iss_size": 1554,
+      "iss_url_length": 1568,
       "script_size": 3434
     },
     {
@@ -10755,6 +11077,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nUQ9oqabqkg",
       "iss_size": 7133,
+      "iss_url_length": 7165,
       "script_size": 7428
     },
     {
@@ -10785,6 +11108,7 @@
       "cap": 1000,
       "dir": "data/puzzles/u2QHd-cprko",
       "iss_size": 150,
+      "iss_url_length": 198,
       "script_size": 1705
     },
     {
@@ -10812,6 +11136,7 @@
       "cap": 185528,
       "dir": "data/puzzles/0Z8XXgfiVB4",
       "iss_size": 606,
+      "iss_url_length": 660,
       "script_size": 2372
     },
     {
@@ -10842,6 +11167,7 @@
       "cap": 1000,
       "dir": "data/puzzles/eXuzsrXhYmI",
       "iss_size": 425,
+      "iss_url_length": 462,
       "script_size": 2001
     },
     {
@@ -10869,6 +11195,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WZYuwh8R4rk",
       "iss_size": 755,
+      "iss_url_length": 807,
       "script_size": 2319
     },
     {
@@ -10897,6 +11224,7 @@
       "cap": 343642,
       "dir": "data/puzzles/M0Bf_fZ0Nfs",
       "iss_size": 581,
+      "iss_url_length": 630,
       "script_size": 2365
     },
     {
@@ -10930,6 +11258,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Rt49sPgJYj4",
       "iss_size": 1965,
+      "iss_url_length": 1985,
       "script_size": 4260
     },
     {
@@ -10964,6 +11293,7 @@
       "cap": 115473,
       "dir": "data/puzzles/L8XFUWyFHBU",
       "iss_size": 8086,
+      "iss_url_length": 7330,
       "script_size": 3433
     },
     {
@@ -10991,6 +11321,7 @@
       "cap": 1000,
       "dir": "data/puzzles/b1rZimUnZ68",
       "iss_size": 284,
+      "iss_url_length": 323,
       "script_size": 1724
     },
     {
@@ -11018,6 +11349,7 @@
       "cap": 1000,
       "dir": "data/puzzles/cxNvHj67Ms8",
       "iss_size": 12,
+      "iss_url_length": 64,
       "script_size": 1412
     },
     {
@@ -11048,6 +11380,7 @@
       "cap": 1000,
       "dir": "data/puzzles/40A8P-25HXI",
       "iss_size": 506,
+      "iss_url_length": 545,
       "script_size": 1333
     },
     {
@@ -11076,6 +11409,7 @@
       "cap": 218340,
       "dir": "data/puzzles/aQe1UwGjW2M",
       "iss_size": 413,
+      "iss_url_length": 461,
       "script_size": 1775
     },
     {
@@ -11104,6 +11438,7 @@
       "cap": 1000,
       "dir": "data/puzzles/LS6YvU5B2QQ",
       "iss_size": 434,
+      "iss_url_length": 485,
       "script_size": 2386
     },
     {
@@ -11133,6 +11468,7 @@
       "cap": 483091,
       "dir": "data/puzzles/1FmCBfKV2hE",
       "iss_size": 597,
+      "iss_url_length": 629,
       "script_size": 2496
     },
     {
@@ -11162,6 +11498,7 @@
       "cap": 47892,
       "dir": "data/puzzles/wmd78ZbRXrI",
       "iss_size": 2457,
+      "iss_url_length": 2506,
       "script_size": 2710
     },
     {
@@ -11191,6 +11528,7 @@
       "cap": 1000,
       "dir": "data/puzzles/jtrhahQlgQE",
       "iss_size": 267,
+      "iss_url_length": 311,
       "script_size": 1554
     },
     {
@@ -11221,6 +11559,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sWKHj57BOIo",
       "iss_size": 597,
+      "iss_url_length": 622,
       "script_size": 1962
     },
     {
@@ -11265,6 +11604,7 @@
       "cap": 1000,
       "dir": "data/puzzles/q2wB7LZO5fM",
       "iss_size": 5176,
+      "iss_url_length": 5254,
       "script_size": 6059
     },
     {
@@ -11300,6 +11640,7 @@
       "cap": 101936,
       "dir": "data/puzzles/zHznepDRqFE",
       "iss_size": 33089,
+      "iss_url_length": 32309,
       "script_size": 5201
     },
     {
@@ -11328,6 +11669,7 @@
       "cap": 280898,
       "dir": "data/puzzles/1t-ASgvUrEw",
       "iss_size": 284,
+      "iss_url_length": 329,
       "script_size": 1295
     },
     {
@@ -11358,6 +11700,7 @@
       "cap": 1000,
       "dir": "data/puzzles/fDmL05pgieo",
       "iss_size": 309,
+      "iss_url_length": 352,
       "script_size": 1817
     },
     {
@@ -11385,6 +11728,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RyaRiRfJbKk",
       "iss_size": 302,
+      "iss_url_length": 342,
       "script_size": 818
     },
     {
@@ -11414,6 +11758,7 @@
       "cap": 1000,
       "dir": "data/puzzles/8GJGYDqViy4",
       "iss_size": 299,
+      "iss_url_length": 340,
       "script_size": 3023
     },
     {
@@ -11442,6 +11787,7 @@
       "cap": 100000,
       "dir": "data/puzzles/QZowOde8-Wc",
       "iss_size": 248,
+      "iss_url_length": 291,
       "script_size": 1148
     },
     {
@@ -11471,6 +11817,7 @@
       "cap": 98328,
       "dir": "data/puzzles/jbPgYWIe-n4",
       "iss_size": 1452,
+      "iss_url_length": 1479,
       "script_size": 2037
     },
     {
@@ -11501,6 +11848,7 @@
       "cap": 186915,
       "dir": "data/puzzles/3gtvi6g3Rbc",
       "iss_size": 2738,
+      "iss_url_length": 2662,
       "script_size": 2367
     },
     {
@@ -11526,6 +11874,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -11554,6 +11903,7 @@
       "cap": 1000,
       "dir": "data/puzzles/f40KVmBiVJA",
       "iss_size": 381,
+      "iss_url_length": 416,
       "script_size": 1313
     },
     {
@@ -11587,6 +11937,7 @@
       "cap": 94339,
       "dir": "data/puzzles/tnyjvadbhMI",
       "iss_size": 43063,
+      "iss_url_length": 43024,
       "script_size": 5715
     },
     {
@@ -11621,6 +11972,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zAmxsvR_tmc",
       "iss_size": 65465,
+      "iss_url_length": 62602,
       "script_size": 7325
     },
     {
@@ -11650,6 +12002,7 @@
       "cap": 1000,
       "dir": "data/puzzles/z-S7xg1Y6Xg",
       "iss_size": 306,
+      "iss_url_length": 351,
       "script_size": 1858
     },
     {
@@ -11678,6 +12031,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W_h4QH-W45Q",
       "iss_size": 505,
+      "iss_url_length": 544,
       "script_size": 1370
     },
     {
@@ -11705,6 +12059,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1d7mEtWWNjU",
       "iss_size": 235,
+      "iss_url_length": 278,
       "script_size": 713
     },
     {
@@ -11732,6 +12087,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YFXM3tcqu5s",
       "iss_size": 456,
+      "iss_url_length": 485,
       "script_size": 1610
     },
     {
@@ -11765,6 +12121,7 @@
       "cap": 313479,
       "dir": "data/puzzles/KPSPD-fl8ew",
       "iss_size": 480,
+      "iss_url_length": 521,
       "script_size": 2959
     },
     {
@@ -11794,6 +12151,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lpQwJfHBCyY",
       "iss_size": 294,
+      "iss_url_length": 344,
       "script_size": 1471
     },
     {
@@ -11835,6 +12193,7 @@
       "cap": 40371,
       "dir": "data/puzzles/9CkHikmSpJE",
       "iss_size": 10353,
+      "iss_url_length": 10389,
       "script_size": 6615
     },
     {
@@ -11860,6 +12219,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -11889,6 +12249,7 @@
       "cap": 105932,
       "dir": "data/puzzles/wzwaz3o2R0s",
       "iss_size": 11280,
+      "iss_url_length": 11109,
       "script_size": 1808
     },
     {
@@ -11918,6 +12279,7 @@
       "cap": 1000,
       "dir": "data/puzzles/pfa7GnpOtFo",
       "iss_size": 5618,
+      "iss_url_length": 5295,
       "script_size": 2492
     },
     {
@@ -11943,6 +12305,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -11974,6 +12337,7 @@
       "cap": 1000,
       "dir": "data/puzzles/hWMCls8DDwM",
       "iss_size": 37241,
+      "iss_url_length": 37276,
       "script_size": 9682
     },
     {
@@ -12001,6 +12365,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1iGaoge6tZc",
       "iss_size": 309,
+      "iss_url_length": 354,
       "script_size": 1269
     },
     {
@@ -12032,6 +12397,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WcxLHy4Wfuw",
       "iss_size": 372,
+      "iss_url_length": 405,
       "script_size": 1732
     },
     {
@@ -12060,6 +12426,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7rUzomyGHK4",
       "iss_size": 355,
+      "iss_url_length": 391,
       "script_size": 1195
     },
     {
@@ -12102,6 +12469,7 @@
       "cap": 1000,
       "dir": "data/puzzles/UZY2TNxBWxQ",
       "iss_size": 109072,
+      "iss_url_length": 108111,
       "script_size": 9577
     },
     {
@@ -12132,6 +12500,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sCW4Y5P2Y8Y",
       "iss_size": 412,
+      "iss_url_length": 455,
       "script_size": 1912
     },
     {
@@ -12160,6 +12529,7 @@
       "cap": 1000,
       "dir": "data/puzzles/UX5P08kLwTE",
       "iss_size": 402,
+      "iss_url_length": 438,
       "script_size": 1898
     },
     {
@@ -12189,6 +12559,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zC1lZ0OtKas",
       "iss_size": 182,
+      "iss_url_length": 225,
       "script_size": 1139
     },
     {
@@ -12225,6 +12596,7 @@
       "cap": 140252,
       "dir": "data/puzzles/dlpn7pSvd-c",
       "iss_size": 11840,
+      "iss_url_length": 11199,
       "script_size": 5099
     },
     {
@@ -12261,6 +12633,7 @@
       "cap": 138121,
       "dir": "data/puzzles/cpnhbUQaY1s",
       "iss_size": 7576,
+      "iss_url_length": 7605,
       "script_size": 7654
     },
     {
@@ -12292,6 +12665,7 @@
       "cap": 1000,
       "dir": "data/puzzles/-9if2VK7KKc",
       "iss_size": 3817,
+      "iss_url_length": 3656,
       "script_size": 2533
     },
     {
@@ -12320,6 +12694,7 @@
       "cap": 1000,
       "dir": "data/puzzles/oSG0c7PZ7ME",
       "iss_size": 264,
+      "iss_url_length": 309,
       "script_size": 992
     },
     {
@@ -12350,6 +12725,7 @@
       "cap": 1000,
       "dir": "data/puzzles/xWkPbS7kVhU",
       "iss_size": 321,
+      "iss_url_length": 366,
       "script_size": 1556
     },
     {
@@ -12375,6 +12751,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -12404,6 +12781,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ZwaxrFBHjPk",
       "iss_size": 879,
+      "iss_url_length": 897,
       "script_size": 2307
     },
     {
@@ -12429,6 +12807,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -12457,6 +12836,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nzEyjcCscvo",
       "iss_size": 603,
+      "iss_url_length": 636,
       "script_size": 1774
     },
     {
@@ -12486,6 +12866,7 @@
       "cap": 328947,
       "dir": "data/puzzles/rDcI3i-LXs8",
       "iss_size": 276,
+      "iss_url_length": 322,
       "script_size": 1290
     },
     {
@@ -12519,6 +12900,7 @@
       "cap": 1000,
       "dir": "data/puzzles/55Yxgdd5_OY",
       "iss_size": 860,
+      "iss_url_length": 901,
       "script_size": 3409
     },
     {
@@ -12571,6 +12953,7 @@
       "cap": 22476,
       "dir": "data/puzzles/m3IzqXmL4qw",
       "iss_size": 31236,
+      "iss_url_length": 31280,
       "script_size": 3620
     },
     {
@@ -12602,6 +12985,7 @@
       "cap": 1000,
       "dir": "data/puzzles/5GEmnRO9u1I.1",
       "iss_size": 381,
+      "iss_url_length": 424,
       "script_size": 1681
     },
     {
@@ -12634,6 +13018,7 @@
       "cap": 490196,
       "dir": "data/puzzles/5GEmnRO9u1I.2",
       "iss_size": 428,
+      "iss_url_length": 474,
       "script_size": 1351
     },
     {
@@ -12666,6 +13051,7 @@
       "cap": 1000,
       "dir": "data/puzzles/5GEmnRO9u1I.3",
       "iss_size": 392,
+      "iss_url_length": 436,
       "script_size": 1488
     },
     {
@@ -12698,6 +13084,7 @@
       "cap": 1000,
       "dir": "data/puzzles/5GEmnRO9u1I.4",
       "iss_size": 417,
+      "iss_url_length": 463,
       "script_size": 1580
     },
     {
@@ -12729,6 +13116,7 @@
       "cap": 961538,
       "dir": "data/puzzles/5GEmnRO9u1I.5",
       "iss_size": 187,
+      "iss_url_length": 232,
       "script_size": 1130
     },
     {
@@ -12762,6 +13150,7 @@
       "cap": 1000,
       "dir": "data/puzzles/5GEmnRO9u1I.6",
       "iss_size": 224,
+      "iss_url_length": 264,
       "script_size": 1582
     },
     {
@@ -12792,6 +13181,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Ux6LYrFtjFc",
       "iss_size": 1635,
+      "iss_url_length": 1667,
       "script_size": 2031
     },
     {
@@ -12826,6 +13216,7 @@
       "cap": 1000,
       "dir": "data/puzzles/PgwC3QDm8b8",
       "iss_size": 34061,
+      "iss_url_length": 30510,
       "script_size": 3914
     },
     {
@@ -12860,6 +13251,7 @@
       "cap": 127877,
       "dir": "data/puzzles/1leqvgtT3_w",
       "iss_size": 3930,
+      "iss_url_length": 3731,
       "script_size": 2430
     },
     {
@@ -12887,6 +13279,7 @@
       "cap": 1000,
       "dir": "data/puzzles/m38J0RC9lJ4",
       "iss_size": 290,
+      "iss_url_length": 330,
       "script_size": 2151
     },
     {
@@ -12936,6 +13329,7 @@
       "cap": 5984,
       "dir": "data/puzzles/tQtDcvWTSXw",
       "iss_size": 37088,
+      "iss_url_length": 37091,
       "script_size": 7335
     },
     {
@@ -12964,6 +13358,7 @@
       "cap": 1000,
       "dir": "data/puzzles/uJF1AWpNbTg",
       "iss_size": 410,
+      "iss_url_length": 443,
       "script_size": 1175
     },
     {
@@ -12994,6 +13389,7 @@
       "cap": 1000,
       "dir": "data/puzzles/LNpAsvUuk9I",
       "iss_size": 1235,
+      "iss_url_length": 1181,
       "script_size": 2477
     },
     {
@@ -13023,6 +13419,7 @@
       "cap": 1000,
       "dir": "data/puzzles/gWnJF8aZqAA",
       "iss_size": 354,
+      "iss_url_length": 399,
       "script_size": 1832
     },
     {
@@ -13068,6 +13465,7 @@
       "cap": 161812,
       "dir": "data/puzzles/0SQJRdZLRQs",
       "iss_size": 6999,
+      "iss_url_length": 7066,
       "script_size": 5279
     },
     {
@@ -13096,6 +13494,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Bq_I16-UJAg",
       "iss_size": 375,
+      "iss_url_length": 409,
       "script_size": 993
     },
     {
@@ -13155,6 +13554,7 @@
       "cap": 11634,
       "dir": "data/puzzles/aTG0L9njTnQ",
       "iss_size": 23653,
+      "iss_url_length": 23561,
       "script_size": 5947
     },
     {
@@ -13187,6 +13587,7 @@
       "cap": 1000,
       "dir": "data/puzzles/FEazwvvoy7E",
       "iss_size": 332,
+      "iss_url_length": 371,
       "script_size": 2366
     },
     {
@@ -13216,6 +13617,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Dn4XK98jODs",
       "iss_size": 2037,
+      "iss_url_length": 1987,
       "script_size": 1560
     },
     {
@@ -13262,6 +13664,7 @@
       "cap": 1000,
       "dir": "data/puzzles/A7CPYMUnafw",
       "iss_size": 16952,
+      "iss_url_length": 16409,
       "script_size": 5971
     },
     {
@@ -13293,6 +13696,7 @@
       "cap": 200000,
       "dir": "data/puzzles/BRYSUrKXZHc",
       "iss_size": 1885,
+      "iss_url_length": 1912,
       "script_size": 4642
     },
     {
@@ -13325,6 +13729,7 @@
       "cap": 235849,
       "dir": "data/puzzles/UFZqd4u7dNg",
       "iss_size": 1310,
+      "iss_url_length": 1303,
       "script_size": 3131
     },
     {
@@ -13354,6 +13759,7 @@
       "cap": 1000,
       "dir": "data/puzzles/r1sOFPudCW8",
       "iss_size": 5134,
+      "iss_url_length": 5182,
       "script_size": 2783
     },
     {
@@ -13381,6 +13787,7 @@
       "cap": 444444,
       "dir": "data/puzzles/sS2obiEAQFM",
       "iss_size": 599,
+      "iss_url_length": 635,
       "script_size": 1185
     },
     {
@@ -13419,6 +13826,7 @@
       "cap": 1000,
       "dir": "data/puzzles/dr7Hh2Xxg_k",
       "iss_size": 6535,
+      "iss_url_length": 6567,
       "script_size": 10884
     },
     {
@@ -13447,6 +13855,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Ouyggv-5Ol4",
       "iss_size": 254,
+      "iss_url_length": 295,
       "script_size": 1226
     },
     {
@@ -13475,6 +13884,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VL6qPIWAmBs",
       "iss_size": 225,
+      "iss_url_length": 271,
       "script_size": 1250
     },
     {
@@ -13508,6 +13918,7 @@
       "cap": 1000,
       "dir": "data/puzzles/OlcsRopfY-o",
       "iss_size": 3968,
+      "iss_url_length": 3764,
       "script_size": 2397
     },
     {
@@ -13536,6 +13947,7 @@
       "cap": 1000,
       "dir": "data/puzzles/yK1Qk7e-OKA",
       "iss_size": 352,
+      "iss_url_length": 397,
       "script_size": 1291
     },
     {
@@ -13564,6 +13976,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7GMoN7J0JlU",
       "iss_size": 2152,
+      "iss_url_length": 2203,
       "script_size": 3804
     },
     {
@@ -13611,6 +14024,7 @@
       "cap": 1000,
       "dir": "data/puzzles/jxwYtstfA8o",
       "iss_size": 7197,
+      "iss_url_length": 7227,
       "script_size": 6288
     },
     {
@@ -13639,6 +14053,7 @@
       "cap": 24148,
       "dir": "data/puzzles/6Xc78VZxcYI",
       "iss_size": 1896,
+      "iss_url_length": 1941,
       "script_size": 2405
     },
     {
@@ -13677,6 +14092,7 @@
       "cap": 92250,
       "dir": "data/puzzles/VCPmKKtMbTc",
       "iss_size": 30183,
+      "iss_url_length": 29382,
       "script_size": 11796
     },
     {
@@ -13707,6 +14123,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7PZc8crETBA",
       "iss_size": 247,
+      "iss_url_length": 286,
       "script_size": 1109
     },
     {
@@ -13735,6 +14152,7 @@
       "cap": 1000,
       "dir": "data/puzzles/0ia8_P3U1Wg",
       "iss_size": 369,
+      "iss_url_length": 415,
       "script_size": 1137
     },
     {
@@ -13764,6 +14182,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XuwUs1bRGsk",
       "iss_size": 315,
+      "iss_url_length": 354,
       "script_size": 1259
     },
     {
@@ -13793,6 +14212,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WVAwYbdMw8o",
       "iss_size": 503,
+      "iss_url_length": 538,
       "script_size": 1706
     },
     {
@@ -13822,6 +14242,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YqFiRxhodQA",
       "iss_size": 488,
+      "iss_url_length": 520,
       "script_size": 2019
     },
     {
@@ -13943,6 +14364,7 @@
       "cap": 179533,
       "dir": "data/puzzles/tLAi94YEcvA",
       "iss_size": 10347,
+      "iss_url_length": 9714,
       "script_size": 5938
     },
     {
@@ -13972,6 +14394,7 @@
       "cap": 1000,
       "dir": "data/puzzles/PRavHFxxZ7Y",
       "iss_size": 133,
+      "iss_url_length": 185,
       "script_size": 770
     },
     {
@@ -14001,6 +14424,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sDmi3HvD_rU",
       "iss_size": 12570,
+      "iss_url_length": 12553,
       "script_size": 5248
     },
     {
@@ -14030,6 +14454,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zA4PshGRoVk",
       "iss_size": 381,
+      "iss_url_length": 418,
       "script_size": 1162
     },
     {
@@ -14065,6 +14490,7 @@
       "cap": 58275,
       "dir": "data/puzzles/ApkQ64eyV5c",
       "iss_size": 69373,
+      "iss_url_length": 69419,
       "script_size": 15842
     },
     {
@@ -14099,6 +14525,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lfZbtPAjxb0",
       "iss_size": 1315,
+      "iss_url_length": 1347,
       "script_size": 2652
     },
     {
@@ -14128,6 +14555,7 @@
       "cap": 1000,
       "dir": "data/puzzles/j_i2d_ydgf4",
       "iss_size": 27137,
+      "iss_url_length": 25052,
       "script_size": 6707
     },
     {
@@ -14159,6 +14587,7 @@
       "cap": 1000,
       "dir": "data/puzzles/8zHIxRFOX9c",
       "iss_size": 533,
+      "iss_url_length": 568,
       "script_size": 2496
     },
     {
@@ -14190,6 +14619,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4Pg3CDy2Ri0",
       "iss_size": 889,
+      "iss_url_length": 909,
       "script_size": 2882
     },
     {
@@ -14219,6 +14649,7 @@
       "cap": 1000,
       "dir": "data/puzzles/o34FpUFGRKc",
       "iss_size": 191,
+      "iss_url_length": 237,
       "script_size": 1568
     },
     {
@@ -14247,6 +14678,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sp0csmm5dfM",
       "iss_size": 432,
+      "iss_url_length": 467,
       "script_size": 1355
     },
     {
@@ -14272,6 +14704,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -14306,6 +14739,7 @@
       "cap": 1000,
       "dir": "data/puzzles/8vnae9oHn1E",
       "iss_size": 538,
+      "iss_url_length": 604,
       "script_size": 2657
     },
     {
@@ -14338,6 +14772,7 @@
       "cap": 1000,
       "dir": "data/puzzles/o3619evP8Yc",
       "iss_size": 910,
+      "iss_url_length": 968,
       "script_size": 2463
     },
     {
@@ -14368,6 +14803,7 @@
       "cap": 1000,
       "dir": "data/puzzles/pe8JRPgBL4w",
       "iss_size": 348,
+      "iss_url_length": 390,
       "script_size": 1037
     },
     {
@@ -14397,6 +14833,7 @@
       "cap": 1000,
       "dir": "data/puzzles/GquVyu6HazM",
       "iss_size": 379,
+      "iss_url_length": 419,
       "script_size": 1167
     },
     {
@@ -14436,6 +14873,7 @@
       "cap": 1000,
       "dir": "data/puzzles/NRFfM16q7MY",
       "iss_size": 1513,
+      "iss_url_length": 1611,
       "script_size": 3281
     },
     {
@@ -14469,6 +14907,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XHtBWmDLsA0",
       "iss_size": 1324,
+      "iss_url_length": 1365,
       "script_size": 3188
     },
     {
@@ -14501,6 +14940,7 @@
       "cap": 198412,
       "dir": "data/puzzles/q6KqCrSnB-s",
       "iss_size": 442,
+      "iss_url_length": 477,
       "script_size": 1970
     },
     {
@@ -14534,6 +14974,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3FNc6mO0l5o",
       "iss_size": 576308,
+      "iss_url_length": 577372,
       "script_size": 7943
     },
     {
@@ -14574,6 +15015,7 @@
       "cap": 4970,
       "dir": "data/puzzles/KoMFWIJjtBc",
       "iss_size": 12794,
+      "iss_url_length": 12836,
       "script_size": 5829
     },
     {
@@ -14607,6 +15049,7 @@
       "cap": 123456,
       "dir": "data/puzzles/suGppTiRORk",
       "iss_size": 3856,
+      "iss_url_length": 3955,
       "script_size": 1975
     },
     {
@@ -14638,6 +15081,7 @@
       "cap": 1000,
       "dir": "data/puzzles/jvFuuaYbfqk",
       "iss_size": 1056,
+      "iss_url_length": 1123,
       "script_size": 2001
     },
     {
@@ -14667,6 +15111,7 @@
       "cap": 173913,
       "dir": "data/puzzles/9p9EYYsbdp8",
       "iss_size": 407,
+      "iss_url_length": 457,
       "script_size": 1390
     },
     {
@@ -14698,6 +15143,7 @@
       "cap": 1000,
       "dir": "data/puzzles/bUiB-PmupEo",
       "iss_size": 310,
+      "iss_url_length": 350,
       "script_size": 945
     },
     {
@@ -14729,6 +15175,7 @@
       "cap": 197628,
       "dir": "data/puzzles/um2u7MC1X3o",
       "iss_size": 1221,
+      "iss_url_length": 1259,
       "script_size": 1885
     },
     {
@@ -14754,6 +15201,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -14786,6 +15234,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Rfg6dYX3Pxs",
       "iss_size": 6636,
+      "iss_url_length": 6681,
       "script_size": 5397
     },
     {
@@ -14825,6 +15274,7 @@
       "cap": 1000,
       "dir": "data/puzzles/UNJGzbTPTlA",
       "iss_size": 16703,
+      "iss_url_length": 16683,
       "script_size": 4725
     },
     {
@@ -14853,6 +15303,7 @@
       "cap": 252525,
       "dir": "data/puzzles/j8aeNRT2tIo",
       "iss_size": 615,
+      "iss_url_length": 652,
       "script_size": 1209
     },
     {
@@ -14890,6 +15341,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Aap1w4kiKfY",
       "iss_size": 103227,
+      "iss_url_length": 103291,
       "script_size": 5246
     },
     {
@@ -14919,6 +15371,7 @@
       "cap": 1000,
       "dir": "data/puzzles/X-ebnjTycsc",
       "iss_size": 468,
+      "iss_url_length": 515,
       "script_size": 1327
     },
     {
@@ -14948,6 +15401,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zM3GQkhmD7E",
       "iss_size": 411,
+      "iss_url_length": 443,
       "script_size": 1231
     },
     {
@@ -14976,6 +15430,7 @@
       "cap": 1000,
       "dir": "data/puzzles/r8N95dotL4M",
       "iss_size": 367,
+      "iss_url_length": 404,
       "script_size": 1139
     },
     {
@@ -15006,6 +15461,7 @@
       "cap": 1000,
       "dir": "data/puzzles/5nLEZK8Rlys",
       "iss_size": 469,
+      "iss_url_length": 500,
       "script_size": 1046
     },
     {
@@ -15046,6 +15502,7 @@
       "cap": 32446,
       "dir": "data/puzzles/tCneFNjmDcw",
       "iss_size": 52353,
+      "iss_url_length": 52436,
       "script_size": 9875
     },
     {
@@ -15086,6 +15543,7 @@
       "cap": 1000,
       "dir": "data/puzzles/_1TaT8_Xj4Y",
       "iss_size": 528896,
+      "iss_url_length": 522527,
       "script_size": 4966
     },
     {
@@ -15118,6 +15576,7 @@
       "cap": 1000,
       "dir": "data/puzzles/TXyy95YaFgQ",
       "iss_size": 5139,
+      "iss_url_length": 5198,
       "script_size": 3305
     },
     {
@@ -15150,6 +15609,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mgs15lxZJMc",
       "iss_size": 668,
+      "iss_url_length": 708,
       "script_size": 1909
     },
     {
@@ -15179,6 +15639,7 @@
       "cap": 292397,
       "dir": "data/puzzles/NsiGrBiISOs",
       "iss_size": 360,
+      "iss_url_length": 403,
       "script_size": 1025
     },
     {
@@ -15209,6 +15670,7 @@
       "cap": 1000,
       "dir": "data/puzzles/eopPSdrMKUY",
       "iss_size": 597,
+      "iss_url_length": 635,
       "script_size": 1449
     },
     {
@@ -15241,6 +15703,7 @@
       "cap": 1000,
       "dir": "data/puzzles/6Z0xoMyxEBo",
       "iss_size": 461,
+      "iss_url_length": 499,
       "script_size": 1218
     },
     {
@@ -15271,6 +15734,7 @@
       "cap": 1000,
       "dir": "data/puzzles/gwUXd_GMrzo",
       "iss_size": 230,
+      "iss_url_length": 278,
       "script_size": 765
     },
     {
@@ -15304,6 +15768,7 @@
       "cap": 1000,
       "dir": "data/puzzles/UrvJfgNLNDc",
       "iss_size": 1705,
+      "iss_url_length": 1732,
       "script_size": 3036
     },
     {
@@ -15334,6 +15799,7 @@
       "cap": 1000,
       "dir": "data/puzzles/uZpWRyDmH3Y",
       "iss_size": 610,
+      "iss_url_length": 651,
       "script_size": 1301
     },
     {
@@ -15361,6 +15827,7 @@
       "cap": 1000,
       "dir": "data/puzzles/T8eEdT5Hjfg",
       "iss_size": 551,
+      "iss_url_length": 601,
       "script_size": 1005
     },
     {
@@ -15396,6 +15863,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mWaNizwrJSs",
       "iss_size": 2754,
+      "iss_url_length": 2772,
       "script_size": 3981
     },
     {
@@ -15428,6 +15896,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Q-zInJ_YQes",
       "iss_size": 390,
+      "iss_url_length": 435,
       "script_size": 1417
     },
     {
@@ -15466,6 +15935,7 @@
       "cap": 64557,
       "dir": "data/puzzles/wKKJQysp-8I",
       "iss_size": 21215,
+      "iss_url_length": 21253,
       "script_size": 6799
     },
     {
@@ -15528,6 +15998,7 @@
       "cap": 115606,
       "dir": "data/puzzles/izvJhyG8ZN8",
       "iss_size": 5156,
+      "iss_url_length": 5192,
       "script_size": 5109
     },
     {
@@ -15558,6 +16029,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1HJtCeHCWQ8",
       "iss_size": 345,
+      "iss_url_length": 382,
       "script_size": 1132
     },
     {
@@ -15589,6 +16061,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YlXeLOWAFSY",
       "iss_size": 584,
+      "iss_url_length": 629,
       "script_size": 1984
     },
     {
@@ -15631,6 +16104,7 @@
       "cap": 233644,
       "dir": "data/puzzles/yOLBEs7SmYc",
       "iss_size": 1422,
+      "iss_url_length": 1489,
       "script_size": 1971
     },
     {
@@ -15661,6 +16135,7 @@
       "cap": 1000,
       "dir": "data/puzzles/eoGfynb2pjI",
       "iss_size": 538,
+      "iss_url_length": 574,
       "script_size": 1265
     },
     {
@@ -15694,6 +16169,7 @@
       "cap": 75585,
       "dir": "data/puzzles/-YAqw0F2D_s",
       "iss_size": 14244,
+      "iss_url_length": 14346,
       "script_size": 5613
     },
     {
@@ -15728,6 +16204,7 @@
       "cap": 1000,
       "dir": "data/puzzles/oLS-lUveJ_A",
       "iss_size": 23115,
+      "iss_url_length": 23129,
       "script_size": 4594
     },
     {
@@ -15756,6 +16233,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4fwsRuKC6EY",
       "iss_size": 495,
+      "iss_url_length": 545,
       "script_size": 949
     },
     {
@@ -15784,6 +16262,7 @@
       "cap": 258397,
       "dir": "data/puzzles/aaFLeOwnZV8",
       "iss_size": 293,
+      "iss_url_length": 333,
       "script_size": 975
     },
     {
@@ -15813,6 +16292,7 @@
       "cap": 165837,
       "dir": "data/puzzles/x14bWYRTq6k",
       "iss_size": 1956,
+      "iss_url_length": 2008,
       "script_size": 1440
     },
     {
@@ -15849,6 +16329,7 @@
       "cap": 256410,
       "dir": "data/puzzles/7xyfTKUsFO4",
       "iss_size": 4278,
+      "iss_url_length": 4382,
       "script_size": 3812
     },
     {
@@ -15885,6 +16366,7 @@
       "cap": 70871,
       "dir": "data/puzzles/IeV2kiiTvjk",
       "iss_size": 2252,
+      "iss_url_length": 2289,
       "script_size": 1767
     },
     {
@@ -15916,6 +16398,7 @@
       "cap": 1000,
       "dir": "data/puzzles/0opeH30RSW8",
       "iss_size": 423,
+      "iss_url_length": 456,
       "script_size": 1505
     },
     {
@@ -15950,6 +16433,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Xip3o499Kmc",
       "iss_size": 917,
+      "iss_url_length": 949,
       "script_size": 2445
     },
     {
@@ -15979,6 +16463,7 @@
       "cap": 1000,
       "dir": "data/puzzles/abWuUk8tH1Y",
       "iss_size": 366,
+      "iss_url_length": 404,
       "script_size": 1315
     },
     {
@@ -16012,6 +16497,7 @@
       "cap": 1000,
       "dir": "data/puzzles/726rongspRA",
       "iss_size": 654,
+      "iss_url_length": 695,
       "script_size": 3396
     },
     {
@@ -16043,6 +16529,7 @@
       "cap": 1000,
       "dir": "data/puzzles/-yEgaKEOL-Q",
       "iss_size": 667,
+      "iss_url_length": 698,
       "script_size": 1886
     },
     {
@@ -16071,6 +16558,7 @@
       "cap": 140252,
       "dir": "data/puzzles/iOD6yayIVCo",
       "iss_size": 1024,
+      "iss_url_length": 1059,
       "script_size": 1052
     },
     {
@@ -16101,6 +16589,7 @@
       "cap": 1000,
       "dir": "data/puzzles/GYt6eBX6kUw",
       "iss_size": 5230,
+      "iss_url_length": 5249,
       "script_size": 3001
     },
     {
@@ -16138,6 +16627,7 @@
       "cap": 244498,
       "dir": "data/puzzles/rAuRTeRk5dk",
       "iss_size": 8200,
+      "iss_url_length": 8124,
       "script_size": 4046
     },
     {
@@ -16171,6 +16661,7 @@
       "cap": 1000,
       "dir": "data/puzzles/kOHLjPuhxY0",
       "iss_size": 996,
+      "iss_url_length": 1026,
       "script_size": 2255
     },
     {
@@ -16214,6 +16705,7 @@
       "cap": 40436,
       "dir": "data/puzzles/1mBUrdFqksY",
       "iss_size": 14492,
+      "iss_url_length": 14582,
       "script_size": 5769
     },
     {
@@ -16249,6 +16741,7 @@
       "cap": 108108,
       "dir": "data/puzzles/bVNnSwPxz-8",
       "iss_size": 18940,
+      "iss_url_length": 18827,
       "script_size": 6048
     },
     {
@@ -16279,6 +16772,7 @@
       "cap": 226244,
       "dir": "data/puzzles/32AgkuuZKvU",
       "iss_size": 333,
+      "iss_url_length": 367,
       "script_size": 997
     },
     {
@@ -16309,6 +16803,7 @@
       "cap": 1000,
       "dir": "data/puzzles/c-BSqKjMNbE",
       "iss_size": 1013,
+      "iss_url_length": 1049,
       "script_size": 1884
     },
     {
@@ -16336,6 +16831,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Ax2mD4RPRZA",
       "iss_size": 241,
+      "iss_url_length": 284,
       "script_size": 721
     },
     {
@@ -16366,6 +16862,7 @@
       "cap": 1000,
       "dir": "data/puzzles/EVyPQkJ1JoQ",
       "iss_size": 535,
+      "iss_url_length": 575,
       "script_size": 1210
     },
     {
@@ -16410,6 +16907,7 @@
       "cap": 5839,
       "dir": "data/puzzles/CAkYhG9w0VQ",
       "iss_size": 25866,
+      "iss_url_length": 25934,
       "script_size": 4085
     },
     {
@@ -16439,6 +16937,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7xEkKTSLkfw",
       "iss_size": 562,
+      "iss_url_length": 610,
       "script_size": 1204
     },
     {
@@ -16471,6 +16970,7 @@
       "cap": 1000,
       "dir": "data/puzzles/6o7caUPFY_s",
       "iss_size": 198,
+      "iss_url_length": 243,
       "script_size": 1330
     },
     {
@@ -16499,6 +16999,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1CDwvRx6UvA",
       "iss_size": 5547,
+      "iss_url_length": 5589,
       "script_size": 2642
     },
     {
@@ -16527,6 +17028,7 @@
       "cap": 63979,
       "dir": "data/puzzles/0fdlJ-87Yzw",
       "iss_size": 2064,
+      "iss_url_length": 2112,
       "script_size": 1688
     },
     {
@@ -16573,6 +17075,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Efx8_I_DhQ4",
       "iss_size": 2720,
+      "iss_url_length": 2791,
       "script_size": 2979
     },
     {
@@ -16608,6 +17111,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Ti7uu3jCNw0",
       "iss_size": 10142,
+      "iss_url_length": 10180,
       "script_size": 7237
     },
     {
@@ -16638,6 +17142,7 @@
       "cap": 1000,
       "dir": "data/puzzles/kFkPAvmuKZ0",
       "iss_size": 1291,
+      "iss_url_length": 1351,
       "script_size": 1954
     },
     {
@@ -16678,6 +17183,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VeBBsKiwTVE",
       "iss_size": 11015,
+      "iss_url_length": 11051,
       "script_size": 3818
     },
     {
@@ -16709,6 +17215,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Q8okAxhHsrw",
       "iss_size": 398,
+      "iss_url_length": 445,
       "script_size": 1079
     },
     {
@@ -16740,6 +17247,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sK2AdHs6Lrs",
       "iss_size": 7675,
+      "iss_url_length": 7465,
       "script_size": 2378
     },
     {
@@ -16777,6 +17285,7 @@
       "cap": 121506,
       "dir": "data/puzzles/AQpw00kwYds",
       "iss_size": 12546,
+      "iss_url_length": 11765,
       "script_size": 3770
     },
     {
@@ -16820,6 +17329,7 @@
       "cap": 33749,
       "dir": "data/puzzles/7znvmkbh6gI",
       "iss_size": 12396,
+      "iss_url_length": 12475,
       "script_size": 3046
     },
     {
@@ -16855,6 +17365,7 @@
       "cap": 271739,
       "dir": "data/puzzles/7fXU1mkv-4M",
       "iss_size": 4253,
+      "iss_url_length": 4402,
       "script_size": 7040
     },
     {
@@ -16884,6 +17395,7 @@
       "cap": 1000,
       "dir": "data/puzzles/LzxSHijkjI8",
       "iss_size": 354,
+      "iss_url_length": 401,
       "script_size": 1102
     },
     {
@@ -16930,6 +17442,7 @@
       "cap": 35112,
       "dir": "data/puzzles/px_YBffmcRY",
       "iss_size": 22282,
+      "iss_url_length": 22451,
       "script_size": 3090
     },
     {
@@ -16960,6 +17473,7 @@
       "cap": 1000,
       "dir": "data/puzzles/1wc7S8Msxf8",
       "iss_size": 436,
+      "iss_url_length": 473,
       "script_size": 1000
     },
     {
@@ -16995,6 +17509,7 @@
       "cap": 43084,
       "dir": "data/puzzles/NGCS6Bffr_4",
       "iss_size": 11719,
+      "iss_url_length": 11552,
       "script_size": 5893
     },
     {
@@ -17029,6 +17544,7 @@
       "cap": 1000,
       "dir": "data/puzzles/d5eTbnaDHNw",
       "iss_size": 696,
+      "iss_url_length": 720,
       "script_size": 1538
     },
     {
@@ -17061,6 +17577,7 @@
       "cap": 19219,
       "dir": "data/puzzles/wOz0UWQ1WcA",
       "iss_size": 28398,
+      "iss_url_length": 25754,
       "script_size": 3192
     },
     {
@@ -17166,6 +17683,7 @@
       "cap": 92336,
       "dir": "data/puzzles/RiO5rqdm3DM",
       "iss_size": 6075,
+      "iss_url_length": 6566,
       "script_size": 4572
     },
     {
@@ -17197,6 +17715,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lnRGiDQg5iw",
       "iss_size": 463,
+      "iss_url_length": 495,
       "script_size": 1202
     },
     {
@@ -17226,6 +17745,7 @@
       "cap": 1000,
       "dir": "data/puzzles/U4s1gYBKBZo",
       "iss_size": 311,
+      "iss_url_length": 353,
       "script_size": 873
     },
     {
@@ -17268,6 +17788,7 @@
       "cap": 78926,
       "dir": "data/puzzles/zfF6xGsesJI",
       "iss_size": 16208,
+      "iss_url_length": 15168,
       "script_size": 4316
     },
     {
@@ -17302,6 +17823,7 @@
       "cap": 1000,
       "dir": "data/puzzles/hoWFAOK9W1M",
       "iss_size": 6241,
+      "iss_url_length": 6130,
       "script_size": 5071
     },
     {
@@ -17353,6 +17875,7 @@
       "cap": 1072,
       "dir": "data/puzzles/tAASGi1p1Vo",
       "iss_size": 368563,
+      "iss_url_length": 368464,
       "script_size": 6670
     },
     {
@@ -17381,6 +17904,7 @@
       "cap": 1000,
       "dir": "data/puzzles/dU9ingNNJwg",
       "iss_size": 363,
+      "iss_url_length": 405,
       "script_size": 789
     },
     {
@@ -17414,6 +17938,7 @@
       "cap": 116279,
       "dir": "data/puzzles/aZcqPcSb-MY",
       "iss_size": 1957,
+      "iss_url_length": 2003,
       "script_size": 3413
     },
     {
@@ -17443,6 +17968,7 @@
       "cap": 1000,
       "dir": "data/puzzles/BfH8FXE2ffE",
       "iss_size": 289,
+      "iss_url_length": 336,
       "script_size": 991
     },
     {
@@ -17471,6 +17997,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3ZltSGljbh8",
       "iss_size": 1232,
+      "iss_url_length": 1275,
       "script_size": 1657
     },
     {
@@ -17505,6 +18032,7 @@
       "cap": 1000,
       "dir": "data/puzzles/fXTmp_MUAu4",
       "iss_size": 252,
+      "iss_url_length": 299,
       "script_size": 858
     },
     {
@@ -17561,6 +18089,7 @@
       "cap": 82712,
       "dir": "data/puzzles/-YXYJgRSq4E",
       "iss_size": 96141,
+      "iss_url_length": 95347,
       "script_size": 6191
     },
     {
@@ -17593,6 +18122,7 @@
       "cap": 1000,
       "dir": "data/puzzles/mG5gaW1lrgE",
       "iss_size": 268,
+      "iss_url_length": 312,
       "script_size": 766
     },
     {
@@ -17623,6 +18153,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lCIHkjKxL08",
       "iss_size": 18874,
+      "iss_url_length": 19002,
       "script_size": 3426
     },
     {
@@ -17652,6 +18183,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Yt8zxaWiMvw",
       "iss_size": 3196,
+      "iss_url_length": 3247,
       "script_size": 1281
     },
     {
@@ -17680,6 +18212,7 @@
       "cap": 1000,
       "dir": "data/puzzles/E8aY4zg-XV8",
       "iss_size": 1155,
+      "iss_url_length": 1209,
       "script_size": 2160
     },
     {
@@ -17711,6 +18244,7 @@
       "cap": 1000,
       "dir": "data/puzzles/qzMO9_wbaUw",
       "iss_size": 566,
+      "iss_url_length": 605,
       "script_size": 1610
     },
     {
@@ -17746,6 +18280,7 @@
       "cap": 1000,
       "dir": "data/puzzles/fz8YlxYWilQ",
       "iss_size": 2025,
+      "iss_url_length": 2160,
       "script_size": 3652
     },
     {
@@ -17778,6 +18313,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sWzize3UkqE",
       "iss_size": 466,
+      "iss_url_length": 502,
       "script_size": 1384
     },
     {
@@ -17814,6 +18350,7 @@
       "cap": 41528,
       "dir": "data/puzzles/QJKqHd2Mz0Y",
       "iss_size": 13578,
+      "iss_url_length": 13410,
       "script_size": 6643
     },
     {
@@ -17844,6 +18381,7 @@
       "cap": 1000,
       "dir": "data/puzzles/UFp7VsUUX-o",
       "iss_size": 960,
+      "iss_url_length": 1002,
       "script_size": 1459
     },
     {
@@ -17878,6 +18416,7 @@
       "cap": 78740,
       "dir": "data/puzzles/GpU31lzjnKU",
       "iss_size": 6587,
+      "iss_url_length": 6630,
       "script_size": 4401
     },
     {
@@ -17910,6 +18449,7 @@
       "cap": 1000,
       "dir": "data/puzzles/TrpgBeReCDg",
       "iss_size": 358,
+      "iss_url_length": 389,
       "script_size": 1406
     },
     {
@@ -17943,6 +18483,7 @@
       "cap": 1000,
       "dir": "data/puzzles/32p9syjQB4Y",
       "iss_size": 383,
+      "iss_url_length": 420,
       "script_size": 1164
     },
     {
@@ -17970,6 +18511,7 @@
       "cap": 1000,
       "dir": "data/puzzles/9ecB_ZFdXUI",
       "iss_size": 757,
+      "iss_url_length": 811,
       "script_size": 2071
     },
     {
@@ -17999,6 +18541,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ZIDS2f2D-K8",
       "iss_size": 461,
+      "iss_url_length": 498,
       "script_size": 1117
     },
     {
@@ -18027,6 +18570,7 @@
       "cap": 42211,
       "dir": "data/puzzles/olOzzZCfIhI",
       "iss_size": 2518,
+      "iss_url_length": 2564,
       "script_size": 1969
     },
     {
@@ -18073,6 +18617,7 @@
       "cap": 26688,
       "dir": "data/puzzles/YGuvqxMkcuw",
       "iss_size": 13027,
+      "iss_url_length": 13033,
       "script_size": 6010
     },
     {
@@ -18108,6 +18653,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4kNz7KQmWrI",
       "iss_size": 12125,
+      "iss_url_length": 12183,
       "script_size": 6118
     },
     {
@@ -18145,6 +18691,7 @@
       "cap": 1000,
       "dir": "data/puzzles/-szFSl7xsKc",
       "iss_size": 1047,
+      "iss_url_length": 1077,
       "script_size": 1647
     },
     {
@@ -18177,6 +18724,7 @@
       "cap": 1000,
       "dir": "data/puzzles/FHUcGcennIA",
       "iss_size": 1683,
+      "iss_url_length": 1663,
       "script_size": 2169
     },
     {
@@ -18210,6 +18758,7 @@
       "cap": 1000,
       "dir": "data/puzzles/cO35gFaVnMM",
       "iss_size": 936,
+      "iss_url_length": 966,
       "script_size": 2201
     },
     {
@@ -18242,6 +18791,7 @@
       "cap": 1000,
       "dir": "data/puzzles/CgUZsL0RULw",
       "iss_size": 6153,
+      "iss_url_length": 6184,
       "script_size": 3582
     },
     {
@@ -18317,6 +18867,7 @@
       "cap": 12951,
       "dir": "data/puzzles/JVwFPcZl1Ck",
       "iss_size": 126729,
+      "iss_url_length": 127811,
       "script_size": 8976
     },
     {
@@ -18347,6 +18898,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RyNL6YBFp4E",
       "iss_size": 480,
+      "iss_url_length": 544,
       "script_size": 1457
     },
     {
@@ -18376,6 +18928,7 @@
       "cap": 1000,
       "dir": "data/puzzles/2tN5-TTuEjE",
       "iss_size": 1715,
+      "iss_url_length": 1760,
       "script_size": 1840
     },
     {
@@ -18412,6 +18965,7 @@
       "cap": 42319,
       "dir": "data/puzzles/CswmNRhF7W8",
       "iss_size": 7662,
+      "iss_url_length": 7691,
       "script_size": 3582
     },
     {
@@ -18439,6 +18993,7 @@
       "cap": 1000,
       "dir": "data/puzzles/vf_mbla-If4",
       "iss_size": 290,
+      "iss_url_length": 344,
       "script_size": 972
     },
     {
@@ -18468,6 +19023,7 @@
       "cap": 1000,
       "dir": "data/puzzles/z39UKC3Y8Po",
       "iss_size": 975,
+      "iss_url_length": 1005,
       "script_size": 1370
     },
     {
@@ -18499,6 +19055,7 @@
       "cap": 296735,
       "dir": "data/puzzles/0OhIa-tRFWM",
       "iss_size": 958,
+      "iss_url_length": 1003,
       "script_size": 1842
     },
     {
@@ -18527,6 +19084,7 @@
       "cap": 371747,
       "dir": "data/puzzles/2rEZ1a04B18",
       "iss_size": 359,
+      "iss_url_length": 402,
       "script_size": 976
     },
     {
@@ -18563,6 +19121,7 @@
       "cap": 55370,
       "dir": "data/puzzles/RsB7oI6GBVc",
       "iss_size": 10390,
+      "iss_url_length": 10493,
       "script_size": 1876
     },
     {
@@ -18597,6 +19156,7 @@
       "cap": 154320,
       "dir": "data/puzzles/CfDFD-RzWgg",
       "iss_size": 11104,
+      "iss_url_length": 10643,
       "script_size": 2248
     },
     {
@@ -18629,6 +19189,7 @@
       "cap": 1000,
       "dir": "data/puzzles/9YcXmLzZvkQ",
       "iss_size": 807,
+      "iss_url_length": 824,
       "script_size": 1442
     },
     {
@@ -18658,6 +19219,7 @@
       "cap": 423728,
       "dir": "data/puzzles/ite7WigjGGI",
       "iss_size": 664,
+      "iss_url_length": 686,
       "script_size": 1075
     },
     {
@@ -18686,6 +19248,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ZNB48hRlSbE",
       "iss_size": 962,
+      "iss_url_length": 1011,
       "script_size": 1419
     },
     {
@@ -18714,6 +19277,7 @@
       "cap": 1000,
       "dir": "data/puzzles/79v8btpEx4g",
       "iss_size": 595,
+      "iss_url_length": 624,
       "script_size": 1339
     },
     {
@@ -18744,6 +19308,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4vZi1NDZTYU",
       "iss_size": 414,
+      "iss_url_length": 460,
       "script_size": 1206
     },
     {
@@ -18783,6 +19348,7 @@
       "cap": 10908,
       "dir": "data/puzzles/JOM2I34cuCI",
       "iss_size": 36950,
+      "iss_url_length": 36446,
       "script_size": 4086
     },
     {
@@ -18815,6 +19381,7 @@
       "cap": 1000,
       "dir": "data/puzzles/dAW5dM7N1Vw",
       "iss_size": 2516,
+      "iss_url_length": 2579,
       "script_size": 1488
     },
     {
@@ -18840,6 +19407,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -18880,6 +19448,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RD6hEGEgUyk",
       "iss_size": 641349,
+      "iss_url_length": 635051,
       "script_size": 5578
     },
     {
@@ -18908,6 +19477,7 @@
       "cap": 1000,
       "dir": "data/puzzles/PzAXofwN7NI",
       "iss_size": 539,
+      "iss_url_length": 570,
       "script_size": 1322
     },
     {
@@ -18943,6 +19513,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ovyYdEsYvZo",
       "iss_size": 8309,
+      "iss_url_length": 8464,
       "script_size": 3640
     },
     {
@@ -18972,6 +19543,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Wb5YT1b-U9Q",
       "iss_size": 222,
+      "iss_url_length": 264,
       "script_size": 992
     },
     {
@@ -19002,6 +19574,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Y23x1sGzWJo",
       "iss_size": 134,
+      "iss_url_length": 182,
       "script_size": 533
     },
     {
@@ -19033,6 +19606,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4rCcjvzCp_o",
       "iss_size": 1325,
+      "iss_url_length": 1354,
       "script_size": 2227
     },
     {
@@ -19065,6 +19639,7 @@
       "cap": 381679,
       "dir": "data/puzzles/IMPCPEbOWNM",
       "iss_size": 11028,
+      "iss_url_length": 10238,
       "script_size": 2970
     },
     {
@@ -19096,6 +19671,7 @@
       "cap": 1000,
       "dir": "data/puzzles/xCXCGHeds4I",
       "iss_size": 743,
+      "iss_url_length": 768,
       "script_size": 1432
     },
     {
@@ -19126,6 +19702,7 @@
       "cap": 1000,
       "dir": "data/puzzles/qv8ZWqMr6JI",
       "iss_size": 453,
+      "iss_url_length": 494,
       "script_size": 1338
     },
     {
@@ -19151,6 +19728,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -19183,6 +19761,7 @@
       "cap": 1000,
       "dir": "data/puzzles/SgmKcJXacb8",
       "iss_size": 2837,
+      "iss_url_length": 2855,
       "script_size": 2798
     },
     {
@@ -19210,6 +19789,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VslFJ0OhlDc.1",
       "iss_size": 333,
+      "iss_url_length": 374,
       "script_size": 1301
     },
     {
@@ -19238,6 +19818,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VslFJ0OhlDc.2",
       "iss_size": 338,
+      "iss_url_length": 381,
       "script_size": 861
     },
     {
@@ -19266,6 +19847,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VslFJ0OhlDc.3",
       "iss_size": 247,
+      "iss_url_length": 293,
       "script_size": 930
     },
     {
@@ -19300,6 +19882,7 @@
       "cap": 1000,
       "dir": "data/puzzles/47tQAsDhC9g",
       "iss_size": 28461,
+      "iss_url_length": 28568,
       "script_size": 4468
     },
     {
@@ -19329,6 +19912,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ypN2qpPhxZw",
       "iss_size": 6949,
+      "iss_url_length": 6162,
       "script_size": 1118
     },
     {
@@ -19360,6 +19944,7 @@
       "cap": 1000,
       "dir": "data/puzzles/eP7ty0Ys_yg",
       "iss_size": 4139,
+      "iss_url_length": 4184,
       "script_size": 2675
     },
     {
@@ -19389,6 +19974,7 @@
       "cap": 1000,
       "dir": "data/puzzles/J2YnRpU042k",
       "iss_size": 411,
+      "iss_url_length": 450,
       "script_size": 1054
     },
     {
@@ -19416,6 +20002,7 @@
       "cap": 1000,
       "dir": "data/puzzles/N6_TVvHh79U",
       "iss_size": 435,
+      "iss_url_length": 474,
       "script_size": 888
     },
     {
@@ -19456,6 +20043,7 @@
       "cap": 102040,
       "dir": "data/puzzles/cvaZv_2K5ZA",
       "iss_size": 14004,
+      "iss_url_length": 14061,
       "script_size": 10002
     },
     {
@@ -19491,6 +20079,7 @@
       "cap": 1000,
       "dir": "data/puzzles/JeZ08_5f_Mk",
       "iss_size": 3441,
+      "iss_url_length": 3298,
       "script_size": 1522
     },
     {
@@ -19519,6 +20108,7 @@
       "cap": 359712,
       "dir": "data/puzzles/YwFw4WRMJTc",
       "iss_size": 526,
+      "iss_url_length": 573,
       "script_size": 812
     },
     {
@@ -19547,6 +20137,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Vnm3Q-AI1c0",
       "iss_size": 330,
+      "iss_url_length": 375,
       "script_size": 1055
     },
     {
@@ -19576,6 +20167,7 @@
       "cap": 277777,
       "dir": "data/puzzles/-Uj9xZPyzM4",
       "iss_size": 377,
+      "iss_url_length": 413,
       "script_size": 937
     },
     {
@@ -19607,6 +20199,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RLhzD2wOKak",
       "iss_size": 598,
+      "iss_url_length": 651,
       "script_size": 930
     },
     {
@@ -19660,6 +20253,7 @@
       "cap": 10272,
       "dir": "data/puzzles/saDN6vul51A",
       "iss_size": 15687,
+      "iss_url_length": 15837,
       "script_size": 4843
     },
     {
@@ -19691,6 +20285,7 @@
       "cap": 1000,
       "dir": "data/puzzles/D9jJCDOCWmU",
       "iss_size": 337,
+      "iss_url_length": 376,
       "script_size": 1022
     },
     {
@@ -19719,6 +20314,7 @@
       "cap": 467289,
       "dir": "data/puzzles/ZY-2dyrz4LQ",
       "iss_size": 671,
+      "iss_url_length": 716,
       "script_size": 1251
     },
     {
@@ -19747,6 +20343,7 @@
       "cap": 1000,
       "dir": "data/puzzles/xg4guKKcdu8",
       "iss_size": 2065,
+      "iss_url_length": 2102,
       "script_size": 1912
     },
     {
@@ -19778,6 +20375,7 @@
       "cap": 258397,
       "dir": "data/puzzles/acFMVXxSN5A",
       "iss_size": 366,
+      "iss_url_length": 419,
       "script_size": 1204
     },
     {
@@ -19808,6 +20406,7 @@
       "cap": 1000,
       "dir": "data/puzzles/vwA_VIz_tfk",
       "iss_size": 731,
+      "iss_url_length": 760,
       "script_size": 1951
     },
     {
@@ -19840,6 +20439,7 @@
       "cap": 1000,
       "dir": "data/puzzles/5_ADzH2E06Y",
       "iss_size": 32012,
+      "iss_url_length": 30344,
       "script_size": 3778
     },
     {
@@ -19872,6 +20472,7 @@
       "cap": 185185,
       "dir": "data/puzzles/sM4xUvyC9s4",
       "iss_size": 3392,
+      "iss_url_length": 3206,
       "script_size": 1915
     },
     {
@@ -19904,6 +20505,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nQ3GFHYV26c",
       "iss_size": 528,
+      "iss_url_length": 562,
       "script_size": 1397
     },
     {
@@ -19932,6 +20534,7 @@
       "cap": 1000,
       "dir": "data/puzzles/V0WZIGbpk-w",
       "iss_size": 340,
+      "iss_url_length": 384,
       "script_size": 1006
     },
     {
@@ -19966,6 +20569,7 @@
       "cap": 1000,
       "dir": "data/puzzles/45EphB4vgMM",
       "iss_size": 831,
+      "iss_url_length": 862,
       "script_size": 1221
     },
     {
@@ -20002,6 +20606,7 @@
       "cap": 165289,
       "dir": "data/puzzles/GsT308ot5xU",
       "iss_size": 5792,
+      "iss_url_length": 5825,
       "script_size": 4938
     },
     {
@@ -20035,6 +20640,7 @@
       "cap": 1000,
       "dir": "data/puzzles/FGjOYublBEs",
       "iss_size": 2110,
+      "iss_url_length": 2097,
       "script_size": 2222
     },
     {
@@ -20060,6 +20666,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -20090,6 +20697,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Z5AyHRWh-fo",
       "iss_size": 517,
+      "iss_url_length": 544,
       "script_size": 1772
     },
     {
@@ -20118,6 +20726,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ftx4AbNRU84",
       "iss_size": 228,
+      "iss_url_length": 273,
       "script_size": 815
     },
     {
@@ -20147,6 +20756,7 @@
       "cap": 250000,
       "dir": "data/puzzles/OwAtzJLNt0U",
       "iss_size": 1539,
+      "iss_url_length": 1574,
       "script_size": 1439
     },
     {
@@ -20175,6 +20785,7 @@
       "cap": 1000,
       "dir": "data/puzzles/TNIPwa9x2vc",
       "iss_size": 717,
+      "iss_url_length": 739,
       "script_size": 1393
     },
     {
@@ -20214,6 +20825,7 @@
       "cap": 25516,
       "dir": "data/puzzles/1mz2gzfti3Q",
       "iss_size": 6359,
+      "iss_url_length": 6432,
       "script_size": 3657
     },
     {
@@ -20246,6 +20858,7 @@
       "cap": 95785,
       "dir": "data/puzzles/tyomt-ZceGs",
       "iss_size": 3404,
+      "iss_url_length": 3447,
       "script_size": 3913
     },
     {
@@ -20307,6 +20920,7 @@
       "cap": 5490,
       "dir": "data/puzzles/axENrc8qYZs",
       "iss_size": 231344,
+      "iss_url_length": 236765,
       "script_size": 9594
     },
     {
@@ -20340,6 +20954,7 @@
       "cap": 1000,
       "dir": "data/puzzles/EIwymhdpsCk",
       "iss_size": 705,
+      "iss_url_length": 752,
       "script_size": 1738
     },
     {
@@ -20369,6 +20984,7 @@
       "cap": 381679,
       "dir": "data/puzzles/qEGLhzb_IZE",
       "iss_size": 315,
+      "iss_url_length": 357,
       "script_size": 963
     },
     {
@@ -20399,6 +21015,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WhCYbISOzms",
       "iss_size": 326,
+      "iss_url_length": 375,
       "script_size": 1518
     },
     {
@@ -20434,6 +21051,7 @@
       "cap": 47619,
       "dir": "data/puzzles/7zSjY2D57PQ",
       "iss_size": 4088,
+      "iss_url_length": 4132,
       "script_size": 1704
     },
     {
@@ -20472,6 +21090,7 @@
       "cap": 67842,
       "dir": "data/puzzles/uc3gUeSnkPM",
       "iss_size": 99966,
+      "iss_url_length": 99781,
       "script_size": 3447
     },
     {
@@ -20499,6 +21118,7 @@
       "cap": 1000,
       "dir": "data/puzzles/uyTSKJ1DB6c",
       "iss_size": 409,
+      "iss_url_length": 447,
       "script_size": 1006
     },
     {
@@ -20527,6 +21147,7 @@
       "cap": 1000,
       "dir": "data/puzzles/khKgc7sz6ok",
       "iss_size": 458,
+      "iss_url_length": 494,
       "script_size": 960
     },
     {
@@ -20560,6 +21181,7 @@
       "cap": 1000,
       "dir": "data/puzzles/wbeaq3sqDm8",
       "iss_size": 7593,
+      "iss_url_length": 7596,
       "script_size": 2510
     },
     {
@@ -20591,6 +21213,7 @@
       "cap": 68634,
       "dir": "data/puzzles/BSFF2g0gf3A",
       "iss_size": 7202,
+      "iss_url_length": 7216,
       "script_size": 2811
     },
     {
@@ -20635,6 +21258,7 @@
       "cap": 32258,
       "dir": "data/puzzles/bgsg3VFURsA",
       "iss_size": 14659,
+      "iss_url_length": 14719,
       "script_size": 5218
     },
     {
@@ -20671,6 +21295,7 @@
       "cap": 1000,
       "dir": "data/puzzles/gqmEL10uFok",
       "iss_size": 3024,
+      "iss_url_length": 2841,
       "script_size": 3285
     },
     {
@@ -20701,6 +21326,7 @@
       "cap": 147710,
       "dir": "data/puzzles/v7StLbDdp30",
       "iss_size": 724,
+      "iss_url_length": 771,
       "script_size": 825
     },
     {
@@ -20735,6 +21361,7 @@
       "cap": 208333,
       "dir": "data/puzzles/RwIOiwR5g9A",
       "iss_size": 81550,
+      "iss_url_length": 79769,
       "script_size": 3956
     },
     {
@@ -20762,6 +21389,7 @@
       "cap": 1000,
       "dir": "data/puzzles/DF0f15tya5Q",
       "iss_size": 345,
+      "iss_url_length": 383,
       "script_size": 917
     },
     {
@@ -20797,6 +21425,7 @@
       "cap": 349650,
       "dir": "data/puzzles/33vSAyF-adI",
       "iss_size": 1245,
+      "iss_url_length": 1262,
       "script_size": 2999
     },
     {
@@ -20827,6 +21456,7 @@
       "cap": 107526,
       "dir": "data/puzzles/W5QnWVnZaSw",
       "iss_size": 1247,
+      "iss_url_length": 1296,
       "script_size": 1932
     },
     {
@@ -20855,6 +21485,7 @@
       "cap": 1000,
       "dir": "data/puzzles/9LDrEYKa-aQ",
       "iss_size": 633,
+      "iss_url_length": 685,
       "script_size": 929
     },
     {
@@ -20884,6 +21515,7 @@
       "cap": 371747,
       "dir": "data/puzzles/SEdHTfSPD3Q",
       "iss_size": 293,
+      "iss_url_length": 335,
       "script_size": 927
     },
     {
@@ -20912,6 +21544,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Oc4rSV8hcIY",
       "iss_size": 575,
+      "iss_url_length": 611,
       "script_size": 1137
     },
     {
@@ -20956,6 +21589,7 @@
       "cap": 1000,
       "dir": "data/puzzles/bO6r_gkEaB4",
       "iss_size": 4733,
+      "iss_url_length": 4799,
       "script_size": 6186
     },
     {
@@ -20984,6 +21618,7 @@
       "cap": 1000,
       "dir": "data/puzzles/UA5AMVmhQ6U",
       "iss_size": 259,
+      "iss_url_length": 298,
       "script_size": 1073
     },
     {
@@ -21013,6 +21648,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ZxElsPvjkqw",
       "iss_size": 254,
+      "iss_url_length": 293,
       "script_size": 819
     },
     {
@@ -21042,6 +21678,7 @@
       "cap": 1000,
       "dir": "data/puzzles/caYxcynuV5o",
       "iss_size": 657,
+      "iss_url_length": 678,
       "script_size": 1212
     },
     {
@@ -21070,6 +21707,7 @@
       "cap": 313479,
       "dir": "data/puzzles/OMqUAduLZfI",
       "iss_size": 1917,
+      "iss_url_length": 1886,
       "script_size": 1112
     },
     {
@@ -21104,6 +21742,7 @@
       "cap": 1000,
       "dir": "data/puzzles/emNOUklCnWQ",
       "iss_size": 639,
+      "iss_url_length": 664,
       "script_size": 1612
     },
     {
@@ -21131,6 +21770,7 @@
       "cap": 108932,
       "dir": "data/puzzles/_Rf4tFPFPqU",
       "iss_size": 6098,
+      "iss_url_length": 6150,
       "script_size": 918
     },
     {
@@ -21179,6 +21819,7 @@
       "cap": 1000,
       "dir": "data/puzzles/fIal_Zby45U",
       "iss_size": 12409,
+      "iss_url_length": 12519,
       "script_size": 5744
     },
     {
@@ -21212,6 +21853,7 @@
       "cap": 1000,
       "dir": "data/puzzles/wJBbBTAxq3s",
       "iss_size": 5400,
+      "iss_url_length": 5055,
       "script_size": 2218
     },
     {
@@ -21240,6 +21882,7 @@
       "cap": 1000,
       "dir": "data/puzzles/C_bwoRF1pQw",
       "iss_size": 1468,
+      "iss_url_length": 1518,
       "script_size": 1545
     },
     {
@@ -21271,6 +21914,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YTsn0cEJ_TY",
       "iss_size": 245,
+      "iss_url_length": 285,
       "script_size": 996
     },
     {
@@ -21300,6 +21944,7 @@
       "cap": 1000,
       "dir": "data/puzzles/X2e6JsSPvWQ",
       "iss_size": 495,
+      "iss_url_length": 539,
       "script_size": 1586
     },
     {
@@ -21328,6 +21973,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RSa9r7ohxn8",
       "iss_size": 329,
+      "iss_url_length": 366,
       "script_size": 921
     },
     {
@@ -21368,6 +22014,7 @@
       "cap": 1000,
       "dir": "data/puzzles/cZjpWVk2dhU.1",
       "iss_size": 3299,
+      "iss_url_length": 3366,
       "script_size": 2944
     },
     {
@@ -21403,6 +22050,7 @@
       "cap": 1000,
       "dir": "data/puzzles/cZjpWVk2dhU.2",
       "iss_size": 3662,
+      "iss_url_length": 3690,
       "script_size": 3248
     },
     {
@@ -21428,6 +22076,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -21462,6 +22111,7 @@
       "cap": 196463,
       "dir": "data/puzzles/m8Y1iTGkB50",
       "iss_size": 2462,
+      "iss_url_length": 2489,
       "script_size": 3970
     },
     {
@@ -21492,6 +22142,7 @@
       "cap": 1000,
       "dir": "data/puzzles/qK9ocKkJk1c",
       "iss_size": 412,
+      "iss_url_length": 454,
       "script_size": 1137
     },
     {
@@ -21525,6 +22176,7 @@
       "cap": 105263,
       "dir": "data/puzzles/-aGOCdPb5uU",
       "iss_size": 5684,
+      "iss_url_length": 5727,
       "script_size": 5039
     },
     {
@@ -21555,6 +22207,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ulE5oGZhuCI",
       "iss_size": 456,
+      "iss_url_length": 490,
       "script_size": 1142
     },
     {
@@ -21585,6 +22238,7 @@
       "cap": 1000,
       "dir": "data/puzzles/arwrroERaz0",
       "iss_size": 598,
+      "iss_url_length": 634,
       "script_size": 1243
     },
     {
@@ -21621,6 +22275,7 @@
       "cap": 1000,
       "dir": "data/puzzles/W5U7KHJiNEE",
       "iss_size": 51670,
+      "iss_url_length": 51522,
       "script_size": 6063
     },
     {
@@ -21651,6 +22306,7 @@
       "cap": 255754,
       "dir": "data/puzzles/RGkXV3Uauqg",
       "iss_size": 427,
+      "iss_url_length": 464,
       "script_size": 1115
     },
     {
@@ -21678,6 +22334,7 @@
       "cap": 1000,
       "dir": "data/puzzles/VRYxSDadLXI",
       "iss_size": 255,
+      "iss_url_length": 309,
       "script_size": 819
     },
     {
@@ -21715,6 +22372,7 @@
       "cap": 35880,
       "dir": "data/puzzles/g8wjYAfQ-5g",
       "iss_size": 16592,
+      "iss_url_length": 16629,
       "script_size": 5435
     },
     {
@@ -21745,6 +22403,7 @@
       "cap": 1000,
       "dir": "data/puzzles/DQRNOwZ5Dig",
       "iss_size": 597,
+      "iss_url_length": 629,
       "script_size": 1349
     },
     {
@@ -21779,6 +22438,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7etaXRyE3QY",
       "iss_size": 1370,
+      "iss_url_length": 1459,
       "script_size": 2010
     },
     {
@@ -21809,6 +22469,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7MbMVelrMGY",
       "iss_size": 612,
+      "iss_url_length": 644,
       "script_size": 1156
     },
     {
@@ -21838,6 +22499,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Jdsnf_kp3jE",
       "iss_size": 405,
+      "iss_url_length": 448,
       "script_size": 1181
     },
     {
@@ -21880,6 +22542,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nTU1kgeBTe0",
       "iss_size": 37143,
+      "iss_url_length": 36636,
       "script_size": 4794
     },
     {
@@ -21916,6 +22579,7 @@
       "cap": 1000,
       "dir": "data/puzzles/V4tTkMKlzTw",
       "iss_size": 2290,
+      "iss_url_length": 2362,
       "script_size": 2193
     },
     {
@@ -21948,6 +22612,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Nbp5FRyACmA",
       "iss_size": 6528,
+      "iss_url_length": 6575,
       "script_size": 2075
     },
     {
@@ -21979,6 +22644,7 @@
       "cap": 1000,
       "dir": "data/puzzles/fooaoPJcdF4",
       "iss_size": 678,
+      "iss_url_length": 718,
       "script_size": 2154
     },
     {
@@ -22008,6 +22674,7 @@
       "cap": 1000,
       "dir": "data/puzzles/OzzuJUU6g84",
       "iss_size": 113,
+      "iss_url_length": 167,
       "script_size": 725
     },
     {
@@ -22035,6 +22702,7 @@
       "cap": 1000,
       "dir": "data/puzzles/BiET2qD45hg",
       "iss_size": 449,
+      "iss_url_length": 493,
       "script_size": 855
     },
     {
@@ -22062,6 +22730,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nkMCRP6Obzw",
       "iss_size": 1303,
+      "iss_url_length": 1354,
       "script_size": 1149
     },
     {
@@ -22092,6 +22761,7 @@
       "cap": 31555,
       "dir": "data/puzzles/YckVr1GDrj4",
       "iss_size": 2182,
+      "iss_url_length": 2226,
       "script_size": 1973
     },
     {
@@ -22120,6 +22790,7 @@
       "cap": 1000,
       "dir": "data/puzzles/CaCAZhVcovA",
       "iss_size": 739,
+      "iss_url_length": 778,
       "script_size": 1460
     },
     {
@@ -22147,6 +22818,7 @@
       "cap": 164473,
       "dir": "data/puzzles/stUFi592gxk",
       "iss_size": 420,
+      "iss_url_length": 456,
       "script_size": 1086
     },
     {
@@ -22179,6 +22851,7 @@
       "cap": 1000,
       "dir": "data/puzzles/c3YgDoCWtl8",
       "iss_size": 449,
+      "iss_url_length": 498,
       "script_size": 1417
     },
     {
@@ -22211,6 +22884,7 @@
       "cap": 1000,
       "dir": "data/puzzles/vXUIMVRdx_Q",
       "iss_size": 3164,
+      "iss_url_length": 2922,
       "script_size": 1572
     },
     {
@@ -22241,6 +22915,7 @@
       "cap": 1000,
       "dir": "data/puzzles/QpD13CSRpJA",
       "iss_size": 347,
+      "iss_url_length": 388,
       "script_size": 889
     },
     {
@@ -22272,6 +22947,7 @@
       "cap": 1000,
       "dir": "data/puzzles/PgzOwyJZOy0",
       "iss_size": 988,
+      "iss_url_length": 1035,
       "script_size": 2970
     },
     {
@@ -22301,6 +22977,7 @@
       "cap": 1000,
       "dir": "data/puzzles/rdo-sBSgxKo",
       "iss_size": 332,
+      "iss_url_length": 379,
       "script_size": 879
     },
     {
@@ -22331,6 +23008,7 @@
       "cap": 1000,
       "dir": "data/puzzles/AiuDikp_bLQ",
       "iss_size": 515,
+      "iss_url_length": 546,
       "script_size": 1208
     },
     {
@@ -22358,6 +23036,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YC7dPnq8bcM",
       "iss_size": 302,
+      "iss_url_length": 350,
       "script_size": 995
     },
     {
@@ -22411,6 +23090,7 @@
       "cap": 11800,
       "dir": "data/puzzles/rDZ7zuMQN_U",
       "iss_size": 16579,
+      "iss_url_length": 16663,
       "script_size": 7887
     },
     {
@@ -22443,6 +23123,7 @@
       "cap": 1000,
       "dir": "data/puzzles/kYS4k8oFN7U",
       "iss_size": 727,
+      "iss_url_length": 765,
       "script_size": 1837
     },
     {
@@ -22472,6 +23153,7 @@
       "cap": 1000,
       "dir": "data/puzzles/_ID6vxLaySA",
       "iss_size": 796,
+      "iss_url_length": 846,
       "script_size": 2188
     },
     {
@@ -22501,6 +23183,7 @@
       "cap": 1000,
       "dir": "data/puzzles/YBcGElZhcpg",
       "iss_size": 268,
+      "iss_url_length": 311,
       "script_size": 862
     },
     {
@@ -22528,6 +23211,7 @@
       "cap": 10322,
       "dir": "data/puzzles/z3fhJ-hMofU",
       "iss_size": 3078,
+      "iss_url_length": 3133,
       "script_size": 2067
     },
     {
@@ -22556,6 +23240,7 @@
       "cap": 1000,
       "dir": "data/puzzles/pxDQpe-_exU",
       "iss_size": 349,
+      "iss_url_length": 393,
       "script_size": 815
     },
     {
@@ -22604,6 +23289,7 @@
       "cap": 176056,
       "dir": "data/puzzles/IqW3xhRMXQ0",
       "iss_size": 30984,
+      "iss_url_length": 30698,
       "script_size": 3943
     },
     {
@@ -22633,6 +23319,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Q9kVuyrX7tU",
       "iss_size": 338,
+      "iss_url_length": 377,
       "script_size": 955
     },
     {
@@ -22663,6 +23350,7 @@
       "cap": 1000,
       "dir": "data/puzzles/TN87bNlBv9E",
       "iss_size": 749,
+      "iss_url_length": 769,
       "script_size": 1772
     },
     {
@@ -22693,6 +23381,7 @@
       "cap": 1000,
       "dir": "data/puzzles/5igcFy0q5pk",
       "iss_size": 1049,
+      "iss_url_length": 1028,
       "script_size": 1587
     },
     {
@@ -22721,6 +23410,7 @@
       "cap": 255754,
       "dir": "data/puzzles/V1Rx7xE66s0",
       "iss_size": 181,
+      "iss_url_length": 226,
       "script_size": 559
     },
     {
@@ -22751,6 +23441,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ZjCZdLkilcg",
       "iss_size": 370,
+      "iss_url_length": 405,
       "script_size": 1397
     },
     {
@@ -22786,6 +23477,7 @@
       "cap": 164473,
       "dir": "data/puzzles/4bri-zC18Ps",
       "iss_size": 4527,
+      "iss_url_length": 4368,
       "script_size": 2761
     },
     {
@@ -22825,6 +23517,7 @@
       "cap": 1000,
       "dir": "data/puzzles/SdRWuy5bUYM",
       "iss_size": 140605,
+      "iss_url_length": 136158,
       "script_size": 7528
     },
     {
@@ -22868,6 +23561,7 @@
       "cap": 70323,
       "dir": "data/puzzles/44nj7guMdHw",
       "iss_size": 21238,
+      "iss_url_length": 20435,
       "script_size": 7113
     },
     {
@@ -22897,6 +23591,7 @@
       "cap": 118203,
       "dir": "data/puzzles/nUmLfBXbB_c",
       "iss_size": 1074,
+      "iss_url_length": 1122,
       "script_size": 929
     },
     {
@@ -22926,6 +23621,7 @@
       "cap": 352112,
       "dir": "data/puzzles/OUlAVsaWnDQ",
       "iss_size": 493,
+      "iss_url_length": 524,
       "script_size": 1103
     },
     {
@@ -22957,6 +23653,7 @@
       "cap": 1000,
       "dir": "data/puzzles/y1ZTfT3sSgs",
       "iss_size": 849,
+      "iss_url_length": 892,
       "script_size": 1735
     },
     {
@@ -22993,6 +23690,7 @@
       "cap": 296735,
       "dir": "data/puzzles/lqU9gph2juo",
       "iss_size": 2395,
+      "iss_url_length": 2474,
       "script_size": 3336
     },
     {
@@ -23020,6 +23718,7 @@
       "cap": 1000,
       "dir": "data/puzzles/wecYBkW0QoI",
       "iss_size": 384,
+      "iss_url_length": 437,
       "script_size": 1335
     },
     {
@@ -23053,6 +23752,7 @@
       "cap": 1000,
       "dir": "data/puzzles/A7VFa7wg4OM",
       "iss_size": 1754,
+      "iss_url_length": 1771,
       "script_size": 1912
     },
     {
@@ -23100,6 +23800,7 @@
       "cap": 62034,
       "dir": "data/puzzles/ZsqBqEUYnpk",
       "iss_size": 62580,
+      "iss_url_length": 62720,
       "script_size": 8251
     },
     {
@@ -23131,6 +23832,7 @@
       "cap": 1000,
       "dir": "data/puzzles/0J_1jDldYDA",
       "iss_size": 663,
+      "iss_url_length": 691,
       "script_size": 1470
     },
     {
@@ -23166,6 +23868,7 @@
       "cap": 1000,
       "dir": "data/puzzles/rRQro3trPYE",
       "iss_size": 780,
+      "iss_url_length": 810,
       "script_size": 2039
     },
     {
@@ -23199,6 +23902,7 @@
       "cap": 323624,
       "dir": "data/puzzles/61G2s1gotC0",
       "iss_size": 366,
+      "iss_url_length": 404,
       "script_size": 1151
     },
     {
@@ -23227,6 +23931,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zpWpBocgLss",
       "iss_size": 173,
+      "iss_url_length": 218,
       "script_size": 551
     },
     {
@@ -23260,6 +23965,7 @@
       "cap": 1000,
       "dir": "data/puzzles/HibdtVhbgVc",
       "iss_size": 436,
+      "iss_url_length": 476,
       "script_size": 1174
     },
     {
@@ -23288,6 +23994,7 @@
       "cap": 1000,
       "dir": "data/puzzles/EwD7nGK6Elc",
       "iss_size": 227,
+      "iss_url_length": 272,
       "script_size": 820
     },
     {
@@ -23317,6 +24024,7 @@
       "cap": 370370,
       "dir": "data/puzzles/89kOzzINk7g",
       "iss_size": 393,
+      "iss_url_length": 431,
       "script_size": 1011
     },
     {
@@ -23348,6 +24056,7 @@
       "cap": 1000,
       "dir": "data/puzzles/yXuWkPnncBI",
       "iss_size": 621,
+      "iss_url_length": 660,
       "script_size": 1732
     },
     {
@@ -23382,6 +24091,7 @@
       "cap": 1000,
       "dir": "data/puzzles/M5TEBJ8VB6Q",
       "iss_size": 2746,
+      "iss_url_length": 3191,
       "script_size": 2252
     },
     {
@@ -23411,6 +24121,7 @@
       "cap": 1000,
       "dir": "data/puzzles/MyMUFi6rNdA",
       "iss_size": 19027,
+      "iss_url_length": 19149,
       "script_size": 3184
     },
     {
@@ -23438,6 +24149,7 @@
       "cap": 1000,
       "dir": "data/puzzles/krakAydaTWQ",
       "iss_size": 351,
+      "iss_url_length": 391,
       "script_size": 866
     },
     {
@@ -23466,6 +24178,7 @@
       "cap": 32226,
       "dir": "data/puzzles/EfEut3QB1x0",
       "iss_size": 66642,
+      "iss_url_length": 66707,
       "script_size": 3023
     },
     {
@@ -23496,6 +24209,7 @@
       "cap": 1000,
       "dir": "data/puzzles/P8N2QmJifnU",
       "iss_size": 371,
+      "iss_url_length": 410,
       "script_size": 1029
     },
     {
@@ -23523,6 +24237,7 @@
       "cap": 483091,
       "dir": "data/puzzles/_k6OwVyU78Q",
       "iss_size": 247,
+      "iss_url_length": 284,
       "script_size": 728
     },
     {
@@ -23555,6 +24270,7 @@
       "cap": 1000,
       "dir": "data/puzzles/s2xzEzHxF8I",
       "iss_size": 3669,
+      "iss_url_length": 3380,
       "script_size": 2130
     },
     {
@@ -23585,6 +24301,7 @@
       "cap": 1000,
       "dir": "data/puzzles/P0x5DIGDcwo",
       "iss_size": 1252,
+      "iss_url_length": 1302,
       "script_size": 2180
     },
     {
@@ -23620,6 +24337,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RzmjwiyQXgo",
       "iss_size": 739,
+      "iss_url_length": 758,
       "script_size": 1436
     },
     {
@@ -23649,6 +24367,7 @@
       "cap": 269541,
       "dir": "data/puzzles/9qWWsbNePts",
       "iss_size": 4253,
+      "iss_url_length": 4268,
       "script_size": 1116
     },
     {
@@ -23681,6 +24400,7 @@
       "cap": 1000,
       "dir": "data/puzzles/BsJOf1TwIVM",
       "iss_size": 446,
+      "iss_url_length": 482,
       "script_size": 1433
     },
     {
@@ -23709,6 +24429,7 @@
       "cap": 1000,
       "dir": "data/puzzles/plao2VczaAA",
       "iss_size": 345,
+      "iss_url_length": 385,
       "script_size": 963
     },
     {
@@ -23747,6 +24468,7 @@
       "cap": 119617,
       "dir": "data/puzzles/q32NxasOR3Y.1",
       "iss_size": 18719,
+      "iss_url_length": 18703,
       "script_size": 8880
     },
     {
@@ -23783,6 +24505,7 @@
       "cap": 1000,
       "dir": "data/puzzles/q32NxasOR3Y.2",
       "iss_size": 70535,
+      "iss_url_length": 67345,
       "script_size": 3337
     },
     {
@@ -23821,6 +24544,7 @@
       "cap": 1000,
       "dir": "data/puzzles/q32NxasOR3Y.3",
       "iss_size": 28695,
+      "iss_url_length": 28751,
       "script_size": 4981
     },
     {
@@ -23850,6 +24574,7 @@
       "cap": 1000,
       "dir": "data/puzzles/q32NxasOR3Y.4",
       "iss_size": 301,
+      "iss_url_length": 351,
       "script_size": 1555
     },
     {
@@ -23880,6 +24605,7 @@
       "cap": 1000,
       "dir": "data/puzzles/q32NxasOR3Y.5",
       "iss_size": 194,
+      "iss_url_length": 238,
       "script_size": 743
     },
     {
@@ -23907,6 +24633,7 @@
       "cap": 1000,
       "dir": "data/puzzles/17CJvs36_3U",
       "iss_size": 311,
+      "iss_url_length": 350,
       "script_size": 786
     },
     {
@@ -23938,6 +24665,7 @@
       "cap": 223214,
       "dir": "data/puzzles/LfYEZJbNlCQ",
       "iss_size": 15028,
+      "iss_url_length": 14410,
       "script_size": 2425
     },
     {
@@ -23966,6 +24694,7 @@
       "cap": 1000,
       "dir": "data/puzzles/xj7sU8q1fks",
       "iss_size": 304,
+      "iss_url_length": 344,
       "script_size": 901
     },
     {
@@ -23993,6 +24722,7 @@
       "cap": 1000,
       "dir": "data/puzzles/WamrJ_Kju74",
       "iss_size": 523,
+      "iss_url_length": 564,
       "script_size": 1039
     },
     {
@@ -24021,6 +24751,7 @@
       "cap": 1000,
       "dir": "data/puzzles/hML5ozL5TOM",
       "iss_size": 865,
+      "iss_url_length": 922,
       "script_size": 2157
     },
     {
@@ -24093,6 +24824,7 @@
       "cap": 13210,
       "dir": "data/puzzles/7pAnA8K5Ju0",
       "iss_size": 31208,
+      "iss_url_length": 31378,
       "script_size": 8659
     },
     {
@@ -24121,6 +24853,7 @@
       "cap": 1000,
       "dir": "data/puzzles/QckuFmNa448",
       "iss_size": 300,
+      "iss_url_length": 342,
       "script_size": 743
     },
     {
@@ -24155,6 +24888,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ZxoM9EjCj0A",
       "iss_size": 1962,
+      "iss_url_length": 2006,
       "script_size": 2320
     },
     {
@@ -24183,6 +24917,7 @@
       "cap": 1000,
       "dir": "data/puzzles/HHc5-eK_oCE",
       "iss_size": 524,
+      "iss_url_length": 567,
       "script_size": 871
     },
     {
@@ -24215,6 +24950,7 @@
       "cap": 1000,
       "dir": "data/puzzles/UvLyXnOoOdI",
       "iss_size": 413,
+      "iss_url_length": 451,
       "script_size": 909
     },
     {
@@ -24244,6 +24980,7 @@
       "cap": 45105,
       "dir": "data/puzzles/L6mIIw2fqT0",
       "iss_size": 19817,
+      "iss_url_length": 18145,
       "script_size": 1666
     },
     {
@@ -24285,6 +25022,7 @@
       "cap": 214592,
       "dir": "data/puzzles/YROLYwkhj4E",
       "iss_size": 21541,
+      "iss_url_length": 21590,
       "script_size": 3091
     },
     {
@@ -24312,6 +25050,7 @@
       "cap": 1000,
       "dir": "data/puzzles/O5szvG2sxv8",
       "iss_size": 415,
+      "iss_url_length": 446,
       "script_size": 1010
     },
     {
@@ -24341,6 +25080,7 @@
       "cap": 1000,
       "dir": "data/puzzles/4dgGvxj2ljE",
       "iss_size": 414,
+      "iss_url_length": 463,
       "script_size": 1397
     },
     {
@@ -24368,6 +25108,7 @@
       "cap": 1000,
       "dir": "data/puzzles/f0nXBbpoCHU",
       "iss_size": 339,
+      "iss_url_length": 386,
       "script_size": 818
     },
     {
@@ -24396,6 +25137,7 @@
       "cap": 260416,
       "dir": "data/puzzles/7212m1XUn8Q",
       "iss_size": 423,
+      "iss_url_length": 463,
       "script_size": 972
     },
     {
@@ -24430,6 +25172,7 @@
       "cap": 787401,
       "dir": "data/puzzles/ZnfrAygWMYs",
       "iss_size": 317,
+      "iss_url_length": 363,
       "script_size": 1622
     },
     {
@@ -24458,6 +25201,7 @@
       "cap": 1000,
       "dir": "data/puzzles/f_xkka-arrA",
       "iss_size": 396,
+      "iss_url_length": 440,
       "script_size": 1125
     },
     {
@@ -24501,6 +25245,7 @@
       "cap": 27987,
       "dir": "data/puzzles/1FdYTTEecbU",
       "iss_size": 11913,
+      "iss_url_length": 12007,
       "script_size": 4357
     },
     {
@@ -24534,6 +25279,7 @@
       "cap": 1000,
       "dir": "data/puzzles/RlM1G6GVmKo",
       "iss_size": 373,
+      "iss_url_length": 413,
       "script_size": 1264
     },
     {
@@ -24559,6 +25305,7 @@
       "cap": null,
       "dir": null,
       "iss_size": null,
+      "iss_url_length": null,
       "script_size": null
     },
     {
@@ -24593,6 +25340,7 @@
       "cap": 1000,
       "dir": "data/puzzles/hDaU7oSKL4I",
       "iss_size": 28888,
+      "iss_url_length": 28941,
       "script_size": 5591
     },
     {
@@ -24623,6 +25371,7 @@
       "cap": 1000,
       "dir": "data/puzzles/8dR8hctBTd0",
       "iss_size": 2859,
+      "iss_url_length": 2938,
       "script_size": 1569
     },
     {
@@ -24650,6 +25399,7 @@
       "cap": 1000,
       "dir": "data/puzzles/sgrqHJq4OgY",
       "iss_size": 1018,
+      "iss_url_length": 1083,
       "script_size": 1291
     },
     {
@@ -24681,6 +25431,7 @@
       "cap": 1000,
       "dir": "data/puzzles/LZWnotnH9Dk",
       "iss_size": 456,
+      "iss_url_length": 505,
       "script_size": 2090
     },
     {
@@ -24711,6 +25462,7 @@
       "cap": 1000,
       "dir": "data/puzzles/0HDv7XZzeuw",
       "iss_size": 138,
+      "iss_url_length": 186,
       "script_size": 697
     },
     {
@@ -24744,6 +25496,7 @@
       "cap": 1000,
       "dir": "data/puzzles/2XTGXn1136k",
       "iss_size": 3086,
+      "iss_url_length": 2982,
       "script_size": 2279
     },
     {
@@ -24772,6 +25525,7 @@
       "cap": 1000,
       "dir": "data/puzzles/qOxkiXk12Pw",
       "iss_size": 1402,
+      "iss_url_length": 1444,
       "script_size": 2600
     },
     {
@@ -24803,6 +25557,7 @@
       "cap": 1000,
       "dir": "data/puzzles/MNcAigXD2Cc",
       "iss_size": 11008,
+      "iss_url_length": 10756,
       "script_size": 3771
     },
     {
@@ -24831,6 +25586,7 @@
       "cap": 595238,
       "dir": "data/puzzles/ddnLr8jWNeY",
       "iss_size": 1474,
+      "iss_url_length": 1518,
       "script_size": 1340
     },
     {
@@ -24862,6 +25618,7 @@
       "cap": 1000,
       "dir": "data/puzzles/qBbAtCyR6AA",
       "iss_size": 655,
+      "iss_url_length": 713,
       "script_size": 1893
     },
     {
@@ -24892,6 +25649,7 @@
       "cap": 308641,
       "dir": "data/puzzles/g2PUwXrKogU",
       "iss_size": 396,
+      "iss_url_length": 438,
       "script_size": 1001
     },
     {
@@ -24921,6 +25679,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ZH_QLPFKmFA",
       "iss_size": 340,
+      "iss_url_length": 387,
       "script_size": 1134
     },
     {
@@ -24950,6 +25709,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zAQJfjWLZEA",
       "iss_size": 163,
+      "iss_url_length": 209,
       "script_size": 560
     },
     {
@@ -24980,6 +25740,7 @@
       "cap": 1000,
       "dir": "data/puzzles/nI0Z4lF_3-8",
       "iss_size": 506,
+      "iss_url_length": 574,
       "script_size": 1627
     },
     {
@@ -25007,6 +25768,7 @@
       "cap": 1000,
       "dir": "data/puzzles/TQXcEoLc_PY",
       "iss_size": 391,
+      "iss_url_length": 425,
       "script_size": 793
     },
     {
@@ -25035,6 +25797,7 @@
       "cap": 1000,
       "dir": "data/puzzles/kaxgr_x3ZN4",
       "iss_size": 614,
+      "iss_url_length": 646,
       "script_size": 1466
     },
     {
@@ -25135,6 +25898,7 @@
       "cap": 120481,
       "dir": "data/puzzles/n6-I-bEaWiY",
       "iss_size": 10571,
+      "iss_url_length": 11080,
       "script_size": 4804
     },
     {
@@ -25163,6 +25927,7 @@
       "cap": 1000,
       "dir": "data/puzzles/_H094kvgR7o",
       "iss_size": 363,
+      "iss_url_length": 412,
       "script_size": 981
     },
     {
@@ -25191,6 +25956,7 @@
       "cap": 1000,
       "dir": "data/puzzles/AubFOPHxEJQ",
       "iss_size": 314,
+      "iss_url_length": 355,
       "script_size": 892
     },
     {
@@ -25220,6 +25986,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Oa1T6bDqJ3I",
       "iss_size": 281,
+      "iss_url_length": 322,
       "script_size": 949
     },
     {
@@ -25251,6 +26018,7 @@
       "cap": 1000,
       "dir": "data/puzzles/lu7Hd6Iz6bM",
       "iss_size": 1563,
+      "iss_url_length": 1584,
       "script_size": 1155
     },
     {
@@ -25278,6 +26046,7 @@
       "cap": 1000,
       "dir": "data/puzzles/fl8BuC4cPZY",
       "iss_size": 272,
+      "iss_url_length": 314,
       "script_size": 784
     },
     {
@@ -25310,6 +26079,7 @@
       "cap": 1000,
       "dir": "data/puzzles/Mso5LozIIO4",
       "iss_size": 385,
+      "iss_url_length": 423,
       "script_size": 1378
     },
     {
@@ -25338,6 +26108,7 @@
       "cap": 1000,
       "dir": "data/puzzles/y2PeyihdkFY",
       "iss_size": 404,
+      "iss_url_length": 450,
       "script_size": 1152
     },
     {
@@ -25365,6 +26136,7 @@
       "cap": 370370,
       "dir": "data/puzzles/bpKitD8EgSo",
       "iss_size": 359,
+      "iss_url_length": 413,
       "script_size": 1476
     },
     {
@@ -25394,6 +26166,7 @@
       "cap": 2370,
       "dir": "data/puzzles/GfLLGEDEHiI",
       "iss_size": 33709,
+      "iss_url_length": 33738,
       "script_size": 2580
     },
     {
@@ -25424,6 +26197,7 @@
       "cap": 153139,
       "dir": "data/puzzles/AkZXbIP6QCM",
       "iss_size": 1765,
+      "iss_url_length": 1817,
       "script_size": 1288
     },
     {
@@ -25455,6 +26229,7 @@
       "cap": 1000,
       "dir": "data/puzzles/uGx2l9e-gDk",
       "iss_size": 3379,
+      "iss_url_length": 3290,
       "script_size": 1593
     },
     {
@@ -25483,6 +26258,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ImW62y8dTRQ",
       "iss_size": 353,
+      "iss_url_length": 393,
       "script_size": 1145
     },
     {
@@ -25523,6 +26299,7 @@
       "cap": 20601,
       "dir": "data/puzzles/1Jm6F20EbrQ",
       "iss_size": 11015,
+      "iss_url_length": 11083,
       "script_size": 3317
     },
     {
@@ -25551,6 +26328,7 @@
       "cap": 1000,
       "dir": "data/puzzles/-ieekoAnd-w",
       "iss_size": 318,
+      "iss_url_length": 357,
       "script_size": 1168
     },
     {
@@ -25585,6 +26363,7 @@
       "cap": 39603,
       "dir": "data/puzzles/rJkoLrrkj5Y",
       "iss_size": 6765,
+      "iss_url_length": 6842,
       "script_size": 1712
     },
     {
@@ -25620,6 +26399,7 @@
       "cap": 1000,
       "dir": "data/puzzles/QURo3LCFfvE",
       "iss_size": 224127,
+      "iss_url_length": 204321,
       "script_size": 3299
     },
     {
@@ -25650,6 +26430,7 @@
       "cap": 35014,
       "dir": "data/puzzles/D6hZjkJLZBg",
       "iss_size": 11203,
+      "iss_url_length": 11211,
       "script_size": 3424
     },
     {
@@ -25678,6 +26459,7 @@
       "cap": 1000,
       "dir": "data/puzzles/qgZojJmRr3g",
       "iss_size": 897,
+      "iss_url_length": 951,
       "script_size": 1297
     },
     {
@@ -25706,6 +26488,7 @@
       "cap": 1000,
       "dir": "data/puzzles/56bOJp7LJR8",
       "iss_size": 402,
+      "iss_url_length": 438,
       "script_size": 957
     },
     {
@@ -25735,6 +26518,7 @@
       "cap": 1000,
       "dir": "data/puzzles/rm3seq8LM4k",
       "iss_size": 2138,
+      "iss_url_length": 2172,
       "script_size": 2618
     },
     {
@@ -25762,6 +26546,7 @@
       "cap": 1000,
       "dir": "data/puzzles/xV95g9_NqV4",
       "iss_size": 893,
+      "iss_url_length": 937,
       "script_size": 1481
     },
     {
@@ -25797,6 +26582,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7r_6oSdgf0Q",
       "iss_size": 64450,
+      "iss_url_length": 64491,
       "script_size": 6163
     },
     {
@@ -25839,6 +26625,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XyS3yC_xwhQ",
       "iss_size": 16199,
+      "iss_url_length": 16195,
       "script_size": 9506
     },
     {
@@ -25868,6 +26655,7 @@
       "cap": 1000,
       "dir": "data/puzzles/zjoRubzzYjg",
       "iss_size": 487,
+      "iss_url_length": 521,
       "script_size": 1062
     },
     {
@@ -25896,6 +26684,7 @@
       "cap": 1000,
       "dir": "data/puzzles/MMw_SKG7pbA",
       "iss_size": 624,
+      "iss_url_length": 664,
       "script_size": 682
     },
     {
@@ -25923,6 +26712,7 @@
       "cap": 1000,
       "dir": "data/puzzles/XgcOW24QN8o",
       "iss_size": 253,
+      "iss_url_length": 298,
       "script_size": 673
     },
     {
@@ -25950,6 +26740,7 @@
       "cap": 1000,
       "dir": "data/puzzles/r-T6gROn-tQ",
       "iss_size": 321,
+      "iss_url_length": 363,
       "script_size": 2378
     },
     {
@@ -25977,6 +26768,7 @@
       "cap": 322580,
       "dir": "data/puzzles/sQSQtubtqwU",
       "iss_size": 261,
+      "iss_url_length": 303,
       "script_size": 621
     },
     {
@@ -26010,6 +26802,7 @@
       "cap": 1000,
       "dir": "data/puzzles/kFZa71JIKvo",
       "iss_size": 4251,
+      "iss_url_length": 4208,
       "script_size": 2139
     },
     {
@@ -26037,6 +26830,7 @@
       "cap": 1000,
       "dir": "data/puzzles/3Ol0T4kLrUY",
       "iss_size": 1087,
+      "iss_url_length": 1141,
       "script_size": 2167
     },
     {
@@ -26073,6 +26867,7 @@
       "cap": 103092,
       "dir": "data/puzzles/xtjZW1-ZFXs",
       "iss_size": 7359,
+      "iss_url_length": 7248,
       "script_size": 4979
     },
     {
@@ -26101,6 +26896,7 @@
       "cap": 1000,
       "dir": "data/puzzles/7xiLo-oAha8",
       "iss_size": 296,
+      "iss_url_length": 344,
       "script_size": 943
     },
     {
@@ -26129,6 +26925,7 @@
       "cap": 1000,
       "dir": "data/puzzles/95I8TShQuNY",
       "iss_size": 18884,
+      "iss_url_length": 18946,
       "script_size": 2515
     },
     {
@@ -26158,6 +26955,7 @@
       "cap": 1000,
       "dir": "data/puzzles/bDjjW91_auk",
       "iss_size": 457,
+      "iss_url_length": 507,
       "script_size": 1440
     },
     {
@@ -26186,6 +26984,7 @@
       "cap": 32797,
       "dir": "data/puzzles/D4_5zLRtSIw",
       "iss_size": 2278,
+      "iss_url_length": 2321,
       "script_size": 2347
     },
     {
@@ -26218,6 +27017,7 @@
       "cap": 1000,
       "dir": "data/puzzles/ePwRXcM5cPs",
       "iss_size": 734,
+      "iss_url_length": 768,
       "script_size": 1787
     },
     {
@@ -26254,6 +27054,7 @@
       "cap": 145348,
       "dir": "data/puzzles/WiU9XBKcEWA",
       "iss_size": 5523,
+      "iss_url_length": 5278,
       "script_size": 1989
     },
     {
@@ -26287,6 +27088,7 @@
       "cap": 1000,
       "dir": "data/puzzles/6kpXxmS_N54",
       "iss_size": 721,
+      "iss_url_length": 753,
       "script_size": 1844
     },
     {
@@ -26327,7 +27129,163 @@
       "cap": 134228,
       "dir": "data/puzzles/twJzFRPy1Fg",
       "iss_size": 17207,
+      "iss_url_length": 16851,
       "script_size": 3881
+    },
+    {
+      "puzzle_id": "Fy7iHJaW3fA",
+      "video_id": "Fy7iHJaW3fA",
+      "puzzle_title": "Hidden Connection",
+      "video_title": "Discover This Sudoku's Hidden Connection",
+      "author": "Fenners",
+      "video_url": "https://www.youtube.com/watch?v=Fy7iHJaW3fA",
+      "sources": [
+        "https://sudokupad.app/imlvnekher"
+      ],
+      "date": "2025-06-15",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Var",
+        "ValueIndexing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 36,
+      "backtracks": 37,
+      "solve_ms": 10.0,
+      "cap": 1000,
+      "dir": "data/puzzles/Fy7iHJaW3fA",
+      "iss_size": 2092,
+      "iss_url_length": 2108,
+      "script_size": 1049
+    },
+    {
+      "puzzle_id": "C5oLdzHDLSY",
+      "video_id": "C5oLdzHDLSY",
+      "puzzle_title": "Quincunx",
+      "video_title": "The Joys of the Quincunx",
+      "author": "Freegerator",
+      "video_url": "https://www.youtube.com/watch?v=C5oLdzHDLSY",
+      "sources": [
+        "https://sudokupad.app/41837g4m94"
+      ],
+      "date": "2025-06-14",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "WhiteDot",
+        "Arrow",
+        "NFA: Quincunx mod 5"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 629,
+      "backtracks": 630,
+      "solve_ms": 27.8,
+      "cap": 1000,
+      "dir": "data/puzzles/C5oLdzHDLSY",
+      "iss_size": 734,
+      "iss_url_length": 775,
+      "script_size": 1648
+    },
+    {
+      "puzzle_id": "ESkLcKJyzTA",
+      "video_id": "ESkLcKJyzTA",
+      "puzzle_title": "Unveil",
+      "video_title": "The Sudoku Where NO Domino Sums To 5!",
+      "author": "James Sinclair",
+      "video_url": "https://www.youtube.com/watch?v=ESkLcKJyzTA",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/unveil"
+      ],
+      "date": "2025-06-14",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Renban",
+        "X",
+        "StrictXV"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 577,
+      "backtracks": 578,
+      "solve_ms": 34.6,
+      "cap": 1000,
+      "dir": "data/puzzles/ESkLcKJyzTA",
+      "iss_size": 369,
+      "iss_url_length": 399,
+      "script_size": 930
+    },
+    {
+      "puzzle_id": "nLN7uIS8X3s",
+      "video_id": "nLN7uIS8X3s",
+      "puzzle_title": "Friday The 13th (1980-2025)",
+      "video_title": "Friday 13th - Not Always Terrifying!",
+      "author": "Jodawo",
+      "video_url": "https://www.youtube.com/watch?v=nLN7uIS8X3s",
+      "sources": [
+        "https://sudokupad.app/9c6on7okjr"
+      ],
+      "date": "2025-06-13",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "NFA: variant sandwich 13"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "backtracks": 3,
+      "solve_ms": 6.5,
+      "cap": 1000,
+      "dir": "data/puzzles/nLN7uIS8X3s",
+      "iss_size": 1127,
+      "iss_url_length": 1178,
+      "script_size": 2677
+    },
+    {
+      "puzzle_id": "Yy_haMUr8UE",
+      "video_id": "Yy_haMUr8UE",
+      "puzzle_title": "Dutch Flat Mates: Pick-up Sticks",
+      "video_title": "Incredible New Sudoku Rule: Pick-Up Sticks!",
+      "author": "Marty Sears",
+      "video_url": "https://www.youtube.com/watch?v=Yy_haMUr8UE",
+      "sources": [
+        "https://sudokupad.app/pc6ejr0nze"
+      ],
+      "date": "2025-06-13",
+      "status": "validated",
+      "constraint_types": [
+        "DutchFlatmates",
+        "Whisper",
+        "Entropic",
+        "Modular",
+        "Renban",
+        "Pair: parity stick",
+        "NFA: lower stick total"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 640,
+      "backtracks": 641,
+      "solve_ms": 99.3,
+      "cap": 1000,
+      "dir": "data/puzzles/Yy_haMUr8UE",
+      "iss_size": 4332,
+      "iss_url_length": 4384,
+      "script_size": 3036
     },
     {
       "puzzle_id": "A8GBl5GGypA",
@@ -26360,6 +27318,7 @@
       "cap": 149253,
       "dir": "data/puzzles/A8GBl5GGypA",
       "iss_size": 5772,
+      "iss_url_length": 5813,
       "script_size": 7040
     },
     {
@@ -26389,6 +27348,7 @@
       "cap": 1000,
       "dir": "data/puzzles/-2BWnJHVV38",
       "iss_size": 500,
+      "iss_url_length": 544,
       "script_size": 1593
     },
     {
@@ -26414,6 +27374,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.1",
       "iss_size": 183,
+      "iss_url_length": 235,
       "script_size": 700
     },
     {
@@ -26439,6 +27400,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.2",
       "iss_size": 162,
+      "iss_url_length": 214,
       "script_size": 658
     },
     {
@@ -26467,6 +27429,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.3",
       "iss_size": 511,
+      "iss_url_length": 541,
       "script_size": 1165
     },
     {
@@ -26492,6 +27455,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.4",
       "iss_size": 211,
+      "iss_url_length": 263,
       "script_size": 993
     },
     {
@@ -26521,6 +27485,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.5",
       "iss_size": 3239,
+      "iss_url_length": 3065,
       "script_size": 2448
     },
     {
@@ -26548,6 +27513,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.6",
       "iss_size": 299,
+      "iss_url_length": 345,
       "script_size": 908
     },
     {
@@ -26576,6 +27542,7 @@
       "cap": 1000,
       "dir": "data/puzzles/R6i558mDoNQ.7",
       "iss_size": 5114,
+      "iss_url_length": 4806,
       "script_size": 2016
     },
     {
@@ -26612,6 +27579,7 @@
       "cap": 38476,
       "dir": "data/puzzles/N1Fi3xt3NkY",
       "iss_size": 9756,
+      "iss_url_length": 9221,
       "script_size": 5065
     },
     {
@@ -26639,6 +27607,7 @@
       "cap": 1000,
       "dir": "data/puzzles/f54CZrQUxMo",
       "iss_size": 625,
+      "iss_url_length": 653,
       "script_size": 1319
     }
   ]

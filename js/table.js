@@ -11,8 +11,7 @@ import { ISS_BASE, el } from './util.js';
 const YOUTUBE_ICON = 'https://www.youtube.com/favicon.ico';
 
 // GitHub Pages / Fastly rejects request URLs past ~8 KB with 414 "URI Too Long".
-// The Solve URL is ISS_BASE + the .iss verbatim (its chars — . ~ - _ and URL-safe
-// base64 — aren't escaped by encodeURIComponent), so gate Solve on the .iss size.
+// Gate Solve on the exported length of the complete, percent-encoded URL.
 const SOLVE_URL_LIMIT = 8000;
 
 // --- formatting helpers ---
@@ -278,7 +277,8 @@ function disabledLink(label, title) {
 // long for the server (large .iss), in which case it's disabled with a pointer to
 // the Script, whose modal stays usable via Copy.
 function solveAction(row) {
-  if (row.iss_size > SOLVE_URL_LIMIT) {
+  const urlLength = row.iss_url_length;
+  if (urlLength > SOLVE_URL_LIMIT) {
     return disabledLink('Solve',
       `Constraint string too large for a URL (${fmtSize(row.iss_size)}) — use Script instead`);
   }
@@ -290,7 +290,8 @@ function solveAction(row) {
 function constraintCell(row, actions) {
   const td = el('td', 'col-constraint');
   if (row.iss_size && row.dir) {
-    const oversized = row.iss_size > SOLVE_URL_LIMIT;
+    const urlLength = row.iss_url_length;
+    const oversized = urlLength > SOLVE_URL_LIMIT;
     const stack = el('div', 'iss-links');
     stack.append(
       issRow(solveAction(row), row.iss_size,
