@@ -228,6 +228,7 @@ class IndexApp {
     this.filterTimer = null;
     this.dom = this.collectDom();
     this.pendingRows = [];
+    this.legendStatuses = [];
     this.renderedCount = 0;
     this.sentinelObserver = null;
     this.chipObserver = null;
@@ -403,6 +404,9 @@ class IndexApp {
     const tiers = Object.keys(STATUS)
       .filter(status => counts[status])
       .sort((a, b) => statusMeta(a).rank - statusMeta(b).rank);
+    // Only the tiers that actually have rows are selectable, so solo/reset
+    // reason about these rather than every status in STATUS.
+    this.legendStatuses = tiers;
 
     this.dom.legend.replaceChildren(...tiers.map(status => {
       const meta = statusMeta(status);
@@ -433,7 +437,12 @@ class IndexApp {
       }
       item.classList.toggle('off', hidden);
       item.setAttribute('aria-pressed', hidden ? 'false' : 'true');
-      item.title = hidden ? `Show ${meta.label}` : `Hide ${meta.label}`;
+      item.title = {
+        solo: `Show only ${meta.label}`,
+        all: 'Show all statuses',
+        show: `Show ${meta.label}`,
+        hide: `Hide ${meta.label}`,
+      }[this.legendAction(item.dataset.status)];
       item.setAttribute('aria-label', item.title);
     }
   }
@@ -491,10 +500,27 @@ class IndexApp {
     this.render();
   }
 
+  // A legend click acts as a solo control at the extremes: from all-shown it
+  // narrows to that status alone, and clicking the sole shown status widens back
+  // to all. In between it's a plain toggle, so multi-status views stay reachable.
+  legendAction(status) {
+    const hidden = this.state.hiddenStatuses;
+    if (!hidden.size) return 'solo';
+    if (!hidden.has(status)
+      && this.legendStatuses.every(s => s === status || hidden.has(s))) return 'all';
+    return hidden.has(status) ? 'show' : 'hide';
+  }
+
   toggleStatus(status) {
-    this.state.hiddenStatuses.has(status)
-      ? this.state.hiddenStatuses.delete(status)
-      : this.state.hiddenStatuses.add(status);
+    const hidden = this.state.hiddenStatuses;
+    switch (this.legendAction(status)) {
+      case 'solo':
+        for (const s of this.legendStatuses) if (s !== status) hidden.add(s);
+        break;
+      case 'all': hidden.clear(); break;
+      case 'show': hidden.delete(status); break;
+      case 'hide': hidden.add(status); break;
+    }
     this.render();
   }
 
