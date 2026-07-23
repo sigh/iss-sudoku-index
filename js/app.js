@@ -165,6 +165,8 @@ function createState() {
   return {
     ...DEFAULT_STATE,
     rows: [],
+    // False while only the recent shard has loaded (see load()).
+    rowsComplete: false,
     searchIndex: new WeakMap(),
     authorCounts: new Map(),
     hiddenStatuses: new Set(),
@@ -271,16 +273,37 @@ class IndexApp {
     this.load().catch(err => this.showLoadError(err));
   }
 
+  // The index is exported as two shards, both ordered date desc: a small
+  // "recent" one sized to the first render chunk, and the archive with the
+  // rest. Both are fetched in parallel; the recent shard renders as soon as it
+  // arrives (partial, loading message still showing) and the archive merges in
+  // behind it. Because the sort is stable, the merged re-render reproduces the
+  // partial rows in place.
   async load() {
-    const res = await fetch('data/mappings.json');
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    const data = await res.json();
-    this.state.rows = data.rows.map(rehydrateRow);
-    this.state.searchIndex = buildSearchIndex(this.state.rows);
-    this.state.authorCounts = countAuthors(this.state.rows);
+    const archivePromise = this.fetchShard('data/mappings-archive.json');
+    // A rejection here must surface via the await below, not as an unhandled one
+    // if the recent fetch throws first.
+    archivePromise.catch(() => {});
+    this.setRows(await this.fetchShard('data/mappings-recent.json'), false);
+    this.buildLegend();
+    this.render();
+    this.setRows(this.state.rows.concat(await archivePromise), true);
     this.dom.loading.hidden = true;
     this.buildLegend();
     this.render();
+  }
+
+  async fetchShard(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    return (await res.json()).rows.map(rehydrateRow);
+  }
+
+  setRows(rows, complete) {
+    this.state.rows = rows;
+    this.state.rowsComplete = complete;
+    this.state.searchIndex = buildSearchIndex(rows);
+    this.state.authorCounts = countAuthors(rows);
   }
 
   readState() {
@@ -292,11 +315,26 @@ class IndexApp {
   }
 
   render() {
+    // Partial data is only trustworthy in the shards' own order (date desc);
+    // for any other sort hold the loading state until the archive arrives.
+    if (!this.state.rowsComplete && !this.isDateDescSort()) {
+      this.renderRows([]);
+      this.renderActiveFilters();
+      this.dom.count.textContent = '';
+      this.dom.empty.hidden = true;
+      this.syncSortHeaders();
+      this.syncBrowserState();
+      return;
+    }
     const { rows, statusCounts } = queryRows(this.state);
     this.renderRows(rows);
     this.renderActiveFilters();
     this.renderControls(rows.length, statusCounts);
     this.syncBrowserState();
+  }
+
+  isDateDescSort() {
+    return this.state.sortBy === 'date' && this.state.sortDesc;
   }
 
   renderRows(rows) {
@@ -340,10 +378,13 @@ class IndexApp {
   }
 
   renderSearchSummary(visibleCount) {
-    this.dom.empty.hidden = visibleCount > 0;
+    // While only the recent shard is loaded, totals are a lower bound and an
+    // empty match is inconclusive — the loading message is still showing.
+    const total = `${this.state.rows.length}${this.state.rowsComplete ? '' : '+'}`;
+    this.dom.empty.hidden = visibleCount > 0 || !this.state.rowsComplete;
     this.dom.count.textContent = visibleCount === this.state.rows.length
-      ? `${this.state.rows.length} puzzles`
-      : `${visibleCount} of ${this.state.rows.length} puzzles`;
+      ? `${total} puzzles`
+      : `${visibleCount} of ${total} puzzles`;
     this.dom.resetFilters.hidden = !this.hasSearchState();
   }
 

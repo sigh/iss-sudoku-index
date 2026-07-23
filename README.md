@@ -15,7 +15,9 @@ Explore it at <https://sigh.github.io/iss-sudoku-index/>.
 
 ## Data
 
-The site is fully static: it fetches `data/mappings.json` and, for the Solve / Script
+The site is fully static: it fetches `data/mappings-recent.json` + `data/mappings-archive.json`
+(`data/mappings.json` holds the same rows in one file for direct consumers)
+and, for the Solve / Script
 links, each encoded puzzle's `data/puzzles/<id>/{puzzle.iss,puzzle.js}`. These are
 pre-generated data files.
 
