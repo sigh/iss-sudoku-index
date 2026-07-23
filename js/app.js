@@ -21,6 +21,15 @@ function defaultSortDesc(col) {
   return col === 'date' || col === 'constraint';
 }
 
+// The export omits fields derivable from puzzle_id (see export_web.py): the
+// canonical video URL, video_id when it matches, and the default artifact dir.
+function rehydrateRow(row) {
+  if (row.video_id == null) row.video_id = row.puzzle_id;
+  if (row.video_url == null) row.video_url = `https://www.youtube.com/watch?v=${row.video_id}`;
+  if (row.dir == null && row.iss_size) row.dir = `data/puzzles/${row.puzzle_id}`;
+  return row;
+}
+
 function countAuthors(rows) {
   const counts = new Map();
   for (const row of rows) {
@@ -266,7 +275,7 @@ class IndexApp {
     const res = await fetch('data/mappings.json');
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = await res.json();
-    this.state.rows = data.rows;
+    this.state.rows = data.rows.map(rehydrateRow);
     this.state.searchIndex = buildSearchIndex(this.state.rows);
     this.state.authorCounts = countAuthors(this.state.rows);
     this.dom.loading.hidden = true;
