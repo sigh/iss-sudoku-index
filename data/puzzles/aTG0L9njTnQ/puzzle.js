@@ -102,15 +102,14 @@ const fixedColourConstraints = circleCells.flatMap((cell, i) => {
 });
 const colourDomain = color.makeReplicate(
   [new Given(color.at(circleCells[0]), 1, 2, 3)],
-  circleCells.map(cell => color.at(cell)));
+  color.at(circleCells));
 
 // Each orthogonally-adjacent pair of circles, once: the horizontal and
 // vertical dominoes starting at each circle whose other cell is also a
 // circle.
 const circleAdjacencies = () => circleCells
   .flatMap(cell => [graph.block(cell, 1, 2), graph.block(cell, 2, 1)])
-  .filter(domino => domino?.every(c => color.at(c) !== null))
-  .map(domino => domino.map(c => color.at(c)));
+  .filter(domino => domino?.every(c => color.at(c) !== null));
 
 const allCircleEntries = circleCells.flatMap(cell => [cell, color.at(cell)]);
 
@@ -147,7 +146,7 @@ return [
   colourDomain,
   ...fixedColourConstraints,
   new And([
-    ...circleAdjacencies().map(cells => new AllDifferent(...cells))
+    ...circleAdjacencies().map(domino => new AllDifferent(...color.at(domino)))
   ]),
   new And([...colorDigitNFAs()]),
 ];

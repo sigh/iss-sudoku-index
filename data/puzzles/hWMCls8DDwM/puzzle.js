@@ -148,7 +148,7 @@ const visitMachine = NFA.encodeSpec({
   transition: ({ anyOn }, value) => ({ anyOn: anyOn || value !== OFF }),
   accept: ({ anyOn }) => anyOn,
 }, geometry.numValues);
-const visits = boxes.map(cells => new NFA(visitMachine, 'visit', ...cells.map(nextCell)));
+const visits = boxes.map(cells => new NFA(visitMachine, 'visit', ...next.at(cells)));
 
 // --- Box Balance: sum of odd digits on the loop within the box equals the
 // sum of the box's cage digits. Reads (next, digit) for each of the box's 9

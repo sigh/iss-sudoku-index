@@ -57,7 +57,7 @@ const SPOTLIGHT_CELLS = [
   'R4C4', 'R3C3', 'R5C2', 'R6C2', 'R6C3',
 ];
 const spotlights = SPOTLIGHT_CELLS.map(cell =>
-  new ChaosCount(cell, 1, cc.at(cell), ...graph.neighbours(cell).map(n => cc.at(n))));
+  new ChaosCount(cell, 1, cc.at(cell), ...cc.at(graph.neighbours(cell))));
 
 // --- No region may contain a 2x2 block: every 2x2 window must show at
 // least 2 distinct region labels among its 4 cells (1 would mean all four
@@ -71,7 +71,7 @@ const blocks = BLOCK_TOPS.flatMap(([r, c], i) => {
   const cells = graph.block(makeCellId(r, c), 2, 2);
   return [
     new Given(control, 2, 3, 4),
-    new CountDistinct(control, ...cells.map(cell => cc.at(cell))),
+    new CountDistinct(control, ...cc.at(cells)),
   ];
 });
 
@@ -79,7 +79,7 @@ const blocks = BLOCK_TOPS.flatMap(([r, c], i) => {
 const rowDiversityCount = new Var('RD', 'row1-distinct-regions', 1);
 const rowDiversity = [
   new Given(rowDiversityCount.cell(1), 2),
-  new CountDistinct(rowDiversityCount.cell(1), ...graph.row(1).map(cell => cc.at(cell))),
+  new CountDistinct(rowDiversityCount.cell(1), ...cc.at(graph.row(1))),
 ];
 
 return [

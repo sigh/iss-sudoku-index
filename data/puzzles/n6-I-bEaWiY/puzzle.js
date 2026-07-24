@@ -37,9 +37,9 @@ const LINES = [
 
 // Each Var stores one plus the visible run length in a direction. The four
 // values therefore sum to the circle digit plus 3.
-const sightCounts = new Var('C', 'directional sight counts', 4 * CIRCLES.length);
+const sightCounts = new Var('C', 'directional sight counts', `${CIRCLES.length}x4`);
 const countVar = (circleIndex, directionIndex) =>
-  sightCounts.cell(4 * circleIndex + directionIndex + 1);
+  sightCounts.cell(circleIndex + 1, directionIndex + 1);
 const directions = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
 const sightCountSpec = NFA.encodeSpec({

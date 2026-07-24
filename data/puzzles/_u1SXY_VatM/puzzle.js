@@ -81,7 +81,7 @@ const scanCells = [...lap, ...lap];
 // Every cell is either shaded (2) or unshaded (1): one Given template
 // stamped over every grid cell via the shade overlay.
 function shadeDomainConstraints() {
-  const targets = Array.from(graph.cells()).map(shadeAt);
+  const targets = shadeAt(Array.from(graph.cells()));
   return [shade.makeReplicate([new Given(targets[0], 1, 2)], targets)];
 }
 

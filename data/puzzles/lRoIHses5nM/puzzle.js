@@ -38,7 +38,7 @@ const cc = graph.makeOverlay('CC');
 
 const S_CELLS = ['R2C2', 'R1C3', 'R3C1', 'R6C3', 'R3C6', 'R6C6'];
 const spotlights = S_CELLS.map(cell => new ChaosCount(
-  cell, 1, cc.at(cell), ...graph.neighbours(cell).map(n => cc.at(n))));
+  cell, 1, cc.at(cell), ...cc.at(graph.neighbours(cell))));
 
 const WHITE_DOTS = [['R3C1', 'R3C2'], ['R3C5', 'R3C6'], ['R3C2', 'R4C2']];
 const BLACK_DOTS = [['R1C3', 'R2C3'], ['R5C3', 'R6C3'], ['R2C3', 'R2C4']];
@@ -64,8 +64,8 @@ const originCell = graph.cells()[0];
 const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
 const noMonoRegion2x2 = cc.makeReplicate(
   [new NFA(notAllEqualSpec, 'no-region-2x2',
-    ...graph.block(originCell, 2, 2).map(c => cc.at(c)))],
-  blockOrigins.map(c => cc.at(c)));
+    ...cc.at(graph.block(originCell, 2, 2)))],
+  cc.at(blockOrigins));
 
 // Row Diversity: the constant "2" beside R2.
 const rowDiversity = new Var('RD', 'row 2 region diversity', 1);

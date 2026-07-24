@@ -6,9 +6,8 @@
 // Rat Run family: the maze/path rules (self-avoiding fixed-endpoint paths for
 // Finkz and Phinx, thick walls, diagonal 2x2 moves, round wall-spot corner
 // restriction, forbidden-door pass-through, and the visited-cell "test
-// constraint") have no ISS primitive and are omitted -- see
-// known-families.md "Rat Run (Marty Sears)". Only the path-independent digit
-// relations below are encoded.
+// constraint") have no ISS primitive and are omitted. Only the
+// path-independent digit relations below are encoded.
 //
 // Blackcurrant (one digit double the other, adjacent cells) -> BlackDot.
 // Grape (difference >= 5, adjacent cells) -> Whisper(5, ...).

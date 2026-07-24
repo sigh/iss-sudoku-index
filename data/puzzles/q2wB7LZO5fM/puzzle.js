@@ -29,8 +29,8 @@ const flagDomain = flags.makeReplicate(new Given(flagOrigin, 1, 2));
 // Middler) or its digit, then check predicate(effA, effB). Phases move
 // strictly forward (digitA -> flagA -> digitB -> flagB -> done) and any
 // symbol past 'done' is rejected, so the reachable state set stays small
-// regardless of how many cells a caller feeds in (see nfa-help.md on
-// unbounded step counters -- a plain climbing index blows the state cap).
+// regardless of how many cells a caller feeds in (a plain climbing step
+// index would grow without bound and blow the state cap).
 const edgeSpec = predicate => NFA.encodeSpec({
   startState: { phase: 'digitA', pending: 0, effA: 0 },
   transition: (state, value) => {
@@ -117,7 +117,7 @@ return [
   // Middler flags: a boolean overlay (2 = Middler), exactly one per house.
   flags.toVar('Middler flags'),
   flagDomain,
-  ...graph.houses().map(house => new Sum(10, ...house.map(flag))),
+  ...graph.houses().map(house => new Sum(10, ...flags.at(house))),
   midDigit,
   ...rowMidConstraints,
   new AllDifferent(...midDigit.cells()),

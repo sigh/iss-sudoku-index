@@ -45,7 +45,7 @@ const opposite = cell => {
 };
 
 // --- Copycat flag domain: every cell is PLAIN or COPY. ---
-const flagTargets = gridCells.map(flagOf);
+const flagTargets = flags.at(gridCells);
 const flagOrigin = flagTargets[0];
 
 // --- Exactly one copycat per row, per column, and per box. ---
@@ -130,7 +130,7 @@ return [
   flags.makeReplicate(new Given(flagOrigin, PLAIN, COPY), flagTargets),
 
   // Exactly one copycat per row, per column, and per box.
-  ...houses.map(house => new NFA(oneCopy, 'one-copycat', ...house.map(flagOf))),
+  ...houses.map(house => new NFA(oneCopy, 'one-copycat', ...flags.at(house))),
 
   // The nine copycat cells contain nine different digits: for each digit, at
   // most one copycat cell holds it. Reads [flag, digit] for every cell.

@@ -112,7 +112,7 @@ const replicateEdgeAgreement = (name, key, dRow, dCol) => {
   const origin = origins[0];
   return shape.makeReplicate(
     [new Pair(key, name, shapeCell(origin), shapeCell(graph.step(origin, dRow, dCol)))],
-    origins.map(shapeCell));
+    shape.at(origins));
 };
 const edgeAgreements = [
   replicateEdgeAgreement('edge-h', edgeAgreeKey(usesRight, usesLeft), 0, 1),

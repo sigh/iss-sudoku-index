@@ -70,8 +70,8 @@ const noMono2x2Machine = NFA.encodeSpec({
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noMono2x2 = shade.makeReplicate(
   new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...graph.block(gridCells[0], 2, 2).map(shadeCell)),
-  blockOrigins.map(shadeCell));
+    ...shade.at(graph.block(gridCells[0], 2, 2))),
+  shade.at(blockOrigins));
 
 // German Whispers, conditional on shading: every orthogonally adjacent pair
 // of cells that are BOTH shaded must differ by at least 5. Walked as the

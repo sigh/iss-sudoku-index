@@ -166,10 +166,10 @@ const parityConstraint = [new Or([
 const edgeAgreementConstraints = [
   shape.makeReplicate(
     new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
-    gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell)),
+    shape.at(gridCells.filter(cell => graph.step(cell, 0, 1)))),
   shape.makeReplicate(
     new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
-    gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell)),
+    shape.at(gridCells.filter(cell => graph.step(cell, 1, 0)))),
 ];
 
 const satelliteMachine = NFA.encodeSpec({
@@ -188,7 +188,7 @@ function centeredBlock(cell) {
 }
 
 const satelliteConstraints = satelliteDishes.map(cell =>
-  new NFA(satelliteMachine, 'satellite', cell, ...centeredBlock(cell).map(shapeCell)));
+  new NFA(satelliteMachine, 'satellite', cell, ...shape.at(centeredBlock(cell))));
 
 // Single connected loop: the on-loop cells (all shape codes except OFF) must
 // form one orthogonally-connected region. Combined with the degree-2 shape

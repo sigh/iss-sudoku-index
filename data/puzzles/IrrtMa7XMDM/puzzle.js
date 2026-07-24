@@ -144,13 +144,12 @@ return [
   // --- Single connected path per value: combined with the degree rules below
   // (two fixed-identity endpoints per value at degree 1, all other on-value
   // cells at degree 2), this forces the on-value cells to form exactly one
-  // simple path -- see unknown-graphs.md/"Global Connectivity" and the
-  // cHi8yZVepgQ precedent for the full argument, applied once per path value.
+  // simple path, applied once per path value.
   new ConnectedValues('VP', ON_A),
   new ConnectedValues('VP', ON_B),
   ...gridCells.map(cell => {
     const machine = ENDPOINTS.includes(cell) ? degree1Machine : degree2Machine;
-    return new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell));
+    return new NFA(machine, 'degree', pathCell(cell), ...path.at(graph.neighbours(cell)));
   }),
   ...gridCells.flatMap(u => {
     return graph.neighbours(u).flatMap(v => {

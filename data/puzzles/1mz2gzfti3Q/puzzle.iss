@@ -1,4 +1,4 @@
-.Var~Q~sorted%20quadrank%20digits~48
+.Var~Q~sorted%20quadrank%20digits~12x4
 .SameValues~2~R2C1~R2C2~R3C1~R3C2~VQ1~VQ2~VQ3~VQ4
 .SameValues~2~R2C2~R2C3~R3C2~R3C3~VQ5~VQ6~VQ7~VQ8
 .SameValues~2~R2C3~R2C4~R3C3~R3C4~VQ9~VQ10~VQ11~VQ12

@@ -67,7 +67,7 @@ const doubledDigitNFA = (digit) => NFA.encodeSpec({
   accept: (state) => state.phase === 0 && state.count === 1,
 }, 9);
 
-const flagTargets = gridCells.map(flag);
+const flagTargets = flags.at(gridCells);
 const flagOrigin = flagTargets[0];
 
 const cages = [
@@ -99,9 +99,9 @@ return [
 
   flags.makeReplicate(new Given(flagOrigin, 1, 2), flagTargets),
 
-  ...Array.from({length: 9}, (_, r) => new Sum(10, ...graph.row(r + 1).map(flag))),
-  ...Array.from({length: 9}, (_, c) => new Sum(10, ...graph.column(c + 1).map(flag))),
-  ...graph.boxes().map(box => new Sum(10, ...box.map(flag))),
+  ...Array.from({length: 9}, (_, r) => new Sum(10, ...flags.at(graph.row(r + 1)))),
+  ...Array.from({length: 9}, (_, c) => new Sum(10, ...flags.at(graph.column(c + 1)))),
+  ...graph.boxes().map(box => new Sum(10, ...flags.at(box))),
 
   ...Array.from({length: 9}, (_, digit) => new NFA(doubledDigitNFA(digit + 1), `doubled-${digit + 1}`, ...interleaveFlags(gridCells))),
 

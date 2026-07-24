@@ -28,7 +28,6 @@ const graph = cellGraph('9x9');
 
 // Shading overlay: 1 = unshaded, 2 = shaded.
 const shade = graph.makeOverlay('VS');
-const shadeAt = cell => shade.at(cell);
 
 // Outside clues, decoded from the SudokuPad underlay stack. Each ring
 // farther from the grid is listed before the ring closer to the grid,
@@ -102,12 +101,12 @@ function runSumSpec(clues) {
 function lineConstraints(clueMap, cellsFn, label) {
   return Object.entries(clueMap).map(([n, clues]) => {
     const cells = cellsFn(Number(n));
-    const interleaved = cells.flatMap(cell => [cell, shadeAt(cell)]);
+    const interleaved = cells.flatMap(cell => [cell, shade.at(cell)]);
     return new NFA(runSumSpec(clues), `${label}${n}`, ...interleaved);
   });
 }
 
-const shadeTargets = graph.cells().map(shadeAt);
+const shadeTargets = shade.at(graph.cells());
 const shadeOrigin = shadeTargets[0];
 
 return [

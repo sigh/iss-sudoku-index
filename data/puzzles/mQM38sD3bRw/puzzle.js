@@ -22,10 +22,9 @@
 // floor(17/2)=8 lines can fit in 17 cells.
 //
 // - ConnectedValues(VL, k) for k=1..8: each label's cells (if any) form one
-//   connected region; an unused label is vacuously satisfied (per
-//   unknown-graphs.md), which is exactly right since the true number of
-//   lines is unknown -- this bounds the count at "<=8 lines", which is all
-//   that is needed since the true count is not otherwise constrained.
+//   connected region; an unused label is vacuously satisfied, so this
+//   bounds the count at "<=8 lines" while the true number of lines stays
+//   free, which the rules do not otherwise constrain.
 // - Per-cell same-label degree in {1,2}: an NFA reads a remainder cell's
 //   label then each real grid neighbour's label and accepts iff exactly 1
 //   or 2 neighbours share the cell's own label. This excludes branching
@@ -112,7 +111,7 @@ const labelValues = Array.from({ length: MAX_LABEL }, (_, i) => i + 1);
 // once as a template and stamped onto the set by Replicate (the label overlay
 // locates the cells).
 const stampDomain = (cells, values) => {
-  const targets = cells.map(labelCell);
+  const targets = label.at(cells);
   return label.makeReplicate(
     new Given(label.cells()[0], ...values), targets);
 };
@@ -137,7 +136,7 @@ const degreeMachine = NFA.encodeSpec({
 }, geometry.numValues);
 const degreeConstraints = remainder.map(cell =>
   new NFA(degreeMachine, 'line-degree',
-    labelCell(cell), ...graph.neighbours(cell).map(labelCell))
+    labelCell(cell), ...label.at(graph.neighbours(cell)))
 );
 
 // --- Per-label sum: cells sharing label k sum to exactly 8 (0 if unused).
@@ -171,7 +170,7 @@ const canonicalOrderMachine = NFA.encodeSpec({
   },
   accept: () => true,
 }, geometry.numValues);
-const canonicalOrderConstraint = new NFA(canonicalOrderMachine, 'label-canonical-order', ...remainder.map(labelCell));
+const canonicalOrderConstraint = new NFA(canonicalOrderMachine, 'label-canonical-order', ...label.at(remainder));
 
 return [
   new Shape('9x9'),

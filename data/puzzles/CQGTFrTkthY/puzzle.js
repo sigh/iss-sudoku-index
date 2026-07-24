@@ -67,8 +67,8 @@ const circledSpec = NFA.encodeSpec({
 
 // --- Circled-cell visibility run (see header comment). ---
 function runCheckNfa(cell) {
-  const upArm = graph.ray(cell, -1, 0).slice(1).map(c => cc.at(c));
-  const downArm = graph.ray(cell, 1, 0).slice(1).map(c => cc.at(c));
+  const upArm = cc.at(graph.ray(cell, -1, 0).slice(1));
+  const downArm = cc.at(graph.ray(cell, 1, 0).slice(1));
   const segments = [[cell, cc.at(cell)]];
   if (upArm.length) segments.push(upArm);
   if (downArm.length) segments.push(downArm);

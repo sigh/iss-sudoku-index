@@ -45,7 +45,7 @@ const gridCells = graph.cells();
 // default domain otherwise runs 1-9, matching the main grid's value range).
 // All 81 Givens share the same value set, so Replicate stamps the template
 // instead of hand-rolling each copy.
-const domainTargets = gridCells.map(catCell);
+const domainTargets = category.at(gridCells);
 const domainOrigin = domainTargets[0];
 
 // Known circled cells (color from the source drawing), fixed to their line

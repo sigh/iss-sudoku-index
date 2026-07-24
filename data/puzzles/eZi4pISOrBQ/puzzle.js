@@ -159,9 +159,9 @@ return [
   new ConnectedValues('VR', ON),
   ...gridCells.map(cell => {
     const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
-    return new NFA(machine, 'degree', riverCell(cell), ...graph.neighbours(cell).map(riverCell));
+    return new NFA(machine, 'degree', riverCell(cell), ...river.at(graph.neighbours(cell)));
   }),
-  ...['R3C8', 'R8C7'].map(cell => new NFA(cornerMachine, 'corner', ...graph.neighbours(cell).map(riverCell))),
+  ...['R3C8', 'R8C7'].map(cell => new NFA(cornerMachine, 'corner', ...river.at(graph.neighbours(cell)))),
   new Arrow('R5C4', 'R5C3', 'R5C5'),
   new Arrow('R5C2', 'R5C1', 'R5C3'),
   new Arrow('R6C5', 'R5C5', 'R7C5'),

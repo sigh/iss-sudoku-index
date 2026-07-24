@@ -1,9 +1,9 @@
-.Shape~1x11~0-10
+.Shape~1x1~0-10
 .NoBoxes
-.Var~G~Answer%20grid~121
-.Var~O~Inside%20a%20box~121
-.Var~T~3x3%20box%20top-left~81
-.~R1C1_0~R1C2_1~R1C3_2~R1C4_3~R1C5_4~R1C6_5~R1C7_6~R1C8_7~R1C9_8~R1Ca_9~R1Cb_10
+.Var~G~Answer%20grid~11x11
+.Var~O~Inside%20a%20box~11x11
+.Var~T~3x3%20box%20top-left~9x9
+.~R1C1_0
 .Replicate~____________________B~VG1
 .~VG1_0_1_2_3_4_5_6_7_8_9
 .End

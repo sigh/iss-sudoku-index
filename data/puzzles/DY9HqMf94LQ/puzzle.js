@@ -145,8 +145,8 @@ const wallDigitMachine = NFA.encodeSpec({
 const noTouchAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noTouchReplicate = side.makeReplicate(
   [new NFA(noDiagonalTouchMachine, 'wall-no-touch',
-    ...graph.block(noTouchAnchors[0], 2, 2).map(sideCell))],
-  noTouchAnchors.map(sideCell));
+    ...side.at(graph.block(noTouchAnchors[0], 2, 2)))],
+  side.at(noTouchAnchors));
 
 return [
   new Shape('9x9'),
@@ -166,7 +166,7 @@ return [
   ]),
   ...gridCells.map(cell =>
     new NFA(wallDegreeMachine, 'wall-degree',
-      sideCell(cell), ...graph.neighbours(cell).map(sideCell))
+      sideCell(cell), ...side.at(graph.neighbours(cell)))
   ),
   noTouchReplicate,
   ...gridCells.flatMap(cell =>

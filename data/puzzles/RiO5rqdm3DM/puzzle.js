@@ -15,6 +15,7 @@
 
 const graph = cellGraph('9x9');
 const shade = graph.makeOverlay('VS');
+const shadeVar = shade.toVar('forest shade');
 
 const circles = [
   'R1C4', 'R4C1', 'R8C9', 'R9C8', 'R1C7', 'R3C8', 'R2C7', 'R1C5',
@@ -23,7 +24,7 @@ const circles = [
 const squares = ['R3C4', 'R2C2', 'R7C3'];
 const countingCells = [...circles, ...squares];
 const sightCounts = new Var(
-  'C', 'directional sight counts', 4 * countingCells.length);
+  'C', 'directional sight counts', `${countingCells.length}x4`);
 
 const whispers = [
   ['R1C4', 'R2C3', 'R3C2', 'R4C1'],
@@ -41,12 +42,12 @@ const renbans = [
   ['R7C3', 'R6C3'],
 ];
 
-// The four directional count Vars for clue i are VC(4i+1)..VC(4i+4).
-// Each holds one plus the same-shade run length in that direction, so adding
-// all four and subtracting the clue digit equals 3 (the centre was counted
-// four times instead of once).
+// The four directional count Vars for clue i are sightCounts.cell(i+1, 1)..
+// sightCounts.cell(i+1, 4). Each holds one plus the same-shade run length in
+// that direction, so adding all four and subtracting the clue digit equals 3
+// (the centre was counted four times instead of once).
 const countVar = (clueIndex, directionIndex) =>
-  sightCounts.cell(4 * clueIndex + directionIndex + 1);
+  sightCounts.cell(clueIndex + 1, directionIndex + 1);
 
 const directions = [
   [-1, 0],
@@ -97,7 +98,7 @@ function noMonochrome2x2Constraints() {
   const targets = [];
   for (let row = 1; row <= 8; row++) {
     for (let col = 1; col <= 8; col++) {
-      targets.push(shade.at(makeCellId(row, col)));
+      targets.push(shadeVar.cell(row, col));
     }
   }
   return [shade.makeReplicate(template, targets)];
@@ -126,7 +127,7 @@ function countingConstraints() {
 
 return [
   new Shape('9x9'),
-  shade.toVar('forest shade'),
+  shadeVar,
   sightCounts,
   ...shadeDomainConstraints(),
   // Shade labels are interchangeable; this removes only the global swap.

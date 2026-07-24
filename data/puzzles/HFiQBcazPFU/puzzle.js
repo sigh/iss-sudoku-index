@@ -113,10 +113,10 @@ return [
   ...huts.map(hut => new Given(loopCell(hut), HORIZ, VERT, UL, UR, DL, DR)),
   loop.makeReplicate(
     new Pair(edgeRightKey, 'loop edge agreement h', loopCell('R1C1'), loopCell('R1C2')),
-    gridCells.filter(cell => graph.step(cell, 0, 1)).map(loopCell)),
+    loop.at(gridCells.filter(cell => graph.step(cell, 0, 1)))),
   loop.makeReplicate(
     new Pair(edgeDownKey, 'loop edge agreement v', loopCell('R1C1'), loopCell('R2C1')),
-    gridCells.filter(cell => graph.step(cell, 1, 0)).map(loopCell)),
+    loop.at(gridCells.filter(cell => graph.step(cell, 1, 0)))),
   ...gridCells.flatMap(cell => {
     const right = graph.step(cell, 0, 1);
     const down = graph.step(cell, 1, 0);

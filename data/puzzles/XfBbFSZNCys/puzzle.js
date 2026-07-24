@@ -13,8 +13,8 @@ const ON = 1;
 const OFF = 2;
 
 const graph = cellGraph('9x9');
-const horizontalVar = new Var('H', 'horizontal gap edges', 90);
-const verticalVar = new Var('V', 'vertical gap edges', 90);
+const horizontalVar = new Var('H', 'horizontal gap edges', '10x9');
+const verticalVar = new Var('V', 'vertical gap edges', '9x10');
 
 function cell(row, col) {
   return makeCellId(row, col);
@@ -22,12 +22,12 @@ function cell(row, col) {
 
 // Horizontal edge on row boundary rb=0..9, spanning column c=1..9.
 function h(rb, c) {
-  return horizontalVar.cell(rb * 9 + c);
+  return horizontalVar.cell(rb + 1, c);
 }
 
 // Vertical edge in row r=1..9, on column boundary cb=0..9.
 function v(r, cb) {
-  return verticalVar.cell((r - 1) * 10 + cb + 1);
+  return verticalVar.cell(r, cb + 1);
 }
 
 function edgeId(edge) {

@@ -16,6 +16,7 @@ const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const shape = new Shape('1x1', '0-9');
 const canvas = cellGraph('11x11');
 const answer = canvas.makeOverlay('VA');
+const answerVar = answer.toVar('11x11 answer, row-major; 0 is blank');
 const placementGrid = cellGraph('9x9');
 const placements = placementGrid.makeOverlay('VP');
 const topLefts = placementGrid.cells();
@@ -116,12 +117,12 @@ const thermos = THERMOS.map(line => new Thermo(...answer.at(cells(line))));
 return [
   shape,
   new Given('R1C1', BLANK), // Pin the otherwise-unused ISS main-grid cell.
-  answer.toVar('11x11 answer, row-major; 0 is blank'),
+  answerVar,
   placements.toVar('selected 3x3 top-left corners'),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),
   new SearchPriority(100, ...placements.cells()),
   new ContainExact(selectedValues, ...placements.cells()),
-  new Given(answer.at(makeCellId(6, 3)), 4),
+  new Given(answerVar.cell(6, 3), 4),
   ...regions,
   ...memberships,
   ...rowAndColumnUniqueness,

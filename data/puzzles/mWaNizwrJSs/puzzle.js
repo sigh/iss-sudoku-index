@@ -9,15 +9,14 @@
 //
 // The almost-Sudoku groups permit a repeated digit, while the ISS main grid
 // always makes rows and columns all-different. The real puzzle therefore
-// lives in a Var group; the main grid is a pinned 1x9 placeholder. Its nine
-// columns make the Var grid render with the puzzle's natural row width.
+// lives in a Var group laid out 9x9; the main grid is a pinned 1x1
+// placeholder supplying the 1-9 value range.
 
 const N = 9;
-const GRID = new Var('G', 'Grid', N * N);
+const GRID = new Var('G', 'Grid', `${N}x${N}`);
 const cellAt = (row, col) => GRID.cell((row - 1) * N + col);
 
 const refGraph = cellGraph('9x9');
-const placeholderCells = cellGraph('1x9').cells();
 const toGrid = (refCell) => {
   const { row, col } = parseCellId(refCell);
   return cellAt(row, col);
@@ -110,9 +109,9 @@ const skyscrapers = [
 ];
 
 return [
-  new Shape('1x9'),
+  new Shape('1x1', '1-9'),
   GRID,
-  ...placeholderCells.map((cell, i) => new Given(cell, i + 1)),
+  new Given('R1C1', 1),
   DISTINCT_COUNT,
   new Given(distinctControl, 8),
   ...almostGroups,

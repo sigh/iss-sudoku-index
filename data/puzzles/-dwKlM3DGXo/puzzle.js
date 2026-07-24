@@ -16,17 +16,14 @@
 // constraints built from scratch.
 
 const N = 9;
-const GRID = new Var('G', 'Grid', N * N);
-const cellAt = (r, c) => GRID.cell(r * N + c + 1);
+const GRID = new Var('G', 'Grid', `${N}x${N}`);
 
-// Use a plain 9x9 reference geometry purely to get row/column/box cell
-// groupings (as R#C# ids); those ids are then mapped onto our own Var grid
-// via parseCellId. This geometry is never itself part of the constraints.
+// A plain 9x9 reference geometry supplies the row/column/box groupings;
+// gridOverlay translates those cell lists onto the Var grid. The geometry is
+// never itself part of the constraints.
 const refGraph = cellGraph('9x9');
-const toOurCells = (refCells) => refCells.map(id => {
-  const { row, col } = parseCellId(id);
-  return cellAt(row - 1, col - 1);
-});
+const gridOverlay = refGraph.makeOverlay('VG');
+const cellAt = (r, c) => GRID.cell(r + 1, c + 1); // r, c: 0-indexed
 
 // The single placeholder main-grid cell holds no puzzle information; pin it
 // so it doesn't multiply reported solution counts during validation.
@@ -34,20 +31,20 @@ const toOurCells = (refCells) => refCells.map(id => {
 // Rows and columns: three 3s plus one each of 1,2,4,5,6,7.
 const ROW_COL_MULTISET = '1_2_3_3_3_4_5_6_7';
 const rows = refGraph.rows().map(row =>
-  new ContainExact(ROW_COL_MULTISET, ...toOurCells(row)));
+  new ContainExact(ROW_COL_MULTISET, ...gridOverlay.at(row)));
 const cols = refGraph.columns().map(col =>
-  new ContainExact(ROW_COL_MULTISET, ...toOurCells(col)));
+  new ContainExact(ROW_COL_MULTISET, ...gridOverlay.at(col)));
 
 // Boxes: at most 3 distinct digits. CountDistinct binds a control cell to the
 // exact distinct-value count, so restrict the control cell to {1,2,3} to
 // express "up to 3" rather than "exactly 3".
 const boxes = refGraph.boxes();
-const BOX_COUNTERS = new Var('B', 'BoxDistinctCount', boxes.length);
+const BOX_COUNTERS = new Var('B', 'BoxDistinctCount', '3x3');
 const boxConstraints = boxes.flatMap((box, i) => {
   const counter = BOX_COUNTERS.cell(i + 1);
   return [
     new Given(counter, 1, 2, 3),
-    new CountDistinct(counter, ...toOurCells(box)),
+    new CountDistinct(counter, ...gridOverlay.at(box)),
   ];
 });
 

@@ -6,40 +6,36 @@
 // Nine unknown, non-overlapping 3x3 boxes contain 1-9. Cells outside them are
 // zero, while nonzero digits do not repeat in any row or column.
 const SIZE = 11;
-const shape = new Shape('1x11', '0-10');
+const shape = new Shape('1x1', '0-10');
 const answer = cellGraph('11x11').makeOverlay('VG');
 const occupied = cellGraph('11x11').makeOverlay('VO');
 const topLeft = cellGraph('9x9').makeOverlay('VT');
 const answerVars = answer.toVar('Answer grid');
 const occupiedVars = occupied.toVar('Inside a box');
 const topLeftVars = topLeft.toVar('3x3 box top-left');
-const answerCell = (row, col) => answer.at(makeCellId(row, col));
-const occupiedCell = (row, col) => occupied.at(makeCellId(row, col));
-const topLeftCell = (row, col) => topLeft.at(makeCellId(row, col));
 const answerRange = Array.from({ length: 10 }, (_, value) => value);
 const binaryRange = [0, 1];
 
 const answerGrid = Array.from({ length: SIZE }, (_, row) =>
-  Array.from({ length: SIZE }, (_, col) => answerCell(row + 1, col + 1)));
+  Array.from({ length: SIZE }, (_, col) => answerVars.cell(row + 1, col + 1)));
 const occupiedGrid = Array.from({ length: SIZE }, (_, row) =>
-  Array.from({ length: SIZE }, (_, col) => occupiedCell(row + 1, col + 1)));
+  Array.from({ length: SIZE }, (_, col) => occupiedVars.cell(row + 1, col + 1)));
 const placements = Array.from({ length: 9 }, (_, row) =>
   Array.from({ length: 9 }, (_, col) => {
     const boxRow = row + 1;
     const boxCol = col + 1;
     return {
-      flag: topLeftCell(boxRow, boxCol),
+      flag: topLeftVars.cell(boxRow, boxCol),
       cells: Array.from({ length: 3 }, (_, dr) =>
         Array.from({ length: 3 }, (_, dc) =>
-          answerCell(boxRow + dr, boxCol + dc))).flat(),
+          answerVars.cell(boxRow + dr, boxCol + dc))).flat(),
       positions: Array.from({ length: 3 }, (_, dr) =>
         Array.from({ length: 3 }, (_, dc) =>
           [boxRow + dr, boxCol + dc])).flat(),
     };
   })).flat();
 
-const placeholder = Array.from({ length: SIZE }, (_, col) =>
-  new Given(makeCellId(1, col + 1), col));
+const placeholder = [new Given(makeCellId(1, 1), 0)];
 const answerDomains = answer.makeReplicate(
   new Given(answer.cells()[0], ...answerRange));
 const occupiedDomains = occupied.makeReplicate(
@@ -75,7 +71,7 @@ const rowsAndColumns = [
 ].map(cells => new PairX(nonzeroDifferentKey, 'nonzero digits differ', ...cells));
 
 const cells = coordinates => coordinates.map(([row, col]) =>
-  answerCell(row, col));
+  answerVars.cell(row, col));
 const uniqueCells = groups => [...new Set(groups.flat())];
 
 const purple = cells([
@@ -124,7 +120,7 @@ const clueCoverage = occupied.makeReplicate(
 
 // Every contiguous part of the blue line inside a selected box is a segment.
 const blueRuns = placements.map(({ flag, positions }) => {
-  const inBox = new Set(positions.map(([row, col]) => answerCell(row, col)));
+  const inBox = new Set(positions.map(([row, col]) => answerVars.cell(row, col)));
   const runs = [];
   for (const cell of blue) {
     if (!inBox.has(cell)) continue;

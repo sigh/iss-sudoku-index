@@ -176,7 +176,7 @@ const arrowConstraints = [
   { bulb: cid(3, 3), arm: [cid(4, 4), cid(3, 5)] },
   { bulb: cid(4, 5), arm: [cid(3, 6), cid(2, 5)] },
   { bulb: cid(6, 6), arm: [cid(5, 6), cid(4, 6)] },
-].map(({bulb, arm}) => new Sum(arm.length - 1, ...arm.map(v), [v(bulb), -1]));
+].map(({bulb, arm}) => new Sum(arm.length - 1, ...VVo.at(arm), [v(bulb), -1]));
 
 return [
   new Shape('6x6', M),

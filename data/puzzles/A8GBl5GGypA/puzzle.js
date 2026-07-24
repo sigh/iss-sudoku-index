@@ -139,19 +139,19 @@ return [
   // Degree 2: each on cell has exactly two on-loop orthogonal neighbours.
   ...gridCells.map(cell =>
     new NFA(degreeMachine, 'degree',
-      loopCell(cell), ...graph.neighbours(cell).map(loopCell))
+      loopCell(cell), ...loop.at(graph.neighbours(cell)))
   ),
 
   // No diagonal self-touch: forbid a 2x2 whose only on cells are a diagonal.
   loop.makeReplicate(
     new NFA(noDiagonalTouchMachine, 'no-touch',
-      ...graph.block(noTouchOrigin, 2, 2).map(loopCell)),
-    noTouchTargets.map(loopCell)),
+      ...loop.at(graph.block(noTouchOrigin, 2, 2))),
+    loop.at(noTouchTargets)),
 
   // Circle counts: the circle's digit equals the number of its king neighbours
   // that are on the loop. Reads the digit, then each neighbour's membership.
   ...circles.map(cell =>
-    new NFA(countMachine, 'count', cell, ...graph.kingNeighbours(cell).map(loopCell))
+    new NFA(countMachine, 'count', cell, ...loop.at(graph.kingNeighbours(cell)))
   ),
 
   // Loop multiples: for two orthogonally adjacent on-loop cells, the larger

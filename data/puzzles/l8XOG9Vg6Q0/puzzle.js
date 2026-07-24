@@ -161,7 +161,7 @@ const endpointCells = gridCells.filter(cell => cell === 'R5C5' || cell === 'R3C1
 const middleCells = gridCells.filter(cell => cell !== 'R5C5' && cell !== 'R3C1');
 
 function baseDomainReplicate(cells, values) {
-  const targets = cells.map(shapeCell);
+  const targets = shape.at(cells);
   return shape.makeReplicate(
     new Given(shape.cells()[0], ...values), targets);
 }
@@ -204,11 +204,11 @@ return [
   ...narrowerShapeGivens,
   shape.makeReplicate(
     [new Pair(rightAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R1C2'))],
-    rightCells.map(shapeCell),
+    shape.at(rightCells),
   ),
   shape.makeReplicate(
     [new Pair(downAgree, 'path-edge', shapeCell('R1C1'), shapeCell('R2C1'))],
-    downCells.map(shapeCell),
+    shape.at(downCells),
   ),
   ...whisperNfas,
   new WhiteDot('R4C6', 'R5C6'),

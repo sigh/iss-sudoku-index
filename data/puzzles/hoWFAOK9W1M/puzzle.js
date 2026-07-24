@@ -6,7 +6,7 @@
 // The four corner 4x4 Sudokus and the rotated central 6x6 Sudoku occupy
 // non-rectangular positions on a 13x13 drawing canvas. VP1..VP169 represent
 // the full canvas in row-major order, with blank positions pinned to 0; the
-// pinned 1x7 grid only supplies the shared 0-6 alphabet.
+// pinned 1x1 grid only supplies the shared 0-6 alphabet.
 
 const cornerOrigins = [[1, 1], [1, 10], [10, 1], [10, 10]];
 const cornerGrids = cornerOrigins.map(([row0, col0]) =>
@@ -30,7 +30,7 @@ const physicalCells = [...new Map([
   ...slantedRows.flat(),
 ].map(cell => [coordKey(cell), cell])).values()]
   .sort(([ar, ac], [br, bc]) => ar - br || ac - bc);
-const canvasVars = new Var('P', 'Canvas cells', 13 * 13);
+const canvasVars = new Var('P', 'Canvas cells', '13x13');
 const occupiedKeys = new Set(physicalCells.map(coordKey));
 const physicalIndex = new Map(physicalCells.map(([row, col]) =>
   [coordKey([row, col]), canvasVars.cell((row - 1) * 13 + col)]));
@@ -123,12 +123,10 @@ const xSumArrows = arrows.map(({ tens, ones, ray }) => {
   return new Or(branches);
 });
 
-const placeholderCells = cellGraph('1x7').cells();
-
 return [
-  new Shape('1x7', '0-6'),
+  new Shape('1x1', '0-6'),
   canvasVars,
-  ...placeholderCells.map((cell, value) => new Given(cell, value)),
+  new Given('R1C1', 0),
   blankCanvas,
   ...cornerSudoku,
   ...disjointPositions,

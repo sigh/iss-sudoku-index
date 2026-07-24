@@ -12,7 +12,7 @@ const graph = cellGraph('9x9');
 const halver = graph.makeOverlay('VH');
 const halverOf = cell => halver.at(cell);
 const cells = graph.cells();
-const halverCells = cells.map(halverOf);
+const halverCells = halver.at(cells);
 
 const scaledSum = target => NFA.encodeSpec({
   startState: { phase: 'flag', total: 0 },
@@ -95,9 +95,9 @@ return [
   new Shape('9x9'),
   halver.toVar('halver status'),
   halver.makeReplicate([new Given(halverCells[0], HALF, FULL)], halverCells),
-  ...graph.rows().map(row => new Sum(17, ...row.map(halverOf))),
-  ...graph.columns().map(column => new Sum(17, ...column.map(halverOf))),
-  ...graph.boxes().map(box => new Sum(17, ...box.map(halverOf))),
+  ...graph.rows().map(row => new Sum(17, ...halver.at(row))),
+  ...graph.columns().map(column => new Sum(17, ...halver.at(column))),
+  ...graph.boxes().map(box => new Sum(17, ...halver.at(box))),
   new NFA(halverDigits, 'halver-digits', ...valueStream(cells)),
   ...cages.flatMap(({ sum, cells: cage }) => [new AllDifferent(...cage), sumValues(sum, cage)]),
   ...thermos.map(thermo => new NFA(increasingValues, 'value-thermo', ...valueStream(thermo))),

@@ -12,7 +12,6 @@ const OFF = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const loop = graph.makeOverlay('VL');
-const loopCell = cell => loop.at(cell);
 const gridCells = graph.cells();
 
 const origin = loop.cells()[0];
@@ -32,7 +31,7 @@ const degreeMachine = NFA.encodeSpec({
   accept: ({ phase, count }) => phase === 'off' || count === 2,
 }, geometry.numValues);
 const degrees = gridCells.map(cell => new NFA(degreeMachine, 'degree',
-  loopCell(cell), ...graph.neighbours(cell).map(loopCell)));
+  ...loop.at([cell, ...graph.neighbours(cell)])));
 
 // No 2x2 block may have just its two diagonal cells on the loop.
 const noDiagonalTouchMachine = NFA.encodeSpec({
@@ -47,11 +46,14 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
   },
   accept: ({ cells }) => cells === null,
 }, geometry.numValues);
-const noDiagonalTouches = gridCells
-  .map(cell => graph.block(cell, 2, 2))
-  .filter(Boolean)
-  .map(block => new NFA(noDiagonalTouchMachine, 'no-diagonal-touch',
-    ...block.map(loopCell)));
+// Every 2x2 block is the same diagonal-touch template shifted, so stamp it
+// once with Replicate instead of instantiating one NFA per block.
+const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
+const firstBlock = graph.block(blockOrigins[0], 2, 2);
+const noDiagonalTouches = loop.makeReplicate(
+  new NFA(noDiagonalTouchMachine, 'no-diagonal-touch', ...loop.at(firstBlock)),
+  loop.at(blockOrigins),
+);
 
 // The machine reads membership/digit pairs for an orthogonal neighbour pair.
 const whisperMachine = NFA.encodeSpec({
@@ -78,7 +80,7 @@ const whispers = gridCells.flatMap(cell => [[0, 1], [1, 0]]
   .map(([dr, dc]) => graph.step(cell, dr, dc))
   .filter(Boolean)
   .map(other => new NFA(whisperMachine, 'dutch-whisper',
-    loopCell(cell), cell, loopCell(other), other)));
+    loop.at(cell), cell, loop.at(other), other)));
 
 // A Japanese-sum pattern is a list of decimal sum tokens. '?' matches one
 // decimal digit and '*' consumes zero or more whole loop segments.
@@ -134,7 +136,7 @@ const japaneseSums = japanesePatterns.map(([line, tokens]) => {
     ? graph.row(number)
     : graph.column(number);
   return new NFA(japanesePatternMachine(tokens), `japanese-${line}`,
-    ...cells.flatMap(cell => [loopCell(cell), cell]));
+    ...cells.flatMap(cell => [loop.at(cell), cell]));
 });
 
 return [
@@ -143,7 +145,7 @@ return [
   ...membership,
   new ConnectedValues('VL', ON),
   ...degrees,
-  ...noDiagonalTouches,
+  noDiagonalTouches,
   ...whispers,
   ...japaneseSums,
 ];

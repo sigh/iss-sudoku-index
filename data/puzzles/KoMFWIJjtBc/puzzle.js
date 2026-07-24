@@ -79,7 +79,7 @@ const degrees = gridCells.map(cell => {
   const machine = cell === START || cell === END
     ? endpointDegreeMachine : internalDegreeMachine;
   return new NFA(machine, 'path degree',
-    pathCell(cell), ...graph.neighbours(cell).map(pathCell));
+    pathCell(cell), ...path.at(graph.neighbours(cell)));
 });
 
 // Each visited box contains exactly three path cells; unvisited boxes contain 0.
@@ -92,7 +92,7 @@ const boxCountMachine = NFA.encodeSpec({
   accept: ({ count }) => count === 0 || count === 3,
 }, geometry.numValues);
 const boxCounts = graph.boxes().map(box =>
-  new NFA(boxCountMachine, 'path box count', ...box.map(pathCell)));
+  new NFA(boxCountMachine, 'path box count', ...path.at(box)));
 
 // For every internal path cell, its digit and the digits in its two ON
 // neighbours occupy all three entropy bands. Endpoints have no centred triple.

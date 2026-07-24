@@ -103,7 +103,7 @@ const pieClues = [
   { col: 3, total: 17 },
   { col: 7, total: 23 },
 ];
-const pieCells = new Var('P', 'pie membership in clued columns', 18);
+const pieCells = new Var('P', 'pie membership in clued columns', '2x9');
 
 // For each cell in a pie-clued column, map its chaos-region label through the
 // nine region flags. The cell flag is 1 exactly for an interior-region cell.
@@ -123,7 +123,7 @@ const pieLookupNFA = NFA.encodeSpec({
 const pieCellDefs = pieClues.flatMap(({ col }, clueIndex) =>
   graph.column(col).map((cell, rowIndex) => ({
     cell,
-    flag: pieCells.cell(clueIndex * 9 + rowIndex + 1),
+    flag: pieCells.cell(clueIndex + 1, rowIndex + 1),
   }))
 );
 

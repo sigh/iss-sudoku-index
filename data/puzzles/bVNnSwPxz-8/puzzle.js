@@ -28,7 +28,7 @@ const cages = [
   { cells: ['R3C2', 'R4C1', 'R4C2', 'R5C1', 'R5C2'] },
 ];
 
-const balanceDigits = new Var('B', 'cage balance digits', 2 * cages.length);
+const balanceDigits = new Var('B', 'cage balance digits', `${cages.length}x2`);
 
 // Every shade Var is either shaded or unshaded.
 const firstShade = shade.cells()[0];
@@ -142,8 +142,8 @@ function makeProductMachine(cellCount) {
 }
 
 const cageRules = cages.flatMap(({ total, cells }, i) => {
-  const high = balanceDigits.cell(2 * i + 1);
-  const low = balanceDigits.cell(2 * i + 2);
+  const high = balanceDigits.cell(i + 1, 1);
+  const low = balanceDigits.cell(i + 1, 2);
   const inputs = [high, low, ...cells.flatMap(cell => [cell, shade.at(cell)])];
   const digitRule = total === undefined
     ? new AllDifferent(...cells)
@@ -161,9 +161,9 @@ const distinctBalances = cages.flatMap((_, i) =>
     const j = i + offset + 1;
     return new Or([
       new AllDifferent(
-        balanceDigits.cell(2 * i + 1), balanceDigits.cell(2 * j + 1)),
+        balanceDigits.cell(i + 1, 1), balanceDigits.cell(j + 1, 1)),
       new AllDifferent(
-        balanceDigits.cell(2 * i + 2), balanceDigits.cell(2 * j + 2)),
+        balanceDigits.cell(i + 1, 2), balanceDigits.cell(j + 1, 2)),
     ]);
   }));
 

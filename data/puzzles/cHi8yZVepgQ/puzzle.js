@@ -107,7 +107,7 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
 // topRight, bottomLeft, bottomRight), translated by a uniform offset per
 // anchor cell, so Replicate shortens this to one template + target set.
 const noTouchAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noTouchTemplate = graph.block(noTouchAnchors[0], 2, 2).map(pathCell);
+const noTouchTemplate = path.at(graph.block(noTouchAnchors[0], 2, 2));
 
 // --- Box coverage: at least one on-path cell in every box.
 const atLeastOneOnMachine = NFA.encodeSpec({
@@ -190,17 +190,17 @@ return [
   new ConnectedValues('VP', ON),
   ...gridCells.map(cell => {
     const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
-    return new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell));
+    return new NFA(machine, 'degree', pathCell(cell), ...path.at(graph.neighbours(cell)));
   }),
   path.makeReplicate(
     new NFA(noDiagonalTouchMachine, 'no-touch', ...noTouchTemplate),
-    noTouchAnchors.map(pathCell)),
-  ...graph.boxes().map(cells => new NFA(atLeastOneOnMachine, 'box-coverage', ...cells.map(pathCell))),
+    path.at(noTouchAnchors)),
+  ...graph.boxes().map(cells => new NFA(atLeastOneOnMachine, 'box-coverage', ...path.at(cells))),
   ...arrows.map(({ cell, dir: [dR, dC] }) => {
-    const ray = graph.ray(cell, dR, dC).slice(1).map(pathCell);
+    const ray = path.at(graph.ray(cell, dR, dC).slice(1));
     return new NFA(countMachine, 'arrow-count', cell, ...ray);
   }),
-  ...circles.map(cell => new NFA(countMachine, 'circle-count', cell, ...graph.kingNeighbours(cell).map(pathCell))),
+  ...circles.map(cell => new NFA(countMachine, 'circle-count', cell, ...path.at(graph.kingNeighbours(cell)))),
   ...mod4Windows.map(([a, b, c, d]) => new NFA(mod4Machine, 'mod4', pathCell(a), a, pathCell(b), b, pathCell(c), c, pathCell(d), d)),
   // --- Renban line (purple): non-repeating consecutive sequence.
   new Renban('R5C7', 'R5C8', 'R5C9'),

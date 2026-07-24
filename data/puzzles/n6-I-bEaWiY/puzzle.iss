@@ -1,5 +1,5 @@
-.Var~S~cave%20shading~81
-.Var~C~directional%20sight%20counts~56
+.Var~S~cave%20shading~9x9
+.Var~C~directional%20sight%20counts~14x4
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

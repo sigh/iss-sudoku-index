@@ -64,7 +64,7 @@ const degreeMachine = NFA.encodeSpec({
 }, geometry.numValues);
 const degreeConstraints = gridCells.map(cell =>
   new NFA(degreeMachine, 'degree',
-    loopCell(cell), ...graph.neighbours(cell).map(loopCell)));
+    loopCell(cell), ...loop.at(graph.neighbours(cell))));
 
 // --- Traffic-light borders: the road cannot cross that edge, i.e. the two
 // cells either side of it cannot both be on the loop (since, under degree-2,
@@ -88,7 +88,7 @@ const cameraConstraints = cameras.map(cell => {
   const { row } = parseCellId(cell);
   const rowCells = [];
   for (let col = 1; col <= 9; col++) rowCells.push(makeCellId(row, col));
-  return new NFA(cameraMachine, 'camera-row', cell, ...rowCells.map(loopCell));
+  return new NFA(cameraMachine, 'camera-row', cell, ...loop.at(rowCells));
 });
 
 return [

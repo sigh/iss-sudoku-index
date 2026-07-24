@@ -98,10 +98,10 @@ const edgeAndDiffConstraints = gridCells.flatMap(cell => {
 const edgeAgreementConstraints = [
   shape.makeReplicate(
     new Pair(edgeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
-    gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell)),
+    shape.at(gridCells.filter(cell => graph.step(cell, 0, 1)))),
   shape.makeReplicate(
     new Pair(edgeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
-    gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell)),
+    shape.at(gridCells.filter(cell => graph.step(cell, 1, 0)))),
 ];
 
 // --- Circle clues. Each vertex's clue does two things: at least one of the four
@@ -119,7 +119,7 @@ const turnsExactly = memo((target) => NFA.encodeSpec({
 const circleConstraints = Object.entries(circleClues).flatMap(([topLeft, d]) => [
   new Quad(topLeft, d),
   new NFA(turnsExactly(d), 'circle-turns',
-    ...graph.block(topLeft, 2, 2).map(shapeCell)),
+    ...shape.at(graph.block(topLeft, 2, 2))),
 ]);
 
 return [

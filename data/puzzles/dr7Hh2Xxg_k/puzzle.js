@@ -40,7 +40,7 @@ const gridCells = graph.cells();
 // degree count is needed for them. The two endpoints get their own 2-value
 // domain (END_A/END_B) meaning "use this one of my two available edges" --
 // each is a grid corner with exactly two neighbours, so 2 codes suffice and
-// there is no need to widen Shape past 9 values (see shapes.md).
+// there is no need to widen Shape past 9 values.
 const OFF = 1, HORIZ = 2, VERT = 3, UL = 4, UR = 5, DL = 6, DR = 7;
 const END_A = 8, END_B = 9;
 const usesUp = s => s === VERT || s === UL || s === UR;
@@ -85,9 +85,9 @@ const edgeRightKey = Pair.fnToKey((a, b) => usesRight(a) === usesLeft(b), geomet
 const edgeDownKey = Pair.fnToKey((a, b) => usesDown(a) === usesUp(b), geometry.numValues);
 const edgeAgreements = [
   ...graph.rows().map(row =>
-    new Pair(edgeRightKey, 'edge-h', ...row.filter(c => !isEndpoint(c)).map(pathCell))),
+    new Pair(edgeRightKey, 'edge-h', ...path.at(row.filter(c => !isEndpoint(c))))),
   ...graph.columns().map(col =>
-    new Pair(edgeDownKey, 'edge-v', ...col.filter(c => !isEndpoint(c)).map(pathCell))),
+    new Pair(edgeDownKey, 'edge-v', ...path.at(col.filter(c => !isEndpoint(c))))),
 ];
 
 // --- Digit difference along a used regular <-> regular edge. -------------
@@ -154,7 +154,7 @@ const existsOnPathMachine = NFA.encodeSpec({
   accept: ({ found }) => found,
 }, geometry.numValues);
 const boxesVisited = graph.boxes()
-  .map(box => new NFA(existsOnPathMachine, 'box-visited', ...box.map(pathCell)));
+  .map(box => new NFA(existsOnPathMachine, 'box-visited', ...path.at(box)));
 
 // --- Terrain overlay: ISLAND or WATER per cell. ---------------------------
 const ISLAND = 1, WATER = 2;
@@ -190,8 +190,8 @@ const noMonoWaterMachine = NFA.encodeSpec({
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noMonoWaterBlocks = terrain.makeReplicate(
   new NFA(noMonoWaterMachine, 'no-mono-water',
-    ...graph.block(gridCells[0], 2, 2).map(terrainCell)),
-  blockOrigins.map(terrainCell));
+    ...terrain.at(graph.block(gridCells[0], 2, 2))),
+  terrain.at(blockOrigins));
 
 return [
   new Shape('9x9'),

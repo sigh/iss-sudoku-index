@@ -59,7 +59,7 @@ const replicateEdgeAgreement = (name, key, dRow, dCol) => {
   const origin = origins[0];
   return shape.makeReplicate(
     new Pair(key, name, shapeCell(origin), shapeCell(graph.step(origin, dRow, dCol))),
-    origins.map(shapeCell));
+    shape.at(origins));
 };
 const edgeRules = [
   replicateEdgeAgreement('edge-h', edgeAgreeKey(usesRight, usesLeft), 0, 1),
@@ -138,7 +138,7 @@ const turnCountMachine = memo(relation => NFA.encodeSpec({
 const CIRCLE_BOX = {
   R1C1: 1, R2C6: 2, R1C8: 3, R5C3: 4, R6C7: 6, R7C5: 8, R8C8: 9, R9C1: 7,
 };
-const boxShapeCells = n => graph.box(n).map(shapeCell);
+const boxShapeCells = n => shape.at(graph.box(n));
 
 // Each circled box's own turn count equals its circle's digit.
 const turnEquals = Object.entries(CIRCLE_BOX).map(([cell, n]) =>

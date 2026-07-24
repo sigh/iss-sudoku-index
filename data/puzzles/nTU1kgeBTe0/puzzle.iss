@@ -1,7 +1,7 @@
 .Shape~1x1~0-9
 .~R1C1_0~VA58_4
-.Var~A~11x11%20answer%2C%20row-major%3B%200%20is%20blank~121
-.Var~P~selected%203x3%20top-left%20corners~81
+.Var~A~11x11%20answer%2C%20row-major%3B%200%20is%20blank~11x11
+.Var~P~selected%203x3%20top-left%20corners~9x9
 .Replicate~_____________H~VP1
 .~VP1_0_1
 .End

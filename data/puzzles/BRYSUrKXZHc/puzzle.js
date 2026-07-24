@@ -40,27 +40,23 @@
 // - The path-sum TEST constraint ("adjacent digits along the route sum to
 //   at least 3"): needs the route, which is omitted.
 
-const GRID = new Var('G', 'Grid', 64);
-const cellAt = (r, c) => GRID.cell(r * 8 + c + 1); // r, c: 0-indexed
+const GRID = new Var('G', 'Grid', '8x8');
 
-// Use a plain 8x8 reference geometry purely to source row/column/box cell
-// groupings (as R#C# ids); those ids are then mapped onto our own Var grid
-// via parseCellId. This geometry is never itself part of the constraints.
-// (Its default box tiling for an 8x8/8-value grid is 2 rows x 4 columns --
-// exactly the drawn "marked 4x2 box" bands, confirmed against the drawn
-// box-boundary dashes: dense stippling at row-coords 2,4,6 and
-// column-coord 4.)
+// A plain 8x8 reference geometry supplies the row/column/box groupings;
+// gridOverlay translates those cell lists onto the Var grid. The geometry is
+// never itself part of the constraints. (Its default box tiling for an
+// 8x8/8-value grid is 2 rows x 4 columns -- exactly the drawn "marked 4x2
+// box" bands, confirmed against the drawn box-boundary dashes: dense
+// stippling at row-coords 2,4,6 and column-coord 4.)
 const refGraph = cellGraph('8x8');
-const toOurCells = (refCells) => refCells.map(id => {
-  const { row, col } = parseCellId(id);
-  return cellAt(row - 1, col - 1);
-});
+const gridOverlay = refGraph.makeOverlay('VG');
+const cellAt = (r, c) => GRID.cell(r + 1, c + 1); // r, c: 0-indexed
 
 // Every row, column, and box holds each of 0,1,2,3 exactly twice (8 cells).
 const MULTISET = '0_0_1_1_2_2_3_3';
-const rows = refGraph.rows().map(row => new ContainExact(MULTISET, ...toOurCells(row)));
-const cols = refGraph.columns().map(col => new ContainExact(MULTISET, ...toOurCells(col)));
-const boxes = refGraph.boxes().map(box => new ContainExact(MULTISET, ...toOurCells(box)));
+const rows = refGraph.rows().map(row => new ContainExact(MULTISET, ...gridOverlay.at(row)));
+const cols = refGraph.columns().map(col => new ContainExact(MULTISET, ...gridOverlay.at(col)));
+const boxes = refGraph.boxes().map(box => new ContainExact(MULTISET, ...gridOverlay.at(box)));
 
 // One-way doors: [big, small] cell pairs (0-indexed [row, col]), read off
 // the 16 purple arrow glyphs. The arrow points at the smaller digit, so the

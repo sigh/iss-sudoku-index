@@ -28,7 +28,6 @@ const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 
 const loop = graph.makeOverlay('VL');
-const loopCell = cell => loop.at(cell);
 const gridCells = graph.cells();
 
 // --- Loop membership: every cell is on (1) or off (2), free unless later
@@ -54,7 +53,7 @@ const degreeMachine = NFA.encodeSpec({
 }, geometry.numValues);
 const degreeConstraints = gridCells.map(cell =>
   new NFA(degreeMachine, 'degree',
-    loopCell(cell), ...graph.neighbours(cell).map(loopCell)));
+    loop.at(cell), ...loop.at(graph.neighbours(cell))));
 
 // --- No diagonal self-touch: forbid a 2x2 whose only on cells are a
 // diagonal pair.
@@ -79,8 +78,8 @@ const noTouchOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noTouchOrigin = noTouchOrigins[0];
 const noTouchConstraint = loop.makeReplicate(
   [new NFA(noDiagonalTouchMachine, 'no-touch',
-    ...graph.block(noTouchOrigin, 2, 2).map(loopCell))],
-  noTouchOrigins.map(loopCell));
+    ...loop.at(graph.block(noTouchOrigin, 2, 2)))],
+  loop.at(noTouchOrigins));
 
 // --- Loop self-count: for each digit v, the number of on-loop cells holding
 // v is either 0 (v never appears on the loop) or exactly v (v appears on the
@@ -101,7 +100,7 @@ const loopSelfCountMachine = (v) => NFA.encodeSpec({
 const loopSelfCountConstraints = Array.from({ length: 9 }, (_, i) => {
   const v = i + 1;
   return new NFA(loopSelfCountMachine(v), `loop-count-${v}`,
-    ...gridCells.flatMap(cell => [loopCell(cell), cell]));
+    ...gridCells.flatMap(cell => [loop.at(cell), cell]));
 });
 
 // --- Arrow counts: the arrow cell's digit equals the number of on-loop
@@ -136,7 +135,7 @@ const arrowClues = [
 const arrowConstraints = arrowClues.map(([cell, dirName]) => {
   const [dRow, dCol] = DIRS[dirName];
   const rayCells = graph.ray(cell, dRow, dCol).slice(1);
-  return new NFA(arrowCountMachine, 'arrow-count', cell, ...rayCells.map(loopCell));
+  return new NFA(arrowCountMachine, 'arrow-count', cell, ...loop.at(rayCells));
 });
 
 return [

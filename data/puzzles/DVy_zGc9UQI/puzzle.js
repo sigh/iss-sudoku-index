@@ -63,10 +63,9 @@ const color = graph.makeOverlay('VC', circleCells);
 
 // Each orthogonally-adjacent pair of circles, once: the horizontal and vertical
 // dominoes starting at each circle whose other cell is also a circle.
-const circleAdjacencies = () => circleCells
+const circleAdjacencies = () => color.at(circleCells
   .flatMap(cell => [graph.block(cell, 1, 2), graph.block(cell, 2, 1)])
-  .filter(domino => domino?.every(c => color.at(c) !== null))
-  .map(domino => domino.map(c => color.at(c)));
+  .filter(domino => domino?.every(c => color.at(c) !== null)));
 
 const allCircleEntries = circleCells.flatMap(cell => [cell, color.at(cell)]);
 
@@ -97,7 +96,7 @@ function colorDigitNFAs() {
 
 const coloredGivens = circleCells
   .flatMap((c, i) => isUncoloredCircle(c, i) ? [] : [colorCandidates(c, i)]);
-const circleTargets = circleCells.map(c => color.at(c));
+const circleTargets = color.at(circleCells);
 const circleOrigin = circleTargets[0];
 
 return [

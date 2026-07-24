@@ -39,7 +39,7 @@ function no2x2Spec() {
 // reads the 2x2 shade window at R1C1; each target origin shifts that window by
 // the same relative offsets within the shade subgraph.
 function no2x2Constraints() {
-  const window = graph.block(makeCellId(1, 1), 2, 2).map(shadeAt);
+  const window = shade.at(graph.block(makeCellId(1, 1), 2, 2));
   const targets = [];
   for (let r = 1; r <= 8; r++) {
     for (let c = 1; c <= 8; c++) {
@@ -148,7 +148,7 @@ function xsumConstraints() {
 // Every cell is shade 1 or 2: one Given template stamped over every grid
 // cell via the shade overlay.
 function shadeDomainConstraints() {
-  const targets = graph.cells().map(shadeAt);
+  const targets = shade.at(graph.cells());
   return [shade.makeReplicate([new Given(targets[0], 1, 2)], targets)];
 }
 

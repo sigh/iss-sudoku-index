@@ -38,7 +38,7 @@ const allCells = graph.cells();
 const MAXV = 10; // 9 (written digit) plus at most 1 (nudge)
 
 function unionValueCells(groups) {
-  return Array.from(new Set(groups.flat())).map(valueAt);
+  return value.at(Array.from(new Set(groups.flat())));
 }
 
 // Restrict the main grid back to true Sudoku digits (Shape widened the value
@@ -58,7 +58,7 @@ const valueConstraints = allCells.map(cell =>
 // Exactly one nudge cell (flag = 2) per row/column/box: with flags in {1,2}
 // over 9 cells, a house-sum of 10 means exactly one 2 and eight 1s.
 const houseConstraints = [...graph.rows(), ...graph.columns(), ...graph.boxes()].map(house =>
-  new Sum('10', ...house.map(flagAt)));
+  new Sum('10', ...flag.at(house)));
 
 // The nine nudge cells hold nine different written digits. For each digit v,
 // scan every (digit, flag) pair in the grid and reject a second nudge cell
@@ -91,7 +91,7 @@ const whiskerLines = [
   ['R7C6', 'R8C6'],
 ];
 const whiskers = whiskerLines.flatMap(line => [
-  new Whisper(5, ...line.map(valueAt)),
+  new Whisper(5, ...value.at(line)),
 ]);
 
 // White dots: consecutive effective values, no value repeats across all
@@ -162,5 +162,5 @@ return [
 
   new AllDifferent(...unionValueCells(cages)),
 
-  new AllDifferent(...diagonal.map(valueAt)),
+  new AllDifferent(...value.at(diagonal)),
 ];

@@ -33,8 +33,7 @@
 // decrease/increase relative to distance to the current room's ghost, reset
 // per room entry, plus "a ghost holds its room's lowest path digit") is
 // omitted -- this needs order/distance measured along an unknown path
-// through unknown regions, which
-// iss-constraints/references/unknown-graphs.md documents as unsupported.
+// through unknown regions, which has no ISS primitive.
 // The secret-passage teleport topology (which two of the 6 cells are
 // actually paired, and that the path may jump between them) is also
 // omitted; only the always-true final-grid consequence -- each digit value
@@ -47,8 +46,6 @@ const path = graph.makeOverlay('VP');   // path-membership cell per grid cell
 
 const ON = 1;    // path-membership values, stored in the Var cells
 const OFF = 2;
-
-const pathCell = cell => path.at(cell);
 
 const DOORS = [
   ['R3C1', 'R3C2'], ['R5C1', 'R5C2'], ['R5C1', 'R6C1'],
@@ -67,8 +64,8 @@ const ATTIC_GHOST = 'R3C9';
 const originCell = path.cells()[0];
 const pathMembership = [
   path.makeReplicate(new Given(originCell, ON, OFF)),
-  new Given(pathCell(ENTRY), ON),
-  ...GHOSTS.map(g => new Given(pathCell(g), ON)),
+  new Given(path.at(ENTRY), ON),
+  ...GHOSTS.map(g => new Given(path.at(g), ON)),
 ];
 
 // --- Degree: the two endpoints have exactly one on-path orthogonal
@@ -98,7 +95,7 @@ const pathDegree = [
   new ConnectedValues('VP', ON),
   ...graph.cells().map(cell => {
     const machine = endpoints.includes(cell) ? degree1Machine : degree2Machine;
-    return new NFA(machine, 'degree', pathCell(cell), ...graph.neighbours(cell).map(pathCell));
+    return new NFA(machine, 'degree', path.at(cell), ...path.at(graph.neighbours(cell)));
   }),
 ];
 

@@ -22,17 +22,16 @@
 const graph = cellGraph('9x9');
 const flags = graph.makeOverlay('VD');
 const gridCells = graph.cells();
-const flag = (cell) => flags.at(cell);
-const interleaveFlags = (cells) => cells.flatMap(cell => [cell, flag(cell)]);
+const interleaveFlags = (cells) => cells.flatMap(cell => [cell, flags.at(cell)]);
 
-const flagTargets = gridCells.map(flag);
+const flagTargets = flags.at(gridCells);
 const flagOrigin = flagTargets[0];
 
 // One digit is doubled per row/column/box: flags sum to 10 (eight 1s, one 2).
 const placementSums = [
-  ...Array.from({ length: 9 }, (_, r) => new Sum(10, ...graph.row(r + 1).map(flag))),
-  ...Array.from({ length: 9 }, (_, c) => new Sum(10, ...graph.column(c + 1).map(flag))),
-  ...graph.boxes().map(box => new Sum(10, ...box.map(flag))),
+  ...Array.from({ length: 9 }, (_, r) => new Sum(10, ...flags.at(graph.row(r + 1)))),
+  ...Array.from({ length: 9 }, (_, c) => new Sum(10, ...flags.at(graph.column(c + 1)))),
+  ...graph.boxes().map(box => new Sum(10, ...flags.at(box))),
 ];
 
 // Each digit 1-9 is doubled exactly once across the grid (the 9 doublers
@@ -173,7 +172,7 @@ return [
     new NFA(doubledDigitNFA(digit + 1), `doubled-${digit + 1}`, ...interleaveFlags(gridCells))),
 
   ...arrowEndpoints.map(cell =>
-    new Pair(rangeKey, 'coord-arrow-range', cell, flag(cell))),
+    new Pair(rangeKey, 'coord-arrow-range', cell, flags.at(cell))),
 
   ...arrows.flatMap(([start, tip]) =>
     Array.from({ length: 9 }, (_, i) => i + 1).map(r =>

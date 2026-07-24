@@ -97,7 +97,7 @@ const cageConstraints = cages.flatMap(([cells, total]) => [
   new AllDifferent(...cells),
   new Sum(
     total,
-    ...cells.map(posVal),
+    ...posVals.at(cells),
     ...cells.map(cell => [negVal(cell), -1])),
 ]);
 
@@ -147,8 +147,8 @@ const lineEqualSums = lines.flatMap(line => {
     const segA = segments[s - 1];
     const segB = segments[s];
     equalities.push(new EqualSum(
-      [...segA.map(posVal), ...segB.map(negVal)],
-      [...segA.map(negVal), ...segB.map(posVal)]));
+      [...posVals.at(segA), ...negVals.at(segB)],
+      [...negVals.at(segA), ...posVals.at(segB)]));
   }
   return equalities;
 });
@@ -167,11 +167,11 @@ const atMostOneFlagMachine = NFA.encodeSpec({
 const atMostOneFlagConstraints = [];
 for (let n = 1; n <= 9; n++) {
   atMostOneFlagConstraints.push(new NFA(
-    atMostOneFlagMachine, `row ${n} sub-zero`, ...graph.row(n).map(flag)));
+    atMostOneFlagMachine, `row ${n} sub-zero`, ...flags.at(graph.row(n))));
   atMostOneFlagConstraints.push(new NFA(
-    atMostOneFlagMachine, `col ${n} sub-zero`, ...graph.column(n).map(flag)));
+    atMostOneFlagMachine, `col ${n} sub-zero`, ...flags.at(graph.column(n))));
   atMostOneFlagConstraints.push(new NFA(
-    atMostOneFlagMachine, `box ${n} sub-zero`, ...graph.box(n).map(flag)));
+    atMostOneFlagMachine, `box ${n} sub-zero`, ...flags.at(graph.box(n))));
 }
 
 // The (up to) 8 sub-zero digits must be pairwise distinct: for each digit v,

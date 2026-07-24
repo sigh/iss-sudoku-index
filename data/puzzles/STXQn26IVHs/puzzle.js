@@ -16,32 +16,28 @@
 // approach as data/puzzles/-dwKlM3DGXo/puzzle.js).
 
 const N = 9;
-const GRID = new Var('G', 'Grid', N * N);
-const cellAt = (r, c) => GRID.cell(r * N + c + 1);
+const GRID = new Var('G', 'Grid', `${N}x${N}`);
 
-// Use a plain 9x9 reference geometry purely to get row/column/box cell
-// groupings (as R#C# ids); those ids are then mapped onto our own Var grid
-// via parseCellId. This geometry is never itself part of the constraints.
+// A plain 9x9 reference geometry supplies the row/column/box groupings;
+// gridLocator translates those cell lists onto the Var grid. The geometry is
+// never itself part of the constraints.
 const refGraph = cellGraph('9x9');
-const toOurCells = (refCells) => refCells.map(id => {
-  const { row, col } = parseCellId(id);
-  return cellAt(row - 1, col - 1);
-});
+const gridLocator = refGraph.makeOverlay('VG');
+const cellAt = (r, c) => GRID.cell(r + 1, c + 1); // r, c: 0-indexed
 
 // Rows, columns, and boxes (the ordinary 3x3 blocks): exactly three each of
 // 0, 2, 5.
 const MULTISET = '0_0_0_2_2_2_5_5_5';
 const rows = refGraph.rows().map(row =>
-  new ContainExact(MULTISET, ...toOurCells(row)));
+  new ContainExact(MULTISET, ...gridLocator.at(row)));
 const cols = refGraph.columns().map(col =>
-  new ContainExact(MULTISET, ...toOurCells(col)));
+  new ContainExact(MULTISET, ...gridLocator.at(col)));
 const boxes = refGraph.boxes().map(box =>
-  new ContainExact(MULTISET, ...toOurCells(box)));
+  new ContainExact(MULTISET, ...gridLocator.at(box)));
 
 // ISS Shape value ranges are contiguous starting at 0 or 1, so {0,2,5} can't
 // be declared directly; use range 0-5 (six values) and restrict every real
 // grid cell back to the three legal digits.
-const gridLocator = refGraph.makeOverlay('VG');
 const digitDomain = gridLocator.makeReplicate(
   [new Given(GRID.cell(1), 0, 2, 5)],
   GRID.cells());

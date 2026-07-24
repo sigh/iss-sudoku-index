@@ -71,7 +71,7 @@ const linesWithConfirmedShapeOnly = [
 // Every cell is UNSHADED or SHADED: one Given template stamped over every
 // grid cell via the shade overlay.
 function shadeDomainConstraints() {
-  const targets = gridCells.map(shadeOf);
+  const targets = shade.at(gridCells);
   return [shade.makeReplicate(new Given(targets[0], UNSHADED, SHADED))];
 }
 
@@ -85,6 +85,6 @@ return [
   new ConnectedValues('VS', SHADED),
   new ConnectedValues('VS', UNSHADED),
   ...linesWithConfirmedShapeOnly.map(line =>
-    new NFA(notAllSameNFA, 'line-both-shades', ...line.map(shadeOf))
+    new NFA(notAllSameNFA, 'line-both-shades', ...shade.at(line))
   ),
 ];

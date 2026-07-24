@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-24T03:13:30.067277+00:00",
+  "generated_at": "2026-07-24T10:47:57.187877+00:00",
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -543,7 +543,7 @@
       "solve_ms": 274.1,
       "iss_size": 15268,
       "iss_url_length": 13862,
-      "script_size": 4057
+      "script_size": 4042
     },
     {
       "puzzle_id": "vWyihZrZvU8",
@@ -622,7 +622,7 @@
       "solve_ms": 26.3,
       "iss_size": 70897,
       "iss_url_length": 68623,
-      "script_size": 13533
+      "script_size": 13518
     },
     {
       "puzzle_id": "JPGFsisxFlw",
@@ -853,10 +853,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 1812,
-      "solve_ms": 29.5,
-      "iss_size": 3239,
-      "iss_url_length": 3282,
-      "script_size": 6551
+      "solve_ms": 29.0,
+      "iss_size": 3240,
+      "iss_url_length": 3283,
+      "script_size": 6423
     },
     {
       "puzzle_id": "MYpoIPhevoI",
@@ -1018,7 +1018,7 @@
       "solve_ms": 8744.2,
       "iss_size": 3780,
       "iss_url_length": 3813,
-      "script_size": 6883
+      "script_size": 6868
     },
     {
       "puzzle_id": "CNGyml7iu_I",
@@ -1415,7 +1415,7 @@
       "solve_ms": 78.7,
       "iss_size": 1265,
       "iss_url_length": 1285,
-      "script_size": 3322
+      "script_size": 3304
     },
     {
       "puzzle_id": "QSvdF_EMck4",
@@ -2189,7 +2189,7 @@
       "solve_ms": 1598.7,
       "iss_size": 3764,
       "iss_url_length": 3795,
-      "script_size": 7910
+      "script_size": 7895
     },
     {
       "puzzle_id": "nLu0P3VYz4c",
@@ -2469,7 +2469,7 @@
       "solve_ms": 38813.8,
       "iss_size": 32579,
       "iss_url_length": 32577,
-      "script_size": 4416
+      "script_size": 4362
     },
     {
       "puzzle_id": "bQJp4EhO5Sk",
@@ -2529,7 +2529,7 @@
       "solve_ms": 7.1,
       "iss_size": 15380,
       "iss_url_length": 14705,
-      "script_size": 3854
+      "script_size": 3841
     },
     {
       "puzzle_id": "Yv_RMyYTeRU",
@@ -2610,7 +2610,7 @@
       "solve_ms": 49.6,
       "iss_size": 4039,
       "iss_url_length": 4099,
-      "script_size": 5296
+      "script_size": 5286
     },
     {
       "puzzle_id": "Rn_svsVv_FA",
@@ -3066,10 +3066,10 @@
       "unique_solution": false,
       "solutions_found": 1000,
       "guesses": 1120,
-      "solve_ms": 23.3,
-      "iss_size": 2805,
-      "iss_url_length": 2850,
-      "script_size": 3442
+      "solve_ms": 42.4,
+      "iss_size": 2809,
+      "iss_url_length": 2854,
+      "script_size": 3437
     },
     {
       "puzzle_id": "0LkWrGwclFo",
@@ -3133,7 +3133,7 @@
       "solve_ms": 13353.1,
       "iss_size": 6024,
       "iss_url_length": 6055,
-      "script_size": 7496
+      "script_size": 7481
     },
     {
       "puzzle_id": "MjqEhvEQiwA",
@@ -3438,7 +3438,7 @@
       "solve_ms": 47.9,
       "iss_size": 6624,
       "iss_url_length": 6655,
-      "script_size": 8167
+      "script_size": 8058
     },
     {
       "puzzle_id": "g7YE5xR5-G4",
@@ -3851,7 +3851,7 @@
       "solve_ms": 196.0,
       "iss_size": 10535,
       "iss_url_length": 10610,
-      "script_size": 5780
+      "script_size": 5776
     },
     {
       "puzzle_id": "ECyhFDcyaIc",
@@ -4012,7 +4012,7 @@
       "solve_ms": 11726.2,
       "iss_size": 45670,
       "iss_url_length": 45704,
-      "script_size": 10164
+      "script_size": 10134
     },
     {
       "puzzle_id": "al5r5VhjyP8",
@@ -4050,7 +4050,7 @@
       "solve_ms": 197427.0,
       "iss_size": 16272,
       "iss_url_length": 16307,
-      "script_size": 7603
+      "script_size": 7599
     },
     {
       "puzzle_id": "MDx8QVOCub8.1",
@@ -4159,7 +4159,7 @@
       "solve_ms": 1491.7,
       "iss_size": 2320,
       "iss_url_length": 2367,
-      "script_size": 4099
+      "script_size": 4089
     },
     {
       "puzzle_id": "konQKbnvhoQ",
@@ -5109,7 +5109,7 @@
       "solve_ms": 302.4,
       "iss_size": 5590,
       "iss_url_length": 5627,
-      "script_size": 8514
+      "script_size": 8504
     },
     {
       "puzzle_id": "blPgSzctUMg",
@@ -5355,7 +5355,7 @@
       "solve_ms": 418.6,
       "iss_size": 1421,
       "iss_url_length": 1447,
-      "script_size": 1765
+      "script_size": 1753
     },
     {
       "puzzle_id": "2O7JJsAvLY4",
@@ -5614,7 +5614,7 @@
       "solve_ms": 13316.4,
       "iss_size": 22845,
       "iss_url_length": 22785,
-      "script_size": 3649
+      "script_size": 3600
     },
     {
       "puzzle_id": "vjXf8PHYA_k",

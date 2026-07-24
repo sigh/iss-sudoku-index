@@ -9,8 +9,8 @@
 //
 // The repeated row and column values cannot live in the ISS main grid,
 // whose rows and columns are always all-different. The real puzzle grid
-// is therefore the row-major VG overlay; a pinned 1x7 main grid is only
-// a placeholder.
+// is therefore the row-major VG overlay; a pinned 1x1 main grid supplying
+// the 1-7 value range is only a placeholder.
 
 const REF = cellGraph('9x9');
 const GRID = REF.makeOverlay('VG');
@@ -55,12 +55,10 @@ const antiKnight = knightPaths.flatMap(path =>
   path.slice(1).map((cell, i) =>
     new AllDifferent(...GRID.at([path[i], cell]))));
 
-const placeholderCells = cellGraph('1x7').cells();
-
 return [
-  new Shape('1x7'),
+  new Shape('1x1', '1-7'),
   GRID.toVar('Grid'),
-  ...placeholderCells.map((cell, i) => new Given(cell, i + 1)),
+  new Given('R1C1', 1),
   ...groups,
   ...cages,
   ...antiKnight,

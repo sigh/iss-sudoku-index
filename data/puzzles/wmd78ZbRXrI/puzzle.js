@@ -55,7 +55,7 @@ const cc = grid.makeOverlay('CC');
 
 const sunConstraints = SUN_CELLS.map(cell => new NFA(
   sunCountNFA, 'SunCount',
-  cell, cc.at(cell), ...grid.kingNeighbours(cell).map(n => cc.at(n)),
+  cell, cc.at(cell), ...cc.at(grid.kingNeighbours(cell)),
 ));
 
 return [

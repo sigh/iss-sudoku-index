@@ -1,7 +1,7 @@
 .NoBoxes
 .ChaosConstruction
 .Var~I~region%20interior%20flags~9
-.Var~P~pie%20membership%20in%20clued%20columns~18
+.Var~P~pie%20membership%20in%20clued%20columns~2x9
 .~VI1_1_2~VI2_1_2~VI3_1_2~VI4_1_2~VI5_1_2~VI6_1_2~VI7_1_2~VI8_1_2~VI9_1_2~VP1_1_2~VP2_1_2~VP3_1_2~VP4_1_2~VP5_1_2~VP6_1_2~VP7_1_2~VP8_1_2~VP9_1_2~VP10_1_2~VP11_1_2~VP12_1_2~VP13_1_2~VP14_1_2~VP15_1_2~VP16_1_2~VP17_1_2~VP18_1_2
 .Sandwich~12~C1
 .Sandwich~16~C4

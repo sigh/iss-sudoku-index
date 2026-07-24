@@ -80,7 +80,7 @@ return [
   new ChaosConstruction(),
 
   ...chaosArrows.map(({ origin, arm }) =>
-    new ChaosArrow(origin, 1, ...arm.map(cell => cc.at(cell)))),
+    new ChaosArrow(origin, 1, ...cc.at(arm))),
 
   new NFA(summitSpec, 'summit', summitLine),
 

@@ -1,6 +1,6 @@
 .Shape~1x1~7
-.Var~G~Grid~81
-.Var~B~BoxDistinctCount~9
+.Var~G~Grid~9x9
+.Var~B~BoxDistinctCount~3x3
 .~R1C1_1~VB1_1_2_3~VB2_1_2_3~VB3_1_2_3~VB4_1_2_3~VB5_1_2_3~VB6_1_2_3~VB7_1_2_3~VB8_1_2_3~VB9_1_2_3
 .ContainExact~1_2_3_3_3_4_5_6_7~VG1~VG2~VG3~VG4~VG5~VG6~VG7~VG8~VG9
 .ContainExact~1_2_3_3_3_4_5_6_7~VG10~VG11~VG12~VG13~VG14~VG15~VG16~VG17~VG18

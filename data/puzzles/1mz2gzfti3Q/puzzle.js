@@ -4,8 +4,8 @@
 // Source: https://sudokupad.app/pd589n0d3g
 
 // VQ holds each circle's four surrounding digits in nondecreasing order.
-const sortedDigits = new Var('Q', 'sorted quadrank digits', 48);
-const vq = (circle, digit) => sortedDigits.cell(circle * 4 + digit + 1);
+const sortedDigits = new Var('Q', 'sorted quadrank digits', '12x4');
+const vq = (circle, digit) => sortedDigits.cell(circle + 1, digit + 1);
 
 const circles = [
   {cells: ['R2C1', 'R2C2', 'R3C1', 'R3C2'], rank: 'R1C1'},

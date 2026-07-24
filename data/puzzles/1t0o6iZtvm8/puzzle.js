@@ -99,8 +99,8 @@ const redCurrantMachine = currantMachine((a, b) => (a % 2) !== (b % 2));
 // top-left cell); stamp it as one Replicate instead of 64 copies.
 const monoAnchors = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noMonoReplicate = zone.makeReplicate(
-  new NFA(noMonoMachine, 'no-mono-2x2', ...graph.block(monoAnchors[0], 2, 2).map(zoneCell)),
-  monoAnchors.map(zoneCell));
+  new NFA(noMonoMachine, 'no-mono-2x2', ...zone.at(graph.block(monoAnchors[0], 2, 2))),
+  zone.at(monoAnchors));
 
 return [
   new Shape('9x9'),

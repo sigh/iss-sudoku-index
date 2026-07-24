@@ -77,7 +77,7 @@ const arrows = [
 const arrowConstraints = arrows.map(([cell, dir]) => {
   const [dRow, dCol] = DIRECTIONS[dir];
   const sight = graph.ray(cell, dRow, dCol).slice(1);
-  return new Sum(2 * sight.length, cell, ...sight.map(shadeCell));
+  return new Sum(2 * sight.length, cell, ...shade.at(sight));
 });
 
 // mod3-2x2 interleaves grid cells and shade-overlay cells in one template,
@@ -104,8 +104,8 @@ return [
   // one cell group (VS) with a uniform (row, col) offset from block to block;
   // Replicate applies cleanly here.
   shade.makeReplicate(
-    new NFA(noMono2x2NFA, 'no-mono-2x2', ...firstBlock.map(shadeCell)),
-    blockOrigins.map(shadeCell)),
+    new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.at(firstBlock)),
+    shade.at(blockOrigins)),
 
   ...mod3Constraints,
   ...arrowConstraints,

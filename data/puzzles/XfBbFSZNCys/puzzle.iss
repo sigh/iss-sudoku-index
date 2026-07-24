@@ -1,5 +1,5 @@
-.Var~H~horizontal%20gap%20edges~90
-.Var~V~vertical%20gap%20edges~90
+.Var~H~horizontal%20gap%20edges~10x9
+.Var~V~vertical%20gap%20edges~9x10
 .Replicate~_______________~VH1
 .~VH1_1_2
 .End

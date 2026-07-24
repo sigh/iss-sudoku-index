@@ -47,7 +47,7 @@ return [
   // king-move neighbours.
   ...allCells.map(cell => {
     const flag = flagOverlay.at(cell);
-    const neighbourFlags = graph.kingNeighbours(cell).map(n => flagOverlay.at(n));
+    const neighbourFlags = flagOverlay.at(graph.kingNeighbours(cell));
     return new Or([
       new Given(flag, 1),
       new And([
@@ -59,6 +59,6 @@ return [
 
   boxCounts,
   ...boxes.map((boxCells, i) => new EqualSum(
-    [boxCounts.cell(i + 1)], boxCells.map(cell => flagOverlay.at(cell)))),
+    [boxCounts.cell(i + 1)], flagOverlay.at(boxCells))),
   new AllDifferent(...boxCounts.cells()),
 ];

@@ -85,7 +85,7 @@ const arrows = [
 
 const arrowConstraints = arrows.map(([cell, [dr, dc]]) => {
   const rayCells = graph.ray(cell, dr, dc).slice(1); // exclude the cell itself
-  return new Sum(2 * rayCells.length, cell, ...rayCells.map(shadeCell));
+  return new Sum(2 * rayCells.length, cell, ...shade.at(rayCells));
 });
 
 return [
@@ -97,8 +97,8 @@ return [
   new ConnectedValues('VS', UNSHADED),
   shade.makeReplicate(
     new NFA(noMono2x2Machine, 'no-mono-2x2',
-      ...graph.block(gridCells[0], 2, 2).map(shadeCell)),
-    blockOrigins.map(shadeCell)),
+      ...shade.at(graph.block(gridCells[0], 2, 2))),
+    shade.at(blockOrigins)),
   ...fortressConstraints,
   ...arrowConstraints,
 ];

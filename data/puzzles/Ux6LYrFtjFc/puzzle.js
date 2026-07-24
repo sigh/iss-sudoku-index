@@ -50,9 +50,8 @@ const shadingConstraints = [
   ...graph.cells().map(cell =>
     new Pair(shadedValueKey, 'shade', cell, shade.at(cell))),
   ...symmetryOrbits()
-    .map(orbit => orbit.map(cell => shade.at(cell)))
     .filter(orbit => orbit.length > 1)
-    .map(orbit => new SameValues(orbit.length, ...orbit)),
+    .map(orbit => new SameValues(orbit.length, ...shade.at(orbit))),
 ];
 
 return [

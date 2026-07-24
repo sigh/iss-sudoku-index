@@ -66,8 +66,8 @@ const noMono2x2Machine = NFA.encodeSpec({
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noMono2x2 = shade.makeReplicate(
   new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...graph.block(gridCells[0], 2, 2).map(shadeCell)),
-  blockOrigins.map(shadeCell));
+    ...shade.at(graph.block(gridCells[0], 2, 2))),
+  shade.at(blockOrigins));
 
 // The arrows drawn inside each cell, as (dRow, dCol) steps.
 const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
@@ -115,7 +115,7 @@ const countShadedMachine = NFA.encodeSpec({
 const arrowCounts = ARROWS.map(([cell, dirs]) => {
   // Each ray runs to the grid edge; slice(1) drops the arrow cell itself.
   const seen = dirs.flatMap(
-    dir => graph.ray(cell, ...DIRS[dir]).slice(1).map(shadeCell));
+    dir => shade.at(graph.ray(cell, ...DIRS[dir]).slice(1)));
   return new NFA(countShadedMachine, 'arrow-shaded-count', cell, ...seen);
 });
 

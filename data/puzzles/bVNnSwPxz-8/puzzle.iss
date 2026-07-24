@@ -1,5 +1,5 @@
-.Var~S~shade~81
-.Var~B~cage%20balance%20digits~20
+.Var~S~shade~9x9
+.Var~B~cage%20balance%20digits~10x2
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

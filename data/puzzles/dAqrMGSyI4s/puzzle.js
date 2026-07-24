@@ -76,8 +76,8 @@ const edgeAgreeKey = (toB, toA) =>
   Pair.fnToKey((a, b) => toB(a) === toA(b), geometry.numValues);
 const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
 const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
-const rightTargets = gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell);
-const downTargets = gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell);
+const rightTargets = shape.at(gridCells.filter(cell => graph.step(cell, 0, 1)));
+const downTargets = shape.at(gridCells.filter(cell => graph.step(cell, 1, 0)));
 
 // --- Per-loop parity: two cells joined by a loop edge share parity. The mirror
 // cell contributes its opposite parity. Reads [shapeA, digitA, digitB]. ---
@@ -143,7 +143,7 @@ return [
   }),
   ...sensors.map(s => {
     const box = graph.block(graph.step(s, -1, -1), 3, 3);
-    return new NFA(sensorMachine, 'sensor', s, ...box.map(shapeCell));
+    return new NFA(sensorMachine, 'sensor', s, ...shape.at(box));
   }),
   // --- A station's digit = total stations holding that digit. ---
   new CountingCircles(...stations),

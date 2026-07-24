@@ -94,7 +94,7 @@ return [
   new Shape('9x9'),
   new ChaosConstruction(),
   new NoBoxes(),
-  new AllDifferent(...BLUE_CIRCLES.map(c => cc.at(c))),
+  new AllDifferent(...cc.at(BLUE_CIRCLES)),
   ...circleArrows,
   ...borderArrows,
   ...whiteDots,

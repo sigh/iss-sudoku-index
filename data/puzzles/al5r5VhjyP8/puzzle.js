@@ -47,7 +47,7 @@ const opposite = cell => {
 
 // --- Copycat flag domain: every cell is PLAIN or COPY. ---
 const copycatDomain = (() => {
-  const targets = gridCells.map(flagOf);
+  const targets = flags.at(gridCells);
   const origin = targets[0];
   return flags.makeReplicate(
     [new Given(origin, PLAIN, COPY)],
@@ -71,7 +71,7 @@ for (let i = 1; i <= 9; i++) {
 }
 houses.push(...graph.boxes());
 const oneCopyCopyatConstraints = houses.map(house =>
-  new NFA(oneCopy, 'one-copycat', ...house.map(flagOf))
+  new NFA(oneCopy, 'one-copycat', ...flags.at(house))
 );
 
 // --- Every copycat cell holds the same digit X: scan [flag, digit] over the

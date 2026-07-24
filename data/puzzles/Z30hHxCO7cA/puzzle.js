@@ -111,11 +111,11 @@ return [
   typoVar,
 
   ...indices.map(r => row(r)).map(cells =>
-    new ContainExact("1", ...cells.map(cell => color.at(cell)))),
+    new ContainExact("1", ...color.at(cells))),
   ...indices.map(c => col(c)).map(cells =>
-    new ContainExact("1", ...cells.map(cell => color.at(cell)))),
+    new ContainExact("1", ...color.at(cells))),
   ...graph.boxes().map(cells =>
-    new ContainExact("1", ...cells.map(cell => color.at(cell)))),
+    new ContainExact("1", ...color.at(cells))),
 
   new ContainExact(Array(33).fill(1).join("_"), ...errorCells),
 

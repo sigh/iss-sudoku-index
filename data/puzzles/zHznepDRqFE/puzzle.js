@@ -31,7 +31,6 @@ const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
 
 const shade = graph.makeOverlay('VS');
-const shadeCell = cell => shade.at(cell);
 const firstShade = shade.cells()[0];
 const shadeDomain = shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED));
 
@@ -53,8 +52,8 @@ const noMono2x2Machine = NFA.encodeSpec({
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noMono2x2 = shade.makeReplicate(
   new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...graph.block(gridCells[0], 2, 2).map(shadeCell)),
-  blockOrigins.map(shadeCell));
+    ...shade.at(graph.block(gridCells[0], 2, 2))),
+  shade.at(blockOrigins));
 
 // A shaded cell's value must equal the max digit among its orthogonal
 // neighbours: every neighbour digit <= value, and at least one equals it.
@@ -85,11 +84,11 @@ const valueLinks = gridCells.map(cell => {
   const neighbours = graph.neighbours(cell);
   return new Or([
     new And([
-      new Given(shadeCell(cell), UNSHADED),
+      new Given(shade.at(cell), UNSHADED),
       new SameValues(2, cell, valueCell(cell)),
     ]),
     new And([
-      new Given(shadeCell(cell), SHADED),
+      new Given(shade.at(cell), SHADED),
       new NFA(maxMachines.get(neighbours.length), 'shaded-value-is-max',
         ...neighbours, valueCell(cell)),
     ]),

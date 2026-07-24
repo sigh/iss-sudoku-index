@@ -36,7 +36,7 @@ const graph = cellGraph('9x9');
 const cc = graph.makeOverlay('CC');
 
 const chaosCounts = circles.map(cell => {
-  const set = [cc.at(cell), ...graph.kingNeighbours(cell).map(n => cc.at(n))];
+  const set = [cc.at(cell), ...cc.at(graph.kingNeighbours(cell))];
   return new ChaosCount(cell, 0, ...set);
 });
 

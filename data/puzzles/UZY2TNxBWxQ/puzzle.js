@@ -195,7 +195,7 @@ function knownRunConstraint(cells, targetSources) {
 
 function unknownRunConstraint(cells, count) {
   return new NFA(unknownRunNFA(count), 'jss-run-unknown',
-    ...cells.map(cell => shade.at(cell)));
+    ...shade.at(cells));
 }
 
 // Every row 3-9 is pink in C1, so every row has at least one run; rows 3-5

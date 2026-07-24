@@ -21,7 +21,7 @@ const placeholderSolution = [
   '234567891', '567891234', '891234567',
   '345678912', '678912345', '912345678',
 ].join('');
-const at = (row, col) => digits.at(makeCellId(row, col));
+const digitsVar = digits.toVar('Another World grid');
 
 // Each digit occurs exactly nine times. A cell with an equal neighbour must be
 // marked in VB with its digit; an isolated occurrence may be marked or OFF.
@@ -208,11 +208,11 @@ const xSumClues = [
 
 return [
   new Shape('9x9', VALUE_COUNT),
-  digits.toVar('Another World grid'),
+  digitsVar,
   block.toVar('adjacent block labels'),
   ...placeholder.map((cell, i) => new Given(cell, Number(placeholderSolution[i]))),
   digits.makeReplicate(new Given(cells[0], ...DIGITS)),
-  new Given(at(4, 5), 1),
+  new Given(digitsVar.cell(4, 5), 1),
   new ContainExact(multiset, ...cells),
   ...blockMembership,
   ...digitBlocks,

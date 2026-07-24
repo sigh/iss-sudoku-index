@@ -120,10 +120,10 @@ const verticalEdgeOrigins = gridCells.filter(cell => graph.step(cell, 1, 0));
 const edges = [
   shape.makeReplicate(
     new Pair(eastAgree, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2')),
-    horizontalEdgeOrigins.map(shapeCell)),
+    shape.at(horizontalEdgeOrigins)),
   shape.makeReplicate(
     new Pair(southAgree, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1')),
-    verticalEdgeOrigins.map(shapeCell)),
+    shape.at(verticalEdgeOrigins)),
 ];
 
 // --- Entropy path: for every non-endpoint on-path cell, its shape code names
@@ -274,7 +274,7 @@ const countMachine = NFA.encodeSpec({
 }, ALL_CODES.length);
 
 const soigneurConstraints = SOIGNEURS.map(cell =>
-  new NFA(countMachine, 'soigneur-count', cell, ...graph.kingNeighbours(cell).map(shapeCell)));
+  new NFA(countMachine, 'soigneur-count', cell, ...shape.at(graph.kingNeighbours(cell))));
 
 return [
   new Shape('9x9', ALL_CODES.length),

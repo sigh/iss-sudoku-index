@@ -134,7 +134,7 @@ function lineConstraints(clueMap, cellsFn, label) {
 
 // Every shading cell has the same 3-value domain; Replicate stamps the one
 // template Given onto all 81 cells instead of 81 near-identical Givens.
-const shadeTargets = graph.cells().map(shadeAt);
+const shadeTargets = shade.at(graph.cells());
 const shadeOrigin = shadeTargets[0];
 
 return [

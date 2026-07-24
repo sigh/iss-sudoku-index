@@ -55,7 +55,7 @@ const color = graph.makeOverlay('VC', circleCells);
 // the whole group by Replicate (the overlay locates the cells). Circles with a
 // stated colour get their own Given on top -- Givens intersect, so the narrower
 // one wins and the domain need not exclude them.
-const colorCells = circleCells.map(cell => color.at(cell));
+const colorCells = color.at(circleCells);
 const colorDomain = color.makeReplicate(new Given(colorCells[0], 1, 2, 3));
 
 const colorGivens = circleCells
@@ -66,10 +66,9 @@ const colorGivens = circleCells
 // vertical dominoes starting at each circle whose other cell is also a
 // circle.
 const circleCellSet = new Set(circleCells);
-const circleAdjacencies = () => circleCells
+const circleAdjacencies = () => color.at(circleCells
   .flatMap(cell => [graph.block(cell, 1, 2), graph.block(cell, 2, 1)])
-  .filter(domino => domino?.every(c => circleCellSet.has(c)))
-  .map(domino => domino.map(c => color.at(c)));
+  .filter(domino => domino?.every(c => circleCellSet.has(c))));
 
 const allCircleEntries = circleCells.flatMap(cell => [cell, color.at(cell)]);
 

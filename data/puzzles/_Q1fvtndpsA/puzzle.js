@@ -32,9 +32,8 @@ const noMono2x2Machine = NFA.encodeSpec({
   accept: ({ done }) => done === true,
 }, geometry.numValues);
 const mono2x2Origin = 'R1C1';
-const mono2x2Targets = gridCells
-  .filter(cell => graph.block(cell, 2, 2))
-  .map(shadeCell);
+const mono2x2Targets = shade.at(gridCells
+  .filter(cell => graph.block(cell, 2, 2)));
 
 const dots = [
   ['R1C4', 'R2C4'],
@@ -120,7 +119,7 @@ return [
   ...shadeDifferences,
   shade.makeReplicate(
     [new NFA(noMono2x2Machine, 'no-mono-2x2',
-      ...graph.block(mono2x2Origin, 2, 2).map(shadeCell))],
+      ...shade.at(graph.block(mono2x2Origin, 2, 2)))],
     mono2x2Targets,
   ),
   ...pillArrows,

@@ -105,10 +105,10 @@ const edgeRules = gridCells.flatMap(cell => {
 const edgeAgreementConstraints = [
   shape.makeReplicate(
     [new Pair(edgeAgreeRightKey, 'edge-h', shapeCell('R1C1'), shapeCell('R1C2'))],
-    gridCells.filter(cell => graph.step(cell, 0, 1)).map(shapeCell)),
+    shape.at(gridCells.filter(cell => graph.step(cell, 0, 1)))),
   shape.makeReplicate(
     [new Pair(edgeAgreeDownKey, 'edge-v', shapeCell('R1C1'), shapeCell('R2C1'))],
-    gridCells.filter(cell => graph.step(cell, 1, 0)).map(shapeCell)),
+    shape.at(gridCells.filter(cell => graph.step(cell, 1, 0)))),
 ];
 
 // --- Modular cross rule: an on-loop cell's own two loop-neighbours must also

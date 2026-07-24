@@ -43,7 +43,7 @@ const eraserLinks = graph.cells().map(
 
 // Exactly one eraser (effective value 0) in every row, column, and box.
 const oneEraserPerHouse = graph.houses().map(
-  house => new ContainExact('0', ...house.map(effAt)));
+  house => new ContainExact('0', ...eff.at(house)));
 
 // The nine eraser cells hold nine different digits. Capture, per row, the
 // digit sitting at that row's (unique) eraser cell into a dedicated Var, by
@@ -83,14 +83,14 @@ const CAGES = [
   [15, ['R4C1', 'R4C2', 'R4C3']],
   [14, ['R1C1', 'R1C2']],
 ];
-const cages = CAGES.map(([total, cells]) => new Cage(total, ...cells.map(effAt)));
+const cages = CAGES.map(([total, cells]) => new Cage(total, ...eff.at(cells)));
 
 // Thermometers: values strictly increase from the bulb.
 const THERMOS = [
   ['R2C2', 'R3C2', 'R3C3', 'R2C3', 'R1C3', 'R1C4', 'R1C5', 'R1C6', 'R2C6'],
   ['R9C8', 'R9C9'],
 ];
-const thermos = THERMOS.map(cells => new Thermo(...cells.map(effAt)));
+const thermos = THERMOS.map(cells => new Thermo(...eff.at(cells)));
 
 // V clues: the two values sum to 5.
 const VEES = [
@@ -109,7 +109,7 @@ const WHISPERS = [
   ['R4C7', 'R5C7', 'R5C8', 'R4C8', 'R4C7'],
   ['R3C5', 'R4C5', 'R4C6', 'R3C6', 'R3C5'],
 ];
-const whispers = WHISPERS.map(cells => new Whisper(5, ...cells.map(effAt)));
+const whispers = WHISPERS.map(cells => new Whisper(5, ...eff.at(cells)));
 
 return [
   new Shape('9x9', '0-9'),
