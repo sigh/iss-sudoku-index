@@ -34,9 +34,12 @@ function selfCluedCage(cells) {
     return cellA.row - cellB.row || cellA.col - cellB.col;
   });
   const [tensCell, onesCell] = ordered;
+  // The two clue cells are wherever reading order puts them, not an
+  // adjacent drawn pill, so PillArrow's pill-adjacency rule can't apply;
+  // encode the relation directly: sum(cage) = 10*tens + ones.
   return new And([
     new AllDifferent(...cells),
-    new PillArrow(2, tensCell, onesCell, ...cells),
+    new Sum(0, [tensCell, -10], [onesCell, -1], ...cells),
   ]);
 }
 

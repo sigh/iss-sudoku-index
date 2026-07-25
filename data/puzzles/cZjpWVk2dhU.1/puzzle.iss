@@ -1,5 +1,5 @@
 .Shape~6x6
-.Var~S~shade~36
+.Var~S~shade~6x6
 .Replicate~______~VS1
 .~VS1_1_2
 .End

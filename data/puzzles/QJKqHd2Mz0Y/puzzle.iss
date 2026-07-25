@@ -1,6 +1,6 @@
 .~R1C1_4~R3C7_2~VP40_1~VP26_1~VP8_1~VP15_1~VP39_1~VP43_1~VP53_1~VP56_1~VP67_1~VP81_1~VI13_2~VI14_2~VI32_2~VI41_2~VI46_2~VI47_2~VI63_2~VI72_2~VI75_2~VI76_2
-.Var~I~infection~81
-.Var~P~path~81
+.Var~I~infection~9x9
+.Var~P~path~9x9
 .Replicate~_____________H~VI1
 .~VI1_1_2
 .End

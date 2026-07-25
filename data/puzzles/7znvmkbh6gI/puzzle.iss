@@ -1,6 +1,6 @@
 .Shape~9x9~10
-.Var~Z~zombie%20flags~81
-.Var~V~effective%20values~81
+.Var~Z~zombie%20flags~9x9
+.Var~V~effective%20values~9x9
 .Replicate~_____________H
 .~R1C1_1_2_3_4_5_6_7_8_9
 .End

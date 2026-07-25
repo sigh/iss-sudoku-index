@@ -1,4 +1,4 @@
-.Var~S~water%20and%20island%20labels~81
+.Var~S~water%20and%20island%20labels~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2_3_4_5_6_7_8
 .End

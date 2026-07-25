@@ -2,7 +2,7 @@
 .Replicate~______
 .~R1C1_1_2_3_4_5_6
 .End
-.Var~G~galaxy%20membership~36
+.Var~G~galaxy%20membership~6x6
 .AllDifferent~R2C2~R3C3~R3C5~R4C2~R4C4~R6C2
 .Or
 .And

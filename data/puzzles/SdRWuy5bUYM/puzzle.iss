@@ -1,4 +1,4 @@
-.Var~S~labyrinth%20%2F%20wall~81
+.Var~S~labyrinth%20%2F%20wall~9x9
 .Var~T~tetromino%20placements~651
 .~R2C3_1~R5C7_2~VS73_1~VS74_1~VS64_2~VS76_1~VS77_1~VS75_2~VS67_2~VS78_1~VS79_2~VS69_2~VS81_1~VS80_1~VS72_2
 .Replicate~_____________H~VS1

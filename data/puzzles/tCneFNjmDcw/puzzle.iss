@@ -1,7 +1,7 @@
 .Shape~9x9~16
-.Var~R~outgoing%20route%20direction~81
-.Var~H~route%20order%20high%20digit~81
-.Var~L~route%20order%20low%20digit~81
+.Var~R~outgoing%20route%20direction~9x9
+.Var~H~route%20order%20high%20digit~9x9
+.Var~L~route%20order%20low%20digit~9x9
 .Replicate~_____________H
 .~R1C1_1_2_3_4_5_6_7_8_9
 .End

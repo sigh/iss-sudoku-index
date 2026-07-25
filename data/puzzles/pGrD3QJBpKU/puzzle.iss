@@ -1,6 +1,6 @@
 .Shape~9x9~10
-.Var~F~nudge%20flag~81
-.Var~V~effective%20value~81
+.Var~F~nudge%20flag~9x9
+.Var~V~effective%20value~9x9
 .Replicate~_____________H
 .~R1C1_1_2_3_4_5_6_7_8_9
 .End

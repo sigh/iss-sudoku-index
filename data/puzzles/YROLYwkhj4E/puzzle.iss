@@ -5,7 +5,7 @@
 .Replicate~_____________H~VA1
 .~VA1_0_3
 .End
-.Var~A~three-sum%20adjustment~81
+.Var~A~three-sum%20adjustment~9x9
 .Var~VT~three-sum%20digit%20by%20row~9
 .ContainExact~3~VA1~VA2~VA3~VA4~VA5~VA6~VA7~VA8~VA9
 .ContainExact~3~VA10~VA11~VA12~VA13~VA14~VA15~VA16~VA17~VA18

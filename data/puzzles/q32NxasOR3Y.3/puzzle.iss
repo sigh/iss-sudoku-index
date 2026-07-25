@@ -2,7 +2,7 @@
 .Replicate~______
 .~R1C1_1_2_3_4_5_6
 .End
-.Var~P~path%20labels~36
+.Var~P~path%20labels~6x6
 .~VP20_1~VP15_2~VP10_3~VP17_4~VP6_5~VP32_6
 .ConnectedValues~VP~1
 .ConnectedValues~VP~2

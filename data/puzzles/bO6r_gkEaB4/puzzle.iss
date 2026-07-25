@@ -1,5 +1,5 @@
 .Shape~6x6
-.Var~D~doubler%20flags~36
+.Var~D~doubler%20flags~6x6
 .Replicate~______~VD1
 .~VD1_1_2
 .End

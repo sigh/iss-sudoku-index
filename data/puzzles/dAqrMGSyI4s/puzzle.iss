@@ -1,4 +1,4 @@
-.Var~S~shape~81
+.Var~S~shape~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2_3_4_5_6_7
 .End

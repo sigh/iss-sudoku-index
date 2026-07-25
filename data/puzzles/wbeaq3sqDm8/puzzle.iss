@@ -1,5 +1,5 @@
 .Shape~9x9~0-9
-.Var~I~influencer%20marker~81
+.Var~I~influencer%20marker~9x9
 .Replicate~_____________H
 .~R1C1_1_2_3_4_5_6_7_8_9
 .End

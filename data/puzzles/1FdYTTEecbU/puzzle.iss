@@ -1,4 +1,4 @@
-.Var~S~labyrinth%20%2F%20wall~81
+.Var~S~labyrinth%20%2F%20wall~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

@@ -1,4 +1,4 @@
-.Var~I~Indexer%20type~81
+.Var~I~Indexer%20type~9x9
 .Replicate~_____________H~VI1
 .~VI1_1_2_3
 .End

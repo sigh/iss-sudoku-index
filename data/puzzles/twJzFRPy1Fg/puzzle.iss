@@ -1,8 +1,8 @@
 .Shape~1x1~0-9
 .~R1C1_0~VO107_1~VO118_1~VO108_1~VO119_1
-.Var~A~11x11%20answer%2C%20row-major%3B%200%20is%20blank~121
-.Var~O~inside%20a%20selected%203x3%20region~121
-.Var~P~selected%203x3%20top-left%20corners~81
+.Var~A~11x11%20answer%2C%20row-major%3B%200%20is%20blank~11x11
+.Var~O~inside%20a%20selected%203x3%20region~11x11
+.Var~P~selected%203x3%20top-left%20corners~9x9
 .Replicate~____________________B~VO1
 .~VO1_0_1
 .End

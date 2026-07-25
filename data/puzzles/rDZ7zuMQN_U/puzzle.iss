@@ -1,4 +1,4 @@
-.Var~R~rooter%20flags~81
+.Var~R~rooter%20flags~9x9
 .Var~EA~twice%20exponent%20of%202~17
 .Var~EB~twice%20exponent%20of%203~17
 .Var~EC~twice%20exponent%20of%205~17

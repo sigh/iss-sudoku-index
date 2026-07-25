@@ -1,4 +1,4 @@
-.Var~S~Japanese%20Sums%20shading~81
+.Var~S~Japanese%20Sums%20shading~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2_3_4_5_6
 .End

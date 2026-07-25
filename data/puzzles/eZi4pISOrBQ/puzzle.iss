@@ -1,4 +1,4 @@
-.Var~R~river~81
+.Var~R~river~9x9
 .Replicate~_____________H~VR1
 .~VR1_1_2
 .End

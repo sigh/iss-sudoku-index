@@ -1,6 +1,6 @@
 .NoBoxes
 .ChaosConstruction
-.Var~P~path~81
+.Var~P~path~9x9
 .Replicate~_____________H~VP1
 .~VP1_1_2
 .End

@@ -8,8 +8,8 @@
 .Replicate~_____________H~VW1
 .~VW1_1_2
 .End
-.Var~F~fire%20cell%20flags%20(2%20%3D%20fire)~81
-.Var~W~water%20cell%20flags%20(2%20%3D%20water)~81
+.Var~F~fire%20cell%20flags%20(2%20%3D%20fire)~9x9
+.Var~W~water%20cell%20flags%20(2%20%3D%20water)~9x9
 .Var~FR~fire%20local%20row%20in%20box%20(0-2%2C%20%2B1%20shift)~9
 .Var~FC~fire%20local%20col%20in%20box%20(0-2%2C%20%2B1%20shift)~9
 .Var~WR~water%20local%20row%20in%20box%20(0-2%2C%20%2B1%20shift)~9

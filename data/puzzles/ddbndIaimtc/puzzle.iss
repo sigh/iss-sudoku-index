@@ -1,4 +1,4 @@
-.Var~B~blob~81
+.Var~B~blob~9x9
 .Var~L~sum~2
 .Replicate~_____________H~VB1
 .~VB1_1_2_3

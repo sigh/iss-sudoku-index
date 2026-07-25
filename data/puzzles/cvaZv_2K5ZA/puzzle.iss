@@ -1,6 +1,6 @@
-.Var~G~green%20line~81
-.Var~B~blue%20line~81
-.Var~E~blue%20endpoints~81
+.Var~G~green%20line~9x9
+.Var~B~blue%20line~9x9
+.Var~E~blue%20endpoints~9x9
 .Replicate~_____________H~VG1
 .~VG1_1_2
 .End

@@ -1,5 +1,5 @@
 .~R3C6_9~R7C1_1~R9C9_4~VS24_1~VS50_1~VS13_2~VS29_2~VS44_2~VS48_2~VS71_2~VS77_2~VS80_2
-.Var~S~snake%20membership~81
+.Var~S~snake%20membership~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

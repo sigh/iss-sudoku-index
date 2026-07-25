@@ -1,6 +1,6 @@
 .Shape~6x6
 .~R2C3_3~VS2_2~VS5_2~VS14_2~VS18_2~VS29_2~VS32_2~VS10_1~VS16_1~VS23_1~VS27_1~VS26_1
-.Var~S~sea%2Fisland%20shading~36
+.Var~S~sea%2Fisland%20shading~6x6
 .Replicate~______~VS1
 .~VS1_1_2
 .End

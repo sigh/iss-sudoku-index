@@ -1,4 +1,4 @@
-.Var~Z~hot(1)%20%2F%20cold(2)%20zone~81
+.Var~Z~hot(1)%20%2F%20cold(2)%20zone~9x9
 .Replicate~_____________H~VZ1
 .~VZ1_1_2
 .End

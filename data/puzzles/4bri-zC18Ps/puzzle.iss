@@ -1,4 +1,4 @@
-.Var~S~cell%20colors~81
+.Var~S~cell%20colors~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

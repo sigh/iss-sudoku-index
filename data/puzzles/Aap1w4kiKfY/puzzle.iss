@@ -1,5 +1,5 @@
 .~R1C2_2~R1C7_1~R3C2_4~R4C3_6~R4C7_5~R6C1_5~R7C5_3~R7C7_2~R7C9_6~R8C4_6~R9C3_7~R9C9_3
-.Var~S~snake%20labels~81
+.Var~S~snake%20labels~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2_3_4_5
 .End

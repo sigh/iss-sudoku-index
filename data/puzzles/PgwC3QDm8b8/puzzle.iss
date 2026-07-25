@@ -1,5 +1,5 @@
 .~R1C1_3~R1C7_8~R4C4_7~R5C6_3~R7C2_4~R9C5_8~R9C9_9
-.Var~S~shade~81
+.Var~S~shade~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

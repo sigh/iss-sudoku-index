@@ -1,5 +1,5 @@
 .Shape~9x9~11
-.Var~S~path%20shape~81
+.Var~S~path%20shape~9x9
 .ConnectedValues~VS~2_3_4_5_6_7_8_9_10_11
 .Replicate~_____________H
 .~R1C1_1_2_3_4_5_6_7_8_9

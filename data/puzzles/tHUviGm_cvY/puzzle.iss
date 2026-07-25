@@ -1,4 +1,4 @@
-.Var~L~loop~81
+.Var~L~loop~9x9
 .~R6C7_8~R8C7_9
 .Replicate~_____________H~VL1
 .~VL1_1_2

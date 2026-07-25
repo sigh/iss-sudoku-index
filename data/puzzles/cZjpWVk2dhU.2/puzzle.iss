@@ -9,7 +9,7 @@
 .BlackDot~R4C4~R4C5
 .BlackDot~R4C5~R5C5
 .BlackDot~R5C2~R6C2
-.Var~Q~queen%20markers~36
+.Var~Q~queen%20markers~6x6
 .Replicate~______~VQ1
 .~VQ1_1_2
 .End

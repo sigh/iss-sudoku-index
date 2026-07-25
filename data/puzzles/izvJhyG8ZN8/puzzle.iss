@@ -1,4 +1,4 @@
-.Var~S~Yin-Yang%20shade~81
+.Var~S~Yin-Yang%20shade~9x9
 .~R1C1_9~R1C4_8~R1C7_7~R4C1_6~R4C4_5~R4C7_4~R7C1_3~R7C4_2~R7C7_1~VS1_1
 .Replicate~_____________H~VS1
 .~VS1_1_2

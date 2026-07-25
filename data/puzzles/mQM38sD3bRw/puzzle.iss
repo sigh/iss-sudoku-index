@@ -1,4 +1,4 @@
-.Var~L~cage%20line%20label~81
+.Var~L~cage%20line%20label~9x9
 .~R2C8_8~R3C5_8~R5C8_7~R6C6_4~R7C4_4
 .Sum~8~R7C3~R8C3~R8C4
 .Sum~8~R8C5~R8C6~R8C7

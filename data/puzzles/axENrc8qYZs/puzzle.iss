@@ -1,4 +1,4 @@
-.Var~S~shade~81
+.Var~S~shade~9x9
 .Var~REN~REN%20truth%20flags~3
 .Var~ARW~ARW%20truth%20flags~3
 .Var~XTF~XTF%20truth%20flags~3

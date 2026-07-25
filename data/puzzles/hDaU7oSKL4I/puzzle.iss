@@ -1,4 +1,4 @@
-.Var~R~natural%2C%20vampire%2C%20or%20victim~81
+.Var~R~natural%2C%20vampire%2C%20or%20victim~9x9
 .Var~B~victim%20digit%20by%20box~9
 .Var~A~vampire%20digit%20by%20box~9
 .Replicate~_____________H~VR1

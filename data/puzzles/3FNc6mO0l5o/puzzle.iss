@@ -2,9 +2,9 @@
 .Replicate~_____________H
 .~R1C1_1_2_3_4_5_6_7_8_9
 .End
-.Var~H~arrow%20identity%20high%20digit~81
-.Var~L~arrow%20identity%20low%20digit~81
-.Var~K~rank%20along%20arrow~81
+.Var~H~arrow%20identity%20high%20digit~9x9
+.Var~L~arrow%20identity%20low%20digit~9x9
+.Var~K~rank%20along%20arrow~9x9
 .NFA~BlQ0lPKA~_arrow%20placement%20and%20attachment~VH14~VL14~VK14~~VH19~VL19~VK19~~VH22~VL22~VK22~~VH26~VL26~VK26~~VH30~VL30~VK30~~VH34~VL34~VK34~~VH36~VL36~VK36~~VH39~VL39~VK39~~VH43~VL43~VK43~~VH47~VL47~VK47~~VH49~VL49~VK49~~VH50~VL50~VK50~~VH51~VL51~VK51~~VH54~VL54~VK54~~VH55~VL55~VK55~~VH58~VL58~VK58~~VH64~VL64~VK64~~VH66~VL66~VK66~~VH67~VL67~VK67~~VH73~VL73~VK73~~VH76~VL76~VK76~~VH79~VL79~VK79~~VH80~VL80~VK80~~VH81~VL81~VK81
 .NFA~SkkD6aUAAH7baD9t2B_a3v8SSSS_5JJJJgAg~_arrow%20placement%20and%20attachment~VH40~VL40~VK40
 .NFA~SkkD6aUAAH7baD9utB_a3v8SSSS_5JJJJgAg~_arrow%20placement%20and%20attachment~VH38~VL38~VK38

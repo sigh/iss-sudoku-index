@@ -1,4 +1,4 @@
-.Var~H~halver%20status~81
+.Var~H~halver%20status~9x9
 .Replicate~_____________H~VH1
 .~VH1_1_2
 .End

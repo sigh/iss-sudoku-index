@@ -1,4 +1,4 @@
-.Var~S~shade~81
+.Var~S~shade~9x9
 .~R1C5_1~R7C9_6
 .Replicate~_____________H~VS1
 .~VS1_1_2

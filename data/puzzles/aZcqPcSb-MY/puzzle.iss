@@ -1,5 +1,5 @@
 .NoBoxes
-.Var~S~yin-yang%20shade~81
+.Var~S~yin-yang%20shade~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

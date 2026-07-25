@@ -1,5 +1,5 @@
 .AntiKnight
-.Var~S~star~81
+.Var~S~star~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2
 .End

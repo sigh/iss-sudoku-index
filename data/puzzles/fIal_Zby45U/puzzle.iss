@@ -1,5 +1,5 @@
 .Shape~9x9~0-8
-.Var~C~condemned%20flags~81
+.Var~C~condemned%20flags~9x9
 .Replicate~_____________H~VC1
 .~VC1_0_1
 .End

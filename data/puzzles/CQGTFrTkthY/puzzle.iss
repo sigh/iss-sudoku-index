@@ -1,6 +1,6 @@
 .NoBoxes
 .ChaosConstruction
-.Var~G~circled%20cell%20flags~81
+.Var~G~circled%20cell%20flags~9x9
 .Replicate~_____________H~VG1
 .~VG1_1_2
 .End

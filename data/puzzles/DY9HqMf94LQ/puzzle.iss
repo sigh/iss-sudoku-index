@@ -1,4 +1,4 @@
-.Var~W~side~81
+.Var~W~side~9x9
 .Replicate~_____________H~VW1
 .~VW1_1_2_3
 .End

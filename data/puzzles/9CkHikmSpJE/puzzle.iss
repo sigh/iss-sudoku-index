@@ -1,4 +1,4 @@
-.Var~C~copycat~81
+.Var~C~copycat~9x9
 .Replicate~_____________H~VC1
 .~VC1_1_2
 .End

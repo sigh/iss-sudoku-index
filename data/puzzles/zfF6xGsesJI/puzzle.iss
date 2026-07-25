@@ -1,5 +1,5 @@
-.Var~C~circle%20flags~81
-.Var~S~shade%20flags~81
+.Var~C~circle%20flags~9x9
+.Var~S~shade%20flags~9x9
 .Var~R~row%20circled%20digits~9
 .Var~L~column%20circled%20digits~9
 .Var~B~box%20circled%20digits~9

@@ -1,4 +1,4 @@
-.Var~M~Middler%20flags~81
+.Var~M~Middler%20flags~9x9
 .Var~E~row%20Middler%20digit~9
 .Replicate~_____________H~VM1
 .~VM1_1_2

@@ -1,4 +1,4 @@
-.Var~D~doubler%20flags~81
+.Var~D~doubler%20flags~9x9
 .~R4C1_7
 .Replicate~_____________H~VD1
 .~VD1_1_2

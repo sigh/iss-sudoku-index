@@ -1,5 +1,5 @@
-.Var~N~nullifier%20flags~81
-.Var~P~path%20membership~81
+.Var~N~nullifier%20flags~9x9
+.Var~P~path%20membership~9x9
 .Replicate~_____________H~VN1
 .~VN1_1_2
 .End

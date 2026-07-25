@@ -1,7 +1,7 @@
 .Shape~9x9~0-8
-.Var~F~sub-zero%20flags~81
-.Var~P~positive%20half~81
-.Var~N~negative%20half~81
+.Var~F~sub-zero%20flags~9x9
+.Var~P~positive%20half~9x9
+.Var~N~negative%20half~9x9
 .~VF1_0~VF2_0~VF3_0~VF4_0~VF5_0~VF6_0~VF7_0~VF8_0~VF9_0
 .Replicate~_____________H~VF1
 .~VF1_0_1

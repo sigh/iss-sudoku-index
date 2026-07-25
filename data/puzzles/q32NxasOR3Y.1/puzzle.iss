@@ -1,9 +1,9 @@
 .Shape~6x6
-.Var~P~path%20membership~36
-.Var~I~path%20incoming%20direction~36
-.Var~O~path%20outgoing%20direction~36
-.Var~H~path%20rank%20high%20digit~36
-.Var~L~path%20rank%20low%20digit~36
+.Var~P~path%20membership~6x6
+.Var~I~path%20incoming%20direction~6x6
+.Var~O~path%20outgoing%20direction~6x6
+.Var~H~path%20rank%20high%20digit~6x6
+.Var~L~path%20rank%20low%20digit~6x6
 .Replicate~______~VP1
 .~VP1_1_2
 .End

@@ -1,4 +1,4 @@
-.Var~G~ghost%20flag~81
+.Var~G~ghost%20flag~9x9
 .Var~H~headstone%20contribution~18
 .Replicate~_____________H~VG1
 .~VG1_1_2

@@ -1,4 +1,4 @@
-.Var~I~infection%20state~81
+.Var~I~infection%20state~9x9
 .Replicate~_____________H~VI1
 .~VI1_1_2
 .End
