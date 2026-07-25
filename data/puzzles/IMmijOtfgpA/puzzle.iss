@@ -1,0 +1,16 @@
+.Var~D~diagDistinctCount~2
+.~VD1_1_2_3~VD2_1_2_3~R1C5_1_3_5_7_9
+.CountDistinct~VD1~R1C1~R2C2~R3C3~R4C4~R5C5~R6C6~R7C7~R8C8~R9C9
+.CountDistinct~VD2~R9C1~R8C2~R7C3~R6C4~R5C5~R4C6~R3C7~R2C8~R1C9
+.Quad~R1C3~1~8
+.Quad~R3C1~1~2~3
+.Quad~R8C3~1~4~9
+.Quad~R3C8~3~6
+.Quad~R1C6~5~7~8
+.Quad~R8C6~4~5
+.Quad~R6C1~2~7
+.Quad~R6C8~5~6~7
+.Quad~R3C6~1~2~6~7
+.Quad~R6C6~1~3~8~9
+.Quad~R3C3~4~5~7~9
+.Quad~R6C3~2~3~5~6

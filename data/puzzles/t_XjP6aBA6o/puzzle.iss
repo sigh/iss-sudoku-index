@@ -1,0 +1,14 @@
+.Replicate~bbbbbbbbbbbbbD
+.Pair~_vq_vq_vq_vq_H~_Even%20no%20touch~R1C1~R1C2
+.End
+.Replicate~___A4__HA___
+.Pair~_vq_vq_vq_vq_H~_Even%20no%20touch~R1C1~R2C1
+.End
+.Whisper~5~R3C3~R4C4
+.Whisper~5~R4C6~R4C5~R5C4~R5C3~R4C4~R3C5
+.Whisper~5~R7C7~R6C6
+.Whisper~5~R7C5~R6C6~R5C7~R5C6~R6C5~R6C4
+.Whisper~5~R3C6~R4C7~R5C8
+.Whisper~5~R5C2~R6C3~R7C4
+.BlackDot~R8C8~R8C9
+.BlackDot~R4C1~R3C1

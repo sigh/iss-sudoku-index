@@ -1,0 +1,5 @@
+.Shape~4x4
+.WhiteDot~R2C2~R3C2
+.WhiteDot~R2C3~R3C3
+.GreaterThan~R3C2~R3C3
+.NFA~UMMvhEMnlMdHpUtntM5_wiuQlVKxaMCMSqM8oodHIuEQyJA~_SameDifference~R2C2~R1C1~R2C1~R3C1~R4C2~R4C3~R3C4~R2C4~R1C4~R2C3
