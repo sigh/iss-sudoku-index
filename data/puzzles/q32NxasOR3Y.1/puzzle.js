@@ -156,7 +156,7 @@ const edgeRules = gridCells.flatMap(cell => [[0, 1], [1, 0]].flatMap(([dR, dC]) 
 }));
 
 // Rank comparator used to make each pair's digit order agree with its traversal
-// order. Keeping digit comparison in GreaterThan avoids a large product NFA.
+// order. Keeping the digit comparison out of this NFA avoids a large product NFA.
 const rankLessSpec = NFA.encodeSpec({
   startState: { phase: 'highA' },
   transition: (state, value) => {
@@ -176,10 +176,18 @@ const rankLessSpec = NFA.encodeSpec({
 
 const rankLess = (a, b) => new NFA(rankLessSpec, 'path order',
   rankHigh.at(a), rankLow.at(a), rankHigh.at(b), rankLow.at(b));
+
+// digitGreater(x, y): x's digit exceeds y's. The circles are scattered, and the
+// native GreaterThan pairs its cells by grid adjacency rather than by argument
+// order, so it binds nothing on cells that do not touch. Pair binds the two cells
+// given, whatever their positions.
+const GREATER = Pair.fnToKey((x, y) => x > y, geometry.numValues);
+const digitGreater = (x, y) => new Pair(GREATER, 'circle order', x, y);
+
 const circleOrderRules = circles.flatMap((a, i) => circles.slice(i + 1).map(b =>
   new Or([
-    new And([new GreaterThan(b, a), rankLess(a, b)]),
-    new And([new GreaterThan(a, b), rankLess(b, a)]),
+    new And([digitGreater(b, a), rankLess(a, b)]),
+    new And([digitGreater(a, b), rankLess(b, a)]),
   ])));
 
 // Nabner applies to every pair of path cells sharing a 2x3 box.

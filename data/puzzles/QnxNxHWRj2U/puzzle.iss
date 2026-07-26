@@ -1,0 +1,9 @@
+.~R1C5_8~R2C4_1~R2C6_2~R3C3_7~R3C7_8~R4C2_2~R4C8_1~R5C9_8~R6C9_2~R7C8_8~R8C7_4~R9C6_5
+.Whisper~5~R7C5~R8C4~R7C3~R6C3~R6C4~R6C5~R5C4~R6C3
+.BlackDot~R8C1~R9C1
+.Replicate~_7f_7f_7f_7f_D
+.Pair~3f_93________H~_no%20orthogonal%20sum%20of%205~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~3f_93________H~_no%20orthogonal%20sum%20of%205~R1C1~R2C1
+.End

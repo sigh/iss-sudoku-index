@@ -1,0 +1,13 @@
+.~R1C1_4~R1C4_8~R1C6_7~R1C9_5~R4C9_6~R6C9_8~R9C9_2
+.Replicate~FTAMJVQRTWLED
+.Pair~oCqgKoCqgKoCq~_red-dot~R1C1~R1C2
+.End
+.Replicate~YA0AUEIwAQhd
+.Pair~oCqgKoCqgKoCq~_red-dot~R1C1~R2C1
+.End
+.Replicate~6ofzyKvqMpwb8D
+.Pair~X9Vf1X9Vf1X9VH~_no-red-dot~R1C1~R1C2
+.End
+.Replicate~n_L_r73P_vei
+.Pair~X9Vf1X9Vf1X9VH~_no-red-dot~R1C1~R2C1
+.End

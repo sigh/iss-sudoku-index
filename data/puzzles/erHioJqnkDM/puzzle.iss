@@ -1,0 +1,6 @@
+.Shape~6x6
+.Palindrome~R4C2~R3C3~R4C3~R3C4~R4C4~R5C4
+.Palindrome~R3C6~R4C5~R5C6~R6C5
+.Between~R3C1~R2C1~R1C1~R2C2~R3C3~R2C3~R1C3
+.LittleKiller~23~R1C1
+.LittleKiller~11~R5C1

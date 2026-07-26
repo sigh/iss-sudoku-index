@@ -1,0 +1,15 @@
+.Shape~5x5~9
+.Jigsaw~0001100211322213324433444
+.RegionSameValues
+.AllDifferent~R3C3~R2C2
+.AllDifferent~R3C3~R2C3
+.AllDifferent~R3C3~R2C4
+.AllDifferent~R3C3~R3C2
+.AllDifferent~R3C3~R3C4
+.AllDifferent~R3C3~R4C2
+.AllDifferent~R3C3~R4C3
+.AllDifferent~R3C3~R4C4
+.~R1C1_2_4_6_8~R1C5_2_4_6_8~R5C1_2_4_6_8~R5C5_2_4_6_8
+.BlackDot~R4C1~R4C2
+.BlackDot~R4C2~R5C2
+.BlackDot~R1C2~R1C3

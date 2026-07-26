@@ -1,0 +1,15 @@
+.~R1C5_2
+.AntiKnight
+.GreaterThan~R1C2~R1C1
+.GreaterThan~R1C2~R1C3
+.GreaterThan~R2C1~R1C1
+.GreaterThan~R2C3~R2C4
+.GreaterThan~R2C3~R1C3
+.GreaterThan~R3C3~R3C4
+.GreaterThan~R4C3~R4C4
+.GreaterThan~R5C3~R5C4
+.GreaterThan~R6C3~R6C4
+.GreaterThan~R7C3~R7C4
+.GreaterThan~R8C3~R8C4
+.GreaterThan~R9C3~R9C4
+.Entropic~R4C2~R4C3~R4C4~R5C3~R5C4~R6C3~R7C4~R8C5~R7C6~R8C6~R8C7~R9C8

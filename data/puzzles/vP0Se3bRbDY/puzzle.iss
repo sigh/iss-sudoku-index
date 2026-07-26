@@ -1,0 +1,16 @@
+.~R5C4_7
+.Replicate~_7f_7f_7f_7f_D
+.Pair~_____f_93f_93H~_adjacent%20cells%20do%20not%20sum%20to%2013~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~_____f_93f_93H~_adjacent%20cells%20do%20not%20sum%20to%2013~R1C1~R2C1
+.End
+.Replicate~_7f_7f_7f_7f
+.Pair~_____f_93f_93H~_adjacent%20cells%20do%20not%20sum%20to%2013~R1C1~R2C2
+.End
+.Replicate~_7f_7f_7f_7f
+.Pair~_____f_93f_93H~_adjacent%20cells%20do%20not%20sum%20to%2013~R1C2~R2C1
+.End
+.Pair~KoCqoKqiqoCqgC~_red%20line~R1C5~R2C6~R3C5~~R2C6~R2C5~~R3C4~R2C4~R1C4~~R1C2~R2C2~R3C2
+.Cage~13~R2C7~R2C8~R3C7~R3C8
+.Cage~10~R3C3~R4C3~R5C3
