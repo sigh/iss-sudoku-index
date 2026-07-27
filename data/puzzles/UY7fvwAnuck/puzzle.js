@@ -83,20 +83,6 @@ const cellLinkingPairs = graph.cells().flatMap((gridCell) => {
   ];
 });
 
-const effectSearchPriority = [
-  new SearchPriority(90, ...graph.cells().map((cell) => {
-    const { row, col } = parseCellId(cell);
-    return effectCell(row, col);
-  })),
-];
-
-const selectedSearchPriority = [
-  new SearchPriority(80, ...graph.cells().map((cell) => {
-    const { row, col } = parseCellId(cell);
-    return selectedCell(row, col);
-  })),
-];
-
 const rowContainExact = Array.from({ length: 9 }, (_, r) =>
   new ContainExact('10', ...Array.from({ length: 9 }, (_, i) => effectCell(r + 1, i + 1)))
 );
@@ -192,13 +178,10 @@ return [
   selectedVar,
   totalTensVar,
   totalOnesVar,
-  new SearchPriority(100, ...graph.cells()),
   ...gridDomainGivens,
   ...effectDomainGivens,
   ...selectedDomainGivens,
   ...cellLinkingPairs,
-  ...effectSearchPriority,
-  ...selectedSearchPriority,
   ...rowContainExact,
   ...colContainExact,
   ...boxContainExact,

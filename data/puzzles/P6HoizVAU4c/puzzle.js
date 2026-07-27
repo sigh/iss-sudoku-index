@@ -270,7 +270,4 @@ return [
   ]),
   ...vPairs.map(([a, b]) => new V(a, b)),
   LittleKiller.fromCells(diagonalTotal, diagonalCells, geometry),
-  // Branching on digits ahead of region labels; the labels then follow from
-  // them far more often than the reverse. Correctness-neutral.
-  new SearchPriority(1, ...graph.cells()),
 ];

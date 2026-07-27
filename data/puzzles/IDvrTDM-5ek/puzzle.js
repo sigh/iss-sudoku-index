@@ -161,8 +161,6 @@ const counted = COUNTED.flatMap(({ area, rank, prefix }) => {
     ...rest.map((j, i) => compareIntoFlag(
       `rank ${rank} ${cellId(area)}`, j, area, flags[i])),
     new Sum(rest.length + rank - 1, ...flags),
-    // The flags are determined by the grid; branch on grid cells first.
-    new SearchPriority(0, ...flags),
   ];
 });
 

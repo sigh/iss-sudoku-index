@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-27T09:51:36.543748+00:00",
+  "generated_at": "2026-07-27T15:21:42.385906+00:00",
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -30,8 +30,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1017,
-      "solve_ms": 14384.7,
+      "guesses": 3912,
+      "solve_ms": 54875.8,
       "iss_size": 200870,
       "iss_url_length": 190256,
       "script_size": 5799
@@ -301,10 +301,9 @@
         "https://sudokupad.app/f6lfolekzi"
       ],
       "date": "2026-07-15",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Or",
-        "And",
         "GreaterThan",
         "NFA: R1 left clue: 1/9 sandwich",
         "NFA: R1 left clue: 4/6 sandwich",
@@ -341,15 +340,15 @@
         "NFA: C6 bottom clue: 1/9 sandwich",
         "NFA: C6 bottom clue: 4/6 sandwich"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 48982,
-      "solve_ms": 8918.8,
-      "iss_size": 11494,
-      "iss_url_length": 11839,
-      "script_size": 2597
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 14916,
+      "solve_ms": 2030.7,
+      "iss_size": 11102,
+      "iss_url_length": 11483,
+      "script_size": 3780
     },
     {
       "puzzle_id": "HHE3g108bj0",
@@ -998,7 +997,7 @@
         "https://sudokupad.app/0do1zxouyi"
       ],
       "date": "2026-07-04",
-      "status": "too-slow",
+      "status": "partial",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -1012,10 +1011,10 @@
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 182833,
-      "solve_ms": 8744.2,
+      "unique_solution": false,
+      "solutions_found": 264,
+      "guesses": 1169610,
+      "solve_ms": 52618.2,
       "iss_size": 3781,
       "iss_url_length": 3814,
       "script_size": 6868
@@ -1360,8 +1359,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 10050,
-      "solve_ms": 11266.0,
+      "guesses": 35221,
+      "solve_ms": 62395.6,
       "iss_size": 96123,
       "iss_url_length": 96082,
       "script_size": 6065
@@ -1710,18 +1709,18 @@
         "https://sudokupad.app/pyvvk21c84"
       ],
       "date": "2026-06-22",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "AllDifferent",
         "BlackDot",
         "NFA: rising-sum"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 30563,
-      "solve_ms": 7654.2,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 246455,
+      "solve_ms": 44428.1,
       "iss_size": 21058,
       "iss_url_length": 21096,
       "script_size": 1666
@@ -1767,7 +1766,7 @@
         "https://sudokupad.app/9702l0djmf"
       ],
       "date": "2026-06-21",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "AllDifferent",
         "Or",
@@ -1824,12 +1823,12 @@
         "NFA: only cage sums 23",
         "NFA: exactly 23 cages sum 23"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 10003,
-      "solve_ms": 11448.4,
+      "guesses": 38753,
+      "solve_ms": 44694.4,
       "iss_size": 318467,
       "iss_url_length": 319346,
       "script_size": 2931
@@ -1922,7 +1921,7 @@
         "https://sudokupad.app/vrblr4abgp"
       ],
       "date": "2026-06-19",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -1944,12 +1943,12 @@
         "NFA: value-sum-22",
         "NFA: value-sum-26"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 21029,
-      "solve_ms": 8869.4,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 121340,
+      "solve_ms": 50728.4,
       "iss_size": 14295,
       "iss_url_length": 14299,
       "script_size": 4170
@@ -2371,8 +2370,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 8419,
-      "solve_ms": 8635.6,
+      "guesses": 47473,
+      "solve_ms": 51856.3,
       "iss_size": 72116,
       "iss_url_length": 72059,
       "script_size": 7573
@@ -2596,8 +2595,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 21751,
-      "solve_ms": 15029.7,
+      "guesses": 134412,
+      "solve_ms": 70116.9,
       "iss_size": 8720,
       "iss_url_length": 8789,
       "script_size": 2199
@@ -2682,8 +2681,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 1,
-      "guesses": 100033,
-      "solve_ms": 38813.8,
+      "guesses": 255344,
+      "solve_ms": 89218.4,
       "iss_size": 32580,
       "iss_url_length": 32578,
       "script_size": 4362
@@ -2963,7 +2962,6 @@
         "ConnectedValues",
         "CountDistinct",
         "GreaterThan",
-        "SearchPriority",
         "NFA: canonical piece labels",
         "NFA: shape declaration",
         "NFA: adjacent cells"
@@ -2972,11 +2970,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 100322,
-      "solve_ms": 5092.0,
-      "iss_size": 14702,
-      "iss_url_length": 14718,
-      "script_size": 11658
+      "guesses": 662271,
+      "solve_ms": 36397.9,
+      "iss_size": 13320,
+      "iss_url_length": 13337,
+      "script_size": 11382
     },
     {
       "puzzle_id": "xzXnxCeFSt4",
@@ -3175,16 +3173,16 @@
         "https://sudokupad.app/2mltluk4bn"
       ],
       "date": "2026-06-02",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "NFA: almost-balanced"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 44436,
-      "solve_ms": 4756.4,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 259113,
+      "solve_ms": 20893.1,
       "iss_size": 1043,
       "iss_url_length": 1095,
       "script_size": 1446
@@ -3338,31 +3336,33 @@
         "https://sudokupad.app/l00604nlbr"
       ],
       "date": "2026-05-30",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
+        "1-13",
         "Var",
-        "WhiteDot",
         "Replicate",
+        "WhiteDot",
         "Or",
         "And",
-        "ConnectedValues",
         "Pair: edge-h",
         "Pair: edge-v",
+        "Pair: loop-cell",
         "NFA: loop-nc-h",
         "NFA: loop-nc-v",
+        "NFA: loop-order",
         "NFA: satellite",
         "Pair: odd-turns",
         "Pair: even-turns"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 218827,
-      "solve_ms": 13353.1,
-      "iss_size": 6025,
-      "iss_url_length": 6056,
-      "script_size": 7481
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 605637,
+      "solve_ms": 59094.5,
+      "iss_size": 14770,
+      "iss_url_length": 14793,
+      "script_size": 12166
     },
     {
       "puzzle_id": "MjqEhvEQiwA",
@@ -3608,8 +3608,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 40165,
-      "solve_ms": 7232.1,
+      "guesses": 253704,
+      "solve_ms": 44918.4,
       "iss_size": 62533,
       "iss_url_length": 62314,
       "script_size": 2272
@@ -3716,7 +3716,6 @@
       "constraint_types": [
         "1-16",
         "Var",
-        "SearchPriority",
         "Replicate",
         "ContainExact",
         "Sum",
@@ -3730,11 +3729,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 67450,
-      "solve_ms": 18804.7,
-      "iss_size": 26345,
-      "iss_url_length": 25283,
-      "script_size": 6479
+      "guesses": 1073362,
+      "solve_ms": 158127.0,
+      "iss_size": 25090,
+      "iss_url_length": 24031,
+      "script_size": 6020
     },
     {
       "puzzle_id": "lY9YsqOO19E",
@@ -4228,7 +4227,7 @@
         "https://sudokupad.app/v38zh5blzk"
       ],
       "date": "2026-05-16",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -4243,12 +4242,12 @@
         "NFA: circle-count",
         "NFA: mod4"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 16171,
-      "solve_ms": 11726.2,
+      "guesses": 35990,
+      "solve_ms": 21310.3,
       "iss_size": 45671,
       "iss_url_length": 45705,
       "script_size": 10134
@@ -5064,8 +5063,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 47071,
-      "solve_ms": 9096.5,
+      "guesses": 219718,
+      "solve_ms": 36804.6,
       "iss_size": 8374,
       "iss_url_length": 8419,
       "script_size": 8907
@@ -5553,7 +5552,7 @@
         "https://sudokupad.app/s64txn1v6l"
       ],
       "date": "2026-04-22",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "1-11",
         "Var",
@@ -5570,12 +5569,12 @@
         "Pair: teleport-link",
         "Pair: redcurrant"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 81730,
-      "solve_ms": 2757.3,
+      "guesses": 328435,
+      "solve_ms": 8841.6,
       "iss_size": 15264,
       "iss_url_length": 15281,
       "script_size": 19548
@@ -5885,8 +5884,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 11366,
-      "solve_ms": 13316.4,
+      "guesses": 107257,
+      "solve_ms": 96565.1,
       "iss_size": 22845,
       "iss_url_length": 22785,
       "script_size": 3600
@@ -6698,8 +6697,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 11601,
-      "solve_ms": 5567.2,
+      "guesses": 74468,
+      "solve_ms": 27869.7,
       "iss_size": 11481,
       "iss_url_length": 11514,
       "script_size": 6682
@@ -6845,8 +6844,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 31032,
-      "solve_ms": 8905.8,
+      "guesses": 191975,
+      "solve_ms": 61130.1,
       "iss_size": 82322,
       "iss_url_length": 82387,
       "script_size": 8933
@@ -6866,7 +6865,6 @@
         "Replicate",
         "AllDifferent",
         "ConnectedValues",
-        "SearchPriority",
         "NFA: steps-used",
         "NFA: red",
         "NFA: mod-8",
@@ -6882,11 +6880,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 148386,
-      "solve_ms": 2666.0,
-      "iss_size": 12904,
-      "iss_url_length": 12924,
-      "script_size": 14284
+      "guesses": 1010112,
+      "solve_ms": 19549.4,
+      "iss_size": 12094,
+      "iss_url_length": 12115,
+      "script_size": 14060
     },
     {
       "puzzle_id": "1gnv6iM2sew",
@@ -7046,7 +7044,7 @@
         "https://sudokupad.app/x0xwsud0hq"
       ],
       "date": "2026-03-29",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "EqualSum",
         "Whisper",
@@ -7063,12 +7061,12 @@
         "NFA: mushroom count 9",
         "NFA: mushroom count 8"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 266673,
-      "solve_ms": 6088.9,
+      "guesses": 115799,
+      "solve_ms": 1937.5,
       "iss_size": 2118,
       "iss_url_length": 2184,
       "script_size": 2682
@@ -7266,8 +7264,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2860,
-      "solve_ms": 5433.3,
+      "guesses": 42034,
+      "solve_ms": 45695.6,
       "iss_size": 432173,
       "iss_url_length": 432141,
       "script_size": 6973
@@ -7300,8 +7298,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 105509,
-      "solve_ms": 7273.3,
+      "guesses": 594674,
+      "solve_ms": 22372.1,
       "iss_size": 15328,
       "iss_url_length": 15345,
       "script_size": 17383
@@ -7724,7 +7722,6 @@
         "Replicate",
         "ContainExact",
         "AllDifferent",
-        "SearchPriority",
         "NFA: path-cell",
         "NFA: blackcurrant",
         "NFA: cell-value",
@@ -7739,11 +7736,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2954,
-      "solve_ms": 9283.6,
-      "iss_size": 201617,
-      "iss_url_length": 201551,
-      "script_size": 19595
+      "guesses": 24532,
+      "solve_ms": 41299.8,
+      "iss_size": 200806,
+      "iss_url_length": 200741,
+      "script_size": 19523
     },
     {
       "puzzle_id": "S86fcufw2T8",
@@ -8169,8 +8166,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 18161,
-      "solve_ms": 11188.9,
+      "guesses": 103182,
+      "solve_ms": 42869.8,
       "iss_size": 32849,
       "iss_url_length": 32854,
       "script_size": 14597
@@ -8323,7 +8320,6 @@
         "SameValues",
         "Var",
         "Sum",
-        "SearchPriority",
         "NFA: max R1C7",
         "NFA: rank 17 R5C2",
         "NFA: rank 6 R3C3",
@@ -8334,11 +8330,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 29699,
-      "solve_ms": 9140.6,
-      "iss_size": 39172,
-      "iss_url_length": 39321,
-      "script_size": 6881
+      "guesses": 180436,
+      "solve_ms": 57039.0,
+      "iss_size": 38200,
+      "iss_url_length": 38352,
+      "script_size": 6771
     },
     {
       "puzzle_id": "8H98gtZSEVA",
@@ -8592,8 +8588,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 123953,
-      "solve_ms": 2846.9,
+      "guesses": 852299,
+      "solve_ms": 47448.4,
       "iss_size": 13973,
       "iss_url_length": 13980,
       "script_size": 15817
@@ -8660,8 +8656,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 15387,
-      "solve_ms": 9526.5,
+      "guesses": 91337,
+      "solve_ms": 38850.4,
       "iss_size": 19130,
       "iss_url_length": 19176,
       "script_size": 7310
@@ -8738,8 +8734,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 13208,
-      "solve_ms": 11916.0,
+      "guesses": 77330,
+      "solve_ms": 67302.3,
       "iss_size": 20351,
       "iss_url_length": 20302,
       "script_size": 4789
@@ -8955,8 +8951,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 49647,
-      "solve_ms": 5269.1,
+      "guesses": 307639,
+      "solve_ms": 41870.2,
       "iss_size": 39984,
       "iss_url_length": 40061,
       "script_size": 19839
@@ -9181,10 +9177,10 @@
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 3594,
-      "solve_ms": 4807.6,
+      "unique_solution": false,
+      "solutions_found": 7337,
+      "guesses": 24875,
+      "solve_ms": 8782.2,
       "iss_size": 143015,
       "iss_url_length": 128039,
       "script_size": 9318
@@ -9368,8 +9364,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 63930,
-      "solve_ms": 7673.1,
+      "guesses": 355918,
+      "solve_ms": 10725.0,
       "iss_size": 21199,
       "iss_url_length": 21252,
       "script_size": 20502
@@ -9700,8 +9696,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1033,
-      "solve_ms": 12382.9,
+      "guesses": 8201,
+      "solve_ms": 58540.8,
       "iss_size": 153683,
       "iss_url_length": 153545,
       "script_size": 7036
@@ -9894,7 +9890,7 @@
         "https://sudokupad.app/xh8xv5itva"
       ],
       "date": "2026-02-11",
-      "status": "too-slow",
+      "status": "off-grid",
       "constraint_types": [
         "11x11",
         "0-10",
@@ -9920,12 +9916,12 @@
         "NFA: count8",
         "NFA: count7"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 16667,
-      "solve_ms": 4726.2,
+      "guesses": 19057,
+      "solve_ms": 5001.7,
       "iss_size": 49513,
       "iss_url_length": 47990,
       "script_size": 9937
@@ -10075,8 +10071,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 6884,
-      "solve_ms": 3623.1,
+      "guesses": 74312,
+      "solve_ms": 27555.0,
       "iss_size": 225878,
       "iss_url_length": 225351,
       "script_size": 5988
@@ -10299,7 +10295,7 @@
         "https://sudokupad.app/e8vw82a7x0"
       ],
       "date": "2026-02-05",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -10310,12 +10306,12 @@
         "WhiteDot",
         "NFA: no-mono-2x2"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 115480,
-      "solve_ms": 12148.7,
+      "guesses": 118385,
+      "solve_ms": 11725.8,
       "iss_size": 8087,
       "iss_url_length": 7331,
       "script_size": 3423
@@ -10372,8 +10368,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 79507,
-      "solve_ms": 5705.8,
+      "guesses": 459100,
+      "solve_ms": 29738.3,
       "iss_size": 17719,
       "iss_url_length": 17733,
       "script_size": 15970
@@ -10496,8 +10492,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 47901,
-      "solve_ms": 5786.2,
+      "guesses": 327164,
+      "solve_ms": 29846.0,
       "iss_size": 2457,
       "iss_url_length": 2506,
       "script_size": 2698
@@ -10602,7 +10598,7 @@
         "https://sudokupad.app/5kmcos4nhu"
       ],
       "date": "2026-01-30",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -10614,12 +10610,12 @@
         "NFA: no-mono-2x2",
         "NFA: shaded-value-is-max"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 101958,
-      "solve_ms": 21490.0,
+      "guesses": 377083,
+      "solve_ms": 71554.4,
       "iss_size": 33091,
       "iss_url_length": 32311,
       "script_size": 5147
@@ -10725,8 +10721,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 7893,
-      "solve_ms": 5210.9,
+      "guesses": 39057,
+      "solve_ms": 8421.9,
       "iss_size": 139043,
       "iss_url_length": 139007,
       "script_size": 16712
@@ -10849,8 +10845,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 6911,
-      "solve_ms": 11533.4,
+      "guesses": 40223,
+      "solve_ms": 72501.4,
       "iss_size": 209860,
       "iss_url_length": 209936,
       "script_size": 6311
@@ -11118,8 +11114,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 50689,
-      "solve_ms": 12573.5,
+      "guesses": 340427,
+      "solve_ms": 58395.0,
       "iss_size": 41481,
       "iss_url_length": 41474,
       "script_size": 16752
@@ -11213,8 +11209,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 105950,
-      "solve_ms": 7700.8,
+      "guesses": 783308,
+      "solve_ms": 51246.9,
       "iss_size": 11280,
       "iss_url_length": 11109,
       "script_size": 1808
@@ -11483,8 +11479,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 135705,
-      "solve_ms": 3378.6,
+      "guesses": 758554,
+      "solve_ms": 34465.8,
       "iss_size": 15328,
       "iss_url_length": 15286,
       "script_size": 13126
@@ -11547,8 +11543,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 138141,
-      "solve_ms": 6483.0,
+      "guesses": 983622,
+      "solve_ms": 91081.9,
       "iss_size": 7577,
       "iss_url_length": 7606,
       "script_size": 7644
@@ -11665,8 +11661,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 7864,
-      "solve_ms": 5014.5,
+      "guesses": 45454,
+      "solve_ms": 60614.8,
       "iss_size": 115843,
       "iss_url_length": 112259,
       "script_size": 10038
@@ -11716,7 +11712,6 @@
         "WhiteDot",
         "V",
         "LittleKiller",
-        "SearchPriority",
         "Pair: different-region",
         "Pair: no-consecutive",
         "Pair: one-label",
@@ -11746,11 +11741,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 16588,
-      "solve_ms": 4400.3,
-      "iss_size": 40314,
-      "iss_url_length": 40281,
-      "script_size": 11867
+      "guesses": 9755,
+      "solve_ms": 2842.7,
+      "iss_size": 39891,
+      "iss_url_length": 39859,
+      "script_size": 11683
     },
     {
       "puzzle_id": "nzEyjcCscvo",
@@ -11839,7 +11834,7 @@
         "https://sudokupad.app/97b5wl5ii6"
       ],
       "date": "2026-01-09",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Or",
         "And",
@@ -11868,12 +11863,12 @@
         "NFA: falling-8",
         "NFA: falling-9"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 22486,
-      "solve_ms": 4253.6,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 114676,
+      "solve_ms": 30666.9,
       "iss_size": 31236,
       "iss_url_length": 31280,
       "script_size": 3620
@@ -12129,10 +12124,10 @@
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 127893,
-      "solve_ms": 6328.9,
+      "unique_solution": false,
+      "solutions_found": 22140,
+      "guesses": 921697,
+      "solve_ms": 36384.0,
       "iss_size": 3930,
       "iss_url_length": 3731,
       "script_size": 2430
@@ -12199,8 +12194,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 6035,
-      "solve_ms": 8181.8,
+      "guesses": 44934,
+      "solve_ms": 46625.5,
       "iss_size": 37089,
       "iss_url_length": 37092,
       "script_size": 7304
@@ -12394,8 +12389,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 11686,
-      "solve_ms": 8201.4,
+      "guesses": 87422,
+      "solve_ms": 57886.4,
       "iss_size": 23653,
       "iss_url_length": 23561,
       "script_size": 5894
@@ -13482,8 +13477,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3166,
-      "solve_ms": 11164.7,
+      "guesses": 20272,
+      "solve_ms": 80119.8,
       "iss_size": 132423,
       "iss_url_length": 132844,
       "script_size": 9456
@@ -13712,8 +13707,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1059,
-      "solve_ms": 42278.0,
+      "guesses": 2739,
+      "solve_ms": 53271.2,
       "iss_size": 576311,
       "iss_url_length": 577375,
       "script_size": 7943
@@ -13727,7 +13722,7 @@
         "https://sudokupad.app/90n1ck63vq"
       ],
       "date": "2025-12-13",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "EqualSum",
@@ -13744,12 +13739,12 @@
         "NFA: path entropy",
         "NFA: path sum 110"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 4983,
-      "solve_ms": 9422.3,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 35552,
+      "solve_ms": 41470.6,
       "iss_size": 12795,
       "iss_url_length": 12837,
       "script_size": 5819
@@ -13907,7 +13902,6 @@
         "AllDifferent",
         "ContainExact",
         "ConnectedValues",
-        "SearchPriority",
         "NFA: region digits",
         "NFA: label order",
         "NFA: region outer count",
@@ -13918,11 +13912,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 17860,
-      "solve_ms": 16045.5,
-      "iss_size": 52777,
-      "iss_url_length": 52891,
-      "script_size": 12009
+      "guesses": 27107,
+      "solve_ms": 64571.2,
+      "iss_size": 52447,
+      "iss_url_length": 52562,
+      "script_size": 11750
     },
     {
       "puzzle_id": "Rfg6dYX3Pxs",
@@ -14174,8 +14168,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 32478,
-      "solve_ms": 13000.4,
+      "guesses": 316487,
+      "solve_ms": 113818.3,
       "iss_size": 52356,
       "iss_url_length": 52439,
       "script_size": 9875
@@ -15076,8 +15070,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 140263,
-      "solve_ms": 3941.3,
+      "guesses": 1052643,
+      "solve_ms": 29011.1,
       "iss_size": 1024,
       "iss_url_length": 1059,
       "script_size": 1052
@@ -15135,8 +15129,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 244510,
-      "solve_ms": 2824.3,
+      "guesses": 1542428,
+      "solve_ms": 16386.3,
       "iss_size": 8200,
       "iss_url_length": 8124,
       "script_size": 4046
@@ -15203,8 +15197,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 33010,
-      "solve_ms": 5861.1,
+      "guesses": 238309,
+      "solve_ms": 32754.5,
       "iss_size": 14493,
       "iss_url_length": 14583,
       "script_size": 5771
@@ -15233,9 +15227,9 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 103536,
-      "solve_ms": 32093.8,
+      "solutions_found": 1,
+      "guesses": 625019,
+      "solve_ms": 155765.9,
       "iss_size": 18943,
       "iss_url_length": 18830,
       "script_size": 6045
@@ -15375,8 +15369,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 5851,
-      "solve_ms": 6872.3,
+      "guesses": 38333,
+      "solve_ms": 50071.8,
       "iss_size": 25866,
       "iss_url_length": 25934,
       "script_size": 4085
@@ -15467,17 +15461,17 @@
         "https://sudokupad.app/7t1yva729p"
       ],
       "date": "2025-11-13",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Renban",
         "NFA: orthogonal sight count"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 63990,
-      "solve_ms": 7472.6,
+      "guesses": 93559,
+      "solve_ms": 10506.9,
       "iss_size": 2064,
       "iss_url_length": 2112,
       "script_size": 1688
@@ -15681,10 +15675,9 @@
         "https://sudokupad.app/m6sunffs9u"
       ],
       "date": "2025-11-10",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
-        "SearchPriority",
         "Or",
         "And",
         "SameValues",
@@ -15695,15 +15688,15 @@
         "BlackDot",
         "NFA: no-monochrome-2x2"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 121529,
-      "solve_ms": 3966.8,
-      "iss_size": 12548,
-      "iss_url_length": 11767,
-      "script_size": 3770
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 394292,
+      "solve_ms": 13498.6,
+      "iss_size": 11708,
+      "iss_url_length": 10929,
+      "script_size": 3621
     },
     {
       "puzzle_id": "7znvmkbh6gI",
@@ -15836,8 +15829,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 35120,
-      "solve_ms": 7087.4,
+      "guesses": 213613,
+      "solve_ms": 38466.6,
       "iss_size": 22282,
       "iss_url_length": 22451,
       "script_size": 3090
@@ -16142,8 +16135,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 78953,
-      "solve_ms": 5928.6,
+      "guesses": 515929,
+      "solve_ms": 32865.6,
       "iss_size": 16210,
       "iss_url_length": 15170,
       "script_size": 4316
@@ -16219,8 +16212,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1098,
-      "solve_ms": 9966.9,
+      "guesses": 6335,
+      "solve_ms": 41406.2,
       "iss_size": 368564,
       "iss_url_length": 368465,
       "script_size": 6670
@@ -16258,7 +16251,7 @@
         "https://sudokupad.app/cum7kp045w"
       ],
       "date": "2025-11-02",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "NoBoxes",
         "Var",
@@ -16268,12 +16261,12 @@
         "NFA: no-monochrome-2x2",
         "NFA: YY cage balance"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 116287,
-      "solve_ms": 8197.7,
+      "guesses": 151658,
+      "solve_ms": 11422.0,
       "iss_size": 1958,
       "iss_url_length": 2004,
       "script_size": 3413
@@ -16403,8 +16396,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 82734,
-      "solve_ms": 10013.7,
+      "guesses": 488222,
+      "solve_ms": 110606.8,
       "iss_size": 96143,
       "iss_url_length": 95349,
       "script_size": 6191
@@ -17020,7 +17013,6 @@
         "0-15",
         "Var",
         "Replicate",
-        "SearchPriority",
         "Or",
         "And",
         "Sum",
@@ -17071,11 +17063,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 12968,
-      "solve_ms": 3291.7,
-      "iss_size": 126729,
-      "iss_url_length": 127811,
-      "script_size": 8976
+      "guesses": 112842,
+      "solve_ms": 40541.6,
+      "iss_size": 126304,
+      "iss_url_length": 127387,
+      "script_size": 8859
     },
     {
       "puzzle_id": "RyNL6YBFp4E",
@@ -17463,7 +17455,6 @@
         "0-9",
         "Var",
         "Replicate",
-        "SearchPriority",
         "ContainExact",
         "Or",
         "And",
@@ -17477,11 +17468,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 7064,
-      "solve_ms": 9242.6,
-      "iss_size": 36953,
-      "iss_url_length": 36449,
-      "script_size": 4086
+      "guesses": 8538,
+      "solve_ms": 7958.4,
+      "iss_size": 36537,
+      "iss_url_length": 36034,
+      "script_size": 4036
     },
     {
       "puzzle_id": "dAW5dM7N1Vw",
@@ -17533,8 +17524,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 23885,
-      "solve_ms": 10771.7,
+      "guesses": 143140,
+      "solve_ms": 59706.9,
       "iss_size": 24870,
       "iss_url_length": 24915,
       "script_size": 6279
@@ -17569,8 +17560,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1030,
-      "solve_ms": 29759.3,
+      "guesses": 1906,
+      "solve_ms": 53610.2,
       "iss_size": 641349,
       "iss_url_length": 635051,
       "script_size": 5578
@@ -17717,7 +17708,7 @@
         "https://sudokupad.app/dkjeovl1up"
       ],
       "date": "2025-10-06",
-      "status": "too-slow",
+      "status": "off-grid",
       "constraint_types": [
         "1x7",
         "Var",
@@ -17726,12 +17717,12 @@
         "Or",
         "Cage"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 381686,
-      "solve_ms": 3201.3,
+      "guesses": 1690440,
+      "solve_ms": 12933.7,
       "iss_size": 11029,
       "iss_url_length": 10239,
       "script_size": 2970
@@ -17805,7 +17796,6 @@
         "Replicate",
         "AllDifferent",
         "V",
-        "SearchPriority",
         "Pair: hedge",
         "Pair: apple",
         "Pair: no-crossing",
@@ -17821,10 +17811,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 110,
-      "solve_ms": 43.2,
-      "iss_size": 29858,
-      "iss_url_length": 29854,
-      "script_size": 22859
+      "solve_ms": 50.9,
+      "iss_size": 29047,
+      "iss_url_length": 29044,
+      "script_size": 22787
     },
     {
       "puzzle_id": "SgmKcJXacb8",
@@ -18268,8 +18258,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 10288,
-      "solve_ms": 8704.9,
+      "guesses": 60620,
+      "solve_ms": 47569.4,
       "iss_size": 15688,
       "iss_url_length": 15838,
       "script_size": 4843
@@ -18630,8 +18620,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 38419,
-      "solve_ms": 6534.6,
+      "guesses": 203695,
+      "solve_ms": 30151.8,
       "iss_size": 39604,
       "iss_url_length": 38172,
       "script_size": 13435
@@ -18807,7 +18797,7 @@
         "https://sudokupad.app/cdifwlxo10"
       ],
       "date": "2025-09-16",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -18845,12 +18835,12 @@
         "NFA: white dot 2",
         "NFA: white dot 3"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 5508,
-      "solve_ms": 6035.3,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 17051,
+      "solve_ms": 13522.7,
       "iss_size": 231345,
       "iss_url_length": 236766,
       "script_size": 9594
@@ -18960,8 +18950,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 47637,
-      "solve_ms": 10142.3,
+      "guesses": 296029,
+      "solve_ms": 56170.7,
       "iss_size": 4088,
       "iss_url_length": 4132,
       "script_size": 1704
@@ -18979,7 +18969,6 @@
       "constraint_types": [
         "Var",
         "AllDifferent",
-        "SearchPriority",
         "Sum",
         "Or",
         "Renban",
@@ -18994,11 +18983,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 67860,
-      "solve_ms": 8426.6,
-      "iss_size": 99966,
-      "iss_url_length": 99781,
-      "script_size": 3447
+      "guesses": 501684,
+      "solve_ms": 63358.8,
+      "iss_size": 99910,
+      "iss_url_length": 99726,
+      "script_size": 3407
     },
     {
       "puzzle_id": "uyTSKJ1DB6c",
@@ -19569,8 +19558,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 108940,
-      "solve_ms": 9839.2,
+      "guesses": 643094,
+      "solve_ms": 58822.5,
       "iss_size": 6098,
       "iss_url_length": 6150,
       "script_size": 918
@@ -20076,7 +20065,7 @@
         "https://sudokupad.app/yttrio/sightline-sum-whisper-loop"
       ],
       "date": "2025-08-26",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -20090,12 +20079,12 @@
         "NFA: sightline-34",
         "NFA: sightline-36"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 35897,
-      "solve_ms": 10475.2,
+      "guesses": 122494,
+      "solve_ms": 16962.9,
       "iss_size": 16593,
       "iss_url_length": 16630,
       "script_size": 5435
@@ -20222,7 +20211,6 @@
         "0-9",
         "Var",
         "Replicate",
-        "SearchPriority",
         "ContainExact",
         "Or",
         "And",
@@ -20239,11 +20227,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 881,
-      "solve_ms": 1156.4,
-      "iss_size": 37146,
-      "iss_url_length": 36639,
-      "script_size": 4816
+      "guesses": 275,
+      "solve_ms": 280.0,
+      "iss_size": 36730,
+      "iss_url_length": 36224,
+      "script_size": 4766
     },
     {
       "puzzle_id": "V4tTkMKlzTw",
@@ -20803,8 +20791,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 10338,
-      "solve_ms": 2966.4,
+      "guesses": 326634,
+      "solve_ms": 132233.8,
       "iss_size": 3078,
       "iss_url_length": 3133,
       "script_size": 2067
@@ -21013,7 +21001,7 @@
         "https://sudokupad.app/7wf14f41d2"
       ],
       "date": "2025-08-09",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -21025,12 +21013,12 @@
         "NFA: no monochromatic 2x2",
         "Pair: alternating parity"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 164486,
-      "solve_ms": 8300.9,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 241991,
+      "solve_ms": 6752.0,
       "iss_size": 4528,
       "iss_url_length": 4369,
       "script_size": 2761
@@ -21625,8 +21613,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 32236,
-      "solve_ms": 7097.4,
+      "guesses": 191392,
+      "solve_ms": 46356.2,
       "iss_size": 66642,
       "iss_url_length": 66707,
       "script_size": 3023
@@ -22823,8 +22811,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 595255,
-      "solve_ms": 4370.8,
+      "guesses": 3592831,
+      "solve_ms": 25259.8,
       "iss_size": 1474,
       "iss_url_length": 1518,
       "script_size": 1340
@@ -23485,8 +23473,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 39619,
-      "solve_ms": 7642.1,
+      "guesses": 230425,
+      "solve_ms": 42086.3,
       "iss_size": 6765,
       "iss_url_length": 6842,
       "script_size": 1712
@@ -23542,8 +23530,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 35024,
-      "solve_ms": 11178.3,
+      "guesses": 198886,
+      "solve_ms": 59626.4,
       "iss_size": 11203,
       "iss_url_length": 11211,
       "script_size": 3424
@@ -23669,8 +23657,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 1,
-      "guesses": 1007,
-      "solve_ms": 12216.5,
+      "guesses": 4755,
+      "solve_ms": 59183.5,
       "iss_size": 64450,
       "iss_url_length": 64491,
       "script_size": 6163
@@ -23892,7 +23880,7 @@
         "https://sudokupad.app/gx4a6r7xzq"
       ],
       "date": "2025-06-19",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -23905,12 +23893,12 @@
         "NFA: loop degree",
         "NFA: loop parity"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 103100,
-      "solve_ms": 8382.3,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 143364,
+      "solve_ms": 8628.0,
       "iss_size": 7360,
       "iss_url_length": 7249,
       "script_size": 4979
@@ -24006,8 +23994,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 32809,
-      "solve_ms": 9247.5,
+      "guesses": 300020,
+      "solve_ms": 75728.2,
       "iss_size": 2278,
       "iss_url_length": 2321,
       "script_size": 2347
@@ -24116,7 +24104,6 @@
         "0-9",
         "Var",
         "Replicate",
-        "SearchPriority",
         "Sum",
         "Or",
         "AllDifferent",
@@ -24130,12 +24117,12 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 134260,
-      "solve_ms": 5649.7,
-      "iss_size": 17212,
-      "iss_url_length": 16856,
-      "script_size": 3881
+      "solutions_found": 1,
+      "guesses": 1069539,
+      "solve_ms": 35918.9,
+      "iss_size": 16796,
+      "iss_url_length": 16441,
+      "script_size": 3831
     },
     {
       "puzzle_id": "Fy7iHJaW3fA",
@@ -25190,8 +25177,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 66592,
-      "solve_ms": 10925.9,
+      "guesses": 384136,
+      "solve_ms": 69935.2,
       "iss_size": 2989,
       "iss_url_length": 3063,
       "script_size": 2919
@@ -25245,19 +25232,19 @@
         "https://sudokupad.app/15rywuvxz9"
       ],
       "date": "2025-05-26",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "AllDifferent",
         "RegionSumLine",
         "EqualSum"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 418420,
-      "solve_ms": 4433.6,
+      "guesses": 1566262,
+      "solve_ms": 15844.5,
       "iss_size": 859,
       "iss_url_length": 904,
       "script_size": 2421
@@ -25271,7 +25258,7 @@
         "https://sudokupad.app/mm2lcvh3w1"
       ],
       "date": "2025-05-25",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "NFA: region-sum-neg-0-seg0",
@@ -25292,17 +25279,18 @@
         "NFA: whisper-neg-0",
         "NFA: whisper-neg-1",
         "NFA: whisper-neg-2",
-        "NFA: whisper-neg-3"
+        "NFA: whisper-neg-3",
+        "NFA: whisper-neg-4"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 50157,
-      "solve_ms": 13311.9,
-      "iss_size": 23605,
-      "iss_url_length": 23656,
-      "script_size": 6476
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 28306,
+      "solve_ms": 7784.0,
+      "iss_size": 23633,
+      "iss_url_length": 23684,
+      "script_size": 6815
     },
     {
       "puzzle_id": "HDB-EI4ceeQ",
@@ -25357,8 +25345,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2886,
-      "solve_ms": 6513.0,
+      "guesses": 16413,
+      "solve_ms": 28856.6,
       "iss_size": 55488,
       "iss_url_length": 55500,
       "script_size": 4420
@@ -25378,7 +25366,6 @@
         "0-9",
         "Var",
         "Replicate",
-        "SearchPriority",
         "ContainExact",
         "Or",
         "And",
@@ -25393,11 +25380,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 1029,
-      "solve_ms": 1205.1,
-      "iss_size": 36981,
-      "iss_url_length": 36473,
-      "script_size": 5236
+      "guesses": 551,
+      "solve_ms": 619.2,
+      "iss_size": 36565,
+      "iss_url_length": 36058,
+      "script_size": 5186
     },
     {
       "puzzle_id": "LHm16UXAZxs",
@@ -25433,7 +25420,7 @@
         "https://sudokupad.app/nlvnqdwjsr"
       ],
       "date": "2025-05-23",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "AllDifferent",
@@ -25444,12 +25431,12 @@
         "PairX: nabner 3",
         "PairX: nabner 4"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 153151,
-      "solve_ms": 1062.4,
+      "guesses": 200026,
+      "solve_ms": 1500.3,
       "iss_size": 2537,
       "iss_url_length": 2579,
       "script_size": 3939
@@ -26509,8 +26496,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 5116,
-      "solve_ms": 9251.4,
+      "guesses": 29057,
+      "solve_ms": 46935.1,
       "iss_size": 1547608,
       "iss_url_length": 1546210,
       "script_size": 7465
@@ -26575,7 +26562,7 @@
         "https://sudokupad.app/kwf3g2ne92"
       ],
       "date": "2025-05-10",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -26585,12 +26572,12 @@
         "NFA: whisper",
         "NFA: skyscraper"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 84611,
-      "solve_ms": 9156.7,
+      "guesses": 207391,
+      "solve_ms": 25292.5,
       "iss_size": 7751,
       "iss_url_length": 7793,
       "script_size": 7007
@@ -27493,8 +27480,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 13951,
-      "solve_ms": 9474.1,
+      "guesses": 94995,
+      "solve_ms": 78074.9,
       "iss_size": 114341,
       "iss_url_length": 114312,
       "script_size": 19903
@@ -28500,8 +28487,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 29623,
-      "solve_ms": 6482.5,
+      "guesses": 175857,
+      "solve_ms": 36492.1,
       "iss_size": 11143,
       "iss_url_length": 11189,
       "script_size": 6538
@@ -28666,8 +28653,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 263174,
-      "solve_ms": 7567.6,
+      "guesses": 1639353,
+      "solve_ms": 48416.2,
       "iss_size": 7354,
       "iss_url_length": 7389,
       "script_size": 6614
@@ -29158,9 +29145,9 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 72276,
-      "solve_ms": 8117.2,
+      "solutions_found": 1,
+      "guesses": 425243,
+      "solve_ms": 40499.1,
       "iss_size": 13622,
       "iss_url_length": 13640,
       "script_size": 7856
@@ -29472,8 +29459,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 106516,
-      "solve_ms": 7876.5,
+      "guesses": 628946,
+      "solve_ms": 35895.8,
       "iss_size": 1220,
       "iss_url_length": 1249,
       "script_size": 2994
@@ -30126,8 +30113,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 15708,
-      "solve_ms": 9717.6,
+      "guesses": 89867,
+      "solve_ms": 67692.1,
       "iss_size": 91848,
       "iss_url_length": 91765,
       "script_size": 9879
@@ -30186,9 +30173,9 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 21347,
-      "solve_ms": 8717.0,
+      "solutions_found": 1,
+      "guesses": 122311,
+      "solve_ms": 40878.2,
       "iss_size": 71804,
       "iss_url_length": 71896,
       "script_size": 8551
@@ -30202,7 +30189,7 @@
         "https://sudokupad.app/dndxixp4qb"
       ],
       "date": "2025-03-10",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "ChaosConstruction",
         "NoBoxes",
@@ -30211,12 +30198,12 @@
         "AllDifferent",
         "ChaosArrow"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 110505,
-      "solve_ms": 4469.2,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 281085,
+      "solve_ms": 11897.6,
       "iss_size": 865,
       "iss_url_length": 878,
       "script_size": 2697
@@ -31333,8 +31320,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 142902,
-      "solve_ms": 9096.5,
+      "guesses": 879804,
+      "solve_ms": 51075.0,
       "iss_size": 3693,
       "iss_url_length": 3733,
       "script_size": 3628
@@ -31576,17 +31563,17 @@
         "https://sudokupad.app/ykcj1iv01r"
       ],
       "date": "2025-02-14",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "GreaterThan",
         "RegionSumLine"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 350893,
-      "solve_ms": 2517.7,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 424416,
+      "solve_ms": 2979.4,
       "iss_size": 510,
       "iss_url_length": 551,
       "script_size": 2006
@@ -31670,8 +31657,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 85508,
-      "solve_ms": 12389.4,
+      "guesses": 599436,
+      "solve_ms": 148402.7,
       "iss_size": 19655,
       "iss_url_length": 19611,
       "script_size": 8638
@@ -31785,7 +31772,7 @@
         "https://sudokupad.app/u3r1c3ptbf"
       ],
       "date": "2025-02-10",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "0-8",
         "AllDifferent",
@@ -31796,12 +31783,12 @@
         "NFA: DiagonalNumbersDistinct",
         "NFA: DiagonalRankOrder"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 13321,
-      "solve_ms": 7125.6,
+      "guesses": 26098,
+      "solve_ms": 13134.0,
       "iss_size": 16269,
       "iss_url_length": 16322,
       "script_size": 9179
@@ -31900,8 +31887,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 21795,
-      "solve_ms": 4087.1,
+      "guesses": 127964,
+      "solve_ms": 24117.1,
       "iss_size": 70751,
       "iss_url_length": 70887,
       "script_size": 5541
@@ -32057,8 +32044,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 13075,
-      "solve_ms": 7911.7,
+      "guesses": 76438,
+      "solve_ms": 25247.6,
       "iss_size": 16964,
       "iss_url_length": 16550,
       "script_size": 8308
@@ -32335,8 +32322,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 13781,
-      "solve_ms": 10273.0,
+      "guesses": 88507,
+      "solve_ms": 70948.3,
       "iss_size": 64126,
       "iss_url_length": 64173,
       "script_size": 9263
@@ -32523,8 +32510,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 21008,
-      "solve_ms": 14810.2,
+      "guesses": 68473,
+      "solve_ms": 53292.2,
       "iss_size": 246813,
       "iss_url_length": 232713,
       "script_size": 7541
@@ -32949,8 +32936,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 58042,
-      "solve_ms": 5488.6,
+      "guesses": 319718,
+      "solve_ms": 18285.9,
       "iss_size": 44551,
       "iss_url_length": 44571,
       "script_size": 8145
@@ -33442,7 +33429,7 @@
         "https://app.crackingthecryptic.com/sudoku/t4GP9DgL9j"
       ],
       "date": "2022-07-06",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "ChaosConstruction",
         "NoBoxes",
@@ -33455,12 +33442,12 @@
         "NFA: no-mono-2x2",
         "NFA: arrow-shaded-count"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 38502,
-      "solve_ms": 5958.5,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 132750,
+      "solve_ms": 20925.5,
       "iss_size": 9757,
       "iss_url_length": 9222,
       "script_size": 5050

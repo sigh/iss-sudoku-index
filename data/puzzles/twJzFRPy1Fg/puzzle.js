@@ -79,7 +79,6 @@ return [
   placements.toVar('selected 3x3 top-left corners'),
   occupied.makeReplicate(new Given(occupied.cells()[0], UNUSED, SELECTED)),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),
-  new SearchPriority(100, ...placements.cells()),
   new Sum(9, ...placements.cells()),
   ...regions,
   ...placementCoverage,

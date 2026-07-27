@@ -515,5 +515,4 @@ return [
   ...clues,
   ...fountainPairs,
   ...edgeBoxes,
-  new SearchPriority(-1, ...posA.at(gridCells), ...posB.at(gridCells)),
 ];

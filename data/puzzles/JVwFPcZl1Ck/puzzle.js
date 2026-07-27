@@ -219,8 +219,6 @@ return [
   leftTensVar,
   leftOnesVar,
   gridDigitDomain,
-  // Branch on Sudoku digits before the much larger derived clue layer.
-  new SearchPriority(100, ...graph.cells()),
   ...clueDomains,
   ...rowSandwiches,
   ...columnSandwiches,

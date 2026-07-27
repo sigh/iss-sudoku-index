@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-27T09:51:36.543748+00:00",
+  "generated_at": "2026-07-27T15:21:42.385906+00:00",
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -30,8 +30,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1017,
-      "solve_ms": 14384.7,
+      "guesses": 3912,
+      "solve_ms": 54875.8,
       "iss_size": 200870,
       "iss_url_length": 190256,
       "script_size": 5799
@@ -301,10 +301,9 @@
         "https://sudokupad.app/f6lfolekzi"
       ],
       "date": "2026-07-15",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Or",
-        "And",
         "GreaterThan",
         "NFA: R1 left clue: 1/9 sandwich",
         "NFA: R1 left clue: 4/6 sandwich",
@@ -341,15 +340,15 @@
         "NFA: C6 bottom clue: 1/9 sandwich",
         "NFA: C6 bottom clue: 4/6 sandwich"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 48982,
-      "solve_ms": 8918.8,
-      "iss_size": 11494,
-      "iss_url_length": 11839,
-      "script_size": 2597
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 14916,
+      "solve_ms": 2030.7,
+      "iss_size": 11102,
+      "iss_url_length": 11483,
+      "script_size": 3780
     },
     {
       "puzzle_id": "HHE3g108bj0",
@@ -998,7 +997,7 @@
         "https://sudokupad.app/0do1zxouyi"
       ],
       "date": "2026-07-04",
-      "status": "too-slow",
+      "status": "partial",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -1012,10 +1011,10 @@
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 182833,
-      "solve_ms": 8744.2,
+      "unique_solution": false,
+      "solutions_found": 264,
+      "guesses": 1169610,
+      "solve_ms": 52618.2,
       "iss_size": 3781,
       "iss_url_length": 3814,
       "script_size": 6868
@@ -1360,8 +1359,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 10050,
-      "solve_ms": 11266.0,
+      "guesses": 35221,
+      "solve_ms": 62395.6,
       "iss_size": 96123,
       "iss_url_length": 96082,
       "script_size": 6065
@@ -1710,18 +1709,18 @@
         "https://sudokupad.app/pyvvk21c84"
       ],
       "date": "2026-06-22",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "AllDifferent",
         "BlackDot",
         "NFA: rising-sum"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 30563,
-      "solve_ms": 7654.2,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 246455,
+      "solve_ms": 44428.1,
       "iss_size": 21058,
       "iss_url_length": 21096,
       "script_size": 1666
@@ -1767,7 +1766,7 @@
         "https://sudokupad.app/9702l0djmf"
       ],
       "date": "2026-06-21",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "AllDifferent",
         "Or",
@@ -1824,12 +1823,12 @@
         "NFA: only cage sums 23",
         "NFA: exactly 23 cages sum 23"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 10003,
-      "solve_ms": 11448.4,
+      "guesses": 38753,
+      "solve_ms": 44694.4,
       "iss_size": 318467,
       "iss_url_length": 319346,
       "script_size": 2931
@@ -1922,7 +1921,7 @@
         "https://sudokupad.app/vrblr4abgp"
       ],
       "date": "2026-06-19",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -1944,12 +1943,12 @@
         "NFA: value-sum-22",
         "NFA: value-sum-26"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 21029,
-      "solve_ms": 8869.4,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 121340,
+      "solve_ms": 50728.4,
       "iss_size": 14295,
       "iss_url_length": 14299,
       "script_size": 4170
@@ -2371,8 +2370,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 8419,
-      "solve_ms": 8635.6,
+      "guesses": 47473,
+      "solve_ms": 51856.3,
       "iss_size": 72116,
       "iss_url_length": 72059,
       "script_size": 7573
@@ -2596,8 +2595,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 21751,
-      "solve_ms": 15029.7,
+      "guesses": 134412,
+      "solve_ms": 70116.9,
       "iss_size": 8720,
       "iss_url_length": 8789,
       "script_size": 2199
@@ -2682,8 +2681,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 1,
-      "guesses": 100033,
-      "solve_ms": 38813.8,
+      "guesses": 255344,
+      "solve_ms": 89218.4,
       "iss_size": 32580,
       "iss_url_length": 32578,
       "script_size": 4362
@@ -2963,7 +2962,6 @@
         "ConnectedValues",
         "CountDistinct",
         "GreaterThan",
-        "SearchPriority",
         "NFA: canonical piece labels",
         "NFA: shape declaration",
         "NFA: adjacent cells"
@@ -2972,11 +2970,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 100322,
-      "solve_ms": 5092.0,
-      "iss_size": 14702,
-      "iss_url_length": 14718,
-      "script_size": 11658
+      "guesses": 662271,
+      "solve_ms": 36397.9,
+      "iss_size": 13320,
+      "iss_url_length": 13337,
+      "script_size": 11382
     },
     {
       "puzzle_id": "xzXnxCeFSt4",
@@ -3175,16 +3173,16 @@
         "https://sudokupad.app/2mltluk4bn"
       ],
       "date": "2026-06-02",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "NFA: almost-balanced"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 44436,
-      "solve_ms": 4756.4,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 259113,
+      "solve_ms": 20893.1,
       "iss_size": 1043,
       "iss_url_length": 1095,
       "script_size": 1446
@@ -3338,31 +3336,33 @@
         "https://sudokupad.app/l00604nlbr"
       ],
       "date": "2026-05-30",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
+        "1-13",
         "Var",
-        "WhiteDot",
         "Replicate",
+        "WhiteDot",
         "Or",
         "And",
-        "ConnectedValues",
         "Pair: edge-h",
         "Pair: edge-v",
+        "Pair: loop-cell",
         "NFA: loop-nc-h",
         "NFA: loop-nc-v",
+        "NFA: loop-order",
         "NFA: satellite",
         "Pair: odd-turns",
         "Pair: even-turns"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 218827,
-      "solve_ms": 13353.1,
-      "iss_size": 6025,
-      "iss_url_length": 6056,
-      "script_size": 7481
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 605637,
+      "solve_ms": 59094.5,
+      "iss_size": 14770,
+      "iss_url_length": 14793,
+      "script_size": 12166
     },
     {
       "puzzle_id": "MjqEhvEQiwA",
@@ -3608,8 +3608,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 40165,
-      "solve_ms": 7232.1,
+      "guesses": 253704,
+      "solve_ms": 44918.4,
       "iss_size": 62533,
       "iss_url_length": 62314,
       "script_size": 2272
@@ -3716,7 +3716,6 @@
       "constraint_types": [
         "1-16",
         "Var",
-        "SearchPriority",
         "Replicate",
         "ContainExact",
         "Sum",
@@ -3730,11 +3729,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 67450,
-      "solve_ms": 18804.7,
-      "iss_size": 26345,
-      "iss_url_length": 25283,
-      "script_size": 6479
+      "guesses": 1073362,
+      "solve_ms": 158127.0,
+      "iss_size": 25090,
+      "iss_url_length": 24031,
+      "script_size": 6020
     },
     {
       "puzzle_id": "lY9YsqOO19E",
@@ -4228,7 +4227,7 @@
         "https://sudokupad.app/v38zh5blzk"
       ],
       "date": "2026-05-16",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -4243,12 +4242,12 @@
         "NFA: circle-count",
         "NFA: mod4"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 16171,
-      "solve_ms": 11726.2,
+      "guesses": 35990,
+      "solve_ms": 21310.3,
       "iss_size": 45671,
       "iss_url_length": 45705,
       "script_size": 10134
@@ -5064,8 +5063,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 47071,
-      "solve_ms": 9096.5,
+      "guesses": 219718,
+      "solve_ms": 36804.6,
       "iss_size": 8374,
       "iss_url_length": 8419,
       "script_size": 8907
@@ -5553,7 +5552,7 @@
         "https://sudokupad.app/s64txn1v6l"
       ],
       "date": "2026-04-22",
-      "status": "too-slow",
+      "status": "validated",
       "constraint_types": [
         "1-11",
         "Var",
@@ -5570,12 +5569,12 @@
         "Pair: teleport-link",
         "Pair: redcurrant"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 81730,
-      "solve_ms": 2757.3,
+      "guesses": 328435,
+      "solve_ms": 8841.6,
       "iss_size": 15264,
       "iss_url_length": 15281,
       "script_size": 19548
@@ -5885,8 +5884,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 11366,
-      "solve_ms": 13316.4,
+      "guesses": 107257,
+      "solve_ms": 96565.1,
       "iss_size": 22845,
       "iss_url_length": 22785,
       "script_size": 3600

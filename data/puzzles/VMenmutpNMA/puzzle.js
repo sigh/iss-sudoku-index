@@ -257,9 +257,4 @@ return [
     .filter(([a, b]) => p.includes(a) && p.includes(b))
     .map(([a, b]) => new GreaterThan(b, a))),
 
-  // The overlays below are determined once the piece labels are, so branching
-  // on them wastes search; correctness is unaffected.
-  new SearchPriority(0,
-    ...shapeId.at(freeCells), ...rotation.at(freeCells),
-    ...rowOffset.at(freeCells), ...colOffset.at(freeCells)),
 ];

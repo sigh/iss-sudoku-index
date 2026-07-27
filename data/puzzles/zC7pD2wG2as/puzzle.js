@@ -436,5 +436,4 @@ return [
   ...noCross,
   ...sequence,
   ...tableTail,
-  new SearchPriority(-1, ...posA.at(gridCells), ...posB.at(gridCells)),
 ];

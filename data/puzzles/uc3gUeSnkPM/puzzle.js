@@ -82,7 +82,6 @@ return [
   new Shape('9x9'),
   categories,
   new AllDifferent(...categories.cells()),
-  new SearchPriority(...categoryCells),
   ...sums,
   ...handTypes,
 ];

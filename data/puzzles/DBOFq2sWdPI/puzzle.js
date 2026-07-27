@@ -3,11 +3,18 @@
 // Video: https://www.youtube.com/watch?v=DBOFq2sWdPI
 // Source: https://sudokupad.app/f6lfolekzi
 
+// Normal Sudoku, no givens. Every outside clue is a Dual Deli Sandwich clue:
+// the sum of the digits between the 1 and the 9, or between the 4 and the 6, of
+// its row or column. Marked Min/Max cells hold a digit smaller (Min) or larger
+// (Max) than every orthogonally adjacent digit.
+const geometry = cellGraph('9x9');
+
 // Each outside clue may use either the 1/9 crust pair or the 4/6 crust pair.
 // One bounded NFA scans the line for each alternative; their Or implements the
 // choice without resolving which delimiter pair is intended for any clue.
-const geometry = cellGraph('9x9');
-
+// Phase 0 waits for either crust, phase 1 sums the filling until the matching
+// crust arrives, phase 2 ignores the rest of the line; a running total above
+// the target is a dead end.
 function sandwichMachine(target, low, high) {
   return NFA.encodeSpec({
     startState: { phase: 0, first: 0, sum: 0 },
@@ -41,6 +48,9 @@ function dualDeli(target, cells, label) {
   ]);
 }
 
+// Transcribed from the numbers printed outside the grid. A sandwich sum does
+// not depend on which end it is read from, so each clue constrains its whole
+// line and the side it sits on carries no further information.
 const clues = [
   [26, geometry.row(1), 'R1 left clue'],
   [28, geometry.row(1), 'R1 right clue'],
@@ -61,18 +71,28 @@ const clues = [
   [13, geometry.column(6), 'C6 bottom clue'],
 ];
 
-function minMax(cell) {
-  const neighbours = geometry.neighbours(cell);
-  return new Or([
-    new And(neighbours.map(neighbour =>
-      new GreaterThan(neighbour, cell))),
-    new And(neighbours.map(neighbour =>
-      new GreaterThan(cell, neighbour))),
-  ]);
+// The two Min/Max forms drawn in the grid, kept apart. "A digit in a Min/Max
+// cell is either smaller or larger than all orthogonal digits to its cell
+// (whether arrows are facing inwards or outwards)" pairs the two comparisons
+// with the two drawn arrow directions, so the inward-arrow cells are the minima
+// and the outward-arrow cells are the maxima.
+const minCells = ['R3C9', 'R9C2'];
+const maxCells = ['R1C4', 'R3C1'];
+
+// GreaterThan(a, b) requires a > b.
+function belowNeighbours(cell) {
+  return geometry.neighbours(cell).map(
+    neighbour => new GreaterThan(neighbour, cell));
+}
+
+function aboveNeighbours(cell) {
+  return geometry.neighbours(cell).map(
+    neighbour => new GreaterThan(cell, neighbour));
 }
 
 return [
   new Shape('9x9'),
   ...clues.map(([target, cells, label]) => dualDeli(target, cells, label)),
-  ...['R1C4', 'R3C1', 'R3C9', 'R9C2'].map(minMax),
+  ...minCells.flatMap(belowNeighbours),
+  ...maxCells.flatMap(aboveNeighbours),
 ];

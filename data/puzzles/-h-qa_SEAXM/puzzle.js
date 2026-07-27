@@ -275,8 +275,4 @@ return [
   ...counterCounts,
   ...counterCircles,
   labelOrder,
-  // Correctness-neutral: flattening the digit cells' priority makes the search
-  // branch on region labels first, growing regions rather than filling digits,
-  // which is about three times faster here.
-  new SearchPriority(0, ...digitLayer.at(liveCells)),
 ];

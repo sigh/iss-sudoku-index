@@ -105,13 +105,18 @@ const regionSumLineNeg = (label, cells) => {
     new NFA(regionSumPairSpec, `${label}-seg${i}`, [neg], segments[i], seg));
 };
 
-// German Whisper lines (green). The last is reconstructed from three split
-// raw stroke entries sharing a corner at R1C3/R1C4/R2C3.
+// German Whisper lines (green), transcribed from the drawn green strokes.
+// The box-1 green art is one branching figure: a closed triangle joining
+// R1C3, R1C4 and R2C3 (row-1 bar R1C3-R1C4, vertical R1C3-R2C3 through the V
+// mark, and a diagonal R1C4-R2C3) with a tail continuing R1C4-R1C5. Whisper
+// adjacency is per drawn edge, so it is listed as a 4-cell run plus the
+// closing diagonal; together those are exactly the four drawn adjacencies.
 const whisperLines = [
   ['R6C4', 'R6C5', 'R6C6'],
   ['R2C8', 'R2C7', 'R1C7'],
   ['R4C7', 'R4C8'],
-  ['R2C3', 'R1C3', 'R1C4', 'R1C5'],
+  ['R1C5', 'R1C4', 'R1C3', 'R2C3'],
+  ['R2C3', 'R1C4'],
 ];
 
 // Region Sum lines (blue). The third is a closed loop -- its drawn path

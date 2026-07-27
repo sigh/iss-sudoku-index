@@ -270,9 +270,6 @@ const walks = [
   // counts do.
   new ConnectedValues('VP', FINKZ),
   new ConnectedValues('VP', PHINX),
-  // Correctness-neutral: the counters are read off a finished walk, so leave
-  // them to the end of the search order rather than branching on them.
-  new SearchPriority(0, ...counters.flatMap(counter => counter.cells())),
 ];
 
 // --- Clues. ---

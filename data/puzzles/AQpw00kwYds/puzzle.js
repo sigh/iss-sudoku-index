@@ -108,9 +108,6 @@ return [
   shape,
   shade.toVar('cell colour'),
   yellowValue.toVar('yellow contribution'),
-  // Branch on two-valued colours before digits; VY is derived.
-  new SearchPriority(100, ...shade.cells()),
-  new SearchPriority(90, ...gridCells),
   ...yellowContributions,
   new ConnectedValues('VS', YELLOW),
   new ConnectedValues('VS', BLUE),

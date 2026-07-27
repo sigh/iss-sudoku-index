@@ -118,7 +118,6 @@ return [
   answerVar,
   placements.toVar('selected 3x3 top-left corners'),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),
-  new SearchPriority(100, ...placements.cells()),
   new ContainExact(selectedValues, ...placements.cells()),
   ...regions,
   ...memberships,
