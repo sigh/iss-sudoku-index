@@ -14,7 +14,7 @@
 // means r8c6=3).
 //
 // Omitted: three sum cages (totals 24, 45, 45) and three bent arrows drawn
-// near R7-9,C7-9 of the true grid. Only fragments of each cage's boundary
+// near R3-5,C3-5 of the true grid. Only fragments of each cage's boundary
 // are drawn (no cage closes within the available geometry, and the arrows
 // carry no visible circle/sum value), so neither is encoded here.
 

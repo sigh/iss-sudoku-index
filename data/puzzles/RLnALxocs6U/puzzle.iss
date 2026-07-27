@@ -1,0 +1,4 @@
+.~R3C3_3~R3C5_1~R3C6_4~R4C7_1~R5C4_3~R5C7_5~R6C4_5~R6C7_9~R7C5_6~R7C6_2~R9C9_7
+.AntiConsecutive
+.BlackDot~R3C3~R3C4
+.LittleKiller~22~R6C9

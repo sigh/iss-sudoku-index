@@ -1,0 +1,15 @@
+.RegionSumLine~R3C8~R4C7~R5C8~R4C9
+.RegionSumLine~R6C3~R7C4~R6C5~R5C4
+.RegionSumLine~R2C3~R3C4~R2C5~R1C4
+.Whisper~6~R3C1~R4C2~R5C3
+.Whisper~6~R4C2~R3C3~R4C4
+.Whisper~6~R3C3~R2C2
+.Whisper~6~R4C6~R5C7~R6C8
+.Whisper~6~R5C7~R6C6~R7C7
+.Whisper~6~R6C6~R5C5
+.Whisper~6~R6C2~R7C3~R8C4
+.Whisper~6~R7C3~R8C2~R9C3
+.Whisper~6~R8C2~R7C1
+.BlackDot~R7C7~R8C7
+.BlackDot~R6C9~R7C9
+.BlackDot~R4C7~R5C7

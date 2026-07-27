@@ -11,10 +11,12 @@
 // average exactly N -- i.e. sum to N*N. An endpoint diamond has one
 // direction leaving it; an interior diamond has two. "Any line leaving from
 // that diamond" is read existentially (at least one of the up to two
-// directions, not necessarily both): the diamond sits where the single
-// drawn line splits into two distinct rays, and "any" picks an unspecified
-// one of them, rather than asserting the property of every one of them
-// simultaneously.
+// directions, not necessarily both). Two grounds, of unequal weight: the
+// diamond sits where the single drawn line splits into two distinct rays,
+// so "any" plausibly picks one of them; and, decisively, the universal
+// reading rejects the published solution at the R4C7 diamond, so it is not
+// a shippable encoding. With only two candidate readings, that second
+// ground is selection by elimination rather than derivation.
 //
 // The rule's closing sentence -- "All cells on a line must be counted in at
 // least one of those averages" -- is not encoded (omitted).

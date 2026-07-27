@@ -1,0 +1,11 @@
+.LittleKiller~42~R9C2
+.LittleKiller~10~R7C1
+.LittleKiller~10~R3C9
+.LittleKiller~30~R1C8
+.LittleKiller~40~R1C9
+.LittleKiller~10~R9C7
+.LittleKiller~10~R1C3
+.LittleKiller~41~R1C1
+.EqualSum~R4C4~R4C5~R4C6~-~R5C4~R5C5~R5C6~-~R6C4~R6C5~R6C6~-~R4C4~R5C4~R6C4~-~R4C5~R5C5~R6C5~-~R4C6~R5C6~R6C6~-~R4C4~R5C5~R6C6~-~R4C6~R5C5~R6C4
+.Arrow~R9C5~R8C4~R8C5~R8C6
+.Arrow~R4C8~R5C8~R6C8~R5C9

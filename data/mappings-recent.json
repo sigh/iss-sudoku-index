@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-27T15:21:42.385906+00:00",
+  "generated_at": "2026-07-28T02:48:15.163036+00:00",
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -5450,7 +5450,7 @@
       "unique_solution": false,
       "solutions_found": 8192,
       "guesses": 53197,
-      "solve_ms": 1306.7,
+      "solve_ms": 434.2,
       "iss_size": 3010,
       "iss_url_length": 2992,
       "script_size": 4294
@@ -5464,7 +5464,7 @@
         "https://sudokupad.app/7gyocv8k7m"
       ],
       "date": "2026-04-23",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Diagonal",
         "Whisper",
@@ -5477,15 +5477,15 @@
         "And",
         "AllDifferent"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 573,
-      "guesses": 1009,
-      "solve_ms": 134.7,
-      "iss_size": 17656,
-      "iss_url_length": 16126,
-      "script_size": 2831
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 203,
+      "solve_ms": 41.6,
+      "iss_size": 20374,
+      "iss_url_length": 18604,
+      "script_size": 3074
     },
     {
       "puzzle_id": "vVTSGvQZs3k",
@@ -5899,22 +5899,23 @@
         "https://sudokupad.app/x07nh4kkwg"
       ],
       "date": "2026-04-18",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Cage",
         "AllDifferent",
         "EqualSum",
-        "WhiteDot"
+        "WhiteDot",
+        "StrictXV"
       ],
       "search_completed": true,
       "hit_cap": false,
-      "unique_solution": false,
-      "solutions_found": 240,
-      "guesses": 33037,
-      "solve_ms": 1563.6,
-      "iss_size": 1003,
-      "iss_url_length": 1034,
-      "script_size": 1766
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 546,
+      "solve_ms": 54.9,
+      "iss_size": 1013,
+      "iss_url_length": 1043,
+      "script_size": 2117
     },
     {
       "puzzle_id": "00bV9KL-kco",

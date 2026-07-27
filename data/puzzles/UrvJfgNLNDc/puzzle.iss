@@ -32,3 +32,7 @@
 .Thermo~VG46~VG53~VG60~VG67
 .Thermo~VG67~VG60~VG53~VG46
 .End
+.Or
+.Thermo~VG30~VG23
+.Thermo~VG23~VG30
+.End

@@ -1,0 +1,11 @@
+.AntiKnight
+.Cage~6~R4C1~R4C2
+.Cage~11~R6C1~R6C2
+.Cage~12~R4C8~R4C9
+.Cage~15~R6C8~R6C9
+.Cage~8~R2C1~R2C2
+.Cage~5~R2C8~R2C9
+.Cage~10~R2C6~R3C6~R3C7
+.Whisper~5~R4C4~R3C5~R4C6
+.Whisper~5~R5C7~R6C7
+.Whisper~5~R4C3~R5C3

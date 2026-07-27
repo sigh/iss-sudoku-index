@@ -11,7 +11,10 @@
 // number formed by X then Y, converted to base 10, is placed at r(X)c(Y).
 // No two cages may point at the same cell.
 //
-// One cage (R9C8-R9C9) is an ordinary killer cage summing to 15 instead.
+// The killer clause is additive, not an exemption: "If a cage has a small
+// number in the top left, the digits in that cage sum to that number" is a
+// condition layered on a cage, and nothing stops a numbered cage also being
+// a coordinate cage. R9C8-R9C9 is both -- it sums to 15 and points.
 //
 // Negative diagonal (R1C1-R9C9): digits do not repeat.
 // German whisper (R3C8-R3C9): adjacent digits differ by at least 5.
@@ -34,6 +37,7 @@ const pointerCages = [
   ['R7C7', 'R7C8'],
   ['R8C5', 'R8C6'],
   ['R3C8', 'R3C9'],
+  ['R9C8', 'R9C9'],
 ];
 
 const pointerConstraints = pointerCages.map(([a, b]) => {

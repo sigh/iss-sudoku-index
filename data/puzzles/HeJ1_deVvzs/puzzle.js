@@ -10,13 +10,14 @@
 //
 // Omitted: the puzzle's chess-game rule (Region Sum Lines on the
 // odd-numbered half-moves, Renban lines on the even-numbered half-moves,
-// each traced along one of the first 5 moves per side of a chess game).
-// The source only draws the resulting chess position (piece placements);
-// no line geometry for the 10 half-moves is present, so which cells each
-// line covers is not recoverable from the drawn data. Recovering it
-// requires reconstructing the one game consistent with the position via
-// chess retrograde analysis -- exactly the deduction the rules text defers
-// to an external reference ("this puzzle's LMD page").
+// each traced along one of the first 5 moves per side of a chess game
+// reaching the diagrammed position). Each line's cells are defined only as
+// "the path of one move in the one game reaching this position" -- deriving
+// them is retrograde chess analysis (a move history from a final position),
+// which ISS cannot pose at all: the grid model has no intermediate board
+// state or legal-move transition to reason over. Not a decode gap (no
+// amount of extra drawn data would supply a rule the source states only as
+// a deduction).
 return [
   new Shape('8x8'),
   new AntiKing(),

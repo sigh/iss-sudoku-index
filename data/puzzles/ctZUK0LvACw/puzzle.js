@@ -29,6 +29,15 @@ const firstShade = shade.cells()[0];
 const shadeDomain = shade.makeReplicate(
   new Given(firstShade, SHADED, UNSHADED));
 
+// Symmetry break: no rule (connectivity, no-mono-2x2, or vision-count) names
+// an absolute colour, so swapping SHADED<->UNSHADED everywhere is always an
+// equally valid completion of any solution. Pin one representative: R1C1
+// (=firstShade) is fixed to SHADED. This narrows nothing about the puzzle's
+// actual shading -- both regions' shapes stay exactly as forced by the other
+// rules -- it only names which of the two interchangeable labels the region
+// containing R1C1 gets.
+const shadeSymmetryBreak = new Given(firstShade, SHADED);
+
 // No 2x2 block may be all one shade: one NFA on the top-left block,
 // replicated to every block origin.
 const noMono2x2Machine = NFA.encodeSpec({
@@ -129,6 +138,7 @@ return [
   new Shape('9x9'),
   shade.toVar('shade'),
   shadeDomain,
+  shadeSymmetryBreak,
   // Yin-Yang connectivity: each shade forms one orthogonally connected region.
   new ConnectedValues('VS', SHADED),
   new ConnectedValues('VS', UNSHADED),

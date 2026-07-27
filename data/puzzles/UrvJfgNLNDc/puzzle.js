@@ -62,9 +62,14 @@ const blueRegions = [
   cells("R7C5 R7C6 R8C5 R8C6"),
 ];
 
+// Three pale diagonals are drawn in the artwork. Endpoints read off the
+// archived image: cell pitch 76px, grid origin (18.5, 19.5), which reproduces
+// the two long diagonals' endpoints exactly. The third is a single diagonal
+// step inside the lower yellow block.
 const diagonals = [
   cells("R3C5 R4C4 R5C3 R6C2 R7C1"),
   cells("R6C6 R7C5 R8C4 R9C3"),
+  cells("R4C6 R3C7"),
 ];
 const monotoneEitherWay = line => new Or([
   new Thermo(...line),

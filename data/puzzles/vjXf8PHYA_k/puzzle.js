@@ -12,10 +12,16 @@
 // together, rather than hard-coding the (derivable) shared total of 18 -
 // hard-coding it would give the solver information the puzzle does not.
 //
-// One white dot (consecutive digits) sits between R8C8 and R8C9. The rules
-// text also describes X (sum 10) and V (sum 5) dots, but the decoded source
-// contains none: the title "Unvexed" is a pun confirming no X's or V's are
-// actually used in this puzzle.
+// One white dot (consecutive digits) sits between R8C8 and R8C9.
+//
+// The rules also state "Digits in cells joined by an X sum to 10. Digits in
+// cells joined by a V sum to 5. All V's and X's are given." The decoded
+// source draws zero X/V marks anywhere. "All ... are given" is an
+// exhaustiveness claim, not mere transcription confirmation: since every
+// X/V pair would be marked if it existed, the total absence of marks means
+// no orthogonally adjacent pair anywhere in the grid may sum to 10 or 5 -
+// StrictXV encodes exactly that global negative (title "Unvexed" = no V,
+// no X).
 
 const noTotalCages = [
   ['R2C8', 'R3C8', 'R3C9'],
@@ -48,4 +54,5 @@ return [
   new EqualSum(...noTotalCages),
 
   new WhiteDot('R8C8', 'R8C9'),
+  new StrictXV(),
 ];

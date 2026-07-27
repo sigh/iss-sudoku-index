@@ -1,0 +1,11 @@
+.Shape~6x6
+.LittleKiller~15~R2C1
+.LittleKiller~10~R5C1
+.LittleKiller~14~R3C6
+.LittleKiller~13~R6C4
+.Sandwich~0~R2
+.Sandwich~7~C3
+.WhiteDot~R6C3~R6C2
+.WhiteDot~R6C2~R6C1
+.BlackDot~R3C6~R4C6
+.BlackDot~R3C4~R4C4

@@ -1,0 +1,13 @@
+.AntiKnight
+.Diagonal~-1
+.Diagonal~1
+.Whisper~5~R7C6~R6C6~R5C6~R4C6~R3C6
+.Whisper~5~R3C4~R4C4~R5C4~R6C4~R7C4
+.Whisper~5~R1C7~R2C7
+.X~R3C8~R3C9
+.X~R8C7~R9C7
+.~R7C8_2_4_6_8~R7C9_2_4_6_8~R7C2_1_3_5_7_9~R2C7_1_3_5_7_9
+.WhiteDot~R5C5~R6C5
+.WhiteDot~R7C1~R7C2
+.WhiteDot~R7C2~R7C3
+.BlackDot~R7C4~R8C4

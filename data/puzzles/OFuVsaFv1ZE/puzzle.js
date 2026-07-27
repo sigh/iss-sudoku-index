@@ -11,9 +11,12 @@
 // make 36 nine-digit numbers that are ranked 1-36 (ascending, no ties) -
 // FullRankTies('none') enforces exactly that ordering constraint even though
 // no individual rank is given as a clue anywhere in this puzzle. The outside
-// cells that display each rank (and the cages requiring their digits be
-// unique) are not modelled here: no rank clue value is ever given, and the
-// cage boundaries are not confidently recoverable from the drawn geometry.
+// cells that display each rank, and the "digits may not repeat within a
+// cage" rule over those rank digits, are not modelled here: ISS's FullRank
+// and FullRankTies handlers never expose a line's computed rank as a value
+// any other constraint (Cage, AllDifferent, ...) can reference, so there is
+// nothing in this encoding for a cage rule to attach to, independent of how
+// well the cage geometry itself is known.
 return [
   new Shape('9x9'),
   new FullRankTies('none'),
