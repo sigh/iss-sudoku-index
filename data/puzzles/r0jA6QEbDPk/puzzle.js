@@ -5,75 +5,110 @@
 
 // Normal sudoku rules apply.
 //
-// Halvers: 9 marked cells, one per row/column/box (a second transversal laid
-// over the grid; the solver places them, nothing shows where). Every digit
-// 1-9 must sit in exactly one halver cell, so the 9 halver digits form a
-// permutation of 1-9.
+// Halvers: nine cells, one in each row, column and 3x3 box. Nothing marks
+// them -- the solver places them. Each digit 1-9 must appear in a halver
+// cell, so the nine halver digits are a permutation of 1-9. The value of a
+// halver is half its digit; every other cell's value is its digit.
 //
-// Omitted: the blue-line rule (each 3x3 box-border crossing starts a new
-// segment; every segment of a line sums to the same total, using each
-// cell's "value" -- its digit, or half its digit at a halver cell). Every
-// tried encoding of this halved-value equal-segment-sum rule hits a solver
-// defect, not a decode or modelling gap.
+// Blue lines: the 3x3 box borders cut each blue line into segments (leaving
+// and re-entering a box starts a new segment), and all segments of one line
+// have the same sum of values. Different lines may differ.
 //
-// Clone dominoes: the three shaded dominoes are positionally equal -- first
-// cell equals first cell, second equals second -- per the rules' own worked
-// example (r2c3 = r5c7 = r9c4).
+// Shaded dominoes: the three shaded dominoes are clones, holding the same
+// digits in the same positions -- the rules' own example (r2c3 = r5c7 =
+// r9c4) fixes the correspondence as left cell to left cell, right to right.
 
-const rows = Array.from({ length: 9 }, (_, i) => i + 1);
-const cols = rows;
-const eq = (a, b) => new SameValues(2, a, b); // two size-1 sets => a === b
+const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// ---- Halver position and digit: one pair of aux cells per row. ----
-// HC(r) = column (1-9) of row r's halver. HD(r) = the digit sitting there.
-const hcVar = new Var('HC', 'halver column index', 9);
-const hdVar = new Var('HD', 'halver digit', 9);
-const HC = r => hcVar.cell(r);
-const HD = r => hdVar.cell(r);
+// The value range is widened to 0-9 so the halver overlay below can use 0 as
+// its "not a halver" state; the playable grid cells are put back to 1-9.
+const shape = new Shape('9x9', '0-9');
+const graph = cellGraph(shape);
+const gridCells = graph.cells();
+const playableDigits = graph.makeReplicate(new Given(gridCells[0], ...digits));
 
-const hcGivens = rows.map(r => new Given(HC(r), ...cols));
-// AllDifferent on 9 column-index cells over a 9-value domain: one halver per
-// column (one per row is automatic -- HC(r) is a single-valued function).
-const hcColumnsDistinct = new AllDifferent(...rows.map(HC));
+// ---- Halver overlay ----
+// VH(cell) is 0 when the cell is not a halver, and the cell's own digit when
+// it is: one Var carries both "is this a halver" and "the halved digit".
+const halver = graph.makeOverlay('VH');
+const H = cell => halver.at(cell);
+const zeroOrOwnDigit = Pair.fnToKey((h, d) => h === 0 || h === d, shape);
+const halverStates = gridCells.map(
+  cell => new Pair(zeroOrOwnDigit, 'halver flag: 0 or own digit', H(cell), cell));
 
-// One halver per box: within each same box-row band of 3 rows, the halvers'
-// column "thirds" (cols 1-3 / 4-6 / 7-9) must be pairwise distinct. Combined
-// with hcColumnsDistinct (already distinct columns) and the band's fixed,
-// distinct box-row, this puts exactly one halver in each of the band's 3
-// boxes -- so exactly one per box overall.
-const columnThird = c => Math.floor((c - 1) / 3);
-const differentThirds = Pair.fnToKey((a, b) => columnThird(a) !== columnThird(b), 9);
-const boxRowBands = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-const oneHalverPerBox = boxRowBands.map(band =>
-  new PairX(differentThirds, 'halver column thirds differ within box-row band', ...band.map(HC)));
+// One halver per row, column and box: exactly eight of the nine overlay cells
+// of each house are 0.
+const eightZeros = Array(8).fill(0).join('_');
+const oneHalverPerHouse = graph.houses().map(
+  house => new ContainExact(eightZeros, ...halver.at(house)));
 
-const hdGivens = rows.map(r => new Given(HD(r), ...cols));
-// HD(r) = the digit at (r, HC(r)): exactly one of the 9 possible columns is
-// the true halver column, and in that branch HD(r) equals that cell's digit.
-const hdLinksToGrid = rows.map(r => new Or(cols.map(c => new And([
-  new Given(HC(r), c),
-  eq(HD(r), makeCellId(r, c)),
-]))));
-// Every digit appears in exactly one halver cell.
-const everyDigitHalvedOnce = new AllDifferent(...rows.map(HD));
+// The nine halver digits are all different, i.e. every digit is halved once.
+// A row's overlay cells are eight zeroes plus the halver digit, so their sum
+// is that digit.
+const halverDigit = new Var('D', 'halver digit of each row', 9);
+const halverDigitDomain = halverDigit.cells().map(cell => new Given(cell, ...digits));
+const rowHalverDigit = graph.rows().map(
+  (row, i) => new EqualSum(halver.at(row), [halverDigit.cell(i + 1)]));
+const everyDigitHalved = new AllDifferent(...halverDigit.cells());
 
-// ---- Clone dominoes (shaded 1x1 cells; adjacent pairs read left-right). ----
-// Provenance: the three shaded-cell pairs at R2C2/R2C3, R5C6/R5C7, R9C3/R9C4.
+// ---- Blue lines ----
+// Provenance: the seven drawn blue polylines, each listed in drawn order.
+const blueLines = [
+  ['R5C5', 'R5C4', 'R5C3', 'R6C3', 'R7C3', 'R8C3', 'R7C4', 'R6C5', 'R7C6',
+    'R7C7', 'R7C8', 'R6C8', 'R6C7'],
+  ['R4C3', 'R4C2', 'R3C1', 'R3C2', 'R2C3', 'R3C4', 'R3C5', 'R2C6', 'R1C6',
+    'R1C7', 'R1C8', 'R1C9'],
+  ['R9C8', 'R9C9', 'R8C9', 'R7C9', 'R6C9', 'R5C9'],
+  ['R6C2', 'R6C1', 'R7C1', 'R7C2', 'R8C2'],
+  ['R9C3', 'R9C4', 'R9C5'],
+  ['R7C5', 'R8C6', 'R8C7', 'R8C8'],
+  ['R2C9', 'R3C9', 'R4C9'],
+];
+
+const boxOfCell = new Map();
+graph.boxes().forEach((cells, i) => cells.forEach(cell => boxOfCell.set(cell, i)));
+
+// Split a drawn path wherever consecutive cells sit in different boxes. A
+// path that leaves a box and comes back therefore yields two segments.
+const segmentsOf = path => path.reduce((segments, cell) => {
+  const current = segments[segments.length - 1];
+  if (current && boxOfCell.get(current[current.length - 1]) === boxOfCell.get(cell)) {
+    current.push(cell);
+  } else {
+    segments.push([cell]);
+  }
+  return segments;
+}, []);
+
+// Twice a cell's value as Sum coefficient terms: 2*digit, minus the overlay
+// cell, which is the digit at a halver and 0 elsewhere. Doubling keeps the
+// equations integral when an odd digit is halved.
+const doubledValue = (cells, sign) =>
+  cells.flatMap(cell => [[cell, 2 * sign], [H(cell), -sign]]);
+
+// Equal segment sums, as a chain of consecutive-pair equations.
+const equalSegmentSums = blueLines.flatMap(path => {
+  const segments = segmentsOf(path);
+  return segments.slice(1).map((segment, i) => new Sum(
+    0, ...doubledValue(segments[i], 1), ...doubledValue(segment, -1)));
+});
+
+// ---- Clone dominoes ----
+// Provenance: the six shaded cells, read as three left-right adjacent pairs.
 const cloneDominoes = [['R2C2', 'R2C3'], ['R5C6', 'R5C7'], ['R9C3', 'R9C4']];
-const cloneEqualities = [0, 1].flatMap(pos => [
-  eq(cloneDominoes[0][pos], cloneDominoes[1][pos]),
-  eq(cloneDominoes[1][pos], cloneDominoes[2][pos]),
-]);
+const clones = [0, 1].map(
+  position => new SameValues(3, ...cloneDominoes.map(domino => domino[position])));
 
 return [
-  new Shape('9x9'),
-  hcVar,
-  hdVar,
-  ...hcGivens,
-  hcColumnsDistinct,
-  ...oneHalverPerBox,
-  ...hdGivens,
-  ...hdLinksToGrid,
-  everyDigitHalvedOnce,
-  ...cloneEqualities,
+  shape,
+  playableDigits,
+  halver.toVar('halver: 0, or the halved digit'),
+  halverDigit,
+  ...halverStates,
+  ...oneHalverPerHouse,
+  ...halverDigitDomain,
+  ...rowHalverDigit,
+  everyDigitHalved,
+  ...equalSegmentSums,
+  ...clones,
 ];

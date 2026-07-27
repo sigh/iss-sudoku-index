@@ -2,161 +2,261 @@
 // Author: Marty Sears
 // Video: https://www.youtube.com/watch?v=IrrtMa7XMDM
 // Source: https://sudokupad.app/up5nrki10o
-//
-// Normal 9x9 sudoku. Finkz and Phinx start at R1C1 and R9C9 and must each
-// discover an orthogonal path to a different cupcake (R2C1, R8C9). Paths may
-// not revisit a cell, cross themselves, cross each other, or pass through
-// thick maze walls. Any two digits visited adjacently along a path must have
-// different parity and differ by at least 5. Blackcurrants: one joined digit
-// is double the other. Purple arrows point to the smaller of the two digits
-// they sit between and may only be traversed in the direction they point.
-//
-// Path model: one 81-cell Var overlay (VP) holds path membership -- 1 = on
-// Finkz's path (from R1C1), 2 = on Phinx's path (from R9C9), 3 = off. Each
-// path gets its own degree rule (its two endpoints have exactly one
-// same-value orthogonal neighbour, every other on-path cell exactly two) and
-// its own ConnectedValues, so connectivity + degree together force exactly
-// one simple path per value (connectivity plus that degree sequence rules
-// out extra components, branching, and stray cycles). Rat identity is not
-// fixed to a cupcake by the rules text (only "two different cupcakes" is
-// stated), so which cupcake ends which rat's path is a genuine disjunction,
-// handled with Or/And rather than picked by proximity.
-//
-// "Cross themselves"/"cross each other" is read as no shared or repeated
-// cell, which the one-Var-per-cell membership model already guarantees for
-// free (a cell can hold only one of the three values, and a single path's
-// cells are never repeated). Unlike some other Rat Run entries, this
-// puzzle's rules text has no "not even diagonally" qualifier, and checking
-// the parity/difference-of-5 rule's own valid-adjacency graph against the
-// known grid shows each rat's route is forced onto a unique corridor with a
-// structurally mandatory diagonal touch between the two corridors -- so a
-// diagonal-touch prohibition would be a stricter reading than the text
-// supports here, and is deliberately not added.
-//
-// The parity/difference-of-5 rule is applied as a conditional NFA to every
-// orthogonally adjacent cell pair: if both cells hold the same path value
-// (not off), their digits must differ in parity and by at least 5. Given the
-// degree+connectivity result forces the same-value adjacency graph to be
-// exactly a simple path, any two same-value adjacent cells are necessarily
-// path-consecutive, so this local, geometry-enumerated check is sound
-// without needing to know traversal order.
-//
-// Omitted:
-// - Thick maze walls. The only "thick" (colour/width-flagged) lines in the
-//   source union to exactly the four box-border grid lines with no gap, so a
-//   literal reading would seal every rat inside its own starting box. That
-//   is provably inconsistent with the parity/difference-of-5 rule applied to
-//   R1C1..R2C1 within box 1 alone (the valid-edge subgraph splits R1C1 and
-//   R2C1 into two disconnected 4-cell components). The "thin" maze-art lines
-//   union to literally every interior grid edge, so they carry no
-//   discriminating wall signal either. Wall geometry is undecodable from the
-//   available vector art; walls are omitted rather than guessed, which can
-//   only relax the model (never wrongly reject the true grid).
-// - One-way door direction: the ON/OFF+degree construction has no notion of
-//   edge direction or traversal order, only cell membership and degree, so
-//   "may only be traversed in the direction it points" cannot be expressed.
-//   The static "points to the smaller digit" clause is still encoded as
-//   GreaterThan.
 
-const ON_A = 1;   // path membership: Finkz's path (starts R1C1)
-const ON_B = 2;   // path membership: Phinx's path (starts R9C9)
-const OFF = 3;
+// Normal sudoku. Finkz and Phinx stand on R1C1 and R9C9 and each walks through
+// the maze to a cupcake; the two reach different cupcakes, of R2C1 and R8C9. A
+// walk steps between orthogonally adjacent cell centres, passes through no thick
+// maze wall, visits no cell twice, and the two walks share no cell.
+// Two digits joined by a blackcurrant have one double the other.
+// A purple arrow points to the smaller of the two digits it sits between, and a
+// walk may cross that edge only in the direction the arrow points.
+// Two digits visited consecutively along a walk have different parities and
+// differ by at least 5.
+//
+// Nothing is omitted. "The paths must not ... cross themselves or each other"
+// adds nothing here: with orthogonal steps between cell centres, two steps meet
+// only at a cell they share, which no cell being used twice already forbids.
 
-const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
+// The alphabet is widened so the Var layers can carry the position counters; the
+// 81 grid cells are pinned back to 1-9 below.
+const NV = 11;
+// Coprime moduli: a closed cycle of steps beside a walk would need a length
+// divisible by both, i.e. 90, and the grid holds 81 cells.
+const MOD_A = 10, MOD_B = 9;
+const OFF = 1;                  // counter value for a cell no rat visits
+const FIRST = 2;                // counter value of a walk's first cell
+// Step values. A step is stored once, on the (a, b) pair built below; FWD means
+// the rat walked a->b and BWD b->a, so the counters can tell direction.
+const UNUSED = 1;
+const A_FWD = 2, A_BWD = 3, B_FWD = 4, B_BWD = 5;
 
-const path = graph.makeOverlay('VP');
-const pathCell = cell => path.at(cell);
+const RAT_A = 'R1C1', RAT_B = 'R9C9';     // the two rat emoji
+const CUPCAKES = ['R2C1', 'R8C9'];        // the two cupcake emoji
+
+// The thick yellow maze walls, as drawn: polylines on the corner lattice, where
+// corner (i, j) is the top-left corner of RiCj, so the lattice runs 1..10. The
+// first entry is the drawn boundary loop; it separates no two grid cells.
+const WALLS = [
+  [[1, 1], [1, 10], [10, 10], [10, 1], [1, 1]],
+  [[2, 2], [2, 3]],
+  [[9, 8], [9, 9]],
+];
+// Round wall spots of the same yellow sit on all 64 interior corners, which is
+// the drawn form of "there is no space to move diagonally in this maze": a
+// diagonal step passes through the corner its two cells share, and every such
+// corner carries a spot. Hence the orthogonal-only step directions below, and no
+// spot list is needed.
+
+// The drawn fruit, each named by the two cells its edge separates.
+const BLACKCURRANTS = [['R2C4', 'R2C5'], ['R3C4', 'R4C4']];
+// The drawn purple arrows, each named by the pair it sits between in the
+// direction it points: from the larger digit to the smaller, and the only
+// direction a walk may cross that edge.
+const DOORS = [['R8C9', 'R9C9'], ['R8C6', 'R8C5']];
+
+const shape = new Shape('9x9', NV);
+const graph = cellGraph(shape);
 const gridCells = graph.cells();
+const posA = graph.makeOverlay('VA');     // walk position mod MOD_A
+const posB = graph.makeOverlay('VB');     // walk position mod MOD_B
 
-// --- Degree: each of the four named endpoints (both starts, both cupcakes)
-// requires exactly one same-value orthogonal neighbour; every other cell
-// requires exactly two when it holds a path value, and is unconstrained when
-// off. The own-value match is read dynamically (not a fixed constant), so
-// one machine per required degree serves both path values.
-const ENDPOINTS = ['R1C1', 'R9C9', 'R2C1', 'R8C9'];
-const makeDegreeMachine = requiredDegree => NFA.encodeSpec({
-  startState: { phase: 'start' },
-  transition: ({ phase, match, count }, value) => {
-    if (phase === 'start') {
-      return value === OFF ? { phase: 'off' } : { phase: 'on', match: value, count: 0 };
+// --- The maze -------------------------------------------------------------
+// Split the wall polylines into unit lattice segments: 'H|i|j' runs from corner
+// (i, j) to (i, j+1) and so separates R(i-1)Cj from RiCj; 'V|i|j' runs from
+// (i, j) to (i+1, j) and separates RiC(j-1) from RiCj.
+const wallSegments = new Set();
+for (const line of WALLS) {
+  for (let n = 1; n < line.length; n++) {
+    const [i0, j0] = line[n - 1], [i1, j1] = line[n];
+    if (i0 === i1) {
+      for (let j = Math.min(j0, j1); j < Math.max(j0, j1); j++) {
+        wallSegments.add(`H|${i0}|${j}`);
+      }
+    } else {
+      for (let i = Math.min(i0, i1); i < Math.max(i0, i1); i++) {
+        wallSegments.add(`V|${i}|${j0}`);
+      }
     }
-    if (phase === 'off') return { phase: 'off' };
-    const next = count + (value === match ? 1 : 0);
-    return next > requiredDegree ? undefined : { phase: 'on', match, count: next };
-  },
-  accept: ({ phase, count }) => phase === 'off' || count === requiredDegree,
-}, geometry.numValues);
-const degree1Machine = makeDegreeMachine(1);
-const degree2Machine = makeDegreeMachine(2);
-
-// --- Parity/difference-of-5 rule: for every orthogonally adjacent cell
-// pair, if both cells hold the same path value (not off), their digits must
-// differ in parity and by at least 5. Sound given the degree+connectivity
-// result above (see header).
-function parityDiffOk(a, b) {
-  return (a % 2) !== (b % 2) && Math.abs(a - b) >= 5;
+  }
 }
-const samePathParityMachine = NFA.encodeSpec({
-  startState: { phase: 0 },
-  transition: (state, value) => {
-    const { phase } = state;
-    if (phase === 'skip' || phase === 'done') return { phase };
-    if (phase === 0) return { phase: 1, vpU: value };
-    if (phase === 1) return { phase: 2, vpU: state.vpU, digitU: value };
-    if (phase === 2) {
-      const { vpU, digitU } = state;
-      if (value !== vpU || vpU === OFF) return { phase: 'skip' };
-      return { phase: 3, digitU };
-    }
-    // phase === 3
-    return parityDiffOk(state.digitU, value) ? { phase: 'done' } : undefined;
-  },
-  accept: ({ phase }) => phase === 'skip' || phase === 'done',
-}, geometry.numValues);
+const stepAllowed = (cell, dRow, dCol) => {
+  const { row, col } = parseCellId(cell);
+  return dRow === 0
+    ? !wallSegments.has(`V|${row}|${col + 1}`)
+    : !wallSegments.has(`H|${row + 1}|${col}`);
+};
 
-const originCell = path.cells()[0];
-const seenEdges = new Set();
+// --- Step variables -------------------------------------------------------
+// One Var per orthogonal adjacency the maze leaves open, recording whether a
+// walk uses it and in which direction; a walled adjacency gets no variable at
+// all, which is how the walls are enforced.
+const steps = [];
+const stepsAt = new Map(gridCells.map(cell => [cell, []]));
+for (const cell of gridCells) {
+  for (const [dRow, dCol] of [[0, 1], [1, 0]]) {
+    const other = graph.step(cell, dRow, dCol);
+    if (!other || !stepAllowed(cell, dRow, dCol)) continue;
+    const id = 'VS' + (steps.length + 1);
+    steps.push({ id, a: cell, b: other });
+    stepsAt.get(cell).push({ id, out: A_FWD, in: A_BWD, out2: B_FWD, in2: B_BWD });
+    stepsAt.get(other).push({ id, out: A_BWD, in: A_FWD, out2: B_BWD, in2: B_FWD });
+  }
+}
+const stepIndex = new Map(steps.map(s => [s.a + '|' + s.b, s]));
+const stepBetween = (p, q) => stepIndex.get(p + '|' + q) || stepIndex.get(q + '|' + p);
+
+const memo = new Map();
+const cached = (key, build) => {
+  if (!memo.has(key)) memo.set(key, build());
+  return memo.get(key);
+};
+
+// --- Walk shape -----------------------------------------------------------
+// Per-cell machine: reads the cell's two counters, then every step it is an end
+// of. A cell no rat visits takes the OFF counter in both layers and uses no
+// step; any other cell is entered once and left once by one and the same rat.
+// A rat's own cell is only left, a cupcake only entered.
+const ROLE_OF = new Map([[RAT_A, 'ratA'], [RAT_B, 'ratB'],
+...CUPCAKES.map(cell => [cell, 'cupcake'])]);
+function cellNFA(incident, role) {
+  // The step values a cell sees depend on whether it is the step's a or b end,
+  // so the machine is keyed on that pattern, not just on the step count.
+  const sig = 'cell|' + role + '|' + incident.map(s => s.out).join(',');
+  return cached(sig, () => NFA.encodeSpec({
+    startState: { k: 0 },
+    transition: (s, value) => {
+      if (s.k === 0) return { k: 1, vis: value !== OFF };
+      if (s.k === 1) {
+        if ((value !== OFF) !== s.vis) return undefined;
+        return { k: 2, vis: s.vis, inA: 0, outA: 0, inB: 0, outB: 0 };
+      }
+      const n = s.k - 2;
+      if (n >= incident.length) return undefined;
+      const step = incident[n];
+      const next = {
+        k: s.k + 1, vis: s.vis,
+        inA: s.inA, outA: s.outA, inB: s.inB, outB: s.outB,
+      };
+      if (value === step.in) next.inA++;
+      else if (value === step.out) next.outA++;
+      else if (value === step.in2) next.inB++;
+      else if (value === step.out2) next.outB++;
+      else if (value !== UNUSED) return undefined;
+      if (next.inA > 1 || next.outA > 1 || next.inB > 1 || next.outB > 1) {
+        return undefined;
+      }
+      return next;
+    },
+    accept: s => {
+      if (s.k !== 2 + incident.length) return false;
+      if (role === 'ratA') {
+        return s.vis && s.outA === 1 && s.inA === 0 && s.inB === 0 && s.outB === 0;
+      }
+      if (role === 'ratB') {
+        return s.vis && s.outB === 1 && s.inB === 0 && s.inA === 0 && s.outA === 0;
+      }
+      if (role === 'cupcake') {
+        return s.vis && s.outA === 0 && s.outB === 0 && s.inA + s.inB === 1;
+      }
+      if (!s.vis) return s.inA === 0 && s.outA === 0 && s.inB === 0 && s.outB === 0;
+      return (s.inA === 1 && s.outA === 1 && s.inB === 0 && s.outB === 0) ||
+        (s.inB === 1 && s.outB === 1 && s.inA === 0 && s.outA === 0);
+    },
+  }, NV));
+}
+// Each rat leaves its own cell once and enters nothing, so counting arrivals
+// over the whole grid leaves exactly one cell per rat that is entered and never
+// left; only the two cupcakes may be such a cell, and each of them takes exactly
+// one arrival. That is what makes the two rats reach different cupcakes.
+const walkShape = gridCells.map(cell => {
+  const incident = stepsAt.get(cell);
+  return new NFA(cellNFA(incident, ROLE_OF.get(cell) || 'plain'), 'walk-cell',
+    posA.at(cell), posB.at(cell), ...incident.map(s => s.id));
+});
+
+// Position counters. Numbering a real walk 1, 2, 3, ... from the rat's cell is
+// always possible, so "the arriving cell's counter is the leaving cell's plus
+// one" rejects no genuine walk; what it buys is that a closed cycle of steps
+// beside the walks would need a length divisible by MOD_A and by MOD_B. The
+// degree rules above admit such a cycle and nothing else rules it out.
+const nextPos = (v, mod) => FIRST + ((v - FIRST + 1) % mod);
+const counterNFA = mod => cached('counter|' + mod, () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return { k: 1, dir: value };
+    if (s.k === 1) return { k: 2, dir: s.dir, a: value };
+    if (s.k !== 2) return undefined;
+    if (s.dir === UNUSED) return { done: true };
+    if (s.a === OFF || value === OFF) return undefined;
+    if (s.dir === A_FWD || s.dir === B_FWD) {
+      return value === nextPos(s.a, mod) ? { done: true } : undefined;
+    }
+    return s.a === nextPos(value, mod) ? { done: true } : undefined;
+  },
+  accept: s => s.done === true,
+}, NV));
+const counters = steps.flatMap(s => [
+  new NFA(counterNFA(MOD_A), 'walk-order', s.id, posA.at(s.a), posA.at(s.b)),
+  new NFA(counterNFA(MOD_B), 'walk-order', s.id, posB.at(s.a), posB.at(s.b)),
+]);
+
+// --- Test constraint ------------------------------------------------------
+// Reads the step, then the two digits it joins; an unused step says nothing.
+const testNFA = cached('test', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return { k: 1, used: value !== UNUSED };
+    if (s.k === 1) return { k: 2, used: s.used, a: value };
+    if (s.k !== 2) return undefined;
+    if (!s.used) return { done: true };
+    return ((s.a + value) % 2 === 1 && Math.abs(s.a - value) >= 5)
+      ? { done: true } : undefined;
+  },
+  accept: s => s.done === true,
+}, NV));
+const testConstraint = steps.map(
+  s => new NFA(testNFA, 'test-constraint', s.id, s.a, s.b));
+
+// --- Fruit and doors ------------------------------------------------------
+const blackcurrants = BLACKCURRANTS.map(([x, y]) => new BlackDot(x, y));
+// An arrow's edge may only be crossed towards the cell it points at, so its step
+// keeps only the unused value and the two rats' values for that one direction.
+const doors = DOORS.flatMap(([from, to]) => {
+  const step = stepBetween(from, to);
+  const along = step.a === from ? [A_FWD, B_FWD] : [A_BWD, B_BWD];
+  return [
+    new GreaterThan(from, to),
+    new Given(step.id, UNUSED, ...along),
+  ];
+});
+
+// --- Variables and domains ------------------------------------------------
+const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, n) => lo + n);
+const layers = [
+  posA.toVar('walk position mod ' + MOD_A),
+  posB.toVar('walk position mod ' + MOD_B),
+  new Var('S', 'walk steps', steps.length),
+];
+const domains = [
+  graph.makeReplicate(new Given(gridCells[0], ...range(1, 9))),
+  // VA needs no domain of its own: the OFF sentinel plus MOD_A residues is
+  // exactly the widened alphabet.
+  posB.makeReplicate(new Given(posB.at(gridCells[0]), ...range(1, MOD_B + 1))),
+  // The step Vars need no domain of their own: the walk-cell machines accept no
+  // value on them but unused / in / out, for either rat.
+  // Each rat's own cell is the first cell of its walk; without this the whole
+  // numbering of a walk could rotate freely through the residues.
+  ...[RAT_A, RAT_B].flatMap(cell => [
+    new Given(posA.at(cell), FIRST), new Given(posB.at(cell), FIRST)]),
+];
 
 return [
-  new Shape('9x9'),
-  path.toVar('path'),
-  // --- Blackcurrants: one digit is double the other.
-  new BlackDot('R2C4', 'R2C5'),
-  new BlackDot('R3C4', 'R4C4'),
-  // --- Purple arrows point to the smaller of the two adjacent digits
-  // (direction of traversal is omitted, see header).
-  new GreaterThan('R8C6', 'R8C5'),
-  new GreaterThan('R8C9', 'R9C9'),
-  // --- Path membership domain: every cell is Finkz's path, Phinx's path, or
-  // off.
-  path.makeReplicate(new Given(originCell, ON_A, ON_B, OFF)),
-  // --- Fixed starts.
-  new Given(pathCell('R1C1'), ON_A),
-  new Given(pathCell('R9C9'), ON_B),
-  // --- Cupcake endpoints: the rules only require "two different cupcakes",
-  // not a fixed rat/cupcake pairing, so which rat ends at which cupcake is a
-  // genuine disjunction.
-  new Or([
-    new And([new Given(pathCell('R2C1'), ON_A), new Given(pathCell('R8C9'), ON_B)]),
-    new And([new Given(pathCell('R2C1'), ON_B), new Given(pathCell('R8C9'), ON_A)]),
-  ]),
-  // --- Single connected path per value: combined with the degree rules below
-  // (two fixed-identity endpoints per value at degree 1, all other on-value
-  // cells at degree 2), this forces the on-value cells to form exactly one
-  // simple path, applied once per path value.
-  new ConnectedValues('VP', ON_A),
-  new ConnectedValues('VP', ON_B),
-  ...gridCells.map(cell => {
-    const machine = ENDPOINTS.includes(cell) ? degree1Machine : degree2Machine;
-    return new NFA(machine, 'degree', pathCell(cell), ...path.at(graph.neighbours(cell)));
-  }),
-  ...gridCells.flatMap(u => {
-    return graph.neighbours(u).flatMap(v => {
-      const key = [u, v].sort().join('-');
-      if (seenEdges.has(key)) return [];
-      seenEdges.add(key);
-      return [new NFA(samePathParityMachine, 'path-parity', pathCell(u), u, pathCell(v), v)];
-    });
-  }),
+  shape,
+  ...layers,
+  ...domains,
+  ...walkShape,
+  ...counters,
+  ...testConstraint,
+  ...blackcurrants,
+  ...doors,
 ];
