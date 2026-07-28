@@ -42,7 +42,7 @@ const eraserLinks = graph.cells().map(
   cell => new Pair(eraserLinkKey, 'digit/value link', cell, effAt(cell)));
 
 // Exactly one eraser (effective value 0) in every row, column, and box.
-const oneEraserPerHouse = graph.houses().map(
+const oneEraserPerHouse = graph.rowsColumnsBoxes().map(
   house => new ContainExact('0', ...eff.at(house)));
 
 // The nine eraser cells hold nine different digits. Capture, per row, the

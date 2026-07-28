@@ -24,9 +24,9 @@ return [
   new Given('R1C1', 1),
   left.toVar('left grid'),
   right.toVar('right grid'),
-  ...graph.houses().flatMap(house => [
-    new AllDifferent(...left.at(house)),
-    new AllDifferent(...right.at(house)),
+  ...graph.rowsColumnsBoxes().flatMap(region => [
+    new AllDifferent(...left.at(region)),
+    new AllDifferent(...right.at(region)),
   ]),
   new AllDifferent(...left.at(circles)),
   new AllDifferent(...right.at(circles)),

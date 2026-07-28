@@ -233,7 +233,7 @@ for (const cell of gridCells) {
 
 // --- Boosters and values --------------------------------------------------
 // One booster per row, column and box.
-const boosterHouses = graph.houses().map(
+const boosterHouses = graph.rowsColumnsBoxes().map(
   house => new ContainExact(String(2), ...boost.at(house)));
 // The nine booster digits are all different. VD<n> is row n's booster digit;
 // with exactly one booster in the row it is that cell's digit and nothing else.

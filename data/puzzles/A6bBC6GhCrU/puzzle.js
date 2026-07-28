@@ -14,7 +14,7 @@ const snatchers = graph.makeOverlay('VB');
 
 // A flag is 1 when absent and 2 when the cell has that hidden role. A nine-cell
 // house sums to 10 exactly when it contains one role cell.
-const onePerHouse = flags => graph.houses().map(
+const onePerHouse = flags => graph.rowsColumnsBoxes().map(
   house => new Sum(10, ...flags.at(house)));
 
 // Each row has exactly one role cell. Its digit is tied to that row's role-digit

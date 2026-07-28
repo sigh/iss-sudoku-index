@@ -16,7 +16,7 @@ const condemned = graph.makeOverlay('VC');
 const flagDomain = condemned.makeReplicate(new Given(condemned.at('R1C1'), 0, 1));
 
 // Each row, column, and box contains exactly one condemned cell.
-const condemnedHouseCounts = graph.houses().map(house =>
+const condemnedHouseCounts = graph.rowsColumnsBoxes().map(house =>
   new Sum(1, ...condemned.at(house))
 );
 

@@ -39,7 +39,7 @@ const halverStates = gridCells.map(
 // One halver per row, column and box: exactly eight of the nine overlay cells
 // of each house are 0.
 const eightZeros = Array(8).fill(0).join('_');
-const oneHalverPerHouse = graph.houses().map(
+const oneHalverPerHouse = graph.rowsColumnsBoxes().map(
   house => new ContainExact(eightZeros, ...halver.at(house)));
 
 // The nine halver digits are all different, i.e. every digit is halved once.

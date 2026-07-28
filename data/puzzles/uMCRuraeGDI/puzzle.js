@@ -233,7 +233,7 @@ for (const cell of gridCells) {
 
 // --- Nullifiers ---------------------------------------------------------------
 // One nullifier per row, column and box.
-const nullifierRules = graph.houses().map(
+const nullifierRules = graph.rowsColumnsBoxes().map(
   cells => new ContainExact(String(NUL), ...nullFlag.at(cells)));
 // The nine nullifier digits are all different. rowNullDigit(n) is row n's
 // nullifier digit; with exactly one nullifier in the row it is that cell's
@@ -327,7 +327,7 @@ const houseSumKey = cached('house-sum-13', () => NFA.encodeSpec({
   },
   accept: s => s.k === 27 && (!s.any || s.sum === 13),
 }, NV));
-const testConstraints = graph.houses().map(cells => new NFA(houseSumKey, 'test-constraint-13',
+const testConstraints = graph.rowsColumnsBoxes().map(cells => new NFA(houseSumKey, 'test-constraint-13',
   ...cells.flatMap(cell => [posA.at(cell), nullFlag.at(cell), cell])));
 
 // --- Variables and domains ---------------------------------------------------

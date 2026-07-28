@@ -36,7 +36,7 @@ const water = graph.makeOverlay('VW');
 
 // Exactly one flagged cell per house (row/column/box): with 9 cells encoded
 // 1/2 and exactly one 2, the house sums to 8*1 + 1*2 = 10.
-const oneHotPerHouse = (flags) => graph.houses().map(
+const oneHotPerHouse = (flags) => graph.rowsColumnsBoxes().map(
   (house) => new Sum(10, ...house.map((cell) => flags.at(cell))));
 
 // Per-box local coordinates (0,1,2 within the box, row-major), needed to work

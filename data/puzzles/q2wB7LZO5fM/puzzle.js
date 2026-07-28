@@ -117,7 +117,7 @@ return [
   // Middler flags: a boolean overlay (2 = Middler), exactly one per house.
   flags.toVar('Middler flags'),
   flagDomain,
-  ...graph.houses().map(house => new Sum(10, ...flags.at(house))),
+  ...graph.rowsColumnsBoxes().map(house => new Sum(10, ...flags.at(house))),
   midDigit,
   ...rowMidConstraints,
   new AllDifferent(...midDigit.cells()),

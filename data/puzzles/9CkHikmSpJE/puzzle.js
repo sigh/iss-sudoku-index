@@ -257,7 +257,7 @@ for (const cell of gridCells) {
 
 // --- Copycats and values --------------------------------------------------
 // One copycat per row, column and box.
-const copycatHouses = graph.houses().map(
+const copycatHouses = graph.rowsColumnsBoxes().map(
   house => new ContainExact(String(COPYCAT), ...copy.at(house)));
 // The nine copycat digits are all different. VD<n> is row n's copycat digit;
 // with exactly one copycat in the row it is that cell's digit and nothing else.

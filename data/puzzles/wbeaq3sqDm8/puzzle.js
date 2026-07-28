@@ -24,7 +24,7 @@ const markerDigitLinks = gridCells.map(cell => new Pair(
   markers.at(cell)));
 
 const eightOrdinary = Array(8).fill(ORDINARY).join('_');
-const oneInfluencerPerHouse = graph.houses().map(
+const oneInfluencerPerHouse = graph.rowsColumnsBoxes().map(
   cells => new ContainExact(eightOrdinary, ...markers.at(cells)));
 
 // Marker values 1..9 encode influencer digits 1..9. Requiring each exactly

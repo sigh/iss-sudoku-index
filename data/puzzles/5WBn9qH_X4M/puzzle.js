@@ -63,7 +63,7 @@ const vampireDigitGivens = boxes.map((box) => new Given(vampireDigit.at(box[0]),
 
 // Exactly one vampire (role 2) and one victim (role 3) cell among each row,
 // column, and box's 9 role cells (the remaining 7 are role 1, normal).
-const roleDistributionConstraints = graph.houses().map(cells =>
+const roleDistributionConstraints = graph.rowsColumnsBoxes().map(cells =>
   new ContainExact('1_1_1_1_1_1_1_2_3', ...roles.at(cells)));
 
 // Scans a box's 9 (digit, role) pairs, then the target Var, and accepts iff

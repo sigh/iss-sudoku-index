@@ -84,7 +84,7 @@ const slashOrder = SLASH_CELLS.map(cell => new Pair(
 const graph = cellGraph(shape);
 const unitSlots = (cells) => cells.flatMap(
   cell => auxCell.has(cell) ? [cell, auxCell.get(cell)] : [cell]);
-const unitGroups = graph.houses().map(cells => new AllDifferent(...unitSlots(cells)));
+const unitGroups = graph.rowsColumnsBoxes().map(cells => new AllDifferent(...unitSlots(cells)));
 
 return [
   shape,

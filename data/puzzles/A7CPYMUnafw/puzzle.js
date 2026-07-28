@@ -43,7 +43,7 @@ const starDomain = star.makeReplicate(
   new Given(firstStar, NOT_STAR, STAR));
 
 // Star Battle: exactly two stars per row/column/box.
-const starCount = graph.houses().map(
+const starCount = graph.rowsColumnsBoxes().map(
   house => new ContainExact(`${STAR}_${STAR}`, ...star.at(house)));
 
 // Star Battle: no two stars touch orthogonally or diagonally (king-move).

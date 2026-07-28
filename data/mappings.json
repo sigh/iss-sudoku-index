@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T10:47:38.896035+00:00",
+  "generated_at": "2026-07-28T11:30:26.416007+00:00",
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -7743,7 +7743,7 @@
       "solve_ms": 41299.8,
       "iss_size": 200806,
       "iss_url_length": 200741,
-      "script_size": 19523
+      "script_size": 19533
     },
     {
       "puzzle_id": "S86fcufw2T8",
@@ -9192,7 +9192,7 @@
       "solve_ms": 8782.2,
       "iss_size": 143015,
       "iss_url_length": 128039,
-      "script_size": 9318
+      "script_size": 9328
     },
     {
       "puzzle_id": "sFUTQioeDaw",
@@ -10596,7 +10596,7 @@
       "solve_ms": 203.3,
       "iss_size": 5177,
       "iss_url_length": 5255,
-      "script_size": 6046
+      "script_size": 6056
     },
     {
       "puzzle_id": "zHznepDRqFE",
@@ -11127,7 +11127,7 @@
       "solve_ms": 58395.0,
       "iss_size": 41481,
       "iss_url_length": 41474,
-      "script_size": 16752
+      "script_size": 16762
     },
     {
       "puzzle_id": "MMUnGPSttjI",
@@ -12323,7 +12323,7 @@
       "solve_ms": 837.1,
       "iss_size": 7000,
       "iss_url_length": 7067,
-      "script_size": 5267
+      "script_size": 5277
     },
     {
       "puzzle_id": "Bq_I16-UJAg",
@@ -12497,7 +12497,7 @@
       "solve_ms": 31.2,
       "iss_size": 16953,
       "iss_url_length": 16410,
-      "script_size": 5968
+      "script_size": 5978
     },
     {
       "puzzle_id": "BRYSUrKXZHc",
@@ -19072,7 +19072,7 @@
       "solve_ms": 11.3,
       "iss_size": 7594,
       "iss_url_length": 7597,
-      "script_size": 2510
+      "script_size": 2520
     },
     {
       "puzzle_id": "BSFF2g0gf3A",
@@ -19615,7 +19615,7 @@
       "solve_ms": 43.3,
       "iss_size": 12410,
       "iss_url_length": 12520,
-      "script_size": 5744
+      "script_size": 5754
     },
     {
       "puzzle_id": "wJBbBTAxq3s",
@@ -22349,7 +22349,7 @@
       "solve_ms": 9370.5,
       "iss_size": 21542,
       "iss_url_length": 21591,
-      "script_size": 3091
+      "script_size": 3101
     },
     {
       "puzzle_id": "O5szvG2sxv8",
@@ -29446,7 +29446,7 @@
       "solve_ms": 201.7,
       "iss_size": 17188,
       "iss_url_length": 17156,
-      "script_size": 9768
+      "script_size": 9778
     },
     {
       "puzzle_id": "jZbmMuEobuQ",
@@ -31187,7 +31187,7 @@
       "solve_ms": 653.7,
       "iss_size": 5020,
       "iss_url_length": 5075,
-      "script_size": 4746
+      "script_size": 4756
     },
     {
       "puzzle_id": "01mr-g5G5co",
@@ -35268,7 +35268,7 @@
       "solve_ms": 5892.0,
       "iss_size": 17940,
       "iss_url_length": 17935,
-      "script_size": 17709
+      "script_size": 17719
     },
     {
       "puzzle_id": "vcoiiZ7GBPc",
@@ -35991,7 +35991,7 @@
       "solve_ms": 19803.9,
       "iss_size": 72864,
       "iss_url_length": 72893,
-      "script_size": 19042
+      "script_size": 19052
     },
     {
       "puzzle_id": "_991BH3o0D4",
@@ -37017,7 +37017,7 @@
       "solve_ms": 1.7,
       "iss_size": 1610,
       "iss_url_length": 1661,
-      "script_size": 3942
+      "script_size": 3952
     },
     {
       "puzzle_id": "83J-IuhRL2M.3",
@@ -37159,7 +37159,7 @@
       "solve_ms": 8518.6,
       "iss_size": 31994,
       "iss_url_length": 31999,
-      "script_size": 16998
+      "script_size": 17018
     },
     {
       "puzzle_id": "XvI67enEcFw",
@@ -38936,10 +38936,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 4,
-      "solve_ms": 20.9,
+      "solve_ms": 25.0,
       "iss_size": 35037,
       "iss_url_length": 35314,
-      "script_size": 8718
+      "script_size": 8616
     },
     {
       "puzzle_id": "pry83BrP3RQ",
@@ -39155,7 +39155,7 @@
       "solve_ms": 86.4,
       "iss_size": 11934,
       "iss_url_length": 10969,
-      "script_size": 2029
+      "script_size": 2039
     },
     {
       "puzzle_id": "UBuQxAfGF-o",
@@ -39667,7 +39667,7 @@
       "solve_ms": 17.5,
       "iss_size": 3532,
       "iss_url_length": 3520,
-      "script_size": 1422
+      "script_size": 1435
     },
     {
       "puzzle_id": "1T8O4LUXGmE",

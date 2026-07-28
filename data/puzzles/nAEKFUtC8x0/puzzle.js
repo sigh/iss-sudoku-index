@@ -87,7 +87,7 @@ const houseSpec = cached('house', () => NFA.encodeSpec({
   },
   accept: s => !s.second && s.mask === HFULL,
 }, shape));
-const schrodingerHouses = graph.houses().map(house =>
+const schrodingerHouses = graph.rowsColumnsBoxes().map(house =>
   new NFA(houseSpec, 'schrodinger-house', ...house.flatMap(c => [c, VS.at(c)])));
 
 // Per-cell value: the digit, or the sum of both digits when a second digit is

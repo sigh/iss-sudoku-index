@@ -17,7 +17,7 @@ const gridDigitDomain = graph.makeReplicate(
   new Given(gridCells[0], ...DIGITS));
 
 // Exactly one adjustment of 3 in every row, column, and box.
-const oneThreeSumPerHouse = graph.houses().map(
+const oneThreeSumPerHouse = graph.rowsColumnsBoxes().map(
   cells => new ContainExact('3', ...adjustment.at(cells)));
 
 // Each row's scan also copies its unique three-sum digit into a capture cell.

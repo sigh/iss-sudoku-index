@@ -185,9 +185,9 @@ function lineConstraints(name, clues, digitCells, shadeCells) {
 function gridLines(label, clueRows, clueCols, digits, shades) {
   return [
     ...clueRows.flatMap((clues, i) => lineConstraints(
-      `${label} row ${i + 1}`, clues, digits(graph.row(i + 1)), shades(graph.row(i + 1)))),
+      `${label} row ${i + 1}`, clues, digits.row(i + 1), shades.row(i + 1))),
     ...clueCols.flatMap((clues, i) => lineConstraints(
-      `${label} col ${i + 1}`, clues, digits(graph.column(i + 1)), shades(graph.column(i + 1)))),
+      `${label} col ${i + 1}`, clues, digits.column(i + 1), shades.column(i + 1))),
   ];
 }
 
@@ -198,15 +198,15 @@ return [
   shadeB.toVar('puzzle B shading'),
 
   // Puzzle B is an ordinary Sudoku grid in its own right.
-  ...graph.houses().map((cells) => new AllDifferent(...gridB.at(cells))),
+  ...gridB.rowsColumnsBoxes().map((cells) => new AllDifferent(...cells)),
 
   // Puzzle A shades red only; puzzle B shades in six colours.
   shadeA.makeReplicate(new Given(shadeA.at('R1C1'), UNSHADED, RED)),
   shadeB.makeReplicate(new Given(shadeB.at('R1C1'), UNSHADED,
     GRAY, GREEN, DARKBLUE, LIGHTBLUE, PINK, YELLOW)),
 
-  ...gridLines('A', A_ROW_CLUES, A_COL_CLUES, (cells) => cells, (cells) => shadeA.at(cells)),
-  ...gridLines('B', B_ROW_CLUES, B_COL_CLUES, (cells) => gridB.at(cells), (cells) => shadeB.at(cells)),
+  ...gridLines('A', A_ROW_CLUES, A_COL_CLUES, graph, shadeA),
+  ...gridLines('B', B_ROW_CLUES, B_COL_CLUES, gridB, shadeB),
 
   new BlackDot('R2C8', 'R2C9'),
 ];

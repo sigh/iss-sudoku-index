@@ -278,7 +278,7 @@ const teleportDigits = [
 // One mirror cell per row, column and box: ContainExact(2, ...) over every
 // house says the mirror flag hits exactly once. No drawn mark says which
 // cell -- the flag is free, discovered like any other digit.
-const mirrorHouses = graph.houses().map(
+const mirrorHouses = graph.rowsColumnsBoxes().map(
   house => new ContainExact(String(2), ...mirr.at(house)));
 // Mirror cells may not hold a teleport.
 const mirrorNotTeleport = TELEPORTS.flat().map(cell => new Given(mirr.at(cell), 1));
