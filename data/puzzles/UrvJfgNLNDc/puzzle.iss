@@ -1,6 +1,6 @@
 .Shape~1x1~0-9
 .~R1C1_0~VG1_0~VG2_0~VG3_0~VG8_0~VG9_0~VG10_0~VG11_0~VG16_0~VG24_0
-.Var~G~Grid%20including%20pinned%20black%20cells~80
+.Var~G~Grid%20including%20pinned%20black%20cells~10x8
 .AllDifferent~VG4~VG5~VG6~VG7
 .AllDifferent~VG12~VG13~VG14~VG15
 .AllDifferent~VG17~VG18~VG19~VG20~VG21~VG22~VG23

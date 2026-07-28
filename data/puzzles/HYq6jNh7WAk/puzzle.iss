@@ -1,6 +1,7 @@
-.WhiteDot~R7C9~R8C9
 .WhiteDot~R1C1~R1C2
 .WhiteDot~R1C1~R2C1
-.BlackDot~R8C8~R9C8
-.BlackDot~R2C1~R3C1
+.WhiteDot~R7C9~R8C9
 .BlackDot~R1C2~R1C3
+.BlackDot~R2C1~R3C1
+.BlackDot~R8C8~R9C8
+.AllDifferent~R1C1~R1C9~R2C6~R2C8~R3C3~R4C4~R6C3~R8C4

@@ -1,0 +1,23 @@
+// Title: Off Killter
+// Author: Skeptical Mario
+// Video: https://www.youtube.com/watch?v=hOE0wUarHWs
+// Source: https://sudokupad.app/ceqp9e6ufs
+
+// Standard 9x9 Sudoku. Each listed killer cage has its drawn total and no repeated digit.
+// Cage cell lists are transcribed from the drawn cage geometry.
+return [
+  new Shape('9x9'),
+  new Cage(14, 'R7C2', 'R7C3'),
+  new Cage(17, 'R8C7', 'R8C8', 'R8C9', 'R9C7', 'R9C8'),
+  new Cage(15, 'R4C9', 'R5C9'),
+  new Cage(13, 'R1C7', 'R1C8', 'R2C7', 'R2C8'),
+  new Cage(7, 'R1C1', 'R2C1'),
+  new Cage(25, 'R4C2', 'R4C3', 'R5C2', 'R5C3'),
+  new Cage(15, 'R6C4', 'R6C5', 'R6C6'),
+  new Cage(17, 'R8C1', 'R8C2', 'R9C1'),
+  new Cage(9, 'R1C2', 'R2C2'),
+  new Cage(28, 'R3C5', 'R3C6', 'R4C6', 'R4C7', 'R5C7'),
+  new Cage(12, 'R2C4', 'R2C5', 'R3C4'),
+  new Cage(13, 'R8C6', 'R9C6'),
+  new Cage(14, 'R4C4', 'R5C4', 'R5C5'),
+];

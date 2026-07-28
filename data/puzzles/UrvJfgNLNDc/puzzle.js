@@ -24,7 +24,8 @@ const playableIds = allIds.filter((_, i) =>
   layout[Math.floor(i / 8)][i % 8] === ".");
 const blackIds = allIds.filter((_, i) =>
   layout[Math.floor(i / 8)][i % 8] === "#");
-const grid = new Var("G", "Grid including pinned black cells", allIds.length);
+const grid = new Var("G", "Grid including pinned black cells",
+  `${rowNumbers.length}x${columnNumbers.length}`);
 const gridCells = grid.cells();
 const byId = new Map(allIds.map((id, i) => [id, gridCells[i]]));
 const cells = spec => spec.trim().split(/\s+/).map(id => byId.get(id));

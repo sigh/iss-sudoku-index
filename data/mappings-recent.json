@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T02:48:15.163036+00:00",
+  "generated_at": "2026-07-28T10:47:38.896035+00:00",
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -1988,24 +1988,18 @@
       "date": "2026-06-18",
       "status": "validated",
       "constraint_types": [
-        "BlackDot",
-        "Pair: adjacent line digits differ by at least 3",
-        "Pair: adjacent line digits differ by at least 2",
-        "Pair: adjacent line digits differ by at least 8",
-        "Pair: adjacent line digits differ by at least 7",
-        "Pair: adjacent line digits differ by at least 6",
-        "Pair: adjacent line digits differ by at least 5",
-        "Pair: adjacent line digits differ by at least 4"
+        "Whisper",
+        "BlackDot"
       ],
       "search_completed": true,
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 2,
-      "solve_ms": 5.4,
-      "iss_size": 935,
-      "iss_url_length": 1077,
-      "script_size": 1220
+      "solve_ms": 3.6,
+      "iss_size": 348,
+      "iss_url_length": 390,
+      "script_size": 889
     },
     {
       "puzzle_id": "ovnLIQzpdDY",
@@ -3281,22 +3275,30 @@
         "https://sudokupad.app/tl8tkze8mn"
       ],
       "date": "2026-05-31",
-      "status": "partial",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
         "BlackDot",
-        "NFA: gap-parity"
+        "AllDifferent",
+        "ConnectedValues",
+        "Sum",
+        "NFA: corner",
+        "NFA: path-degree",
+        "NFA: path-position",
+        "NFA: parity",
+        "NFA: path-step",
+        "Pair: corner"
       ],
       "search_completed": false,
       "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 1000,
-      "guesses": 1120,
-      "solve_ms": 42.4,
-      "iss_size": 2809,
-      "iss_url_length": 2854,
-      "script_size": 3437
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 118098,
+      "solve_ms": 9186.2,
+      "iss_size": 31925,
+      "iss_url_length": 31933,
+      "script_size": 15193
     },
     {
       "puzzle_id": "0LkWrGwclFo",

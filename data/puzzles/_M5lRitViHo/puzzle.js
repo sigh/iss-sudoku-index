@@ -19,18 +19,9 @@ const linePaths = [
   ['R7C1', 'R6C2'],
 ];
 
-function lineGapConstraints(path) {
-  const minimumDifference = path.length;
-  const key = Pair.fnToKey((a, b) => Math.abs(a - b) >= minimumDifference, 9);
-  const label = `adjacent line digits differ by at least ${minimumDifference}`;
-  return Array.from({ length: path.length - 1 }, (_, i) =>
-    new Pair(key, label, path[i], path[i + 1])
-  );
-}
-
 return [
   new Shape('9x9'),
-  ...linePaths.flatMap(lineGapConstraints),
+  ...linePaths.map(path => new Whisper(path.length, ...path)),
   new BlackDot('R1C8', 'R1C9'),
   new BlackDot('R2C6', 'R2C7'),
 ];

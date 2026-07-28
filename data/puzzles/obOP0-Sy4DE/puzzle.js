@@ -41,12 +41,12 @@ const greyStripes = [
 // zigzag patterns (starting "up" or starting "down"); encode that choice as
 // an Or of the two fully-determined patterns.
 //
-// The stripes run diagonally, so the built-in adjacent-pair line classes
-// (GreaterThan, Thermo, ...) do not apply: they bind pairs found by grid
-// (orthogonal) adjacency, which is empty for a diagonal stripe and silently
-// enforces nothing. Pair instead binds each call's two cells directly by
-// argument position, regardless of grid adjacency, so one Pair per edge with
-// a ">" relation correctly expresses the diagonal comparison.
+// The stripes run diagonally, so the built-in GreaterThan class does not
+// apply: it binds pairs found by grid (orthogonal) adjacency, which is empty
+// for a diagonal stripe and silently enforces nothing. Pair instead binds
+// each call's two cells directly by argument position, regardless of grid
+// adjacency, so one Pair per edge with a ">" relation correctly expresses
+// the diagonal comparison.
 const GREATER = Pair.fnToKey((a, b) => a > b, 9);
 function alternatingStripe(...cells) {
   const edges = [];
