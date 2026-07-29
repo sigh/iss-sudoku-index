@@ -1,0 +1,11 @@
+.RegionSumLine~R6C8~R5C7~R4C6~R3C7~R2C8
+.RegionSumLine~R2C6~R3C5~R4C4~R3C3~R2C2
+.RegionSumLine~R8C8~R7C7~R6C6~R7C5~R8C4
+.RegionSumLine~R8C2~R7C3~R6C4~R5C3~R4C2
+.Quad~R7C2~1~2~8~9
+.Quad~R7C4~3
+.Quad~R2C2~2~7
+.Quad~R2C5~3~4~7~8
+.Quad~R2C7~1~2~3~4
+.Quad~R5C7~7~9
+.Quad~R7C7~2~4~5~7

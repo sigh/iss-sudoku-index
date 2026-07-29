@@ -1,0 +1,10 @@
+.Var~S~water-land%20state~9x9
+.AllDifferent~R1C7~R3C2~R4C1~R4C4~R5C9~R7C4~R8C8~R9C2~R9C7
+.Replicate~_____________H~VS1
+.~VS1_1_2
+.End
+.Replicate~_7f_7f_7f_7f~VS1
+.NFA~UgIX_EMhTHQlX_CEIQhCEP_WxjGMYxn_Y1jGMYxn_YxzGMYxn_Yxj2MYxn_YxjIMYxn_YxjGRYxn_YxjGMkxn_YxjGMZNn_YxjGMYyn_ra1rWta3_ta1rWta3_te1rWta3_tbFrWta3_ta2bWta3_ta1tWta3_ta1rbta3_ta1rW5a3_ta1rWt23_ta1rWtb3-CEIQhCH_hCEIQhCH-hCEIQhD-whCEIQh-4QhCEIQ-8IQhCEIe-EIQhCEO_CEIQhCG_hCEIQhC_whCEIQhA~_no-mono-2x2~VS1~VS2~VS10~VS11
+.End
+.ConnectedValues~VS~1
+.~VS7_2~VS20_2~VS28_2~VS31_2~VS45_2~VS58_2~VS71_2~VS74_2~VS79_2

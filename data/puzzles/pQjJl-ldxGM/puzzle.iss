@@ -1,0 +1,12 @@
+.~R3C7_8
+.AntiKing
+.LittleKiller~36~R1C1
+.LittleKiller~33~R6C1
+.LittleKiller~33~R9C6
+.LittleKiller~22~R6C9
+.LittleKiller~7~R1C4
+.Sum~5~R9C9
+.Sandwich~33~R5
+.Sandwich~5~R8
+.Sandwich~22~R7
+.Sandwich~7~C5

@@ -1,0 +1,17 @@
+.~R1C8_5~R5C5_6~R9C2_8
+.Thermo~R4C1~R3C2~R2C3~R1C4
+.Thermo~R6C9~R7C8~R8C7~R9C6
+.Thermo~R8C5~R7C4~R6C3~R5C4
+.Thermo~R2C5~R3C6~R4C7~R5C6
+.Whisper~5~R1C2~R1C3
+.Whisper~5~R2C1~R3C1
+.Whisper~5~R7C9~R8C9
+.Whisper~5~R9C7~R9C8
+.Whisper~5~R3C5~R4C5
+.Whisper~5~R6C5~R7C5
+.Whisper~5~R5C7~R5C8
+.Whisper~5~R5C2~R5C3
+.Whisper~5~R9C3~R9C4
+.Whisper~5~R6C1~R7C1
+.Whisper~5~R3C9~R4C9
+.Whisper~5~R1C6~R1C7

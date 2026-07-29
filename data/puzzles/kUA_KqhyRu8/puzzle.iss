@@ -1,0 +1,12 @@
+.~R1C1_9~R9C9_9
+.LittleKiller~9~R1C7
+.LittleKiller~9~R1C4
+.LittleKiller~9~R9C8
+.LittleKiller~9~R9C7
+.Sandwich~9~R3
+.Sandwich~9~R4
+.Sandwich~9~R5
+.Sandwich~9~R7
+.Sandwich~9~C3
+.Sandwich~9~C4
+.Sandwich~9~C7

@@ -1,0 +1,12 @@
+.~R6C8_9~R9C1_2~R9C8_6
+.RegionSumLine~R3C1~R3C2~R3C3~R2C4~R1C5~R1C6~R2C7
+.RegionSumLine~R2C8~R3C9~R3C8~R4C7~R5C6
+.RegionSumLine~R4C6~R5C5~R6C4~R7C5
+.RegionSumLine~R4C5~R5C4~R6C3~R7C4
+.BlackDot~R2C8~R3C8
+.Replicate~_7f_7f_7f_7f_D
+.Pair~93-fvv_f___-_H~_not%201%3A2%20ratio~R1C1~R1C2
+.End
+.Replicate~__v_________
+.Pair~93-fvv_f___-_H~_not%201%3A2%20ratio~R1C1~R2C1
+.End

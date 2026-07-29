@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-07-28T11:30:26.416007+00:00",
+  "generated_at": "2026-07-29T13:20:11.900965+00:00",
   "rows": [
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -40264,6 +40264,2805 @@
       "iss_size": 12946,
       "iss_url_length": 13003,
       "script_size": 2240
+    },
+    {
+      "puzzle_id": "FSkzUCak25k",
+      "puzzle_title": "The Hare and the Tortoise",
+      "video_title": "The Hare And The Tortoise:  Among Us Meets Sudoku!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/qes8ggvsi4"
+      ],
+      "date": "2024-09-11",
+      "status": "partial",
+      "constraint_types": [
+        "Sum"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 999,
+      "guesses": 1037,
+      "solve_ms": 21.6,
+      "iss_size": 16,
+      "iss_url_length": 68,
+      "script_size": 403
+    },
+    {
+      "puzzle_id": "8kvMaY4LP1I",
+      "puzzle_title": "Alchemist Sudoku",
+      "video_title": "Alchemy in Sudoku",
+      "author": "Irius",
+      "sources": [
+        "https://sudokupad.app/HM48mhR9ff"
+      ],
+      "date": "2024-09-10",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow",
+        "Thermo",
+        "LittleKiller",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 5.3,
+      "iss_size": 537,
+      "iss_url_length": 570,
+      "script_size": 1847
+    },
+    {
+      "puzzle_id": "aNwVXvVvxFc",
+      "puzzle_title": "\u2211 or \u03bc",
+      "video_title": "\u2211 or \u03bc: The Sudoku Math Tricks",
+      "author": "Antiknight",
+      "sources": [
+        "https://sudokupad.app/yjy08cqz6p"
+      ],
+      "date": "2024-09-10",
+      "status": "validated",
+      "constraint_types": [
+        "Sum",
+        "Renban"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3450,
+      "solve_ms": 72.7,
+      "iss_size": 521,
+      "iss_url_length": 571,
+      "script_size": 1454
+    },
+    {
+      "puzzle_id": "4oIItj0ch-A",
+      "puzzle_title": "ISD 9/9/2024",
+      "video_title": "It's International Sudoku Day! Try this puzzle",
+      "author": "Grant McLean",
+      "sources": [
+        "https://sudokupad.app/k1spkwhpl7"
+      ],
+      "date": "2024-09-09",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Thermo",
+        "AntiConsecutive"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 5.1,
+      "iss_size": 274,
+      "iss_url_length": 314,
+      "script_size": 942
+    },
+    {
+      "puzzle_id": "-egiLh6s-nw",
+      "puzzle_title": "Center Clash",
+      "video_title": "Computers Cannot Understand This Sudoku.  Can A Human?",
+      "author": "Blashyrkh",
+      "sources": [
+        "https://sudokupad.app/ur2bt9j05l"
+      ],
+      "date": "2024-09-09",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 98,
+      "solve_ms": 8.7,
+      "iss_size": 151,
+      "iss_url_length": 200,
+      "script_size": 550
+    },
+    {
+      "puzzle_id": "AA8IY4sNSuw",
+      "puzzle_title": "Mad 4 Diagonalz",
+      "video_title": "Crazy Patterns in a Puzzle",
+      "author": "Chris Napolitano",
+      "sources": [
+        "https://sudokupad.app/pblc50fmga"
+      ],
+      "date": "2024-09-08",
+      "status": "validated",
+      "constraint_types": [
+        "Replicate",
+        "Pair: diagonal even repeat"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 10,
+      "solve_ms": 5.3,
+      "iss_size": 1538,
+      "iss_url_length": 1606,
+      "script_size": 2079
+    },
+    {
+      "puzzle_id": "RceIm4QX-u0",
+      "puzzle_title": "Twelve Spots",
+      "video_title": "Can You Join These Twelve Dots?",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/7m4vgf6l3t"
+      ],
+      "date": "2024-09-08",
+      "status": "partial",
+      "constraint_types": [
+        "6x6",
+        "1-7",
+        "Var",
+        "Replicate",
+        "ContainExact",
+        "Sum",
+        "NFA: turquoise path cell",
+        "NFA: same difference step",
+        "Pair: no diagonal crossing"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 141086,
+      "solve_ms": 6703.2,
+      "iss_size": 6060,
+      "iss_url_length": 6122,
+      "script_size": 4500
+    },
+    {
+      "puzzle_id": "7EFoLh-Pjh8",
+      "puzzle_title": "The Lizard Baby Disambiguation",
+      "video_title": "Who Knows if it's a Lizard or a Baby?",
+      "author": "olima",
+      "sources": [
+        "https://sudokupad.app/8c67u7k14l"
+      ],
+      "date": "2024-09-07",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "WhiteDot",
+        "BlackDot",
+        "Indexing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 41,
+      "solve_ms": 8.7,
+      "iss_size": 368,
+      "iss_url_length": 410,
+      "script_size": 1141
+    },
+    {
+      "puzzle_id": "QvtYrZfHa2c",
+      "puzzle_title": "13",
+      "video_title": "When is a Noob an Experienced Expert?",
+      "author": "Sudoku Noob",
+      "sources": [
+        "https://sudokupad.app/LnNgNPRpDL"
+      ],
+      "date": "2024-09-06",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "Cage",
+        "AllDifferent",
+        "X",
+        "Sandwich"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 6.1,
+      "iss_size": 432,
+      "iss_url_length": 467,
+      "script_size": 1494
+    },
+    {
+      "puzzle_id": "W3h5_lkqnTU",
+      "puzzle_title": "Compression",
+      "video_title": "This Sudoku Is Astonishing [MUST WATCH]",
+      "author": "Jay Dyer",
+      "sources": [
+        "https://sudokupad.app/7xe7r6dwgb"
+      ],
+      "date": "2024-09-06",
+      "status": "too-slow",
+      "constraint_types": [
+        "RegionSumLine"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 330037,
+      "solve_ms": 2915.2,
+      "iss_size": 404,
+      "iss_url_length": 447,
+      "script_size": 919
+    },
+    {
+      "puzzle_id": "EQ7OyVHemlw",
+      "puzzle_title": "The Continental",
+      "video_title": "Struggling with the Vaults - Again!",
+      "author": "Blobz",
+      "sources": [
+        "https://sudokupad.app/blobz/the-continental"
+      ],
+      "date": "2024-09-05",
+      "status": "partial",
+      "constraint_types": [
+        "Cage",
+        "AllDifferent",
+        "NFA: cage boundary"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 1000,
+      "guesses": 1030,
+      "solve_ms": 85.8,
+      "iss_size": 1656,
+      "iss_url_length": 1697,
+      "script_size": 2539
+    },
+    {
+      "puzzle_id": "j5gUSoGqtec",
+      "puzzle_title": "Have you Heard?",
+      "video_title": "Have you Heard This Before?",
+      "author": "rysmyth",
+      "sources": [
+        "https://sudokupad.app/bnL6qqT9DT"
+      ],
+      "date": "2024-09-04",
+      "status": "validated",
+      "constraint_types": [
+        "0-15",
+        "Var",
+        "Replicate",
+        "Sum",
+        "AllDifferent",
+        "Thermo",
+        "Arrow",
+        "Quad",
+        "Pair: C is at most 45",
+        "Pair: E is at most 45",
+        "Pair: H is at most 45",
+        "Pair: R is at most 45",
+        "Pair: S is at most 45",
+        "Pair: T is at most 45",
+        "Pair: X is at most 45",
+        "Pair: Y is at most 45",
+        "NFA: C/E different",
+        "NFA: C/H different",
+        "NFA: C/R different",
+        "NFA: C/S different",
+        "NFA: C/T different",
+        "NFA: C/X different",
+        "NFA: C/Y different",
+        "NFA: E/H different",
+        "NFA: E/R different",
+        "NFA: E/S different",
+        "NFA: E/T different",
+        "NFA: E/X different",
+        "NFA: E/Y different",
+        "NFA: H/R different",
+        "NFA: H/S different",
+        "NFA: H/T different",
+        "NFA: H/X different",
+        "NFA: H/Y different",
+        "NFA: R/S different",
+        "NFA: R/T different",
+        "NFA: R/X different",
+        "NFA: R/Y different",
+        "NFA: S/T different",
+        "NFA: S/X different",
+        "NFA: S/Y different",
+        "NFA: T/X different",
+        "NFA: T/Y different",
+        "NFA: X/Y different",
+        "NFA: C above C6",
+        "NFA: E above C3",
+        "NFA: E above C5",
+        "NFA: E above C8",
+        "NFA: H above C2",
+        "NFA: R above C7",
+        "NFA: S above C4",
+        "NFA: T above C1",
+        "NFA: T above C9",
+        "NFA: X left of R1",
+        "NFA: Y left of R2"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 15.7,
+      "iss_size": 6357,
+      "iss_url_length": 6708,
+      "script_size": 5085
+    },
+    {
+      "puzzle_id": "0mm4BgeH3bk",
+      "puzzle_title": "Qaak",
+      "video_title": "Only 2 People Per Month Can Solve This Puzzle",
+      "author": "dumediat",
+      "sources": [
+        "https://sudokupad.app/zroqrn8dgg"
+      ],
+      "date": "2024-09-04",
+      "status": "partial",
+      "constraint_types": [
+        "6x6",
+        "1-9",
+        "RegionSize",
+        "Arrow",
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 159,
+      "guesses": 327,
+      "solve_ms": 10.9,
+      "iss_size": 245,
+      "iss_url_length": 287,
+      "script_size": 1127
+    },
+    {
+      "puzzle_id": "KNeY8WSAvjY",
+      "puzzle_title": "Inner Peas",
+      "video_title": "Inner Peas",
+      "author": "SamuPiano",
+      "sources": [
+        "https://sudokupad.app/qwd7jxoeym"
+      ],
+      "date": "2024-09-03",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no-mono-2x2"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 992,
+      "guesses": 1091,
+      "solve_ms": 25.1,
+      "iss_size": 464,
+      "iss_url_length": 510,
+      "script_size": 1676
+    },
+    {
+      "puzzle_id": "nrfbkezAzTs",
+      "puzzle_title": "No RePEAts!",
+      "video_title": "I Asked ChatGPT To Recommend A Sudoku....",
+      "author": "sujoyku",
+      "sources": [
+        "https://sudokupad.app/ww029llseg"
+      ],
+      "date": "2024-09-03",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "Or",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 161,
+      "solve_ms": 11.8,
+      "iss_size": 1064,
+      "iss_url_length": 1116,
+      "script_size": 1280
+    },
+    {
+      "puzzle_id": "eb2KNpWz2WU",
+      "puzzle_title": "Putting Green",
+      "video_title": "Putting Sudoku in the Picture",
+      "author": "Brinel",
+      "sources": [
+        "https://sudokupad.app/97xewlvvf5"
+      ],
+      "date": "2024-09-02",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "Whisper",
+        "EqualSum",
+        "WhiteDot",
+        "Quad"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 571,
+      "solve_ms": 26.2,
+      "iss_size": 436,
+      "iss_url_length": 476,
+      "script_size": 1467
+    },
+    {
+      "puzzle_id": "Z6WoPSQOYHU",
+      "puzzle_title": "Bookends",
+      "video_title": "The Sudoku With Only 6 Different Cages",
+      "author": "mnasti2",
+      "sources": [
+        "https://sudokupad.app/e0yukfm7p9"
+      ],
+      "date": "2024-09-02",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "1-12",
+        "Var",
+        "Sum",
+        "AllDifferent",
+        "NFA: effective-value",
+        "NFA: rank-1-is-lowest",
+        "NFA: rank-6-is-highest",
+        "NFA: different-cage-totals",
+        "NFA: each-digit-doubled-once"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 7107,
+      "solve_ms": 1008.3,
+      "iss_size": 9405,
+      "iss_url_length": 9446,
+      "script_size": 5453
+    },
+    {
+      "puzzle_id": "lpNjWkqywHU",
+      "puzzle_title": "Pining for the Fjords",
+      "video_title": "Pining for the Fjords",
+      "author": "trufflebear",
+      "sources": [
+        "https://sudokupad.app/6i91d5krhm"
+      ],
+      "date": "2024-09-01",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "Or",
+        "And",
+        "AllDifferent",
+        "Thermo",
+        "NFA: no-mono-2x2",
+        "NFA: mainland",
+        "NFA: signed cage -2",
+        "NFA: signed cage 2",
+        "NFA: signed cage 14",
+        "NFA: thermo-crossing",
+        "NFA: signed cage 18",
+        "NFA: signed cage -13",
+        "NFA: signed cage -8",
+        "NFA: signed cage 5",
+        "NFA: signed cage -23",
+        "NFA: signed cage -20"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1974,
+      "solve_ms": 175.6,
+      "iss_size": 11387,
+      "iss_url_length": 11426,
+      "script_size": 5651
+    },
+    {
+      "puzzle_id": "aonJknbuSdU",
+      "puzzle_title": "RAT RUN 10: Sensored",
+      "video_title": "The Final Rat Puzzle?  Finkz In The Fog!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/fjayk4klcz"
+      ],
+      "date": "2024-09-01",
+      "status": "partial",
+      "constraint_types": [
+        "1-16",
+        "Var",
+        "Replicate",
+        "BlackDot",
+        "AllDifferent",
+        "NFA: path-cell",
+        "NFA: shock-value",
+        "NFA: path-order",
+        "Pair: shock-value",
+        "Pair: no-crossing"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 739,
+      "guesses": 1145,
+      "solve_ms": 29.8,
+      "iss_size": 7626,
+      "iss_url_length": 7653,
+      "script_size": 7005
+    },
+    {
+      "puzzle_id": "TacENHHUfIc",
+      "puzzle_title": "Lief, the Univeres, and Everythign",
+      "video_title": "Everythign is Wrogn Here!",
+      "author": "SSG",
+      "sources": [
+        "https://sudokupad.app/3nkifpknc6"
+      ],
+      "date": "2024-08-31",
+      "status": "partial",
+      "constraint_types": [
+        "NFA: wrong quad",
+        "NFA: wrong parity",
+        "NFA: wrong entropy",
+        "NFA: wrong modular",
+        "NFA: wrong ambiguous thermo",
+        "NFA: wrong 42 cage",
+        "NFA: wrong Nabner",
+        "NFA: wrong renban"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 4962,
+      "guesses": 110039,
+      "solve_ms": 10421.0,
+      "iss_size": 8608,
+      "iss_url_length": 8678,
+      "script_size": 5077
+    },
+    {
+      "puzzle_id": "cV9vrTq_E4k",
+      "puzzle_title": "Killer's Circle",
+      "video_title": "Circling the Killer",
+      "author": "Skeptical Mario",
+      "sources": [
+        "https://sudokupad.app/fmlum9pis1"
+      ],
+      "date": "2024-08-30",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 32,
+      "solve_ms": 145.4,
+      "iss_size": 311,
+      "iss_url_length": 351,
+      "script_size": 895
+    },
+    {
+      "puzzle_id": "-uDAvlFbaYc",
+      "puzzle_title": "Mission Impossible",
+      "video_title": "Aad's Mission Impossible!",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/dxuvqdw2co"
+      ],
+      "date": "2024-08-30",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 50,
+      "solve_ms": 7.9,
+      "iss_size": 166,
+      "iss_url_length": 211,
+      "script_size": 717
+    },
+    {
+      "puzzle_id": "9uC7CXmte3U",
+      "puzzle_title": "22",
+      "video_title": "What if the secret number was 22?",
+      "author": "Bfranj17",
+      "sources": [
+        "https://sudokupad.app/fddFpq7HLn"
+      ],
+      "date": "2024-08-29",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 430,
+      "solve_ms": 33.7,
+      "iss_size": 413,
+      "iss_url_length": 449,
+      "script_size": 1060
+    },
+    {
+      "puzzle_id": "wCkp8Yiddoo",
+      "puzzle_title": "Copycat Confusion",
+      "video_title": "Phistomefel Breaks Our Brains",
+      "author": "Phistomefel",
+      "sources": [
+        "https://sudokupad.app/hrsnhhdbno"
+      ],
+      "date": "2024-08-29",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Sum",
+        "Thermo",
+        "RegionSumLine",
+        "Whisper",
+        "SameValues"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 13523,
+      "solve_ms": 292.4,
+      "iss_size": 1100,
+      "iss_url_length": 1123,
+      "script_size": 1889
+    },
+    {
+      "puzzle_id": "bemQf8z4EvM",
+      "puzzle_title": "Negative X+V",
+      "video_title": "Negative Boxes",
+      "author": "Bokke",
+      "sources": [
+        "https://sudokupad.app/wffccmftu1"
+      ],
+      "date": "2024-08-28",
+      "status": "validated",
+      "constraint_types": [
+        "NoBoxes",
+        "AllDifferent",
+        "Cage",
+        "X",
+        "V",
+        "StrictXV"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 33,
+      "solve_ms": 8.4,
+      "iss_size": 775,
+      "iss_url_length": 801,
+      "script_size": 1603
+    },
+    {
+      "puzzle_id": "VQs72Is9GxA",
+      "puzzle_title": "Fifteen Cages",
+      "video_title": "A 10/10 Fog Sudoku:  Fifteen Cages by James Sinclair",
+      "author": "James Sinclair",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/fifteen-cages"
+      ],
+      "date": "2024-08-28",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "AllDifferent",
+        "BlackDot",
+        "NFA: unequal cage totals"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 9,
+      "solve_ms": 14.1,
+      "iss_size": 7474,
+      "iss_url_length": 7516,
+      "script_size": 2787
+    },
+    {
+      "puzzle_id": "x793CREN40E",
+      "puzzle_title": "Spread",
+      "video_title": "Inspired by Phistomefel - Individually Exquisite",
+      "author": "Kennet\u2019s Dad",
+      "sources": [
+        "https://sudokupad.app/0m0zb2b86m"
+      ],
+      "date": "2024-08-27",
+      "status": "validated",
+      "constraint_types": [
+        "DoubleArrow",
+        "NFA: product-square"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 214,
+      "solve_ms": 18.3,
+      "iss_size": 879,
+      "iss_url_length": 918,
+      "script_size": 2299
+    },
+    {
+      "puzzle_id": "hRK7VVhO1eA",
+      "puzzle_title": "Ghost Cages",
+      "video_title": "The Ghost Cages",
+      "author": "Michael Lefkowitz",
+      "sources": [
+        "https://sudokupad.app/66g31006zr"
+      ],
+      "date": "2024-08-27",
+      "status": "partial",
+      "constraint_types": [],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 989,
+      "guesses": 1034,
+      "solve_ms": 21.6,
+      "iss_size": 29,
+      "iss_url_length": 81,
+      "script_size": 533
+    },
+    {
+      "puzzle_id": "9hvWfodvrCs",
+      "puzzle_title": "Time Flies Like an Arrow...",
+      "video_title": "Trying to get Finished before the Plumber ...",
+      "author": "Abdul the Killer",
+      "sources": [
+        "https://sudokupad.app/0787piuafi"
+      ],
+      "date": "2024-08-26",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no-mono-2x2",
+        "NFA: not-shaded-count",
+        "NFA: shaded-count",
+        "NFA: shade-iff"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 335,
+      "solve_ms": 132.5,
+      "iss_size": 11822,
+      "iss_url_length": 11863,
+      "script_size": 4839
+    },
+    {
+      "puzzle_id": "t2rs9YwG3sw",
+      "puzzle_title": "Bosnian Whisper",
+      "video_title": "The Bosnian Miracle Sudoku",
+      "author": "Cale Schoon",
+      "sources": [
+        "https://sudokupad.app/2oxam110an"
+      ],
+      "date": "2024-08-26",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no diagonal touch",
+        "NFA: loop degree",
+        "NFA: circle count",
+        "NFA: column loop whisper",
+        "NFA: row loop whisper"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 56769,
+      "solve_ms": 8006.6,
+      "iss_size": 4326,
+      "iss_url_length": 4385,
+      "script_size": 4510
+    },
+    {
+      "puzzle_id": "p-6xy-yjSHo",
+      "puzzle_title": "Vaulted Lattice",
+      "video_title": "More Amazing Parallel Lines!",
+      "author": "Blobz",
+      "sources": [
+        "https://sudokupad.app/blobz/vaulted-lattice"
+      ],
+      "date": "2024-08-25",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "Sum",
+        "NFA: Vault boundary"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 8.7,
+      "iss_size": 3602,
+      "iss_url_length": 3638,
+      "script_size": 2550
+    },
+    {
+      "puzzle_id": "r2CJi0cYV2s",
+      "puzzle_title": "RAT RUN 9: Shock Value",
+      "video_title": "Don't Electrocute The Rat!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/vaeya6u829"
+      ],
+      "date": "2024-08-25",
+      "status": "partial",
+      "constraint_types": [
+        "SameValues",
+        "BlackDot"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 999,
+      "guesses": 1039,
+      "solve_ms": 27.5,
+      "iss_size": 163,
+      "iss_url_length": 208,
+      "script_size": 918
+    },
+    {
+      "puzzle_id": "elfkvRAmEGw",
+      "puzzle_title": "Mathemagics",
+      "video_title": "The Magic of an Empty Grid",
+      "author": "Lithium-Ion",
+      "sources": [
+        "https://sudokupad.app/7BghrPt24L"
+      ],
+      "date": "2024-08-24",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no-touch",
+        "NFA: box-count",
+        "NFA: box-digit",
+        "NFA: degree",
+        "NFA: sum-off-loop"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 14,
+      "guesses": 1037,
+      "solve_ms": 350.3,
+      "iss_size": 7635,
+      "iss_url_length": 7660,
+      "script_size": 5258
+    },
+    {
+      "puzzle_id": "0W58C6iHnog",
+      "puzzle_title": "With friends like this...",
+      "video_title": "The Rat has Friends ...",
+      "author": "Ratfinkz ",
+      "sources": [
+        "https://sudokupad.app/vgpr0pfsqm"
+      ],
+      "date": "2024-08-23",
+      "status": "partial",
+      "constraint_types": [
+        "AllDifferent",
+        "WhiteDot",
+        "Pair: cage neighbours are not consecutive"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 600,
+      "guesses": 1010,
+      "solve_ms": 30.7,
+      "iss_size": 1074,
+      "iss_url_length": 1121,
+      "script_size": 1768
+    },
+    {
+      "puzzle_id": "T9WhzHIzjXs",
+      "puzzle_title": "Hooked",
+      "video_title": "Can The Sims Solve Sudoku?!",
+      "author": "Florian Wortmann",
+      "sources": [
+        "https://sudokupad.app/zd0vryms8s"
+      ],
+      "date": "2024-08-23",
+      "status": "validated",
+      "constraint_types": [
+        "RegionSumLine"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2438,
+      "solve_ms": 80.3,
+      "iss_size": 294,
+      "iss_url_length": 340,
+      "script_size": 756
+    },
+    {
+      "puzzle_id": "QDd4tK5XNLY",
+      "puzzle_title": "Mystery Product",
+      "video_title": "A Real Surprise Package",
+      "author": "Oddlyeven",
+      "sources": [
+        "https://sudokupad.app/lkztmzmo88"
+      ],
+      "date": "2024-08-22",
+      "status": "partial",
+      "constraint_types": [
+        "Sum"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 1000,
+      "guesses": 1042,
+      "solve_ms": 15.9,
+      "iss_size": 52,
+      "iss_url_length": 104,
+      "script_size": 336
+    },
+    {
+      "puzzle_id": "uooKw453hIY",
+      "puzzle_title": "Maximus Unique",
+      "video_title": "How Can This Be Someone's First Ever Sudoku?",
+      "author": "Krushed",
+      "sources": [
+        "https://sudokupad.app/pojaazbn3z"
+      ],
+      "date": "2024-08-22",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Cage",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 617,
+      "solve_ms": 53.5,
+      "iss_size": 300,
+      "iss_url_length": 339,
+      "script_size": 945
+    },
+    {
+      "puzzle_id": "L8_Wy191cy8",
+      "puzzle_title": "Cosmic Cages \ud83d\udcab",
+      "video_title": "Welcome to our Galaxy!",
+      "author": "yangang",
+      "sources": [
+        "https://sudokupad.app/gyouoafcwb"
+      ],
+      "date": "2024-08-21",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "vZWlLYfwWAw",
+      "puzzle_title": "Trace Amounts",
+      "video_title": "The EASY Sudoku With Just 2 Given Digits",
+      "author": "Michael Lefkowitz",
+      "sources": [
+        "https://sudokupad.app/j8w1vml1mn"
+      ],
+      "date": "2024-08-21",
+      "status": "partial",
+      "constraint_types": [
+        "6x6"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 1000,
+      "guesses": 1009,
+      "solve_ms": 18.9,
+      "iss_size": 26,
+      "iss_url_length": 77,
+      "script_size": 481
+    },
+    {
+      "puzzle_id": "tRmOWN2jmSQ",
+      "puzzle_title": "True Blue",
+      "video_title": "True Blue, like a Kangaroo?",
+      "author": "James Kopp",
+      "sources": [
+        "https://sudokupad.app/6G7Mj2Bdmm"
+      ],
+      "date": "2024-08-20",
+      "status": "validated",
+      "constraint_types": [
+        "RegionSumLine",
+        "BlackDot",
+        "Replicate",
+        "Pair: not 1:2 ratio"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 74,
+      "solve_ms": 21.4,
+      "iss_size": 366,
+      "iss_url_length": 419,
+      "script_size": 1637
+    },
+    {
+      "puzzle_id": "OqyXKDOhfDA",
+      "puzzle_title": "Zoom Out",
+      "video_title": "Phistomefel Recommended We Do This Puzzle!",
+      "author": "Myxo",
+      "sources": [
+        "https://sudokupad.app/vlkzbme0k2"
+      ],
+      "date": "2024-08-20",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Whisper"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3936,
+      "solve_ms": 410.9,
+      "iss_size": 386,
+      "iss_url_length": 422,
+      "script_size": 1113
+    },
+    {
+      "puzzle_id": "gmFFnXktWbo",
+      "puzzle_title": "This + This = That",
+      "video_title": "What is the Difference Between This and That?",
+      "author": "Eric Rathbun",
+      "sources": [
+        "https://sudokupad.app/hm38DDftrd"
+      ],
+      "date": "2024-08-19",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "WhiteDot",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1362,
+      "solve_ms": 120.3,
+      "iss_size": 375,
+      "iss_url_length": 410,
+      "script_size": 1122
+    },
+    {
+      "puzzle_id": "zLbJRhELssI",
+      "puzzle_title": "Bow Fishing",
+      "video_title": "Fishing for Compliments",
+      "author": "Scott Williams",
+      "sources": [
+        "https://sudokupad.app/huv80pdliu"
+      ],
+      "date": "2024-08-18",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow",
+        "Thermo"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 46,
+      "solve_ms": 14.7,
+      "iss_size": 410,
+      "iss_url_length": 444,
+      "script_size": 1435
+    },
+    {
+      "puzzle_id": "gMwY2CSqd7A",
+      "puzzle_title": "Aquanuradoku",
+      "video_title": "The Fairy Tale Sudoku",
+      "author": "Mennoo_",
+      "sources": [
+        "https://sudokupad.app/3gdgz1a4il"
+      ],
+      "date": "2024-08-18",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "Renban",
+        "WhiteDot",
+        "Or",
+        "And",
+        "Thermo"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 11,
+      "solve_ms": 10.3,
+      "iss_size": 1052,
+      "iss_url_length": 1019,
+      "script_size": 1530
+    },
+    {
+      "puzzle_id": "ZLfC5xE1jH0",
+      "puzzle_title": "Weird Bug",
+      "video_title": "Getting to Grips with a Bug",
+      "author": "Jay Dyer",
+      "sources": [
+        "https://sudokupad.app/by04qqkuna"
+      ],
+      "date": "2024-08-17",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 26,
+      "solve_ms": 7.6,
+      "iss_size": 418,
+      "iss_url_length": 453,
+      "script_size": 1080
+    },
+    {
+      "puzzle_id": "7e_gOdz3D7g",
+      "puzzle_title": "Parallel Interference",
+      "video_title": "What are Degrees of Freedom? Why do they Matter in Sudoku?",
+      "author": "Legor455",
+      "sources": [
+        "https://sudokupad.app/pp93atpfih"
+      ],
+      "date": "2024-08-16",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "LittleKiller",
+        "Diagonal"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 6.4,
+      "iss_size": 242,
+      "iss_url_length": 283,
+      "script_size": 1083
+    },
+    {
+      "puzzle_id": "kUA_KqhyRu8",
+      "puzzle_title": "Number 9... Number 9... Number 9...",
+      "video_title": "The White Sudoku",
+      "author": "Olli Wright",
+      "sources": [
+        "https://sudokupad.app/x2wmck35ak"
+      ],
+      "date": "2024-08-16",
+      "status": "validated",
+      "constraint_types": [
+        "LittleKiller",
+        "Sandwich"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 6.4,
+      "iss_size": 204,
+      "iss_url_length": 245,
+      "script_size": 1445
+    },
+    {
+      "puzzle_id": "tgdxRBGvYr0",
+      "puzzle_title": "Big Bang",
+      "video_title": "Right at the Middle of the Big Bang",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/3jdlbq25sj"
+      ],
+      "date": "2024-08-15",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 5.9,
+      "iss_size": 293,
+      "iss_url_length": 333,
+      "script_size": 902
+    },
+    {
+      "puzzle_id": "-TbfZF4KBs4",
+      "puzzle_title": "RAT RUN 8: Discontinuous",
+      "video_title": "Rat Run Sudoku: Marty Sears Is Surely Trolling!!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/etuf5ak2y4"
+      ],
+      "date": "2024-08-15",
+      "status": "partial",
+      "constraint_types": [
+        "1-16",
+        "Var",
+        "Replicate",
+        "Sum",
+        "NFA: path-cell",
+        "NFA: doubler digit 2",
+        "NFA: doubler digit 1",
+        "NFA: doubler digit 4",
+        "NFA: doubler digit 6",
+        "NFA: doubler digit 8",
+        "NFA: doubler digit 9",
+        "NFA: doubler digit 7",
+        "NFA: doubler digit 5",
+        "NFA: doubler digit 3",
+        "NFA: red-x",
+        "NFA: path-order",
+        "NFA: blackcurrant",
+        "Pair: no-crossing"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 1,
+      "guesses": 76024,
+      "solve_ms": 3532.5,
+      "iss_size": 17914,
+      "iss_url_length": 17946,
+      "script_size": 7572
+    },
+    {
+      "puzzle_id": "iCXQ26GNjDY",
+      "puzzle_title": "Doctor, my fever might be odd",
+      "video_title": "A Really Odd Fever Dream",
+      "author": "PhysicistFromFunen",
+      "sources": [
+        "https://sudokupad.app/9jLmRBJ3JH"
+      ],
+      "date": "2024-08-14",
+      "status": "validated",
+      "constraint_types": [
+        "NFA: blue even fever",
+        "NFA: orange odd fever"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 154,
+      "solve_ms": 33.0,
+      "iss_size": 740,
+      "iss_url_length": 799,
+      "script_size": 1983
+    },
+    {
+      "puzzle_id": "11ycmkh_xB8",
+      "puzzle_title": "Foggy Banren",
+      "video_title": "The \"Fog Of War\" Sudoku Paradox",
+      "author": "Darth Paradox",
+      "sources": [
+        "https://sudokupad.app/2s9gi1de7p"
+      ],
+      "date": "2024-08-14",
+      "status": "partial",
+      "constraint_types": [
+        "0-15",
+        "Var",
+        "Replicate",
+        "Sum",
+        "NFA: schrodinger-house-1",
+        "NFA: schrodinger-house-10",
+        "NFA: schrodinger-house-11",
+        "NFA: schrodinger-house-12",
+        "NFA: schrodinger-house-13",
+        "NFA: schrodinger-house-14",
+        "NFA: schrodinger-house-15",
+        "NFA: schrodinger-house-16",
+        "NFA: schrodinger-house-17",
+        "NFA: schrodinger-house-18",
+        "NFA: schrodinger-house-19",
+        "NFA: schrodinger-house-2",
+        "NFA: schrodinger-house-20",
+        "NFA: schrodinger-house-21",
+        "NFA: schrodinger-house-22",
+        "NFA: schrodinger-house-23",
+        "NFA: schrodinger-house-24",
+        "NFA: schrodinger-house-25",
+        "NFA: schrodinger-house-26",
+        "NFA: schrodinger-house-27",
+        "NFA: schrodinger-house-3",
+        "NFA: schrodinger-house-4",
+        "NFA: schrodinger-house-5",
+        "NFA: schrodinger-house-6",
+        "NFA: schrodinger-house-7",
+        "NFA: schrodinger-house-8",
+        "NFA: schrodinger-house-9",
+        "NFA: pair-1-3",
+        "NFA: pair-1-5",
+        "NFA: pair-1-7",
+        "NFA: pair-1-9",
+        "NFA: pair-1-8",
+        "NFA: pair-1-6",
+        "NFA: pair-1-4",
+        "NFA: pair-0-9",
+        "NFA: pair-0-8",
+        "NFA: pair-0-7",
+        "NFA: pair-0-6",
+        "NFA: pair-0-5",
+        "NFA: pair-0-4",
+        "NFA: pair-0-3",
+        "NFA: pair-0-2",
+        "NFA: pair-0-1",
+        "NFA: pair-1-2",
+        "NFA: pair-3-5",
+        "NFA: pair-3-7",
+        "NFA: pair-3-9",
+        "NFA: pair-3-8",
+        "NFA: pair-3-6",
+        "NFA: pair-3-4",
+        "NFA: pair-5-7",
+        "NFA: pair-5-9",
+        "NFA: pair-5-8",
+        "NFA: pair-5-6",
+        "NFA: pair-7-9",
+        "NFA: pair-7-8",
+        "NFA: pair-8-9",
+        "NFA: pair-6-7",
+        "NFA: pair-6-9",
+        "NFA: pair-6-8",
+        "NFA: pair-4-5",
+        "NFA: pair-4-7",
+        "NFA: pair-4-9",
+        "NFA: pair-4-8",
+        "NFA: pair-4-6",
+        "NFA: pair-2-3",
+        "NFA: pair-2-5",
+        "NFA: pair-2-7",
+        "NFA: pair-2-9",
+        "NFA: pair-2-8",
+        "NFA: pair-2-6",
+        "NFA: pair-2-4",
+        "NFA: cell-value",
+        "Pair: canonical-pair",
+        "Pair: even-value"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 36,
+      "guesses": 2991,
+      "solve_ms": 10269.0,
+      "iss_size": 71848,
+      "iss_url_length": 71848,
+      "script_size": 4623
+    },
+    {
+      "puzzle_id": "A-Wsb-4z2Wg",
+      "puzzle_title": "Kropki DotS",
+      "video_title": "At Last! Superman is Identified",
+      "author": "Nityant Agarwal",
+      "sources": [
+        "https://sudokupad.app/BtghmrqfDb"
+      ],
+      "date": "2024-08-13",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "BlackDot",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 13,
+      "solve_ms": 4.7,
+      "iss_size": 307,
+      "iss_url_length": 349,
+      "script_size": 1106
+    },
+    {
+      "puzzle_id": "f6EgmV9EZoU",
+      "puzzle_title": "Clasp Locker",
+      "video_title": "Is This Sudoku Impossible? Only 11 People Say \"No\".",
+      "author": "Dorlir",
+      "sources": [
+        "https://sudokupad.app/ykl7sztkdv"
+      ],
+      "date": "2024-08-13",
+      "status": "validated",
+      "constraint_types": [
+        "Zipper"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 86,
+      "solve_ms": 9.0,
+      "iss_size": 267,
+      "iss_url_length": 314,
+      "script_size": 946
+    },
+    {
+      "puzzle_id": "jUNwo6BlFfU",
+      "puzzle_title": "Would you like that toasted?",
+      "video_title": "How do you like your Sudoku?",
+      "author": "Justin Vitanza",
+      "sources": [
+        "https://sudokupad.app/46bismbam8"
+      ],
+      "date": "2024-08-12",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "NFA: R7 < 4",
+        "NFA: C4 > 2",
+        "NFA: R1 < 10",
+        "NFA: R3 > 15",
+        "Pair: increase"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 827,
+      "solve_ms": 37.3,
+      "iss_size": 2238,
+      "iss_url_length": 2246,
+      "script_size": 3985
+    },
+    {
+      "puzzle_id": "5MlBrvvv8Yc",
+      "puzzle_title": "Euclidean Windmill",
+      "video_title": "The Euclidean Windmill",
+      "author": "Botaku",
+      "sources": [
+        "https://sudokupad.app/r433rBpLPG"
+      ],
+      "date": "2024-08-12",
+      "status": "validated",
+      "constraint_types": [
+        "Replicate",
+        "Pair: Euclidean spacing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 55,
+      "solve_ms": 10.3,
+      "iss_size": 1056,
+      "iss_url_length": 1096,
+      "script_size": 1763
+    },
+    {
+      "puzzle_id": "7mQd8iwA7Jc",
+      "puzzle_title": "Sir Bri Sudoku",
+      "video_title": "Brian May - the Unexpected Tribute!",
+      "author": "olima",
+      "sources": [
+        "https://app.crackingthecryptic.com/cgqcfwnwmi"
+      ],
+      "date": "2024-08-11",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "Whisper",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 604,
+      "solve_ms": 21.4,
+      "iss_size": 598,
+      "iss_url_length": 629,
+      "script_size": 1410
+    },
+    {
+      "puzzle_id": "kFyUDHPqVmM",
+      "puzzle_title": "These Aren't The Circles You're Looking For",
+      "video_title": "Jay Dyer Is A Genius:  The 2nd Stash Of Evidence",
+      "author": "Jay Dyer",
+      "sources": [
+        "https://sudokupad.app/9t76BmHtFp"
+      ],
+      "date": "2024-08-11",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "NFA: shaded-1",
+        "NFA: shaded-4",
+        "NFA: shaded-3",
+        "NFA: shaded-2",
+        "NFA: shaded-9",
+        "NFA: shaded-8",
+        "NFA: shaded-7",
+        "NFA: shaded-6",
+        "NFA: shaded-5",
+        "NFA: shaded-neighbourhood-sum"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 42363,
+      "solve_ms": 39408.4,
+      "iss_size": 11196,
+      "iss_url_length": 11234,
+      "script_size": 2761
+    },
+    {
+      "puzzle_id": "jVWbnsa6_mY",
+      "puzzle_title": "Magical Clock",
+      "video_title": "A Magical Clock for your Delight!",
+      "author": "Jeroen Panda",
+      "sources": [
+        "https://sudokupad.app/pgbxx02f1l"
+      ],
+      "date": "2024-08-10",
+      "status": "validated",
+      "constraint_types": [
+        "EqualSum",
+        "Zipper",
+        "AllDifferent",
+        "LittleKiller"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 71,
+      "solve_ms": 15.1,
+      "iss_size": 706,
+      "iss_url_length": 736,
+      "script_size": 2173
+    },
+    {
+      "puzzle_id": "W81TsEV0w8E",
+      "puzzle_title": "Sudoku found tattooed on Lenin's body",
+      "video_title": "Sudoku Found Tattooed On Lenin's Body",
+      "author": "\u00d8yvind Thorsby",
+      "sources": [
+        "https://sudokupad.app/aalg2syl3j"
+      ],
+      "date": "2024-08-10",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "CountingCircles",
+        "NFA: box-position-9",
+        "NFA: box-position-8",
+        "NFA: box-position-7",
+        "NFA: box-position-6",
+        "NFA: box-position-5",
+        "NFA: box-position-4",
+        "NFA: box-position-3",
+        "NFA: box-position-2",
+        "NFA: box-position-1"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 9,
+      "solve_ms": 20.6,
+      "iss_size": 4276,
+      "iss_url_length": 4315,
+      "script_size": 1822
+    },
+    {
+      "puzzle_id": "Sv2YCK5dE1E",
+      "puzzle_title": "Evenly Odd",
+      "video_title": "Getting Even with the Odds - or something ...",
+      "author": "Pixeleon",
+      "sources": [
+        "https://sudokupad.app/j1t45qigg3"
+      ],
+      "date": "2024-08-09",
+      "status": "validated",
+      "constraint_types": [
+        "NFA: orange 1",
+        "NFA: blue 4",
+        "NFA: blue 2",
+        "NFA: orange 6",
+        "NFA: blue 8",
+        "NFA: blue 10",
+        "NFA: blue 12",
+        "NFA: blue 6",
+        "NFA: orange 11",
+        "NFA: orange 12",
+        "NFA: orange 13",
+        "NFA: orange 14",
+        "NFA: orange 10",
+        "NFA: orange 9",
+        "NFA: orange 7",
+        "NFA: orange 8",
+        "NFA: orange 15",
+        "NFA: orange 17",
+        "NFA: orange 18"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 139,
+      "solve_ms": 54.0,
+      "iss_size": 2921,
+      "iss_url_length": 2992,
+      "script_size": 2497
+    },
+    {
+      "puzzle_id": "NjpUueqFEHY",
+      "puzzle_title": "Drop",
+      "video_title": "\"Kneel Before Z...etamath\"",
+      "author": "zetamath & friends",
+      "sources": [
+        "https://sudokupad.app/cbux5i6zv0"
+      ],
+      "date": "2024-08-09",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Whisper",
+        "Renban",
+        "RegionSumLine",
+        "Entropic"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4986,
+      "solve_ms": 104.8,
+      "iss_size": 379,
+      "iss_url_length": 418,
+      "script_size": 1076
+    },
+    {
+      "puzzle_id": "jALfyLdDv4Q",
+      "puzzle_title": "Swimming in the Reeds",
+      "video_title": "One of the Fishiest Sudokus Ever",
+      "author": "James Kopp",
+      "sources": [
+        "https://sudokupad.app/slyjfc5x9r"
+      ],
+      "date": "2024-08-08",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "RegionSumLine",
+        "BlackDot",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 7.6,
+      "iss_size": 325,
+      "iss_url_length": 368,
+      "script_size": 1028
+    },
+    {
+      "puzzle_id": "-KXjRMkYpA4",
+      "puzzle_title": "RAT RUN 7: Multiple Choice",
+      "video_title": "The Sudoku Rat: She's BACK!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/yp87tkg99m"
+      ],
+      "date": "2024-08-08",
+      "status": "validated",
+      "constraint_types": [
+        "1-16",
+        "Var",
+        "Replicate",
+        "SameValues",
+        "AllDifferent",
+        "GreaterThan",
+        "NFA: path-cell",
+        "NFA: path-multiple",
+        "NFA: path-order",
+        "Pair: no-crossing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 102756,
+      "solve_ms": 13216.3,
+      "iss_size": 11430,
+      "iss_url_length": 11443,
+      "script_size": 6929
+    },
+    {
+      "puzzle_id": "2U_SitaGFEg",
+      "puzzle_title": "Apologetic Airlines",
+      "video_title": "Apologetic Airlines",
+      "author": "olima",
+      "sources": [
+        "https://sudokupad.app/1pcuk5mpn2"
+      ],
+      "date": "2024-08-07",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Whisper",
+        "Renban",
+        "RegionSumLine",
+        "WhiteDot",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 23,
+      "solve_ms": 15.6,
+      "iss_size": 881,
+      "iss_url_length": 879,
+      "script_size": 1855
+    },
+    {
+      "puzzle_id": "7KxugQBUi-A",
+      "puzzle_title": "Foggy on the Details",
+      "video_title": "Are You Sure You Know The Rules Of Sudoku?",
+      "author": "Karl the Fog!",
+      "sources": [
+        "https://sudokupad.app/e3dz5lytps"
+      ],
+      "date": "2024-08-07",
+      "status": "partial",
+      "constraint_types": [
+        "6x6",
+        "Sum",
+        "Modular",
+        "RegionSumLine"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 26,
+      "guesses": 554,
+      "solve_ms": 74.4,
+      "iss_size": 288,
+      "iss_url_length": 332,
+      "script_size": 1091
+    },
+    {
+      "puzzle_id": "48ml74I9FRM",
+      "puzzle_title": "Fare thee well, Miss Carousel",
+      "video_title": "Phistomefel Breaks Maths!",
+      "author": "Phistomefel",
+      "sources": [
+        "https://sudokupad.app/F28G66PTLg"
+      ],
+      "date": "2024-08-06",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Or",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 945,
+      "solve_ms": 366.8,
+      "iss_size": 871,
+      "iss_url_length": 878,
+      "script_size": 1340
+    },
+    {
+      "puzzle_id": "v6eN2nTThwg",
+      "puzzle_title": "Alarm Clock",
+      "video_title": "A Very Late Alarm Call",
+      "author": "Jobo",
+      "sources": [
+        "https://sudokupad.app/wa9fbfdl75"
+      ],
+      "date": "2024-08-05",
+      "status": "validated",
+      "constraint_types": [
+        "DisjointSets",
+        "Modular",
+        "Or",
+        "Thermo",
+        "WhiteDot",
+        "X"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 14,
+      "solve_ms": 14.0,
+      "iss_size": 584,
+      "iss_url_length": 610,
+      "script_size": 1360
+    },
+    {
+      "puzzle_id": "G48nPIQwJSU",
+      "puzzle_title": "Zip Zag",
+      "video_title": "How Does Jet Lag Affect Your Brain?",
+      "author": "Sujoyku & Egubachu",
+      "sources": [
+        "https://sudokupad.app/bo63al9pzv"
+      ],
+      "date": "2024-08-05",
+      "status": "validated",
+      "constraint_types": [
+        "Zipper"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 133,
+      "solve_ms": 29.9,
+      "iss_size": 257,
+      "iss_url_length": 304,
+      "script_size": 842
+    },
+    {
+      "puzzle_id": "6cOIc5bJAuI",
+      "puzzle_title": "Walking in a circle",
+      "video_title": "Very Approachable Fog of War Sudoku",
+      "author": "fractalminding",
+      "sources": [
+        "https://sudokupad.app/3pNhMr2hpF"
+      ],
+      "date": "2024-08-04",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "Renban",
+        "Thermo",
+        "Modular"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 6.4,
+      "iss_size": 294,
+      "iss_url_length": 340,
+      "script_size": 1101
+    },
+    {
+      "puzzle_id": "fPBKIxjUU14",
+      "puzzle_title": "Galapagos",
+      "video_title": "A Beautiful Sequel: Sudoku meets Nurikabe",
+      "author": "Niverio",
+      "sources": [
+        "https://sudokupad.app/DhFTHL63t7"
+      ],
+      "date": "2024-08-04",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no-shaded-2x2",
+        "NFA: island-9-sum",
+        "NFA: island-7-sum",
+        "NFA: island-9-crosses-box",
+        "NFA: island-8-crosses-box",
+        "NFA: island-7-crosses-box",
+        "NFA: island-6-crosses-box",
+        "NFA: island-3-crosses-box",
+        "NFA: island-5-crosses-box",
+        "NFA: island-4-crosses-box",
+        "NFA: island-2-crosses-box",
+        "NFA: island-2-sum",
+        "NFA: island-8-sum",
+        "NFA: island-6-sum",
+        "NFA: island-5-sum",
+        "NFA: island-4-sum",
+        "NFA: island-3-sum"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 1035,
+      "solve_ms": 11819.2,
+      "iss_size": 61660,
+      "iss_url_length": 61682,
+      "script_size": 3525
+    },
+    {
+      "puzzle_id": "DMsISJZqzO0",
+      "puzzle_title": "Wake Up!",
+      "video_title": "Wake Up with Sudoku!",
+      "author": "Pete Craig",
+      "sources": [
+        "https://sudokupad.app/4mlp7jvob1"
+      ],
+      "date": "2024-08-03",
+      "status": "validated",
+      "constraint_types": [
+        "RegionSumLine",
+        "Quad"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 20.3,
+      "iss_size": 278,
+      "iss_url_length": 320,
+      "script_size": 864
+    },
+    {
+      "puzzle_id": "MO7tJ5jAa2g",
+      "puzzle_title": "Gegentakt",
+      "video_title": "One Of The Best Sudokus In History",
+      "author": "Myxo",
+      "sources": [
+        "https://sudokupad.app/c8waymdam4"
+      ],
+      "date": "2024-08-03",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Renban"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 25321,
+      "solve_ms": 420.4,
+      "iss_size": 234,
+      "iss_url_length": 276,
+      "script_size": 846
+    },
+    {
+      "puzzle_id": "csPxMjFkQD4",
+      "puzzle_title": "Buddy System",
+      "video_title": "Every Buddy Needs a Buddy",
+      "author": "rysmyth",
+      "sources": [
+        "https://sudokupad.app/mr3vsn89ww"
+      ],
+      "date": "2024-08-02",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "ContainAtLeast",
+        "ContainExact"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 12.0,
+      "iss_size": 19870,
+      "iss_url_length": 19695,
+      "script_size": 2124
+    },
+    {
+      "puzzle_id": "zLFnfduBntY",
+      "puzzle_title": "Entanglement",
+      "video_title": "\"What On Earth Did I Just Solve?\"",
+      "author": "Jay Dyer",
+      "sources": [
+        "https://sudokupad.app/8h24l900cg"
+      ],
+      "date": "2024-08-02",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 129,
+      "solve_ms": 31.6,
+      "iss_size": 306,
+      "iss_url_length": 344,
+      "script_size": 840
+    },
+    {
+      "puzzle_id": "DrXD_yIW3ok",
+      "puzzle_title": "Projojojomo",
+      "video_title": "The Scojojobo Promo - I mean it!",
+      "author": "Scojojobo",
+      "sources": [
+        "https://sudokupad.app/br70hyi0ur"
+      ],
+      "date": "2024-08-01",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "AllDifferent",
+        "SameValues",
+        "NFA: quad",
+        "NFA: difference dot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 3,
+      "guesses": 33267,
+      "solve_ms": 1632.3,
+      "iss_size": 1439,
+      "iss_url_length": 1483,
+      "script_size": 2578
+    },
+    {
+      "puzzle_id": "68wU4SJ1osc",
+      "puzzle_title": "Evening Shade",
+      "video_title": "This Man's Sudokus Are SO Popular For A Reason",
+      "author": "James Sinclair",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/evening-shade"
+      ],
+      "date": "2024-08-01",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "RegionSumLine",
+        "WhiteDot",
+        "Quad"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 12.8,
+      "iss_size": 305,
+      "iss_url_length": 345,
+      "script_size": 1026
+    },
+    {
+      "puzzle_id": "voSxg0kqq_U",
+      "puzzle_title": "Factor Map",
+      "video_title": "One of the Most Fantastic Colouring Exercises Ever",
+      "author": "Ul-Rhymm",
+      "sources": [
+        "https://sudokupad.app/c325ibxs31"
+      ],
+      "date": "2024-07-31",
+      "status": "partial",
+      "constraint_types": [
+        "AllDifferent"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 997,
+      "guesses": 1038,
+      "solve_ms": 27.4,
+      "iss_size": 623,
+      "iss_url_length": 655,
+      "script_size": 1475
+    },
+    {
+      "puzzle_id": "fu2oq_8TGJo",
+      "puzzle_title": "Sus Yin Yang",
+      "video_title": "The Most Extraordinary Sudoku Cell: It's Back!!",
+      "author": "gdc",
+      "sources": [
+        "https://sudokupad.app/f3xngr79fu"
+      ],
+      "date": "2024-07-31",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no-mono-2x2",
+        "NFA: pseudo-zipper"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 41.6,
+      "iss_size": 8919,
+      "iss_url_length": 8941,
+      "script_size": 4159
+    },
+    {
+      "puzzle_id": "IJ2UIrox_xw",
+      "puzzle_title": "Non-repeating Palindromes",
+      "video_title": "These Shapes Look Completely Impossible",
+      "author": "Amin Khalek",
+      "sources": [
+        "https://sudokupad.app/100ywt1d63"
+      ],
+      "date": "2024-07-30",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ContainExact",
+        "NFA: halver-2",
+        "NFA: doubler-2",
+        "NFA: halver-1",
+        "NFA: doubler-1",
+        "NFA: halver-4",
+        "NFA: doubler-4",
+        "NFA: halver-6",
+        "NFA: doubler-6",
+        "NFA: halver-8",
+        "NFA: doubler-8",
+        "NFA: halver-9",
+        "NFA: doubler-9",
+        "NFA: halver-7",
+        "NFA: doubler-7",
+        "NFA: halver-5",
+        "NFA: doubler-5",
+        "NFA: halver-3",
+        "NFA: doubler-3",
+        "NFA: inequality",
+        "NFA: palindrome",
+        "NFA: equal-sum"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 18874,
+      "solve_ms": 8180.7,
+      "iss_size": 31705,
+      "iss_url_length": 31706,
+      "script_size": 4913
+    },
+    {
+      "puzzle_id": "P9VVuaLvtDg",
+      "puzzle_title": "45",
+      "video_title": "The Secret Of This Sudoku Is NOT 45!!!",
+      "author": "Teal",
+      "sources": [
+        "https://sudokupad.app/14arl2fm9c"
+      ],
+      "date": "2024-07-30",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "1-9",
+        "RegionSameValues",
+        "Var",
+        "SameValues",
+        "Pair: increasing notes",
+        "NFA: Ten lines"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4035,
+      "solve_ms": 117.8,
+      "iss_size": 396,
+      "iss_url_length": 449,
+      "script_size": 1491
+    },
+    {
+      "puzzle_id": "G8g-NtzCZgA",
+      "puzzle_title": "Vortex",
+      "video_title": "An Endless Vortex ... of Turtles?",
+      "author": "Donatello_86 ",
+      "sources": [
+        "https://sudokupad.app/6o5zvf29rt"
+      ],
+      "date": "2024-07-29",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Whisper",
+        "BlackDot",
+        "WhiteDot",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 16,
+      "solve_ms": 8.6,
+      "iss_size": 687,
+      "iss_url_length": 712,
+      "script_size": 1802
+    },
+    {
+      "puzzle_id": "wDRcI3CIQdw",
+      "puzzle_title": "Zebediah Killgrave",
+      "video_title": "The Purple Man:  This is sudoku GENIUS.",
+      "author": "starwarigami",
+      "sources": [
+        "https://sudokupad.app/nnf5fqru6z"
+      ],
+      "date": "2024-07-29",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 11742,
+      "solve_ms": 131.8,
+      "iss_size": 1286,
+      "iss_url_length": 1301,
+      "script_size": 1888
+    },
+    {
+      "puzzle_id": "Be1ZOWa7xPw",
+      "puzzle_title": "Stolen Numerals King XV",
+      "video_title": "Don't Steal All my Sudoku Numbers!",
+      "author": "NurglesGift",
+      "sources": [
+        "https://sudokupad.app/w1oz8pek6a"
+      ],
+      "date": "2024-07-28",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKing",
+        "Or",
+        "X",
+        "V",
+        "Replicate",
+        "Pair",
+        "BlackDot",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 294,
+      "solve_ms": 27.6,
+      "iss_size": 1120,
+      "iss_url_length": 1056,
+      "script_size": 2286
+    },
+    {
+      "puzzle_id": "lGz8_HhoecU",
+      "puzzle_title": "Cornered Colors",
+      "video_title": "How Can These Sudoku Cages Have Negative Totals?",
+      "author": "Leonhard Kohl-L\u00f6rting",
+      "sources": [
+        "https://sudokupad.app/bmh85ce33k"
+      ],
+      "date": "2024-07-28",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "AllDifferent",
+        "NFA: no-monochrome-2x2",
+        "NFA: signed 5 cage",
+        "NFA: signed 7 cage",
+        "NFA: signed 3 cage",
+        "NFA: signed 2 cage",
+        "NFA: signed 16 cage",
+        "NFA: signed 14 cage",
+        "NFA: signed 4 cage",
+        "NFA: signed -7 cage",
+        "NFA: signed 27 cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2030,
+      "solve_ms": 170.1,
+      "iss_size": 18657,
+      "iss_url_length": 18718,
+      "script_size": 2836
+    },
+    {
+      "puzzle_id": "Cqh0MS8utnw",
+      "puzzle_title": "Zipper Gramophone",
+      "video_title": "How to Approach Zipper Lines",
+      "author": "Flash Groudon",
+      "sources": [
+        "https://sudokupad.app/iwfv5d36aw"
+      ],
+      "date": "2024-07-27",
+      "status": "validated",
+      "constraint_types": [
+        "Zipper",
+        "Renban",
+        "Modular"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 15,
+      "solve_ms": 6.5,
+      "iss_size": 370,
+      "iss_url_length": 412,
+      "script_size": 1008
+    },
+    {
+      "puzzle_id": "u7yVQQC3QeI",
+      "puzzle_title": "RAT RUN 6: Equilibrium",
+      "video_title": "The Sudoku Rat Seeks Equality?!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/3xa2x14bxe"
+      ],
+      "date": "2024-07-27",
+      "status": "partial",
+      "constraint_types": [
+        "SameValues",
+        "BlackDot"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 958,
+      "guesses": 1032,
+      "solve_ms": 17.7,
+      "iss_size": 163,
+      "iss_url_length": 208,
+      "script_size": 595
+    },
+    {
+      "puzzle_id": "4nDcjuZUBJY",
+      "puzzle_title": "Zodiac Project: Ponta Delgada",
+      "video_title": "Find the Islands",
+      "author": "Florian Wortmann",
+      "sources": [
+        "https://sudokupad.app/2p1an6oilw"
+      ],
+      "date": "2024-07-26",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "AllDifferent",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no-mono-2x2"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 998,
+      "guesses": 1088,
+      "solve_ms": 22.3,
+      "iss_size": 565,
+      "iss_url_length": 610,
+      "script_size": 1979
+    },
+    {
+      "puzzle_id": "AwzDRqTx0tU",
+      "puzzle_title": "Square Dance",
+      "video_title": "Has Simon Made An Error?",
+      "author": "Jay Dyer",
+      "sources": [
+        "https://sudokupad.app/x48q45yg2r"
+      ],
+      "date": "2024-07-26",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2133,
+      "solve_ms": 80.7,
+      "iss_size": 308,
+      "iss_url_length": 347,
+      "script_size": 889
+    },
+    {
+      "puzzle_id": "sTCDUAiuslk",
+      "puzzle_title": "The Path Through Life",
+      "video_title": "The Path Through Life",
+      "author": "Tobias",
+      "sources": [
+        "https://app.crackingthecryptic.com/TQdQfrd2HB"
+      ],
+      "date": "2024-07-25",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "Zu-pzIHRrGI",
+      "puzzle_title": "Craven",
+      "video_title": "A New Way To Understand An Old Sudoku Trick",
+      "author": "James Sinclair",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/craven-unshaded"
+      ],
+      "date": "2024-07-25",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Renban",
+        "WhiteDot",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 136,
+      "solve_ms": 14.5,
+      "iss_size": 326,
+      "iss_url_length": 364,
+      "script_size": 1242
+    },
+    {
+      "puzzle_id": "xV4AQTHTEgc",
+      "puzzle_title": "Rats in a Maze #001",
+      "video_title": "The Rodent Revolution is underway ...",
+      "author": "Dittman Rat",
+      "sources": [
+        "https://sudokupad.app/wbjj6zns2r"
+      ],
+      "date": "2024-07-24",
+      "status": "partial",
+      "constraint_types": [
+        "1-16",
+        "Replicate",
+        "Var",
+        "Thermo",
+        "NFA: rat-route-degree",
+        "NFA: off-route-position",
+        "NFA: rat-consecutive-step",
+        "NFA: rat-route-order"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 184583,
+      "guesses": 186651,
+      "solve_ms": 465.6,
+      "iss_size": 20185,
+      "iss_url_length": 20205,
+      "script_size": 6085
+    },
+    {
+      "puzzle_id": "CqSAzDMgWkI",
+      "puzzle_title": "RAT RUN 5: Disparity",
+      "video_title": "The Cleverest Rat Run Sudoku Yet",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/wv01avmfs9"
+      ],
+      "date": "2024-07-24",
+      "status": "partial",
+      "constraint_types": [
+        "BlackDot"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 990,
+      "guesses": 1038,
+      "solve_ms": 20.3,
+      "iss_size": 119,
+      "iss_url_length": 166,
+      "script_size": 676
+    },
+    {
+      "puzzle_id": "pQjJl-ldxGM",
+      "puzzle_title": "Little Killer Sandwiches",
+      "video_title": "A Brilliant Combination of Rules",
+      "author": "jreg",
+      "sources": [
+        "https://app.crackingthecryptic.com/eennxzmcfl"
+      ],
+      "date": "2024-07-23",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKing",
+        "LittleKiller",
+        "Sum",
+        "Sandwich"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 16,
+      "solve_ms": 12.6,
+      "iss_size": 201,
+      "iss_url_length": 242,
+      "script_size": 1217
+    },
+    {
+      "puzzle_id": "TLDIcF6IXDk",
+      "puzzle_title": "Gold",
+      "video_title": "This Sudoku Would Win The Gold!",
+      "author": "Joseph Nehme",
+      "sources": [
+        "https://sudokupad.app/r00yffw1w7"
+      ],
+      "date": "2024-07-23",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Cage",
+        "Palindrome"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1206,
+      "solve_ms": 45.3,
+      "iss_size": 390,
+      "iss_url_length": 427,
+      "script_size": 1148
+    },
+    {
+      "puzzle_id": "dQjzGAhNyW0",
+      "puzzle_title": "Ready By Six",
+      "video_title": "The Louder Whisper?",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/owxvae01q1"
+      ],
+      "date": "2024-07-22",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 21,
+      "solve_ms": 5.5,
+      "iss_size": 275,
+      "iss_url_length": 321,
+      "script_size": 829
+    },
+    {
+      "puzzle_id": "R8oNw1TbyYM",
+      "puzzle_title": "Cornered Parity",
+      "video_title": "This Sudoku Is \"Criminally Underrated\"!",
+      "author": "Lulero",
+      "sources": [
+        "https://sudokupad.app/378yd1xsg9"
+      ],
+      "date": "2024-07-22",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "Cage",
+        "Thermo",
+        "NFA: no parity triple"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 34,
+      "solve_ms": 12.3,
+      "iss_size": 573,
+      "iss_url_length": 620,
+      "script_size": 1177
+    },
+    {
+      "puzzle_id": "Ru_ul5XxKrE",
+      "puzzle_title": "123",
+      "video_title": "The Utter Genius of 123",
+      "author": "James Kopp",
+      "sources": [
+        "https://sudokupad.app/f338uqc57l"
+      ],
+      "date": "2024-07-21",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.7,
+      "iss_size": 454,
+      "iss_url_length": 494,
+      "script_size": 1114
+    },
+    {
+      "puzzle_id": "8hguaSv376w",
+      "puzzle_title": "One Trick Pony",
+      "video_title": "Can A One-Trick Pony Master Sudoku?",
+      "author": "Arbitrary",
+      "sources": [
+        "https://sudokupad.app/rdb3z3k51d"
+      ],
+      "date": "2024-07-21",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1163,
+      "solve_ms": 40.9,
+      "iss_size": 320,
+      "iss_url_length": 360,
+      "script_size": 1060
+    },
+    {
+      "puzzle_id": "eREMbxX_5TY",
+      "puzzle_title": "Chock-a-Block",
+      "video_title": "This Grid is Chock a Block Full (and that's a clue)",
+      "author": "Marty Sears and Justin Vitanza",
+      "sources": [
+        "https://sudokupad.app/1j53hl97cx"
+      ],
+      "date": "2024-07-20",
+      "status": "partial",
+      "constraint_types": [
+        "Renban",
+        "NFA: even sum 1",
+        "NFA: even sum 2",
+        "NFA: even sum 3",
+        "NFA: same difference 1",
+        "NFA: same difference 2",
+        "NFA: same difference 3",
+        "Pair: anti-Kropki line 1, pair 1",
+        "Pair: anti-Kropki line 1, pair 2",
+        "Pair: anti-Kropki line 1, pair 3",
+        "Pair: anti-Kropki line 2, pair 1",
+        "Pair: anti-Kropki line 2, pair 2",
+        "Pair: anti-Kropki line 2, pair 3",
+        "Pair: anti-Kropki line 3, pair 1",
+        "Pair: anti-Kropki line 3, pair 2",
+        "Pair: anti-Kropki line 3, pair 3",
+        "Pair: anti-Kropki line 4, pair 1",
+        "Pair: anti-Kropki line 4, pair 2",
+        "Pair: anti-Kropki line 4, pair 3",
+        "Pair: anti-Kropki line 5, pair 1",
+        "Pair: anti-Kropki line 5, pair 2",
+        "Pair: anti-Kropki line 5, pair 3",
+        "Pair: anti-Kropki line 6, pair 1",
+        "Pair: anti-Kropki line 6, pair 2",
+        "Pair: anti-Kropki line 6, pair 3",
+        "Pair: anti-Kropki line 7, pair 1",
+        "Pair: anti-Kropki line 7, pair 2",
+        "Pair: anti-Kropki line 7, pair 3",
+        "Pair: anti-Kropki line 8, pair 1",
+        "Pair: anti-Kropki line 8, pair 2",
+        "Pair: anti-Kropki line 8, pair 3",
+        "Pair: prime line 1",
+        "Pair: prime line 2",
+        "Pair: prime line 3"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 3730,
+      "guesses": 303967,
+      "solve_ms": 6508.1,
+      "iss_size": 1920,
+      "iss_url_length": 2241,
+      "script_size": 2828
     },
     {
       "puzzle_id": "R6i558mDoNQ.1",

@@ -1,0 +1,13 @@
+.AntiKnight
+.RegionSumLine~R8C1~R7C1~R6C1~R5C1~R4C2~R3C3~R2C4~R1C5~R1C6~R1C7~R1C8
+.RegionSumLine~R6C7~R5C6
+.RegionSumLine~R8C6~R9C7
+.WhiteDot~R7C6~R7C7
+.WhiteDot~R6C7~R7C7
+.WhiteDot~R7C8~R7C7
+.WhiteDot~R7C7~R8C7
+.WhiteDot~R6C2~R6C3
+.WhiteDot~R5C8~R4C8
+.WhiteDot~R2C8~R2C9
+.Quad~R3C3~6~7~8~9
+.Quad~R1C1~1~6
