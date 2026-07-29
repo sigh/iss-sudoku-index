@@ -1,0 +1,13 @@
+.XSum~C4~14~
+.XSum~C5~28~5
+.XSum~R6~~13
+.XSum~R7~~10
+.XSum~C3~~14
+.XSum~R4~36~
+.LittleKiller~14~R1C3
+.LittleKiller~28~R1C4
+.LittleKiller~13~R5C9
+.LittleKiller~10~R9C8
+.LittleKiller~5~R6C1
+.LittleKiller~14~R8C1
+.LittleKiller~36~R5C1

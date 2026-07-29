@@ -1,0 +1,12 @@
+.AntiKnight
+.Cage~3~R2C3~R3C3
+.Cage~7~R2C5~R3C5
+.Cage~5~R3C7~R3C8
+.Cage~7~R4C4~R4C5
+.Cage~5~R5C6~R6C6
+.Cage~7~R8C5~R8C6
+.Cage~5~R7C8~R8C8
+.Cage~5~R5C1~R6C1
+.Cage~8~R6C2~R6C3
+.Thermo~R9C9~R8C9~R7C9
+.Thermo~R5C5~R5C4

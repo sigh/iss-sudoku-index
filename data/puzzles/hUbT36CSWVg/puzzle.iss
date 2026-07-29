@@ -1,0 +1,11 @@
+.~R7C5_1_3_5_7_9~R9C9_1_3_5_7_9
+.WhiteDot~R7C4~R7C5
+.WhiteDot~R2C2~R2C3
+.WhiteDot~R1C2~R2C2
+.WhiteDot~R1C7~R1C8
+.WhiteDot~R7C1~R8C1
+.BlackDot~R6C5~R7C5
+.BlackDot~R3C3~R3C4
+.BlackDot~R2C3~R3C3
+.BlackDot~R1C1~R1C2
+.BlackDot~R2C8~R2C9

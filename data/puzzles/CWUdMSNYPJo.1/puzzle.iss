@@ -1,0 +1,15 @@
+.Shape~6x6~9
+.NoBoxes
+.RegionSize~9
+.Jigsaw~001111022211021113022223000233033333
+.~R3C4_2
+.Skyscraper~R3~3~
+.Skyscraper~R4~4~3
+.Skyscraper~R5~1~4
+.Skyscraper~R6~2~
+.Skyscraper~R1~~4
+.Skyscraper~R2~~2
+.Skyscraper~C1~6~
+.Skyscraper~C2~1~
+.Skyscraper~C4~1~
+.Skyscraper~C5~3~

@@ -1,0 +1,9 @@
+.Shape~6x6
+.NoBoxes
+.Jigsaw~000000122222111323411333444443555555
+.Replicate~ffffff
+.Pair~are672~_not%20prime%20or%20square~R1C1~R1C2
+.End
+.Replicate~_____
+.Pair~are672~_not%20prime%20or%20square~R1C1~R2C1
+.End

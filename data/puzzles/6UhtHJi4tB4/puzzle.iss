@@ -1,0 +1,6 @@
+.Shape~6x6
+.~R1C2_1_3_5~R1C3_2_4_6
+.Thermo~R2C3~R2C4~R2C5
+.Thermo~R6C4~R6C5~R6C6
+.Arrow~R1C4~R1C3~R1C2
+.AntiKnight

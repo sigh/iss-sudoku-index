@@ -1,0 +1,10 @@
+.Shape~6x6~9
+.RegionSameValues
+.Whisper~5~R4C3~R4C4~R4C5
+.Whisper~5~R2C4~R2C5
+.Renban~R6C4~R5C4~R4C4~R3C4
+.Renban~R4C1~R5C1
+.Renban~R2C1~R2C2
+.RegionSumLine~R6C1~R6C2~R6C3~R6C4
+.Sum~8~R3C1~R4C1
+.Sum~10~R1C2~R2C2

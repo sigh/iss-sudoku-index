@@ -1,0 +1,13 @@
+.Replicate~JJJJJJJJJJJJJB
+.Pair~4H-gP4D-gP4D_~_difference%20at%20least%203~R1C1~R1C2~~R1C2~R1C3
+.End
+.Replicate~_HAA4_AAA_H
+.Pair~4H-gP4D-gP4D_~_difference%20at%20least%203~R1C1~R2C1~~R2C1~R3C1
+.End
+.Replicate~JIBJIBJIBJIBJ
+.Pair~wH8AHwBcAH4Bf~_difference%20at%20least%204~R1C3~R1C4
+.End
+.Replicate~_HAA4_
+.Pair~wH8AHwBcAH4Bf~_difference%20at%20least%204~R3C1~R4C1
+.End
+.~R2C2_1~R2C5_1_2~R2C8_1_2_3~R5C2_1_2_3_4~R5C5_1_2_3_4_5~R5C8_1_2_3_4_5_6~R8C2_1_2_3_4_5_6_7~R8C5_1_2_3_4_5_6_7_8

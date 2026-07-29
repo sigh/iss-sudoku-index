@@ -1,0 +1,15 @@
+.DutchFlatmates
+.NumberedRoom~C2~5~1
+.NumberedRoom~C3~5~
+.NumberedRoom~C4~5~
+.NumberedRoom~C6~5~
+.NumberedRoom~C7~5~1
+.NumberedRoom~C8~5~1
+.NumberedRoom~R2~5~5
+.NumberedRoom~R3~5~5
+.NumberedRoom~R6~5~
+.NumberedRoom~R5~~1
+.NumberedRoom~R7~~1
+.NumberedRoom~C1~~1
+.NumberedRoom~C5~~1
+.NumberedRoom~C9~~1
