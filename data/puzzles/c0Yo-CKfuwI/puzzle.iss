@@ -1,0 +1,5 @@
+.Regex~WzEzNTc5XQ~R6C5~~R8C5~~R9C3
+.Regex~WzI0Njhd~R3C9~~R4C5~~R6C1
+.BlackDot~R3C2~R4C2
+.BlackDot~R3C8~R3C9
+.WhiteDot~R8C7~R8C8

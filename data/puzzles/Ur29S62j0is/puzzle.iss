@@ -1,0 +1,2 @@
+.~R4C4_5~R6C7_8~R8C2_9
+.WhiteDot~R1C2~R2C2

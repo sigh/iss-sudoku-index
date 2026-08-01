@@ -1,0 +1,15 @@
+.Whisper~4~R9C3~R8C4~R7C3
+.Whisper~4~R7C6~R6C7~R5C6
+.Whisper~4~R5C3~R4C2~R3C3
+.Whisper~4~R2C5~R2C6~R1C6
+.Renban~R9C1~R8C1~R8C2
+.Renban~R7C4~R7C5~R6C5
+.Renban~R3C6~R3C7~R2C7
+.Quad~R1C1~1~2~3~4
+.Quad~R8C8~1~2~3~4
+.Quad~R7C2~6~7~8~9
+.Quad~R7C5~2~3~4~7
+.Quad~R5C5~1~3~7~8
+.Quad~R4C8~1~2~3~7
+.Quad~R3C6~1~2~4~6
+.Quad~R1C7~2~3~4~9

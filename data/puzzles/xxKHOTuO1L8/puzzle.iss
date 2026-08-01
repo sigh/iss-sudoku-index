@@ -1,0 +1,8 @@
+.Palindrome~R6C7~R6C8~R7C7~R8C7~R9C8
+.WhiteDot~R3C2~R3C3
+.WhiteDot~R5C9~R6C9
+.WhiteDot~R7C3~R7C4
+.BlackDot~R1C1~R2C1
+.BlackDot~R2C1~R2C2
+.BlackDot~R3C7~R4C7
+.BlackDot~R8C7~R9C7

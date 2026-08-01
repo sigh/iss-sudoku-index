@@ -1,0 +1,8 @@
+.~R1C1_2_4_6_8~R3C3_2_4_6_8
+.WhiteDot~R4C1~R5C1
+.WhiteDot~R4C5~R5C5
+.WhiteDot~R6C4~R7C4
+.WhiteDot~R8C4~R9C4
+.WhiteDot~R7C6~R8C6
+.WhiteDot~R9C8~R9C9
+.WhiteDot~R4C8~R4C9

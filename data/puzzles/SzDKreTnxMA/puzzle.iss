@@ -1,0 +1,9 @@
+.AntiKnight
+.GlobalMod
+.BlackDot~R6C6~R7C6
+.BlackDot~R6C7~R7C7
+.BlackDot~R6C5~R7C5
+.BlackDot~R3C7~R4C7
+.BlackDot~R3C6~R4C6
+.BlackDot~R3C8~R4C8
+.Thermo~R9C3~R8C3~R8C2
