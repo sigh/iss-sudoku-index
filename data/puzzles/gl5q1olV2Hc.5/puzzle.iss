@@ -1,0 +1,7 @@
+.~R1C2_2~R1C4_7~R1C8_9~R2C1_5~R2C3_7~R2C7_6~R2C9_8~R3C2_6~R3C8_3~R4C9_6~R5C5_4~R6C1_2~R7C2_4~R7C8_5~R8C1_1~R8C3_3~R8C7_2~R8C9_7~R9C2_7~R9C6_1~R9C8_4
+.Replicate~_7f_7f_7f_7f_D
+.Pair~93-fvv_f___-_H~_~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~93-fvv_f___-_H~_~R1C1~R2C1
+.End

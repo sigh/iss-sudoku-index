@@ -1,13 +1,21 @@
 // Title: Schrodinger's Carry-on
 // Author: James Sinclair
 // Video: https://www.youtube.com/watch?v=8L4ffie834I
-// Source: https://sudokupad.app/james-sinclair/schrodingers-carry-on
+// Source: https://sudokupad.app/james-sinclair/schrodingers-carry-on?setting-nogrid=1
 
-// 6x6, digits 0-6. Each row/column/box holds 0-6 once each across its six
-// cells, so exactly one cell per group is a "Schrodinger" cell holding two
-// digits. A cell's value is the sum of its digit(s). Index cells (columns 1-2)
-// point at where their column-number value sits in the row; four arrows sum
-// cell values into a circle.
+// 6x6 grid, boxes 2 rows x 3 columns, digits 0-6. Rules encoded here:
+//   1. Each row, column and box holds the digits 0-6 once each across its six
+//      cells, so exactly one cell per group is a "Schrodinger" cell holding two
+//      digits. Two Schrodinger cells may not hold the same pair.
+//   2. A cell's value is the sum of its digit(s).
+//   3. The twelve red squares (columns 1-2, every row) are index cells. An index
+//      cell in column X with value Y >= 1 forces the cell in column Y of the same
+//      row to have value X; Y = 0 instead forces value X to be absent from the
+//      row. An index cell's value may not exceed 6.
+//   4. Sum of the values along each arrow equals the value in its circle.
+//   5. Digits do not repeat within a cage.
+// Nothing is omitted. The maroon band drawn below row 6 carries the puzzle's
+// text and no cells; fog/reveal timing is presentation only.
 //
 // Model. Two overlays sit on top of the main 6x6 grid:
 //   A  = the main grid cell, ISS value v = digit (v-1). Restricted to 0-6.
@@ -29,21 +37,27 @@ const v = cell => VVo.at(cell);
 const cells = [];
 for (let r = 1; r <= 6; r++) for (let c = 1; c <= 6; c++) cells.push([r, c]);
 
-// Group rule: the six A digits plus the one non-sentinel VB cover 0-6 exactly
-// once. Scanning [A,VB,A,VB,...] and setting one bit per digit, the six A cells
-// (never sentinel) contribute six distinct bits; reaching all seven bits forces
-// exactly one VB to be non-sentinel -- i.e. exactly one Schrodinger cell that
-// supplies the missing seventh digit. No extra "double placed" flag is needed.
-const groupNFA = NFA.encodeSpec({
+// Scan interleaved [A, VB, A, VB, ...] and set one bitmask bit per digit,
+// skipping VB sentinels; a repeated digit kills the run. `accept` decides what
+// the collected set must be.
+const digitSetNFA = accept => NFA.encodeSpec({
   startState: 0,
   transition: (mask, x) => {
     if (x === SENTINEL) return mask;
     const bit = 1 << (x - 1);
-    if (mask & bit) return undefined;   // digit already present in this group
+    if (mask & bit) return undefined;   // digit already present
     return mask | bit;
   },
-  accept: mask => mask === 127,          // all of 0-6 present
+  accept,
 }, SENTINEL);
+
+// Row/column/box: all of 0-6 present. The six A cells (never sentinel) give six
+// distinct bits, so reaching all seven bits forces exactly one non-sentinel VB
+// -- i.e. exactly one two-digit cell, supplying the missing seventh digit. No
+// extra "double already placed" flag is needed.
+const groupNFA = digitSetNFA(mask => mask === 127);
+// Cage: no repeats, any subset.
+const cageNFA = digitSetNFA(() => true);
 
 // Value tie over [A, VB, VV]: VV == A when normal, A + VB - 1 when Schrodinger.
 const valNFA = NFA.encodeSpec({
@@ -60,7 +74,9 @@ const valNFA = NFA.encodeSpec({
 // Index rule for index-cell column X (1 or 2), scanning a row's six VV cells in
 // column order. Let Y be the index cell's value (VV-1, forced to 0-6). If Y>=1
 // the cell in column Y must have value X; if Y==0 the value X is absent from the
-// row. pos is clamped so compilation stays bounded to the six real cells.
+// row. col1eq caches column 1's value because for X=2 the target column can be 1,
+// which is scanned before Y is known. pos is clamped so compilation stays bounded
+// to the six real cells.
 function indexNFA(X) {
   return NFA.encodeSpec({
     startState: { pos: 1, y: -1, tveq: null, col1eq: false, cnt: 0 },
@@ -108,10 +124,7 @@ function pairNFA(lo, hi) {
 // {x,y} has a single A/VB encoding, removing an A<->VB swap symmetry.
 const canonKey = Pair.fnToKey((a, x) => x === SENTINEL || x < a, M);
 
-// Group rules (row / column / box) over interleaved [A, VB].
 const inter = list => list.flatMap(([r, c]) => [cid(r, c), b(cid(r, c))]);
-
-// Pair-distinctness across the whole grid.
 const allInter = inter(cells);
 
 // Domains: A digits 0-6; VB digit or sentinel; VV value+1 (index cells <= value 6).
@@ -127,12 +140,10 @@ const domainConstraints = [
 
 const canonConstraints = cells.map(([r, c]) => new Pair(canonKey, 'canon', cid(r, c), b(cid(r, c))));
 
-// Value ties.
 const valueTieConstraints = cells.map(([r, c]) =>
   new NFA(valNFA, 'val', cid(r, c), b(cid(r, c)), v(cid(r, c)))
 );
 
-// Group rules (row / column / box) over interleaved [A, VB].
 const rowConstraints = Array.from({length: 6}, (_, i) => {
   const r = i + 1;
   const l = Array.from({length: 6}, (_, j) => [r, j + 1]);
@@ -163,7 +174,6 @@ const indexConstraints = Array.from({length: 6}, (_, i) => {
   ];
 }).flat();
 
-// Pair-distinctness across the whole grid.
 const pairConstraints = [];
 for (let lo = 0; lo <= 6; lo++) for (let hi = lo + 1; hi <= 6; hi++) {
   pairConstraints.push(new NFA(pairNFA(lo, hi), `pair${lo}${hi}`, ...allInter));
@@ -171,12 +181,22 @@ for (let lo = 0; lo <= 6; lo++) for (let hi = lo + 1; hi <= 6; hi++) {
 
 // Arrows: sum of arm cell VALUES == circle VALUE. With VV = value + 1, the
 // linear form is sum(VV_arm) - VV_bulb = (armLength - 1).
+// Cells read off the drawn polylines: each arrow starts on its circle's rim and
+// bends through cell centres to the head.
 const arrowConstraints = [
   { bulb: cid(5, 1), arm: [cid(4, 2), cid(3, 2), cid(2, 1)] },
   { bulb: cid(3, 3), arm: [cid(4, 4), cid(3, 5)] },
   { bulb: cid(4, 5), arm: [cid(3, 6), cid(2, 5)] },
   { bulb: cid(6, 6), arm: [cid(5, 6), cid(4, 6)] },
 ].map(({bulb, arm}) => new Sum(arm.length - 1, ...VVo.at(arm), [v(bulb), -1]));
+
+// Cages: the three dashed outlines. Cells read off the closed outlines drawn on
+// the cage layer -- two 2x3 blocks and one 4-cell hook.
+const cageConstraints = [
+  [[1, 2], [1, 3], [1, 4], [2, 2], [2, 3], [2, 4]],
+  [[5, 2], [5, 3], [5, 4], [6, 2], [6, 3], [6, 4]],
+  [[3, 4], [4, 2], [4, 3], [4, 4]],
+].map((l, i) => new NFA(cageNFA, `cage${i + 1}`, ...inter(l)));
 
 return [
   new Shape('6x6', M),
@@ -191,4 +211,5 @@ return [
   ...indexConstraints,
   ...pairConstraints,
   ...arrowConstraints,
+  ...cageConstraints,
 ];

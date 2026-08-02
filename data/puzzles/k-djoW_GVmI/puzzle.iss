@@ -1,4 +1,5 @@
-.Diagonal~
+.Diagonal~1
+.Diagonal~-1
 .Thermo~R1C1~R2C1~R3C1~R4C1
 .Thermo~R5C1~R6C1~R7C1
 .Thermo~R8C1~R9C1~R9C2~R9C3

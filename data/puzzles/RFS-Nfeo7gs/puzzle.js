@@ -3,8 +3,11 @@
 // Video: https://www.youtube.com/watch?v=RFS-Nfeo7gs
 // Source: https://app.crackingthecryptic.com/kgozp9smu9
 
-// Normal Sudoku; the main down-right diagonal is all-different. Black dots are
-// 2:1 ratios, and each little-killer clue sums its indicated diagonal.
+// Normal Sudoku. The rules' singular "the indicated diagonal" is the
+// positive-slope one, R9C1 to R1C9 -- the payload marks `diagonal+` with no
+// `diagonal-` -- so that diagonal is all-different. Black dots are 2:1 ratios,
+// and each little-killer clue sums its own down-right diagonal, which is a
+// separate feature from the marked diagonal.
 const geometry = cellGeometry('9x9');
 const graph = cellGraph('9x9');
 

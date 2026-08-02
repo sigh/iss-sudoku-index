@@ -1,0 +1,17 @@
+// Title: Aad-van-ced Zippers
+// Author: gdc
+// Video: https://www.youtube.com/watch?v=GjEjQDCAZLk
+// Source: https://sudokupad.app/w9gvte9pxw
+
+// Normal 6x6 Sudoku uses 2x3 boxes. Each lavender line is a Zipper Line:
+// symmetric pairs have a common sum; an odd line's circled centre is that sum.
+// The drawn lavender paths supply the cell sequences below.
+return [
+  new Shape('6x6'),
+  new Zipper(
+    'R1C1', 'R2C1', 'R3C1', 'R3C2', 'R3C3',
+    'R3C4', 'R2C4', 'R1C4', 'R1C3', 'R1C2',
+  ),
+  new Zipper('R4C1', 'R5C1', 'R5C2', 'R6C2', 'R5C3'),
+  new Zipper('R4C5', 'R5C5', 'R6C5', 'R6C6', 'R5C6', 'R4C6', 'R3C6'),
+];

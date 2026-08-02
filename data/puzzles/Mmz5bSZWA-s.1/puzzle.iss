@@ -1,0 +1,7 @@
+.Shape~6x6
+.Cage~4~R2C5~R3C5
+.Cage~11~R4C2~R5C2
+.Cage~10~R4C4~R5C4
+.Cage~3~R2C3~R3C3
+.Cage~5~R4C5~R4C6
+.Cage~9~R3C1~R3C2

@@ -1,4 +1,5 @@
-.Diagonal~
+.Diagonal~-1
+.Diagonal~1
 .AntiKnight
 .Arrow~R4C5~R3C4~R3C5~R3C6
 .Arrow~R5C4~R4C3~R5C3~R6C3

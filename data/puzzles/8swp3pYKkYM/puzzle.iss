@@ -1,0 +1,17 @@
+.LittleKiller~15~R1C3
+.LittleKiller~35~R8C9
+.LittleKiller~19~R9C4
+.LittleKiller~22~R9C6
+.LittleKiller~22~R4C1
+.NFA~Qjf8Av__~_exactly%201%209s~R9C4~R8C5~R7C6~R6C7~R5C8~R4C9
+.NFA~Qjf8Ie__~_exactly%201%205s~R1C3~R2C2~R3C1
+.NFA~RhX_AIA96qq_-q6r__7_gA~_exactly%203%205s~R8C9~R7C8~R6C7~R5C6~R4C5~R3C4~R2C3~R1C2
+.NFA~RhX_IAA_qqq_-aqo~_exactly%202%202s~R9C6~R8C7~R7C8~R6C9~~R9C6~R8C5~R7C4~R6C3~R5C2~R4C1
+.Sandwich~15~C4
+.Sandwich~35~R9
+.Sandwich~19~C3
+.Sandwich~22~C5
+.Sandwich~22~C7
+.V~R2C5~R2C6
+.V~R3C9~R4C9
+.V~R2C2~R3C2

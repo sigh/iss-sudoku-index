@@ -4,9 +4,9 @@
 // Source: https://app.crackingthecryptic.com/9zyrpmw0lb
 
 // Irregular Sudoku uses the nine drawn regions instead of standard boxes.
-// Purple loops are Renban lines; the recoverable blue loop has equal sums in each
-// region segment; gold Nabner loops have neither equal nor consecutive digits anywhere
-// on a loop. The other blue loop is omitted because its recovered cell path is ambiguous.
+// Purple loops are Renban lines; each blue loop has the same total in every region it
+// enters; gold Nabner loops carry neither repeated nor consecutive digits anywhere on
+// a loop. Every rules sentence is encoded; nothing is omitted.
 const regions = [
   ['R1C1', 'R1C2', 'R1C3', 'R1C4', 'R2C1', 'R2C4', 'R3C1', 'R4C1', 'R4C2'],
   ['R1C5', 'R2C5', 'R2C7', 'R2C8', 'R3C5', 'R3C6', 'R3C7', 'R3C8', 'R4C7'],
@@ -38,6 +38,12 @@ return [
   new Given('R7C6', 5),
   new Renban('R4C6', 'R5C6', 'R5C7', 'R5C8', 'R4C8', 'R3C8', 'R3C7', 'R3C6'),
   new Renban('R5C3', 'R5C4', 'R6C4', 'R7C4', 'R7C3', 'R7C2', 'R6C2', 'R5C2'),
+  // Drawn blue loops. RegionSumLine partitions its cell list by walking it in order,
+  // so each loop is listed starting where a region visit begins. The loop drawn
+  // R8C5-R8C6-R8C7-R7C7-R6C7-R6C6-R6C5-R7C5 is rotated to start at R8C6, because R7C5
+  // and R8C5 form a single visit to one region spanning the loop's closing edge. The
+  // second loop is listed as drawn: its ends R2C3 and R2C4 lie in different regions.
   new RegionSumLine('R8C6', 'R8C7', 'R7C7', 'R6C7', 'R6C6', 'R6C5', 'R7C5', 'R8C5'),
+  new RegionSumLine('R2C3', 'R3C3', 'R4C3', 'R4C4', 'R4C5', 'R3C5', 'R2C5', 'R2C4'),
   ...nabners,
 ];

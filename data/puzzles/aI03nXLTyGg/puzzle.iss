@@ -6,3 +6,5 @@
 .Between~R5C2~R6C2~R6C3
 .Between~R6C9~R7C8~R8C7~R9C6
 .Between~R9C2~R8C3~R9C4
+.Between~R9C8~R8C8~R8C9
+.Between~R8C9~R9C9~R9C8

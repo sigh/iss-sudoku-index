@@ -4,9 +4,20 @@
 // Source: https://sudokupad.app/eb90s76a4e
 
 // Rules encoded: 6x6 Sudoku, two-colour shading with no monochrome toroidal
-// 2x2, and the one outside diagonal clue whose starting cell is fixed by the
-// rules text. The required toroidal same-colour connectivity and five
-// geometrically ambiguous outside clues are deliberately omitted.
+// 2x2, and all six outside diagonal clues. The required toroidal same-colour
+// connectivity is deliberately omitted: ConnectedValues only follows ordinary
+// non-wrapping grid adjacency, so it cannot express connectivity that crosses
+// the wraparound edges this puzzle allows.
+//
+// Each outside clue's raw waypoints sit inside the frame cell that carries its
+// badge, offset toward one corner of that cell (e.g. the 22 clue's waypoints
+// are at row 0.745-0.922, col 5.745-5.922 of an 8-wide canvas: both close to
+// the row1/col6 boundary). The arrow's own drawn direction (down-right etc.)
+// then names a single one of the four cells touching that corner as the run's
+// first cell -- the one lying in that direction from the corner. The rules
+// text's worked example confirms this reading for the 22 clue (its second
+// cell, after wrapping, is stated to be R2C1), and every other clue is read
+// the same way from its own raw waypoints.
 
 const SHADED = 1;
 const UNSHADED = 2;
@@ -64,9 +75,37 @@ function firstRunSum(total, path) {
   })));
 }
 
+// A run that never meets the opposite shade (the infinity clue) means every
+// cell on that diagonal shares one shade: two branches, all-shaded or
+// all-unshaded.
+function infiniteRun(path) {
+  return new Or([SHADED, UNSHADED].map(value =>
+    new And(shade.at(path).map(v => new Given(v, value)))));
+}
+
 const clues = [
+  // Badge cell R1C6, arrow down-right (raw waypoints row 0.745-0.922,
+  // col 5.745-5.922): enters at R1C6; confirmed by the rules text's own
+  // worked example (2nd cell R2C1).
   [22, ['R1C6', 'R2C1', 'R3C2', 'R4C3', 'R5C4', 'R6C5']],
+  // Badge cell R1C3, arrow down-right (row 0.745-0.922, col 2.745-2.922):
+  // enters at R1C3.
+  [24, ['R1C3', 'R2C4', 'R3C5', 'R4C6', 'R5C1', 'R6C2']],
+  // Badge cell R8C7, arrow up-left (row 7.078-7.255, col 6.078-6.255):
+  // enters at R6C5 -- the same toroidal diagonal as the 22 clue, read from
+  // the opposite end and direction.
+  [5, ['R6C5', 'R5C4', 'R4C3', 'R3C2', 'R2C1', 'R1C6']],
+  // Badge cell R8C2, arrow up-right (row 7.078-7.255, col 1.745-1.922):
+  // enters at R6C2.
+  [5, ['R6C2', 'R5C3', 'R4C4', 'R3C5', 'R2C6', 'R1C1']],
+  // Badge cell R6C1, arrow up-right (row 5.078-5.255, col 0.745-0.922):
+  // enters at R4C1.
+  [10, ['R4C1', 'R3C2', 'R2C3', 'R1C4', 'R6C5', 'R5C6']],
 ];
+
+// Badge cell R1C5, arrow down-right (row 0.745-0.922, col 4.745-4.922):
+// enters at R1C5.
+const infinitePath = ['R1C5', 'R2C6', 'R3C1', 'R4C2', 'R5C3', 'R6C4'];
 
 return [
   new Shape('6x6'),
@@ -75,4 +114,5 @@ return [
   ...toroidalBlocks.map(block =>
     new NFA(noMono2x2Machine, 'no-mono-toroidal-2x2', ...shade.at(block))),
   ...clues.map(([total, path]) => firstRunSum(total, path)),
+  infiniteRun(infinitePath),
 ];

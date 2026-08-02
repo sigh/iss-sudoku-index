@@ -1,0 +1,3 @@
+.Cage~6~R1C2~R2C2
+.Cage~6~R7C1~R8C1
+.Cage~6~R8C8~R9C8

@@ -1,0 +1,10 @@
+.Replicate~_7f_7f_7f_7f_D
+.Pair~4H-gP4D-gP4D_~_adjacent%20difference%20at%20least%203~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~4H-gP4D-gP4D_~_adjacent%20difference%20at%20least%203~R1C1~R2C1
+.End
+.Thermo~R2C1~R1C1~R1C2
+.Thermo~R5C6~R6C6~R6C5
+.BlackDot~R2C3~R2C4
+.BlackDot~R6C9~R7C9
