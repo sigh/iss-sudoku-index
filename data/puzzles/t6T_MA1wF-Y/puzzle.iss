@@ -1,0 +1,10 @@
+.Arrow~R2C5~R3C6~R2C7
+.Arrow~R6C5~R7C5~R8C6~R9C5
+.Arrow~R3C2~R4C2~R5C3~R6C2
+.Arrow~R5C7~R6C8~R7C9
+.Arrow~R8C1~R8C2~R8C3
+.Arrow~R3C9~R4C9~R5C9
+.LittleKiller~19~R6C9
+.LittleKiller~26~R4C1
+.LittleKiller~24~R1C6
+.LittleKiller~21~R9C4

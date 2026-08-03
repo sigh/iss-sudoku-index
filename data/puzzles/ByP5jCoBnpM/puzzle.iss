@@ -1,0 +1,11 @@
+.Cage~15~R1C4~R1C5~R1C6
+.Cage~11~R4C1~R5C1~R6C1
+.Cage~14~R9C4~R9C5~R9C6
+.Cage~14~R4C9~R5C9~R6C9
+.LittleKiller~56~R1C1
+.LittleKiller~50~R1C9
+.LittleKiller~23~R1C4
+.LittleKiller~28~R6C1
+.LittleKiller~29~R4C9
+.LittleKiller~24~R9C6
+.Whisper~5~R4C2~R5C3

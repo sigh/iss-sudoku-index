@@ -1,0 +1,16 @@
+.~R1C1_5~R9C9_5
+.XSum~C2~29~
+.XSum~C6~12~
+.XSum~C7~7~
+.XSum~R5~16~
+.XSum~R6~9~9
+.XSum~R4~~30
+.XSum~C8~~26
+.LittleKiller~29~R7C9
+.LittleKiller~12~R3C9
+.LittleKiller~7~R2C9
+.LittleKiller~16~R6C1
+.LittleKiller~9~R7C1
+.LittleKiller~30~R9C5
+.LittleKiller~9~R9C7
+.LittleKiller~26~R3C1

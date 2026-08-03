@@ -1,0 +1,10 @@
+.Shape~6x6
+.Diagonal~1
+.Diagonal~-1
+.LittleKiller~5~R5C1
+.LittleKiller~17~R3C1
+.LittleKiller~11~R4C6
+.LittleKiller~9~R1C4
+.LittleKiller~6~R2C6
+.LittleKiller~15~R6C3
+.LittleKiller~7~R6C4

@@ -3,8 +3,7 @@
 // Video: https://www.youtube.com/watch?v=2KFwiaXIaOg
 // Source: https://sudokupad.app/iql7m9a36u
 
-// Normal Sudoku, Yin-Yang shading, and the seven zipper paths whose cell
-// geometry is unambiguous in the source are encoded. The R9C8 zipper is omitted.
+// Normal Sudoku, Yin-Yang shading, and all eight zipper paths are encoded.
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
@@ -40,6 +39,7 @@ const zippers = [
   ['R5C3', 'R6C3', 'R5C4', 'R4C4', 'R4C5', 'R4C6', 'R5C6', 'R6C6', 'R6C5'],
   ['R6C4', 'R7C5', 'R8C6'],
   ['R2C4', 'R1C4', 'R1C3'],
+  ['R7C8', 'R7C9', 'R8C9', 'R9C9', 'R9C8', 'R9C7', 'R8C7', 'R7C7', 'R6C7'],
 ];
 
 // For one symmetric pair, scan left shade/digit, centre shade/digit, then

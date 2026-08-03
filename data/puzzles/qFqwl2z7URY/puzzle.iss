@@ -1,0 +1,13 @@
+.Whisper~5~R6C3~R6C4~R5C4~R4C5~R4C4~R3C4
+.Whisper~5~R3C9~R3C8~R3C7~R2C6~R2C5
+.Whisper~5~R2C3~R3C2~R4C2~R5C1
+.Renban~R4C7~R4C6~R5C6~R6C5~R6C6~R7C6
+.Renban~R7C1~R7C2~R7C3~R8C4~R8C5
+.Renban~R8C7~R7C8~R6C8~R5C9
+.Sandwich~8~C2
+.Sandwich~5~C4
+.Sandwich~10~C6
+.Sandwich~14~C7
+.Sandwich~10~R3
+.Sandwich~22~R4
+.Sandwich~27~R7

@@ -1,0 +1,14 @@
+.Cage~15~R1C1~R2C1~R3C1
+.Cage~22~R3C4~R3C5~R3C6
+.Cage~15~R4C3~R5C3~R6C3
+.Cage~15~R4C7~R5C7
+.Cage~27~R8C4~R8C5~R8C6~R8C7
+.Cage~15~R8C9~R9C9
+.Palindrome~R4C2~R5C2~R6C2~R7C3~R8C3~R9C3
+.Palindrome~R1C7~R2C7~R3C7~R4C8~R5C8~R6C8
+.Replicate~_7f_7f_7f_7f_D
+.Pair~3bv927v_-7v_-H~_not%205%20or%2010~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~3bv927v_-7v_-H~_not%205%20or%2010~R1C1~R2C1
+.End

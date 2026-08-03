@@ -6,22 +6,20 @@
 // Normal sudoku rules apply: standard rows, columns, and 3x3 boxes.
 //
 // The source draws a plain 9x9 sudoku rotated 45 degrees inside a 17x17
-// SudokuPad canvas with the built-in grid hidden (setting-nogrid=1). Givens
-// and lines below are converted back to plain, unrotated row/column
-// coordinates.
+// canvas with the built-in grid hidden. Givens and the whisper below use
+// plain, unrotated row/column coordinates recovered from that rotation.
 //
 // Green line: German whisper -- adjacent cells on the line differ by at
 // least 5.
 //
-// Outside clues: sandwich sums. Each arrow+number is drawn at 45 degrees on
-// the rotated display -- which is how a plain row or column of the
-// underlying grid appears on screen, matching the rules' "indicated
-// diagonal" -- and covers one full row or column.
+// Outside clues: sandwich sums, one per plain row/column, drawn diagonally
+// on the rotated display.
 //
 // OMITTED: "The base paths are double arrows: the digits on each path have
 // the same sum as the bases at the ends of the path. The bases contain four
-// different digits." No drawn geometry in the source payload could be
-// matched to a base-and-path shape for this rule.
+// different digits." Every other drawn line in the source is a redraw of
+// the box/cell grid borders, not clue geometry; no base-and-path shape for
+// this rule is present in the source.
 
 const geometry = cellGeometry('9x9');
 

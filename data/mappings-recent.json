@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-02T15:02:20.741866+00:00",
+  "generated_at": "2026-08-03T14:09:28.086312+00:00",
   "rows": [
     {
       "puzzle_id": "UaD4_AskOFo",
@@ -4055,10 +4055,10 @@
       "unique_solution": false,
       "solutions_found": 7,
       "guesses": 1015,
-      "solve_ms": 35.8,
+      "solve_ms": 39.1,
       "iss_size": 961,
       "iss_url_length": 1008,
-      "script_size": 1359
+      "script_size": 2399
     },
     {
       "puzzle_id": "R1G2sLLsu1U",

@@ -1,0 +1,15 @@
+.Cage~10~R1C1~R1C2~R1C3~R2C1
+.Cage~17~R2C3~R3C3~R4C2~R4C3
+.Palindrome~R3C6~R2C7~R1C7
+.Palindrome~R7C1~R7C2~R8C3~R7C4~R8C5~R9C5
+.Palindrome~R3C2~R2C3~R2C4~R3C4~R4C5~R5C4~R5C3
+.Palindrome~R6C5~R6C6~R6C7~R7C8~R8C8~R8C7~R9C6
+.Palindrome~R1C4~R1C5~R2C5~R2C6~R3C7~R4C8~R5C8~R6C8~R5C7
+.NumberedRoom~C1~4~
+.NumberedRoom~C2~5~2
+.NumberedRoom~C6~4~
+.NumberedRoom~C8~5~
+.NumberedRoom~C4~~3
+.NumberedRoom~R9~3~6
+.NumberedRoom~R1~~5
+.NumberedRoom~R4~~5

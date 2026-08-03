@@ -118,6 +118,8 @@ const traceability = gridCells.map(cell => new NFA(
   ...graph.neighbours(cell).flatMap(neighbour => [infection.at(neighbour), neighbour]),
 ));
 
+// The five blue-circle detector cells, from the five large ringed circles
+// drawn under the grid.
 const detectors = ['R3C5', 'R4C3', 'R5C3', 'R5C6', 'R8C8'];
 const detectorCountMachine = NFA.encodeSpec({
   startState: {phase: 'target'},
@@ -140,6 +142,8 @@ const detectorRules = detectors.flatMap(cell => [
   ),
 ]);
 
+// The four green two-cell Germy Whisper segments (thickness-9.6 lines),
+// distinct from the decorative germ-icon strokes drawn around their cells.
 const germyWhispers = [
   ['R8C1', 'R7C2'],
   ['R5C4', 'R4C5'],
@@ -151,6 +155,7 @@ const whisperRules = germyWhispers.flatMap(cells => [
   ...infection.at(cells).map(cell => new Given(cell, INFECTED)),
 ]);
 
+// The three purple Cocci dot edges, from the three large ringed edge circles.
 const cocciDots = [
   ['R2C2', 'R2C3'],
   ['R4C6', 'R4C7'],
