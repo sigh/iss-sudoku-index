@@ -1,0 +1,14 @@
+.~R7C6_4
+.AntiKnight
+.Arrow~R3C4~R4C5~R5C5
+.Arrow~R3C7~R4C6~R5C5~R6C5
+.Arrow~R6C3~R5C4~R5C5~R6C5
+.Arrow~R7C7~R6C6~R5C5~R6C5
+.Palindrome~R3C3~R2C4~R1C5
+.Palindrome~R4C3~R3C4~R2C5
+.Palindrome~R3C6~R4C7~R5C8
+.Palindrome~R3C7~R4C8~R5C9
+.Palindrome~R5C1~R6C2~R7C3
+.Palindrome~R5C2~R6C3~R7C4
+.Palindrome~R8C5~R7C6~R6C7
+.Palindrome~R9C5~R8C6~R7C7

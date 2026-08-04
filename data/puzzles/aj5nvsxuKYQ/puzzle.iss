@@ -1,0 +1,12 @@
+.~R5C2_4~R8C5_4
+.Cage~9~R1C1~R1C2~R2C1
+.Cage~9~R1C8~R1C9~R2C9
+.Cage~9~R8C9~R9C9~R9C8
+.Cage~9~R8C1~R9C1~R9C2
+.LittleKiller~28~R1C5
+.Replicate~_7f_7f_7f_7f_D
+.Pair~xDv82____7v_-H~_SafeDistance~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~xDv82____7v_-H~_SafeDistance~R1C1~R2C1
+.End

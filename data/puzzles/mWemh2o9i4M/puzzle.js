@@ -1,0 +1,28 @@
+// Title: X-Centric
+// Author: Malrog and Twototenth
+// Video: https://www.youtube.com/watch?v=mWemh2o9i4M
+// Source: https://app.crackingthecryptic.com/sudoku/ng8rt6Md8d
+
+// Normal sudoku rules apply (default row/column/box all-different from
+// Shape('9x9')). Digits may not repeat along either drawn diagonal
+// (Diagonal(-1) is R1C1..R9C9, Diagonal(1) is R1C9..R9C1). Each cage's
+// digits must sum to its stated total and may not repeat (Cage enforces
+// both). Cage cells/totals are transcribed from the payload's `cages` array.
+
+return [
+  new Shape('9x9'),
+
+  new Diagonal(-1),
+  new Diagonal(1),
+
+  new Cage(14, 'R2C1', 'R3C1'),
+  new Cage(42, 'R4C1', 'R4C2', 'R4C3', 'R5C1', 'R6C1', 'R6C2', 'R7C1', 'R8C1'),
+  new Cage(12, 'R5C2', 'R5C3', 'R5C4', 'R6C4'),
+  new Cage(17, 'R7C4', 'R7C5', 'R7C6'),
+  new Cage(38, 'R8C5', 'R9C2', 'R9C3', 'R9C4', 'R9C5', 'R9C6', 'R9C7', 'R9C8'),
+  new Cage(28, 'R4C6', 'R5C6', 'R5C7', 'R5C8'),
+  new Cage(12, 'R7C9', 'R8C9'),
+  new Cage(39, 'R2C9', 'R3C9', 'R4C8', 'R4C9', 'R5C9', 'R6C7', 'R6C8', 'R6C9'),
+  new Cage(40, 'R1C2', 'R1C3', 'R1C4', 'R1C5', 'R1C6', 'R1C7', 'R1C8', 'R2C5'),
+  new Cage(12, 'R3C4', 'R3C5', 'R3C6'),
+];

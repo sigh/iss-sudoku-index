@@ -1,0 +1,9 @@
+.FullRank~C1~33~
+.FullRank~C2~30~
+.FullRank~C3~26~
+.FullRank~C4~24~
+.FullRank~C5~13~
+.FullRank~R4~1~
+.FullRank~R5~17~
+.FullRank~R6~~36
+.FullRank~C6~~35

@@ -1,0 +1,2 @@
+.Renban~R3C8~R3C9
+.Renban~R4C5~R5C5~R5C4

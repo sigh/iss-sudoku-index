@@ -1,0 +1,29 @@
+// Title: Lattice
+// Author: pieguy
+// Video: https://www.youtube.com/watch?v=Lc9kKytyKVg
+// Source: https://app.crackingthecryptic.com/sudoku/JGLH47jqTd
+
+// Normal sudoku rules (default rows/cols/boxes). Twelve killer cages: digits
+// in a cage sum to its printed total and cannot repeat within the cage.
+// No given digits.
+
+// Cage sums and cells, transcribed from the drawn `cages` array.
+const cages = [
+  [35, 'R1C3', 'R2C3', 'R3C2', 'R3C3', 'R4C2', 'R5C2', 'R6C2'],
+  [35, 'R2C4', 'R2C5', 'R2C6', 'R2C7', 'R3C7', 'R3C8', 'R3C9'],
+  [9, 'R3C5', 'R3C6'],
+  [9, 'R4C3', 'R5C3'],
+  [9, 'R5C4', 'R5C5'],
+  [9, 'R4C7', 'R5C7'],
+  [35, 'R4C8', 'R5C8', 'R6C8', 'R7C7', 'R7C8', 'R8C7', 'R9C7'],
+  [13, 'R6C6', 'R6C7'],
+  [8, 'R6C5', 'R7C5'],
+  [7, 'R4C5', 'R4C6'],
+  [35, 'R7C1', 'R7C2', 'R7C3', 'R8C3', 'R8C4', 'R8C5', 'R8C6'],
+  [18, 'R9C3', 'R9C4', 'R9C5'],
+];
+
+return [
+  new Shape('9x9'),
+  ...cages.map(([sum, ...cells]) => new Cage(sum, ...cells)),
+];

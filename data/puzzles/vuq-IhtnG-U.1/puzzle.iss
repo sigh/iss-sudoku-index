@@ -1,0 +1,17 @@
+.~R1C9_8~R2C2_1~R2C3_2~R3C2_3~R3C3_4~R4C6_8~R4C8_2~R6C4_9~R6C6_4~R6C7_5~R7C6_6~R7C7_7~R8C4_1~R9C1_9
+.SameValues~2~R1C1~R5C5
+.SameValues~2~R1C2~R5C6
+.SameValues~2~R1C3~R5C7
+.SameValues~2~R1C4~R5C8
+.SameValues~2~R2C1~R6C5
+.SameValues~2~R2C4~R6C8
+.SameValues~2~R3C1~R7C5
+.SameValues~2~R3C4~R7C8
+.SameValues~2~R4C1~R8C5
+.SameValues~2~R4C2~R8C6
+.SameValues~2~R4C3~R8C7
+.SameValues~2~R4C4~R8C8
+.SameValues~2~R2C6~R6C2
+.SameValues~2~R2C7~R6C3
+.SameValues~2~R3C6~R7C2
+.SameValues~2~R3C7~R7C3

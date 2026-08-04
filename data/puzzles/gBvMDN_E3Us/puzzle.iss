@@ -1,0 +1,13 @@
+.Thermo~R1C3~R1C4~R2C4~R3C4~R4C4
+.Thermo~R4C5~R5C5~R6C5~R7C5~R8C5
+.Thermo~R1C7~R1C6~R2C6~R3C6~R4C6
+.Thermo~R9C1~R9C2~R9C3~R9C4~R8C4
+.Thermo~R5C7~R6C8~R7C8~R8C8
+.Thermo~R6C2~R5C2~R4C3
+.~R2C5_1_3_5_7_9
+.Replicate~_7f_7f_7f_7f_D
+.Pair~_7v_-7v_-7v_-H~_~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~_7v_-7v_-7v_-H~_~R1C1~R2C1
+.End
