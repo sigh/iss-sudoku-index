@@ -1,0 +1,10 @@
+.~R4C9_1~R9C2_5~R9C9_2
+.DisjointSets
+.AntiKnight
+.Diagonal~-1
+.Arrow~R3C3~R4C4~R5C5
+.Arrow~R6C3~R5C2~R4C1
+.Arrow~R6C3~R7C4~R8C5~R9C6
+.Arrow~R1C7~R2C8~R3C9
+.Arrow~R4C7~R3C6~R2C5~R1C4
+.Arrow~R4C7~R5C8~R6C9

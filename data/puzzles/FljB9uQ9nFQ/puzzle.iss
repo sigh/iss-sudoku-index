@@ -1,0 +1,15 @@
+.Shape~6x6
+.~R1C2_3~R2C1_1_3_5~R3C6_1_3_5
+.Cage~12~R1C2~R2C2~R2C1
+.Cage~15~R4C2~R4C4~R4C6~R4C3~R4C5
+.Cage~9~R5C1~R5C2
+.AllDifferent~R5C3~R5C4
+.Arrow~R4C6~R3C5~R2C4
+.Thermo~R5C4~R6C5~R5C6
+.Palindrome~R4C4~R3C5~R2C6
+.LittleKiller~10~R5C1
+.XSum~C1~~6
+.WhiteDot~R2C1~R2C2
+.BlackDot~R3C2~R3C3
+.X~R2C2~R2C3
+.Quad~R5C3~1~2~3~4

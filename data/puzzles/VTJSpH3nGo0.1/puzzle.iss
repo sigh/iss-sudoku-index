@@ -1,0 +1,15 @@
+.Quad~R3C5~5~6~7~8
+.Quad~R5C6~4~5~6~7
+.Quad~R6C4~3~4~5~6
+.Quad~R4C3~2~3~4
+.Quad~R2C7~4~5~6~7
+.Quad~R7C2~2~3~4~5
+.Quad~R1C6~3~5~7~9
+.Quad~R8C3~3~5~6~7
+.Quad~R6C1~2~8
+.Quad~R3C8~2~3
+.Quad~R2C2~1~2~8~9
+.Quad~R7C7~1~3~7~8
+.Cage~15~R4C5~R5C4~R5C5~R5C6~R6C5
+.Cage~28~R8C1~R8C2~R9C1~R9C2
+.Cage~12~R1C8~R1C9~R2C8~R2C9

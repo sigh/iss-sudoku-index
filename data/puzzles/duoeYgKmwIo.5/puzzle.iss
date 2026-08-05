@@ -1,0 +1,15 @@
+.~R1C8_3~R3C3_1~R7C7_4~R9C2_7
+.Quad~R3C3~2~2
+.Quad~R4C3~3~3
+.Quad~R5C3~4~4
+.Quad~R6C3~5~5
+.Quad~R6C6~6~6
+.Quad~R5C6~7~7
+.Quad~R4C6~8~8
+.Quad~R3C6~9~9
+.Quad~R2C2~2~5~8
+.Quad~R1C1~3~6~9
+.Quad~R7C7~3~6~9
+.Quad~R8C8~2~5~8
+.Quad~R5C1~5~6
+.Quad~R4C8~2~9

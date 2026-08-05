@@ -1,0 +1,9 @@
+.~R4C3_1~R5C4_2~R5C6_1~R6C7_2
+.AntiKnight
+.AntiKing
+.Replicate~_7f_7f_7f_7f_D
+.Pair~3bv927v_-7v_-H~_~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~3bv927v_-7v_-H~_~R1C1~R2C1
+.End
