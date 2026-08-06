@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-05T11:18:43.627999+00:00",
+  "generated_at": "2026-08-06T11:08:29.041938+00:00",
   "rows": [
     {
       "puzzle_id": "UaD4_AskOFo",
@@ -396,7 +396,7 @@
       "constraint_types": [
         "Or",
         "Cage",
-        "ContainExact",
+        "LookAndSay",
         "BlackDot",
         "WhiteDot",
         "Whisper",
@@ -408,10 +408,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 4,
-      "solve_ms": 5.8,
-      "iss_size": 1018,
-      "iss_url_length": 1045,
-      "script_size": 2135
+      "solve_ms": 6.4,
+      "iss_size": 1007,
+      "iss_url_length": 1034,
+      "script_size": 2092
     },
     {
       "puzzle_id": "zWudy39jjEQ",
@@ -1219,7 +1219,7 @@
       "solve_ms": 26.3,
       "iss_size": 70898,
       "iss_url_length": 68624,
-      "script_size": 13518
+      "script_size": 13602
     },
     {
       "puzzle_id": "JPGFsisxFlw",
@@ -4245,9 +4245,9 @@
       "solutions_found": 1,
       "guesses": 253,
       "solve_ms": 26.7,
-      "iss_size": 2548,
-      "iss_url_length": 2557,
-      "script_size": 4662
+      "iss_size": 2549,
+      "iss_url_length": 2558,
+      "script_size": 4635
     },
     {
       "puzzle_id": "IrrtMa7XMDM",
@@ -4331,9 +4331,9 @@
       "solutions_found": 0,
       "guesses": 1073362,
       "solve_ms": 158127.0,
-      "iss_size": 25090,
-      "iss_url_length": 24031,
-      "script_size": 6020
+      "iss_size": 25092,
+      "iss_url_length": 24033,
+      "script_size": 6004
     },
     {
       "puzzle_id": "lY9YsqOO19E",
@@ -4689,7 +4689,7 @@
       "solve_ms": 196.0,
       "iss_size": 10536,
       "iss_url_length": 10611,
-      "script_size": 5776
+      "script_size": 5846
     },
     {
       "puzzle_id": "ECyhFDcyaIc",
@@ -7642,7 +7642,7 @@
       "solve_ms": 18.0,
       "iss_size": 34208,
       "iss_url_length": 34167,
-      "script_size": 7991
+      "script_size": 7961
     },
     {
       "puzzle_id": "PkPU_cSbrfs",
@@ -9058,7 +9058,7 @@
       "solve_ms": 158.6,
       "iss_size": 18030,
       "iss_url_length": 18072,
-      "script_size": 6231
+      "script_size": 6147
     },
     {
       "puzzle_id": "pGrD3QJBpKU",
@@ -10467,9 +10467,9 @@
       "solutions_found": 1,
       "guesses": 1978,
       "solve_ms": 326.7,
-      "iss_size": 33708,
-      "iss_url_length": 33728,
-      "script_size": 19070
+      "iss_size": 33710,
+      "iss_url_length": 33730,
+      "script_size": 19063
     },
     {
       "puzzle_id": "z1ZdqfIQdjE",
@@ -12305,7 +12305,7 @@
       "solve_ms": 7.5,
       "iss_size": 879,
       "iss_url_length": 897,
-      "script_size": 2307
+      "script_size": 2614
     },
     {
       "puzzle_id": "P6HoizVAU4c",
@@ -14972,7 +14972,6 @@
       "status": "validated",
       "constraint_types": [
         "6x6",
-        "RegionSize",
         "Arrow",
         "SumLine"
       ],
@@ -14980,11 +14979,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 891,
-      "solve_ms": 26.0,
-      "iss_size": 230,
-      "iss_url_length": 278,
-      "script_size": 765
+      "guesses": 53,
+      "solve_ms": 7.5,
+      "iss_size": 216,
+      "iss_url_length": 265,
+      "script_size": 741
     },
     {
       "puzzle_id": "UrvJfgNLNDc",
@@ -15094,7 +15093,7 @@
       "solve_ms": 22.1,
       "iss_size": 2703,
       "iss_url_length": 2721,
-      "script_size": 3867
+      "script_size": 3856
     },
     {
       "puzzle_id": "Q-zInJ_YQes",
@@ -16784,7 +16783,7 @@
       "solve_ms": 5.9,
       "iss_size": 6201,
       "iss_url_length": 6090,
-      "script_size": 4975
+      "script_size": 4951
     },
     {
       "puzzle_id": "tAASGi1p1Vo",
@@ -23420,17 +23419,17 @@
       "status": "too-slow",
       "constraint_types": [
         "8x8",
-        "ContainExact"
+        "LookAndSay"
       ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3592831,
-      "solve_ms": 25259.8,
-      "iss_size": 1474,
-      "iss_url_length": 1518,
-      "script_size": 1340
+      "guesses": 450465,
+      "solve_ms": 2384.6,
+      "iss_size": 372,
+      "iss_url_length": 422,
+      "script_size": 1215
     },
     {
       "puzzle_id": "qBbAtCyR6AA",
@@ -25170,7 +25169,7 @@
       "solve_ms": 7.4,
       "iss_size": 560,
       "iss_url_length": 595,
-      "script_size": 1871
+      "script_size": 2037
     },
     {
       "puzzle_id": "NmYfB2DqgAs",
@@ -25223,7 +25222,7 @@
       "solve_ms": 5617.7,
       "iss_size": 16621,
       "iss_url_length": 16658,
-      "script_size": 6058
+      "script_size": 6017
     },
     {
       "puzzle_id": "xSoCN1mIHqU",
@@ -25384,7 +25383,7 @@
       "solve_ms": 5.7,
       "iss_size": 1100,
       "iss_url_length": 1159,
-      "script_size": 6266
+      "script_size": 6223
     },
     {
       "puzzle_id": "VrN7K3YwjkA",
@@ -29556,7 +29555,7 @@
       "solve_ms": 13.8,
       "iss_size": 600,
       "iss_url_length": 627,
-      "script_size": 2820
+      "script_size": 2779
     },
     {
       "puzzle_id": "iBpgpwUq9d8",
@@ -29810,9 +29809,9 @@
       "solutions_found": 1,
       "guesses": 425243,
       "solve_ms": 40499.1,
-      "iss_size": 13622,
-      "iss_url_length": 13640,
-      "script_size": 7856
+      "iss_size": 13623,
+      "iss_url_length": 13641,
+      "script_size": 7827
     },
     {
       "puzzle_id": "-L9qq8cyQ5M",
@@ -30097,7 +30096,7 @@
       "solve_ms": 201.7,
       "iss_size": 17188,
       "iss_url_length": 17156,
-      "script_size": 9778
+      "script_size": 9834
     },
     {
       "puzzle_id": "jZbmMuEobuQ",
@@ -31596,7 +31595,7 @@
       "solve_ms": 5479.3,
       "iss_size": 8964,
       "iss_url_length": 8498,
-      "script_size": 5478
+      "script_size": 5468
     },
     {
       "puzzle_id": "BwLGn5ho5MU",
@@ -32552,7 +32551,7 @@
       "solve_ms": 24117.1,
       "iss_size": 70751,
       "iss_url_length": 70887,
-      "script_size": 5541
+      "script_size": 5613
     },
     {
       "puzzle_id": "BsBlndvhpmc",
@@ -34849,7 +34848,7 @@
       "solve_ms": 2680.5,
       "iss_size": 57119,
       "iss_url_length": 57138,
-      "script_size": 11164
+      "script_size": 11219
     },
     {
       "puzzle_id": "MoFx3knrLro",
@@ -35147,7 +35146,7 @@
       "solve_ms": 7.5,
       "iss_size": 6882,
       "iss_url_length": 6825,
-      "script_size": 11495
+      "script_size": 11480
     },
     {
       "puzzle_id": "9r5SaCFRP4g",
@@ -36262,7 +36261,7 @@
       "solve_ms": 7.5,
       "iss_size": 14147,
       "iss_url_length": 13148,
-      "script_size": 5587
+      "script_size": 5546
     },
     {
       "puzzle_id": "ZWYz9_1Qwt4",
@@ -36549,17 +36548,17 @@
         "Or",
         "And",
         "Sum",
-        "ContainExact"
+        "LookAndSay"
       ],
       "search_completed": true,
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 118385,
-      "solve_ms": 2753.1,
-      "iss_size": 21747,
-      "iss_url_length": 20728,
-      "script_size": 2629
+      "solve_ms": 3057.0,
+      "iss_size": 21128,
+      "iss_url_length": 20109,
+      "script_size": 2540
     },
     {
       "puzzle_id": "3Lb6RkjZDtc",
@@ -37993,7 +37992,7 @@
       "solve_ms": 7.9,
       "iss_size": 156,
       "iss_url_length": 201,
-      "script_size": 1909
+      "script_size": 1870
     },
     {
       "puzzle_id": "gFzgB9jY5cM.1",
@@ -38173,7 +38172,7 @@
       "solve_ms": 10.6,
       "iss_size": 544,
       "iss_url_length": 570,
-      "script_size": 2416
+      "script_size": 2350
     },
     {
       "puzzle_id": "GNu0MnrAtAA",
@@ -39669,7 +39668,33 @@
       "date": "2024-10-07",
       "status": "partial",
       "constraint_types": [
-        "WhiteDot"
+        "1-10",
+        "Replicate",
+        "Var",
+        "SameValues",
+        "Sum",
+        "WhiteDot",
+        "Pair: run",
+        "Pair: tail",
+        "Pair: link-U",
+        "Pair: link-D",
+        "Pair: off",
+        "Pair: start-U",
+        "Pair: start-D",
+        "Pair: start-L",
+        "Pair: start-R",
+        "Pair: link-L",
+        "Pair: link-R",
+        "NFA: seed",
+        "NFA: carry-R",
+        "NFA: carry-L",
+        "NFA: carry-D",
+        "NFA: carry-U",
+        "NFA: renban",
+        "NFA: mask-R",
+        "NFA: mask-L",
+        "NFA: mask-D",
+        "NFA: mask-U"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -39677,9 +39702,9 @@
       "solutions_found": 995,
       "guesses": 1039,
       "solve_ms": 19.1,
-      "iss_size": 19,
-      "iss_url_length": 71,
-      "script_size": 479
+      "iss_size": 45523,
+      "iss_url_length": 45557,
+      "script_size": 13150
     },
     {
       "puzzle_id": "TxEYzJLQpcA",
@@ -39899,7 +39924,7 @@
       "solve_ms": 145.5,
       "iss_size": 4002,
       "iss_url_length": 4029,
-      "script_size": 4296
+      "script_size": 4218
     },
     {
       "puzzle_id": "tmjNfTn6hGo",
@@ -41102,7 +41127,7 @@
       "solve_ms": 5.3,
       "iss_size": 1538,
       "iss_url_length": 1606,
-      "script_size": 2079
+      "script_size": 2036
     },
     {
       "puzzle_id": "RceIm4QX-u0",
@@ -41367,7 +41392,7 @@
       "solve_ms": 1014.3,
       "iss_size": 3126,
       "iss_url_length": 3211,
-      "script_size": 4321
+      "script_size": 4311
     },
     {
       "puzzle_id": "nrfbkezAzTs",
@@ -41451,7 +41476,7 @@
       "solve_ms": 1008.3,
       "iss_size": 9405,
       "iss_url_length": 9446,
-      "script_size": 5453
+      "script_size": 5508
     },
     {
       "puzzle_id": "lpNjWkqywHU",
@@ -44175,19 +44200,40 @@
         "https://sudokupad.app/9wm6ctm2hv"
       ],
       "date": "2024-07-13",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
-        "Thermo"
+        "1-10",
+        "Var",
+        "Replicate",
+        "Thermo",
+        "NFA: japanese sums R5",
+        "NFA: japanese sums C4",
+        "NFA: japanese sums C3",
+        "NFA: japanese sums R2",
+        "NFA: japanese sums C5",
+        "NFA: japanese sums C7",
+        "NFA: japanese sums R8",
+        "NFA: japanese sums R7",
+        "NFA: japanese sums R9",
+        "NFA: japanese sums C9",
+        "NFA: japanese sums C8",
+        "NFA: japanese sums R6",
+        "NFA: japanese sums R4",
+        "NFA: japanese sums C1",
+        "NFA: japanese sums C2",
+        "NFA: japanese sums R1",
+        "NFA: japanese sums R3",
+        "NFA: japanese sums C6"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 987,
-      "guesses": 1035,
-      "solve_ms": 28.3,
-      "iss_size": 52,
-      "iss_url_length": 104,
-      "script_size": 482
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 4.6,
+      "iss_size": 10394,
+      "iss_url_length": 10495,
+      "script_size": 5225
     },
     {
       "puzzle_id": "kLpazYijLas",
@@ -44646,17 +44692,17 @@
       "constraint_types": [
         "Or",
         "Cage",
-        "ContainExact"
+        "LookAndSay"
       ],
       "search_completed": true,
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 1070,
-      "solve_ms": 71.0,
-      "iss_size": 1495,
-      "iss_url_length": 1452,
-      "script_size": 1504
+      "solve_ms": 47.4,
+      "iss_size": 1461,
+      "iss_url_length": 1418,
+      "script_size": 1444
     },
     {
       "puzzle_id": "RJNoyPbW3Vc",
@@ -46167,7 +46213,7 @@
       "solve_ms": 229.0,
       "iss_size": 145080,
       "iss_url_length": 141179,
-      "script_size": 3125
+      "script_size": 2557
     },
     {
       "puzzle_id": "ZOknNT8EOng",
@@ -47743,8 +47789,26 @@
       "date": "2024-05-08",
       "status": "partial",
       "constraint_types": [
+        "1-11",
+        "Var",
+        "Replicate",
         "AllDifferent",
-        "X"
+        "ContainExact",
+        "Sum",
+        "Palindrome",
+        "Modular",
+        "EqualSum",
+        "Or",
+        "Whisper",
+        "NFA: no crossing",
+        "NFA: path position",
+        "NFA: cell value",
+        "NFA: path degree",
+        "NFA: path values",
+        "NFA: pseudo cell",
+        "Pair: on path",
+        "NFA: killer digit",
+        "PairX: Nabner"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -47752,9 +47816,9 @@
       "solutions_found": 990,
       "guesses": 1034,
       "solve_ms": 18.6,
-      "iss_size": 288,
-      "iss_url_length": 330,
-      "script_size": 798
+      "iss_size": 40454,
+      "iss_url_length": 40545,
+      "script_size": 16486
     },
     {
       "puzzle_id": "Zv6w8Y3UTQY",
@@ -48123,22 +48187,23 @@
         "https://sudokupad.app/azp64ejj1v?setting-nogrid=1"
       ],
       "date": "2024-05-01",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
+        "Arrow",
         "Or",
         "And",
-        "AllDifferent",
-        "SameValues"
+        "SameValues",
+        "AllDifferent"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 929,
-      "guesses": 1028,
-      "solve_ms": 16.9,
-      "iss_size": 2461,
-      "iss_url_length": 2370,
-      "script_size": 1334
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 352,
+      "solve_ms": 21.7,
+      "iss_size": 1947,
+      "iss_url_length": 1872,
+      "script_size": 2876
     },
     {
       "puzzle_id": "aYsWENNTfjo",
@@ -49471,7 +49536,7 @@
       "solve_ms": 7203.3,
       "iss_size": 2009,
       "iss_url_length": 2061,
-      "script_size": 3427
+      "script_size": 3386
     },
     {
       "puzzle_id": "6yXzdXQ9SX8",
@@ -49639,7 +49704,7 @@
       "solve_ms": 8497.8,
       "iss_size": 68435,
       "iss_url_length": 68363,
-      "script_size": 12512
+      "script_size": 12471
     },
     {
       "puzzle_id": "8nwws3rjUrc",
@@ -49701,21 +49766,23 @@
         "https://sudokupad.app/myxmj3f1g9"
       ],
       "date": "2024-04-02",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Palindrome",
+        "Zipper",
+        "SameValues",
         "WhiteDot",
         "BlackDot"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 978,
-      "guesses": 1025,
-      "solve_ms": 28.0,
-      "iss_size": 146,
-      "iss_url_length": 195,
-      "script_size": 508
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2390,
+      "solve_ms": 57.4,
+      "iss_size": 393,
+      "iss_url_length": 440,
+      "script_size": 2717
     },
     {
       "puzzle_id": "Cd38-xpsblo",
@@ -51961,23 +52028,27 @@
         "https://app.crackingthecryptic.com/817bobvnn5"
       ],
       "date": "2024-02-26",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "AllDifferent",
         "Or",
+        "And",
         "SameValues",
-        "Cage"
+        "EqualSum",
+        "Cage",
+        "Pair: down",
+        "Pair: right"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 1000,
-      "guesses": 1114,
-      "solve_ms": 25.1,
-      "iss_size": 4810,
-      "iss_url_length": 4532,
-      "script_size": 2628
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 304,
+      "solve_ms": 42.8,
+      "iss_size": 22404,
+      "iss_url_length": 21262,
+      "script_size": 6312
     },
     {
       "puzzle_id": "7yXvcsWVK2g",
@@ -52186,7 +52257,10 @@
       "constraint_types": [
         "Palindrome",
         "WhiteDot",
-        "BlackDot"
+        "BlackDot",
+        "Or",
+        "And",
+        "SameValues"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -52194,9 +52268,9 @@
       "solutions_found": 998,
       "guesses": 1033,
       "solve_ms": 14.5,
-      "iss_size": 176,
-      "iss_url_length": 221,
-      "script_size": 851
+      "iss_size": 2827,
+      "iss_url_length": 2619,
+      "script_size": 3329
     },
     {
       "puzzle_id": "O0X4Da1VdYI",
@@ -52387,9 +52461,9 @@
       "solutions_found": 1,
       "guesses": 1720,
       "solve_ms": 8816.0,
-      "iss_size": 106180,
-      "iss_url_length": 106200,
-      "script_size": 15368
+      "iss_size": 106181,
+      "iss_url_length": 106201,
+      "script_size": 15370
     },
     {
       "puzzle_id": "H0D3H19tKzg",
@@ -53322,7 +53396,7 @@
       "solve_ms": 36.2,
       "iss_size": 1858,
       "iss_url_length": 1870,
-      "script_size": 6429
+      "script_size": 6388
     },
     {
       "puzzle_id": "I__VQXB_upM",
@@ -53541,7 +53615,7 @@
       "solve_ms": 10130.6,
       "iss_size": 53642,
       "iss_url_length": 49108,
-      "script_size": 6216
+      "script_size": 6310
     },
     {
       "puzzle_id": "1wGrV70pfo0",
@@ -54183,6 +54257,7 @@
         "Var",
         "SameValues",
         "Arrow",
+        "Pair: padding order",
         "Pair: white dot"
       ],
       "search_completed": false,
@@ -54191,9 +54266,9 @@
       "solutions_found": 0,
       "guesses": 423757,
       "solve_ms": 3124.4,
-      "iss_size": 1669,
-      "iss_url_length": 1711,
-      "script_size": 3074
+      "iss_size": 1870,
+      "iss_url_length": 1913,
+      "script_size": 4649
     },
     {
       "puzzle_id": "lbTvr5Ocd3k",
@@ -54206,8 +54281,26 @@
       "date": "2024-01-16",
       "status": "partial",
       "constraint_types": [
-        "NoBoxes",
-        "Jigsaw"
+        "Var",
+        "Replicate",
+        "NFA: row-8",
+        "NFA: row-7",
+        "NFA: row-4",
+        "NFA: row-2",
+        "NFA: row-1",
+        "NFA: column-2",
+        "NFA: column-1",
+        "NFA: column-9",
+        "NFA: row-9",
+        "NFA: column-8",
+        "NFA: row-5",
+        "NFA: column-5",
+        "NFA: column-6",
+        "NFA: row-3",
+        "NFA: column-7",
+        "NFA: column-3",
+        "NFA: column-4",
+        "NFA: row-6"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -54215,9 +54308,9 @@
       "solutions_found": 1000,
       "guesses": 1042,
       "solve_ms": 18.1,
-      "iss_size": 98,
-      "iss_url_length": 149,
-      "script_size": 530
+      "iss_size": 7753,
+      "iss_url_length": 7784,
+      "script_size": 5067
     },
     {
       "puzzle_id": "9qorOlkTmrI",
@@ -54583,7 +54676,7 @@
         "SameValues",
         "Or",
         "And",
-        "Cage"
+        "Sum"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -54591,9 +54684,9 @@
       "solutions_found": 999,
       "guesses": 1064,
       "solve_ms": 28.0,
-      "iss_size": 3235,
-      "iss_url_length": 3019,
-      "script_size": 2177
+      "iss_size": 6843,
+      "iss_url_length": 6334,
+      "script_size": 3465
     },
     {
       "puzzle_id": "HoELynTTAq4",
@@ -55541,7 +55634,9 @@
       "date": "2023-12-22",
       "status": "partial",
       "constraint_types": [
-        "Cage"
+        "Cage",
+        "Or",
+        "And"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -55549,9 +55644,9 @@
       "solutions_found": 996,
       "guesses": 1040,
       "solve_ms": 22.0,
-      "iss_size": 53,
-      "iss_url_length": 103,
-      "script_size": 482
+      "iss_size": 464,
+      "iss_url_length": 506,
+      "script_size": 4212
     },
     {
       "puzzle_id": "C2JLJkM-GzE",
@@ -55951,7 +56046,7 @@
         "Or",
         "And",
         "Cage",
-        "ContainExact",
+        "LookAndSay",
         "Sum"
       ],
       "search_completed": true,
@@ -55959,10 +56054,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 1576,
-      "solve_ms": 49.9,
-      "iss_size": 4482,
-      "iss_url_length": 4285,
-      "script_size": 2119
+      "solve_ms": 58.1,
+      "iss_size": 4334,
+      "iss_url_length": 4137,
+      "script_size": 2074
     },
     {
       "puzzle_id": "jgEW_ECvpWI",
@@ -56141,7 +56236,7 @@
         "https://sudokupad.app/crqk2uytmu"
       ],
       "date": "2023-12-13",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -56149,6 +56244,8 @@
         "WhiteDot",
         "BlackDot",
         "NFA: no-mono-2x2",
+        "NFA: line-parity-count-R9C1-R8C5",
+        "NFA: line-parity-count-R3C8-R2C9",
         "NFA: minesweeper-R1C1",
         "NFA: minesweeper-R2C3",
         "NFA: minesweeper-R2C9",
@@ -56158,17 +56255,21 @@
         "NFA: minesweeper-R6C4",
         "NFA: minesweeper-R6C7",
         "NFA: minesweeper-R8C5",
-        "NFA: minesweeper-R9C1"
+        "NFA: minesweeper-R9C1",
+        "NFA: line-parity-count-R2C3-R3C5",
+        "NFA: line-parity-count-R1C1-R2C3",
+        "NFA: line-parity-count-R2C9-R6C7",
+        "NFA: line-parity-count-R4C5-R6C4"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 968,
-      "guesses": 1031,
-      "solve_ms": 26.3,
-      "iss_size": 1382,
-      "iss_url_length": 1416,
-      "script_size": 2950
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1229,
+      "solve_ms": 53.1,
+      "iss_size": 3337,
+      "iss_url_length": 3366,
+      "script_size": 7654
     },
     {
       "puzzle_id": "76WIK0uMoP4",
@@ -56429,9 +56530,9 @@
       "solutions_found": 934,
       "guesses": 1016,
       "solve_ms": 17.9,
-      "iss_size": 277,
-      "iss_url_length": 324,
-      "script_size": 1114
+      "iss_size": 502,
+      "iss_url_length": 546,
+      "script_size": 3081
     },
     {
       "puzzle_id": "1TjGatuBPcY",
@@ -57285,6 +57386,7 @@
       "status": "partial",
       "constraint_types": [
         "Diagonal",
+        "RegionSumLine",
         "WhiteDot",
         "BlackDot"
       ],
@@ -57294,9 +57396,9 @@
       "solutions_found": 998,
       "guesses": 1039,
       "solve_ms": 17.3,
-      "iss_size": 51,
-      "iss_url_length": 101,
-      "script_size": 589
+      "iss_size": 341,
+      "iss_url_length": 385,
+      "script_size": 2565
     },
     {
       "puzzle_id": "DC5xJFjT9cA",
@@ -57610,7 +57712,7 @@
       "solve_ms": 2.7,
       "iss_size": 1353,
       "iss_url_length": 1389,
-      "script_size": 2059
+      "script_size": 1970
     },
     {
       "puzzle_id": "gxuYWm8Unss.4",
@@ -57795,22 +57897,26 @@
         "https://sudokupad.app/29nTttfqqt"
       ],
       "date": "2023-11-21",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Between",
+        "ContainAtLeast",
+        "Or",
         "WhiteDot",
         "BlackDot",
-        "X"
+        "X",
+        "Pair: skier-via-R6C4",
+        "Pair: skier-via-R7C3"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 653,
-      "guesses": 1018,
-      "solve_ms": 24.6,
-      "iss_size": 326,
-      "iss_url_length": 363,
-      "script_size": 1180
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 87,
+      "solve_ms": 10.4,
+      "iss_size": 833,
+      "iss_url_length": 859,
+      "script_size": 4242
     },
     {
       "puzzle_id": "_IgvMlgtEUI",
@@ -58644,20 +58750,20 @@
         "https://app.crackingthecryptic.com/sudoku/LMNPbhgr93"
       ],
       "date": "2023-11-08",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "Renban",
-        "Pair: clockwise digit map"
+        "Pair: clockwise rotation digit map"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 64,
-      "guesses": 1002,
-      "solve_ms": 53.5,
-      "iss_size": 727,
-      "iss_url_length": 774,
-      "script_size": 1514
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 14,
+      "solve_ms": 5.4,
+      "iss_size": 740,
+      "iss_url_length": 790,
+      "script_size": 2127
     },
     {
       "puzzle_id": "OnZf07JvkY0",
@@ -59928,20 +60034,22 @@
         "https://app.crackingthecryptic.com/sudoku/pHm4JTbr9d"
       ],
       "date": "2023-10-22",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
-        "AllDifferent",
+        "Or",
+        "And",
+        "NFA: different cage sets",
         "NFA: Horner 91"
       ],
       "search_completed": true,
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 1307,
-      "solve_ms": 85.1,
-      "iss_size": 935,
-      "iss_url_length": 980,
-      "script_size": 1870
+      "guesses": 0,
+      "solve_ms": 5.8,
+      "iss_size": 2659,
+      "iss_url_length": 2693,
+      "script_size": 5822
     },
     {
       "puzzle_id": "RsoI-EQ85R0",
@@ -60120,22 +60228,24 @@
         "https://app.crackingthecryptic.com/sudoku/DGjdPjDn9P"
       ],
       "date": "2023-10-19",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
+        "Or",
+        "Arrow",
+        "PillArrow",
         "BlackDot",
         "WhiteDot",
-        "Arrow",
-        "PillArrow"
+        "NFA: fibonacci"
       ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 996,
-      "guesses": 1029,
-      "solve_ms": 19.0,
-      "iss_size": 191,
-      "iss_url_length": 236,
-      "script_size": 834
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 4.8,
+      "iss_size": 913,
+      "iss_url_length": 950,
+      "script_size": 2364
     },
     {
       "puzzle_id": "5jTBQmdkLYA",
@@ -60481,7 +60591,7 @@
       "solve_ms": 9433.2,
       "iss_size": 10063,
       "iss_url_length": 10067,
-      "script_size": 4708
+      "script_size": 4624
     },
     {
       "puzzle_id": "SrR2LBDLhJo",
@@ -67405,7 +67515,7 @@
       "solve_ms": 2.2,
       "iss_size": 2741,
       "iss_url_length": 2749,
-      "script_size": 3389
+      "script_size": 2695
     },
     {
       "puzzle_id": "iMHduQ3Yws4.5",
@@ -68479,7 +68589,7 @@
       "solve_ms": 2.1,
       "iss_size": 421,
       "iss_url_length": 472,
-      "script_size": 3133
+      "script_size": 3094
     },
     {
       "puzzle_id": "R6eWBSTcBOE",
@@ -72270,7 +72380,7 @@
       "solve_ms": 23.5,
       "iss_size": 7419,
       "iss_url_length": 7454,
-      "script_size": 8328
+      "script_size": 8400
     },
     {
       "puzzle_id": "C8oendb_Y1w",
@@ -73077,7 +73187,7 @@
       "solve_ms": 6702.8,
       "iss_size": 8096,
       "iss_url_length": 6989,
-      "script_size": 3208
+      "script_size": 3169
     },
     {
       "puzzle_id": "o3DiURCMQ_4",
@@ -75439,7 +75549,7 @@
       "solve_ms": 8888.1,
       "iss_size": 34923,
       "iss_url_length": 34887,
-      "script_size": 10434
+      "script_size": 10357
     },
     {
       "puzzle_id": "F5fuiXOmQ0E",
@@ -76987,7 +77097,7 @@
       "solve_ms": 6.2,
       "iss_size": 521,
       "iss_url_length": 547,
-      "script_size": 2951
+      "script_size": 2912
     },
     {
       "puzzle_id": "hrgB8rcTfi0",
@@ -77898,7 +78008,7 @@
       "solve_ms": 5.7,
       "iss_size": 3271,
       "iss_url_length": 3422,
-      "script_size": 6571
+      "script_size": 6530
     },
     {
       "puzzle_id": "A4GAP4VeNUg",
@@ -78038,7 +78148,7 @@
         "Or",
         "And",
         "SameValues",
-        "ContainExact",
+        "LookAndSay",
         "Pair: X (10 or 15)",
         "Pair: V (5 or 15)"
       ],
@@ -78047,10 +78157,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 5,
-      "solve_ms": 8.8,
-      "iss_size": 9018,
-      "iss_url_length": 8304,
-      "script_size": 4325
+      "solve_ms": 12.7,
+      "iss_size": 8993,
+      "iss_url_length": 8279,
+      "script_size": 4292
     },
     {
       "puzzle_id": "DnRGUWffGsc.1",
@@ -81549,7 +81659,7 @@
       "solve_ms": 180.2,
       "iss_size": 24457,
       "iss_url_length": 24216,
-      "script_size": 3518
+      "script_size": 3596
     },
     {
       "puzzle_id": "SYSS_GD-vaU",
@@ -83143,7 +83253,7 @@
       "solve_ms": 14.4,
       "iss_size": 4295,
       "iss_url_length": 4255,
-      "script_size": 1644
+      "script_size": 1921
     },
     {
       "puzzle_id": "P2_lU15Qsw8",
@@ -83411,9 +83521,9 @@
       "solutions_found": 905,
       "guesses": 1016,
       "solve_ms": 23.7,
-      "iss_size": 347,
-      "iss_url_length": 382,
-      "script_size": 977
+      "iss_size": 1307,
+      "iss_url_length": 1342,
+      "script_size": 2399
     },
     {
       "puzzle_id": "Zm6i9k0-srU",
@@ -84195,7 +84305,14 @@
       "date": "2022-11-17",
       "status": "partial",
       "constraint_types": [
-        "Sandwich"
+        "Var",
+        "Replicate",
+        "Sandwich",
+        "NFA: loop-degree",
+        "NFA: loop-seam",
+        "NFA: loop-position",
+        "Pair: loop-seam",
+        "Pair: off-loop-position"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -84203,9 +84320,9 @@
       "solutions_found": 2,
       "guesses": 93,
       "solve_ms": 14.3,
-      "iss_size": 188,
-      "iss_url_length": 229,
-      "script_size": 1387
+      "iss_size": 9294,
+      "iss_url_length": 9333,
+      "script_size": 7560
     },
     {
       "puzzle_id": "912rzhP0jvE",
@@ -84757,7 +84874,7 @@
         "https://app.crackingthecryptic.com/sudoku/NHQNdgPTQ6"
       ],
       "date": "2022-11-09",
-      "status": "partial",
+      "status": "validated",
       "constraint_types": [
         "AntiKnight",
         "Renban",
@@ -84765,13 +84882,13 @@
       ],
       "search_completed": true,
       "hit_cap": false,
-      "unique_solution": false,
-      "solutions_found": 0,
-      "guesses": 295,
-      "solve_ms": 14.0,
-      "iss_size": 376,
-      "iss_url_length": 413,
-      "script_size": 1326
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 343,
+      "solve_ms": 16.4,
+      "iss_size": 442,
+      "iss_url_length": 479,
+      "script_size": 2272
     },
     {
       "puzzle_id": "C3jVEiF2yXs",
@@ -84955,6 +85072,1379 @@
       "iss_size": 247,
       "iss_url_length": 285,
       "script_size": 933
+    },
+    {
+      "puzzle_id": "UyvzaLg1NM4",
+      "puzzle_title": "Killer Sudomino",
+      "video_title": "Which Solver Will You Watch?",
+      "author": "AnalyticalNinja",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/mGtft8fRN9"
+      ],
+      "date": "2022-11-07",
+      "status": "partial",
+      "constraint_types": [
+        "Cage",
+        "LittleKiller"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 141,
+      "guesses": 204,
+      "solve_ms": 15.6,
+      "iss_size": 322,
+      "iss_url_length": 360,
+      "script_size": 2204
+    },
+    {
+      "puzzle_id": "2ODfJvC5Izo",
+      "puzzle_title": "Base Cages",
+      "video_title": "Basic Maths",
+      "author": "Brian Scott",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/mgJHLFHTpF"
+      ],
+      "date": "2022-11-06",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "And",
+        "Sum",
+        "Or"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 5.5,
+      "iss_size": 2776,
+      "iss_url_length": 2669,
+      "script_size": 5301
+    },
+    {
+      "puzzle_id": "kglHhQzsCzo",
+      "puzzle_title": "The Raven",
+      "video_title": "The Raven",
+      "author": "Aspartagcus",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/QTDfNnbPhh"
+      ],
+      "date": "2022-11-06",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "SameValues",
+        "AllDifferent",
+        "Or",
+        "And",
+        "Sum",
+        "EqualSum"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 553,
+      "guesses": 1019,
+      "solve_ms": 23.0,
+      "iss_size": 3583,
+      "iss_url_length": 3514,
+      "script_size": 3796
+    },
+    {
+      "puzzle_id": "ruu87b2LrjM",
+      "puzzle_title": "Go the Right way.",
+      "video_title": "Which Way in the Fog?",
+      "author": "Panthera",
+      "sources": [
+        "https://tinyurl.com/5xvnzfv6"
+      ],
+      "date": "2022-11-05",
+      "status": "validated",
+      "constraint_types": [
+        "WhiteDot",
+        "BlackDot",
+        "Replicate",
+        "Var",
+        "Pair: difference-6",
+        "Pair: difference-5",
+        "NFA: column-4-sum",
+        "NFA: column-5-sum",
+        "NFA: column-9-sum",
+        "NFA: row-4-sum",
+        "NFA: row-8-sum",
+        "NFA: column-6-sum",
+        "NFA: column-7-sum",
+        "NFA: column-8-sum",
+        "NFA: row-5-sum",
+        "NFA: row-6-sum",
+        "NFA: row-7-sum",
+        "NFA: row-9-sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 7.0,
+      "iss_size": 3634,
+      "iss_url_length": 3637,
+      "script_size": 7481
+    },
+    {
+      "puzzle_id": "2G9pMM1EyyY",
+      "puzzle_title": "A Symmetry",
+      "video_title": "The Hardest \"Spot The Difference\" Puzzle [RE-UPLOAD With Correct Rules]",
+      "author": "Twototenth",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/m4mpd4BFp3"
+      ],
+      "date": "2022-11-05",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2425,
+      "solve_ms": 46.4,
+      "iss_size": 268,
+      "iss_url_length": 309,
+      "script_size": 1649
+    },
+    {
+      "puzzle_id": "y9CafAeTzpE",
+      "puzzle_title": "A Mathematical Phenomenon",
+      "video_title": "An Intrigiung Mathematical Phenomenon",
+      "author": "Xenonetix",
+      "sources": [
+        "https://tinyurl.com/a-mathematical-phenomenon"
+      ],
+      "date": "2022-11-04",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2942,
+      "solve_ms": 822.7,
+      "iss_size": 250091,
+      "iss_url_length": 245580,
+      "script_size": 4749
+    },
+    {
+      "puzzle_id": "dh-wkVoVKK0",
+      "puzzle_title": "Twice or Half",
+      "video_title": "Double the numbers, Double the Fun!",
+      "author": "Dali",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/f9Dbmgj3MJ"
+      ],
+      "date": "2022-11-03",
+      "status": "partial",
+      "constraint_types": [
+        "0-9",
+        "Replicate",
+        "Arrow",
+        "Renban"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 985,
+      "guesses": 1036,
+      "solve_ms": 17.5,
+      "iss_size": 241,
+      "iss_url_length": 287,
+      "script_size": 2964
+    },
+    {
+      "puzzle_id": "GwZcXQ1re6w",
+      "puzzle_title": "Diwali Candle 2",
+      "video_title": "A Celebration And An Apology",
+      "author": "Schwupel",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/tgQJNqqB6r"
+      ],
+      "date": "2022-11-03",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "NFA: no-mono-2x2",
+        "NFA: vision"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 172,
+      "solve_ms": 38.7,
+      "iss_size": 1935,
+      "iss_url_length": 1977,
+      "script_size": 3951
+    },
+    {
+      "puzzle_id": "L67FRpiZjYU",
+      "puzzle_title": "Pinwheel",
+      "video_title": "A Paradoxical Puzzle",
+      "author": "Paradox",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/fQpGg8mQR4"
+      ],
+      "date": "2022-11-02",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "Cage",
+        "AllDifferent",
+        "Arrow",
+        "Between",
+        "WhiteDot",
+        "LittleKiller",
+        "Sandwich",
+        "Pair"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 4.8,
+      "iss_size": 1241,
+      "iss_url_length": 1276,
+      "script_size": 3177
+    },
+    {
+      "puzzle_id": "VA3U1-jFtaE",
+      "puzzle_title": "Pliers",
+      "video_title": "Is This Phistomefel Puzzle Easy?!?",
+      "author": "Phistomefel",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/6r4hPpFg9m"
+      ],
+      "date": "2022-11-02",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Replicate",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 26,
+      "solve_ms": 5.2,
+      "iss_size": 323,
+      "iss_url_length": 363,
+      "script_size": 1867
+    },
+    {
+      "puzzle_id": "xL75pjM7j9c.1",
+      "video_id": "xL75pjM7j9c",
+      "puzzle_title": "October 4, 2022: Line Sums",
+      "video_title": "Lots of Gas before the GAS",
+      "author": "clover!",
+      "sources": [
+        "https://tinyurl.com/mryfrp8n"
+      ],
+      "date": "2022-11-01",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.9,
+      "iss_size": 509,
+      "iss_url_length": 543,
+      "script_size": 1675
+    },
+    {
+      "puzzle_id": "xL75pjM7j9c.2",
+      "video_id": "xL75pjM7j9c",
+      "puzzle_title": "Oct. 3, 2022: [SECRET]\u00b0 Angles",
+      "video_title": "Lots of Gas before the GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/3scsaxr2"
+      ],
+      "date": "2022-11-01",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.9,
+      "iss_size": 194,
+      "iss_url_length": 244,
+      "script_size": 1009
+    },
+    {
+      "puzzle_id": "xL75pjM7j9c.3",
+      "video_id": "xL75pjM7j9c",
+      "puzzle_title": "A Real Humanmade Sudoku",
+      "video_title": "Lots of Gas before the GAS",
+      "author": "Bill Murphy",
+      "sources": [
+        "https://tinyurl.com/3v62n4fk"
+      ],
+      "date": "2022-11-01",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.5,
+      "iss_size": 491,
+      "iss_url_length": 526,
+      "script_size": 1608
+    },
+    {
+      "puzzle_id": "xL75pjM7j9c.4",
+      "video_id": "xL75pjM7j9c",
+      "puzzle_title": "Oct 1, 2022: Pencilmark Sudoku",
+      "video_title": "Lots of Gas before the GAS",
+      "author": "clover!",
+      "sources": [
+        "https://tinyurl.com/2rj68935"
+      ],
+      "date": "2022-11-01",
+      "status": "validated",
+      "constraint_types": [],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 6,
+      "solve_ms": 3.4,
+      "iss_size": 385,
+      "iss_url_length": 437,
+      "script_size": 1674
+    },
+    {
+      "puzzle_id": "xL75pjM7j9c.5",
+      "video_id": "xL75pjM7j9c",
+      "puzzle_title": "9/30/22: For KNT and jovi_al",
+      "video_title": "Lots of Gas before the GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/4x62t45v"
+      ],
+      "date": "2022-11-01",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.0,
+      "iss_size": 253,
+      "iss_url_length": 298,
+      "script_size": 1074
+    },
+    {
+      "puzzle_id": "sHovQ_fjW0E",
+      "puzzle_title": "4DoES",
+      "video_title": "The (Fascinating) Sudoku With 20 Given Digits",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/pbj4b4j7DN"
+      ],
+      "date": "2022-11-01",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 9.3,
+      "iss_size": 9294,
+      "iss_url_length": 9166,
+      "script_size": 2492
+    },
+    {
+      "puzzle_id": "9vsvrVFbzB0",
+      "puzzle_title": "Bat Emerging from the Mist",
+      "video_title": "Like a Bat out of Hell",
+      "author": "James Kopp",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/PR79NF7R4g"
+      ],
+      "date": "2022-10-31",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Or",
+        "X",
+        "V",
+        "Pair: white-no-5-or-10"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 13.0,
+      "iss_size": 6644,
+      "iss_url_length": 6188,
+      "script_size": 3135
+    },
+    {
+      "puzzle_id": "vk3R95TYTuE",
+      "puzzle_title": "The Thing",
+      "video_title": "The Thing: A Halloween Sudoku Special",
+      "author": "Math Pesto",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/FrQ76Q9jmD"
+      ],
+      "date": "2022-10-31",
+      "status": "partial",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "Sum",
+        "ContainExact",
+        "NFA: green line diff>=5 (signed)",
+        "NFA: thermo increasing (signed)",
+        "NFA: blue line equal signed sum"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 133798,
+      "guesses": 155310,
+      "solve_ms": 2061.8,
+      "iss_size": 20106,
+      "iss_url_length": 20169,
+      "script_size": 7262
+    },
+    {
+      "puzzle_id": "xapRkc25dC0",
+      "puzzle_title": "Nine Arrows",
+      "video_title": "A Full Set of Arrows",
+      "author": "Henrik Jacobsen",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/G6h4Jt3tRm"
+      ],
+      "date": "2022-10-30",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Cage",
+        "LittleKiller",
+        "Arrow",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 4.6,
+      "iss_size": 324,
+      "iss_url_length": 364,
+      "script_size": 1891
+    },
+    {
+      "puzzle_id": "Fxi1JQSEcx8",
+      "puzzle_title": "First Seen Odd/Even X",
+      "video_title": "Clover's \"Floating\" X-Wings",
+      "author": "Clover",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/Bm3dMdPF8m"
+      ],
+      "date": "2022-10-30",
+      "status": "validated",
+      "constraint_types": [
+        "X",
+        "NFA: first-bottom C1",
+        "NFA: first-bottom C3",
+        "NFA: first-right R5",
+        "NFA: first-bottom C5",
+        "NFA: first-top C7",
+        "NFA: first-top C9",
+        "NFA: first-right R6",
+        "NFA: first-top C1",
+        "NFA: first-top C3",
+        "NFA: first-bottom C7",
+        "NFA: first-bottom C9",
+        "NFA: first-left R5",
+        "NFA: first-left R4",
+        "NFA: first-top C5"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2138,
+      "solve_ms": 74.3,
+      "iss_size": 1072,
+      "iss_url_length": 1138,
+      "script_size": 3199
+    },
+    {
+      "puzzle_id": "WVZLv5Rrj6M",
+      "puzzle_title": "Merry-Go-Round",
+      "video_title": "Sudoku as a Fairground Ride",
+      "author": "Kestrel",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/g4nPPf8jLh"
+      ],
+      "date": "2022-10-29",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "WhiteDot",
+        "BlackDot",
+        "X",
+        "V"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 5.3,
+      "iss_size": 417,
+      "iss_url_length": 450,
+      "script_size": 1534
+    },
+    {
+      "puzzle_id": "UVXyMBCsv7Q",
+      "puzzle_title": "Sum Line Sudoku #2",
+      "video_title": "Phistomefel's Revenge",
+      "author": "Phistomefel",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/4hnrd6BrqT"
+      ],
+      "date": "2022-10-29",
+      "status": "validated",
+      "constraint_types": [
+        "NFA: sum-triple"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1146,
+      "solve_ms": 65.0,
+      "iss_size": 623,
+      "iss_url_length": 675,
+      "script_size": 2511
+    },
+    {
+      "puzzle_id": "qPnxVg1uVN8",
+      "puzzle_title": "Dots & Arrows",
+      "video_title": "The Puzzle Created in a Dream",
+      "author": "Ella Torch",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/7fhJrR24JR"
+      ],
+      "date": "2022-10-28",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "PillArrow",
+        "WhiteDot",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 136,
+      "solve_ms": 10.7,
+      "iss_size": 502,
+      "iss_url_length": 535,
+      "script_size": 1664
+    },
+    {
+      "puzzle_id": "IbyFPWoj7JA.1",
+      "video_id": "IbyFPWoj7JA",
+      "puzzle_title": "Sep 29, 2022: Capsules Sudoku",
+      "video_title": "Squeezing in some GAS",
+      "author": "bakpao",
+      "sources": [
+        "https://tinyurl.com/yc5ctxvj"
+      ],
+      "date": "2022-10-27",
+      "status": "validated",
+      "constraint_types": [
+        "Pair"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.2,
+      "iss_size": 302,
+      "iss_url_length": 353,
+      "script_size": 1268
+    },
+    {
+      "puzzle_id": "IbyFPWoj7JA.2",
+      "video_id": "IbyFPWoj7JA",
+      "puzzle_title": "September 28, 2022: Antiking",
+      "video_title": "Squeezing in some GAS",
+      "author": "clover!",
+      "sources": [
+        "https://tinyurl.com/m6jwcbmw"
+      ],
+      "date": "2022-10-27",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.0,
+      "iss_size": 165,
+      "iss_url_length": 216,
+      "script_size": 1148
+    },
+    {
+      "puzzle_id": "IbyFPWoj7JA.3",
+      "video_id": "IbyFPWoj7JA",
+      "puzzle_title": "9/27/22: Ready Steady Bow",
+      "video_title": "Squeezing in some GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/y74kbee7"
+      ],
+      "date": "2022-10-27",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.7,
+      "iss_size": 296,
+      "iss_url_length": 340,
+      "script_size": 1304
+    },
+    {
+      "puzzle_id": "IbyFPWoj7JA.4",
+      "video_id": "IbyFPWoj7JA",
+      "puzzle_title": "Sept. 26, 2022: Disjoint",
+      "video_title": "Squeezing in some GAS",
+      "author": "clover!",
+      "sources": [
+        "https://tinyurl.com/5xfkzj2f"
+      ],
+      "date": "2022-10-27",
+      "status": "validated",
+      "constraint_types": [
+        "DisjointSets"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.8,
+      "iss_size": 204,
+      "iss_url_length": 255,
+      "script_size": 968
+    },
+    {
+      "puzzle_id": "IbyFPWoj7JA.5",
+      "video_id": "IbyFPWoj7JA",
+      "puzzle_title": "September 25, 2022: Carpe XVem",
+      "video_title": "Squeezing in some GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/3fju9yry"
+      ],
+      "date": "2022-10-27",
+      "status": "validated",
+      "constraint_types": [
+        "X",
+        "V"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 4.8,
+      "iss_size": 376,
+      "iss_url_length": 404,
+      "script_size": 1500
+    },
+    {
+      "puzzle_id": "5Lt7xHQ5gd4",
+      "puzzle_title": "Nurikiller",
+      "video_title": "Who Didn't Give This Puzzle 10/10? So far, NOBODY!",
+      "author": "Abed Hawila",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/9PQtqQj3r7"
+      ],
+      "date": "2022-10-27",
+      "status": "unverified",
+      "constraint_types": [
+        "1-10",
+        "Replicate",
+        "Var",
+        "ConnectedValues",
+        "Pair: white areas do not touch (h)",
+        "Pair: white areas do not touch (v)",
+        "NFA: no-black-2x2",
+        "NFA: distinct-9",
+        "NFA: distinct-8",
+        "NFA: distinct-7",
+        "NFA: distinct-6",
+        "NFA: distinct-5",
+        "NFA: distinct-4",
+        "NFA: distinct-3",
+        "NFA: distinct-2",
+        "NFA: distinct-1",
+        "NFA: size-9",
+        "NFA: size-8",
+        "NFA: size-1",
+        "NFA: size-2",
+        "NFA: size-5",
+        "NFA: size-4",
+        "NFA: size-3",
+        "NFA: size-7",
+        "NFA: size-6",
+        "NFA: sum-7",
+        "NFA: sum-2",
+        "NFA: sum-8",
+        "NFA: sum-9",
+        "NFA: sum-5",
+        "NFA: sum-3",
+        "NFA: sum-6",
+        "NFA: sum-4",
+        "NFA: sum-1"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 1014,
+      "solve_ms": 17654.6,
+      "iss_size": 532081,
+      "iss_url_length": 532104,
+      "script_size": 7623
+    },
+    {
+      "puzzle_id": "oETiygzjlvk",
+      "puzzle_title": "Diophantine Addict",
+      "video_title": "Diophantine Equations in Sudoku",
+      "author": "Glen Fletcher",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/tJDTF2TbgP"
+      ],
+      "date": "2022-10-26",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "BlackDot",
+        "Palindrome",
+        "Arrow",
+        "PillArrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 430,
+      "solve_ms": 51.9,
+      "iss_size": 600,
+      "iss_url_length": 633,
+      "script_size": 2595
+    },
+    {
+      "puzzle_id": "_lpyEuKkjRg",
+      "puzzle_title": "/4 /5",
+      "video_title": "The Miracle Sudoku: \"Build Your Own\" Version",
+      "author": "Nahileon",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/pM7jd2QbmD"
+      ],
+      "date": "2022-10-26",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Var",
+        "Sum",
+        "Pair: pattern-five",
+        "Pair: pattern-odd",
+        "Pair: pattern-even",
+        "NFA: pattern-line"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2095,
+      "solve_ms": 60.1,
+      "iss_size": 5398,
+      "iss_url_length": 5447,
+      "script_size": 4682
+    },
+    {
+      "puzzle_id": "bYk9PlL0OsY",
+      "puzzle_title": "The Headless Hessian",
+      "video_title": "Don't Have Dreams about this Sudoku",
+      "author": "High Dudgeon",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/rLBq3dTLGT"
+      ],
+      "date": "2022-10-25",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Whisper",
+        "Renban",
+        "Or",
+        "V",
+        "X"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 693,
+      "solve_ms": 25.7,
+      "iss_size": 334,
+      "iss_url_length": 367,
+      "script_size": 1709
+    },
+    {
+      "puzzle_id": "htD2pBSFqBA",
+      "puzzle_title": "Nightfall",
+      "video_title": "The Marriage Proposal",
+      "author": "Playmaker6174",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/Tq37QbFhpP"
+      ],
+      "date": "2022-10-25",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "RegionSumLine",
+        "Pair: Orange line (max diff 2)"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4141,
+      "solve_ms": 60.8,
+      "iss_size": 442,
+      "iss_url_length": 493,
+      "script_size": 2147
+    },
+    {
+      "puzzle_id": "hkpydyIbJNk",
+      "puzzle_title": "Bubbler",
+      "video_title": "What's so \"Adorable\" about a Classic Sudoku?",
+      "author": "thetearex15",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/r3LrBMrN9P"
+      ],
+      "date": "2022-10-24",
+      "status": "validated",
+      "constraint_types": [],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.3,
+      "iss_size": 197,
+      "iss_url_length": 249,
+      "script_size": 1177
+    },
+    {
+      "puzzle_id": "j4oD3Qh08lc",
+      "puzzle_title": "The Chromatic Octagon",
+      "video_title": "The Chromatic Octagon",
+      "author": "Eric Rathbun",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/TQM4644NR7"
+      ],
+      "date": "2022-10-24",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "AllDifferent",
+        "WhiteDot",
+        "Palindrome"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1306,
+      "solve_ms": 46.8,
+      "iss_size": 681,
+      "iss_url_length": 713,
+      "script_size": 2196
+    },
+    {
+      "puzzle_id": "w_rbCF9HaZ8",
+      "puzzle_title": "Gridlocked",
+      "video_title": "The Confusion of Profusion",
+      "author": "Marushia Dark",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/PMJMhpmR8r"
+      ],
+      "date": "2022-10-23",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 4.4,
+      "iss_size": 643,
+      "iss_url_length": 667,
+      "script_size": 2367
+    },
+    {
+      "puzzle_id": "AsJC2KmsacU",
+      "puzzle_title": "Double The Heat",
+      "video_title": "One Of The 10 Hardest Puzzles We've Ever Seen",
+      "author": "Jay Dyer",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/NbhMLRBtdj"
+      ],
+      "date": "2022-10-23",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "Sum",
+        "NFA: doubler 2",
+        "NFA: doubler 1",
+        "NFA: doubler 4",
+        "NFA: doubler 6",
+        "NFA: doubler 8",
+        "NFA: doubler 9",
+        "NFA: doubler 7",
+        "NFA: doubler 5",
+        "NFA: doubler 3",
+        "NFA: doubler thermo"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 1,
+      "guesses": 14305,
+      "solve_ms": 9611.9,
+      "iss_size": 10079,
+      "iss_url_length": 10112,
+      "script_size": 4068
+    },
+    {
+      "puzzle_id": "M-jTmBSv-HE",
+      "puzzle_title": "Kineticism",
+      "video_title": "A Very Moving Puzzle",
+      "author": "jovi_al",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/2LJ7ggN9D4"
+      ],
+      "date": "2022-10-22",
+      "status": "validated",
+      "constraint_types": [
+        "XSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 6.8,
+      "iss_size": 112,
+      "iss_url_length": 157,
+      "script_size": 1403
+    },
+    {
+      "puzzle_id": "BLvkxRZl9Ew",
+      "puzzle_title": "Sawyer Beetle",
+      "video_title": "The Symmetrical Beetle",
+      "author": "BremSter, FullDeck & Missing A Few Cards",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/gM7M8432BJ"
+      ],
+      "date": "2022-10-22",
+      "status": "validated",
+      "constraint_types": [
+        "Entropic",
+        "Renban",
+        "X",
+        "V"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 227,
+      "solve_ms": 13.4,
+      "iss_size": 439,
+      "iss_url_length": 474,
+      "script_size": 2374
+    },
+    {
+      "puzzle_id": "TUMP5GFD5D4",
+      "puzzle_title": "Pentomino Sight Lines",
+      "video_title": "Crazy Shapes - Slotted into Place",
+      "author": "Blobz",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/gJBh3q6mmr"
+      ],
+      "date": "2022-10-21",
+      "status": "partial",
+      "constraint_types": [
+        "WhiteDot"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 1000,
+      "guesses": 1032,
+      "solve_ms": 14.7,
+      "iss_size": 105,
+      "iss_url_length": 156,
+      "script_size": 1201
+    },
+    {
+      "puzzle_id": "gpvP58KH-p4",
+      "puzzle_title": "Arrowage",
+      "video_title": "The Magic Roundabout Sudoku",
+      "author": "Celery",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/jLLJ73Gn4d"
+      ],
+      "date": "2022-10-21",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 133,
+      "solve_ms": 9.1,
+      "iss_size": 321,
+      "iss_url_length": 363,
+      "script_size": 1390
+    },
+    {
+      "puzzle_id": "vZ-qiES6VVY.1",
+      "video_id": "vZ-qiES6VVY",
+      "puzzle_title": "Sept. 24, 2022: 159",
+      "video_title": "Another Dip into the GAS Tank",
+      "author": "clover!",
+      "sources": [
+        "https://tinyurl.com/5n99r2uc"
+      ],
+      "date": "2022-10-20",
+      "status": "validated",
+      "constraint_types": [
+        "Indexing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.2,
+      "iss_size": 298,
+      "iss_url_length": 347,
+      "script_size": 1591
+    },
+    {
+      "puzzle_id": "vZ-qiES6VVY.2",
+      "video_id": "vZ-qiES6VVY",
+      "puzzle_title": "Sept. 23, 2022: Easy, Killer",
+      "video_title": "Another Dip into the GAS Tank",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/3xjytfst"
+      ],
+      "date": "2022-10-20",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 7.1,
+      "iss_size": 408,
+      "iss_url_length": 448,
+      "script_size": 1603
+    },
+    {
+      "puzzle_id": "vZ-qiES6VVY.3",
+      "video_id": "vZ-qiES6VVY",
+      "puzzle_title": "Sept. 22, 2022: Clone Sudoku",
+      "video_title": "Another Dip into the GAS Tank",
+      "author": "clover!",
+      "sources": [
+        "https://tinyurl.com/2wpjp9hc"
+      ],
+      "date": "2022-10-20",
+      "status": "validated",
+      "constraint_types": [
+        "SameValues"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.2,
+      "iss_size": 457,
+      "iss_url_length": 497,
+      "script_size": 1412
+    },
+    {
+      "puzzle_id": "vZ-qiES6VVY.4",
+      "video_id": "vZ-qiES6VVY",
+      "puzzle_title": "9/21/22: \"wrong answers only\"",
+      "video_title": "Another Dip into the GAS Tank",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/yc86bz8z"
+      ],
+      "date": "2022-10-20",
+      "status": "validated",
+      "constraint_types": [],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.5,
+      "iss_size": 204,
+      "iss_url_length": 256,
+      "script_size": 1094
+    },
+    {
+      "puzzle_id": "vZ-qiES6VVY.5",
+      "video_id": "vZ-qiES6VVY",
+      "puzzle_title": "September 20th, 2022: Killer",
+      "video_title": "Another Dip into the GAS Tank",
+      "author": "Sam Tyrgleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/yj44w9d5"
+      ],
+      "date": "2022-10-20",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.6,
+      "iss_size": 362,
+      "iss_url_length": 397,
+      "script_size": 1015
+    },
+    {
+      "puzzle_id": "LLJTYuTsC18",
+      "puzzle_title": "Antidiagonal",
+      "video_title": "Can you Solve this Puzzle in 5 Minutes!?",
+      "author": "Piotr Gdowski",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/Br3nfTMfbJ"
+      ],
+      "date": "2022-10-19",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "CountDistinct"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 161,
+      "solve_ms": 13.7,
+      "iss_size": 304,
+      "iss_url_length": 357,
+      "script_size": 1715
+    },
+    {
+      "puzzle_id": "mir3Wc54q9k",
+      "puzzle_title": "Minister of Primes",
+      "video_title": "Yes Minister of Primes!",
+      "author": "Mountainfarmer",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/GjPBFrjthr"
+      ],
+      "date": "2022-10-18",
+      "status": "validated",
+      "constraint_types": [
+        "WhiteDot",
+        "AllDifferent",
+        "Or",
+        "Pair: two-digit prime"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5544,
+      "solve_ms": 3325.8,
+      "iss_size": 12394,
+      "iss_url_length": 11603,
+      "script_size": 4058
+    },
+    {
+      "puzzle_id": "ZumfvSBRmIg",
+      "puzzle_title": "Imperfect Flower",
+      "video_title": "The Imperfect Flower",
+      "author": "AnalyticalNinja",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/F39tr4Rm97"
+      ],
+      "date": "2022-10-18",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "BlackDot",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 47,
+      "solve_ms": 9.5,
+      "iss_size": 911,
+      "iss_url_length": 932,
+      "script_size": 1969
+    },
+    {
+      "puzzle_id": "DAMOAheL-Ik",
+      "puzzle_title": "Tough Centre",
+      "video_title": "A Tough Proposition? Or Not?",
+      "author": "Igor Jaskulski",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/FjqjGf9HFL"
+      ],
+      "date": "2022-10-17",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Whisper",
+        "LittleKiller",
+        "WhiteDot",
+        "X",
+        "V"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 4.9,
+      "iss_size": 544,
+      "iss_url_length": 567,
+      "script_size": 2908
+    },
+    {
+      "puzzle_id": "RmP98fnT0Ng",
+      "puzzle_title": "Lumos Maxima",
+      "video_title": "The Future Of Sudoku",
+      "author": "Chameleon",
+      "sources": [
+        "https://yusitnikov.github.io/puzzletv/#lumos-maxima"
+      ],
+      "date": "2022-10-17",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Cage",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 34,
+      "solve_ms": 9.2,
+      "iss_size": 375,
+      "iss_url_length": 415,
+      "script_size": 1903
+    },
+    {
+      "puzzle_id": "Aq16DYbLuI0",
+      "puzzle_title": "Renban-Anti-Kropki",
+      "video_title": "Feeling Positive about Negative Constraints",
+      "author": "Klausku",
+      "sources": [
+        "https://app.crackingthecryptic.com/sudoku/NMpgqR73rH"
+      ],
+      "date": "2022-10-16",
+      "status": "validated",
+      "constraint_types": [
+        "Renban",
+        "StrictKropki"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 4.3,
+      "iss_size": 197,
+      "iss_url_length": 242,
+      "script_size": 1022
     },
     {
       "puzzle_id": "N1Fi3xt3NkY",

@@ -98,7 +98,7 @@ const cluePins = islands.map(
 // least one of them is water. Applied along every row, column and diagonal, so
 // that consecutive pairs cover all orthogonal and diagonal adjacencies.
 const noTouchKey = Pair.fnToKey(
-  (a, b) => a === WATER || b === WATER || a === b, geometry.numValues);
+  (a, b) => a === WATER || b === WATER || a === b, geometry);
 const diagonalStarts = [
   ...graph.row(1), ...graph.column(1).slice(1), ...graph.column(9).slice(1)];
 const adjacencyLines = [
@@ -120,7 +120,7 @@ const mixedBlockMachine = NFA.encodeSpec({
     island: island || value !== WATER,
   }),
   accept: ({ seen, water, island }) => seen === 4 && water && island,
-}, geometry.numValues);
+}, geometry);
 const mixedBlocks = terrain.makeReplicate(
   new NFA(mixedBlockMachine, 'both terrains in every 2x2',
     ...terrain.at(graph.block(gridCells[0], 2, 2))),
@@ -149,7 +149,7 @@ const islandMachine = (label, size, sum) => NFA.encodeSpec({
   accept: ({ digits, reading }) => reading === 'label'
     && digits.length === size
     && digits.reduce((a, b) => a + b, 0) === sum,
-}, geometry.numValues);
+}, geometry);
 
 const islandBranch = (island, { size, sum }) => new And([
   new Given(island.sizeCell, size),

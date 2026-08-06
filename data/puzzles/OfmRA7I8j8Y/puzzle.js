@@ -31,7 +31,6 @@ const cells = graph.cells();
 const replicateOffsetPairs = (key, name, offsets) => offsets.map(([dr, dc]) => {
   const origins = cells.filter(cell => graph.step(cell, dr, dc) !== null);
   const [origin] = origins;
-  // lint-ok: bare-replicate-constructor
   return new Replicate(
     [new Pair(key, name, origin, graph.step(origin, dr, dc))],
     Replicate.encodeTargetCells(origins, origin, graph),

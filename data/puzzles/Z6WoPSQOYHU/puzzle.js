@@ -10,6 +10,7 @@
 // highest totals.
 
 const graph = cellGraph('6x6~1-12');
+const digitGeometry = cellGeometry('6x6');
 const flags = graph.makeOverlay('VD');
 const effective = graph.makeOverlay('VE');
 const flag = cell => flags.at(cell);
@@ -35,7 +36,7 @@ const doubledDigits = NFA.encodeSpec({
     return mask & bit ? undefined : { digit: null, mask: mask | bit };
   },
   accept: ({ digit, mask }) => digit === null && mask === 63,
-}, 6);
+}, digitGeometry);
 
 // Each effective-value Var is its grid digit times its doubler flag. The three
 // input positions are digit, flag, then the derived effective value.

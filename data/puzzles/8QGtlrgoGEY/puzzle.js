@@ -65,8 +65,8 @@ const cages = [
 // whichever of the 9 candidate referred cells actually applies, selected by
 // that cell's own digit (`Given` picks the branch, `SameValues` copies the
 // referred cell's value into the Var) -- the Var-selects-an-alternative
-// pattern from data/scripts/rectangle_sums.js. The final `ContainExact`
-// then reads the look-and-say count directly off those Vars.
+// pattern from data/scripts/rectangle_sums.js. The final `LookAndSay`
+// then reads the clue directly over those Vars.
 const cageConstraints = cages.flatMap(({ cells, count, digit }, ci) => {
   // One upper-case letter per cage (A-G, 7 cages) -- Var prefixes must be
   // upper-case letters only.
@@ -85,7 +85,7 @@ const cageConstraints = cages.flatMap(({ cells, count, digit }, ci) => {
     new AllDifferent(...cells),
     refs,
     ...links,
-    new ContainExact(Array(count).fill(digit).join('_'), ...refs.cells()),
+    new LookAndSay(`${count}${digit}`, ...refs.cells()),
   ];
 });
 

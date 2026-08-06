@@ -65,7 +65,7 @@ const notBothFive = Pair.fnToKey((a, b) => !(a === 5 && b === 5), 9);
 const antiKnightFives = KNIGHT_OFFSETS.map(([dr, dc]) => {
   const targets = graph.cells().filter(cell => graph.step(cell, dr, dc) != null);
   const origin = targets[0];
-  return new Replicate( // lint-ok: bare-replicate-constructor
+  return new Replicate(
     [new Pair(notBothFive, 'not both 5 (knight)', origin, graph.step(origin, dr, dc))],
     Replicate.encodeTargetCells(targets, origin, graph),
     origin,

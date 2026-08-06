@@ -9,6 +9,7 @@
 const graph = cellGraph('9x9');
 const overlay = graph.makeOverlay('VA');
 const gridCells = graph.cells();
+const gridIndex = new Map(gridCells.map((cell, index) => [cell, index]));
 const answer = (row, col) => overlay.at(gridCells[row * 9 + col]);
 const units = [
   ...Array.from({ length: 9 }, (_, row) =>
@@ -20,11 +21,15 @@ const units = [
       Array.from({ length: 9 }, (_, i) => answer(
         boxRow * 3 + Math.floor(i / 3), boxCol * 3 + i % 3)))).flat(),
 ];
-const kingBlocks = Array.from({ length: 8 }, (_, row) =>
-  Array.from({ length: 8 }, (_, col) => [
-    answer(row, col), answer(row, col + 1),
-    answer(row + 1, col), answer(row + 1, col + 1),
-  ])).flat();
+const kingBlocks = gridCells.flatMap(cell => {
+  const origin = parseCellId(cell);
+  if (origin.row === 9 || origin.col === 9) return [];
+  const block = [cell, ...graph.kingNeighbours(cell).filter(other => {
+    const position = parseCellId(other);
+    return position.row >= origin.row && position.col >= origin.col;
+  })].sort((a, b) => gridIndex.get(a) - gridIndex.get(b));
+  return [overlay.at(block)];
+});
 
 return [
   // A fixed one-cell host supplies the 1-6 alphabet; the answer is the Var grid.

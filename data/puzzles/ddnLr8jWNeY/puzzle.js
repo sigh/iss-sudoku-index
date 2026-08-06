@@ -3,8 +3,8 @@
 // Video: https://www.youtube.com/watch?v=ddnLr8jWNeY
 // Source: https://sudokupad.app/qt0xjevecl
 
-// Each clue is read as (count, digit) pairs. ContainExact restricts only the
-// named digit, so the cage's remaining cells may contain the unnamed digits.
+// Each clue is read as (count, digit) pairs. Values not named by the clue are
+// unrestricted.
 const cageSpecs = [
   {
     cells: [
@@ -33,13 +33,10 @@ const cageSpecs = [
   },
 ];
 
-const lookAndSayCounts = cageSpecs.flatMap(({ cells, counts }) =>
-  counts.map(([count, digit]) => new ContainExact(
-    Array(count).fill(digit).join('_'),
-    ...cells,
-  )));
+const lookAndSayClues = cageSpecs.map(({ cells, counts }) =>
+  new LookAndSay(counts.flat().join(''), ...cells));
 
 return [
   new Shape('8x8'),
-  ...lookAndSayCounts,
+  ...lookAndSayClues,
 ];

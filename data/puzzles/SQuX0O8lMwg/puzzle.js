@@ -35,7 +35,7 @@ const islands = [
 ];
 
 const lookAndSay = ({ total, cells }) =>
-  new ContainExact(Array(total / 10 | 0).fill(total % 10).join('_'), ...cells);
+  new LookAndSay(total, ...cells);
 const killer = ({ total, cells }) => new Cage(total, ...cells);
 // A both-type cage sums but permits repeats, as the stated Look-and-Say exception requires.
 const both = cage => new And([new Sum(cage.total, ...cage.cells), lookAndSay(cage)]);

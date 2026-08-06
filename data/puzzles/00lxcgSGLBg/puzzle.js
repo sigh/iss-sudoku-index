@@ -62,7 +62,9 @@ function usesDir(code) {
   }
 }
 
-const graph = cellGraph('9x9');
+const puzzleShape = new Shape('9x9', ALL_CODES.length);
+const digitGeometry = cellGeometry('9x9');
+const graph = cellGraph(puzzleShape);
 const gridCells = graph.cells();
 
 const shape = graph.makeOverlay('VS');
@@ -113,8 +115,8 @@ const fixedShapes = [
 
 // --- Edge agreement: the cells sharing a grid edge must agree on whether
 // that edge is used (part of the path) or not.
-const eastAgree = Pair.fnToKey((a, b) => usesDir(a).E === usesDir(b).W, ALL_CODES.length);
-const southAgree = Pair.fnToKey((a, b) => usesDir(a).S === usesDir(b).N, ALL_CODES.length);
+const eastAgree = Pair.fnToKey((a, b) => usesDir(a).E === usesDir(b).W, puzzleShape);
+const southAgree = Pair.fnToKey((a, b) => usesDir(a).S === usesDir(b).N, puzzleShape);
 const horizontalEdgeOrigins = gridCells.filter(cell => graph.step(cell, 0, 1));
 const verticalEdgeOrigins = gridCells.filter(cell => graph.step(cell, 1, 0));
 const edges = [
@@ -138,7 +140,7 @@ const tripleBandMachine = NFA.encodeSpec({
   startState: { bands: 0 },
   transition: ({ bands }, value) => ({ bands: bands | (1 << bandOf(value)) }),
   accept: ({ bands }) => bands === ALL_BANDS,
-}, 9);
+}, digitGeometry);
 const TWO_DIR_CODES = [CODE.NS, CODE.EW, CODE.NE, CODE.NW, CODE.SE, CODE.SW];
 const entropyConstraints = gridCells
   .filter(cell => cell !== START && cell !== FINISH)
@@ -277,7 +279,7 @@ const soigneurConstraints = SOIGNEURS.map(cell =>
   new NFA(countMachine, 'soigneur-count', cell, ...shape.at(graph.kingNeighbours(cell))));
 
 return [
-  new Shape('9x9', ALL_CODES.length),
+  puzzleShape,
   shape.toVar('shape'),
   graph.makeReplicate(new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
   new Given('R1C2', 5),

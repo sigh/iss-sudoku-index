@@ -812,10 +812,10 @@
 .SameValues~2~VG2~R9C8
 .End
 .End
-.ContainExact~2~VA1~VA2
-.ContainExact~9_9_9~VB1~VB2~VB3
-.ContainExact~4_4_4~VC1~VC2~VC3
-.ContainExact~5_5~VD1~VD2~VD3~VD4~VD5
-.ContainExact~3_3_3~VE1~VE2~VE3
-.ContainExact~2_2_2~VF1~VF2~VF3
-.ContainExact~5~VG1~VG2
+.LookAndSay~12~VA1~VA2
+.LookAndSay~39~VB1~VB2~VB3
+.LookAndSay~34~VC1~VC2~VC3
+.LookAndSay~25~VD1~VD2~VD3~VD4~VD5
+.LookAndSay~33~VE1~VE2~VE3
+.LookAndSay~32~VF1~VF2~VF3
+.LookAndSay~15~VG1~VG2

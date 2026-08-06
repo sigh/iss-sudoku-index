@@ -20,9 +20,9 @@ const sequenceNFA = NFA.encodeSpec({
   accept: ({ previous }) => previous !== null,
 }, 9);
 
-const cageType = (sum, lookSay, cells) => new Or([
-  new Cage(sum, ...cells),
-  new ContainExact(lookSay, ...cells),
+const cageType = (clue, cells) => new Or([
+  new Cage(clue, ...cells),
+  new LookAndSay(clue, ...cells),
 ]);
 
 const diagonalPairKey = Pair.fnToKey(
@@ -36,11 +36,11 @@ const boxDiagonalPairs = graph.boxes().flatMap(box => [
 ]);
 
 return [
-  cageType(24, '4_4', ['R1C4', 'R1C5', 'R1C6']),
-  cageType(12, '2', ['R7C6', 'R8C6', 'R9C6']),
-  cageType(14, '4', ['R8C2', 'R9C2', 'R9C3']),
-  cageType(28, '8_8', ['R3C7', 'R4C6', 'R4C7']),
-  cageType(23, '3_3', ['R6C2', 'R7C2', 'R7C3']),
+  cageType(24, ['R1C4', 'R1C5', 'R1C6']),
+  cageType(12, ['R7C6', 'R8C6', 'R9C6']),
+  cageType(14, ['R8C2', 'R9C2', 'R9C3']),
+  cageType(28, ['R3C7', 'R4C6', 'R4C7']),
+  cageType(23, ['R6C2', 'R7C2', 'R7C3']),
 
   new BlackDot('R6C7', 'R6C8'),
   new WhiteDot('R1C5', 'R1C6'),

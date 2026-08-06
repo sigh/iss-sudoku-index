@@ -109,7 +109,6 @@ function replicatePairs(offsets, key, label, allowedPair) {
     // graph.makeReplicate() always anchors at R1C1; several offsets here
     // have no valid template at R1C1 (e.g. dC < 0), so the origin must be
     // each offset's own first valid cell instead.
-    // lint-ok: bare-replicate-constructor
     replicated.push(new Replicate(
       [new Pair(key, label, templateOrigin, templateOther)],
       Replicate.encodeTargetCells(origins, templateOrigin, graph),

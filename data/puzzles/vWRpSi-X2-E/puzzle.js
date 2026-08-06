@@ -11,18 +11,9 @@
 
 const graph = cellGraph('9x9');
 const grid = graph.makeOverlay('VG');
-const cell = (row, col) => grid.at(makeCellId(row, col)); // lint-ok: overlay-at-make-cell-id
-const row = r => Array.from({ length: 9 }, (_, c) => cell(r, c + 1));
-const col = c => Array.from({ length: 9 }, (_, r) => cell(r + 1, c));
-// lint-ok: manual-box-arithmetic
-const box = (br, bc) => Array.from({ length: 3 }, (_, dr) =>
-  Array.from({ length: 3 }, (_, dc) => cell(br * 3 + dr + 1, bc * 3 + dc + 1))).flat(); // lint-ok: manual-box-arithmetic
-const units = [
-  ...Array.from({ length: 9 }, (_, r) => row(r + 1)),
-  ...Array.from({ length: 9 }, (_, c) => col(c + 1)),
-  ...Array.from({ length: 3 }, (_, br) =>
-    Array.from({ length: 3 }, (_, bc) => box(br, bc))).flat(),
-];
+const gridVar = grid.toVar('displayed grid');
+const cell = (row, col) => gridVar.cell(row, col);
+const units = grid.rowsColumnsBoxes();
 const id = (r, c) => `${r},${c}`;
 const givenCells = new Set(['1,4', '4,2', '7,7', '8,9', '9,4', '9,5']);
 const cageCells = [cell(1, 6), cell(2, 6), cell(3, 6), cell(3, 7),
@@ -55,7 +46,7 @@ const xPairs = markedX.map(pair => {
 return [
   new Shape('1x1', 9),
   new Given('R1C1', 1),
-  grid.toVar('displayed grid'),
+  gridVar,
   new Given(cell(1, 4), 8), new Given(cell(4, 2), 7), new Given(cell(7, 7), 5),
   new Given(cell(8, 9), 1), new Given(cell(9, 4), 3), new Given(cell(9, 5), 6),
   new Sum(52, ...cageCells),

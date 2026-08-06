@@ -3,30 +3,38 @@
 // Video: https://www.youtube.com/watch?v=RibOCs_eQWo
 // Source: https://sudokupad.app/hrQdLRJG82
 
-// Standard Sudoku applies. The red dot at R5C5 is the centre of one
-// orthogonally connected, 180-degree rotationally symmetric galaxy. Each
-// drawn cage is wholly in that galaxy, or wholly outside it and has its shown sum.
+// Normal sudoku rules apply. A red dot marks the centre of R5C5; it is the
+// centre of the "galaxy", an undrawn set of cells that is 180-degree
+// rotationally symmetric about that point and orthogonally connected. Within a
+// cage, the digits that are not part of the galaxy sum to the cage's total.
+//
+// The rules text says only where the total is printed ("in the cage's top left
+// corner"), which is a drawing detail and not encoded. The rules state no
+// no-repeat clause for cages, so the sums below are Sum, not Cage; each cage
+// lies within one row, column, or box anyway, so sudoku already makes its
+// digits distinct.
 
-const GALAXY = 1;
-const OUTSIDE = 2;
+const IN = 1;    // the cell is part of the galaxy
+const OUT = 2;   // the cell is outside the galaxy
+
 const graph = cellGraph('9x9');
 const galaxy = graph.makeOverlay('VG');
 
-// The red centre dot is drawn at R5C5.
-const centre = new Given(galaxy.at('R5C5'), GALAXY);
-const domain = galaxy.makeReplicate(
-  new Given(galaxy.cells()[0], GALAXY, OUTSIDE));
+// Galaxy membership is a solver choice with exactly two states, so every
+// overlay cell is restricted to those two values.
+const membership = galaxy.makeReplicate(
+  new Given(galaxy.cells()[0], IN, OUT));
 
-// A cell and its 180-degree image have the same galaxy membership.
-const rotationalPairs = graph.cells().flatMap(cell => {
-  const { row, col } = parseCellId(cell);
-  const rotated = makeCellId(10 - row, 10 - col);
-  return cell < rotated
-    ? [new SameValues(2, galaxy.at(cell), galaxy.at(rotated))]
-    : [];
-});
+// Rotational symmetry about the R5C5 dot: RrCc and R(10-r)C(10-c) are on the
+// same side of the galaxy boundary. Rotating the board by 180 degrees reverses
+// a reading-order list, so the pairs are the nth overlay cell with the nth from
+// the end; the 41st cell is R5C5, its own image.
+const overlayCells = galaxy.cells();
+const symmetry = overlayCells.slice(0, 40).map(
+  (cell, i) => new SameValues(2, cell, overlayCells[80 - i]));
 
-// Cage cells and totals transcribed from the drawn cage boundaries and labels.
+// Cage cells and totals, transcribed from the drawn cage outlines and their
+// printed totals.
 const cages = [
   [4, ['R5C6', 'R6C6']], [3, ['R4C4', 'R5C4']],
   [5, ['R4C5', 'R4C6']], [6, ['R6C4', 'R6C5']],
@@ -44,20 +52,28 @@ const cages = [
   [0, ['R5C5']],
 ];
 
-const cageRules = cages.map(([total, cells]) => new Or([
-  new And(galaxy.at(cells).map(cell => new Given(cell, GALAXY))),
-  new And([
-    ...galaxy.at(cells).map(cell => new Given(cell, OUTSIDE)),
-    new Cage(total, ...cells),
-  ]),
-]));
+// Which cells of a cage lie outside the galaxy is itself unknown, so a cage is
+// the disjunction over the subsets that could be the outside ones: each branch
+// pins every cell of the cage IN or OUT and sums the OUT cells. A subset of m
+// cells carries m digits from 1-9, so its sum lies in [m, 9m] and subsets
+// outside that range for the clue are dropped. The 0 on R5C5 leaves only the
+// empty subset, which is the branch putting the centre cell in the galaxy.
+const cageRules = cages.map(([total, cells]) => new Or(
+  [...Array(1 << cells.length).keys()].flatMap(subset => {
+    const outside = cells.filter((_, i) => subset >> i & 1);
+    if (total < outside.length || total > 9 * outside.length) return [];
+    return [new And([
+      ...cells.map((cell, i) => new Given(
+        galaxy.at(cell), (subset >> i & 1) ? OUT : IN)),
+      ...(outside.length ? [new Sum(total, ...outside)] : []),
+    ])];
+  })));
 
 return [
   new Shape('9x9'),
-  galaxy.toVar('galaxy membership'),
-  domain,
-  centre,
-  new ConnectedValues('VG', GALAXY),
-  ...rotationalPairs,
+  galaxy.toVar('galaxy'),
+  membership,
+  new ConnectedValues('VG', IN),
+  ...symmetry,
   ...cageRules,
 ];

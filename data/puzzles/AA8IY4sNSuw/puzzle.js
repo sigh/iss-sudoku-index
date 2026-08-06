@@ -34,7 +34,6 @@ const diagonalPairs = Array.from({ length: 8 }, (_, i) => i + 1).flatMap(distanc
       new Pair(noRepeatedNonFourEven, 'diagonal even repeat',
         'R1C1', makeCellId(1 + distance, 1 + distance)),
       downRightOrigins),
-    // lint-ok: bare-replicate-constructor
     new Replicate(
       [new Pair(noRepeatedNonFourEven, 'diagonal even repeat',
         downLeftOrigin, makeCellId(1 + distance, 1))],

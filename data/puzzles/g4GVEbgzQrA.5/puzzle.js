@@ -54,7 +54,6 @@ const nonConsecutiveDownRight = graph.makeReplicate(
 // "/": R1C1 has no down-left neighbour, so makeReplicate's fixed R1C1 origin
 // cannot anchor this family; anchor the template at its own natural start
 // cell instead.
-// lint-ok: bare-replicate-constructor
 const nonConsecutiveDownLeft = new Replicate(
   [nonConsecutivePair(...downLeft[0])],
   Replicate.encodeTargetCells(downLeft.map(([a]) => a), downLeft[0][0], graph),

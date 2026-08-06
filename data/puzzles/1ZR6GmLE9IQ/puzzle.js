@@ -39,6 +39,16 @@
 const TR = new Var('B', 'Top-right grid', '9x9');
 const BL = new Var('C', 'Bottom-left grid', '9x9');
 const BR = new Var('D', 'Bottom-right grid', '9x9');
+const quadrantGraph = cellGraph('9x9');
+const trCells = quadrantGraph.makeOverlay('VB');
+const blCells = quadrantGraph.makeOverlay('VC');
+const brCells = quadrantGraph.makeOverlay('VD');
+
+const globalCoords = (id) => {
+  const match = /^R(\d+)C(\d+)$/.exec(id); // lint-ok: manual-cell-id-regex
+  if (!match) throw new Error(`Invalid global cell id: ${id}`);
+  return { row: +match[1], col: +match[2] };
+};
 
 // Resolve a global "R#C#" id (1-indexed over the full 18x18 canvas, as drawn)
 // to the cell id ISS actually uses: a real grid cell for the top-left
@@ -46,8 +56,8 @@ const BR = new Var('D', 'Bottom-right grid', '9x9');
 // than the built-in parseCellId/cellGraph helpers because those cap out at
 // CellGeometry.MAX_SIZE (16), below this puzzle's 18-wide canvas.
 const g = (id) => {
-  const m = /^R(\d+)C(\d+)$/.exec(id); // lint-ok: manual-cell-id-regex
-  const r = +m[1] - 1, c = +m[2] - 1; // 0-indexed, 0..17
+  const { row, col } = globalCoords(id);
+  const r = row - 1, c = col - 1; // 0-indexed, 0..17
   const lr = (r % 9) + 1, lc = (c % 9) + 1; // 1-indexed within its quadrant
   if (r < 9 && c < 9) return makeCellId(lr, lc);
   if (r < 9) return TR.cell(lr, lc);
@@ -59,26 +69,19 @@ const g = (id) => {
 // graph.boxes() call covers this: the canvas spans two independent Shape
 // grids' worth of boxes, joined only by this puzzle's own coordinates.
 const boxOf = (id) => {
-  const m = /^R(\d+)C(\d+)$/.exec(id); // lint-ok: manual-cell-id-regex
-  const r = +m[1] - 1, c = +m[2] - 1;
+  const { row, col } = globalCoords(id);
+  const r = row - 1, c = col - 1;
   return `${(r / 3) | 0},${(c / 3) | 0}`;
 };
 
 // Explicit row/column/box AllDifferent groups for a Var-backed quadrant.
-const quadrantSudoku = (v) => {
-  const groups = [];
-  for (let i = 1; i <= 9; i++) {
-    groups.push(new AllDifferent(...Array.from({ length: 9 }, (_, j) => v.cell(i, j + 1)))); // row i
-    groups.push(new AllDifferent(...Array.from({ length: 9 }, (_, j) => v.cell(j + 1, i)))); // col i
-  }
-  for (let br = 0; br < 3; br++) {
-    for (let bc = 0; bc < 3; bc++) {
-      const cells = [];
-      for (let i = 1; i <= 3; i++) for (let j = 1; j <= 3; j++) cells.push(v.cell(br * 3 + i, bc * 3 + j)); // lint-ok: manual-box-arithmetic
-      groups.push(new AllDifferent(...cells));
-    }
-  }
-  return groups;
+const quadrantSudoku = (overlay) => {
+  const rows = overlay.rows();
+  const columns = overlay.columns();
+  return [
+    ...rows.flatMap((row, i) => [row, columns[i]]),
+    ...overlay.boxes(),
+  ].map(cells => new AllDifferent(...cells));
 };
 
 // --- Cages ------------------------------------------------------------
@@ -251,9 +254,9 @@ const dots = ratioDots.map(([x, a, b]) => new Pair(ratioKey[x], `Ratio 1:${x}`, 
 return [
   new Shape('9x9'),
   TR, BL, BR,
-  ...quadrantSudoku(TR),
-  ...quadrantSudoku(BL),
-  ...quadrantSudoku(BR),
+  ...quadrantSudoku(trCells),
+  ...quadrantSudoku(blCells),
+  ...quadrantSudoku(brCells),
   ...cages,
   ...palindromes,
   ...regionSumLines,

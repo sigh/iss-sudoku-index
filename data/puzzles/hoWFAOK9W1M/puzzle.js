@@ -33,7 +33,7 @@ const physicalCells = [...new Map([
 const canvasVars = new Var('P', 'Canvas cells', '13x13');
 const occupiedKeys = new Set(physicalCells.map(coordKey));
 const physicalIndex = new Map(physicalCells.map(([row, col]) =>
-  [coordKey([row, col]), canvasVars.cell((row - 1) * 13 + col)]));
+  [coordKey([row, col]), canvasVars.cell(row, col)]));
 const at = cell => {
   const mapped = physicalIndex.get(coordKey(cell));
   if (!mapped) throw new Error(`Blank canvas position used as a digit: ${cell.join(',')}`);
@@ -77,7 +77,7 @@ const blankCells = Array.from({ length: 13 }, (_, r) =>
   Array.from({ length: 13 }, (_, c) => [r + 1, c + 1]))
   .flat()
   .filter(cell => !occupiedKeys.has(coordKey(cell)))
-  .map(([row, col]) => canvasVars.cell((row - 1) * 13 + col));
+  .map(([row, col]) => canvasVars.cell(row, col));
 const blankCanvas = new Sum(0, ...blankCells);
 
 const arrows = [

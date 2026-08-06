@@ -88,7 +88,6 @@ const vowelKnightConstraints = KNIGHT_TEMPLATE_OFFSETS.map(([dr, dc]) => {
   const targets = graph.cells().filter(cell => graph.step(cell, dr, dc) !== null);
   const origin = targets[0];
   const template = graph.step(origin, dr, dc);
-  // lint-ok: bare-replicate-constructor
   return new Replicate(
     [new Pair(noVowelKnightRepeat, 'vowel knight', origin, template)],
     Replicate.encodeTargetCells(targets, origin, graph),

@@ -103,10 +103,11 @@ const flagOrder = [...SIZE3, ...SIZE4];
 // redundant with 144 near-duplicate constraints for no added constraint
 // power -- Replicate does not apply either, since this Var group (144
 // cells) is larger than the 81-cell grid it would need to shadow.
-const flags = new Var('D', 'digit-in-cage flags', flagOrder.length * DIGITS.length);
+const flags = new Var(
+  'D', 'digit-in-cage flags', `${flagOrder.length}x${DIGITS.length}`);
 const flagIndex = new Map(flagOrder.map((label, i) => [label, i]));
-// The digit-d flag cell for a cage label (1-based Var cell index).
-const flag = (label, digit) => flags.cell(flagIndex.get(label) * DIGITS.length + digit);
+// The digit-d flag cell for a cage label.
+const flag = (label, digit) => flags.cell(flagIndex.get(label) + 1, digit);
 
 // Sets one cage's 9 flags: scan the cage's own k cells (building the sorted
 // set of digits seen -- duplicates dead-end, which cages are already

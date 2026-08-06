@@ -145,7 +145,6 @@ const interiorCells = canvasCells.filter(cell => canvas.neighbours(cell).length 
 const boundaryCells = canvasCells.filter(cell => canvas.neighbours(cell).length !== 4);
 const degreeTemplateCell = interiorCells[0];
 const emptyDegrees = [
-  // lint-ok: bare-replicate-constructor
   new Replicate(
     [new NFA(
       emptyDegreeMachine,

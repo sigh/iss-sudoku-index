@@ -31,7 +31,6 @@ const downRightEdges = graph.makeReplicate(
 // the topmost-leftmost cell with an in-grid down-left neighbour -- instead.
 const downLeftOrigin = 'R1C2';
 const downLeftAnchors = allCells.filter(cell => graph.step(cell, 1, -1) !== null);
-// lint-ok: bare-replicate-constructor
 const downLeftEdges = new Replicate(
   [new Pair(diffAtLeast2, '', downLeftOrigin, graph.step(downLeftOrigin, 1, -1))],
   Replicate.encodeTargetCells(downLeftAnchors, downLeftOrigin, graph),

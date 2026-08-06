@@ -24,32 +24,27 @@
 // ContainExact over the 24 flags for a clue pins the count of smaller quads
 // to (rank - 1), which is exactly the clue's rank.
 
-function cellAt(r, c) {
-  // r, c are 0-indexed grid positions.
-  return makeCellId(r + 1, c + 1);
-}
-
-// All 25 overlapping 2x2 areas (top-left corner at r, c for r, c in 0..4),
+// All 25 overlapping 2x2 areas (top-left corner at r, c for r, c in 1..5),
 // each read top-left, top-right, bottom-left, bottom-right.
 const quads = [];
-for (let r = 0; r < 5; r++) {
-  for (let c = 0; c < 5; c++) {
+for (let r = 1; r <= 5; r++) {
+  for (let c = 1; c <= 5; c++) {
     quads.push({
       r, c,
-      tl: cellAt(r, c), tr: cellAt(r, c + 1),
-      bl: cellAt(r + 1, c), br: cellAt(r + 1, c + 1),
+      tl: makeCellId(r, c), tr: makeCellId(r, c + 1),
+      bl: makeCellId(r + 1, c), br: makeCellId(r + 1, c + 1),
     });
   }
 }
 const quadAt = new Map(quads.map(q => [`${q.r}_${q.c}`, q]));
 
-// Clued quads: top-left corner (0-indexed), the circle's printed digits (for
+// Clued quads: one-indexed top-left corner, the circle's printed digits (for
 // the QUAD CLUES rule), and the circle's number as a rank (for FULL QUAD-RANK).
 const CLUES = [
-  { r: 1, c: 0, digits: [2, 2], rank: 22 },
-  { r: 1, c: 1, digits: [6], rank: 6 },
-  { r: 3, c: 1, digits: [1, 1], rank: 11 },
-  { r: 4, c: 1, digits: [5], rank: 5 },
+  { r: 2, c: 1, digits: [2, 2], rank: 22 },
+  { r: 2, c: 2, digits: [6], rank: 6 },
+  { r: 4, c: 2, digits: [1, 1], rank: 11 },
+  { r: 5, c: 2, digits: [5], rank: 5 },
 ];
 
 // State machine comparing one clued ("target") quad against one other quad.

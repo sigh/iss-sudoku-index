@@ -15,7 +15,6 @@ const tenLine = [
 
 return [
   new Shape('6x6'),
-  new RegionSize(2, 3),
   new Arrow('R5C1', 'R5C2', 'R4C3', 'R3C4'),
   new Arrow('R6C6', 'R6C5', 'R5C4', 'R4C5'),
   new SumLine(10, ...tenLine),

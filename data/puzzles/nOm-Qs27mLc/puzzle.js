@@ -62,7 +62,7 @@ const knightReplicates = KNIGHT_OFFSET_TEMPLATES.map(([dRow, dCol]) => {
   const origins = graph.cells().filter(cell => graph.step(cell, dRow, dCol) !== null);
   const origin = origins[0];
   const other = graph.step(origin, dRow, dCol);
-  return new Replicate( // lint-ok: bare-replicate-constructor
+  return new Replicate(
     [new Pair(knightKey, 'KnightNotSum5Or15', origin, other)],
     Replicate.encodeTargetCells(origins, origin, graph),
     origin,

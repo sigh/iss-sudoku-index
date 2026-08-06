@@ -19,7 +19,8 @@
 // (Euler characteristic, forcing zero enclosed holes) together pin the IN
 // region to one simple loop boundary.
 
-const graph = cellGraph('9x9');
+const shape = new Shape('9x9');
+const graph = cellGraph(shape);
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
 
@@ -56,6 +57,7 @@ const touchedDomain = touched.makeReplicate(
   new Given(touched.cells()[0], TOUCH_NO, TOUCH_YES));
 
 const CONCAVE = 1, NEUTRAL = 2, CONVEX = 3;
+const vertexShape = new Shape('1x1', 3);
 const convex = graph.makeOverlay('VX', vertexKeys);
 const convexDomain = convex.makeReplicate(
   new Given(convex.cells()[0], CONCAVE, NEUTRAL, CONVEX));
@@ -90,7 +92,7 @@ const vertexMachine = NFA.encodeSpec({
     return value === expectedConvex ? { phase: 'done' } : undefined;
   },
   accept: (s) => s.phase === 'done',
-}, 3); // side/touched/convex aux domains only reach 3, not the full digit range.
+}, vertexShape); // side/touched/convex aux domains only reach 3, not the full digit range.
 
 const vertexRules = vertexKeys.map(key => {
   const { row: r, col: c } = parseCellId(key);
@@ -189,7 +191,7 @@ const diffRules = gridCells.flatMap(cell => {
 });
 
 return [
-  new Shape('9x9'),
+  shape,
   side.toVar('side'),
   touched.toVar('touched'),
   convex.toVar('convex'),

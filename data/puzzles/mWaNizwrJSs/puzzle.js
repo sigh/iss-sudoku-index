@@ -14,7 +14,7 @@
 
 const N = 9;
 const GRID = new Var('G', 'Grid', `${N}x${N}`);
-const cellAt = (row, col) => GRID.cell((row - 1) * N + col);
+const cellAt = (row, col) => GRID.cell(row, col);
 
 const refGraph = cellGraph('9x9');
 const toGrid = (refCell) => {

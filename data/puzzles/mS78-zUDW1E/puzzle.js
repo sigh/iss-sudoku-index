@@ -6,10 +6,10 @@
 // North Side is the main 9x9 ISS grid. South Side is encoded as 81 Var cells
 // with explicit domains and explicit row, column, and box constraints.
 
-const southVar = new Var('S', 'South Side grid', 81);
+const southVar = new Var('S', 'South Side grid', '9x9');
 
 function southCell(row, col) {
-  return southVar.cell((row - 1) * 9 + col);
+  return southVar.cell(row, col);
 }
 
 function southCells(cells) {
@@ -22,7 +22,7 @@ const allDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 // are identical Given(cell, 1..9) stamps, so Replicate stamps the template
 // instead of hand-rolling each copy. `southLocator` is a pure position
 // locator (never added to `constraints`) whose 'VS1'..'VS81' ids and
-// row-major ordering exactly match `southVar.cell(n)` / southCell(row, col).
+// row-major ordering exactly matches southCell(row, col).
 const southLocator = cellGraph('9x9').makeOverlay('VS');
 const southTargets = southLocator.cells();
 const southOrigin = southTargets[0];

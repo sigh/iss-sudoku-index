@@ -8,7 +8,7 @@
 // clue's tens digit is the exact count of its ones digit), including both.
 const cage = (clue, cells) => new Or([
   new Cage(clue, ...cells),
-  new ContainExact(Array(Math.floor(clue / 10)).fill(String(clue % 10)).join('_'), ...cells),
+  new LookAndSay(clue, ...cells),
 ]);
 
 // Cage cell lists transcribed from the coloured outlined cages and their top-left clues.

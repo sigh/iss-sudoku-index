@@ -39,7 +39,9 @@
 // segments above the cap), which is not a faithful encoding even if it
 // happens to accept the known solution.
 
-const graph = cellGraph('9x9');
+const shape = new Shape('9x9');
+const graph = cellGraph(shape);
+const shadeShape = new Shape('1x1', 2);
 const shade = graph.makeOverlay('VS');
 const shadeAt = cell => shade.at(cell);
 
@@ -51,7 +53,7 @@ const notAllSameSpec = NFA.encodeSpec({
     return [{ first: state.first, differs: state.differs || value !== state.first }];
   },
   accept: (state) => state !== null && state.differs,
-}, 2);
+}, shadeShape);
 
 // All 64 blocks are the same NFA applied to a uniform (dRow, dCol) shift of
 // one template block, so Replicate stamps the template instead of hand-
@@ -86,7 +88,7 @@ function shadeDomainConstraints() {
 }
 
 return [
-  new Shape('9x9'),
+  shape,
   shade.toVar('yin-yang shading'),
   ...shadeDomainConstraints(),
   // Global Yin-Yang connectivity: each shade forms one orthogonally-connected

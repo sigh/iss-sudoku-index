@@ -2,7 +2,7 @@
 .Var~S~second%20digit~9x9
 .Var~H~value%20high~9x9
 .Var~L~value%20low~9x9
-.Var~F~clue%20holds~24
+.Var~F~clue%20holds~8x3
 .Var~C~circles%20holding%20digit%201%2C%202%2C%203~3
 .Replicate~_____________H
 .~R1C1_0_1_2_3_4_5_6_7_8_9

@@ -21,7 +21,6 @@ const antiQueen = [1, -1].flatMap((deltaColumn) =>
         targets.push(makeCellId(row, column));
       }
     }
-    // lint-ok: bare-replicate-constructor -- each template origin depends on its slope.
     return new Replicate(
       [new Pair(noTwoFives, 'anti-queen 5s', origin, partner)],
       Replicate.encodeTargetCells(targets, origin, graph), origin,

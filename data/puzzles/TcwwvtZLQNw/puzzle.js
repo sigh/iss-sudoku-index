@@ -9,7 +9,9 @@
 
 const WALL = 1;
 const LABYRINTH = 2;
-const graph = cellGraph('9x9');
+const shape = new Shape('9x9');
+const membershipShape = new Shape('1x1', 2);
+const graph = cellGraph(shape);
 const cells = graph.cells();
 const labyrinth = graph.makeOverlay('VL');
 const digitClass = new Var('D', 'digit class', 9);
@@ -47,7 +49,7 @@ const noUnmarkedDeadEndSpec = NFA.encodeSpec({
     center === null ? { center: value, count: 0 }
       : { center, count: Math.min(2, count + (value === LABYRINTH ? 1 : 0)) },
   accept: ({ center, count }) => center === WALL || count !== 1,
-}, 2);
+}, membershipShape);
 const arrowCells = new Set(['R4C9', 'R1C1', 'R9C3']);
 const noUnmarkedDeadEnds = cells.filter(cell => !arrowCells.has(cell)).map(cell => new NFA(
   noUnmarkedDeadEndSpec, 'no-unmarked-dead-end',
@@ -61,7 +63,7 @@ const nonUniformSquareSpec = NFA.encodeSpec({
     seenLabyrinth: seenLabyrinth || value === LABYRINTH,
   }),
   accept: ({ seenWall, seenLabyrinth }) => seenWall && seenLabyrinth,
-}, 2);
+}, membershipShape);
 const blankSquareCells = ['R4C5', 'R4C6', 'R5C5', 'R5C6'];
 const unmarkedSquareOrigins = cells
   .map(cell => graph.block(cell, 2, 2))
@@ -120,7 +122,7 @@ const arrowRules = arrows.flatMap(([cell, exit]) => [
 ]);
 
 return [
-  new Shape('9x9'), new NoBoxes(), labyrinth.toVar('labyrinth'), digitClass,
+  shape, new NoBoxes(), labyrinth.toVar('labyrinth'), digitClass,
   new Given('R1C7', 1), ...regions.map(region => new AllDifferent(...region)),
   membershipDomain, ...classDomain, new ContainExact('2_2_2_2_2', ...classes),
   ...digitMembership, new ConnectedValues('VL', LABYRINTH),

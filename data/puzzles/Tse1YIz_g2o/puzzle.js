@@ -22,6 +22,8 @@
 const HUMAN = 1;
 const ZOMBIE = 2;
 const PATIENT_ZERO = 'R3C5'; // the drawn circle marks this cell
+const shape = new Shape('9x9');
+const infectionShape = new Shape('1x1', 2);
 
 // Givens, transcribed from the drawn grid (rows 5-7 only).
 const givens = [
@@ -32,7 +34,7 @@ const givens = [
   ['R7C6', 2], ['R7C7', 6], ['R7C8', 1], ['R7C9', 3],
 ];
 
-const graph = cellGraph('9x9');
+const graph = cellGraph(shape);
 const gridCells = graph.cells();
 const zLayer = graph.makeOverlay('VZ');
 const z = cell => zLayer.at(cell);
@@ -53,7 +55,7 @@ const noMono2x2Machine = NFA.encodeSpec({
     return allSame ? undefined : { done: true };
   },
   accept: ({ done }) => done === true,
-}, 2);
+}, infectionShape);
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noMono2x2 = zLayer.makeReplicate(
   new NFA(noMono2x2Machine, 'no-mono-2x2',
@@ -81,7 +83,7 @@ const forcingRules = gridCells.flatMap(
   x => graph.neighbours(x).map(y => forcing(x, y)));
 
 return [
-  new Shape('9x9'),
+  shape,
   ...givens.map(([cell, value]) => new Given(cell, value)),
   zLayer.toVar('zombie/human'),
   zDomain,

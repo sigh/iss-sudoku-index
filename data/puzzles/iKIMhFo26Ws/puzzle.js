@@ -269,8 +269,8 @@ const noCross = gridCells.flatMap(cell => {
 // cell is a legal step away from a cupcake.)
 // The two tables are the six cells of VP: entries 1-3 hold the classes of walk A
 // at positions congruent to 1, 2, 0 mod 3, and entries 4-6 the same for walk B.
-const phases = new Var('P', 'modular class by walk and position mod 3', 6);
-const classCell = (walk, phase) => phases.cell((walk - 1) * 3 + phase + 1);
+const phases = new Var('P', 'modular class by walk and position mod 3', '2x3');
+const classCell = (walk, phase) => phases.cell(walk, phase + 1);
 const PHASE_ENTRIES = [1, 2].flatMap(
   walk => [0, 1, 2].map(phase => classCell(walk, phase)));
 // Reads every step the cell is an end of, then the cell's mod-9 counter, its

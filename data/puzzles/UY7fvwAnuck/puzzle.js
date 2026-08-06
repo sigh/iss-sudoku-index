@@ -14,13 +14,13 @@ const SELECTED_VALUES = '1_2_3_4_5_6_7_8_9_10';
 const TOTAL_TENS = '1_2_3_4'; // encoded as 0, 1, 2, 3
 const TOTAL_ONES = '1_2_3_4_5_6_7_8_9_10'; // encoded as 0, 1, ..., 9
 
-const effectVar = new Var('E', 'Effective value', 81);
-const selectedVar = new Var('S', 'Loose-ten digit marker', 81);
+const effectVar = new Var('E', 'Effective value', '9x9');
+const selectedVar = new Var('S', 'Loose-ten digit marker', '9x9');
 const totalTensVar = new Var('T', 'Cage total tens', 24);
 const totalOnesVar = new Var('O', 'Cage total ones', 24);
 
-const effectCell = (r, c) => effectVar.cell((r - 1) * 9 + c);
-const selectedCell = (r, c) => selectedVar.cell((r - 1) * 9 + c);
+const effectCell = (r, c) => effectVar.cell(r, c);
+const selectedCell = (r, c) => selectedVar.cell(r, c);
 const totalTensCell = (i) => totalTensVar.cell(i + 1);
 const totalOnesCell = (i) => totalOnesVar.cell(i + 1);
 

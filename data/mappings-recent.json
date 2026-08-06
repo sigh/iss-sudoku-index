@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-05T11:18:43.627999+00:00",
+  "generated_at": "2026-08-06T11:08:29.041938+00:00",
   "rows": [
     {
       "puzzle_id": "UaD4_AskOFo",
@@ -396,7 +396,7 @@
       "constraint_types": [
         "Or",
         "Cage",
-        "ContainExact",
+        "LookAndSay",
         "BlackDot",
         "WhiteDot",
         "Whisper",
@@ -408,10 +408,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 4,
-      "solve_ms": 5.8,
-      "iss_size": 1018,
-      "iss_url_length": 1045,
-      "script_size": 2135
+      "solve_ms": 6.4,
+      "iss_size": 1007,
+      "iss_url_length": 1034,
+      "script_size": 2092
     },
     {
       "puzzle_id": "zWudy39jjEQ",
@@ -1219,7 +1219,7 @@
       "solve_ms": 26.3,
       "iss_size": 70898,
       "iss_url_length": 68624,
-      "script_size": 13518
+      "script_size": 13602
     },
     {
       "puzzle_id": "JPGFsisxFlw",
@@ -4245,9 +4245,9 @@
       "solutions_found": 1,
       "guesses": 253,
       "solve_ms": 26.7,
-      "iss_size": 2548,
-      "iss_url_length": 2557,
-      "script_size": 4662
+      "iss_size": 2549,
+      "iss_url_length": 2558,
+      "script_size": 4635
     },
     {
       "puzzle_id": "IrrtMa7XMDM",
@@ -4331,9 +4331,9 @@
       "solutions_found": 0,
       "guesses": 1073362,
       "solve_ms": 158127.0,
-      "iss_size": 25090,
-      "iss_url_length": 24031,
-      "script_size": 6020
+      "iss_size": 25092,
+      "iss_url_length": 24033,
+      "script_size": 6004
     },
     {
       "puzzle_id": "lY9YsqOO19E",
@@ -4689,7 +4689,7 @@
       "solve_ms": 196.0,
       "iss_size": 10536,
       "iss_url_length": 10611,
-      "script_size": 5776
+      "script_size": 5846
     },
     {
       "puzzle_id": "ECyhFDcyaIc",

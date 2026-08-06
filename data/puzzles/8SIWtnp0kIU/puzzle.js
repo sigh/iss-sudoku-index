@@ -209,14 +209,12 @@ const notBothStarKey = Pair.fnToKey(
 // serve as the template's own-offset anchor here, so Replicate is
 // constructed directly below instead.
 const KING_OFFSETS = [[0, 1], [1, -1], [1, 0], [1, 1]];
-// lint-ok: custom-neighbour-helper
 const kingNoTwoStars = KING_OFFSETS.map(([dr, dc]) => {
   const originsGrid = cells.filter(cell => graph.step(cell, dr, dc) !== null);
   const originsVar = stars.at(originsGrid);
   const targetGrid = graph.step(originsGrid[0], dr, dc);
   const template = new Pair(
     notBothStarKey, '', stars.at(originsGrid[0]), stars.at(targetGrid));
-  // lint-ok: bare-replicate-constructor
   return new Replicate(
     [template],
     Replicate.encodeTargetCells(originsVar, originsVar[0], stars),

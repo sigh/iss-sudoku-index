@@ -12,6 +12,7 @@
 // dimensions, with every row/column/box all-different added explicitly.
 const board = new Var('B', 'board', '12x9');
 const cellAt = (row, col) => board.cell(row, col);
+const boardLayout = cellGraph('12x9').makeOverlay('VB');
 
 // Physical rows: every row is 9 cells regardless of which grid(s) it
 // belongs to, so one all-different per row (1-12) covers both grids' row
@@ -30,24 +31,10 @@ const columns = columnWindows.flatMap(startRow =>
     return new AllDifferent(...Array.from({ length: 9 }, (_, r) => cellAt(startRow + r, col)));
   }));
 
-// Boxes: the two grids' own 3x3 box tilings are rows {1-3,4-6,7-9} and rows
-// {4-6,7-9,10-12} (each grid's rows 1-9, 3 at a time) x columns {1-3,4-6,7-9}
-// -- not the grid's own default tiling, since VB is a flat 12x9 block, hence
-// the manual construction. Box-rows 4-6 and 7-9 are identical cell sets in
-// both grids, so one set of box-row starts (1, 4, 7, 10) covers every needed
-// box exactly once. This matches the puzzle's drawn box-boundary lines: two
-// full-height vertical dividers after columns 3 and 6, and horizontal
-// dividers after rows 3, 6, and 9 (the row-6 and row-9 dividers each serve
-// one boundary in each grid).
-const boxRowStarts = [1, 4, 7, 10];
-const boxColStarts = [1, 4, 7];   // lint-ok: manual-box-arithmetic (no graph.box() -- see above)
-const boxes = boxRowStarts.flatMap(r0 => boxColStarts.map(c0 => {
-  const cells = [];
-  for (let r = r0; r < r0 + 3; r++)
-    for (let c = c0; c < c0 + 3; c++)
-      cells.push(cellAt(r, c));
-  return new AllDifferent(...cells);
-}));
+// Boxes: the 12x9 board layout tiles into the twelve 3x3 boxes needed by the
+// two overlapping grids. Box-rows 4-6 and 7-9 are shared, so each physical
+// box appears exactly once.
+const boxes = boardLayout.boxes(9).map(cells => new AllDifferent(...cells));
 
 // Givens, transcribed from the source's per-cell digits.
 const givens = [

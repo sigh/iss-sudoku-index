@@ -26,6 +26,7 @@ const POS = k => k + 1;             // snake position k (1..12) -> pos value
 const UNUSED = 1, FWD = 2, BWD = 3; // step values: unused, a->b, b->a
 
 const shape = new Shape('9x9', NV);
+const digitGeometry = cellGeometry('9x9');
 const graph = cellGraph(shape);
 const gridCells = graph.cells();
 
@@ -59,7 +60,7 @@ const productNFA = target => NFA.encodeSpec({
     return next > target ? undefined : next;
   },
   accept: state => state === target,
-}, 9);
+}, digitGeometry);
 const goldenConstraints = goldenCages.map(c =>
   new NFA(productNFA(c.product), 'golden-cage', ...c.cells));
 

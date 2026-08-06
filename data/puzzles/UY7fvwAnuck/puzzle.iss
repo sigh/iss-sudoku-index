@@ -1,6 +1,6 @@
 .Shape~9x9~16
-.Var~E~Effective%20value~81
-.Var~S~Loose-ten%20digit%20marker~81
+.Var~E~Effective%20value~9x9
+.Var~S~Loose-ten%20digit%20marker~9x9
 .Var~T~Cage%20total%20tens~24
 .Var~O~Cage%20total%20ones~24
 .Replicate~_____________H

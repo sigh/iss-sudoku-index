@@ -88,7 +88,6 @@ const leftDegree = new NFA(degreeMachine, 'snake degree',
 const rightDegree = new NFA(degreeMachine, 'snake degree',
   snake.at('R2C9'), ...snake.at(graph.neighbours('R2C9')));
 function replicateFrom(template, origin, targets) {
-  // lint-ok: bare-replicate-constructor
   return new Replicate([template], Replicate.encodeTargetCells(targets, origin, snake), origin);
 }
 const ordinaryDegrees = [

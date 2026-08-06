@@ -38,7 +38,6 @@ const degreeMachine = NFA.encodeSpec({
 // Replicate each degree shape over cells with the same boundary position.
 const interiorCells = cells.filter(cell => !/^R[19]C|C[19]$/.test(cell));
 const degreeAt = cell => new NFA(degreeMachine, 'loop-degree', ...loop.at([cell, ...graph.neighbours(cell)]));
-// lint-ok: bare-replicate-constructor -- each boundary shape needs its own origin.
 const replicateDegree = (origin, targets) => new Replicate(
   [degreeAt(origin)],
   Replicate.encodeTargetCells(loop.at(targets), loop.at(origin), loop),

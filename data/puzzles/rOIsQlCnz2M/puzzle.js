@@ -15,17 +15,24 @@ const FORTRESS = [
   'R5C8', 'R6C2', 'R6C6', 'R8C3', 'R9C8',
 ];
 const fortressSet = new Set(FORTRESS);
+const graph = cellGraph('9x9');
 
 // Build one GreaterThan per fortress cell, listing the fortress cell first
 // followed by its non-fortress orthogonal neighbours: GreaterThan pairs each
 // cell with every later-listed grid-adjacent cell as (earlier > later), so
 // listing the fortress cell first enforces fortress > each neighbour.
 const fortressConstraints = FORTRESS.map(cellId => {
-  const { row, col } = parseCellId(cellId);
-  const neighbours = [[row - 1, col], [row + 1, col], [row, col - 1], [row, col + 1]]
-    .filter(([r, c]) => r >= 1 && r <= 9 && c >= 1 && c <= 9)
-    .map(([r, c]) => makeCellId(r, c))
-    .filter(id => !fortressSet.has(id));
+  const origin = parseCellId(cellId);
+  const directionRank = id => {
+    const position = parseCellId(id);
+    if (position.row < origin.row) return 0;
+    if (position.row > origin.row) return 1;
+    if (position.col < origin.col) return 2;
+    return 3;
+  };
+  const neighbours = graph.neighbours(cellId)
+    .filter(id => !fortressSet.has(id))
+    .sort((a, b) => directionRank(a) - directionRank(b));
   return new GreaterThan(cellId, ...neighbours);
 });
 

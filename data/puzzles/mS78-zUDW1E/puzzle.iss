@@ -1,5 +1,5 @@
 .~R1C2_5~R6C2_8~R7C4_4~VS37_1~VS42_2~VS64_3
-.Var~S~South%20Side%20grid~81
+.Var~S~South%20Side%20grid~9x9
 .Replicate~_____________H~VS1
 .~VS1_1_2_3_4_5_6_7_8_9
 .End

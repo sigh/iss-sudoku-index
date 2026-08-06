@@ -35,6 +35,7 @@
 //   each to (digit, role) or (role, victimDigit) respectively.
 
 const graph = cellGraph('9x9');
+const digitGeometry = graph.gridGeometry();
 
 function range(lo, hi) {
   return Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
@@ -92,7 +93,7 @@ function boxRoleDigitSpecFor(targetRole) {
         : undefined;
     },
     accept: (state) => state.sub === 'done',
-  }, 9); // tokens are only ever digits (1-9) or the role marker (1-3)
+  }, digitGeometry); // tokens are only ever digits (1-9) or the role marker (1-3)
 }
 
 function interleaveDigitsRoles(cells) {

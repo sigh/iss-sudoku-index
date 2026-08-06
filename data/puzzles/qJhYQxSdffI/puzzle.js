@@ -16,10 +16,10 @@
 // a multiple of 10, since "0 copies of digit 0" is meaningless -- 0 is not a
 // grid digit), A = floor(S / 10) copies of B must fit in the cage (A <= n),
 // and the remaining (n - A) cells must be able to sum to S - A*B using
-// digits 1-9 (bounds (n-A)*1 .. (n-A)*9). Each surviving (S, A, B) becomes one
-// branch: Sum(S) pins the total, ContainExact(B x A) pins the exact count of
-// B (and only B -- other digits are unconstrained by it). Exactly one branch
-// is true in any valid completion, so Or over all branches is the rule.
+// digits 1-9 (bounds (n-A)*1 .. (n-A)*9). Each surviving S becomes one branch:
+// Sum(S) pins the total and LookAndSay(S) interprets it as the clue. Exactly
+// one branch is true in any valid completion, so Or over all branches is the
+// rule.
 const buildLookAndSay = (...cells) => {
   const n = cells.length;
   const branches = [];
@@ -33,7 +33,7 @@ const buildLookAndSay = (...cells) => {
     if (rest < restCells * 1 || rest > restCells * 9) continue;
     branches.push(new And([
       new Sum(sum, ...cells),
-      new ContainExact(Array(a).fill(b).join('_'), ...cells),
+      new LookAndSay(sum, ...cells),
     ]));
   }
   return new Or(branches);

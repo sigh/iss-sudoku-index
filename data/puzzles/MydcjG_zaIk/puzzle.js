@@ -36,7 +36,6 @@ const antiLongKnight = longKnightOffsets.map(([dr, dc]) => {
     }
   }
 
-  // lint-ok: bare-replicate-constructor
   return new Replicate(
     [new AllDifferent(origin, partner)],
     Replicate.encodeTargetCells(targets, origin, graph),

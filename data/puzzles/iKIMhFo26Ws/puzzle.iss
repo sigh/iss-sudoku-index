@@ -2,7 +2,7 @@
 .Var~A~walk%20position%20mod%2010~9x9
 .Var~B~walk%20position%20mod%209~9x9
 .Var~S~walk%20steps~142
-.Var~P~modular%20class%20by%20walk%20and%20position%20mod%203~6
+.Var~P~modular%20class%20by%20walk%20and%20position%20mod%203~2x3
 .Replicate~_____________H
 .~R1C1_1_2_3_4_5_6_7_8_9
 .End

@@ -94,7 +94,6 @@ function touchingPairsTemplate(dR, dC) {
   const otherCell = graph.step(originCell, dR, dC);
   const [origin, other] = flags.at([originCell, otherCell]);
   const targets = flags.at(graph.cells().filter(cell => graph.step(cell, dR, dC)));
-  // lint-ok: bare-replicate-constructor
   return new Replicate(
     [new Pair(noAdjacentTentsKey, 'no adjacent tents', origin, other)],
     Replicate.encodeTargetCells(targets, origin, flags),

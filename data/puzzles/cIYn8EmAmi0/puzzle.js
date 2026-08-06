@@ -22,10 +22,12 @@
 // preserves it exactly, so outside-clue totals are compared as 2*total.
 
 const RED = 1, YELLOW = 2, BLUE = 3;
+const shape = new Shape('9x9');
+const colourShape = new Shape('1x1', 3);
 // Doubled-value multiplier per colour.
 const DOUBLED_MULT = { [RED]: 4, [YELLOW]: 2, [BLUE]: 1 };
 
-const graph = cellGraph('9x9');
+const graph = cellGraph(shape);
 const gridCells = graph.cells();
 const color = graph.makeOverlay('VC');
 
@@ -47,7 +49,7 @@ const noMono2x2Spec = NFA.encodeSpec({
     return next.every(v => v === next[0]) ? undefined : { done: true };
   },
   accept: ({ done }) => done === true,
-}, 3);
+}, colourShape);
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noMono2x2 = color.makeReplicate(
   new NFA(noMono2x2Spec, 'no-mono-2x2', ...color.at(graph.block(gridCells[0], 2, 2))),
@@ -117,7 +119,7 @@ const equalValueLines = EQUAL_VALUE_PAIRS.map(([a, b]) => new NFA(
   ...coloredCell(a), ...coloredCell(b)));
 
 return [
-  new Shape('9x9'),
+  shape,
   color.toVar('colour'),
   colorDomain,
   // Yin Yang Yong connectivity: each colour forms one orthogonally connected

@@ -14,6 +14,8 @@
 // perimeter digits must be lesser.
 // Arrow: digits along the arrow sum to the digit in its attached circle.
 
+const graph = cellGraph('9x9');
+
 // Build the GreaterThan constraints (one per perimeter cell) for the 3x3
 // fortress block centred on (centerRow, centerCol).
 const fortress = (centerRow, centerCol, relation) => {
@@ -29,10 +31,18 @@ const fortress = (centerRow, centerCol, relation) => {
   return perimeterOffsets.map(([dRow, dCol]) => {
     const row = centerRow + dRow;
     const col = centerCol + dCol;
-    const outsideNeighbors = [[row - 1, col], [row + 1, col], [row, col - 1], [row, col + 1]]
-      .filter(([r, c]) => !inBlock(r, c))
-      .map(([r, c]) => makeCellId(r, c));
     const perimeterCell = makeCellId(row, col);
+    const directionRank = cell => {
+      const position = parseCellId(cell);
+      if (position.row < row) return 0;
+      if (position.row > row) return 1;
+      if (position.col < col) return 2;
+      return 3;
+    };
+    const outsideNeighbors = graph.neighbours(perimeterCell).filter(cell => {
+      const position = parseCellId(cell);
+      return !inBlock(position.row, position.col);
+    }).sort((a, b) => directionRank(a) - directionRank(b));
     // GreaterThan pairs each cell with every later-listed grid-adjacent
     // cell as (earlier > later), so list the greater side first.
     const cells = relation === 'greater'

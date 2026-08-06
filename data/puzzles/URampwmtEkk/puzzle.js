@@ -25,7 +25,6 @@ const degreeMachine = NFA.encodeSpec({
   },
   accept: ({ phase, onNeighbours }) => phase === 'off' || onNeighbours === 2,
 }, geometry.numValues);
-// lint-ok: bare-replicate-constructor -- each template starts away from VL1.
 const replicate = (constraint, origin, targets) => new Replicate(
   [constraint], Replicate.encodeTargetCells(targets, origin, loop), origin);
 const degreeAt = cell => new NFA(degreeMachine, 'degree',

@@ -135,8 +135,8 @@ const CLUE_GROUPS = [
   DUTCH_LINES, GERMAN_LINES, CAGES, WHITE_DOTS, BLACK_DOTS, X_MARKS, V_MARKS,
   CIRCLES,
 ];
-const flags = new Var('F', 'clue holds', 3 * CLUE_GROUPS.length);
-const flag = (group, i) => flags.cell(3 * CLUE_GROUPS.indexOf(group) + i + 1);
+const flags = new Var('F', 'clue holds', `${CLUE_GROUPS.length}x3`);
+const flag = (group, i) => flags.cell(CLUE_GROUPS.indexOf(group) + 1, i + 1);
 // Exactly two appearances of each clue kind hold, so its three flags sum to 2.
 const twoOfThree = CLUE_GROUPS.map(
   group => new Sum(2, ...group.map((_, i) => flag(group, i))));

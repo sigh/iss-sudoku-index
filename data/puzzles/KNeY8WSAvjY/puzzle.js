@@ -79,7 +79,7 @@ const noMono2x2Machine = NFA.encodeSpec({
     return next.every(v => v === next[0]) ? undefined : { done: true };
   },
   accept: ({ done }) => done === true,
-}, geometry.numValues);
+}, geometry);
 const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
 const noMono2x2 = shade.makeReplicate(
   new NFA(noMono2x2Machine, 'no-mono-2x2',

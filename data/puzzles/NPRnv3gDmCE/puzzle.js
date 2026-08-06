@@ -26,7 +26,7 @@ const antiGiraffe = antiGiraffeDeltas.map(([dRow, dCol]) => {
     cell => graph.step(cell, dRow, dCol) !== null);
   const anchor = targets[0];
   const shiftedAnchor = graph.step(anchor, dRow, dCol);
-  return new Replicate( // lint-ok: bare-replicate-constructor -- needs a non-R1C1 origin
+  return new Replicate(
     [new AllDifferent(anchor, shiftedAnchor)],
     Replicate.encodeTargetCells(targets, anchor, graph),
     anchor,

@@ -67,7 +67,6 @@ return [
   loop.toVar('loop membership'),
   loop.makeReplicate(new Given(loop.cells()[0], ON, OFF)),
   new ConnectedValues('VC', ON),
-  // lint-ok: bare-replicate-constructor
   new Replicate([new NFA(degreeSpec, 'loop degree', loop.at('R2C2'), ...loop.at(graph.neighbours('R2C2')))], Replicate.encodeTargetCells(loop.at(interior), loop.at('R2C2'), loop), loop.at('R2C2')),
   ...boundary.map(cell => new NFA(degreeSpec, 'loop degree', loop.at(cell), ...loop.at(graph.neighbours(cell)))),
   loop.makeReplicate(new NFA(noTouchSpec, 'no diagonal touch', ...loop.at(graph.block('R1C1', 2, 2))), loop.at(blockStarts)),
