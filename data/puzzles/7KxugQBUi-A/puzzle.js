@@ -3,50 +3,47 @@
 // Video: https://www.youtube.com/watch?v=7KxugQBUi-A
 // Source: https://sudokupad.app/e3dz5lytps
 
-// Normal 6x6 Sudoku, 2x3 boxes. The rules text is delivered by an unreliable
-// narrator: every rule it first states turns out to be wrong somewhere in a
-// fog-revealed correction, each sitting at the specific edge/cell it
-// corrects (a mistaken "upper left" cage corner, "lines can't share cells",
-// "digits can't repeat" are each corrected at the instance they describe).
-// By that pattern, the line colours are also swapped from how they are first
-// introduced: the "did I get the line colours backwards? Oh dear..." bubble
-// is the same hesitant-but-correct voice as every other correction, so red
-// lines are "Region Sum" and blue lines are "Modular", not as first stated.
-// Two corrections are confirmed by the drawn geometry itself, not just by
-// tone: the red line's own waypoints jump diagonally (R6C1->R5C2->R6C3), and
-// the "lines can share cells" bubble sits on R1C3 -- the only cell where a
-// short blue line (R3C3-R2C3) would otherwise need two identical values in
-// the same column (R2C3=R3C3) if it stopped short, which normal Sudoku
-// forbids, so the line must extend through the shared cell.
-// The three numbered cage totals are not in any consistent corner -- three
-// separate corrections about their placement end with "cage clues can go
-// wherever, really" -- so each total is assigned by which cage's cells
-// contain it, not by position. Two of the three cages (sums 15, 20) still
-// resolve to fully distinct digits from their sum alone (5 distinct 1-6
-// digits summing to 15 or 20 has only one set each), matching ordinary
-// Killer-cage semantics. The third (sum 28) has 7 cells but only 6 possible
-// digits, so an all-different reading is impossible by pigeonhole; its own
-// "digits can repeat in cages after all!" bubble sits inside that cage,
-// confirming the repeat-allowed reading is local to it.
+// Normal 6x6 Sudoku, 2x3 boxes, no givens. The rules text states one rule set
+// and eight speech bubbles drawn on the grid revise it; the revised set is what
+// is encoded here.
+//
+// - Red lines are Region Sum lines and blue lines are Modular lines, the
+//   opposite of the rules text. The bubble drawn on R6C4, a cell of the red
+//   line, reads "Hold on, did I get the line colours backwards?". The literal
+//   assignment - Modular on the red line, Region Sum on the blue lines - has no
+//   completion at all, with or without the other bubbles applied.
+// - Lines may move diagonally ("Like I said, lines can also move diagonally",
+//   drawn over R5C1/R5C2). The red line's waypoints step R6C1 -> R5C2 -> R6C3
+//   across cell corners, so its path is read with those diagonal steps.
+// - Lines may share cells ("Oops! Lines *can* share cells, sorry!", drawn in
+//   R1C3). The short blue stroke up column 3 ends inside R1C3, a cell the blue
+//   row-1 line already covers.
+// - Digits may repeat in a cage ("Huh! Maybe digits can repeat in cages after
+//   all!", drawn in the 7-cell cage). Seven cells cannot hold seven different
+//   digits from 1-6, so cages are Sum, not Cage.
+// - A cage total may be drawn anywhere in its cage ("Well, I guess cage clues
+//   can go wherever, really."). The three totals sit in the upper-left of R1C1,
+//   the upper-right of R1C6 and the lower-right of R5C6 - no single corner rule
+//   fits all three - so each total is matched to the cage containing its cell.
+//
+// Drawn but carrying no digit rule: the fog and its four "foglight" cage
+// entries (R3C3; R1C4/R1C5; R5C4; R4C5), the fog emoji above column 4, and the
+// heap of tiny strokes and loose digits in R6C6 that its own bubble calls
+// unused. The red line is drawn twice over the same waypoints, matching the
+// rules text stating the red-line rule twice; one constraint covers both.
+// "Cages don't overlap" and the two revised line-drawing rules describe the
+// drawing rather than the digits, so they add no constraint.
 return [
   new Shape('6x6'),
 
-  // Killer cages: totals read from free-floating numbers, matched to their
-  // cage by containment (position is explicitly unreliable, see above).
-  new Cage(15, 'R1C5', 'R1C6', 'R2C4', 'R2C5', 'R3C5'),
-  new Cage(20, 'R1C1', 'R2C1', 'R3C1', 'R3C2', 'R4C1'),
-  // 7 cells, 6-symbol alphabet: all-different is impossible; repeats allowed
-  // here only, per the correction bubble inside this cage.
+  // Killer cage totals, each read from the number drawn inside that cage.
+  new Sum(15, 'R1C5', 'R1C6', 'R2C4', 'R2C5', 'R3C5'),
+  new Sum(20, 'R1C1', 'R2C1', 'R3C1', 'R3C2', 'R4C1'),
   new Sum(28, 'R4C6', 'R5C2', 'R5C3', 'R5C4', 'R5C5', 'R5C6', 'R6C5'),
 
-  // Red Region Sum line: each segment split by a box border sums equally.
-  // Cell order follows the drawn path, including its diagonal jumps.
   new RegionSumLine('R5C1', 'R6C1', 'R5C2', 'R6C3', 'R6C4', 'R6C5', 'R5C5', 'R5C6'),
 
-  // Blue Modular(3) lines: every 3 consecutive cells hold one digit each from
-  // {1,4}, {2,5}, {3,6}.
   new Modular(3, 'R1C1', 'R1C2', 'R1C3', 'R1C4'),
-  // Extended through R1C3, shared with the line above (see note at top).
   new Modular(3, 'R3C3', 'R2C3', 'R1C3'),
   new Modular(3, 'R2C5', 'R3C5', 'R3C6'),
   new Modular(3, 'R4C6', 'R4C5', 'R4C4', 'R3C4'),

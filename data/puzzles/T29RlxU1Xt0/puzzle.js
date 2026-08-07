@@ -3,51 +3,75 @@
 // Video: https://www.youtube.com/watch?v=T29RlxU1Xt0
 // Source: https://sudokupad.app/f6xcgzdav3
 
-// Full encoding of: Sudoku, Yin Yang (with a neutral R5C5), Split Peas,
-// Pea Circles, and XV. Fog is solving UI and is not encoded (it clears
-// cells as they are solved; it imposes no final-grid rule).
+// Rules encoded below:
+//  - Normal sudoku.
+//  - Yin Yang: shaded cells orthogonally connected, unshaded cells orthogonally
+//    connected, no 2x2 wholly shaded or wholly unshaded; R5C5 is neither.
+//  - Split Peas: the digits strictly between two circles on a line sum to a
+//    concatenation of that line's two circle digits.
+//  - Pea Circles: each circle's digit is the number of cells sharing that
+//    circle's shading along each line connected to it, bounding circles
+//    included.
+//  - XV: X sums to 10, V sums to 5; "not all are given", so no negative rule.
+//
+// Not encoded, as neither restricts the final grid: the Fog rule and its two
+// FOGLIGHT cages (reveal UI), and "All lines travel orthogonally; lines may not
+// branch or cross, except at circles", which describes the drawn art. That last
+// sentence is what makes a circle a line boundary, and so is what splits each
+// drawn stroke into the circle-bounded stretches used below.
 
 const SHADED = 1;
 const UNSHADED = 2;
-const NEUTRAL = 3;
+const NEITHER = 3;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const shade = graph.makeOverlay('VS');
 const gridCells = graph.cells();
 
-// Yin Yang shading. R5C5 is fixed neutral (rules text); every other cell is
-// shaded or unshaded, discovered by the solver.
-const neutralCell = shade.at('R5C5');
-const shadedCells = shade.cells().filter(c => c !== neutralCell);
-const shadeDomain = shade.makeReplicate(
-  new Given(shadedCells[0], SHADED, UNSHADED), shadedCells);
-
-// Which physical region counts as "shaded" is a label the rules never fix:
-// the connectivity, no-mono-2x2, sight-count and sum clues only ever compare
-// cells to each other, never to an absolute shade name. Pin one arbitrary
-// cell as a representative to break that label symmetry. This does not
-// narrow which shadings are accepted, only which of the two mirror images
-// of a given shape is reported.
-const shadeRepresentative = new Given(shadedCells[0], SHADED);
-
-// Each shade is one orthogonally-connected region; the neutral cell is an
-// obstacle to both (it belongs to neither value).
-const connectivity = [
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
+// The five drawn green strokes, as the cells each polyline runs through.
+const strokes = [
+  ['R1C1', 'R2C1', 'R3C1', 'R3C2', 'R2C2', 'R2C3', 'R1C3', 'R1C2'],
+  ['R8C2', 'R7C2', 'R6C2', 'R5C2', 'R4C2', 'R4C3', 'R4C4', 'R3C4', 'R2C4',
+    'R1C4', 'R1C5', 'R2C5', 'R3C5', 'R4C5'],
+  ['R4C1', 'R5C1', 'R6C1', 'R7C1', 'R8C1', 'R9C1', 'R9C2', 'R9C3', 'R9C4',
+    'R8C4', 'R8C5', 'R8C6', 'R7C6', 'R6C6', 'R6C5'],
+  ['R1C6', 'R1C7', 'R2C7', 'R2C8', 'R3C8', 'R4C8', 'R4C7', 'R4C6', 'R5C6'],
+  ['R8C7', 'R7C7', 'R6C7', 'R6C8'],
 ];
 
-// No 2x2 block may be all one shade (a block containing the neutral cell
-// trivially can't be, since NEUTRAL only occurs once).
+// The thirteen drawn circles (white fill, green border). Every one sits on a
+// stroke, at an end or where the stroke passes through it.
+const circles = new Set([
+  'R1C1', 'R1C2', 'R4C1', 'R4C2', 'R3C4', 'R4C5', 'R8C2', 'R1C6', 'R5C6',
+  'R8C6', 'R6C5', 'R8C7', 'R6C8',
+]);
+
+// Cut each stroke at its circles, so every stretch runs circle to circle and
+// carries no circle in its interior. Both clue rules are stated over such a
+// stretch: "strictly between two circles", "the bounding circles".
+const stretches = strokes.flatMap(stroke => {
+  const cuts = stroke.flatMap((cell, i) => circles.has(cell) ? [i] : []);
+  return cuts.slice(0, -1).map((from, k) => stroke.slice(from, cuts[k + 1] + 1));
+});
+
+// Every shade Var is shaded or unshaded, except the one the rules exempt.
+const HOLE = 'R5C5';
+const shadedCells = gridCells.filter(cell => cell !== HOLE);
+const shadeDomain = shade.makeReplicate(
+  new Given(shade.at(shadedCells[0]), SHADED, UNSHADED),
+  shade.at(shadedCells));
+
+// No 2x2 block may be all shaded or all unshaded: an NFA rejecting four equal
+// values, replicated to every 2x2 origin. A block covering R5C5 passes on its
+// NEITHER value, which is what "completely shaded or unshaded" excludes.
 const noMono2x2Machine = NFA.encodeSpec({
   startState: { seen: [] },
   transition: ({ seen, done }, value) => {
     if (done === true) return { done: true };
     const next = [...seen, value];
     if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
+    return next.every(v => v === next[0]) ? undefined : { done: true };
   },
   accept: ({ done }) => done === true,
 }, geometry.numValues);
@@ -57,156 +81,62 @@ const noMono2x2 = shade.makeReplicate(
     ...shade.at(graph.block(gridCells[0], 2, 2))),
   shade.at(blockOrigins));
 
-// Split Pea / Pea Circle lines: drawn cell order and circled cells (13
-// white-filled, green-bordered circle marks).
-const LINES = [
-  ['R1C1', 'R2C1', 'R3C1', 'R3C2', 'R2C2', 'R2C3', 'R1C3', 'R1C2'],
-  ['R8C2', 'R7C2', 'R6C2', 'R5C2', 'R4C2', 'R4C3', 'R4C4', 'R3C4', 'R2C4',
-    'R1C4', 'R1C5', 'R2C5', 'R3C5', 'R4C5'],
-  ['R4C1', 'R5C1', 'R6C1', 'R7C1', 'R8C1', 'R9C1', 'R9C2', 'R9C3', 'R9C4',
-    'R8C4', 'R8C5', 'R8C6', 'R7C6', 'R6C6', 'R6C5'],
-  ['R1C6', 'R1C7', 'R2C7', 'R2C8', 'R3C8', 'R4C8', 'R4C7', 'R4C6', 'R5C6'],
-  ['R8C7', 'R7C7', 'R6C7', 'R6C8'],
-];
-const CIRCLE_CELLS = new Set([
-  'R1C1', 'R1C2', 'R4C2', 'R3C4', 'R4C1', 'R4C5', 'R8C2', 'R5C6', 'R1C6',
-  'R8C6', 'R6C5', 'R8C7', 'R6C8',
-]);
-
-// Split Peas: the sum of the cells strictly between two circles equals a
-// concatenation of the two circles' digits, either circle holding the tens
-// digit. Every consecutive pair of circles along a line is its own segment
-// ("Every set of cells between two circles is a separate summation.").
-function splitPeaSegment(between, c1, c2) {
-  const asTensUnits = (tens, units) =>
-    new Sum(0, ...between, [tens, -10], [units, -1]);
-  return new Or([asTensUnits(c1, c2), asTensUnits(c2, c1)]);
-}
-
-// Pea Circles: the digit in a circle equals the size of the same-shade
-// orthogonally-connected component (the same "connected" as the Yin Yang
-// rule) that contains it, within the cells lying on that circle's own line --
-// not necessarily contiguous along the drawn stroke's traversal order. A
-// drawn line can pass within one cell of itself (L0 folds around 3/4 of a
-// box; L1 folds a hairpin at R3C4-R4C5), so two cells can be orthogonally
-// adjacent, and hence part of the same connected run, without being
-// consecutive on the stroke. Enumerate every connected subset of the line's
-// cells containing the circle (up to the largest possible digit): one And
-// per subset pinning the digit to the subset size, the subset to the target
-// shade, and every cell orthogonally adjacent to the subset -- but outside
-// it, and still on this line -- to the opposite shade; exactly one subset is
-// the true component, so the clue is their Or. The target shade is the
-// circle's own (unknown) shade, so both are tried.
-function lineAdjacency(lineCells) {
-  const cellSet = new Set(lineCells);
-  return lineCells.map(cell => graph.neighbours(cell)
-    .filter(neighbour => cellSet.has(neighbour))
-    .map(neighbour => lineCells.indexOf(neighbour)));
-}
-
-function connectedSubsets(adjacency, root, maxSize) {
-  const results = [];
-  const seen = new Set();
-  const key = indices => indices.slice().sort((a, b) => a - b).join(',');
-  function grow(current, frontier) {
-    const currentKey = key([...current]);
-    if (seen.has(currentKey)) return;
-    seen.add(currentKey);
-    if (current.size <= maxSize) results.push([...current].sort((a, b) => a - b));
-    if (current.size >= maxSize) return;
-    for (const candidate of frontier) {
-      const nextSet = new Set(current);
-      nextSet.add(candidate);
-      const nextFrontier = new Set(frontier);
-      nextFrontier.delete(candidate);
-      for (const neighbour of adjacency[candidate]) {
-        if (!nextSet.has(neighbour)) nextFrontier.add(neighbour);
-      }
-      grow(nextSet, nextFrontier);
-    }
-  }
-  grow(new Set([root]), new Set(adjacency[root]));
-  return results;
-}
-
-function sightCountConstraint(digitCell, lineCells, adjacency, index, targetShade) {
-  const blocker = targetShade === SHADED ? UNSHADED : SHADED;
-  const subsets = connectedSubsets(adjacency, index, geometry.numValues);
-
-  return new Or(subsets.map(subset => {
-    const inSubset = new Set(subset);
-    const boundary = new Set();
-    for (const i of subset) {
-      for (const neighbour of adjacency[i]) {
-        if (!inSubset.has(neighbour)) boundary.add(neighbour);
-      }
-    }
-    return new And([
-      new Given(digitCell, subset.length),
-      ...shade.at(subset.map(i => lineCells[i]))
-        .map(cell => new Given(cell, targetShade)),
-      ...shade.at([...boundary].map(i => lineCells[i]))
-        .map(cell => new Given(cell, blocker)),
-    ]);
-  }));
-}
-
-const splitPeas = LINES.flatMap(line => {
-  const circleIdxs = line
-    .map((cell, i) => (CIRCLE_CELLS.has(cell) ? i : -1))
-    .filter(i => i >= 0);
-  return circleIdxs.slice(1).map((idx, k) => {
-    const prev = circleIdxs[k];
-    return splitPeaSegment(line.slice(prev + 1, idx), line[prev], line[idx]);
-  });
+// sum(interior) = 10*first + last, or the two circles read the other way round.
+const splitPeas = stretches.map(cells => {
+  const head = cells[0];
+  const tail = cells[cells.length - 1];
+  const interior = cells.slice(1, -1);
+  return new Or([
+    new Sum(0, ...interior, [head, -10], [tail, -1]),
+    new Sum(0, ...interior, [tail, -10], [head, -1]),
+  ]);
 });
 
-// L0's circles at R1C1 and R1C2 sit on directly adjacent cells -- the only
-// Pea Circle pair that is. A component containing both would have to report
-// the same size from either circle, so R1C1 (digit 5) and R1C2 (digit 3)
-// cannot both be true at once; and the only 5-cell component at R1C1 that
-// excludes R1C2 is the full R2C1/R2C2/R3C1/R3C2 no-mono-2x2 block. Checked
-// exhaustively over all 256 shadings of L0's 8 cells: no shading satisfies
-// both circles' Pea Circle clues alongside no-mono-2x2. R1C1's clue is
-// omitted; R1C2's is unaffected and encoded normally.
-const PEA_CIRCLE_OMITTED = new Set(['R1C1']);
+// Reads one circle's digit, then the shading of its stretch starting at that
+// same circle. The first shading read is therefore the circle's own: it fixes
+// the shading being counted and opens the count at 1 for the circle itself.
+// Each later cell of that shading adds one; a count past the digit can never
+// come back down, so those branches are dropped.
+const peaCountMachine = NFA.encodeSpec({
+  startState: { digit: null, target: null, count: 0 },
+  transition: ({ digit, target, count }, value) => {
+    if (digit === null) return { digit: value, target: null, count: 0 };
+    if (target === null) {
+      // Stretch cells never carry NEITHER: R5C5 lies on no stroke.
+      if (value !== SHADED && value !== UNSHADED) return undefined;
+      return { digit, target: value, count: 1 };
+    }
+    const next = count + (value === target ? 1 : 0);
+    return next > digit ? undefined : { digit, target, count: next };
+  },
+  accept: ({ digit, count }) => count === digit,
+}, geometry.numValues);
 
-const peaCircles = LINES.flatMap(line => {
-  const adjacency = lineAdjacency(line);
-  return line
-    .map((cell, index) => (CIRCLE_CELLS.has(cell) ? { cell, index } : null))
-    .filter(Boolean)
-    .filter(({ cell }) => !PEA_CIRCLE_OMITTED.has(cell))
-    .map(({ cell, index }) => new Or([
-      sightCountConstraint(cell, line, adjacency, index, SHADED),
-      sightCountConstraint(cell, line, adjacency, index, UNSHADED),
-    ]));
+// One machine per circle per stretch it bounds -- "each line connected to the
+// circle" -- reading the stretch outwards from that circle.
+const peaCircles = stretches.flatMap(cells => {
+  const orders = [cells, [...cells].reverse()];
+  return orders.map(order => new NFA(
+    peaCountMachine, 'pea-circle', order[0], ...shade.at(order)));
 });
-
-// XV: drawn edge marks (V/X letters between the given cell pairs).
-const vPairs = [
-  ['R2C5', 'R2C6'],
-  ['R6C4', 'R6C5'],
-  ['R8C7', 'R9C7'],
-  ['R8C5', 'R8C6'],
-];
-const xPairs = [
-  ['R7C2', 'R7C3'],
-];
-const xv = [
-  ...vPairs.map(pair => new V(...pair)),
-  ...xPairs.map(pair => new X(...pair)),
-];
 
 return [
   new Shape('9x9'),
   shade.toVar('shade'),
   shadeDomain,
-  shadeRepresentative,
-  new Given(neutralCell, NEUTRAL),
-  ...connectivity,
+  new Given(shade.at(HOLE), NEITHER),
+  // Nothing in the rules tells the two shades apart -- every constraint here is
+  // invariant under swapping them -- so each shading has a mirror image. Name
+  // the first cell in reading order the shaded one to pick one of the pair.
+  new Given(shade.at(gridCells[0]), SHADED),
+  new ConnectedValues('VS', SHADED),
+  new ConnectedValues('VS', UNSHADED),
   noMono2x2,
   ...splitPeas,
   ...peaCircles,
-  ...xv,
+  new X('R7C2', 'R7C3'),
+  new V('R2C5', 'R2C6'),
+  new V('R6C4', 'R6C5'),
+  new V('R8C5', 'R8C6'),
+  new V('R8C7', 'R9C7'),
 ];

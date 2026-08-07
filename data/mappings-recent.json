@@ -1,6 +1,331 @@
 {
-  "generated_at": "2026-08-06T11:08:29.041938+00:00",
+  "generated_at": "2026-08-08T05:48:27.089806+00:00",
   "rows": [
+    {
+      "puzzle_id": "sdzoFUAFMIc",
+      "puzzle_title": "Maximum Effort",
+      "video_title": "Take sudoku to the Max",
+      "author": "Chris Napolitano",
+      "sources": [
+        "https://sudokupad.app/qs53ivj39n"
+      ],
+      "date": "2026-08-07",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow",
+        "DoubleArrow",
+        "Whisper",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 39,
+      "solve_ms": 7.8,
+      "iss_size": 401,
+      "iss_url_length": 439,
+      "script_size": 1429
+    },
+    {
+      "puzzle_id": "EHFxYwyOEE8",
+      "puzzle_title": "Whispering Cube",
+      "video_title": "The \"Whispering Cube\" Sudoku [Aad van de Wetering]",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/3eipqnv8xm"
+      ],
+      "date": "2026-08-07",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 8,
+      "solve_ms": 3.9,
+      "iss_size": 279,
+      "iss_url_length": 328,
+      "script_size": 1640
+    },
+    {
+      "puzzle_id": "bMlMnsKH4zs",
+      "puzzle_title": "Anti & Pro Knights",
+      "video_title": "Do Not Always Be Anti Knight!",
+      "author": "Eric Bader",
+      "sources": [
+        "https://sudokupad.app/n837muu8j6"
+      ],
+      "date": "2026-08-06",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Whisper",
+        "Renban",
+        "Replicate",
+        "Or",
+        "ContainAtLeast",
+        "Pair: Anti-knight (9)",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 61,
+      "solve_ms": 30.5,
+      "iss_size": 9334,
+      "iss_url_length": 9045,
+      "script_size": 6042
+    },
+    {
+      "puzzle_id": "_FC2zpPDiZ4",
+      "puzzle_title": "Consecutive Regional Constraints",
+      "video_title": "A Quite Astonishing Fog-Of-War Sudoku",
+      "author": "Belamis",
+      "sources": [
+        "https://sudokupad.app/zt3l4bqwuj"
+      ],
+      "date": "2026-08-06",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "RegionSumLine",
+        "Renban",
+        "Whisper",
+        "Entropic",
+        "Modular",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 134,
+      "solve_ms": 15.3,
+      "iss_size": 585,
+      "iss_url_length": 618,
+      "script_size": 3937
+    },
+    {
+      "puzzle_id": "MAL2QLszGjE",
+      "puzzle_title": "2 Truths and a Quibble",
+      "video_title": "Would I Lie to You (sudoku style)?",
+      "author": "Zombie Hunter",
+      "sources": [
+        "https://sudokupad.app/9tt24bqtnq"
+      ],
+      "date": "2026-08-05",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 12.1,
+      "iss_size": 3640,
+      "iss_url_length": 3180,
+      "script_size": 3659
+    },
+    {
+      "puzzle_id": "G7g0QQBG5ZQ",
+      "puzzle_title": "Dorlir's unsquished sudoku",
+      "video_title": "A 5x5 Sudoku Grows To Be 9x9?!!",
+      "author": "Jonesy",
+      "sources": [
+        "https://sudokupad.app/01lue6wf81"
+      ],
+      "date": "2026-08-05",
+      "status": "validated",
+      "constraint_types": [
+        "CountingCircles",
+        "AllDifferent",
+        "X"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 10,
+      "solve_ms": 7.9,
+      "iss_size": 693,
+      "iss_url_length": 731,
+      "script_size": 1468
+    },
+    {
+      "puzzle_id": "iPVL06VmAr8",
+      "puzzle_title": "Floating Through Space",
+      "video_title": "Floating in a Most Peculiar Way",
+      "author": "gdc",
+      "sources": [
+        "https://sudokupad.app/3cnbyztbq0"
+      ],
+      "date": "2026-08-04",
+      "status": "validated",
+      "constraint_types": [
+        "7x7",
+        "NoBoxes",
+        "ChaosConstruction",
+        "NFA: Cave",
+        "NFA: UpToNSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 825,
+      "solve_ms": 159.2,
+      "iss_size": 7658,
+      "iss_url_length": 7701,
+      "script_size": 6200
+    },
+    {
+      "puzzle_id": "tgt5Gs9dBNA",
+      "puzzle_title": "Drafting Strategy",
+      "video_title": "An EPIC \"Blue Prince\" Sudoku Attempted",
+      "author": "Sudoku Joker",
+      "sources": [
+        "https://sudokupad.app/qbx29s7dud"
+      ],
+      "date": "2026-08-04",
+      "status": "partial",
+      "constraint_types": [
+        "Replicate",
+        "GreaterThan",
+        "Sum",
+        "AllDifferent",
+        "Pair: NoDouble",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 70,
+      "guesses": 1010,
+      "solve_ms": 32.4,
+      "iss_size": 571,
+      "iss_url_length": 600,
+      "script_size": 2346
+    },
+    {
+      "puzzle_id": "dm_JmuQT2Wk",
+      "puzzle_title": "Region Tessellation",
+      "video_title": "How can ANYONE call this a SUDOKU?",
+      "author": "Michael Lefkowitz",
+      "sources": [
+        "https://sudokupad.app/vmnal5hbuj?setting-nogrid=1"
+      ],
+      "date": "2026-08-03",
+      "status": "partial",
+      "constraint_types": [
+        "1x1",
+        "1-9",
+        "NoBoxes",
+        "Var",
+        "AllDifferent",
+        "Renban",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 9,
+      "guesses": 118,
+      "solve_ms": 8.5,
+      "iss_size": 1125,
+      "iss_url_length": 1157,
+      "script_size": 3954
+    },
+    {
+      "puzzle_id": "bVB6D4T-g9k",
+      "puzzle_title": "Unusually Hot",
+      "video_title": "The Unusually Hot Thermo Sudoku!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/pvo44ijd8p"
+      ],
+      "date": "2026-08-03",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "Or",
+        "And",
+        "NFA: no-mono-2x2",
+        "Pair: thermo",
+        "Pair: dot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 34,
+      "solve_ms": 17.1,
+      "iss_size": 5797,
+      "iss_url_length": 5400,
+      "script_size": 5084
+    },
+    {
+      "puzzle_id": "Lw7SG_Hjg-Q",
+      "puzzle_title": "Massive W, Little L",
+      "video_title": "Don't Disconnect my Line!",
+      "author": "Mr.Menace",
+      "sources": [
+        "https://sudokupad.app/rdahf4598m"
+      ],
+      "date": "2026-08-02",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "SameValues",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 550,
+      "solve_ms": 21.2,
+      "iss_size": 782,
+      "iss_url_length": 790,
+      "script_size": 2555
+    },
+    {
+      "puzzle_id": "NZVZA5yZPEI",
+      "puzzle_title": "Turbulence",
+      "video_title": "How To Deal With Sudoku Turbulence",
+      "author": "Scojo",
+      "sources": [
+        "https://sudokupad.app/prg8idgvw2"
+      ],
+      "date": "2026-08-02",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "DoubleArrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 531,
+      "solve_ms": 20.6,
+      "iss_size": 366,
+      "iss_url_length": 408,
+      "script_size": 2135
+    },
     {
       "puzzle_id": "UaD4_AskOFo",
       "puzzle_title": "poLo",
@@ -29,7 +354,8 @@
         "NFA: position",
         "NFA: seg-digit-max",
         "NFA: seg-pos-max",
-        "NFA: off-digit-min"
+        "NFA: off-digit-min",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -105,7 +431,8 @@
       "constraint_types": [
         "Between",
         "Or",
-        "EqualSum"
+        "EqualSum",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -133,7 +460,8 @@
         "NFA: one trigger",
         "NFA: bubble count",
         "NFA: pinprick",
-        "NFA: pop process"
+        "NFA: pop process",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -155,7 +483,9 @@
       ],
       "date": "2026-07-30",
       "status": "validated",
-      "constraint_types": [],
+      "constraint_types": [
+        "Given"
+      ],
       "search_completed": true,
       "hit_cap": false,
       "unique_solution": true,
@@ -229,7 +559,8 @@
       "status": "validated",
       "constraint_types": [
         "AntiKing",
-        "Arrow"
+        "Arrow",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -256,7 +587,8 @@
         "Var",
         "Replicate",
         "NFA: tens",
-        "NFA: sum"
+        "NFA: sum",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -315,7 +647,8 @@
         "NFA: rough count 9",
         "NFA: rough count 8",
         "NFA: rough count 7",
-        "Pair: circle entropy"
+        "Pair: circle entropy",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -339,7 +672,8 @@
       "status": "validated",
       "constraint_types": [
         "RegionSumLine",
-        "EqualSum"
+        "EqualSum",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -484,7 +818,8 @@
         "NFA: no-touch",
         "NFA: multiple",
         "NFA: square-count",
-        "NFA: circle-count"
+        "NFA: circle-count",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -587,7 +922,8 @@
       "constraint_types": [
         "Var",
         "AllDifferent",
-        "NFA: circle colour count"
+        "NFA: circle colour count",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -598,6 +934,91 @@
       "iss_size": 22229,
       "iss_url_length": 22233,
       "script_size": 2718
+    },
+    {
+      "puzzle_id": "gv1bSMbRQQ0",
+      "puzzle_title": "A sudoku that spells cicada",
+      "video_title": "Insect-Based Sudoku!",
+      "author": "meloettaHD",
+      "sources": [
+        "https://sudokupad.app/0z0pkkno12"
+      ],
+      "date": "2026-07-21",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "AllDifferent",
+        "SameValues",
+        "AntiKing",
+        "Whisper",
+        "AntiKnight",
+        "Pair: Index Line",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 4.8,
+      "iss_size": 1034,
+      "iss_url_length": 1082,
+      "script_size": 2719
+    },
+    {
+      "puzzle_id": "zJSJ-uIjxsI",
+      "puzzle_title": "Schr\u00f6dinger",
+      "video_title": "Make Sure This Has Exactly TWO Solutions!?!",
+      "author": "JT",
+      "sources": [
+        "https://sudokupad.app/4jjr2ooiit"
+      ],
+      "date": "2026-07-21",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow",
+        "WhiteDot",
+        "Or",
+        "And",
+        "ContainExact",
+        "Pair",
+        "NFA",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 132,
+      "solve_ms": 16.6,
+      "iss_size": 4098,
+      "iss_url_length": 3911,
+      "script_size": 6233
+    },
+    {
+      "puzzle_id": "hlszNGUU2qE",
+      "puzzle_title": "Sandwich Between Sudoku",
+      "video_title": "Getting Between a Solver and his Sandwich",
+      "author": "TheScrasse",
+      "sources": [
+        "https://sudokupad.app/7ejxpjqo2v"
+      ],
+      "date": "2026-07-20",
+      "status": "validated",
+      "constraint_types": [
+        "Sandwich",
+        "Between"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 19,
+      "solve_ms": 7.8,
+      "iss_size": 357,
+      "iss_url_length": 395,
+      "script_size": 1746
     },
     {
       "puzzle_id": "XAI5NFO_jFs",
@@ -622,7 +1043,8 @@
         "EqualSum",
         "Pair: Index Line",
         "Pair: rank 1-36",
-        "NFA: Full Rank ordering"
+        "NFA: Full Rank ordering",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -648,7 +1070,8 @@
         "Sum",
         "BlackDot",
         "Whisper",
-        "Pair: 10-26"
+        "Pair: 10-26",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -697,7 +1120,8 @@
         "NFA: circle count for 7",
         "NFA: four path remainders",
         "NFA: square count for 6",
-        "NFA: circle count for 6"
+        "NFA: circle count for 6",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -762,7 +1186,8 @@
         "NFA: countercount-6",
         "NFA: countercount-7",
         "NFA: countercount-8",
-        "NFA: countercount-9"
+        "NFA: countercount-9",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -853,7 +1278,8 @@
         "NFA: japanese-R6",
         "NFA: japanese-C1",
         "NFA: japanese-R8",
-        "NFA: japanese-R9"
+        "NFA: japanese-R9",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1014,7 +1440,8 @@
         "GreaterThan",
         "Or",
         "Sum",
-        "NFA: face digit = opposite-parity count on sausage chain"
+        "NFA: face digit = opposite-parity count on sausage chain",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1043,7 +1470,8 @@
         "Renban",
         "BlackDot",
         "WhiteDot",
-        "Pair: not 1:2"
+        "Pair: not 1:2",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1130,7 +1558,8 @@
         "Or",
         "GreaterThan",
         "Sum",
-        "NFA: no-mono-2x2"
+        "NFA: no-mono-2x2",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1155,7 +1584,8 @@
       "constraint_types": [
         "Var",
         "ContainExact",
-        "Pair: Liar"
+        "Pair: Liar",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1209,7 +1639,8 @@
         "Pair: edge-h",
         "Pair: edge-v",
         "NFA: entropy",
-        "NFA: soigneur-count"
+        "NFA: soigneur-count",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1315,7 +1746,8 @@
       "date": "2026-07-08",
       "status": "validated",
       "constraint_types": [
-        "NFA: increasing differences"
+        "NFA: increasing differences",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1348,7 +1780,8 @@
         "NFA: sum-3",
         "NFA: sum-2",
         "NFA: product-1",
-        "NFA: product-5"
+        "NFA: product-5",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1373,7 +1806,8 @@
       "constraint_types": [
         "Or",
         "And",
-        "Sum"
+        "Sum",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1404,7 +1838,8 @@
         "NFA: R1 off-by-one equation",
         "NFA: R2 off-by-one equation",
         "NFA: R7 off-by-one equation",
-        "Pair: red line difference at most 2"
+        "Pair: red line difference at most 2",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1443,7 +1878,8 @@
         "NFA: bulb 6",
         "NFA: bulb 7",
         "NFA: bulb 8",
-        "NFA: bulb 9"
+        "NFA: bulb 9",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1467,7 +1903,8 @@
       "status": "validated",
       "constraint_types": [
         "DutchFlatmates",
-        "Pair: multiples"
+        "Pair: multiples",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1519,7 +1956,8 @@
       "constraint_types": [
         "AllDifferent",
         "Or",
-        "Modular"
+        "Modular",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1547,7 +1985,8 @@
         "Arrow",
         "DoubleArrow",
         "Whisper",
-        "RegionSumLine"
+        "RegionSumLine",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1605,7 +2044,8 @@
         "Pair: edge-v",
         "NFA: par-h",
         "NFA: par-v",
-        "NFA: sensor"
+        "NFA: sensor",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -1663,7 +2103,8 @@
         "NFA: excl4",
         "NFA: excl2",
         "NFA: excl1",
-        "NFA: product=X"
+        "NFA: product=X",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1688,7 +2129,8 @@
       "constraint_types": [
         "Pair",
         "NFA: no-2x2-sum-26",
-        "NFA: offside"
+        "NFA: offside",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1712,7 +2154,8 @@
       "status": "validated",
       "constraint_types": [
         "Renban",
-        "Whisper"
+        "Whisper",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1817,7 +2260,8 @@
         "Pair",
         "AllDifferent",
         "BlackDot",
-        "WhiteDot"
+        "WhiteDot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1842,7 +2286,8 @@
       "constraint_types": [
         "Cage",
         "Palindrome",
-        "RegionSumLine"
+        "RegionSumLine",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -1951,7 +2396,8 @@
         "NFA: k5_4",
         "NFA: k5_3",
         "NFA: k5_2",
-        "NFA: k5_1"
+        "NFA: k5_1",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -1974,7 +2420,8 @@
       "date": "2026-06-28",
       "status": "validated",
       "constraint_types": [
-        "RegionSumLine"
+        "RegionSumLine",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2030,7 +2477,8 @@
         "PairX: white column",
         "PairX: white row",
         "PairX: plus box parity",
-        "PairX: white box parity"
+        "PairX: white box parity",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2054,7 +2502,8 @@
       "status": "validated",
       "constraint_types": [
         "Arrow",
-        "Quad"
+        "Quad",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2105,7 +2554,8 @@
         "NoBoxes",
         "ChaosConstruction",
         "V",
-        "X"
+        "X",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -2130,7 +2580,8 @@
       "constraint_types": [
         "Cage",
         "WhiteDot",
-        "BlackDot"
+        "BlackDot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2155,7 +2606,8 @@
       "constraint_types": [
         "Renban",
         "Entropic",
-        "Arrow"
+        "Arrow",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2444,7 +2896,8 @@
       "constraint_types": [
         "Or",
         "And",
-        "Sum"
+        "Sum",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2498,7 +2951,8 @@
         "Sum",
         "WhiteDot",
         "BlackDot",
-        "Pair: slow thermo"
+        "Pair: slow thermo",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2539,7 +2993,8 @@
         "NFA: black-dot-values",
         "NFA: value-sum-19",
         "NFA: value-sum-22",
-        "NFA: value-sum-26"
+        "NFA: value-sum-26",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2563,7 +3018,8 @@
       "status": "validated",
       "constraint_types": [
         "BlackDot",
-        "WhiteDot"
+        "WhiteDot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2613,7 +3069,8 @@
         "And",
         "AllDifferent",
         "Sum",
-        "X"
+        "X",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2690,7 +3147,8 @@
       "status": "validated",
       "constraint_types": [
         "Cage",
-        "Pair: rose octagon"
+        "Pair: rose octagon",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2718,7 +3176,8 @@
         "BlackDot",
         "WhiteDot",
         "NFA: divisor",
-        "Pair: parity line"
+        "Pair: parity line",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -2956,7 +3415,8 @@
         "NFA: cage1box7",
         "NFA: cage1box8",
         "NFA: cage1box9",
-        "Pair: boxShare"
+        "Pair: boxShare",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -2987,7 +3447,8 @@
         "GreaterThan",
         "SameValues",
         "Pair: path-edge",
-        "NFA: maze-whisper"
+        "NFA: maze-whisper",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3010,7 +3471,8 @@
       "date": "2026-06-14",
       "status": "validated",
       "constraint_types": [
-        "Arrow"
+        "Arrow",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3048,7 +3510,8 @@
         "NFA: parity-sum-30",
         "NFA: parity-sum-22",
         "Pair: opposite-parity",
-        "Pair: same-parity"
+        "Pair: same-parity",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3296,7 +3759,8 @@
         "Whisper",
         "Palindrome",
         "WhiteDot",
-        "BlackDot"
+        "BlackDot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3327,7 +3791,8 @@
         "PillArrow",
         "Or",
         "And",
-        "NFA: no-mono-2x2"
+        "NFA: no-mono-2x2",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3351,7 +3816,8 @@
       "status": "validated",
       "constraint_types": [
         "Replicate",
-        "NFA: no-3-consecutive"
+        "NFA: no-3-consecutive",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3408,7 +3874,8 @@
         "Pair: loop edge agreement h",
         "Pair: loop edge agreement v",
         "NFA: loop nonconsecutive v",
-        "NFA: loop nonconsecutive h"
+        "NFA: loop nonconsecutive h",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -3432,7 +3899,8 @@
       "status": "validated",
       "constraint_types": [
         "Whisper",
-        "GreaterThan"
+        "GreaterThan",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3498,7 +3966,8 @@
         "Renban",
         "WhiteDot",
         "BlackDot",
-        "X"
+        "X",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3556,7 +4025,8 @@
         "GreaterThan",
         "NFA: canonical piece labels",
         "NFA: shape declaration",
-        "NFA: adjacent cells"
+        "NFA: adjacent cells",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -3584,7 +4054,8 @@
         "Replicate",
         "AllDifferent",
         "EqualSum",
-        "CountingCircles"
+        "CountingCircles",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3608,7 +4079,8 @@
       "status": "validated",
       "constraint_types": [
         "SameValues",
-        "NFA: different letter pairs"
+        "NFA: different letter pairs",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3719,7 +4191,8 @@
       "status": "validated",
       "constraint_types": [
         "Pair: 2-digit square",
-        "NFA: 3-digit square"
+        "NFA: 3-digit square",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3744,7 +4217,8 @@
       "constraint_types": [
         "Cage",
         "AllDifferent",
-        "BlackDot"
+        "BlackDot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -3886,7 +4360,8 @@
         "NFA: path-position",
         "NFA: parity",
         "NFA: path-step",
-        "Pair: corner"
+        "Pair: corner",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -3952,7 +4427,8 @@
         "NFA: loop-order",
         "NFA: satellite",
         "Pair: odd-turns",
-        "Pair: even-turns"
+        "Pair: even-turns",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4022,7 +4498,8 @@
       "status": "validated",
       "constraint_types": [
         "RegionSumLine",
-        "Quad"
+        "Quad",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4075,7 +4552,8 @@
         "Arrow",
         "BlackDot",
         "Replicate",
-        "Pair: not black dot"
+        "Pair: not black dot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4111,7 +4589,8 @@
         "NFA: test-constraint",
         "Pair: no-crossing",
         "Pair: idle-box-exit",
-        "Pair: button-digit"
+        "Pair: button-digit",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4202,7 +4681,8 @@
         "NFA: BXS6",
         "NFA: BXS7",
         "NFA: BXS8",
-        "NFA: BXS9"
+        "NFA: BXS9",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -4237,7 +4717,8 @@
         "SameValues",
         "Pair: slow thermo",
         "Pair: alternating parity",
-        "PairX: nabner"
+        "PairX: nabner",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4267,7 +4748,8 @@
         "GreaterThan",
         "NFA: walk-cell",
         "NFA: walk-order",
-        "NFA: test-constraint"
+        "NFA: test-constraint",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4323,7 +4805,8 @@
         "AllDifferent",
         "Pair: selected iff ten",
         "Pair: digit or ten",
-        "Pair: selected digit"
+        "Pair: selected digit",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -4407,7 +4890,8 @@
         "NFA: white-R",
         "NFA: white-U",
         "NFA: black-U",
-        "Pair: distinct-edge"
+        "Pair: distinct-edge",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4618,7 +5102,8 @@
         "NFA: BAL6",
         "NFA: BAL7",
         "NFA: BAL8",
-        "NFA: BAL9"
+        "NFA: BAL9",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4679,7 +5164,8 @@
         "NFA: no repeat 4",
         "NFA: no repeat 3",
         "NFA: no repeat 2",
-        "NFA: no repeat 1"
+        "NFA: no repeat 1",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -4733,7 +5219,8 @@
       "constraint_types": [
         "Replicate",
         "NFA: ASCEND_TRIO",
-        "NFA: NO_CONSEC_TRIO"
+        "NFA: NO_CONSEC_TRIO",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4840,7 +5327,8 @@
         "NFA: degree",
         "NFA: arrow-count",
         "NFA: circle-count",
-        "NFA: mod4"
+        "NFA: mod4",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4878,7 +5366,8 @@
         "NFA: same-copycat-digit",
         "NFA: black-dot",
         "NFA: multiple-line",
-        "NFA: yellow-dot"
+        "NFA: yellow-dot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -4987,7 +5476,8 @@
         "ConnectedValues",
         "NFA: degree",
         "NFA: camera-row",
-        "Pair: no-cross"
+        "Pair: no-cross",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -5016,7 +5506,8 @@
         "AllDifferent",
         "Cage",
         "Whisper",
-        "Sum"
+        "Sum",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -5089,7 +5580,8 @@
       "status": "validated",
       "constraint_types": [
         "AllDifferent",
-        "Or"
+        "Or",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -5208,7 +5700,8 @@
         "NFA: coverage-DUTCH",
         "NFA: coverage-RENBAN",
         "NFA: coverage-RSUM",
-        "NFA: coverage-ARROW"
+        "NFA: coverage-ARROW",
+        "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
@@ -5231,7 +5724,8 @@
       "date": "2026-05-10",
       "status": "validated",
       "constraint_types": [
-        "Between"
+        "Between",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -5336,7 +5830,9 @@
       ],
       "date": "2026-05-09",
       "status": "partial",
-      "constraint_types": [],
+      "constraint_types": [
+        "Given"
+      ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
@@ -5365,7 +5861,8 @@
         "NFA: tent-match",
         "NFA: tent-count",
         "NFA: pair-diff",
-        "Pair: tent-no-touch"
+        "Pair: tent-no-touch",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -5399,7 +5896,8 @@
         "NFA: rank24",
         "NFA: noTie",
         "NFA: r5bRankFlag",
-        "NFA: rank4flag"
+        "NFA: rank4flag",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -5472,7 +5970,8 @@
       "status": "validated",
       "constraint_types": [
         "Replicate",
-        "NFA: Hotspot"
+        "NFA: Hotspot",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -5498,7 +5997,8 @@
         "GreaterThan",
         "Replicate",
         "Or",
-        "And"
+        "And",
+        "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
@@ -5585,393 +6085,6 @@
       "iss_size": 1239,
       "iss_url_length": 1292,
       "script_size": 3222
-    },
-    {
-      "puzzle_id": "HVo4_EckxxY",
-      "puzzle_title": "Up Up and Away",
-      "video_title": "The Sudoku With The Purple Thermometer",
-      "author": "ChinStrap",
-      "sources": [
-        "https://sudokupad.app/sr3ev8r4sd"
-      ],
-      "date": "2026-05-03",
-      "status": "validated",
-      "constraint_types": [
-        "6x6",
-        "Regex",
-        "NFA: Run1",
-        "NFA: Run4",
-        "NFA: Run3",
-        "NFA: Run2"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 45,
-      "solve_ms": 6.3,
-      "iss_size": 784,
-      "iss_url_length": 829,
-      "script_size": 2990
-    },
-    {
-      "puzzle_id": "FtR_Qtg62b0",
-      "puzzle_title": "Killer Whispers",
-      "video_title": "Is that a Ring I see Before Me?",
-      "author": "David Storrs",
-      "sources": [
-        "https://sudokupad.app/oi12bomld9"
-      ],
-      "date": "2026-05-02",
-      "status": "validated",
-      "constraint_types": [
-        "Whisper",
-        "Sum"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 512,
-      "solve_ms": 67.2,
-      "iss_size": 548,
-      "iss_url_length": 585,
-      "script_size": 2738
-    },
-    {
-      "puzzle_id": "jVMQiwCzc2k",
-      "puzzle_title": "Yin Yang Doubler Uniqueness",
-      "video_title": "Ouch My Poor Poor Brain: Sudoku At Its Maddest!!",
-      "author": "Oddlyeven",
-      "sources": [
-        "https://sudokupad.app/yl0n45rfll"
-      ],
-      "date": "2026-05-02",
-      "status": "too-slow",
-      "constraint_types": [
-        "Var",
-        "Replicate",
-        "ConnectedValues",
-        "Sum",
-        "NFA: no-monochrome-2x2",
-        "NFA: x-sum-10",
-        "NFA: black-dot-ratio",
-        "NFA: group-value-uniqueness",
-        "NFA: renban"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 219718,
-      "solve_ms": 36804.6,
-      "iss_size": 8374,
-      "iss_url_length": 8419,
-      "script_size": 8907
-    },
-    {
-      "puzzle_id": "gk4rIG7COrg",
-      "puzzle_title": "Goalie",
-      "video_title": "May Day is Saved!",
-      "author": "Daniel Hanson",
-      "sources": [
-        "https://sudokupad.app/4pd5gy143h"
-      ],
-      "date": "2026-05-01",
-      "status": "validated",
-      "constraint_types": [
-        "AntiKnight",
-        "BlackDot",
-        "WhiteDot",
-        "Palindrome",
-        "Whisper"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 24,
-      "solve_ms": 8.1,
-      "iss_size": 288,
-      "iss_url_length": 335,
-      "script_size": 879
-    },
-    {
-      "puzzle_id": "nDOET-_1e4c",
-      "puzzle_title": "African Daisies",
-      "video_title": "The Beautiful Sudoku Mind",
-      "author": "Antiknight",
-      "sources": [
-        "https://sudokupad.app/yp5cwjsu5m"
-      ],
-      "date": "2026-05-01",
-      "status": "validated",
-      "constraint_types": [
-        "Zipper",
-        "PairX: Nabner"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 593,
-      "solve_ms": 15.7,
-      "iss_size": 457,
-      "iss_url_length": 498,
-      "script_size": 1065
-    },
-    {
-      "puzzle_id": "rIO26rioOLI",
-      "puzzle_title": "Golden Pointers",
-      "video_title": "Sudoku with a Beautiful Flow",
-      "author": "Hanks",
-      "sources": [
-        "https://sudokupad.app/2e89u1hmiw"
-      ],
-      "date": "2026-04-30",
-      "status": "validated",
-      "constraint_types": [
-        "Arrow",
-        "WhiteDot",
-        "Pair: golden not consecutive"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 118,
-      "solve_ms": 11.7,
-      "iss_size": 673,
-      "iss_url_length": 718,
-      "script_size": 1805
-    },
-    {
-      "puzzle_id": "ktjNaziMZIg",
-      "puzzle_title": "Grouping All but Two",
-      "video_title": "The 79-Cell Sudoku!",
-      "author": "Sneppix",
-      "sources": [
-        "https://sudokupad.app/28d8kmh1jf"
-      ],
-      "date": "2026-04-30",
-      "status": "partial",
-      "constraint_types": [
-        "WhiteDot"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": false,
-      "solutions_found": 988,
-      "guesses": 1034,
-      "solve_ms": 18.6,
-      "iss_size": 139,
-      "iss_url_length": 185,
-      "script_size": 1121
-    },
-    {
-      "puzzle_id": "GggK620f52I",
-      "puzzle_title": "Synergy",
-      "video_title": "A Simple New Ruleset Given a Stunning Treatment",
-      "author": "Michael Lefkowitz",
-      "sources": [
-        "https://sudokupad.app/hq2d86hgi0"
-      ],
-      "date": "2026-04-29",
-      "status": "validated",
-      "constraint_types": [
-        "NFA: ArrowMod3",
-        "NFA: ArrowEntropic"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 1690,
-      "solve_ms": 86.6,
-      "iss_size": 1241,
-      "iss_url_length": 1292,
-      "script_size": 2745
-    },
-    {
-      "puzzle_id": "YsdA3pQaagU",
-      "puzzle_title": "Snarky Puppy - Xavi",
-      "video_title": "This Puppy has Attitude",
-      "author": "Aron Lid\u00e9 (Aspartagcus)",
-      "sources": [
-        "https://sudokupad.app/qhcougnkg6"
-      ],
-      "date": "2026-04-28",
-      "status": "validated",
-      "constraint_types": [
-        "Whisper",
-        "X",
-        "V",
-        "SameValues",
-        "AllDifferent"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 4,
-      "solve_ms": 4.7,
-      "iss_size": 296,
-      "iss_url_length": 341,
-      "script_size": 1619
-    },
-    {
-      "puzzle_id": "x5dhRvoStw0",
-      "puzzle_title": "Peer Pressure",
-      "video_title": "Harvard Freshman Creates GENIUS Sudoku",
-      "author": "Cane_Puzzles",
-      "sources": [
-        "https://sudokupad.app/rwx8a9tkdt"
-      ],
-      "date": "2026-04-28",
-      "status": "validated",
-      "constraint_types": [
-        "AntiKnight",
-        "Thermo",
-        "Renban"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 752,
-      "solve_ms": 31.2,
-      "iss_size": 292,
-      "iss_url_length": 332,
-      "script_size": 1082
-    },
-    {
-      "puzzle_id": "z54K1xbazxg",
-      "puzzle_title": "Lynx",
-      "video_title": "The Lynx Sees Everything!",
-      "author": "Blobz",
-      "sources": [
-        "https://sudokupad.app/blobz/lynx"
-      ],
-      "date": "2026-04-27",
-      "status": "validated",
-      "constraint_types": [
-        "Diagonal",
-        "DoubleArrow"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 3,
-      "solve_ms": 5.4,
-      "iss_size": 323,
-      "iss_url_length": 367,
-      "script_size": 1064
-    },
-    {
-      "puzzle_id": "kTB2LzuY3HQ",
-      "puzzle_title": "Empty Vessels",
-      "video_title": "This CANNOT Be Solved, Can It?",
-      "author": "Die Hard",
-      "sources": [
-        "https://sudokupad.app/9q82og2xas"
-      ],
-      "date": "2026-04-27",
-      "status": "validated",
-      "constraint_types": [
-        "CountingCircles",
-        "RegionSumLine",
-        "Whisper",
-        "Renban",
-        "Pair: OddEven"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 4117,
-      "solve_ms": 77.3,
-      "iss_size": 342,
-      "iss_url_length": 388,
-      "script_size": 1942
-    },
-    {
-      "puzzle_id": "oVFrx5oJdYo",
-      "puzzle_title": "Four Leaf Clover",
-      "video_title": "Is it Luck or is it Logic?",
-      "author": "James Kopp",
-      "sources": [
-        "https://sudokupad.app/76p1fymv2s"
-      ],
-      "date": "2026-04-26",
-      "status": "validated",
-      "constraint_types": [
-        "Renban",
-        "V",
-        "X"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 0,
-      "solve_ms": 4.5,
-      "iss_size": 734,
-      "iss_url_length": 757,
-      "script_size": 2361
-    },
-    {
-      "puzzle_id": "eZi4pISOrBQ",
-      "puzzle_title": "Douro",
-      "video_title": "Find The River Through The Sudoku Fog",
-      "author": "Xenonetix",
-      "sources": [
-        "https://sudokupad.app/kbrkvktac9"
-      ],
-      "date": "2026-04-26",
-      "status": "validated",
-      "constraint_types": [
-        "Var",
-        "Replicate",
-        "ConnectedValues",
-        "Arrow",
-        "NFA: degree",
-        "NFA: corner",
-        "NFA: river-diff"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 3650,
-      "solve_ms": 302.4,
-      "iss_size": 5591,
-      "iss_url_length": 5628,
-      "script_size": 8504
-    },
-    {
-      "puzzle_id": "blPgSzctUMg",
-      "puzzle_title": "How to slice a sandwich",
-      "video_title": "How to Slice a Sandwich Sudoku!",
-      "author": "Ul-Rhymm",
-      "sources": [
-        "https://sudokupad.app/9fjvy1dcyo"
-      ],
-      "date": "2026-04-25",
-      "status": "validated",
-      "constraint_types": [
-        "Renban",
-        "Sandwich"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 101,
-      "solve_ms": 14.0,
-      "iss_size": 367,
-      "iss_url_length": 405,
-      "script_size": 1780
     }
   ]
 }

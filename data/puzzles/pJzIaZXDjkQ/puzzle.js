@@ -3,98 +3,93 @@
 // Video: https://www.youtube.com/watch?v=pJzIaZXDjkQ
 // Source: https://app.crackingthecryptic.com/sudoku/4LhtN674Br
 
-// Normal sudoku (standard 3x3 boxes; the payload's 9 regions match them
-// exactly). White Kropki dot: the two cells consecutive. Black Kropki dot:
-// the two cells in a 1:2 ratio. White Kroopki "doot": two 2-cell dominoes'
-// sums consecutive. Black Kroopki doot: the two dominoes' sums in a 1:2
-// ratio. No givens; only marked pairs/dominoes are constrained (the rules
-// do not say every dot/doot is shown).
-//
-// Decode note: the source draws these marks as two distinct overlay
-// footprints. One kind sits at a plain 2-cell edge (only one cell each
-// side despite the elongated capsule shape) and reads as an ordinary dot
-// (WhiteDot/BlackDot), same as the small round marks.
-//
-// The other kind is centred exactly on a 4-cell grid corner, straddling it
-// symmetrically, and is a doot relating the two dominoes on either side of
-// its long axis's midpoint. Which pair of cells forms each domino is not
-// pinned down by the drawn geometry alone: along the mark's long axis its
-// coverage of the two cells it reaches is a clean, symmetric half/half
-// split, and along its short axis coverage of its own two cells is also a
-// clean, symmetric split -- both axes are "divided" the same way, so
-// nothing in the mark's own footprint says which axis is the split and
-// which is the pooled one. The source leaves this correspondence open, so
-// both readings -- long-axis-splits/short-axis-pools, and its mirror -- are
-// encoded as a disjunction: the puzzle uses one convention uniformly for
-// all 11 corner doots, and the solver is left to discover which.
-//
-// A handful of the drawn edge-position capsules (between R2C4/R2C5,
-// R2C5/R2C6, R8C4/R8C5, R8C5/R8C6, R5C5/R6C5, R6C2/R7C2, R3C8/R4C8) do not
-// hold consecutive or a 1:2 ratio under either fill colour, so no
-// dot/doot reading fits them; they are omitted here rather than guessed.
+// Rules encoded below, in full:
+//   Normal sudoku rules apply.
+//   Digits separated by a white Kropki dot must be consecutive.
+//   Digits separated by a black Kropki dot must have a ratio of 1:2.
+//   Sets of digits separated by a white Kroopki 'doot' (the long, ellipse-looking
+//     things) must have their respective sums be consecutive.
+//   Sets of digits separated by a black Kroopki doot must have their respective
+//     sums be in a 1:2 ratio.
+// There are no given digits, and the rules never say that every dot or doot is
+// drawn, so no negative ("all dots given") constraint is added.
 
+// Kropki dots: the small round marks, each centred on one cell edge.
+// Transcribed from the drawn dots.
 const whiteDots = [
-  ['R4C5', 'R5C5'], ['R6C4', 'R6C5'], ['R7C5', 'R8C5'], ['R8C5', 'R9C5'],
-  ['R1C8', 'R2C8'], ['R2C2', 'R3C2'],
+  ['R7C5', 'R8C5'],
+  ['R8C5', 'R9C5'],
+  ['R2C2', 'R3C2'],
+  ['R6C4', 'R6C5'],
 ];
-
 const blackDots = [
-  ['R1C4', 'R2C4'], ['R2C4', 'R3C4'], ['R3C7', 'R3C8'],
+  ['R1C4', 'R2C4'],
+  ['R2C4', 'R3C4'],
+  ['R3C7', 'R3C8'],
 ];
 
-// Each corner doot: the 2x2 block of cells it straddles (top-left,
-// top-right, bottom-left, bottom-right), its colour, and which axis its
-// long dimension runs along -- transcribed from the source's drawn corner
-// overlays and their exact bounding-box cell coverage (see decode note
-// above).
-const cornerDoots = [
-  { tl: 'R4C3', tr: 'R4C4', bl: 'R5C3', br: 'R5C4', color: 'black', long: 'col' },
-  { tl: 'R5C6', tr: 'R5C7', bl: 'R6C6', br: 'R6C7', color: 'black', long: 'col' },
-  { tl: 'R4C8', tr: 'R4C9', bl: 'R5C8', br: 'R5C9', color: 'white', long: 'row' },
-  { tl: 'R4C1', tr: 'R4C2', bl: 'R5C1', br: 'R5C2', color: 'white', long: 'row' },
-  { tl: 'R6C8', tr: 'R6C9', bl: 'R7C8', br: 'R7C9', color: 'black', long: 'row' },
-  { tl: 'R7C8', tr: 'R7C9', bl: 'R8C8', br: 'R8C9', color: 'white', long: 'row' },
-  { tl: 'R7C7', tr: 'R7C8', bl: 'R8C7', br: 'R8C8', color: 'black', long: 'col' },
-  { tl: 'R8C8', tr: 'R8C9', bl: 'R9C8', br: 'R9C9', color: 'white', long: 'col' },
-  { tl: 'R3C2', tr: 'R3C3', bl: 'R4C2', br: 'R4C3', color: 'white', long: 'row' },
-  { tl: 'R8C2', tr: 'R8C3', bl: 'R9C2', br: 'R9C3', color: 'black', long: 'col' },
-  { tl: 'R3C1', tr: 'R3C2', bl: 'R4C1', br: 'R4C2', color: 'white', long: 'col' },
+// Kroopki doots: the long capsules. Each one lies along a single grid line and
+// runs from the centre of one cell to the centre of another, so it flanks a run
+// of cells on one side of that line and the matching run on the other side.
+// Those two runs are the sets it separates (a dot separates 1 cell from 1 cell;
+// a doot separates n from n).
+//
+// Transcribed from the drawn capsules as ['V'|'H', line, from, to]:
+//   'V': capsule on the vertical line between columns `line` and `line`+1,
+//        spanning rows `from`..`to`  -> separates that column run on the left
+//        from the same rows in column `line`+1.
+//   'H': capsule on the horizontal line between rows `line` and `line`+1,
+//        spanning columns `from`..`to`.
+const whiteDoots = [
+  ['V', 4, 1, 3],  // C4 vs C5, rows 1-3
+  ['V', 5, 1, 3],  // C5 vs C6, rows 1-3
+  ['V', 8, 8, 9],
+  ['V', 1, 3, 4],
+  ['H', 4, 4, 6],  // R4 vs R5, columns 4-6
+  ['H', 4, 8, 9],
+  ['H', 4, 1, 2],
+  ['H', 7, 8, 9],
+  ['H', 3, 2, 3],
+  ['H', 1, 7, 9],
+];
+const blackDoots = [
+  ['V', 4, 7, 9],  // C4 vs C5, rows 7-9
+  ['V', 5, 7, 9],  // C5 vs C6, rows 7-9
+  ['V', 3, 4, 5],
+  ['V', 6, 5, 6],
+  ['V', 7, 7, 8],
+  ['V', 2, 8, 9],
+  ['H', 5, 4, 6],  // R5 vs R6, columns 4-6
+  ['H', 6, 1, 3],
+  ['H', 3, 7, 9],
+  ['H', 6, 8, 9],
 ];
 
-// Sum-consecutive: |sumA - sumB| = 1, as a disjunction of the two signed
-// linear equations (Sum's coefficient form: target, then [cell, coeff]...).
-const sumConsecutive = ([a, b]) => new Or([
-  new Sum(1, [a[0], 1], [a[1], 1], [b[0], -1], [b[1], -1]),
-  new Sum(-1, [a[0], 1], [a[1], 1], [b[0], -1], [b[1], -1]),
+// The two cell runs a doot separates.
+const dootSets = ([axis, line, from, to]) => {
+  const lanes = [];
+  for (let i = from; i <= to; i++) lanes.push(i);
+  return axis === 'V'
+    ? [lanes.map(r => makeCellId(r, line)), lanes.map(r => makeCellId(r, line + 1))]
+    : [lanes.map(c => makeCellId(line, c)), lanes.map(c => makeCellId(line + 1, c))];
+};
+
+// sum(a) - sum(b) = +/-1.
+const consecutiveSums = (a, b) => new Or([
+  new Sum(1, ...a, ...b.map(c => [c, -1])),
+  new Sum(-1, ...a, ...b.map(c => [c, -1])),
 ]);
 
-// Sum-ratio 1:2: sumA = 2*sumB, or sumB = 2*sumA.
-const sumRatio = ([a, b]) => new Or([
-  new Sum(0, [a[0], 1], [a[1], 1], [b[0], -2], [b[1], -2]),
-  new Sum(0, [a[0], -2], [a[1], -2], [b[0], 1], [b[1], 1]),
+// sum(a) = 2*sum(b), or sum(b) = 2*sum(a).
+const ratioSums = (a, b) => new Or([
+  new Sum(0, ...a, ...b.map(c => [c, -2])),
+  new Sum(0, ...a.map(c => [c, 2]), ...b.map(c => [c, -1])),
 ]);
-
-const dootConstraint = (domino, m) =>
-  (m.color === 'white' ? sumConsecutive : sumRatio)(domino);
-
-// The two candidate dominoes for one mark's long axis: 'rows' pairs each
-// row's two cells together (top domino vs bottom domino); 'cols' pairs
-// each column's two cells together (left domino vs right domino).
-const rowsDomino = m => [[m.tl, m.tr], [m.bl, m.br]];
-const colsDomino = m => [[m.tl, m.bl], [m.tr, m.br]];
-
-// Branch A: the long axis is the split (top/bottom, or left/right); the
-// short axis is pooled into each domino. Branch B is the mirror image:
-// the long axis is pooled, the short axis is the split. Exactly one
-// convention applies to all 11 corner doots at once.
-const branchA = new And(cornerDoots.map(m =>
-  dootConstraint(m.long === 'row' ? rowsDomino(m) : colsDomino(m), m)));
-const branchB = new And(cornerDoots.map(m =>
-  dootConstraint(m.long === 'row' ? colsDomino(m) : rowsDomino(m), m)));
 
 return [
   new Shape('9x9'),
   ...whiteDots.map(cells => new WhiteDot(...cells)),
   ...blackDots.map(cells => new BlackDot(...cells)),
-  new Or([branchA, branchB]),
+  ...whiteDoots.map(doot => consecutiveSums(...dootSets(doot))),
+  ...blackDoots.map(doot => ratioSums(...dootSets(doot))),
 ];

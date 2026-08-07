@@ -1,4 +1,7 @@
 .Shape~6x6
+.Var~Q~printed%20circle%20digits~5
+.~VQ1_3~VQ2_4~VQ3_4~VQ4_3~VQ5_4
+.CountingCircles~R1C2~R3C1~R4C5~R6C4~R6C5~VQ1~VQ2~VQ3~VQ4~VQ5
 .AllDifferent~R5C1~R5C2~R5C3~R5C4
 .Palindrome~R6C5~R5C5~R4C4~R4C3~R3C2~R2C2~R1C2
 .Palindrome~R4C5~R3C5~R2C6~R1C6

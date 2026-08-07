@@ -4,3 +4,8 @@
 .Sandwich~18~R5
 .Sandwich~11~C2
 .Sandwich~23~C5
+.DoubleArrow~R9C9~R9C8~R9C7~R9C6~R9C5
+.DoubleArrow~R9C5~R8C5~R7C5~R6C5~R5C5
+.DoubleArrow~R5C5~R5C6~R5C7~R5C8~R5C9
+.DoubleArrow~R5C9~R6C9~R7C9~R8C9~R9C9
+.AllDifferent~R9C9~R9C5~R5C5~R5C9

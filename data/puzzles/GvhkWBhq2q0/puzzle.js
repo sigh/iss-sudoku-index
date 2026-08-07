@@ -3,127 +3,126 @@
 // Video: https://www.youtube.com/watch?v=GvhkWBhq2q0
 // Source: https://app.crackingthecryptic.com/17rhp0owyb
 
-// Normal sudoku (standard 3x3 boxes, no givens).
+// Rules encoded (all of them; nothing is omitted):
 //
-// Rule 1 ("Digits in the circles must appear in the surrounding four cells"):
-// each of the 6 labelled circles is a `Quad`. The drawn circles are empty;
-// the printed digits are two separate single-digit marks placed just
-// west/east of the circle, on the row/col line through it (e.g. "2" just
-// west and "1" just east of the circle centred at grid corner [2, 2]).
+//  1. Normal sudoku, no given digits.
+//  2. Digits in the circles must appear in the surrounding four cells.
+//  3. Each fence segment sits on one cell edge and its value is the
+//     difference between the two cells it separates. No two segments on the
+//     same fence share a value. A fence's total value is the sum of its
+//     segment values, and that total is the number in the circle attached to
+//     the fence. Two circles are drawn empty: those totals are deduced, and
+//     rule 2 still applies to the digits of the deduced total.
 //
-// Rule 2 (Difference Fences): the drawn fence outlines are the two parallel
-// border rails of thick "fence" walls lying on top of grid edges (not
-// through cell centres); several rails are split across drawing entries and
-// clipped short where they pass under a circle. Reconstructing the rails
-// (pairing offset parallel runs, snapping circle-clipped ends back to the
-// circle's own grid vertex, and following shared vertices) recovers 8
-// connected wall-chains, one touching each circle, of 3 unit segments each
-// -- except the fence at the (5,5)-cornered blank circle, which is 6
-// segments. Each unit segment is one sudoku-cell edge; "the difference
-// between the cells they separate" is |a-b| across that edge.
+// Reading the circle contents as one number: each drawn circle has radius
+// 0.31 cell and carries two digit marks 0.085 cell to its left and right, so
+// both marks are inside the circle, side by side. Taken as a single number
+// (left mark = tens) the six labelled circles read 21, 19, 17, 15, 18, 12.
+// Taken as separate one-digit totals they cannot be totals at all: a
+// three-segment fence needs three distinct non-zero differences, so its total
+// is at least 1+2+3 = 6, and the circles at R2C2 and R7C2 carry only the
+// marks 2,1 and 1,2.
 //
-// A 3-segment fence needs 3 pairwise-distinct positive differences, whose
-// minimum possible sum is 1+2+3=6. A single printed digit (1-9) can't reach
-// that floor, and splitting a 3-edge chain into a 1-segment + 2-segment pair
-// fails arithmetically for the (2,2)- and (7,2)-cornered circles specifically
-// -- a 2-segment sub-fence needs sum >= 1+2 = 3, but those two circles' digit
-// pairs are {2,1} and {1,2}, and neither split leaves >=3 for the 2-segment
-// side. Reading the two digits as one two-digit total instead (west digit as
-// tens, east as units, matching their left-to-right drawing order) clears
-// that floor for every labelled circle at once, so the same reading is used
-// uniformly rather than only where the split fails.
-//
-// The two circles with no printed digits (corner (7,7) and corner (5,5)) are
-// the fences whose totals the rules say still need to be deduced; only the
-// distinct-segment-values part of the rule is encoded for them.
-//
-// Difference values are carried in Var cells VD1..VD27 (one per fence
-// segment, in fence order below), holding |a-b|+1 so the value fits the
-// grid's own 1-9 range (VD==1 would mean a difference of 0). AllDifferent
-// over a fence's own VDs enforces "no two segments on a fence share a
-// value"; Sum(total+segmentCount, ...VDs) enforces the shifted total.
+// Reading the two blank circles: the rules say the total "is given in the
+// attached quad" for every fence and then that "some total values will need
+// to be deduced". The deduced total is therefore still the circle's contents,
+// so rule 2 applies to its digits; that is what makes the deduction one the
+// solve needs. The blank circles' fences are encoded as a disjunction over
+// every total their segment count can reach, each branch pairing the total
+// with the quad its digits imply.
 
+// The eight drawn fences, each as the chain of grid corners its wall runs
+// along, plus the circle it ends at. Corner [r, c] is the lattice point at
+// the bottom-right of R{r}C{c}; corner [0, 0] is the grid's top-left. The
+// circle field is that same corner, i.e. the quad's top-left cell is
+// R{r}C{c}. `digits` is the pair of marks drawn in the circle, left then
+// right, or null for a circle drawn empty.
 const fences = [
-  // Corner R2C2/R2C3/R3C2/R3C3, digits west=2 east=1 -> total 21.
+  { corner: [2, 2], digits: [2, 1], path: [[1, 2], [1, 1], [2, 1], [2, 2]] },
+  { corner: [4, 1], digits: [1, 9], path: [[4, 2], [5, 2], [5, 1], [4, 1]] },
+  { corner: [1, 5], digits: [1, 7], path: [[1, 4], [2, 4], [2, 5], [1, 5]] },
+  { corner: [2, 8], digits: [1, 5], path: [[1, 8], [1, 7], [2, 7], [2, 8]] },
+  { corner: [4, 8], digits: [1, 8], path: [[7, 8], [6, 8], [5, 8], [4, 8]] },
+  { corner: [7, 7], digits: null, path: [[5, 6], [5, 7], [6, 7], [7, 7]] },
+  { corner: [7, 2], digits: [1, 2], path: [[8, 2], [8, 1], [7, 1], [7, 2]] },
   {
-    quad: { topLeft: 'R2C2', values: [2, 1] },
-    total: 21,
-    edges: [['R2C2', 'R3C2'], ['R2C1', 'R2C2'], ['R1C2', 'R2C2']],
-  },
-  // Corner R4C1/R4C2/R5C1/R5C2, digits west=1 east=9 -> total 19.
-  {
-    quad: { topLeft: 'R4C1', values: [1, 9] },
-    total: 19,
-    edges: [['R5C2', 'R6C2'], ['R5C2', 'R5C3'], ['R5C1', 'R5C2']],
-  },
-  // Corner R1C5/R1C6/R2C5/R2C6, digits west=1 east=7 -> total 17.
-  {
-    quad: { topLeft: 'R1C5', values: [1, 7] },
-    total: 17,
-    edges: [['R2C5', 'R3C5'], ['R2C4', 'R2C5'], ['R2C5', 'R2C6']],
-  },
-  // Corner R2C8/R2C9/R3C8/R3C9, digits west=1 east=5 -> total 15.
-  {
-    quad: { topLeft: 'R2C8', values: [1, 5] },
-    total: 15,
-    edges: [['R2C8', 'R3C8'], ['R1C8', 'R2C8'], ['R2C7', 'R2C8']],
-  },
-  // Corner R4C8/R4C9/R5C8/R5C9, digits west=1 east=8 -> total 18.
-  {
-    quad: { topLeft: 'R4C8', values: [1, 8] },
-    total: 18,
-    edges: [['R7C8', 'R7C9'], ['R5C8', 'R5C9'], ['R6C8', 'R6C9']],
-  },
-  // Corner R7C7/R7C8/R8C7/R8C8, blank circle -- total to be deduced.
-  {
-    quad: null,
-    total: null,
-    edges: [['R7C7', 'R7C8'], ['R6C7', 'R6C8'], ['R5C7', 'R6C7']],
-  },
-  // Corner R7C2/R7C3/R8C2/R8C3, digits west=1 east=2 -> total 12.
-  {
-    quad: { topLeft: 'R7C2', values: [1, 2] },
-    total: 12,
-    edges: [['R8C2', 'R9C2'], ['R7C2', 'R8C2'], ['R8C1', 'R8C2']],
-  },
-  // Corner R5C5/R5C6/R6C5/R6C6, blank circle -- total to be deduced.
-  // 6-segment fence (longer than the other 7).
-  {
-    quad: null,
-    total: null,
-    edges: [
-      ['R8C5', 'R8C6'], ['R5C5', 'R6C5'], ['R8C5', 'R9C5'],
-      ['R6C4', 'R6C5'], ['R7C4', 'R7C5'], ['R8C4', 'R8C5'],
-    ],
+    corner: [5, 5], digits: null,
+    path: [[7, 5], [8, 5], [8, 4], [7, 4], [6, 4], [5, 4], [5, 5]],
   },
 ];
 
-const segmentCount = fences.reduce((n, f) => n + f.edges.length, 0);
-const diffVars = new Var('D', 'fence segment |difference|+1', String(segmentCount));
-
-// VD_i == |a-b|+1: exactly one of (a-b-VD_i=-1) or (b-a-VD_i=-1) must hold.
-function diffLink(v, a, b) {
-  return new Or([
-    new Sum(-1, a, [b, -1], [v, -1]),
-    new Sum(-1, b, [a, -1], [v, -1]),
-  ]);
+// One unit step of a corner chain is one cell edge. A step along row boundary
+// r into column c separates R{r}C{c} from R{r+1}C{c}; a step along column
+// boundary c into row r separates R{r}C{c} from R{r}C{c+1}.
+function edgeCells([r0, c0], [r1, c1]) {
+  if (r0 === r1) {
+    const c = Math.max(c0, c1);
+    return [makeCellId(r0, c), makeCellId(r0 + 1, c)];
+  }
+  const r = Math.max(r0, r1);
+  return [makeCellId(r, c0), makeCellId(r, c0 + 1)];
 }
 
+const fenceEdges = fences.map(
+  f => f.path.slice(1).map((p, i) => edgeCells(f.path[i], p)));
+
+// Every fence segment separates two cells that share a row or a column, so
+// its value is in 1..8 and fits a Var cell's own 1..9 range directly.
+const segmentCount = fenceEdges.reduce((n, e) => n + e.length, 0);
+const diffVars = new Var('D', 'fence segment difference', String(segmentCount));
+
+// VD_i == |a - b|: one of a = b + VD_i, b = a + VD_i must hold.
+const diffLink = (v, [a, b]) => new Or([
+  new EqualSum([a], [b, v]),
+  new EqualSum([b], [a, v]),
+]);
+
+// The totals a k-segment fence can reach: the sums of the k-subsets of 1..8,
+// since its segment values are distinct and lie in 1..8.
+function reachableTotals(k) {
+  const totals = new Set();
+  const walk = (next, remaining, sum) => {
+    if (remaining === 0) return void totals.add(sum);
+    for (let v = next; v <= 8; v++) walk(v + 1, remaining - 1, sum + v);
+  };
+  walk(1, k, 0);
+  return [...totals].sort((x, y) => x - y);
+}
+
+// The digits of a total, as they would be written in its circle. A total of
+// 10 or 20 would be written with a 0, which is not a sudoku digit and so
+// places no requirement on the four cells; only its other digit is required.
+const totalDigits = t =>
+  (t < 10 ? [t] : [Math.floor(t / 10), t % 10]).filter(d => d > 0);
+
 let cursor = 0;
-const fenceConstraints = fences.flatMap(fence => {
-  const vars = fence.edges.map(() => diffVars.cell(++cursor));
-  const links = fence.edges.map(([a, b], i) => diffLink(vars[i], a, b));
-  const parts = [
-    ...links,
+const fenceConstraints = fences.flatMap((fence, fi) => {
+  const edges = fenceEdges[fi];
+  const vars = edges.map(() => diffVars.cell(++cursor));
+  const quadCell = makeCellId(...fence.corner);
+  const links = [
+    ...edges.map((e, i) => diffLink(vars[i], e)),
     new AllDifferent(...vars),
   ];
-  if (fence.total !== null) {
-    parts.push(new Sum(fence.total + fence.edges.length, ...vars));
+
+  if (fence.digits) {
+    const total = fence.digits[0] * 10 + fence.digits[1];
+    return [
+      ...links,
+      new Sum(total, ...vars),
+      new Quad(quadCell, ...fence.digits),
+    ];
   }
-  if (fence.quad) {
-    parts.push(new Quad(fence.quad.topLeft, ...fence.quad.values));
-  }
-  return parts;
+
+  // Blank circle: the total is unknown, so branch over every total this
+  // fence can reach and require the quad that total's digits spell out.
+  return [
+    ...links,
+    new Or(reachableTotals(edges.length).map(t => new And([
+      new Sum(t, ...vars),
+      new Quad(quadCell, ...totalDigits(t)),
+    ]))),
+  ];
 });
 
 return [

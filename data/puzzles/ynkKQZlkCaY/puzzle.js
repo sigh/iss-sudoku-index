@@ -3,90 +3,119 @@
 // Video: https://www.youtube.com/watch?v=ynkKQZlkCaY
 // Source: https://app.crackingthecryptic.com/sudoku/qQbmM7j4dM
 
-// Digits 0-9 occur once in every row, column, and box, with one two-digit
-// S-cell per house. An S-cell spells the rightward or downward Kakuro total;
-// numeric outside clues run from the edge to the first S-cell. R2C1 is even.
-// The drawn labels "<3" and "<2" are omitted: the rules only define numbers.
+// Rules encoded here:
+//   Every row, column and box holds each of the digits 0-9 exactly once. Nine
+//   grid cells hold nine distinct digits and the tenth digit sits in the
+//   house's single S-cell, which holds two different digits.
+//   Each S-cell is a Kakuro clue rightwards or downwards: the two-digit number
+//   its two digits spell, in either order, totals the digits from the next cell
+//   along to the edge of the grid.
+//   Each outside clue totals the digits from the edge of the grid up to the
+//   next S-cell, that cell excluded. Totals may be zero or carry a leading
+//   zero, so an S-cell in the first cell of a lane leaves a total of 0.
+//   R2C1 holds an even digit -- either of the two, were it an S-cell.
+//   The clue boxes above C6 and C7 read "<3" and "<2", so those lane totals are
+//   less than 3 and less than 2. The sign belongs to the total: both texts are
+//   drawn in the same clue box, the same lower-left triangle, the same
+//   quarter-cell offset and the same font as the six plain numeric totals.
 
-const shape = new Shape('9x9', '0-15');
-const SENTINEL = 10;
+const shape = new Shape('9x9', '0-9');
 const graph = cellGraph(shape);
 const cells = graph.cells();
-const VS = graph.makeOverlay('VS');
-const VH = graph.makeOverlay('VH');
-const VL = graph.makeOverlay('VL');
-const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
+// VM marks the S-cells: 1 on an S-cell, 0 on every other cell.
+const VM = graph.makeOverlay('VM');
+// VD carries an S-cell's second digit and is 0 on every other cell.
+const VD = graph.makeOverlay('VD');
 
-// In every house, primary/second pairs contain each real digit 0-9 once;
-// sentinel means the cell has no second digit.
-const houseSpec = NFA.encodeSpec({
-  startState: { mask: 0, second: false },
-  transition: (s, x) => {
-    if (!s.second) {
-      if (x > 9) return undefined;
-      const bit = 1 << x;
-      return s.mask & bit ? undefined : { mask: s.mask | bit, second: true };
-    }
-    if (x === SENTINEL) return { mask: s.mask, second: false };
-    if (x > 9) return undefined;
-    const bit = 1 << x;
-    return s.mask & bit ? undefined : { mask: s.mask | bit, second: false };
-  },
-  accept: s => !s.second && s.mask === 1023,
-}, shape);
+const houses = graph.rowsColumnsBoxes();
+const oneSCellPerHouse = houses.map(house => new ContainExact('1', ...VM.at(house)));
 
-// VH/VL hold 9*VH+VL, the ordinary digit or an S-cell's two-digit sum.
-const valueSpec = NFA.encodeSpec({
-  startState: { k: 0 },
-  transition: (s, x) => {
-    if (s.k === 0) return x <= 9 ? { k: 1, a: x } : undefined;
-    if (s.k === 1) return x === SENTINEL || x <= 9 ? { k: 2, value: x === SENTINEL ? s.a : s.a + x } : undefined;
-    if (s.k === 2) return x <= 1 ? { k: 3, value: s.value, high: x } : undefined;
-    if (s.k === 3) return x === s.value - 9 * s.high ? { done: true } : undefined;
-    return undefined;
-  },
-  accept: s => s.done === true,
-}, shape);
+// One extra cell per house, holding the digit that house's nine grid cells
+// leave out, in the order rows 1-9, columns 1-9, boxes 1-9.
+const omittedDigit = new Var('X', 'omitted digit', houses.length);
+const omitted = omittedDigit.cells();
+// A house's ten digits are its nine grid cells plus its S-cell's second digit,
+// and every one of them is different -- which is the whole of "contains every
+// digit exactly once", and is why an S-cell's two digits always differ.
+const everyDigitOnce = houses.map((house, i) => new AllDifferent(...house, omitted[i]));
+// Every VD cell of a house is 0 except its S-cell's, so their total is that
+// second digit; this is what makes it the digit the house's grid cells omit.
+const houseDigits = houses.map(
+  (house, i) => new EqualSum([omitted[i]], VD.at(house)));
 
-// Store S-cell pairs in descending order only to remove artificial swap symmetry.
-const canonicalPair = Pair.fnToKey((a, b) => b === SENTINEL || b < a, shape);
-const houses = graph.rowsColumnsBoxes().map((house, i) => new NFA(houseSpec, `schrodinger-house-${i + 1}`, ...house.flatMap(cell => [cell, VS.at(cell)])));
-const valueTies = cells.map(cell => new NFA(valueSpec, 'cell-value', cell, VS.at(cell), VH.at(cell), VL.at(cell)));
-const canonicalPairs = cells.map(cell => new Pair(canonicalPair, 'canonical-pair', cell, VS.at(cell)));
+const noSecondDigit = Pair.fnToKey((mark, second) => mark === 1 || second === 0, shape);
+const secondDigits = cells.map(
+  cell => new Pair(noSecondDigit, 'second-digit', VM.at(cell), VD.at(cell)));
 
-const valueTerms = (ray, coefficient = 1) => ray.flatMap(cell => [[VH.at(cell), 9 * coefficient], [VL.at(cell), coefficient]]);
-const twoDigitTotal = (a, b, ray) => [
-  new Sum(0, ...valueTerms(ray), [a, -10], [b, -1]),
-  new Sum(0, ...valueTerms(ray), [a, -1], [b, -10]),
+// An S-cell's two digits are an unordered pair, so which of them the encoding
+// keeps in the grid cell and which in VD is the encoding's own choice, not the
+// puzzle's. Keeping the larger in the grid cell pins one representative and
+// drops the 2^9 mirror images it would otherwise count as separate solutions.
+// It is vacuous off the S-cells, where VD is 0.
+const largerInGrid = Pair.fnToKey((digit, second) => digit >= second, shape);
+const sCellOrder = cells.map(
+  cell => new Pair(largerInGrid, 'larger-digit-in-grid', cell, VD.at(cell)));
+
+// Every run a Kakuro clue totals lies in the rest of one row or one column, and
+// each of those holds a single S-cell -- the one making the clue. So no run
+// contains an S-cell, every cell in it holds one digit, and the run's digit
+// total is just the total of its grid cells.
+// An S-cell's grid digit a and second digit b spell 10a+b or 10b+a.
+const spells = (cell, run) => [
+  new Sum(0, ...run, [cell, -10], [VD.at(cell), -1]),
+  new Sum(0, ...run, [cell, -1], [VD.at(cell), -10]),
 ];
-// A selected S-cell may clue either ray. Later S-cells contribute both digits.
-const sClue = cell => new Or([
-  new Given(VS.at(cell), SENTINEL),
-  ...twoDigitTotal(cell, VS.at(cell), graph.ray(cell, 0, 1).slice(1)),
-  ...twoDigitTotal(cell, VS.at(cell), graph.ray(cell, 1, 0).slice(1)),
-]);
+const sClue = cell => {
+  const notAnSCell = new Given(VM.at(cell), 0);
+  const runs = [graph.ray(cell, 1, 0), graph.ray(cell, 0, 1)]
+    .map(ray => ray.slice(1)).filter(run => run.length);
+  const options = runs.flatMap(run => spells(cell, run));
+  // R9C9 has no run at all, and a clue of 0 would need two equal digits, so it
+  // can never be an S-cell.
+  return options.length ? new Or([notAnSCell, ...options]) : notAnSCell;
+};
 
-// Each numeric outside-clue lane is transcribed from its drawn text box.
-const outsideClue = (total, ray) => new Or(ray.map((cell, i) => new And([
-  new Given(VS.at(cell), ...range(0, 9)),
-  ...ray.slice(0, i).map(previous => new Given(VS.at(previous), SENTINEL)),
-  new Sum(total, ...ray.slice(0, i)),
-])));
+// The nine drawn outside clue boxes, each split by a top-left to bottom-right
+// diagonal: a total in the lower-left triangle reads down its column, one in
+// the upper-right triangle reads right along its row.
 const OUTSIDE = [
-  [35, graph.ray('R1C1', 1, 0)], [34, graph.ray('R1C4', 1, 0)],
-  [33, graph.ray('R1C5', 1, 0)], [35, graph.ray('R1C8', 1, 0)],
-  [29, graph.ray('R1C1', 0, 1)], [3, graph.ray('R4C1', 0, 1)],
-  [35, graph.ray('R5C1', 0, 1)],
+  [[35], graph.ray('R1C1', 1, 0)],
+  [[34], graph.ray('R1C4', 1, 0)],
+  [[33], graph.ray('R1C5', 1, 0)],
+  [[0, 1, 2], graph.ray('R1C6', 1, 0)],
+  [[0, 1], graph.ray('R1C7', 1, 0)],
+  [[35], graph.ray('R1C8', 1, 0)],
+  [[29], graph.ray('R1C1', 0, 1)],
+  [[3], graph.ray('R4C1', 0, 1)],
+  [[35], graph.ray('R5C1', 0, 1)],
 ];
+// One branch per position the lane's next S-cell could take: the run before it
+// holds no S-cell, and its digits make the total. A comparison clue lists every
+// total that satisfies it.
+const outsideClue = (totals, ray) => new Or(ray.flatMap((sCell, i) => {
+  const run = ray.slice(0, i);
+  const sCellHere = new Given(VM.at(sCell), 1);
+  if (!run.length) return totals.includes(0) ? [sCellHere] : [];
+  const runIsClear = run.map(cell => new Given(VM.at(cell), 0));
+  return totals.map(total => new And(
+    [sCellHere, ...runIsClear, new Sum(total, ...run)]));
+}));
 
 return [
   shape,
-  VS.toVar('second digit'), VH.toVar('value high'), VL.toVar('value low'),
-  graph.makeReplicate(new Given(cells[0], ...range(0, 9))),
-  VS.makeReplicate(new Given(VS.at(cells[0]), ...range(0, 10))),
-  VH.makeReplicate(new Given(VH.at(cells[0]), 0, 1)),
-  VL.makeReplicate(new Given(VL.at(cells[0]), ...range(0, 8)), VL.at(cells)),
-  ...houses, ...valueTies, ...canonicalPairs,
-  ...cells.map(sClue), ...OUTSIDE.map(([total, ray]) => outsideClue(total, ray)),
-  new Given('R2C1', 0, 2, 4, 6, 8),
+  VM.toVar('S-cell'), VD.toVar('second digit'), omittedDigit,
+  VM.makeReplicate(new Given(VM.at(cells[0]), 0, 1)),
+  ...oneSCellPerHouse,
+  ...everyDigitOnce,
+  ...houseDigits,
+  ...secondDigits,
+  ...sCellOrder,
+  ...cells.map(sClue),
+  ...OUTSIDE.map(([totals, ray]) => outsideClue(totals, ray)),
+  // The shaded R2C1: even is a property of a digit the cell holds, so an
+  // S-cell there would satisfy it with either of its two.
+  new Or([
+    new Given('R2C1', 0, 2, 4, 6, 8),
+    new And([new Given(VM.at('R2C1'), 1), new Given(VD.at('R2C1'), 0, 2, 4, 6, 8)]),
+  ]),
 ];
