@@ -21,6 +21,9 @@ and, for the Solve / Script
 links, each encoded puzzle's `data/puzzles/<id>/{puzzle.iss,puzzle.js}`. These are
 pre-generated data files.
 
+<https://sigh.github.io/iss-sudoku-index/stats> renders constraint-type statistics (frequency, co-occurrence,
+solver cost) client-side from `data/mappings.json`.
+
 ## License
 
 [MIT](LICENSE)

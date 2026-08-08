@@ -3,7 +3,7 @@
 import { STATUS, statusMeta } from './status.js';
 import { buildRow, SORT_KEYS } from './table.js';
 import { openScriptModal } from './script_modal.js';
-import { DENSITIES, ISS_BASE, el, encodeCodeParam } from './util.js';
+import { DENSITIES, ISS_BASE, el, encodeCodeParam, fetchJson, showLoadError } from './util.js';
 
 // Rows are appended to the table in chunks as the user scrolls (windowed
 // rendering) so a large index doesn't stall filtering/sorting re-renders.
@@ -270,7 +270,7 @@ class IndexApp {
     this.dom.filter.value = this.state.filterText;
     for (const input of this.dom.density) input.checked = input.value === this.state.density;
     this.wire();
-    this.load().catch(err => this.showLoadError(err));
+    this.load().catch(err => showLoadError(this.dom.loading, err));
   }
 
   // The index is exported as two shards, both ordered date desc: a small
@@ -294,9 +294,7 @@ class IndexApp {
   }
 
   async fetchShard(url) {
-    const res = await fetch(url);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    return (await res.json()).rows.map(rehydrateRow);
+    return (await fetchJson(url)).rows.map(rehydrateRow);
   }
 
   setRows(rows, complete) {
@@ -667,11 +665,6 @@ class IndexApp {
       fileUrl: `${row.dir}/puzzle.js`,
       buildIssHref: async text => ISS_BASE + '?code=' + await encodeCodeParam(text),
     });
-  }
-
-  showLoadError(err) {
-    this.dom.loading.textContent = `Failed to load index: ${err.message}`;
-    this.dom.loading.classList.add('error');
   }
 }
 

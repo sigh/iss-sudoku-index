@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CTC → ISS — Stats</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <!-- Start the index download before stats.js loads; crossorigin matches fetch()'s
+       default mode so the preloaded response is reused. -->
+  <link rel="preload" href="data/mappings.json" as="fetch" crossorigin>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="css/stats.css">
+
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2SQH4BL89R"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-2SQH4BL89R');
+  </script>
+
+  <script type="module" src="js/stats.js"></script>
+</head>
+
+<body>
+  <header>
+    <div class="titles">
+      <h1>CTC → ISS · Stats</h1>
+      <p class="subtitle">
+        Constraint-type statistics over the
+        <a href="./">encoded puzzle index</a> — how often each type appears,
+        which types appear together, and what each costs the solver
+      </p>
+    </div>
+    <div class="header-side">
+      <nav class="attribution">
+        [<a href="./">puzzle index</a>]
+        [<a href="https://github.com/sigh/iss-sudoku-index" target="_blank" rel="noopener noreferrer">source code</a>]
+        [<a href="https://sigh.github.io/" target="_blank" rel="noopener noreferrer">sigh.github.io</a>]
+      </nav>
+    </div>
+  </header>
+
+  <main class="stats-page">
+    <div id="loading" class="empty">Loading&#8230;</div>
+
+    <div class="stats-body" id="stats-body" hidden>
+      <section class="stat-section">
+        <div class="stat-head">
+          <h2>Constraint type frequency</h2>
+          <div class="stat-head-side">
+            <span class="stat-meta" id="freq-meta"></span>
+            <div class="segmented" role="group" aria-label="Frequency view">
+              <label>
+                <input type="radio" name="freq-view" value="chart" checked>
+                <span>Chart</span>
+              </label>
+              <label>
+                <input type="radio" name="freq-view" value="table">
+                <span>Table</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <p class="stat-note">Puzzles containing each constraint type. Click a type to
+          see its puzzles in the index.</p>
+        <div id="freq-view-chart">
+          <div class="bar-columns" id="freq-chart"></div>
+        </div>
+        <div class="stat-table-scroll" id="freq-view-table" hidden></div>
+      </section>
+
+      <section class="stat-section">
+        <div class="stat-head">
+          <h2>Constraint co-occurrence</h2>
+          <div class="stat-head-side">
+            <span class="stat-meta" id="cooc-meta"></span>
+            <div class="segmented" role="group" aria-label="Co-occurrence view">
+              <label>
+                <input type="radio" name="cooc-view" value="chart" checked>
+                <span>Chart</span>
+              </label>
+              <label>
+                <input type="radio" name="cooc-view" value="table">
+                <span>Table</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <p class="stat-note">How often the most frequent types appear in the same
+          puzzle. Click a cell to see the puzzles with both types.</p>
+        <div id="cooc-view-chart">
+          <div class="stat-scroll">
+            <div id="cooc-chart"></div>
+          </div>
+          <div id="cooc-legend" class="cooc-legend"></div>
+        </div>
+        <div class="stat-table-scroll" id="cooc-view-table" hidden></div>
+      </section>
+
+      <section class="stat-section">
+        <div class="stat-head">
+          <h2>Solver cost by constraint type</h2>
+          <div class="stat-head-side">
+            <span class="stat-meta" id="cost-meta"></span>
+            <div class="segmented" role="group" aria-label="Solver cost view">
+              <label>
+                <input type="radio" name="cost-view" value="chart" checked>
+                <span>Chart</span>
+              </label>
+              <label>
+                <input type="radio" name="cost-view" value="table">
+                <span>Table</span>
+              </label>
+            </div>
+          </div>
+        </div>
+        <p class="stat-note">How many guesses solved puzzles containing each type
+          needed, for types with a sample (n) of at least 10. Each row is that
+          type's distribution: the box spans p25&#8211;p75, the line p10&#8211;p90,
+          and the tick marks the median. Unsolved and partial encodings are left
+          out because their counts aren't comparable.
+          Too&#8209;slow&nbsp;% is the share of the type's searched puzzles that
+          exceeded the evaluation cap; those runs have no guess count, so the
+          heaviest types read as underestimates.</p>
+        <div class="stat-scroll" id="cost-view-chart">
+          <div id="cost-chart"></div>
+        </div>
+        <div class="stat-table-scroll" id="cost-view-table" hidden></div>
+      </section>
+
+      <p class="stat-footnote" id="stats-footnote">
+        Parametrized tags (<span class="mono">NFA:&nbsp;…</span>,
+        <span class="mono">Pair:&nbsp;…</span>) are grouped by their base class;
+        grid-size and value-range tags are omitted. Types co-occur within puzzles,
+        so per-type cost is a screening view, not attribution.
+      </p>
+    </div>
+  </main>
+</body>
+
+</html>

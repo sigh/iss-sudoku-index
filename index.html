@@ -42,10 +42,11 @@
     </div>
     <div class="header-side">
       <nav class="attribution">
+        [<a href="stats">stats</a>]
         [<a href="https://github.com/sigh/iss-sudoku-index" target="_blank" rel="noopener noreferrer">source code</a>]
         [<a href="https://sigh.github.io/" target="_blank" rel="noopener noreferrer">sigh.github.io</a>]
       </nav>
-      <div class="density-control" role="group" aria-label="Row density">
+      <div class="segmented" role="group" aria-label="Row density">
         <label>
           <input type="radio" name="density" value="compact">
           <span>Compact</span>
@@ -65,7 +66,7 @@
   <section id="controls">
     <div class="filter-row">
       <input type="search" id="filter" placeholder="Filter title, author, constraint, id or link" autocomplete="off">
-      <button id="reset-filters" class="reset-filters" type="button" hidden>Reset all</button>
+      <button id="reset-filters" class="pill" type="button" hidden>Reset all</button>
     </div>
     <div class="status-controls">
       <div id="legend" class="legend"><!-- status filter chips, populated by JS --></div>
@@ -100,9 +101,10 @@
     <div id="sentinel" aria-hidden="true"></div>
     <div id="empty" class="empty" hidden>
       <span>No puzzles match</span>
-      <button id="clear-empty" class="empty-clear" type="button">Clear filters</button>
+      <button id="clear-empty" class="pill" type="button">Clear filters</button>
     </div>
-    <button id="to-top" class="to-top" type="button" title="Back to top" aria-label="Back to top" hidden>&#8593;</button>
+    <button id="to-top" class="to-top" type="button" title="Back to top" aria-label="Back to top"
+      hidden>&#8593;</button>
   </main>
 </body>
 

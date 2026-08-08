@@ -2,6 +2,28 @@ export const ISS_BASE = 'https://sigh.github.io/Interactive-Sudoku-Solver/';
 
 export const DENSITIES = new Set(['compact', 'medium', 'large']);
 
+export async function fetchJson(url) {
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  return res.json();
+}
+
+// Reports a failed load in the page's loading placeholder.
+export function showLoadError(element, err) {
+  element.textContent = `Failed to load index: ${err.message}`;
+  element.classList.add('error');
+}
+
+// Builds a link into the index page's filter state. The params mirror those
+// read by readActiveFilters() in app.js; repeated `constraint` values are ANDed.
+export function indexUrl({ constraints = [], text = '' } = {}) {
+  const params = new URLSearchParams();
+  for (const name of constraints) params.append('constraint', name);
+  if (text) params.set('filter', text);
+  const qs = params.toString();
+  return qs ? `./?${qs}` : './';
+}
+
 export function el(tag, options = {}, ...children) {
   const node = document.createElement(tag);
 

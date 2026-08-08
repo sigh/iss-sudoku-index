@@ -44,16 +44,16 @@ body {
 a { color: var(--color-primary-dark); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-.density-control {
+.segmented {
   display: inline-flex;
   align-items: center;
   gap: 4px;
   font-size: var(--fs-small);
   color: var(--text-muted);
 }
-.density-control label { cursor: pointer; }
-.density-control input { position: absolute; opacity: 0; pointer-events: none; }
-.density-control label span {
+.segmented label { cursor: pointer; }
+.segmented input { position: absolute; opacity: 0; pointer-events: none; }
+.segmented label span {
   display: inline-flex;
   align-items: center;
   min-height: 22px;
@@ -63,17 +63,17 @@ a:hover { text-decoration: underline; }
   color: var(--text-muted);
   user-select: none;
 }
-.density-control label:first-of-type span { border-radius: 11px 0 0 11px; }
-.density-control label:last-of-type span { border-radius: 0 11px 11px 0; }
-.density-control label + label span { margin-left: -5px; }
-.density-control input:checked + span {
+.segmented label:first-of-type span { border-radius: 11px 0 0 11px; }
+.segmented label:last-of-type span { border-radius: 0 11px 11px 0; }
+.segmented label + label span { margin-left: -5px; }
+.segmented input:checked + span {
   position: relative;
   z-index: 1;
   background: var(--color-primary);
   border-color: var(--color-primary);
   color: #fff;
 }
-.density-control input:focus-visible + span {
+.segmented input:focus-visible + span {
   position: relative;
   z-index: 2;
   box-shadow: 0 0 0 2px var(--color-primary);
@@ -195,7 +195,8 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
   gap: 8px;
   margin-left: auto;
 }
-.reset-filters {
+/* Small outlined control, used for buttons and links on both pages. */
+.pill {
   padding: 2px 9px;
   border: 1px solid var(--border-strong);
   border-radius: 10px;
@@ -205,11 +206,8 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
   font-size: var(--fs-small);
   cursor: pointer;
 }
-.reset-filters:hover { background: var(--bg-hover); }
-.reset-filters:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
+.pill:hover { background: var(--bg-hover); text-decoration: none; }
+.pill:focus-visible { outline: 2px solid var(--color-primary); outline-offset: 2px; }
 
 /* min-height reserves the chips' height pre-load so the sticky bar doesn't
    grow (and shift the table) when the legend populates. */
@@ -237,16 +235,14 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
 .legend-item .count { color: var(--text-muted); font-variant-numeric: tabular-nums; }
 
 /* --- Table --- */
-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+table { width: 100%; border-collapse: collapse; }
+#index { table-layout: fixed; }
 col.col-video { width: 140px; }
 #index[data-density="large"] col.col-video { width: 260px; }
 col.col-status { width: 98px; }
 col.col-guesses { width: 112px; }
 col.col-constraint { width: 136px; }
 thead th {
-  position: sticky;
-  top: var(--sticky-controls-height);
-  z-index: 10;
   background: var(--bg-header);
   text-align: left;
   font-weight: bold;
@@ -255,6 +251,9 @@ thead th {
   border-bottom: 1px solid var(--border-strong);
   white-space: nowrap;
 }
+/* The index header tracks the sticky controls bar; other tables stick to their
+   own scroll container (see .stats-table in stats.css). */
+#index thead th { position: sticky; top: var(--sticky-controls-height); z-index: 10; }
 th[data-sort] { cursor: pointer; }
 th[data-sort]:hover { color: var(--color-primary-dark); }
 th[data-sort]:focus-visible {
@@ -267,7 +266,7 @@ th.sorted.desc::after { content: " \25BC"; }
 tbody td { padding: 6px 10px; border-bottom: 1px solid #eee; vertical-align: middle; }
 tbody tr:hover { background: var(--bg-hover); }
 
-.col-num { text-align: right; font-variant-numeric: tabular-nums; }
+.col-num, .num { text-align: right; font-variant-numeric: tabular-nums; }
 td.col-num { color: var(--text); }
 td.col-num.na { color: var(--text-muted); }
 .stat-main { font-variant-numeric: tabular-nums; white-space: nowrap; }
@@ -526,21 +525,6 @@ pre.modal-code { flex: 1; min-height: 0; margin: 0; }
   padding: var(--gap);
 }
 .empty[hidden] { display: none; }
-.empty-clear {
-  padding: 2px 9px;
-  border: 1px solid var(--border-strong);
-  border-radius: 10px;
-  color: var(--text);
-  background: var(--bg-surface);
-  font: inherit;
-  font-size: var(--fs-small);
-  cursor: pointer;
-}
-.empty-clear:hover { background: var(--bg-hover); }
-.empty-clear:focus-visible {
-  outline: 2px solid var(--color-primary);
-  outline-offset: 2px;
-}
 
 /* Floating back-to-top button — appears once the list is a couple of screens deep. */
 .to-top {
