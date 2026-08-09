@@ -6,11 +6,12 @@
 // Three overlapping standard grids: 4x4 at R1C1, 6x6 at R2C3, and 4x4 at
 // R5C7. The equal-sum-diagonals rule is omitted: the payload does not identify
 // which diagonals its short arrowhead marks select. The 8x10 canvas has holes,
-// so its cells are represented by VG1..VG80.
+// so the grid is Raw: no automatic row/column all-different exists, so every
+// sudoku rule below is stated explicitly, including for the padding cells.
 const rows = 8;
 const cols = 10;
-const vars = new Var('G', 'canvas cells', `${rows}x${cols}`);
-const cell = (r, c) => vars.cell(r, c);
+const shape = new Shape(`${rows}x${cols}`, '1-6', 'Raw');
+const cell = (r, c) => makeCellId(r, c);
 const allDifferent = (cells) => new AllDifferent(...cells);
 const squareGroups = (r0, c0, n, boxRows, boxCols) => [
   ...Array.from({ length: n }, (_, r) =>
@@ -47,8 +48,7 @@ const domains = Array.from(active, (key) => {
 }).filter(Boolean);
 const sudokuGroups = grids.flatMap(({ r, c, n, br, bc }) => squareGroups(r, c, n, br, bc));
 return [
-  new Shape('1x1', 6),
-  vars,
+  shape,
   ...padding,
   ...domains,
   ...sudokuGroups,

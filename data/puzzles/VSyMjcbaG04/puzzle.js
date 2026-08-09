@@ -25,24 +25,15 @@
 //   BLACK DOT   1:2 ratio.
 // Nothing is omitted.
 //
-// The real grid cannot live on the ISS main grid: rows/columns are
-// unconditionally all-different over every declared cell, and there is no
-// way to declare an 11x11 canvas with 40 cells excluded from that. It
-// instead lives on a `VD` overlay Var group over the same 11x11 canvas:
-//   VD  each cell's value: 0 outside every box, else its digit 1-9
-// The native main grid holds nothing real, so it is pinned to a fixed
-// cyclic Latin square (boxes dropped) that adds no search of its own.
+// A Sudoku-type main grid's rows/columns are unconditionally all-different
+// over every declared cell, and there is no way to declare an 11x11 canvas
+// with 40 cells excluded from that, so the grid is Raw: no implicit
+// constraints. Each main-grid cell's value: 0 outside every box, else its
+// digit 1-9.
 const SIZE = 11;
-const shape = new Shape('11x11', '0-10');
-const grid = cellGraph('11x11');
-const value = grid.makeOverlay('VD');
-const valueVar = value.toVar('Digits');
-const at = cells => value.at(cells);
-
-const filler = grid.cells().map(cell => {
-  const { row, col } = parseCellId(cell);
-  return new Given(cell, (row - 1 + col - 1) % SIZE);
-});
+const shape = new Shape('11x11', '0-9', 'Raw');
+const grid = cellGraph(shape);
+const at = cells => cells;
 
 // Nine fixed 3x3 boxes, transcribed from the source's `cages` (identical to
 // its `regions`), row-major within each box.
@@ -66,11 +57,11 @@ const boxes = BOXES.map(cells => new AllDifferent(...at(cells)));
 // Holes carry no digit; real cells hold 1-9. Neither is compared against
 // another hole or real cell by any other constraint, so a single shared
 // placeholder (0) is enough for every hole.
-const emptyHoles = HOLES.map(c => new Given(value.at(c), 0));
+const emptyHoles = HOLES.map(c => new Given(c, 0));
 // All 81 real cells get the identical 1-9 restriction, so stamp it with one
 // Replicate instead of 81 hand-written Givens (lint: stamped-copies-without-replicate).
-const realDomain = value.makeReplicate(
-  new Given(value.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9), at(REAL_CELLS));
+const realDomain = grid.makeReplicate(
+  new Given(grid.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9), at(REAL_CELLS));
 
 // Rows/columns: all-different over each row's/column's real cells only,
 // grouped from the box geometry above.
@@ -103,7 +94,7 @@ for (const c of REAL_CELLS) {
     const key = c < other ? `${c}_${other}` : `${other}_${c}`;
     if (seenKnightPairs.has(key)) continue;
     seenKnightPairs.add(key);
-    knightPairs.push(new AllDifferent(value.at(c), value.at(other)));
+    knightPairs.push(new AllDifferent(c, other));
   }
 }
 
@@ -139,24 +130,17 @@ const PALINDROMES = [
 ];
 const palindromes = PALINDROMES.map(cells => new Palindrome(...at(cells)));
 
-// ---- Kropki dots: white = consecutive, black = 1:2 ratio. WhiteDot/
-// BlackDot validate their cells as grid-adjacent, which the VD overlay
-// cells are not (they address the paired grid cell, not a native one), so
-// the relation is applied directly via Pair instead.
-const consecutive = Pair.fnToKey((a, b) => Math.abs(a - b) === 1, shape);
-const ratio2 = Pair.fnToKey((a, b) => a === 2 * b || b === 2 * a, shape);
+// ---- Kropki dots: white = consecutive, black = 1:2 ratio, both on
+// grid-adjacent cells, so both are native (lint: pair-native-relation).
 const WHITE_DOTS = [['R9C9', 'RaC9'], ['R8C5', 'R8C6']];
 const BLACK_DOTS = [['R1C3', 'R1C4'], ['R7C1', 'R7C2']];
 const dots = [
-  ...WHITE_DOTS.map(cells => new Pair(consecutive, 'white-dot', ...at(cells))),
-  ...BLACK_DOTS.map(cells => new Pair(ratio2, 'black-dot', ...at(cells))),
+  ...WHITE_DOTS.map(cells => new WhiteDot(...at(cells))),
+  ...BLACK_DOTS.map(cells => new BlackDot(...at(cells))),
 ];
 
 return [
   shape,
-  new NoBoxes(),
-  ...filler,
-  valueVar,
   ...boxes,
   ...emptyHoles,
   realDomain,

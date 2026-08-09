@@ -6,6 +6,8 @@
 // Four overlapping 4x4, 5x5, 6x6, and 7x7 Sudokus use digits 1 through their
 // respective sizes.  Rows, columns, and the outlined regions are all distinct.
 // VS is the source canvas: its shared cells let the four grids use one value.
+// A Raw main grid's rows/columns are individually capped at 16 cells, so the
+// 19x7 canvas cannot be the main grid; it stays a Var group.
 const S = new Var('S', '19x7 source canvas', '19x7');
 const cell = (r, c) => S.cell(r, c);
 const grid = (r0, c0, n) =>
@@ -54,10 +56,13 @@ for (const g of gridLayers)
 // In an overlap, the smaller grid's alphabet is the cell's available range.
 const domains = [...active].map(([id, n]) =>
   new Given(id, ...Array.from({ length: n }, (_, i) => i + 1)));
+// Cells outside every grid have no rule; pin them to remove that
+// encoding-introduced freedom without constraining the puzzle.
 const padding = Array.from({ length: 19 }, (_, r) =>
   Array.from({ length: 7 }, (_, c) => cell(r + 1, c + 1))
     .filter(id => !active.has(id))
     .map(id => new Given(id, 1))).flat();
+// Provenance: the puzzle's drawn givens, transcribed as [row, col, value].
 const givens = [
   [1, 2, 1], [1, 4, 2], [4, 3, 3], [4, 5, 4], [7, 4, 4], [7, 6, 1],
   [10, 2, 3], [10, 4, 2], [10, 6, 4], [13, 1, 4], [13, 3, 1],
@@ -66,8 +71,9 @@ const givens = [
 ].map(([r, c, value]) => new Given(cell(r, c), value));
 
 return [
-  // The 1x1 carrier grid is unused; fix it so it does not add a model-only symmetry.
-  new Shape('1x1', 7), new NoBoxes(), new Given('R1C1', 1), S,
+  // The Raw 1x1 carrier grid is unused; pinned so it does not add a
+  // model-only x7 symmetry.
+  new Shape('1x1', 7, 'Raw'), new Given('R1C1', 1), S,
   ...padding, ...domains, ...givens,
   ...houses(four), ...regularRegions(four, 2, 2).map(r => new AllDifferent(...r)),
   ...houses(five), ...regions5.map(r => new AllDifferent(...r)),

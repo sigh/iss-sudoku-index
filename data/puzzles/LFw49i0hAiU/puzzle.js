@@ -4,10 +4,16 @@
 // Source: https://sudokupad.app/4pqenuxwmn?setting-nogrid=1
 
 // Encodes the complete upper-left normal 9x9 Sudoku and the four Counting Cards
-// suit sets. The second overlapping Sudoku's grid geometry is omitted: its
-// cell-aligned rows, columns, and boxes cannot be recovered from the drawing.
-const canvas = new Var('P', '14x13 source canvas', '14x13');
-const cell = (row, col) => canvas.cell(row, col);
+// suit sets. The rules describe four interlocked Sudoku grids of different
+// sizes in total (their own example names a 6x6 grid); the other grids'
+// geometry is omitted below because their boundary strokes do not resolve to
+// a complete, cell-aligned set of rows, columns, and boxes in the source.
+//
+// The 14x13 canvas repeats digits across its non-overlapping regions (it is
+// not itself one Sudoku), so the grid is Raw: no implicit rows, columns,
+// boxes, or all-different; only the rules stated below apply.
+const shape = new Shape('14x13', 9, 'Raw');
+const cell = (row, col) => makeCellId(row, col);
 const upperLeftGraph = cellGraph('9x9');
 const toCanvas = (gridCell) => {
   const { row, col } = parseCellId(gridCell);
@@ -40,8 +46,7 @@ const spades = [[10, 4], [10, 5], [14, 5], [14, 6], [9, 10], [8, 10], [6, 13]]
   .map(([row, col]) => cell(row, col));
 
 return [
-  new Shape('1x1', 9),
-  canvas,
+  shape,
   ...upperLeftSudoku,
   new CountingCircles(...diamonds),
   new CountingCircles(...hearts),

@@ -3,75 +3,78 @@
 // Video: https://www.youtube.com/watch?v=IMPCPEbOWNM
 // Source: https://sudokupad.app/dkjeovl1up
 
-// Every row, column, and box contains one each of 2, 4, 5, 6, and 7;
-// digits 1 and 3 each occur at least once. Every 1/3 belongs to an
-// orthogonally adjacent 13 read left-to-right or top-to-bottom. Killer
-// cages have distinct digits and the indicated totals.
+// Digits 1-7 in a 9x9 grid. Every row, column, and box contains exactly one
+// each of 2, 4, 5, 6, 7, and at least one 1 and at least one 3. Every 1 and
+// every 3 is part of an adjacent pair reading '13' left-to-right or
+// top-to-bottom. Cage digits are distinct and sum to the printed total.
 //
-// Since repeats are required in nine-cell houses containing only seven
-// values, the real puzzle is the row-major VG Var grid. The pinned 1x7
-// main grid is only a placeholder.
+// Rows and columns repeat digits, which no ISS main grid allows, so the grid
+// is Raw: no implicit constraints.
 
-const REF = cellGraph('9x9');
-const GRID = REF.makeOverlay('VG');
+const shape = new Shape('9x9', 7, 'Raw');
+const GRID = cellGraph(shape);
 
-// Five values occur exactly once. The remaining four cells are 1s and 3s,
-// with each present at least once.
-const houseCells = [
-  ...REF.rows(),
-  ...REF.columns(),
-  ...REF.boxes(),
-];
-const houses = houseCells.flatMap(cells => [
-  new ContainExact('2_4_5_6_7', ...GRID.at(cells)),
-  new ContainAtLeast('1_3', ...GRID.at(cells)),
+// Boxes are built explicitly: a Raw grid has no default box regions.
+const boxes = [];
+for (let r = 1; r <= 9; r += 3) {
+  for (let c = 1; c <= 9; c += 3) {
+    boxes.push(GRID.block(makeCellId(r, c), 3, 3));
+  }
+}
+
+// The five once-only digits plus a positive count of each of 1 and 3 fill
+// all nine cells of a house: 5 fixed occurrences leave 4 cells, each 1 or 3.
+const houses = [...GRID.rows(), ...GRID.columns(), ...boxes].flatMap(cells => [
+  new ContainExact('2_4_5_6_7', ...cells),
+  new ContainAtLeast('1_3', ...cells),
 ]);
 
-// A 1 must see a 3 immediately right or down; a 3 must see a 1
-// immediately left or up. The first branch makes the implication vacuous
-// for every other value.
+// A '13' pair is ordered, so the rule is directional: a 1 needs a 3 to its
+// right or below it, and a 3 needs a 1 to its left or above it. Each Or is an
+// implication whose first branch (the cell is not that digit) makes it vacuous
+// for the other five digits.
 const NOT_ONE = [2, 3, 4, 5, 6, 7];
 const NOT_THREE = [1, 2, 4, 5, 6, 7];
-const thirteenPairs = REF.cells().flatMap(cell => {
-  const gridCell = GRID.at(cell);
-  const right = REF.step(cell, 0, 1);
-  const down = REF.step(cell, 1, 0);
-  const left = REF.step(cell, 0, -1);
-  const up = REF.step(cell, -1, 0);
-  const oneBranches = [new Given(gridCell, ...NOT_ONE)];
-  const threeBranches = [new Given(gridCell, ...NOT_THREE)];
-  if (right) oneBranches.push(new Given(GRID.at(right), 3));
-  if (down) oneBranches.push(new Given(GRID.at(down), 3));
-  if (left) threeBranches.push(new Given(GRID.at(left), 1));
-  if (up) threeBranches.push(new Given(GRID.at(up), 1));
-  return [new Or(oneBranches), new Or(threeBranches)];
+const thirteenPairs = GRID.cells().flatMap(cell => {
+  const right = GRID.step(cell, 0, 1);
+  const down = GRID.step(cell, 1, 0);
+  const left = GRID.step(cell, 0, -1);
+  const up = GRID.step(cell, -1, 0);
+  return [
+    new Or([
+      new Given(cell, ...NOT_ONE),
+      ...(right ? [new Given(right, 3)] : []),
+      ...(down ? [new Given(down, 3)] : []),
+    ]),
+    new Or([
+      new Given(cell, ...NOT_THREE),
+      ...(left ? [new Given(left, 1)] : []),
+      ...(up ? [new Given(up, 1)] : []),
+    ]),
+  ];
 });
 
-// Cage geometry is the puzzle's drawn data. Cage enforces both the sum
-// and the stated no-repeat rule, including for digits 1 and 3.
+// Drawn cages, read from the grid art: total shown in the top-left cell.
+// Cage supplies both the sum and the stated no-repeat rule.
 const CAGES = [
+  { total: 13, cells: ['R1C1', 'R1C2', 'R2C1'] },
+  { total: 9, cells: ['R1C8', 'R1C9', 'R2C9'] },
+  { total: 13, cells: ['R2C8', 'R3C8', 'R4C8', 'R5C8'] },
+  { total: 13, cells: ['R3C3', 'R3C4', 'R4C3', 'R4C4'] },
+  { total: 13, cells: ['R5C2', 'R6C2', 'R6C3'] },
+  { total: 13, cells: ['R5C9', 'R6C9'] },
+  { total: 13, cells: ['R6C6', 'R7C5', 'R7C6'] },
+  { total: 13, cells: ['R7C1', 'R7C2', 'R7C3'] },
   { total: 13, cells: ['R7C7', 'R8C7', 'R9C7', 'R9C8'] },
   { total: 13, cells: ['R7C8', 'R7C9', 'R8C9', 'R9C9'] },
   { total: 13, cells: ['R8C1', 'R8C2', 'R8C3', 'R8C4'] },
-  { total: 13, cells: ['R2C8', 'R3C8', 'R4C8', 'R5C8'] },
-  { total: 13, cells: ['R5C9', 'R6C9'] },
-  { total: 13, cells: ['R7C1', 'R7C2', 'R7C3'] },
   { total: 13, cells: ['R9C1', 'R9C2', 'R9C3'] },
-  { total: 9, cells: ['R1C8', 'R1C9', 'R2C9'] },
-  { total: 13, cells: ['R6C6', 'R7C5', 'R7C6'] },
-  { total: 13, cells: ['R5C2', 'R6C2', 'R6C3'] },
-  { total: 13, cells: ['R1C1', 'R1C2', 'R2C1'] },
-  { total: 13, cells: ['R3C3', 'R3C4', 'R4C3', 'R4C4'] },
 ];
 const cages = CAGES.map(({ total, cells }) =>
-  new Cage(total, ...GRID.at(cells)));
-
-const placeholderCells = cellGraph('1x7').cells();
+  new Cage(total, ...cells));
 
 return [
-  new Shape('1x7'),
-  GRID.toVar('Grid'),
-  ...placeholderCells.map((cell, i) => new Given(cell, i + 1)),
+  shape,
   ...houses,
   ...thirteenPairs,
   ...cages,

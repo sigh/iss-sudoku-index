@@ -16,23 +16,17 @@ const UNSHADED = 2;
 const UNSELECTED = 1;
 const SELECTED = 2;
 
-// ConnectedValues requires a full layer matching the main grid. The main grid
-// is therefore a fixed cyclic Latin carrier; the puzzle answer itself lives in
-// VG and is unaffected by the carrier values.
-const shape = new Shape('11x11');
-const canvas = cellGraph('11x11');
+// Off-region cells repeat EMPTY, which a Sudoku grid's implicit row/column
+// all-different would reject, so the grid is Raw: no implicit constraints.
+const shape = new Shape('11x11', 10, 'Raw');
+const graph = cellGraph(shape);
 const cornerGrid = cellGraph('9x9');
-const digit = canvas.makeOverlay('VG');
-const shade = canvas.makeOverlay('VS');
-const occupied = canvas.makeOverlay('VO');
+const shade = graph.makeOverlay('VS');
+const occupied = graph.makeOverlay('VO');
 const corner = cornerGrid.makeOverlay('VC');
 
-const canvasCells = canvas.cells();
+const canvasCells = graph.cells();
 const cornerCells = cornerGrid.cells();
-const carrierGivens = canvasCells.map(cell => {
-  const { row, col } = parseCellId(cell);
-  return new Given(cell, ((row + col - 2) % 11) + 1);
-});
 
 // Drawn cage cell lists and top-left totals.
 const cages = [
@@ -59,7 +53,7 @@ const cages = [
 const greaterThanFourCell = 'R3C4';
 
 const domains = [
-  digit.makeReplicate(new Given(digit.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9, EMPTY)),
+  graph.makeReplicate(new Given(graph.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9, EMPTY)),
   shade.makeReplicate(new Given(shade.cells()[0], SHADED, UNSHADED)),
   occupied.makeReplicate(new Given(occupied.cells()[0], UNSELECTED, SELECTED)),
   corner.makeReplicate(new Given(corner.cells()[0], UNSELECTED, SELECTED)),
@@ -91,11 +85,11 @@ const digitOccupancyKey = Pair.fnToKey(
   shape,
 );
 const digitOccupancy = canvasCells.map(cell =>
-  new Pair(digitOccupancyKey, 'region occupancy', digit.at(cell), occupied.at(cell)));
+  new Pair(digitOccupancyKey, 'region occupancy', cell, occupied.at(cell)));
 
 // A selected corner makes its whole 3x3 block a 1-9 all-different region.
 const candidateRegions = cornerCells.map(topLeft => {
-  const block = digit.at(canvas.block(topLeft, 3, 3));
+  const block = graph.block(topLeft, 3, 3);
   return new Or([
     new Given(corner.at(topLeft), UNSELECTED),
     new AllDifferent(...block),
@@ -113,10 +107,10 @@ const noRepeatedDigitsMachine = NFA.encodeSpec({
   },
   accept: () => true,
 }, shape);
-const noRowColumnRepeats = [...canvas.rows(), ...canvas.columns()].map(cells =>
-  new NFA(noRepeatedDigitsMachine, 'no repeated digits', ...digit.at(cells)));
+const noRowColumnRepeats = [...graph.rows(), ...graph.columns()].map(cells =>
+  new NFA(noRepeatedDigitsMachine, 'no repeated digits', ...cells));
 const noCageRepeats = cages.map(({ cells }) =>
-  new NFA(noRepeatedDigitsMachine, 'no repeated cage digits', ...digit.at(cells)));
+  new NFA(noRepeatedDigitsMachine, 'no repeated cage digits', ...cells));
 
 // Yin-Yang: reject a 2x2 whose four shade values are identical.
 const noMono2x2Machine = NFA.encodeSpec({
@@ -129,12 +123,12 @@ const noMono2x2Machine = NFA.encodeSpec({
   },
   accept: ({ done }) => done === true,
 }, shape);
-const blockOrigins = canvasCells.filter(cell => canvas.block(cell, 2, 2));
+const blockOrigins = canvasCells.filter(cell => graph.block(cell, 2, 2));
 const noMono2x2 = shade.makeReplicate(
   new NFA(
     noMono2x2Machine,
     'no monochromatic 2x2',
-    ...shade.at(canvas.block(canvasCells[0], 2, 2)),
+    ...shade.at(graph.block(canvasCells[0], 2, 2)),
   ),
   shade.at(blockOrigins),
 );
@@ -159,17 +153,15 @@ const shadeSumMachine = target => NFA.encodeSpec({
   },
   accept: ({ sum, shade: pendingShade }) =>
     pendingShade === null && sum === target,
-}, 11);
+}, shape);
 
 const cageSums = cages.map(({ total, cells }) => {
-  const inputs = cells.flatMap(cell => [shade.at(cell), digit.at(cell)]);
+  const inputs = cells.flatMap(cell => [shade.at(cell), cell]);
   return new NFA(shadeSumMachine(total), 'one-colour cage sum', ...inputs);
 });
 
 return [
   shape,
-  ...carrierGivens,
-  digit.toVar('11x11 digit or empty'),
   shade.toVar('Yin-Yang shade'),
   occupied.toVar('region occupancy'),
   corner.toVar('3x3 region top-left'),
@@ -185,5 +177,5 @@ return [
   noMono2x2,
   new Given(shade.cells()[0], SHADED),
   ...cageSums,
-  new Given(digit.at(greaterThanFourCell), 5, 6, 7, 8, 9),
+  new Given(greaterThanFourCell, 5, 6, 7, 8, 9),
 ];

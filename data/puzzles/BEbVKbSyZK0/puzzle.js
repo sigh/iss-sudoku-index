@@ -14,18 +14,19 @@
 // set; squares are odd and circles are even. Empty clue cells are ignored.
 // Anti-rook is the chess constraint that applies, as it is already required by
 // the row/column no-repeat rule. Every rule is encoded.
+//
+// Rows/columns repeat digits (cells outside the nine selected 3x3 regions are
+// empty, not a Latin square), so the grid is Raw: no implicit constraints.
 
 const EMPTY = 10;
 const UNSELECTED = 1;
 const SELECTED = 2;
 
-const shape = new Shape('11x11');
-const canvas = cellGraph('11x11');
+const shape = new Shape('11x11', EMPTY, 'Raw');
+const canvas = cellGraph(shape);
 const cornerGrid = cellGraph('9x9');
-const digit = canvas.makeOverlay('VG');
 const occupied = canvas.makeOverlay('VO');
 const corner = cornerGrid.makeOverlay('VC');
-const digitVar = digit.toVar('11x11 digit or empty');
 const occupiedVar = occupied.toVar('region occupancy and empty loop');
 const cornerVar = corner.toVar('3x3 region top-left');
 const canvasCells = canvas.cells();
@@ -63,15 +64,8 @@ const nabners = [
 const drawnSquares = cells([[2,6],[5,4],[6,6]]);
 const drawnCircles = cells([[6,9],[8,9]]);
 
-// ConnectedValues requires a whole-grid layer. The main grid is therefore a
-// fixed carrier; the actual digit-or-empty answer is the VG overlay.
-const carrierGivens = canvasCells.map(cell => {
-  const { row, col } = parseCellId(cell);
-  return new Given(cell, ((row + col - 2) % 11) + 1);
-});
-
 const domains = [
-  digit.makeReplicate(new Given(digit.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9, EMPTY)),
+  canvas.makeReplicate(new Given(canvasCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9, EMPTY)),
   occupied.makeReplicate(new Given(occupied.cells()[0], UNSELECTED, SELECTED)),
   corner.makeReplicate(new Given(corner.cells()[0], UNSELECTED, SELECTED)),
 ];
@@ -82,7 +76,7 @@ const cornerCount = new Sum(corner.cells().length + 9, ...corner.cells());
 const regions = cornerCells.map(topLeft => ({
   topLeft,
   cornerCell: corner.at(topLeft),
-  block: digit.at(canvas.block(topLeft, 3, 3)),
+  block: canvas.block(topLeft, 3, 3),
   canvasBlock: canvas.block(topLeft, 3, 3),
 }));
 const coverage = canvasCells.map(cell => {
@@ -105,7 +99,7 @@ const digitOccupancyKey = Pair.fnToKey(
   shape,
 );
 const digitOccupancy = canvasCells.map(cell =>
-  new Pair(digitOccupancyKey, 'region occupancy', digit.at(cell), occupied.at(cell)));
+  new Pair(digitOccupancyKey, 'region occupancy', cell, occupied.at(cell)));
 const candidateRegions = regions.map(({ cornerCell, block }) => new Or([
   new Given(cornerCell, UNSELECTED),
   new AllDifferent(...block),
@@ -123,7 +117,7 @@ const noRepeatedDigitsMachine = NFA.encodeSpec({
   accept: () => true,
 }, shape);
 const noRowColumnRepeats = [...canvas.rows(), ...canvas.columns()].map(group =>
-  new NFA(noRepeatedDigitsMachine, 'no repeated digits', ...digit.at(group)));
+  new NFA(noRepeatedDigitsMachine, 'no repeated digits', ...group));
 
 // The empty cells are a connected degree-2 set, hence one loop. A 2x2 cannot
 // contain only a diagonal empty pair, which closes the no-diagonal-touch rule.
@@ -196,7 +190,7 @@ const decreasingMachine = NFA.encodeSpec({
   accept: () => true,
 }, shape);
 const wrognThermometers = thermometers.map(path =>
-  new NFA(decreasingMachine, 'wrogn thermometer', ...digit.at(path)));
+  new NFA(decreasingMachine, 'wrogn thermometer', ...path));
 
 // A wrogn renban has no equal or consecutive pair among its active digits.
 const antiRenbanMachine = NFA.encodeSpec({
@@ -210,7 +204,7 @@ const antiRenbanMachine = NFA.encodeSpec({
   accept: () => true,
 }, shape);
 const wrognRenbans = renbans.map(path =>
-  new NFA(antiRenbanMachine, 'wrogn renban', ...digit.at(path)));
+  new NFA(antiRenbanMachine, 'wrogn renban', ...path));
 
 // The stated wrogn-Nabner degree conditions are exactly a nonrepeating,
 // gap-free interval of at least two active digits.
@@ -230,7 +224,7 @@ const renbanSetMachine = NFA.encodeSpec({
   },
 }, shape);
 const wrognNabners = nabners.map(path =>
-  new NFA(renbanSetMachine, 'wrogn nabner', ...digit.at(path)));
+  new NFA(renbanSetMachine, 'wrogn nabner', ...path));
 
 // A selected 3x3 region cuts each blue path wherever that block intersects the
 // ordered path. Every resulting selected segment must have a distinct sum.
@@ -298,8 +292,8 @@ const wrognRegionSumLines = regionSumLines.flatMap(path => {
         unequalSumMachine(flags.length, left.cells.length, right.cells.length),
         'wrogn region-sum segments',
         ...flags,
-        ...digit.at(left.cells),
-        ...digit.at(right.cells),
+        ...left.cells,
+        ...right.cells,
       )];
     }));
 });
@@ -307,14 +301,12 @@ const wrognRegionSumLines = regionSumLines.flatMap(path => {
 // Wrogn parity reverses the standard square/circle meanings; empty cells are
 // permitted because every clue ignores cells outside the selected regions.
 const wrognParity = [
-  ...drawnSquares.map(cell => new Given(digit.at(cell), 1, 3, 5, 7, 9, EMPTY)),
-  ...drawnCircles.map(cell => new Given(digit.at(cell), 2, 4, 6, 8, EMPTY)),
+  ...drawnSquares.map(cell => new Given(cell, 1, 3, 5, 7, 9, EMPTY)),
+  ...drawnCircles.map(cell => new Given(cell, 2, 4, 6, 8, EMPTY)),
 ];
 
 return [
   shape,
-  ...carrierGivens,
-  digitVar,
   occupiedVar,
   cornerVar,
   ...domains,

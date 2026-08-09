@@ -18,9 +18,8 @@
 //
 // Nothing is omitted.
 //
-// Rows and columns repeat digits, which an ISS main grid cannot do, so the
-// answer lives in the row-major VD group and the 1x1 main grid is a pinned
-// placeholder contributing only the widened alphabet.
+// Rows/columns repeat digits, so the grid is Raw: no implicit constraints, so
+// every house below is stated explicitly.
 
 // The 43 pale-orange circles drawn in cells.
 const CIRCLES = [
@@ -60,12 +59,11 @@ const MOD_A = 9, MOD_B = 8;
 const OFF = 0;    // counter value for a cell the rat does not visit
 const FIRST = 1;  // counter value of the walk's first cell
 
-// The alphabet is widened to ten values so the larger counter layer fits; the
-// 0-9 form keeps the puzzle's own 0-3 digits playable.
-const shape = new Shape('1x1', '0-9');
-const REF = cellGraph('8x8');
+// The main grid is Raw, alphabet widened to ten values so the larger counter
+// layer fits; the grid is restricted back to 0-3 below.
+const shape = new Shape('8x8', '0-9', 'Raw');
+const REF = cellGraph(shape);
 const cells = REF.cells();
-const dig = REF.makeOverlay('VD');    // the answer digits
 const posA = REF.makeOverlay('VA');   // walk position mod MOD_A
 const posB = REF.makeOverlay('VB');   // walk position mod MOD_B
 
@@ -116,7 +114,7 @@ const circleNFA = (numEdges, perimeter) => cached(
 const circles = CIRCLES.map(cell => {
   const incident = edgesAt.get(cell);
   return new NFA(circleNFA(incident.length, 4 - incident.length), 'wall-count',
-    dig.at(cell), ...incident.map(e => e.id));
+    cell, ...incident.map(e => e.id));
 });
 
 // --- Walk shape -----------------------------------------------------------
@@ -200,17 +198,25 @@ const consecutiveNFA = cached('consecutive', () => NFA.encodeSpec({
   accept: s => s.done === true,
 }, shape));
 const consecutive = edges.map(
-  e => new NFA(consecutiveNFA, 'walk-sum', e.id, dig.at(e.a), dig.at(e.b)));
+  e => new NFA(consecutiveNFA, 'walk-sum', e.id, e.a, e.b));
 
 // --- Houses and doors -----------------------------------------------------
-const houses = [...REF.rows(), ...REF.columns(), ...REF.boxes()].map(
-  house => new ContainExact('0_0_1_1_2_2_3_3', ...dig.at(house)));
+// Raw grid: boxes() is empty, so the marked 4x2 boxes are built explicitly.
+const BOX_ROWS = 2, BOX_COLS = 4;
+const boxes = [];
+for (let r = 1; r <= 8; r += BOX_ROWS) {
+  for (let c = 1; c <= 8; c += BOX_COLS) {
+    boxes.push(REF.block(makeCellId(r, c), BOX_ROWS, BOX_COLS));
+  }
+}
+const houses = [...REF.rows(), ...REF.columns(), ...boxes].map(
+  house => new ContainExact('0_0_1_1_2_2_3_3', ...house));
 // An arrow's edge holds no wall and may only be crossed towards the cell it
 // points at, so its Var keeps only OPEN and that one direction.
 const doors = DOORS.flatMap(([from, to]) => {
   const edge = edgeBetween(from, to);
   return [
-    new GreaterThan(dig.at(from), dig.at(to)),
+    new GreaterThan(from, to),
     new Given(edge.id, OPEN, edge.a === from ? FWD : BWD),
   ];
 });
@@ -218,13 +224,12 @@ const doors = DOORS.flatMap(([from, to]) => {
 // --- Variables and domains ------------------------------------------------
 const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, n) => lo + n);
 const layers = [
-  dig.toVar('Digits'),
   posA.toVar('walk position mod ' + MOD_A),
   posB.toVar('walk position mod ' + MOD_B),
   new Var('E', 'maze edges', edges.length),
 ];
 const domains = [
-  dig.makeReplicate(new Given(dig.at(cells[0]), ...range(0, 3))),
+  REF.makeReplicate(new Given(cells[0], ...range(0, 3))),
   // The edge Vars need no domain of their own: the walk-cell machines accept no
   // value on them but WALL / OPEN / FWD / BWD.
   // VA needs no domain of its own: the OFF sentinel plus MOD_A residues is
@@ -238,8 +243,6 @@ const domains = [
 
 return [
   shape,
-  // The main grid carries no part of the answer.
-  ...cellGraph(shape).cells().map((cell, n) => new Given(cell, n)),
   ...layers,
   ...domains,
   ...houses,

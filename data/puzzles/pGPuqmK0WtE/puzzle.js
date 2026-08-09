@@ -17,24 +17,27 @@
 //     double. Not all possible dots are given, so absent dots say nothing.
 // Nothing is omitted.
 //
-// The answer cannot live in the ISS main grid: 40 of the 121 cells hold no digit,
-// while a main-grid row is always all-different across the full 11-value alphabet,
-// so blanks in a row would have to take 11 distinct filler values (an 11x11 grid
-// admits at most 16). The grid is therefore pinned to a fixed Latin square and
-// contributes nothing; every cell of the puzzle is modelled in the VD group.
+// The 11x11 canvas is Raw, not a default Sudoku-type main grid: a Sudoku main
+// grid's row is always all-different, while here a row holds at most one of
+// each digit and any number of empty cells. Raw carries no implicit
+// constraints, so every rule below is stated explicitly; the main grid cells
+// hold 1-9 = the digit in this cell, 0 = no digit.
 
-const shape = new Shape('11x11', '0-10');
+const shape = new Shape('11x11', '0-10', 'Raw');
+
+// The reference geometry over the same value range. It supplies the rows,
+// columns, 3x3 windows and step arithmetic that get translated onto the cell
+// groups, and the value count the custom Pair/NFA keys are built for.
 const grid = cellGraph(shape);
 const geom = grid.gridGeometry();
 const cells = grid.cells();
 
-// One overlay per per-cell unknown, all indexed by the grid cell they shadow.
-const D = grid.makeOverlay('VD');   // 1-9 = the digit in this cell, 0 = no digit
+// One aux group per per-cell unknown, all indexed by the reference cell they shadow.
 const T = grid.makeOverlay('VT');   // 1 = a 3x3 box has its top-left corner here, 2 = no
 const F = grid.makeOverlay('VF');   // 1 = this cell lies inside a box, 2 = no
 const L = grid.makeOverlay('VL');   // line code, see below
 const C = grid.makeOverlay('VC');   // 1 = this cell lies on a line, 2 = no
-const countVar = new Var('N', 'circle digit counts', 9);  // 1 + how often digit n is circled
+const countVar = new Var('N', 'circle digit counts', 9);  // how often digit n is circled
 const COUNTS = countVar.cells();
 
 const BLANK = 0;
@@ -63,21 +66,16 @@ const CIRCLES = [
 ].map(([r, c]) => makeCellId(r, c));
 const circleSet = new Set(CIRCLES);
 
-// The inert main grid: a cyclic Latin square over the full 0-10 alphabet, which
-// leaves it exactly one completion.
-const mainGrid = cells.map(
-  (cell, i) => new Given(cell, ((((i / 11) | 0) + (i % 11)) % 11)));
-
-// Every overlay cell keeps the same domain across the whole layer.
+// Every cell of a group keeps the same domain across the whole layer. The count
+// cells keep the full 0-10 range, which their Sum below already narrows.
 const overlayDomain = (overlay, ...values) =>
   overlay.makeReplicate(new Given(overlay.cells()[0], ...values));
 const domains = [
-  overlayDomain(D, BLANK, ...DIGITS),
+  overlayDomain(grid, BLANK, ...DIGITS),
   overlayDomain(T, 1, 2),
   overlayDomain(F, 1, 2),
   overlayDomain(L, ...LINE_CODES),
   overlayDomain(C, 1, 2),
-  ...COUNTS.map(v => new Given(v, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10)),
 ];
 
 // A box corner needs a whole 3x3 block below and right of it.
@@ -86,11 +84,11 @@ const cornerRoom = T.makeReplicate(
   T.at(cells.filter(cell => grid.block(cell, 3, 3) === null)));
 
 const filledKey = Pair.fnToKey((d, f) => (d !== BLANK) === (f === 1), geom);
-const filled = cells.map(cell => new Pair(filledKey, 'filled', D.at(cell), F.at(cell)));
+const filled = cells.map(cell => new Pair(filledKey, 'filled', cell, F.at(cell)));
 
 // A cell is inside a box exactly when one box corner sits in the 3x3 window that
 // ends at it, and no more than one may: that single equation is both "the boxes
-// tile the filled cells" and "the boxes do not overlap". Both overlays are
+// tile the filled cells" and "the boxes do not overlap". Both groups are
 // 1 = yes / 2 = no, so a count of yeses over n cells is 2n minus their sum.
 const coverage = cells.map(cell => {
   const window = [];
@@ -114,14 +112,14 @@ const boxDigits = cells
   .filter(cell => grid.block(cell, 3, 3) !== null)
   .map(cell => new Or([
     new Given(T.at(cell), 2),
-    new AllDifferent(...D.at(grid.block(cell, 3, 3))),
+    new AllDifferent(...grid.block(cell, 3, 3)),
   ]));
 
 // Rows and columns hold at most one of each digit; blanks may repeat, which no
 // AllDifferent can say, so the pairwise relation states it directly.
 const rowColKey = PairX.fnToKey((a, b) => a !== b || a === BLANK, geom);
 const rowsAndColumns = [...grid.rows(), ...grid.columns()].map(
-  house => new PairX(rowColKey, 'no-repeat', ...D.at(house)));
+  house => new PairX(rowColKey, 'no-repeat', ...house));
 
 // One Or per circle over every line that could pass through it: pick a length d,
 // an orientation and how far back the line starts, then pin the circle's digit to
@@ -146,7 +144,7 @@ const lines = CIRCLES.map(circle => {
         if (span.length !== d) continue;
         const cont = dRow === 0 ? H_CONT : V_CONT;
         const branch = [
-          new Given(D.at(circle), d),
+          new Given(circle, d),
           new Given(L.at(start), dRow === 0 ? H_START : V_START),
           ...span.slice(1).map(cell => new Given(L.at(cell), cont)),
         ];
@@ -168,30 +166,30 @@ const onLine = cells.map(cell => new Pair(onLineKey, 'on-line', L.at(cell), C.at
 // circled digits. Each Or already paints its own line and no two lines can share a
 // cell, so this is what stops a line being drawn where no circle asked for one.
 // VC is 1 = on / 2 = off, so its total is 2*121 minus the number of covered cells.
-const lineCellTotal = new Sum(2 * cells.length, ...C.cells(), ...D.at(CIRCLES));
+const lineCellTotal = new Sum(2 * cells.length, ...C.cells(), ...CIRCLES);
 
 // One machine per digit, reading its count cell first and then the 37 circles:
-// the count cell sets how many more of that digit are still to come, and the run
-// is accepted only if the tally lands exactly on zero. The alphabet runs from 0,
-// so a start value of 0 is rejected outright rather than counting below zero.
+// the count cell sets how many of that digit are still to come, and the run is
+// accepted only if the tally lands exactly on zero.
 const countSpec = (digit) => NFA.encodeSpec({
   startState: null,
   transition: (remaining, value) => {
-    if (remaining === null) return value === BLANK ? undefined : value - 1;
+    if (remaining === null) return value;
     if (value !== digit) return remaining;
     return remaining === 0 ? undefined : remaining - 1;
   },
   accept: (remaining) => remaining === 0,
 }, geom);
 const circleCounts = DIGITS.map(
-  digit => new NFA(countSpec(digit), `count${digit}`, COUNTS[digit - 1], ...D.at(CIRCLES)));
+  digit => new NFA(countSpec(digit), `count${digit}`, COUNTS[digit - 1], ...CIRCLES));
 
-// Nine distinct non-negative counts adding to 37, with at most one of them zero,
-// can only be 0..7 and 9 in some order; distinctness plus the total says exactly
-// that. The count cells carry count + 1 so that a count of zero is in range.
+// The nine counts are distinct and total the 37 circles. (Nine distinct
+// non-negative counts summing to 37 can only be 0..7 and 9 in some order, which
+// is why at most one digit is missing from the circles; that is a consequence
+// here, not a further constraint.)
 const countRules = [
   new AllDifferent(...COUNTS),
-  new Sum(CIRCLES.length + COUNTS.length, ...COUNTS),
+  new Sum(CIRCLES.length, ...COUNTS),
 ];
 
 // The three drawn dots, read off the small edge circles. A dot also tells us both
@@ -201,16 +199,16 @@ const blackKey = Pair.fnToKey(
 const whiteKey = Pair.fnToKey(
   (a, b) => a !== BLANK && b !== BLANK && Math.abs(a - b) === 1, geom);
 const dots = [
-  new Pair(blackKey, 'black', D.at('R1C1'), D.at('R2C1')),
-  new Pair(whiteKey, 'white', D.at('R5C8'), D.at('R5C9')),
-  new Pair(whiteKey, 'white', D.at('R7C5'), D.at('R8C5')),
+  new Pair(blackKey, 'black', 'R1C1', 'R2C1'),
+  new Pair(whiteKey, 'white', 'R5C8', 'R5C9'),
+  new Pair(whiteKey, 'white', 'R7C5', 'R8C5'),
 ];
 
 return [
   shape,
-  D.toVar('D'), T.toVar('T'), F.toVar('F'), L.toVar('L'), C.toVar('C'),
+  T.toVar('T'), F.toVar('F'), L.toVar('L'), C.toVar('C'),
   countVar,
-  ...mainGrid, ...domains, cornerRoom, ...filled,
+  ...domains, cornerRoom, ...filled,
   ...coverage, boxTotal, ...boxDigits, ...rowsAndColumns,
   ...lines, ...onLine, lineCellTotal,
   ...circleCounts, ...countRules, ...dots,

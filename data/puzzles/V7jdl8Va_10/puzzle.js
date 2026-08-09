@@ -18,27 +18,18 @@
 //   DIAGONAL              on each main diagonal no value other than 0 repeats.
 // Nothing is omitted.
 //
-// Rows and columns are 11 cells holding at most 9 distinct digits plus repeated
-// 0s, which an ISS main grid cannot hold: its rows and columns are always
-// all-different. The puzzle therefore lives on two Var layers --
-//   VD  the value 0-9 of each cell        VR  the region label of each cell
-// -- which carry their own 11x11 layout. The main grid holds no part of the
-// puzzle, so it is a single pinned cell that exists only to declare the 0-9
-// value range the layers draw from.
+// Rows/columns repeat digits, so the grid is Raw: no implicit constraints.
+// VD (the value 0-9 of each cell) is the main grid; VR (the region label of
+// each cell) remains a second 11x11 Var overlay from the same cellGraph.
 
 const SIZE = 11;
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const REGION_COUNT = 9;
 
-const shape = new Shape('1x1', '0-9');
-const grid = cellGraph('11x11');
-const values = grid.makeOverlay('VD');
-const regions = grid.makeOverlay('VR');
-const valueVars = values.toVar('Values');
+const shape = new Shape('11x11', '0-9', 'Raw');
+const graph = cellGraph(shape);
+const regions = graph.makeOverlay('VR');
 const regionVars = regions.toVar('Regions');
-
-// The one main-grid cell holds nothing; pin it so it adds no search.
-const filler = [new Given('R1C1', 0)];
 
 // Nine regions of nine cells leave 121 - 81 = 40 cells outside every region.
 // The same multiset serves both layers: labels 1-9 nine times each for VR, and
@@ -50,8 +41,8 @@ const exactMultiset = [
 
 // A cell is outside every region exactly when its value is 0.
 const outsideKey = Pair.fnToKey((label, value) => (label === 0) === (value === 0), shape);
-const outsideLink = grid.cells().map(cell => new Pair(
-  outsideKey, 'value 0 outside regions', regions.at(cell), values.at(cell)));
+const outsideLink = graph.cells().map(cell => new Pair(
+  outsideKey, 'value 0 outside regions', regions.at(cell), cell));
 
 // No two regions touch, even diagonally: two king-adjacent cells that are both
 // in a region are in the same region.
@@ -134,7 +125,7 @@ for (let row = 1; row <= SIZE; row++) {
         regionDigits.push(new NFA(
           samePairSpec, 'region digits differ',
           regionVars.cell(row, col), regionVars.cell(r2, c2),
-          valueVars.cell(row, col), valueVars.cell(r2, c2)));
+          makeCellId(row, col), makeCellId(r2, c2)));
       }
     }
   }
@@ -147,16 +138,16 @@ const nonzeroDifferentKey = PairX.fnToKey(
 const rowsAndColumns = [];
 const diagonals = [[], []];
 for (let n = 1; n <= SIZE; n++) {
-  rowsAndColumns.push(values.at(grid.row(n)), values.at(grid.column(n)));
-  diagonals[0].push(valueVars.cell(n, n));
-  diagonals[1].push(valueVars.cell(n, SIZE + 1 - n));
+  rowsAndColumns.push(graph.row(n), graph.column(n));
+  diagonals[0].push(makeCellId(n, n));
+  diagonals[1].push(makeCellId(n, SIZE + 1 - n));
 }
 const noRepeats = [...rowsAndColumns, ...diagonals].map(cells => new PairX(
   nonzeroDifferentKey, 'nonzero values differ', ...cells));
 
 // Drawn clues, as [row, column]. The nine grey circles, then the six grey
 // squares.
-const cellAt = ([row, col]) => valueVars.cell(row, col);
+const cellAt = ([row, col]) => makeCellId(row, col);
 const ODD_CELLS = [
   [3, 3], [3, 6], [3, 9], [6, 3], [6, 6], [6, 9], [9, 3], [9, 6], [9, 9],
 ];
@@ -177,23 +168,18 @@ const BLACK_DOTS = [
   [[11, 5], [11, 6]], [[11, 6], [11, 7]],
 ];
 // Both dot rules are stated over values, so 0 participates: 0 is consecutive
-// with 1, and 0 is double 0.
-const whiteKey = Pair.fnToKey((a, b) => Math.abs(a - b) === 1, shape);
-const blackKey = Pair.fnToKey((a, b) => a === 2 * b || b === 2 * a, shape);
+// with 1, and 0 is double 0. Every dot here joins orthogonally adjacent
+// cells, so the native classes apply directly.
 const dots = [
-  ...WHITE_DOTS.map(([a, b]) => new Pair(
-    whiteKey, 'white dot', cellAt(a), cellAt(b))),
-  ...BLACK_DOTS.map(([a, b]) => new Pair(
-    blackKey, 'black dot', cellAt(a), cellAt(b))),
+  ...WHITE_DOTS.map(([a, b]) => new WhiteDot(cellAt(a), cellAt(b))),
+  ...BLACK_DOTS.map(([a, b]) => new BlackDot(cellAt(a), cellAt(b))),
 ];
 
 return [
   shape,
-  valueVars,
   regionVars,
-  ...filler,
   new ContainExact(exactMultiset, ...regions.cells()),
-  new ContainExact(exactMultiset, ...values.cells()),
+  new ContainExact(exactMultiset, ...graph.cells()),
   ...outsideLink,
   ...noTouch,
   ...connected,

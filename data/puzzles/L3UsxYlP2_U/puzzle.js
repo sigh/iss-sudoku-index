@@ -7,14 +7,12 @@
 // zero is an empty cell. Purple lines are nonempty renbans after zeroes are
 // ignored. Blue-line region segments are nonempty and have equal sums.
 //
-// Empty cells may repeat, so the real board is the VG Var grid. The pinned
-// 1x1 main grid supplies the 0-6 alphabet but carries no puzzle information.
+// Empty cells may repeat, so the grid is Raw: no implicit constraints.
 
 const BLANK = 0;
 const DIGITS = [0, 1, 2, 3, 4, 5, 6];
-const shape = new Shape('1x1', '0-6');
-const G = new Var('G', 'Ramen grid', '6x6');
-const cell = (r, c) => G.cell(r, c);
+const shape = new Shape('6x6', '0-6', 'Raw');
+const cell = (r, c) => makeCellId(r, c);
 const grid = Array.from({ length: 6 }, (_, r) =>
   Array.from({ length: 6 }, (_, c) => cell(r + 1, c + 1)));
 const rows = grid;
@@ -96,8 +94,6 @@ const GIVENS = [
 
 return [
   shape,
-  new Given('R1C1', BLANK),
-  G,
   ...gridDomain,
   ...houses,
   ...renbans,

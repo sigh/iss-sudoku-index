@@ -7,8 +7,11 @@
 // are empty. Digits do not repeat in a row or column. The grey thermometer
 // increases from R4C3 to R3C4. Outside-diagonal sums satisfy their shown
 // inequalities and the x, y, z relationships. Fog/revealing is UI-only.
-const board = new Var('G', '11x11 fog board', '11x11');
-const cell = (row, col) => board.cells()[(row - 1) * 11 + col - 1];
+// Rows/columns don't repeat-check by default, so the grid is Raw: no
+// implicit constraints; rows/columns are stated explicitly below.
+const shape = new Shape('11x11', '1-10', 'Raw');
+const graph = cellGraph(shape);
+const cell = (row, col) => makeCellId(row, col);
 const rows = Array.from({ length: 11 }, (_, r) =>
   Array.from({ length: 11 }, (_, c) => cell(r + 1, c + 1)));
 const columns = Array.from({ length: 11 }, (_, c) =>
@@ -71,7 +74,7 @@ const diagonals = {
   i: diagonal(11, 6, -1, 1), j: diagonal(8, 1, -1, 1),
   k: diagonal(6, 1, 1, 1), l: diagonal(4, 1, 1, 1),
 };
-const flagFor = square => occupied[board.cells().indexOf(square)];
+const flagFor = square => occupied[graph.cells().indexOf(square)];
 const effectiveTerms = (cells, coefficient = 1) => [
   ...cells,
   ...cells.flatMap(square => Array.from({ length: 10 * coefficient }, () => flagFor(square))),
@@ -97,9 +100,7 @@ const coverageConstraints = rows.flatMap((row, r) => row.map((square, c) => {
 })).flat();
 
 return [
-  new Shape('1x1', 10),
-  new Given('R1C1', 10), // Placeholder main grid; the answer is the VG board.
-  board,
+  shape,
   selectorVars,
   occupiedVars,
   biasVars,

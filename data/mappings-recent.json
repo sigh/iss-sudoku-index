@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-09T07:29:33.037178+00:00",
+  "generated_at": "2026-08-10T14:10:02.450846+00:00",
   "rows": [
     {
       "puzzle_id": "kM6Kwwkv3aM",
@@ -12,25 +12,23 @@
       "date": "2026-08-08",
       "status": "too-slow",
       "constraint_types": [
-        "1x1",
+        "Raw 10x10",
         "0-9",
-        "Var",
         "ConnectedValues",
         "ContainExact",
         "Arrow",
-        "Whisper",
-        "Pair: black dot",
-        "Given"
+        "BlackDot",
+        "Whisper"
       ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 251263,
-      "solve_ms": 845.2,
-      "iss_size": 1256,
-      "iss_url_length": 1287,
-      "script_size": 3121
+      "guesses": 289864,
+      "solve_ms": 944.3,
+      "iss_size": 1238,
+      "iss_url_length": 1265,
+      "script_size": 2651
     },
     {
       "puzzle_id": "sdzoFUAFMIc",
@@ -258,10 +256,7 @@
       "date": "2026-08-03",
       "status": "partial",
       "constraint_types": [
-        "1x1",
-        "1-9",
-        "NoBoxes",
-        "Var",
+        "Raw 9x9",
         "AllDifferent",
         "Renban",
         "Given"
@@ -270,11 +265,11 @@
       "hit_cap": false,
       "unique_solution": false,
       "solutions_found": 9,
-      "guesses": 118,
-      "solve_ms": 8.5,
-      "iss_size": 1125,
-      "iss_url_length": 1157,
-      "script_size": 3954
+      "guesses": 135,
+      "solve_ms": 8.3,
+      "iss_size": 1098,
+      "iss_url_length": 1130,
+      "script_size": 3489
     },
     {
       "puzzle_id": "bVB6D4T-g9k",
@@ -1891,11 +1886,10 @@
         "https://sudokupad.app/q5iopoxvbm"
       ],
       "date": "2026-07-06",
-      "status": "off-grid",
+      "status": "validated",
       "constraint_types": [
-        "1x1",
+        "Raw 9x9",
         "0-5",
-        "Var",
         "ContainExact",
         "Replicate",
         "NFA: bulb 1",
@@ -1916,11 +1910,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 1812,
-      "solve_ms": 29.0,
-      "iss_size": 3240,
-      "iss_url_length": 3283,
-      "script_size": 6423
+      "guesses": 1793,
+      "solve_ms": 33.4,
+      "iss_size": 3252,
+      "iss_url_length": 3296,
+      "script_size": 5295
     },
     {
       "puzzle_id": "MYpoIPhevoI",

@@ -3,12 +3,15 @@
 // Video: https://www.youtube.com/watch?v=uQqqOmndIVI
 // Source: https://sudokupad.app/6xlki7zd3x
 
-// Two standard 9x9 Sudokus sit side by side on the source's 9x19 canvas. Each
-// grid is its own 9x9 Var group because an ISS main grid cannot have this
-// geometry, and the canvas is too wide to declare as one group (Var columns cap
-// at 16). The encoded rules are normal Sudoku in each grid, the two complete
-// circle sets, and equality of corresponding circled digits. The cage
-// digit/value rules and the doubler rule are deliberately omitted.
+// Two standard, independent 9x9 Sudokus sit side by side on the source's 9x19
+// canvas ("Normal sudoku rules apply in both grids"), separated by a walled-off,
+// unused column 10. Each grid gets its own 9x9 Var group, VL and VR: an ISS
+// main grid cannot hold two disjoint sets of rows/columns/boxes, and there is
+// no single "the board" group here for the other to be auxiliary to, so both
+// stay off-grid behind a pinned 1x1 placeholder. The encoded rules are normal
+// Sudoku in each grid, the two complete circle sets, and equality of
+// corresponding circled digits. The cage digit/value rules and the doubler
+// rule are deliberately omitted.
 const graph = cellGraph('9x9');
 const left = graph.makeOverlay('VL');
 const right = graph.makeOverlay('VR');

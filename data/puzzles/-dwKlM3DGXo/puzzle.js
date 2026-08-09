@@ -7,55 +7,51 @@
 // 1,2,4,5,6,7. Every box has up to 3 distinct digits (repeats within a box
 // are otherwise unrestricted). Excluding 3s, a cage's digits sum to its
 // total; 3s contribute 0 to the sum, and digits may repeat within a cage.
+// There are no givens.
 //
-// The row/column rule is a multiset (three 3s, not all-different), which the
-// ISS main grid's automatic row/column all-different cannot express (it would
-// also be unsatisfiable: 9 cells, 7 possible values, forced distinct). The
-// main grid is reduced to a single unused placeholder cell; the real 9x9
-// grid lives entirely in a Var group with explicit row/column/box/cage
-// constraints built from scratch.
+// Rows and columns repeat digits, so the grid is Raw: no implicit
+// constraints.
 
-const N = 9;
-const GRID = new Var('G', 'Grid', `${N}x${N}`);
-
-// A plain 9x9 reference geometry supplies the row/column/box groupings;
-// gridOverlay translates those cell lists onto the Var grid. The geometry is
-// never itself part of the constraints.
-const refGraph = cellGraph('9x9');
-const gridOverlay = refGraph.makeOverlay('VG');
-const cellAt = (r, c) => GRID.cell(r + 1, c + 1); // r, c: 0-indexed
-
-// The single placeholder main-grid cell holds no puzzle information; pin it
-// so it doesn't multiply reported solution counts during validation.
+const shape = new Shape('9x9', '1-7', 'Raw');
+const graph = cellGraph(shape);
+const cellAt = (r, c) => makeCellId(r, c); // r, c: 1-indexed
 
 // Rows and columns: three 3s plus one each of 1,2,4,5,6,7.
 const ROW_COL_MULTISET = '1_2_3_3_3_4_5_6_7';
-const rows = refGraph.rows().map(row =>
-  new ContainExact(ROW_COL_MULTISET, ...gridOverlay.at(row)));
-const cols = refGraph.columns().map(col =>
-  new ContainExact(ROW_COL_MULTISET, ...gridOverlay.at(col)));
+const rows = graph.rows().map(row =>
+  new ContainExact(ROW_COL_MULTISET, ...row));
+const cols = graph.columns().map(col =>
+  new ContainExact(ROW_COL_MULTISET, ...col));
 
 // Boxes: at most 3 distinct digits. CountDistinct binds a control cell to the
-// exact distinct-value count, so restrict the control cell to {1,2,3} to
-// express "up to 3" rather than "exactly 3".
-const boxes = refGraph.boxes();
+// exact distinct-value count, so restricting the control cell to {1,2,3}
+// expresses "up to 3" rather than "exactly 3". A Raw grid has no default
+// boxes, so build the same 3x3 regions explicitly.
 const BOX_COUNTERS = new Var('B', 'BoxDistinctCount', '3x3');
+const boxes = [];
+for (let r = 1; r <= 9; r += 3) {
+  for (let c = 1; c <= 9; c += 3) {
+    boxes.push(graph.block(makeCellId(r, c), 3, 3));
+  }
+}
 const boxConstraints = boxes.flatMap((box, i) => {
   const counter = BOX_COUNTERS.cell(i + 1);
   return [
     new Given(counter, 1, 2, 3),
-    new CountDistinct(counter, ...gridOverlay.at(box)),
+    new CountDistinct(counter, ...box),
   ];
 });
 
-// Cages: sum of digits excluding 3s equals the given total. Repeats allowed,
-// so this is a custom relation rather than Cage/Sum (which require distinct
-// cage cells): a Pair for a 2-cell cage, otherwise a running-sum NFA.
-// maxDepth bounds the NFA's running total (and its compiled state count) to
-// the cage's own cell count; without it the builder assumes the sum could
-// keep growing forever and exceeds the 4096-state limit.
+// Cages: sum of digits excluding 3s equals the given total, with repeats
+// allowed -- neither Cage nor Sum (both of which treat the cells as a set of
+// distinct summands). A Pair for a 2-cell cage, otherwise a running-sum NFA
+// whose state is the total so far of the non-3 digits seen; a state is
+// dropped once that total passes the cage's own total. maxDepth bounds the
+// running total to the cage's cell count, since the builder otherwise assumes
+// an unbounded sum and exceeds the 4096-state compile limit.
 const nonThree = (v) => (v === 3 ? 0 : v);
-const cageSumKey = (total) => Pair.fnToKey((a, b) => nonThree(a) + nonThree(b) === total, 7);
+const cageSumKey = (total) =>
+  Pair.fnToKey((a, b) => nonThree(a) + nonThree(b) === total, shape);
 const cageSumNFA = (total, numCells) => NFA.encodeSpec({
   startState: 0,
   transition: (sum, v) => {
@@ -64,36 +60,31 @@ const cageSumNFA = (total, numCells) => NFA.encodeSpec({
   },
   accept: (sum) => sum === total,
   maxDepth: numCells,
-}, 7);
+}, shape);
 
-// Cage cells as [row, col], 0-indexed, from the puzzle's drawn cages.
+// Cage cells as [row, col], 1-indexed, from the puzzle's drawn cages.
 const CAGES = [
-  { total: 10, cells: [[0, 2], [0, 3], [0, 4], [0, 5]] },
-  { total: 10, cells: [[1, 0], [1, 1], [2, 1], [3, 1]] },
-  { total: 15, cells: [[2, 2], [2, 3], [3, 2], [3, 3]] },
-  { total: 7, cells: [[1, 4], [2, 4]] },
-  { total: 14, cells: [[1, 6], [1, 7], [2, 6], [3, 5], [3, 6]] },
-  { total: 8, cells: [[2, 7], [3, 7], [4, 7]] },
-  { total: 8, cells: [[2, 8], [3, 8], [4, 8]] },
-  { total: 3, cells: [[4, 6], [5, 6], [5, 7]] },
-  { total: 21, cells: [[5, 1], [6, 1], [7, 1], [7, 2], [7, 3]] },
-  { total: 7, cells: [[5, 5], [6, 5], [6, 6]] },
-  { total: 1, cells: [[8, 6], [8, 7]] },
+  { total: 10, cells: [[1, 3], [1, 4], [1, 5], [1, 6]] },
+  { total: 10, cells: [[2, 1], [2, 2], [3, 2], [4, 2]] },
+  { total: 15, cells: [[3, 3], [3, 4], [4, 3], [4, 4]] },
+  { total: 7, cells: [[2, 5], [3, 5]] },
+  { total: 14, cells: [[2, 7], [2, 8], [3, 7], [4, 6], [4, 7]] },
+  { total: 8, cells: [[3, 8], [4, 8], [5, 8]] },
+  { total: 8, cells: [[3, 9], [4, 9], [5, 9]] },
+  { total: 3, cells: [[5, 7], [6, 7], [6, 8]] },
+  { total: 21, cells: [[6, 2], [7, 2], [8, 2], [8, 3], [8, 4]] },
+  { total: 7, cells: [[6, 6], [7, 6], [7, 7]] },
+  { total: 1, cells: [[9, 7], [9, 8]] },
 ];
 const cages = CAGES.map(({ total, cells }) => {
-  const ourCells = cells.map(([r, c]) => cellAt(r, c));
-  if (cells.length === 2) {
-    return new Pair(cageSumKey(total), `cage sum ${total}`, ...ourCells);
-  } else {
-    return new NFA(
-      cageSumNFA(total, cells.length), `cage sum ${total}`, ...ourCells);
-  }
+  const cageCells = cells.map(([r, c]) => cellAt(r, c));
+  return cells.length === 2
+    ? new Pair(cageSumKey(total), `cage sum ${total}`, ...cageCells)
+    : new NFA(cageSumNFA(total, cells.length), `cage sum ${total}`, ...cageCells);
 });
 
 return [
-  new Shape('1x1', 7),
-  GRID,
-  new Given('R1C1', 1),
+  shape,
   ...rows,
   ...cols,
   BOX_COUNTERS,

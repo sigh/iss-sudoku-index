@@ -3,8 +3,6 @@
 
 export const STATUS = {
   validated: { icon: '●', label: 'Solved', cls: 'ok', rank: 0 },
-  // Solved and unique, but the answer lives in Var cells, not the main grid.
-  'off-grid': { icon: '◉', label: 'Solved off-grid', cls: 'ok', rank: 1 },
   partial: { icon: '◐', label: 'Partial', cls: 'warn', rank: 2 },
   // Fully encoded, but the fixed search found no completion to verify.
   unverified: { icon: '?', label: 'Unverified', cls: 'warn', rank: 3 },

@@ -19,23 +19,13 @@
 //                   actually fills, in path order.
 // Nothing is omitted.
 //
-// The answer cannot live in the ISS main grid: an 11x11 row can hold up to 11
-// blank cells, and main-grid rows are always all-different -- too small for 9
-// digits plus distinct blank fillers. The grid instead lives on Var layers
-// over an 11x11 cell graph:
-//   VD  each cell's value: 0 if blank, else its digit 1-9
+// Cells outside every box are blank, so the grid is Raw: no implicit
+// constraints. A second Var layer tracks box placement:
 //   VL  each cell's position inside its box: 0 if blank, else 1 + 3*rowOffset +
 //       colOffset for offsets 0-2
-// The main grid still has to exist at 11x11, so it is pinned to a fixed
-// cyclic Latin square that adds no search of its own, with boxes dropped.
-// Values run 0-10 (11 of them) only because that Latin square needs 11
-// distinct fillers; 10 is never available to VD or VL.
-const SIZE = 11;
-const shape = new Shape('11x11', '0-10');
-const grid = cellGraph('11x11');
-const value = grid.makeOverlay('VD');
+const shape = new Shape('11x11', '0-9', 'Raw');
+const grid = cellGraph(shape);
 const label = grid.makeOverlay('VL');
-const valueVars = value.toVar('Values');
 const labelVars = label.toVar('Box labels');
 
 // ---- Deconstruction: nine non-overlapping 3x3 boxes. VL steps by 1
@@ -70,7 +60,7 @@ const labelBorders = [
   ...label.at(grid.column(11)).map(c => new Given(c, 0, 3, 6, 9)),
 ];
 const emptyLinks = grid.cells().map(
-  c => new Pair(emptyIff, 'empty', value.at(c), label.at(c)));
+  c => new Pair(emptyIff, 'empty', c, label.at(c)));
 // Exactly nine cells carry label 1, i.e. there are exactly nine boxes.
 const nineBoxes = new ContainExact(Array(9).fill(1).join('_'), ...label.cells());
 
@@ -81,12 +71,12 @@ const boxDigits = grid.cells().flatMap(topLeft => {
   if (block === null) return [];
   return [new Or([
     new Given(label.at(topLeft), 0, 2, 3, 4, 5, 6, 7, 8, 9),
-    new AllDifferent(...value.at(block))])];
+    new AllDifferent(...block)])];
 });
 
 const rowsAndCols = [
-  ...grid.rows().map((cells, i) => new PairX(noRepeat, `row${i + 1}`, ...value.at(cells))),
-  ...grid.columns().map((cells, i) => new PairX(noRepeat, `col${i + 1}`, ...value.at(cells))),
+  ...grid.rows().map((cells, i) => new PairX(noRepeat, `row${i + 1}`, ...cells)),
+  ...grid.columns().map((cells, i) => new PairX(noRepeat, `col${i + 1}`, ...cells)),
 ];
 
 // ---- Thermometers: transcribed bulb-first from the drawn lines; each bulb
@@ -125,21 +115,10 @@ const thermoMachine = NFA.encodeSpec({
   accept: () => true,
 }, shape);
 const thermos = THERMOS.map(
-  (path, i) => new NFA(thermoMachine, `thermo${i + 1}`, ...value.at(path)));
-
-// The main grid holds nothing real: pin it to the cyclic Latin square
-// value = row + col (mod SIZE), which trivially satisfies row/column
-// all-different and needs no boxes.
-const filler = grid.cells().map(cell => {
-  const { row, col } = parseCellId(cell);
-  return new Given(cell, (row - 1 + col - 1) % SIZE);
-});
+  (path, i) => new NFA(thermoMachine, `thermo${i + 1}`, ...path));
 
 return [
   shape,
-  new NoBoxes(),
-  ...filler,
-  valueVars,
   labelVars,
   ...labelRuns,
   ...labelBorders,

@@ -3,32 +3,37 @@
 // Video: https://www.youtube.com/watch?v=JOM2I34cuCI
 // Source: https://sudokupad.app/lj4chf65ci
 
-// The visible 11x11 board allows repeated blanks, which ISS's main-grid row and
-// column houses cannot represent. Store its 121 entries in VA instead: 0 is a
-// blank and 1-9 are placed digits. VP is the 9x9 array of possible 3x3 top-left
-// corners, with 1 meaning that the corresponding region is selected.
+// Rules encoded here:
+//  - The 11x11 board holds nine non-overlapping 3x3 regions; every other cell
+//    is blank.
+//  - Each region contains 1-9 once each.
+//  - No digit repeats in a row or a column (blanks may repeat).
+//  - Digits on a marked diagonal sum to its clue; blanks contribute nothing.
+// Nothing is omitted: there are no givens and no pre-drawn region borders.
 
+// Rows/columns repeat digits, so the grid is Raw: no implicit constraints.
+// 0 is a blank, 1-9 a placed digit.
 const BLANK = 0;
+
+// VP marks which 3x3 regions are placed: one selector per possible top-left
+// corner of a 3x3 block on the 11x11 board, i.e. rows 1-9 x columns 1-9.
 const UNUSED = 0;
 const SELECTED = 1;
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const NUM_REGIONS = 9;
 
-const shape = new Shape('1x1', '0-9');
-const canvas = cellGraph('11x11');
-const answer = canvas.makeOverlay('VA');
-const placementGrid = cellGraph('9x9');
-const placements = placementGrid.makeOverlay('VP');
-const topLefts = placementGrid.cells();
+const shape = new Shape('11x11', '0-9', 'Raw');
+const board = cellGraph(shape);
+const cornerGrid = cellGraph('9x9');
+const placements = cornerGrid.makeOverlay('VP');
+const topLefts = cornerGrid.cells();
 
-const blockAt = topLeft => answer.at(canvas.block(topLeft, 3, 3));
+const blockAt = topLeft => board.block(topLeft, 3, 3);
 const selectorsCovering = cell => placements.at(topLefts
-  .filter(topLeft => canvas.block(topLeft, 3, 3).includes(cell)));
+  .filter(topLeft => board.block(topLeft, 3, 3).includes(cell)));
 
-const selectedValues = [SELECTED, SELECTED, SELECTED, SELECTED, SELECTED,
-  SELECTED, SELECTED, SELECTED, SELECTED].join('_');
-
-// A selected top-left creates one complete 1-9 region; an unused top-left has
-// no digit effect. Exactly nine selectors are selected below.
+// A selected top-left carries one complete 1-9 region; an unused one places
+// nothing. Exactly nine are selected, by the ContainExact below.
 const regions = topLefts.map(topLeft => {
   const cells = blockAt(topLeft);
   return new Or([
@@ -41,9 +46,10 @@ const regions = topLefts.map(topLeft => {
   ]);
 });
 
-// Scan one answer cell followed by all placements that cover it. A blank has no
-// selected covering placement; a digit has exactly one. This simultaneously
-// enforces coverage and the non-overlap rule.
+// Read one board cell, then every selector whose 3x3 block covers it. A blank
+// must have no selected coverer and a digit exactly one, which is coverage and
+// non-overlap in a single scan. `needed` is that target, fixed by the first
+// symbol; `count` is the running number of selected coverers seen.
 const membershipMachine = NFA.encodeSpec({
   startState: { needed: null, count: 0 },
   transition: ({ needed, count }, value) => {
@@ -56,10 +62,11 @@ const membershipMachine = NFA.encodeSpec({
   },
   accept: ({ needed, count }) => needed !== null && count === needed,
 }, shape);
-const memberships = canvas.cells().map(cell => new NFA(
-  membershipMachine, 'region membership', answer.at(cell), ...selectorsCovering(cell)));
+const memberships = board.cells().map(cell => new NFA(
+  membershipMachine, 'region membership', cell, ...selectorsCovering(cell)));
 
-// Ignore repeated zeroes, but reject a second occurrence of any placed digit.
+// Raw grid has no houses of its own. `seen` is the bitset of digits already
+// used in the line: blanks repeat freely, any other value may appear only once.
 const noRepeatedDigitMachine = NFA.encodeSpec({
   startState: 0,
   transition: (seen, value) => {
@@ -70,14 +77,17 @@ const noRepeatedDigitMachine = NFA.encodeSpec({
   accept: () => true,
 }, shape);
 const rowAndColumnUniqueness = [
-  ...canvas.rows().map(row =>
-    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...answer.at(row))),
-  ...canvas.columns().map(column =>
-    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...answer.at(column))),
+  ...board.rows().map(row =>
+    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...row)),
+  ...board.columns().map(column =>
+    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...column)),
 ];
 
-// Each tuple is [total, first row, first column, row step, column step]. Rays
-// include their first cells and continue to the edge of the 11x11 canvas.
+// Drawn arrows outside the board, each with its circled total. Every arrow is a
+// 45-degree ray entering at a grid corner; the tuples are
+// [total, first row, first column, row step, column step], taken from the
+// arrowhead's boundary crossing and direction. Rays include their first cell
+// and run to the far edge.
 const DIAGONALS = [
   [18, 1, 4, 1, -1],
   [3, 1, 5, 1, -1],
@@ -94,15 +104,13 @@ const DIAGONALS = [
   [30, 1, 3, 1, 1],
 ];
 const diagonalSums = DIAGONALS.map(([total, row, col, dRow, dCol]) =>
-  new Sum(total, ...answer.at(canvas.ray(makeCellId(row, col), dRow, dCol))));
+  new Sum(total, ...board.ray(makeCellId(row, col), dRow, dCol)));
 
 return [
   shape,
-  new Given('R1C1', BLANK), // Pin the otherwise-unused ISS main-grid cell.
-  answer.toVar('11x11 answer, row-major; 0 is blank'),
   placements.toVar('selected 3x3 top-left corners'),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),
-  new ContainExact(selectedValues, ...placements.cells()),
+  new ContainExact(Array(NUM_REGIONS).fill(SELECTED).join('_'), ...placements.cells()),
   ...regions,
   ...memberships,
   ...rowAndColumnUniqueness,

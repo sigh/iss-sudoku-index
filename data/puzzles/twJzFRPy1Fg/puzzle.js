@@ -3,23 +3,24 @@
 // Video: https://www.youtube.com/watch?v=twJzFRPy1Fg
 // Source: https://sudokupad.app/ajb3ccmjg6
 
-// The 11x11 canvas allows repeated blanks, so its row-major answer is stored in
-// VA: 0 is blank and 1-9 are placed digits. VO marks occupied cells, and VP is
-// the 9x9 array of possible 3x3 top-left corners; a 1 selects that placement.
+// The 11x11 canvas allows repeated blanks, so it is Raw: no implicit
+// row/column all-different. VO marks occupied cells, and VP is the 9x9 array
+// of possible 3x3 top-left corners; a 1 selects that placement.
 
 const BLANK = 0;
 const UNUSED = 0;
 const SELECTED = 1;
 
-const shape = new Shape('1x1', '0-9');
-const canvas = cellGraph('11x11');
-const answer = canvas.makeOverlay('VA');
+const shape = new Shape('11x11', '0-9', 'Raw');
+const canvas = cellGraph(shape);
 const occupied = canvas.makeOverlay('VO');
 const placementGrid = cellGraph('9x9');
 const placements = placementGrid.makeOverlay('VP');
 const topLefts = placementGrid.cells();
 
-const blockAt = topLeft => answer.at(canvas.block(topLeft, 3, 3));
+const occupiedVar = occupied.toVar('inside a selected 3x3 region');
+
+const blockAt = topLeft => canvas.block(topLeft, 3, 3);
 const selectorsCovering = cell => placements.at(topLefts.filter(topLeft =>
   canvas.block(topLeft, 3, 3).includes(cell)));
 
@@ -38,16 +39,16 @@ const placementCoverage = canvas.cells().map(cell =>
 const digitMembershipKey = Pair.fnToKey(
   (isOccupied, digit) => isOccupied === (digit === BLANK ? 0 : 1), shape);
 const digitMembership = canvas.cells().map(cell => new Pair(
-  digitMembershipKey, 'region membership', occupied.at(cell), answer.at(cell)));
+  digitMembershipKey, 'region membership', occupied.at(cell), cell));
 
 // Reject a second occurrence of any nonblank digit in a row or column.
 const nonblankDifferentKey = PairX.fnToKey(
   (a, b) => a === BLANK || b === BLANK || a !== b, shape);
 const rowAndColumnUniqueness = [
   ...canvas.rows().map(row =>
-    new PairX(nonblankDifferentKey, 'row nonblank digits differ', ...answer.at(row))),
+    new PairX(nonblankDifferentKey, 'row nonblank digits differ', ...row)),
   ...canvas.columns().map(column =>
-    new PairX(nonblankDifferentKey, 'column nonblank digits differ', ...answer.at(column))),
+    new PairX(nonblankDifferentKey, 'column nonblank digits differ', ...column)),
 ];
 
 // All possible candies are given, and none are drawn. Therefore adjacent placed
@@ -58,24 +59,23 @@ const noCandyKey = Pair.fnToKey((a, b) =>
   ((a % 2) !== (b % 2) && a + b !== 5 && a + b !== 7), shape);
 const noCandyAdjacencies = [
   ...canvas.rows().map(row =>
-    new Pair(noCandyKey, 'no unmarked candy', ...answer.at(row))),
+    new Pair(noCandyKey, 'no unmarked candy', ...row)),
   ...canvas.columns().map(column =>
-    new Pair(noCandyKey, 'no unmarked candy', ...answer.at(column))),
+    new Pair(noCandyKey, 'no unmarked candy', ...column)),
 ];
 
-const leftWrapper = answer.at([makeCellId(10, 8), makeCellId(11, 8)]);
-const rightWrapper = answer.at([makeCellId(10, 9), makeCellId(11, 9)]);
-const wrapperOccupied = occupied.at([
-  makeCellId(10, 8), makeCellId(11, 8), makeCellId(10, 9), makeCellId(11, 9),
-]);
+const leftWrapper = [makeCellId(10, 8), makeCellId(11, 8)];
+const rightWrapper = [makeCellId(10, 9), makeCellId(11, 9)];
+const wrapperOccupied = [
+  occupiedVar.cell(10, 8), occupiedVar.cell(11, 8),
+  occupiedVar.cell(10, 9), occupiedVar.cell(11, 9),
+];
 const wrapperAtMostTenKey = Pair.fnToKey((a, b) =>
   a !== BLANK && b !== BLANK && a + b <= 10, shape);
 
 return [
   shape,
-  new Given('R1C1', BLANK), // Pin the otherwise-unused ISS main-grid cell.
-  answer.toVar('11x11 answer, row-major; 0 is blank'),
-  occupied.toVar('inside a selected 3x3 region'),
+  occupiedVar,
   placements.toVar('selected 3x3 top-left corners'),
   occupied.makeReplicate(new Given(occupied.cells()[0], UNUSED, SELECTED)),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),

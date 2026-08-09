@@ -5,16 +5,12 @@
 
 // Only a diamond-shaped 41-cell subset of the 9x9 canvas is playable; the
 // other 40 cells carry no region, no clue, and no rules-text reference.
-// ISS's main-grid Shape always adds full 9-cell row/column AllDifferent
-// groups over every declared grid cell, which would wrongly force the
-// empty corner cells into those groups alongside the real ones. So the
-// main grid is left as an unused 1x1 dummy purely to declare the 1-9 value
-// range, and the whole diamond lives in a 9x9 Var overlay ('D') addressed
-// by row/column -- Var cells are never swept into the automatic
-// row/column/box groups, which are built solely from the Shape's own
-// dimensions. Only the 41 live Var cells get puzzle constraints; the other
-// 40 (the corners outside the diamond) are pinned to a fixed sentinel
-// value so their otherwise-free domain cannot multiply the solution count.
+// Rows/columns don't span the diamond's partial lengths, so the grid is
+// Raw: no implicit constraints, and every rule -- including row/column and
+// region membership -- is stated explicitly below. Only the 41 live cells
+// get puzzle constraints; the other 40 (the corners outside the diamond)
+// are pinned to a fixed sentinel value so their otherwise-free domain
+// cannot multiply the solution count.
 //
 // Encoded:
 // - each row's and column's live cells hold a non-repeating consecutive
@@ -43,8 +39,9 @@ const REGIONS = [
 const live = new Set();
 for (const region of REGIONS) for (const [r, c] of region) live.add(`${r},${c}`);
 
-const diamond = new Var('D', 'diamond cells', '9x9');
-const cell = (r, c) => diamond.cell(r, c);
+// The grid is Raw, so there are no automatic row/column all-different rules.
+const shape = new Shape('9x9', '1-9', 'Raw');
+const cell = (r, c) => makeCellId(r, c);
 
 const regionConstraints = REGIONS.map(
   region => new AllDifferent(...region.map(([r, c]) => cell(r, c))));
@@ -78,12 +75,7 @@ const givens = [
 ];
 
 return [
-  new Shape('1x1', 9),
-  new NoBoxes(),
-  // The dummy main-grid cell holds no puzzle content; pin it so it does not
-  // multiply the solution count with its own free, unconstrained value.
-  new Given('R1C1', 1),
-  diamond,
+  shape,
   ...regionConstraints,
   ...lineConstraints(true),
   ...lineConstraints(false),

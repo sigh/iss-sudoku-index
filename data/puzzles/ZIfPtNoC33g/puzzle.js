@@ -17,14 +17,10 @@
 //  - Digits joined by a black dot are in a 1:2 ratio.
 // Fog and the three fog lights are presentation only and are not encoded.
 //
-// The answer cannot live in the ISS main grid: a row here holds up to eleven
-// empty cells, and main-grid rows are all-different over a value range capped
-// at 16, too small for 9 digits plus a distinct filler per empty cell. So the
-// grid is modelled as the 11x11 var group VD (0 = empty, 1-9 = the digit), with
-// the main grid reduced to one pinned cell.
-const shape = new Shape('1x1', '0-9');
-const grid = cellGraph('11x11');
-const digit = grid.makeOverlay('VD');
+// Rows/columns are not all-different here (empty cells repeat 0 freely), so
+// the grid is Raw: no implicit constraints.
+const shape = new Shape('11x11', '0-9', 'Raw');
+const grid = cellGraph(shape);
 
 // VL labels each cell's position inside its region: 0 = not in a region,
 // otherwise 1 + 3*rowOffset + colOffset for offsets 0-2 within the 3x3 block.
@@ -68,7 +64,7 @@ const labelBorders = [
   ...label.at(grid.column(11)).map(c => new Given(c, 0, 3, 6, 9)),
 ];
 const emptyLinks = grid.cells().map(
-  c => new Pair(emptyIff, 'empty', digit.at(c), label.at(c)));
+  c => new Pair(emptyIff, 'empty', c, label.at(c)));
 // Exactly nine cells carry label 1, i.e. there are exactly nine regions.
 const nineRegions = new ContainExact(Array(9).fill(1).join('_'), ...label.cells());
 
@@ -79,12 +75,12 @@ const regionDigits = grid.cells().flatMap(topLeft => {
   if (block === null) return [];
   return [new Or([
     new Given(label.at(topLeft), 0, 2, 3, 4, 5, 6, 7, 8, 9),
-    new AllDifferent(...digit.at(block))])];
+    new AllDifferent(...block)])];
 });
 
 const rowsAndCols = [
-  ...grid.rows().map((cells, i) => new PairX(noRepeat, `row${i + 1}`, ...digit.at(cells))),
-  ...grid.columns().map((cells, i) => new PairX(noRepeat, `col${i + 1}`, ...digit.at(cells))),
+  ...grid.rows().map((cells, i) => new PairX(noRepeat, `row${i + 1}`, ...cells)),
+  ...grid.columns().map((cells, i) => new PairX(noRepeat, `col${i + 1}`, ...cells)),
 ];
 
 // Outside clues, transcribed from the circled values and the arrowheads drawn
@@ -128,7 +124,7 @@ const shortClueKey = (k) => Pair.fnToKey((a, b) =>
 
 let unknownIndex = 0;
 const outsideClues = OUTSIDE.map(([start, dR, dC, k], i) => {
-  const cells = digit.at(grid.ray(start, dR, dC));
+  const cells = grid.ray(start, dR, dC);
   if (k === null) {
     const q = clueVars.cells()[unknownIndex++];
     return new NFA(unknownClueNFA(cells.length), `clue${i + 1}`, cells, [q]);
@@ -178,24 +174,22 @@ let targetIndex = 0;
 const arrowClues = ARROWS.flatMap(([cell, ...dirs]) => {
   const targets = dirs.map(() => arrowTargets.cells()[targetIndex++]);
   const machines = dirs.map(([dR, dC], i) => {
-    const ray = digit.at(grid.ray(cell, dR, dC).slice(1));
+    const ray = grid.ray(cell, dR, dC).slice(1);
     return new NFA(arrowNFA(ray.length), `arrow${cell}${i}`,
-      [digit.at(cell)], ray, [targets[i]]);
+      [cell], ray, [targets[i]]);
   });
   // The clue digit equals the sum of the digits its arrows point at.
-  return [new Arrow(digit.at(cell), ...targets), ...machines];
+  return [new Arrow(cell, ...targets), ...machines];
 });
 
 // Black dots, from the two edge marks drawn between R9C7/R9C8 and R9C7/R10C7.
 const dots = [
-  new Pair(blackDot, 'dot1', digit.at('R9C7'), digit.at('R9C8')),
-  new Pair(blackDot, 'dot2', digit.at('R9C7'), digit.at('RaC7')),
+  new Pair(blackDot, 'dot1', 'R9C7', 'R9C8'),
+  new Pair(blackDot, 'dot2', 'R9C7', 'RaC7'),
 ];
 
 return [
   shape,
-  new Given('R1C1', 0),
-  digit.toVar('grid'),
   label.toVar('region labels'),
   arrowTargets,
   clueVars,

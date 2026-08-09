@@ -25,15 +25,13 @@
 
 // Value 0 is playable so that it can mark "not in any region" and a region with
 // no outer clue cells.
-const shape = new Shape('9x9', '0-9');
+//
+// A canvas row mixes the 7x7's digits with an outer clue digit that is free to
+// repeat them (e.g. the published solution has R2C9 = 6 beside R2C4 = 6), so
+// the grid is Raw: no implicit constraints. VR, the region-label layer, has to
+// be a full-grid layer because that is what ConnectedValues accepts.
+const shape = new Shape('9x9', '0-9', 'Raw');
 const graph = cellGraph(shape);
-
-// The 9x9 main grid cannot hold the answer: its rows and columns are always
-// all-different, but a canvas row mixes the 7x7's digits with an outer clue
-// digit that is free to repeat them. Digits therefore live in the VD layer and
-// region labels in the VR layer -- and VR has to be a full-grid layer because
-// that is what ConnectedValues accepts.
-const digitLayer = graph.makeOverlay('VD');
 const regionLayer = graph.makeOverlay('VR');
 // VK1..VK9: how many outer clue cells region L contains (0-7).
 const counters = new Var('K', 'counters', 9);
@@ -84,18 +82,12 @@ const clueRay = (cell) => {
 // A clue is a (cell it sits in, cell holding its digit) pair: a blank outer cell
 // clues with its own answer digit, a rectangle with its given digit.
 const clues = [
-  ...outerCells.map(cell => [cell, digitLayer.at(cell)]),
+  ...outerCells.map(cell => [cell, cell]),
   ...Object.keys(GIVEN_CLUES).map(
     (cell, i) => [cell, clueValues.cell(i + 1)]),
 ];
 
 // --- Cell domains ----------------------------------------------------------
-
-// The main grid is unused. Pin it to a Latin square so it adds no solutions.
-const unusedGrid = graph.cells().map(cell => {
-  const { row, col } = parseCellId(cell);
-  return new Given(cell, (row + col) % 9);
-});
 
 // Grey cells are empty and belong to no region; pinning them to 0 keeps them out
 // of the answer without adding solutions. The live cells all take the same
@@ -103,10 +95,10 @@ const unusedGrid = graph.cells().map(cell => {
 // template sits on the layer's first cell, which Replicate uses only as the
 // translation origin).
 const digitDomains = [
-  digitLayer.makeReplicate(
-    new Given(digitLayer.cells()[0], 1, 2, 3, 4, 5, 6, 7),
-    digitLayer.at(liveCells)),
-  ...GREY_CELLS.map(cell => new Given(digitLayer.at(cell), 0)),
+  graph.makeReplicate(
+    new Given(graph.cells()[0], 1, 2, 3, 4, 5, 6, 7),
+    liveCells),
+  ...GREY_CELLS.map(cell => new Given(cell, 0)),
 ];
 
 const clueGivens = Object.values(GIVEN_CLUES).map(
@@ -128,7 +120,7 @@ const rowColGroups = [
   ...graph.rows(), ...graph.columns(),
 ].map(cells => cells.filter(isInner))
   .filter(cells => cells.length === 7)
-  .map(cells => new AllDifferent(...digitLayer.at(cells)));
+  .map(cells => new AllDifferent(...cells));
 
 // --- Chaos construction ----------------------------------------------------
 
@@ -165,7 +157,7 @@ const regionDigits = [1, 2, 3, 4, 5, 6, 7, 8, 9].flatMap(label =>
       accept: (state) => state.phase === 'label' && state.count === 1,
     }, shape);
     return new NFA(spec, 'region digits',
-      ...liveCells.flatMap(cell => [regionLayer.at(cell), digitLayer.at(cell)]));
+      ...liveCells.flatMap(cell => [regionLayer.at(cell), cell]));
   }));
 
 // --- Numbered rooms --------------------------------------------------------
@@ -194,7 +186,7 @@ const roomSpec = NFA.encodeSpec({
 }, shape);
 
 const numberedRooms = clues.map(([cell, valueCell]) => new NFA(
-  roomSpec, 'numbered room', valueCell, ...digitLayer.at(clueRay(cell))));
+  roomSpec, 'numbered room', valueCell, ...clueRay(cell)));
 
 // --- Outside cell counters -------------------------------------------------
 
@@ -238,7 +230,7 @@ const counterCircles = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(label => {
   }, shape);
   return new NFA(spec, 'region circles',
     counters.cell(label),
-    ...CIRCLED_CELLS.flatMap(cell => [regionLayer.at(cell), digitLayer.at(cell)]));
+    ...CIRCLED_CELLS.flatMap(cell => [regionLayer.at(cell), cell]));
 });
 
 // --- Region label symmetry -------------------------------------------------
@@ -256,12 +248,9 @@ const labelOrder = new NFA(NFA.encodeSpec({
 
 return [
   shape,
-  new NoBoxes(),
-  digitLayer.toVar('digits'),
   regionLayer.toVar('regions'),
   counters,
   clueValues,
-  ...unusedGrid,
   ...digitDomains,
   ...clueGivens,
   ...regionDomains,

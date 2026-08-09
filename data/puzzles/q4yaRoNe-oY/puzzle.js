@@ -6,38 +6,24 @@
 // Every answer row, column, and 3x3 box contains 1, 1, 2, 2, 3, 3, 4, 5, 6.
 // Cells a king's move apart differ. The drawn six-cell cage sums to 25;
 // the rules do not require its digits to be distinct.
-const graph = cellGraph('9x9');
-const overlay = graph.makeOverlay('VA');
-const gridCells = graph.cells();
-const gridIndex = new Map(gridCells.map((cell, index) => [cell, index]));
-const answer = (row, col) => overlay.at(gridCells[row * 9 + col]);
-const units = [
-  ...Array.from({ length: 9 }, (_, row) =>
-    Array.from({ length: 9 }, (_, col) => answer(row, col))),
-  ...Array.from({ length: 9 }, (_, col) =>
-    Array.from({ length: 9 }, (_, row) => answer(row, col))),
-  ...Array.from({ length: 3 }, (_, boxRow) =>
-    Array.from({ length: 3 }, (_, boxCol) =>
-      Array.from({ length: 9 }, (_, i) => answer(
-        boxRow * 3 + Math.floor(i / 3), boxCol * 3 + i % 3)))).flat(),
-];
-const kingBlocks = gridCells.flatMap(cell => {
-  const origin = parseCellId(cell);
-  if (origin.row === 9 || origin.col === 9) return [];
-  const block = [cell, ...graph.kingNeighbours(cell).filter(other => {
-    const position = parseCellId(other);
-    return position.row >= origin.row && position.col >= origin.col;
-  })].sort((a, b) => gridIndex.get(a) - gridIndex.get(b));
-  return [overlay.at(block)];
-});
+const shape = new Shape('9x9', 6, 'Raw');
+const graph = cellGraph(shape);
+const boxes = [];
+for (let r = 1; r <= 9; r += 3)
+  for (let c = 1; c <= 9; c += 3)
+    boxes.push(graph.block(makeCellId(r, c), 3, 3));
+const units = [...graph.rows(), ...graph.columns(), ...boxes];
+// Slide a 2x2 window from every cell (self, right, down, down-right); each
+// king-adjacent pair falls inside exactly one window, off-grid members drop.
+const kingBlocks = graph.cells()
+  .map(cell => [cell, graph.step(cell, 0, 1), graph.step(cell, 1, 0), graph.step(cell, 1, 1)]
+    .filter(c => c !== null))
+  .filter(block => block.length > 1);
 
 return [
-  // A fixed one-cell host supplies the 1-6 alphabet; the answer is the Var grid.
-  new Shape('1x1', 6),
-  overlay.toVar('answer grid'),
-  new Given('R1C1', 1),
+  shape,
   ...units.map(unit => new ContainExact('1_1_2_2_3_3_4_5_6', ...unit)),
   ...kingBlocks.map(block => new AllDifferent(...block)),
   // Drawn cage cells, in source order.
-  new Sum(25, answer(0, 4), answer(1, 4), answer(2, 4), answer(2, 3), answer(3, 4), answer(4, 4)),
+  new Sum(25, 'R1C5', 'R2C5', 'R3C5', 'R3C4', 'R4C5', 'R5C5'),
 ];

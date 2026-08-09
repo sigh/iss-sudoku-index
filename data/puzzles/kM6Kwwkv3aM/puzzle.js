@@ -18,20 +18,20 @@
 // orthogonally connected group. The converse holds too, so this is the same
 // rule, not a weakening of it.
 //
-// Because rows and columns of an ISS main grid are always all-different, and
-// here every digit repeats ten times, the board is a 10x10 Var group (VB)
-// instead; the main grid is a pinned 1x1 placeholder holding no puzzle content.
-const shape = new Shape('1x1', '0-9');
-const board = new Var('B', 'board', '10x10');
-const at = (row, col) => board.cell(row, col);
+// Every digit repeats ten times, which a Sudoku grid's implicit row/column
+// all-different would reject, so the grid is Raw: no implicit constraints.
+const shape = new Shape('10x10', '0-9', 'Raw');
+const graph = cellGraph(shape);
+const at = (row, col) => makeCellId(row, col);
 const digits = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const regions = [
-  // One connected group per digit.
-  ...digits.map(d => new ConnectedValues('VB', d)),
+  // One connected group per digit. An empty group prefix targets the main
+  // grid.
+  ...digits.map(d => new ConnectedValues('', d)),
   // Ten cells per digit, over the whole board.
   new ContainExact(
-    digits.flatMap(d => Array(10).fill(d)).join('_'), ...board.cells()),
+    digits.flatMap(d => Array(10).fill(d)).join('_'), ...graph.cells()),
 ];
 
 // Arrows, transcribed from the drawn strokes: circle cell first, then the arm
@@ -45,11 +45,6 @@ const arrows = [
   [[5, 6], [5, 7], [4, 7]],
 ].map(cells => new Arrow(...cells.map(rc => at(...rc))));
 
-// "One is double the other", over the digit alphabet 0-9 (so a black dot
-// between two equal digits forces both to 0). Written as a custom pair because
-// BlackDot binds by main-grid adjacency, which Var cells do not have.
-const doubleKey = Pair.fnToKey((a, b) => a === 2 * b || b === 2 * a, shape);
-
 // Dotted edges, transcribed from the drawn dots (each between two
 // orthogonally adjacent cells).
 const blackDots = [
@@ -58,7 +53,7 @@ const blackDots = [
   [[7, 10], [8, 10]],
   [[10, 3], [10, 4]],
   [[10, 9], [10, 10]],
-].map(([p, q]) => new Pair(doubleKey, 'black dot', at(...p), at(...q)));
+].map(([p, q]) => new BlackDot(at(...p), at(...q)));
 
 const greenDots = [
   [[1, 2], [1, 3]],
@@ -69,9 +64,6 @@ const greenDots = [
 
 return [
   shape,
-  // The placeholder grid cell carries no puzzle content, so it is pinned.
-  new Given('R1C1', 0),
-  board,
   ...regions,
   ...arrows,
   ...blackDots,

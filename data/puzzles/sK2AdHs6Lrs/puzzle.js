@@ -3,26 +3,29 @@
 // Video: https://www.youtube.com/watch?v=sK2AdHs6Lrs
 // Source: https://sudokupad.app/e4i4jbq62m
 
-// Every row, column, and box contains exactly two 1s, two 3s, and one
-// each of 2, 4, 5, 6, and 7. Cages have the indicated sums and allow
-// repeated digits. Equal digits cannot be a chess knight's move apart.
+// Every row, column and box contains exactly two 1s, two 3s, and one each of
+// 2, 4, 5, 6 and 7. Each cage sums to its total, and digits may repeat within a
+// cage. Two cells a chess knight's move apart cannot contain the same digit.
+// There are no given digits.
 //
-// The repeated row and column values cannot live in the ISS main grid,
-// whose rows and columns are always all-different. The real puzzle grid
-// is therefore the row-major VG overlay; a pinned 1x1 main grid supplying
-// the 1-7 value range is only a placeholder.
+// Rows and columns repeat digits, so the puzzle cannot be a default
+// Sudoku-type main grid, whose rows and columns are always all-different.
+// The 9x9 grid is Raw: no implicit constraints, and every rule below is
+// stated explicitly.
 
-const REF = cellGraph('9x9');
-const GRID = REF.makeOverlay('VG');
+const shape = new Shape('9x9', '1-7', 'Raw');
+const REF = cellGraph(shape);
+
 const MULTISET = '1_1_2_3_3_4_5_6_7';
+// A Raw grid has no default boxes, so the 3x3 tiling is built explicitly.
+const boxes = [];
+for (let row = 1; row <= 9; row += 3)
+  for (let col = 1; col <= 9; col += 3)
+    boxes.push(REF.block(makeCellId(row, col), 3, 3));
+const units = [...REF.rows(), ...REF.columns(), ...boxes].map(
+  cells => new ContainExact(MULTISET, ...cells));
 
-const groups = [
-  ...REF.rows(),
-  ...REF.columns(),
-  ...REF.boxes(),
-].map(cells => new ContainExact(MULTISET, ...GRID.at(cells)));
-
-// Cage geometry is the puzzle's drawn data. Sum permits repeats, unlike Cage.
+// Cage cells and totals as drawn on the grid.
 const CAGES = [
   { total: 5, cells: ['R3C1', 'R3C2', 'R4C1', 'R4C2'] },
   { total: 6, cells: ['R6C8', 'R6C9', 'R7C8', 'R7C9'] },
@@ -34,32 +37,27 @@ const CAGES = [
   { total: 3, cells: ['R6C3', 'R6C4'] },
   { total: 25, cells: ['R6C5', 'R6C6', 'R7C5', 'R7C6'] },
 ];
-const cages = CAGES.map(({ total, cells }) =>
-  new Sum(total, ...GRID.at(cells)));
+// Sum rather than Cage, because the rules allow repeats. The 25 cage requires
+// them: four distinct digits from 1-7 reach at most 7 + 6 + 5 + 4 = 22.
+const cages = CAGES.map(
+  ({ total, cells }) => new Sum(total, ...cells));
 
-// Four orientations cover every undirected knight edge exactly once. Maximal
-// paths provide the edge lists without hand-enumerating all knight pairs.
+// Four of the eight knight offsets cover each unordered knight pair exactly
+// once. Each offset becomes one Replicate: the template is the pair at the
+// first grid cell that has a partner at that offset, stamped onto every cell
+// that does. 224 knight pairs in four constraints.
 const KNIGHT_OFFSETS = [[1, 2], [2, 1], [-1, 2], [2, -1]];
-const knightPaths = KNIGHT_OFFSETS.flatMap(([dRow, dCol]) =>
-  REF.cells()
-    .filter(cell =>
-      !REF.step(cell, -dRow, -dCol) && REF.step(cell, dRow, dCol))
-    .map(start => {
-      const path = [];
-      for (let cell = start; cell; cell = REF.step(cell, dRow, dCol)) {
-        path.push(cell);
-      }
-      return path;
-    }));
-const antiKnight = knightPaths.flatMap(path =>
-  path.slice(1).map((cell, i) =>
-    new AllDifferent(...GRID.at([path[i], cell]))));
+const antiKnight = KNIGHT_OFFSETS.map(([dRow, dCol]) => {
+  const targets = REF.cells().filter(cell => REF.step(cell, dRow, dCol));
+  const origin = targets[0];
+  const pair = new AllDifferent(origin, REF.step(origin, dRow, dCol));
+  return new Replicate(
+    [pair], Replicate.encodeTargetCells(targets, origin, REF), origin);
+});
 
 return [
-  new Shape('1x1', '1-7'),
-  GRID.toVar('Grid'),
-  new Given('R1C1', 1),
-  ...groups,
+  shape,
+  ...units,
   ...cages,
   ...antiKnight,
 ];

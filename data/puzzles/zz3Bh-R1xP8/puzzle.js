@@ -9,19 +9,17 @@
 // (digits 0-9). Each physical row/column of the board holds one 6-cell
 // segment of the first grid and one 10-cell segment of the second, each
 // independently a "digits once each" house -- the two segments may repeat a
-// digit against each other, which a real ISS row/column house cannot allow,
-// so every cell lives in a VG Var instead of the ISS main grid.
+// digit against each other, which a real Sudoku-grid row/column house cannot
+// allow, so the grid is Raw: no implicit row/column constraints.
 // Japanese Sums: outside-grid clues (read outermost-to-innermost, matching a
 // scan from the top or left) each give one coloured run's cell-sum, in
 // order along that row/column. Runs of the same colour need a gap cell
 // between them; different colours may touch. A VH Var records each cell's
 // run colour (0 = none) and a scanning NFA checks the sequence per line.
 
-const shape = new Shape('1x1', '0-9');
-const canvas = cellGraph('16x16');
-const digits = canvas.makeOverlay('VG');
+const shape = new Shape('16x16', '0-9', 'Raw');
+const canvas = cellGraph(shape);
 const colours = canvas.makeOverlay('VH');
-const digitVar = digits.toVar('digit grid, row-major; the 1-6/0-9 answer');
 const colourVar = colours.toVar('Japanese Sum run colour, row-major; 0 = none');
 
 // Box regions as drawn: [row, col] pairs (0-indexed, from the payload), 16
@@ -78,15 +76,15 @@ const columnGroups = canvas.columns().flatMap(col => [
   col.filter(c => !shadedIds.has(c)),
 ]);
 const houses = [...regionCells, ...rowGroups, ...columnGroups]
-  .map(cells => new AllDifferent(...digits.at(cells)));
+  .map(cells => new AllDifferent(...cells));
 
-// Domain per cell: Var cells default to the shape's full 0-9 alphabet, which
+// Domain per cell: grid cells default to the shape's full 0-9 alphabet, which
 // already matches the unshaded (10x10) digits, so only the shaded (6x6)
 // cells need a narrowing Given -- one Replicate template stamped over just
 // those 96 cells.
-const shadedDigitCells = digits.at(canvas.cells().filter(cell => shadedIds.has(cell)));
+const shadedDigitCells = canvas.cells().filter(cell => shadedIds.has(cell));
 const domains = [
-  digits.makeReplicate(new Given(digits.cells()[0], ...SHADED_DIGITS), shadedDigitCells),
+  canvas.makeReplicate(new Given(canvas.cells()[0], ...SHADED_DIGITS), shadedDigitCells),
 ];
 // A run colour is 0 (none) or one of the seven letters below; 8 and 9 are
 // unused values of the shared 0-9 alphabet. Same domain everywhere, so one
@@ -187,7 +185,7 @@ function japaneseSumMachine(clueList) {
   }, shape);
 }
 
-const interleave = cells => cells.flatMap(cell => [colours.at(cell), digits.at(cell)]);
+const interleave = cells => cells.flatMap(cell => [colours.at(cell), cell]);
 const japaneseSums = [
   ...canvas.rows().map((row, i) => new NFA(
     japaneseSumMachine(toClueList(ROW_CLUES[i])), `row ${i + 1} japanese sum`,
@@ -199,8 +197,6 @@ const japaneseSums = [
 
 return [
   shape,
-  new Given('R1C1', 0), // Pin the otherwise-unused ISS main-grid cell.
-  digitVar,
   colourVar,
   ...domains,
   ...colourDomains,

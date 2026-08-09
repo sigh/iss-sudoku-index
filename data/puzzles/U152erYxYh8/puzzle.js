@@ -3,9 +3,9 @@
 // Video: https://www.youtube.com/watch?v=U152erYxYh8
 // Source: https://sudokupad.app/bhxcnaf8gg
 
-// Nine non-overlapping 3x3 boxes are placed on the 11x11 canvas. VA stores the
-// visible answer (0 for blank); VP selects the 9x9 array of possible box
-// top-left corners. Every non-corner selected box is a magic square. The two
+// Nine non-overlapping 3x3 boxes are placed on the 11x11 canvas, the main
+// grid (0 for blank); VP selects the 9x9 array of possible box top-left
+// corners. Every non-corner selected box is a magic square. The two
 // thermometers, dots, diagonal sums, given, and blue diagonal are the drawn
 // clues. Nothing is omitted.
 
@@ -14,20 +14,19 @@ const UNUSED = 0;
 const SELECTED = 1;
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// The main ISS grid is an inert 1x1 placeholder. The displayed canvas needs
-// repeated blanks, so the source answer instead lives in the 11x11 VA group.
-const shape = new Shape('1x1', '0-9');
-const canvas = cellGraph('11x11');
-const answer = canvas.makeOverlay('VA');
+// The 11x11 canvas's off-box cells repeat "blank", so the grid is Raw: no
+// implicit constraints.
+const shape = new Shape('11x11', '0-9', 'Raw');
+const canvas = cellGraph(shape);
 const placementGrid = cellGraph('9x9');
 const placements = placementGrid.makeOverlay('VP');
 const topLefts = placementGrid.cells();
 
-const blockAt = topLeft => answer.at(canvas.block(topLeft, 3, 3));
+const blockAt = topLeft => canvas.block(topLeft, 3, 3);
 const selectorsCovering = cell => placements.at(topLefts.filter(topLeft =>
   canvas.block(topLeft, 3, 3).includes(cell)));
 const isCanvasCorner = cell => ['R1C1', 'R1C9', 'R9C1', 'R9C9'].includes(cell);
-const cellsAt = coordinates => answer.at(coordinates.map(([row, col]) => makeCellId(row, col)));
+const cellsAt = coordinates => coordinates.map(([row, col]) => makeCellId(row, col));
 
 // A selected top-left creates one complete 1-9 region. Every non-corner region
 // also has equal sums on its three rows, three columns, and two diagonals.
@@ -58,7 +57,7 @@ const membershipMachine = NFA.encodeSpec({
   accept: ({ needed, count }) => needed !== null && count === needed,
 }, shape);
 const memberships = canvas.cells().map(cell => new NFA(
-  membershipMachine, 'region membership', answer.at(cell), ...selectorsCovering(cell)));
+  membershipMachine, 'region membership', cell, ...selectorsCovering(cell)));
 
 // Blanks may repeat; placed digits may not repeat in any canvas row, column, or
 // the blue main diagonal.
@@ -73,9 +72,9 @@ const noRepeatedDigitMachine = NFA.encodeSpec({
 }, shape);
 const rowAndColumnUniqueness = [
   ...canvas.rows().map(row => new NFA(noRepeatedDigitMachine,
-    'row nonblank digits differ', ...answer.at(row))),
+    'row nonblank digits differ', ...row)),
   ...canvas.columns().map(column => new NFA(noRepeatedDigitMachine,
-    'column nonblank digits differ', ...answer.at(column))),
+    'column nonblank digits differ', ...column)),
 ];
 // The drawn thin blue stroke runs corner-to-corner through these eleven cells.
 const blueDiagonal = cellsAt([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6],
@@ -84,16 +83,29 @@ const blueDiagonal = cellsAt([[1, 1], [2, 2], [3, 3], [4, 4], [5, 5], [6, 6],
 const ratioKey = ratio => Pair.fnToKey((a, b) =>
   a !== BLANK && b !== BLANK && (a === ratio * b || b === ratio * a), shape);
 
+// "All clues inside the grid must fully fit inside the 3x3 boxes (except the
+// blue line)" -- the two thermometers, the two ratio dots, and the two white
+// dots are "inside the grid" clues, so every one of their cells is covered by
+// a selected box (nonblank). The outside diagonal-sum clues are not "inside
+// the grid" and the blue diagonal is explicitly excepted, so neither gets
+// this restriction.
+const mustFitInBox = cellsAt([
+  [1, 1], [2, 2], [3, 3], [3, 4],
+  [11, 7], [10, 6], [9, 6], [10, 7], [9, 7],
+  [10, 9], [11, 9], [9, 9],
+  [5, 5], [6, 5],
+  [9, 3], [10, 3],
+]).map(cell => new Given(cell, ...DIGITS));
+
 return [
   shape,
-  new Given('R1C1', BLANK),
-  answer.toVar('11x11 answer, row-major; 0 is blank'),
   placements.toVar('selected 3x3 top-left corners'),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),
   new ContainExact(Array(9).fill(SELECTED).join('_'), ...placements.cells()),
   ...regions,
   ...memberships,
   ...rowAndColumnUniqueness,
+  ...mustFitInBox,
   new Given(cellsAt([[6, 6]])[0], 5),
   new Thermo(...cellsAt([[1, 1], [2, 2], [3, 3], [3, 4]])),
   new Thermo(...cellsAt([[11, 7], [10, 6], [9, 6], [10, 7], [9, 7]])),

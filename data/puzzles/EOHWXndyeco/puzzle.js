@@ -14,14 +14,11 @@
 //                   sum; every line crosses at least one border.
 // Nothing is omitted.
 //
-// Rows and columns hold repeated digits, so the answer cannot live on an ISS
-// main grid, whose rows and columns are always all-different. Every playable
-// cell is therefore a Var:
-//   VD  the 9x9 answer grid          VR  the region label of each cell
+// Rows and columns hold repeated digits, so the grid is Raw: no implicit
+// constraints, so every rule is stated over the main grid or the auxiliary
+// Var layers.
+//   VR  the region label of each cell
 //   VN  the constants 1..9           VE..VM  per-region views used by CIRCLES
-// The layers carry their own 9x9 layout, so the main grid holds no part of the
-// puzzle: it is a single pinned cell that exists only to declare the 1-9 value
-// range the layers draw from.
 
 const CIRCLES = [
   'R2C4', 'R3C2', 'R3C3', 'R3C5', 'R5C5', 'R6C7', 'R8C3', 'R9C5', 'R9C9',
@@ -46,22 +43,19 @@ const LINES = [
   ['R2C6', 'R2C7', 'R3C7'],
 ];
 
-const grid = cellGraph('9x9');
-const digits = grid.makeOverlay('VD');
+const shape = new Shape('9x9', 9, 'Raw');
+const grid = cellGraph(shape);
 const regions = grid.makeOverlay('VR');
 // One extra 81-cell layer per region, used by the CIRCLES rule below.
 const views = 'EFGHIJKLM'.split('').map(letter => grid.makeOverlay('V' + letter));
 const LABELS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// The one main-grid cell holds nothing; pin it so it adds no search.
-const filler = [new Given('R1C1', 1)];
-
 // SOMEDOKU. VN holds the constants 1..9, used as CountDistinct controls.
 const counts = new Var('N', 'Counts 1-9', 9);
 const constants = LABELS.map(n => new Given(counts.cell(n), n));
 const someduku = LABELS.flatMap(n => [
-  new CountDistinct(counts.cell(n), ...digits.at(grid.row(n))),
-  new CountDistinct(counts.cell(n), ...digits.at(grid.column(n))),
+  new CountDistinct(counts.cell(n), ...grid.row(n)),
+  new CountDistinct(counts.cell(n), ...grid.column(n)),
 ]);
 
 // CHAOS CONSTRUCTION: nine cells per label, each label one connected blob.
@@ -117,14 +111,14 @@ for (const a of grid.cells()) {
 // region j's circle. That circle digit is itself one of region j's digits, so
 // the distinct values of the whole layer are exactly region j's distinct
 // digits, and CountDistinct over the layer reports the circled digit.
-const circleDigits = new AllDifferent(...digits.at(CIRCLES));
+const circleDigits = new AllDifferent(...CIRCLES);
 const views_link = LABELS.flatMap((label, j) => {
   const others = LABELS.filter(n => n !== label);
-  const circleDigit = digits.at(CIRCLES[j]);
+  const circleDigit = CIRCLES[j];
   return grid.cells().map(cell => new Or([
     new And([
       new Given(regions.at(cell), label),
-      new SameValues(2, views[j].at(cell), digits.at(cell)),
+      new SameValues(2, views[j].at(cell), cell),
     ]),
     new And([
       new Given(regions.at(cell), ...others),
@@ -133,7 +127,7 @@ const views_link = LABELS.flatMap((label, j) => {
   ]));
 });
 const circleCounts = LABELS.map((label, j) =>
-  new CountDistinct(digits.at(CIRCLES[j]), ...views[j].cells()));
+  new CountDistinct(CIRCLES[j], ...views[j].cells()));
 
 // REGION SUM LINES. Consecutive line cells are in one segment iff they share a
 // region label, so a line of L cells has 2^(L-1) possible cuttings; the rule
@@ -141,7 +135,7 @@ const circleCounts = LABELS.map((label, j) =>
 // label agreements it assumes and equates its segment sums.
 const regionSumLines = LINES.map(cells => {
   const lineLabels = regions.at(cells);
-  const lineDigits = digits.at(cells);
+  const lineDigits = cells;
   const branches = [];
   for (let mask = 1; mask < (1 << (cells.length - 1)); mask++) {
     const borders = [];
@@ -160,12 +154,10 @@ const regionSumLines = LINES.map(cells => {
 });
 
 return [
-  new Shape('1x1', 9),
-  digits.toVar('Digits'),
+  shape,
   regions.toVar('Regions'),
   ...views.map((view, j) => view.toVar(`Region ${j + 1} view`)),
   counts,
-  ...filler,
   ...constants,
   ...someduku,
   ...chaos,

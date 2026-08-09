@@ -22,15 +22,12 @@
 // phrase is read against this drawn geometry rather than literally.
 //
 // The playable area is not a rectangle, and rows/columns must allow repeats
-// across a gray block -- the solver's main-grid row/column all-different is
-// unconditional and cannot express that. So the whole puzzle is modelled off
-// the main grid: a Var overlay shadows the full 11x11 canvas one-for-one
-// (VD1..VD121, row-major), and region/row/column groups are stated
-// explicitly over it instead of relying on the main grid's built-in ones. The
-// 40 non-playable overlay cells are pinned to an arbitrary fixed digit (they
-// carry no puzzle meaning, but need a value to keep the solution count from
-// inflating with their free choice). The Shape's one real cell is an unused,
-// pinned placeholder.
+// across a gray block -- an ordinary main grid's row/column all-different is
+// unconditional and cannot express that. So the grid is Raw: no implicit
+// constraints. Region/row/column groups are stated explicitly over it. The 40
+// non-playable cells are pinned to an arbitrary fixed digit (they carry no
+// puzzle meaning, but need a value to keep the solution count from inflating
+// with their free choice).
 
 // Region layout, transcribed from the drawn wall lines (see above). A letter
 // is a region id; '.' is outside every region (includes the 4 gray cells).
@@ -49,10 +46,11 @@ const LAYOUT = [
 ];
 const N = 11;
 
-// A Var cell per grid cell, so the group's declared shape matches the source
-// canvas (checked by review) and `at()`/`cells()` come for free.
-const grid = cellGraph('11x11').makeOverlay('VD').toVar('digits'); // Var('D', 'digits', '11x11')
-const cellId = (r, c) => grid.cell(r + 1, c + 1); // r, c 0-indexed
+const shape = new Shape('11x11', 9, 'Raw');
+// LAYOUT/playable/background are genuinely 0-indexed (array indices), not a
+// mistranscribed data table.
+// lint-ok: zero-indexed-cell-math
+const cellId = (r, c) => makeCellId(r + 1, c + 1); // r, c 0-indexed; board's own (row, col) addressing
 
 const playable = []; // {r, c, region}, 0-indexed
 const background = []; // {r, c}
@@ -109,9 +107,7 @@ const GIVENS = [
 const givens = GIVENS.map(([row, col, v]) => new Given(cellId(row - 1, col - 1), v));
 
 return [
-  new Shape('1x1', 9), // dummy main cell; the real puzzle lives on the VD overlay
-  new Given('R1C1', 1), // pin it so it doesn't inflate the solution count
-  grid,
+  shape,
   ...regions,
   ...rowGroups,
   ...colGroups,

@@ -3,11 +3,9 @@
 // Video: https://www.youtube.com/watch?v=kDPTNACpJuA
 // Source: https://app.crackingthecryptic.com/sudoku/tGqm6F2nPN
 
-// ISS main-grid rows and columns are always all-different, so an 11-cell row
-// that can hold repeated "empty" cells cannot live in the main grid. The
-// 11x11 answer instead lives row-major in the `VA` overlay group: 0 means a
-// cell outside every box (empty), 1-9 is a placed digit. A pinned 1x1 main
-// grid supplies the 0-9 value range.
+// The 11x11 answer is the main grid, using the Raw shape (no implicit
+// row/column/box rules): 0 means a cell outside every box (empty), 1-9 is a
+// placed digit.
 //
 // The 81 `VP` selectors are every possible top-left corner of a 3x3 box
 // inside the 11x11 canvas. Exactly nine are selected; a selected box holds
@@ -20,7 +18,7 @@
 // applying only to placed digits.
 //
 // Cage: "Digits within a cage must sum to the given total" is a plain Sum
-// over the raw VA values; the cage's two cells (transcribed from the
+// over the two cells' raw values; the cells (transcribed from the
 // payload's single non-stub `cages` entry) both sit in column 9, so the
 // column rule above already forces them distinct.
 //
@@ -34,15 +32,13 @@ const UNUSED = 0;
 const SELECTED = 1;
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const shape = new Shape('1x1', '0-9');
-const canvas = cellGraph('11x11');
-const answer = canvas.makeOverlay('VA');
-const answerVar = answer.toVar('11x11 answer, row-major; 0 is empty');
+const shape = new Shape('11x11', '0-9', 'Raw');
+const canvas = cellGraph(shape);
 const placementGrid = cellGraph('9x9');
 const placements = placementGrid.makeOverlay('VP');
 const topLefts = placementGrid.cells();
 
-const blockAt = topLeft => answer.at(canvas.block(topLeft, 3, 3));
+const blockAt = topLeft => canvas.block(topLeft, 3, 3);
 const selectorsCovering = cell => placements.at(topLefts
   .filter(topLeft => canvas.block(topLeft, 3, 3).includes(cell)));
 
@@ -77,7 +73,7 @@ const membershipMachine = NFA.encodeSpec({
   accept: ({ needed, count }) => needed !== null && count === needed,
 }, shape);
 const memberships = canvas.cells().map(cell => new NFA(
-  membershipMachine, 'box membership', answer.at(cell), ...selectorsCovering(cell)));
+  membershipMachine, 'box membership', cell, ...selectorsCovering(cell)));
 
 // Ignore repeated empties, but reject a second occurrence of any placed digit.
 const noRepeatedDigitMachine = NFA.encodeSpec({
@@ -91,14 +87,14 @@ const noRepeatedDigitMachine = NFA.encodeSpec({
 }, shape);
 const rowAndColumnUniqueness = [
   ...canvas.rows().map(row =>
-    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...answer.at(row))),
+    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...row)),
   ...canvas.columns().map(column =>
-    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...answer.at(column))),
+    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...column)),
 ];
 
 // The puzzle's single cage. Cell IDs use a single hex-like digit for row/col
 // >= 10 (a=10, b=11): R10C9 is 'RaC9', R11C9 is 'RbC9'.
-const cageSum = new Sum(11, ...answer.at(['RaC9', 'RbC9']));
+const cageSum = new Sum(11, 'RaC9', 'RbC9');
 
 // Orthogonally adjacent digits may not be consecutive, a 1:2 ratio, or sum to
 // 5 or 10; an empty (0) cell on either side exempts the pair.
@@ -109,22 +105,20 @@ const adjacentAllowed = Pair.fnToKey((a, b) => {
   const sum = a + b;
   return sum !== 5 && sum !== 10;
 }, shape);
-const origin = answer.cells()[0];
-const horizontalStarts = answer.cells().filter(cell => answer.step(cell, 0, 1));
-const verticalStarts = answer.cells().filter(cell => answer.step(cell, 1, 0));
+const origin = canvas.cells()[0];
+const horizontalStarts = canvas.cells().filter(cell => canvas.step(cell, 0, 1));
+const verticalStarts = canvas.cells().filter(cell => canvas.step(cell, 1, 0));
 const adjacency = [
-  answer.makeReplicate(
-    new Pair(adjacentAllowed, 'adjacent restriction', origin, answer.step(origin, 0, 1)),
+  canvas.makeReplicate(
+    new Pair(adjacentAllowed, 'adjacent restriction', origin, canvas.step(origin, 0, 1)),
     horizontalStarts),
-  answer.makeReplicate(
-    new Pair(adjacentAllowed, 'adjacent restriction', origin, answer.step(origin, 1, 0)),
+  canvas.makeReplicate(
+    new Pair(adjacentAllowed, 'adjacent restriction', origin, canvas.step(origin, 1, 0)),
     verticalStarts),
 ];
 
 return [
   shape,
-  new Given('R1C1', BLANK), // Pin the otherwise-unused ISS main-grid cell.
-  answerVar,
   placements.toVar('selected 3x3 top-left corners'),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),
   new ContainExact(selectedValues, ...placements.cells()),

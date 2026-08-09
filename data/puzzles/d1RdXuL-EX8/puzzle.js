@@ -9,12 +9,12 @@
 // digits. Unmarked adjacencies carry no negative-dot rule.
 //
 // The row/column rule permits duplicates, unlike ISS's automatic main-grid
-// all-different groups. The 9x9 answer is therefore a Var grid; the pinned
-// 1x1 main grid is only a placeholder.
+// all-different groups, so the grid is Raw: no implicit constraints, and
+// every rule below is stated explicitly.
 
 const SIZE = 9;
-const GRID = new Var('G', 'Duplicates grid', '9x9');
-const cell = (r, c) => GRID.cell(r, c); // 1-indexed row and column
+const SHAPE = new Shape('9x9', '1-9', 'Raw');
+const cell = (r, c) => makeCellId(r, c); // 1-indexed row and column
 const row = (r) => Array.from({ length: SIZE }, (_, c) => cell(r, c + 1));
 const column = (c) => Array.from({ length: SIZE }, (_, r) => cell(r + 1, c));
 
@@ -25,7 +25,7 @@ const distinctCountNFA = (required) => NFA.encodeSpec({
   transition: (seen, value) => seen | (1 << (value - 1)),
   accept: (seen) => seen.toString(2).split('1').length - 1 === required,
   maxDepth: SIZE,
-}, SIZE);
+}, SHAPE);
 const rowAndColumnCounts = Array.from({ length: SIZE }, (_, i) => {
   const required = i + 1;
   const encoded = distinctCountNFA(required);
@@ -67,16 +67,12 @@ const BLUE_DIAMONDS = [
   [[6, 4], [6, 5]], [[5, 7], [6, 7]],
   [[4, 7], [4, 8]], [[3, 5], [4, 5]],
 ];
-const consecutiveKey = Pair.fnToKey((a, b) => Math.abs(a - b) === 1, SIZE);
-const whiteDots = WHITE_DOTS.map(([a, b]) =>
-  new Pair(consecutiveKey, 'white dot', cell(...a), cell(...b)));
+const whiteDots = WHITE_DOTS.map(([a, b]) => new WhiteDot(cell(...a), cell(...b)));
 const blueDiamonds = BLUE_DIAMONDS.map(([a, b]) =>
   new SameValues(2, cell(...a), cell(...b)));
 
 return [
-  new Shape('1x1', SIZE),
-  GRID,
-  new Given('R1C1', 1),
+  SHAPE,
   ...rowAndColumnCounts,
   ...cages,
   ...whiteDots,

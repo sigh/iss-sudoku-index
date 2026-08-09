@@ -5,22 +5,18 @@
 
 // Two overlapping 9x9 classic sudoku grids on a 12-row x 9-column canvas: the
 // top grid is rows 1-9, the bottom grid is rows 4-12, and rows 4-9 are the
-// same physical cells read by both grids. An ISS main grid can't hold this:
-// its automatic column all-different would force 12 cells in one column to
-// be pairwise distinct, impossible with only 9 values. So the whole board is
-// one Var group (VB) instead, addressed row/column via its declared 12x9
-// dimensions, with every row/column/box all-different added explicitly.
-const board = new Var('B', 'board', '12x9');
-const cellAt = (row, col) => board.cell(row, col);
-const boardLayout = cellGraph('12x9').makeOverlay('VB');
+// same physical cells read by both grids. The automatic column all-different
+// of a Sudoku grid would force 12 cells in one column to be pairwise
+// distinct, impossible with only 9 values, so the grid is Raw: every
+// row/column/box all-different is added explicitly.
+const shape = new Shape('12x9', 9, 'Raw');
+const graph = cellGraph(shape);
+const cellAt = (row, col) => makeCellId(row, col);
 
 // Physical rows: every row is 9 cells regardless of which grid(s) it
 // belongs to, so one all-different per row (1-12) covers both grids' row
 // rules.
-const rows = Array.from({ length: 12 }, (_, i) => {
-  const row = i + 1;
-  return new AllDifferent(...Array.from({ length: 9 }, (_, c) => cellAt(row, c + 1)));
-});
+const rows = graph.rows().map(row => new AllDifferent(...row));
 
 // Columns: the two grids' column windows (rows 1-9, rows 4-12) differ, so
 // both need their own all-different per column.
@@ -33,8 +29,12 @@ const columns = columnWindows.flatMap(startRow =>
 
 // Boxes: the 12x9 board layout tiles into the twelve 3x3 boxes needed by the
 // two overlapping grids. Box-rows 4-6 and 7-9 are shared, so each physical
-// box appears exactly once.
-const boxes = boardLayout.boxes(9).map(cells => new AllDifferent(...cells));
+// box appears exactly once. A Raw grid has no default boxes, so build them
+// explicitly.
+const boxes = [];
+for (let r = 1; r <= 12; r += 3)
+  for (let c = 1; c <= 9; c += 3)
+    boxes.push(new AllDifferent(...graph.block(makeCellId(r, c), 3, 3)));
 
 // Givens, transcribed from the source's per-cell digits.
 const givens = [
@@ -52,12 +52,7 @@ const givens = [
 ].map(([row, col, value]) => new Given(cellAt(row, col), value));
 
 return [
-  // The answer lives entirely in VB; the main grid is a pinned placeholder.
-  // '1-9' widens the value range so VB cells (which take the grid's range)
-  // can hold digits 1-9 despite the 1-cell placeholder grid.
-  new Shape('1x1', '1-9'),
-  new Given('R1C1', 1),
-  board,
+  shape,
   ...rows,
   ...columns,
   ...boxes,

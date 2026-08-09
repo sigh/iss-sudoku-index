@@ -3,12 +3,12 @@
 // Video: https://www.youtube.com/watch?v=rGtTswpyWy4
 // Source: https://app.crackingthecryptic.com/sudoku/p9TjBQfq8f
 
-// ISS main-grid rows and columns are always all-different, so an 11-cell row
-// that can hold repeated "no digit" cells cannot live in the main grid. The
-// 11x11 answer is instead represented row-major by the `VA` group: 0 means a
-// cell outside every region (no digit), 1-9 is a placed digit. A pinned 1x1
-// main grid supplies the 0-9 value range. Same construction as `IBQu9a6Gl3U`
-// (Deconstruction Site, same author/genre), `nTU1kgeBTe0` and `n80PJ9D5B1Y`.
+// A default Sudoku-type main grid's rows and columns are always all-different,
+// so an 11-cell row that can hold repeated "no digit" cells cannot live there.
+// Instead the 11x11 answer is a Raw main grid: no implicit constraints, 0
+// meaning a cell outside every region (no digit) and 1-9 a placed digit.
+// Same construction as `IBQu9a6Gl3U` (Deconstruction Site, same
+// author/genre), `nTU1kgeBTe0` and `n80PJ9D5B1Y`.
 //
 // The 81 `VP` selectors are every possible top-left corner of a 3x3 block.
 // Exactly nine are selected; a selected block holds 1-9 all-different, an
@@ -20,7 +20,7 @@
 //
 // Cages: "Cages show the sum of their digits ... and digits cannot repeat
 // within a cage" is read literally over whichever cells the region placement
-// leaves with digits -- an ordinary Sum over the raw VA values (blanks
+// leaves with digits -- an ordinary Sum over the raw board values (blanks
 // contribute 0), plus a state machine forbidding a repeated nonzero digit
 // while ignoring repeated blanks. Cage R (45, 15 cells) is by far the
 // largest: most of its cells are expected to fall outside every region.
@@ -38,16 +38,14 @@ const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const ODD_DIGITS = [1, 3, 5, 7, 9];
 const EVEN_DIGITS = [2, 4, 6, 8];
 
-const shape = new Shape('1x1', '0-9');
-const canvas = cellGraph('11x11');
-const answer = canvas.makeOverlay('VA');
-const answerVar = answer.toVar('11x11 answer, row-major; 0 is no digit');
+const shape = new Shape('11x11', '0-9', 'Raw');
+const canvas = cellGraph(shape);
 const placementGrid = cellGraph('9x9');
 const placements = placementGrid.makeOverlay('VP');
 const topLefts = placementGrid.cells();
 const cells = coordinates => coordinates.map(([row, col]) => makeCellId(row, col));
 
-const blockAt = topLeft => answer.at(canvas.block(topLeft, 3, 3));
+const blockAt = topLeft => canvas.block(topLeft, 3, 3);
 const selectorsCovering = cell => placements.at(topLefts
   .filter(topLeft => canvas.block(topLeft, 3, 3).includes(cell)));
 
@@ -82,7 +80,7 @@ const membershipMachine = NFA.encodeSpec({
   accept: ({ needed, count }) => needed !== null && count === needed,
 }, shape);
 const memberships = canvas.cells().map(cell => new NFA(
-  membershipMachine, 'region membership', answer.at(cell), ...selectorsCovering(cell)));
+  membershipMachine, 'region membership', cell, ...selectorsCovering(cell)));
 
 // Ignore repeated blanks, but reject a second occurrence of any placed digit.
 const noRepeatedDigitMachine = NFA.encodeSpec({
@@ -96,9 +94,9 @@ const noRepeatedDigitMachine = NFA.encodeSpec({
 }, shape);
 const rowAndColumnUniqueness = [
   ...canvas.rows().map(row =>
-    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...answer.at(row))),
+    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...row)),
   ...canvas.columns().map(column =>
-    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...answer.at(column))),
+    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...column)),
 ];
 
 // Killer cages. Cell tables transcribed from the puzzle's drawn cage outlines.
@@ -129,23 +127,21 @@ const CAGES = [
   [12, [[10, 10], [11, 7], [11, 8], [11, 9], [11, 10]]],            // V
 ];
 const cageSums = CAGES.map(([total, cage]) =>
-  new Sum(total, ...answer.at(cells(cage))));
+  new Sum(total, ...cells(cage)));
 const cageNonzeroUniqueness = CAGES.map(([, cage]) => new NFA(
-  noRepeatedDigitMachine, 'cage nonblank digits differ', ...answer.at(cells(cage))));
+  noRepeatedDigitMachine, 'cage nonblank digits differ', ...cells(cage)));
 
 // Shaded parity markers. Coordinates transcribed from the puzzle's drawn
 // underlay shapes (circle == odd; square == even).
 const ODD_CELLS = cells([[1, 2], [6, 11], [7, 10], [9, 2]]);
 const EVEN_CELLS = cells([[2, 1], [3, 2]]);
 const parity = [
-  ...ODD_CELLS.map(cell => new Given(answer.at(cell), ...ODD_DIGITS)),
-  ...EVEN_CELLS.map(cell => new Given(answer.at(cell), ...EVEN_DIGITS)),
+  ...ODD_CELLS.map(cell => new Given(cell, ...ODD_DIGITS)),
+  ...EVEN_CELLS.map(cell => new Given(cell, ...EVEN_DIGITS)),
 ];
 
 return [
   shape,
-  new Given('R1C1', BLANK), // Pin the otherwise-unused ISS main-grid cell.
-  answerVar,
   placements.toVar('selected 3x3 top-left corners'),
   placements.makeReplicate(new Given(placements.cells()[0], UNUSED, SELECTED)),
   new ContainExact(selectedValues, ...placements.cells()),

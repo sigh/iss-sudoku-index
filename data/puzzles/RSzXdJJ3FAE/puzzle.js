@@ -5,16 +5,24 @@
 
 // Every row, column, and 3x3 box has either zero or exactly d copies of each
 // digit d. The outlined cages contain no repeated digit.
-const graph = cellGraph('9x9');
-const answer = graph.makeOverlay('VA');
-const unitCells = [
-  ...graph.rows(),
-  ...graph.columns(),
-  ...graph.boxes(),
-];
+//
+// Rows/columns/boxes routinely repeat digits (e.g. a unit holding digit 4
+// four times), so the grid is Raw: no implicit rows, columns, boxes or
+// all-different, so every rule below is stated explicitly.
+const shape = new Shape('9x9', 9, 'Raw');
+const board = cellGraph(shape);
 
-// Each machine scans one unit for one target digit; count d is allowed only as
-// zero (absent) or d (present), with d + 1 rejected immediately.
+// Raw grid has no default boxes; build the ordinary 3x3 tiling explicitly.
+const boxes = [];
+for (let r = 1; r <= 9; r += 3) {
+  for (let c = 1; c <= 9; c += 3) {
+    boxes.push(board.block(makeCellId(r, c), 3, 3));
+  }
+}
+const units = [...board.rows(), ...board.columns(), ...boxes];
+
+// Each machine scans one unit for one target digit; count d is allowed only
+// as zero (absent) or d (present), with d + 1 rejected immediately.
 const countMachine = (target) => NFA.encodeSpec({
   startState: 0,
   transition: (count, value) => {
@@ -23,10 +31,10 @@ const countMachine = (target) => NFA.encodeSpec({
   },
   accept: (count) => count === 0 || count === target,
   maxDepth: 9,
-}, 9);
-const selfCounts = unitCells.flatMap(cells =>
+}, shape);
+const selfCounts = units.flatMap(cells =>
   Array.from({ length: 9 }, (_, i) =>
-    new NFA(countMachine(i + 1), `count ${i + 1}`, ...answer.at(cells))));
+    new NFA(countMachine(i + 1), `count ${i + 1}`, ...cells)));
 
 // These no-total cage cell lists are transcribed from the drawn cage outlines.
 const cages = [
@@ -38,20 +46,10 @@ const cages = [
   ['R2C6', 'R2C7'],
   ['R2C9', 'R3C9'],
   ['R8C8', 'R8C9'],
-].map(cells => new AllDifferent(...answer.at(cells)));
-
-// ISS requires a main grid even though the answer has repeated row/column values.
-// This fixed ordinary Sudoku is inert host state; VA is the published answer grid.
-const hostGivens = Array.from({ length: 9 }, (_, r) =>
-  Array.from({ length: 9 }, (_, c) =>
-    new Given(makeCellId(r + 1, c + 1), (r * 3 + Math.floor(r / 3) + c) % 9 + 1),
-  ),
-).flat();
+].map(cells => new AllDifferent(...cells));
 
 return [
-  new Shape('9x9'),
-  answer.toVar('answer grid'),
-  ...hostGivens,
+  shape,
   ...selfCounts,
   ...cages,
 ];

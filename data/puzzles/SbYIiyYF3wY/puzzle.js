@@ -11,12 +11,10 @@
 // digit that doubles in one unit cannot also double in a different one). A
 // digit may otherwise recur freely across cells that share no unit, exactly
 // as in ordinary Sudoku, where only row/column/box pairs are constrained at
-// all. The solver's main-grid row/column all-different cannot be disabled or
-// loosened (unlike boxes, which NoBoxes/RegionSize can change), so it cannot
-// hold a repeated-digit row itself. The answer therefore lives entirely in a
-// hand-built 36-cell Var grid (group G, row-major via G.cell(row, col)); the
-// one real grid cell is an unused, pinned throwaway so it contributes no
-// extra solutions.
+// all. The solver's default row/column all-different cannot be disabled or
+// loosened (unlike boxes, which NoBoxes/RegionSize can change), so the grid
+// is Raw: no implicit constraints, and every rule -- rows, columns, boxes
+// included -- is stated explicitly below.
 //
 // The baseline is realised with a widened 0-7 value range (7 is a sentinel,
 // never a real digit) and an 18-cell Var group L, one label per row/column/
@@ -26,8 +24,8 @@
 // the label to equal that repeated digit (or the sentinel if the unit has no
 // repeat) once all 6 cells are read. A second NFA scans all 18 labels and
 // rejects a real digit that labels more than one unit, capping each digit to
-// at most one doubling-event grid-wide. Real grid cells are restricted back
-// to 0-6 (never the sentinel) via Given.
+// at most one doubling-event grid-wide. Board cells are restricted back to
+// 0-6 (never the sentinel) via Given.
 //
 // Fog is solving UI, not a grid rule, and is not encoded.
 // Pink line "non-repeating set of consecutive digits" = Renban.
@@ -37,18 +35,15 @@
 // allowed (no distinctness stated for the diagonal) = Sum, not Cage.
 
 const SENTINEL = 7; // widened-range placeholder meaning "this unit has no repeat"
-const shape = new Shape('1x1', '0-7'); // dummy main grid; the real 6x6 is off-grid
-const pinDummy = new Given('R1C1', 0);
+const shape = new Shape('6x6', '0-7', 'Raw'); // widened so labels can hold the sentinel
+const graph = cellGraph(shape);
+const cell = (r, c) => makeCellId(r, c); // r, c are 1-indexed
 
-const G = new Var('G', 'Answer grid', '6x6');
-const cell = (r, c) => G.cell(r, c); // r, c are 1-indexed
 // Real answer cells only ever hold a digit 0-6, never the label sentinel.
-const gridDomain = Array.from({ length: 36 }, (_, i) =>
-  new Given(cell(Math.floor(i / 6) + 1, (i % 6) + 1), 0, 1, 2, 3, 4, 5, 6));
+const boardDomain = graph.cells().map(c => new Given(c, 0, 1, 2, 3, 4, 5, 6));
 
-const rows = Array.from({ length: 6 }, (_, r) =>
-  Array.from({ length: 6 }, (_, c) => cell(r + 1, c + 1)));
-const cols = Array.from({ length: 6 }, (_, c) => rows.map(row => row[c]));
+const rows = graph.rows();
+const cols = graph.columns();
 const boxOf = (r, c) => Math.floor(r / 2) * 2 + Math.floor(c / 3); // 0-indexed r,c -> box 0-5
 const boxes = Array.from({ length: 6 }, () => []);
 for (let r = 0; r < 6; r++)
@@ -135,10 +130,8 @@ const whiteDots = [
 
 return [
   shape,
-  pinDummy,
-  G,
   L,
-  ...gridDomain,
+  ...boardDomain,
   ...unitBudgets,
   globalOnce,
   ...diagonalSums,

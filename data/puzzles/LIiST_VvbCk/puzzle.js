@@ -9,26 +9,24 @@
 // Omitted: determining the mean-mini/Sudoku-box layout, the required doubler
 // positions, and the three-stage mean-mini/Quattroquadri construction.
 
-// The final rows and columns can repeat digits, so the 12x12 answer cannot
-// use ISS's all-different main grid. VG is the row-major answer layer; the
-// pinned 1x1 main grid is only a placeholder.
-const SHAPE = new Shape('1x1', '0-9');
-const GRID = new Var('G', 'Grid', '12x12');
+// The final rows and columns can repeat digits, so the grid is Raw: no
+// implicit constraints.
+// Widened to 0-9 so the doubler addend below can hold "no doubler" (0); the
+// grid cells are pinned back to the true 1-9 digit set below.
+const SHAPE = new Shape('12x12', '0-9', 'Raw');
+const graph = cellGraph(SHAPE);
 const ADDS = new Var('A', 'DoublerAddends', '12x12');
-const ref = cellGraph('12x12');
-const gridLayer = ref.makeOverlay('VG');
-const at = (r, c) => GRID.cell(r, c);
+const at = (r, c) => makeCellId(r, c);
 const add = (r, c) => ADDS.cell(r, c);
 const cells = (points) => points.map(([r, c]) => at(r, c));
-const terms = (points, sign = 1) => points.flatMap(([r, c]) =>
-  sign === 1 ? [at(r, c), add(r, c)] : [[at(r, c), -1], [add(r, c), -1]]);
+const terms = (points) => points.flatMap(([r, c]) => [at(r, c), add(r, c)]);
 
 // A doubler addend is either 0 or its cell's digit. This lets the recovered
 // numeric clues use the rule's effective values without guessing which cells
 // are the stage-three doublers.
 const doublerKey = Pair.fnToKey((digit, extra) =>
   extra === 0 || extra === digit, SHAPE);
-const doublerLinks = GRID.cells().map((cell, i) =>
+const doublerLinks = graph.cells().map((cell, i) =>
   new Pair(doublerKey, 'possible doubler', cell, ADDS.cells()[i]));
 
 // Drawn cages, [total|null for parity cages, cells]; source coordinates are
@@ -80,10 +78,10 @@ const arrows = ARROWS.map(([bulb, arm]) =>
 
 return [
   SHAPE,
-  GRID,
   ADDS,
-  new Given('R1C1', 1),
-  gridLayer.makeReplicate(new Given(gridLayer.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
+  // Pins every grid cell's domain back to 1-9 (the widened shape otherwise
+  // also allows 0, which only the doubler-addend cells should use).
+  graph.makeReplicate(new Given(graph.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
   ...doublerLinks,
   ...cages,
   ...arrows,

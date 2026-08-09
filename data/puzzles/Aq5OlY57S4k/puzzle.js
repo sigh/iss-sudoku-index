@@ -17,15 +17,13 @@
 //  - Two marked diagonals sum to their outside totals.
 //  - The given R8C7 = 7.
 //
-// The 9x9 main grid cannot hold the answer: its rows and columns are always
-// all-different, but a row here holds only 4-8 digits and several no-digit
-// cells. The board therefore lives in the VD layer, with 0 for "no digit", and
-// the main grid is pinned to a fixed sudoku so that it adds no solutions. It
-// stays a 9x9 grid because ConnectedValues needs a layer of numGridCells cells.
-const shape = new Shape('9x9', '0-8');
+// A row here holds only 4-8 digits and several no-digit cells, so the grid is
+// Raw: no implicit constraints, so every rule below (including row/column
+// no-repeat) is stated explicitly. 0 means "no digit".
+const shape = new Shape('9x9', '0-8', 'Raw');
 const graph = cellGraph(shape);
 
-const EMPTY = 0;                 // VD: this cell is in no region
+const EMPTY = 0;                 // grid: this cell is in no region
 const IN = 1, OUT = 0;           // VO: inside / outside a region
 const ON = 1, OFF = 0;           // VL: on / off the loop
 const NO_REGION = 0;             // VN: region number of a cell in no region
@@ -33,7 +31,6 @@ const EXTREME = [1, 2, 7, 8];
 const NUM_REGIONS = 8;
 const REGION_ROWS = 2, REGION_COLS = 4;
 
-const digits = graph.makeOverlay('VD');      // digit, or 0 for no digit
 const inside = graph.makeOverlay('VO');      // 1 if the cell is in a region
 const loop = graph.makeOverlay('VL');        // 1 if the cell is on the loop
 const labels = graph.makeOverlay('VN');      // region number, or 0
@@ -76,7 +73,7 @@ const digitMembershipKey = Pair.fnToKey(
 const labelMembershipKey = Pair.fnToKey(
   (membership, label) => membership === (label === NO_REGION ? OUT : IN), shape);
 const membership = gridCells.flatMap(cell => [
-  new Pair(digitMembershipKey, 'digit in region', inside.at(cell), digits.at(cell)),
+  new Pair(digitMembershipKey, 'digit in region', inside.at(cell), cell),
   new Pair(labelMembershipKey, 'label in region', inside.at(cell), labels.at(cell)),
 ]);
 
@@ -85,7 +82,7 @@ const membership = gridCells.flatMap(cell => [
 const regionContents = placements.flatMap(({ cell, block }) => [
   new Or([
     new Given(corners.at(cell), OFF),
-    new AllDifferent(...digits.at(block)),
+    new AllDifferent(...block),
   ]),
   new Or([
     new Given(corners.at(cell), OFF),
@@ -96,7 +93,7 @@ const regionContents = placements.flatMap(({ cell, block }) => [
 const nonZeroDifferentKey = PairX.fnToKey(
   (a, b) => a === EMPTY || b === EMPTY || a !== b, shape);
 const rowsAndColumns = [...graph.rows(), ...graph.columns()].map(
-  line => new PairX(nonZeroDifferentKey, 'digits differ', ...digits.at(line)));
+  line => new PairX(nonZeroDifferentKey, 'digits differ', ...line));
 
 // Region numbering: reading order of the top-left cells is the reading order of
 // each number's first appearance, so scanning the label layer row by row must
@@ -189,7 +186,7 @@ const alternations = gridCells.flatMap(cell => [[0, 1], [1, 0]]
   .map(([dRow, dCol]) => graph.step(cell, dRow, dCol))
   .filter(Boolean)
   .map(other => new NFA(alternationMachine, 'alternation',
-    loop.at(cell), digits.at(cell), loop.at(other), digits.at(other))));
+    loop.at(cell), cell, loop.at(other), other)));
 
 // Region N holds digit N on the loop. The VM layer carries a cell's region
 // number when that cell holds its own region's number and is on the loop, and 0
@@ -216,7 +213,7 @@ const markMachine = NFA.encodeSpec({
   accept: ({ phase }) => phase === 'done',
 }, shape);
 const regionDigitMarks = gridCells.map(cell => new NFA(markMachine, 'region digit',
-  labels.at(cell), digits.at(cell), loop.at(cell), marks.at(cell)));
+  labels.at(cell), cell, loop.at(cell), marks.at(cell)));
 const regionDigits = new ContainAtLeast(
   Array.from({ length: NUM_REGIONS }, (_, i) => i + 1).join('_'),
   ...marks.cells());
@@ -225,26 +222,17 @@ const regionDigits = new ContainAtLeast(
 // lattice corners, pointing down-right and up-right, with the circles "16" and
 // "5" beside them; each ray is the grid diagonal leaving its corner.
 const diagonals = [
-  new Sum(16, ...digits.at(graph.ray('R6C1', 1, 1))),
-  new Sum(5, ...digits.at(graph.ray('R9C1', -1, 1))),
+  new Sum(16, ...graph.ray('R6C1', 1, 1)),
+  new Sum(5, ...graph.ray('R9C1', -1, 1)),
 ];
-
-// The main grid holds no part of the answer, so it is pinned cell by cell to a
-// fixed sudoku grid, which its own row, column and box groups accept.
-const parkedGrid = gridCells.map((cell, index) => {
-  const row = Math.floor(index / 9), col = index % 9;
-  return new Given(cell, (3 * row + Math.floor(row / 3) + col) % 9);
-});
 
 return [
   shape,
-  digits.toVar('Digits'),
   inside.toVar('In a region'),
   loop.toVar('On the loop'),
   labels.toVar('Region number'),
   marks.toVar('Region digit on loop'),
   corners.toVar('Region top-left'),
-  ...parkedGrid,
   ...domains,
   regionCount,
   ...coverage,
@@ -260,5 +248,5 @@ return [
   ...regionDigitMarks,
   regionDigits,
   ...diagonals,
-  new Given(digits.at('R8C7'), 7),
+  new Given('R8C7', 7),
 ];

@@ -26,18 +26,13 @@
 // given loop or a second shading colour), so they are left for the encoding
 // below to derive rather than fed in as givens.
 
-// The active Shape's value range must be >= 14: ConnectedValues requires its
-// var-cell group to have exactly as many cells as the main grid
-// (js/solver/connected_handler.js), so the main grid itself has to be the
-// real 14x14 (NoBoxes below drops its otherwise-mandatory box groups; its
-// row/column all-different is unavoidable, so the range widens to 14 purely
-// so that requirement is satisfiable -- the main-grid R#C# cells are
-// otherwise unused, and every real cell lives in the D/PHYS overlays below,
-// restricted back to its true small domain via Given).
-const NUM_VALUES = 14;
+// Rows/columns repeat digits (many cells hold no digit at all), so the grid
+// is Raw: no implicit constraints.
+const NUM_VALUES = 10;   // max of the digit domain (NODIGIT, 10) and PHYS's LOOPCELL (3)
 const DIGIT = 1, SHADED = 2, LOOPCELL = 3;   // PHYS-overlay state codes (not digit values)
 
-const graph = cellGraph('14x14');    // geometry helper, mirrors the Shape below
+const shape = new Shape('14x14', NUM_VALUES, 'Raw');
+const graph = cellGraph(shape);
 const gridCells = graph.cells();     // all 196 physical cells, row-major
 
 // --- Regions: nine 3x3 top-left corners, read off the given-cell clusters. ---
@@ -106,31 +101,25 @@ const ARROWS = [
   [12, 7, 0, -1], [13, 14, 0, -1], [14, 12, 0, -1], // left
 ];
 
-// === Digit layer: full-grid Var overlay (1-9 at a region cell, NODIGIT ===
-// === elsewhere). Full-grid, not sparse to the 81 region cells, only because
-// the result's off-grid solution_group needs a rectangular 'RxC' Var group
-// (js/lib/validation.py's check_solution_group) to carry the digit answer;
-// the 115 non-region D-cells are otherwise irrelevant and pinned to one
-// constant so they add no search freedom of their own.
+// === Digit layer: 1-9 at a region cell, NODIGIT (10) elsewhere; full-grid so
+// the board's non-region cells are irrelevant and pinned to one constant.
 const NODIGIT = 10;
-const D = graph.makeOverlay('VD');
-const digitVar = D.toVar('digit');
-const digitOrigin = D.cells()[0];
+const digitOrigin = gridCells[0];
 const digitGivens = [
-  ...DIGIT_GIVENS.map(([r, c, v]) => new Given(digitVar.cell(r, c), v)),
-  D.makeReplicate(new Given(digitOrigin, NODIGIT), D.at(emptyCells)),
+  ...DIGIT_GIVENS.map(([r, c, v]) => new Given(makeCellId(r, c), v)),
+  graph.makeReplicate(new Given(digitOrigin, NODIGIT), emptyCells),
 ];
 // Each region: 1-9 once (Deconstruction).
-const boxGroups = regionBlocks.map(block => new AllDifferent(...D.at(block)));
+const boxGroups = regionBlocks.map(block => new AllDifferent(...block));
 // Row/column all-different, scoped to the cells that actually hold a digit
-// (D is full-grid, so row()/column() must be filtered by hand).
+// (the grid is full-size, so row()/column() must be filtered by hand).
 const rowGroups = Array.from({ length: 14 }, (_, i) => graph.row(i + 1).filter(c => digitCellSet.has(c)))
-  .filter(cells => cells.length >= 2).map(cells => new AllDifferent(...D.at(cells)));
+  .filter(cells => cells.length >= 2).map(cells => new AllDifferent(...cells));
 const colGroups = Array.from({ length: 14 }, (_, i) => graph.column(i + 1).filter(c => digitCellSet.has(c)))
-  .filter(cells => cells.length >= 2).map(cells => new AllDifferent(...D.at(cells)));
+  .filter(cells => cells.length >= 2).map(cells => new AllDifferent(...cells));
 // Killer cages: sum + distinct over each cage's digit-holding cells only.
 const cageConstraints = CAGES.map(([total, cells]) => new Cage(
-  total, ...D.at(cells.map(([r, c]) => makeCellId(r, c)).filter(c => digitCellSet.has(c)))));
+  total, ...cells.map(([r, c]) => makeCellId(r, c)).filter(c => digitCellSet.has(c))));
 
 // === Physical layer: full-grid Var overlay, one of DIGIT/SHADED/LOOPCELL. ===
 const PHYS = graph.makeOverlay('VP');
@@ -192,13 +181,11 @@ const arrowMachine = NFA.encodeSpec({
 const arrowConstraints = ARROWS.map(([r, c, dRow, dCol]) => {
   const arrowCell = makeCellId(r, c);
   const rayCells = graph.ray(arrowCell, dRow, dCol).slice(1);   // exclude the arrow cell itself
-  return new NFA(arrowMachine, 'arrow-count', D.at(arrowCell), ...PHYS.at(rayCells));
+  return new NFA(arrowMachine, 'arrow-count', arrowCell, ...PHYS.at(rayCells));
 });
 
 return [
-  new Shape('14x14', NUM_VALUES),   // real geometry is in the D/PHYS overlays, not R#C#
-  new NoBoxes(),                    // the main grid's R#C# cells are unused scaffolding
-  digitVar,
+  shape,
   PHYS.toVar('physical'),
   ...digitGivens,
   ...boxGroups,

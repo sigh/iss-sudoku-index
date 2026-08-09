@@ -15,11 +15,9 @@
 // member's doubled-or-plain value.
 //
 // ISS main-grid rows/columns are always all-different, so an 11-cell row
-// that can repeat "no digit" cannot live in the main grid. The 11x11 answer
-// is instead a `VA` overlay, row-major, 0 = no digit / 1-9 = a placed digit;
-// a pinned 1x1 main grid supplies the 0-9 value range. Same construction as
-// `nTU1kgeBTe0` (Kylo Ren), `n80PJ9D5B1Y` (Across Roads) and `IBQu9a6Gl3U`
-// (Deconstruction Site).
+// that can repeat "no digit" needs the grid Raw: no implicit constraints (0 =
+// no digit, 1-9 = a placed digit). Same family as `nTU1kgeBTe0` (Kylo Ren),
+// `n80PJ9D5B1Y` (Across Roads) and `IBQu9a6Gl3U` (Deconstruction Site).
 //
 // The 81 `VP` selectors are every possible top-left corner of a 3x3 block
 // within the 11x11 grid (a 9x9 space of candidates). Exactly nine are
@@ -52,10 +50,8 @@ const DOUBLER = 2;
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const ONE_DOUBLER_PER_REGION = 8 * NOT_DOUBLER + 1 * DOUBLER; // = 10
 
-const shape = new Shape('1x1', '0-9');
-const canvas = cellGraph('11x11');
-const answer = canvas.makeOverlay('VA');
-const answerVar = answer.toVar('11x11 answer, row-major; 0 is no digit');
+const shape = new Shape('11x11', '0-9', 'Raw');
+const canvas = cellGraph(shape);
 const flags = canvas.makeOverlay('VD');
 const flagsVar = flags.toVar('doubler flags, row-major; 1 ordinary, 2 doubler');
 const placementGrid = cellGraph('9x9');
@@ -74,7 +70,7 @@ const selectedValues = Array(9).fill(SELECTED).join('_');
 // Exactly nine selectors are selected below.
 const regions = topLefts.map(topLeft => {
   const blockCells = blockCellsAt(topLeft);
-  const blockDigits = answer.at(blockCells);
+  const blockDigits = blockCells;
   const blockFlags = flags.at(blockCells);
   return new Or([
     new Given(placements.at(topLeft), UNUSED),
@@ -102,11 +98,11 @@ const membershipMachine = NFA.encodeSpec({
   accept: ({ needed, count }) => needed !== null && count === needed,
 }, shape);
 const memberships = canvas.cells().map(cell => new NFA(
-  membershipMachine, 'region membership', answer.at(cell), ...selectorsCovering(cell)));
+  membershipMachine, 'region membership', cell, ...selectorsCovering(cell)));
 
 // A blank cell cannot be a doubler (a doubler is always inside a region).
 const blankImpliesNotDoubler = canvas.cells().map(cell => new Or([
-  new Given(answer.at(cell), ...DIGITS),
+  new Given(cell, ...DIGITS),
   new Given(flags.at(cell), NOT_DOUBLER),
 ]));
 
@@ -122,9 +118,9 @@ const noRepeatedDigitMachine = NFA.encodeSpec({
 }, shape);
 const rowAndColumnUniqueness = [
   ...canvas.rows().map(row =>
-    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...answer.at(row))),
+    new NFA(noRepeatedDigitMachine, 'row nonblank digits differ', ...row)),
   ...canvas.columns().map(column =>
-    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...answer.at(column))),
+    new NFA(noRepeatedDigitMachine, 'column nonblank digits differ', ...column)),
 ];
 
 // At most one doubler per row/column, scanning the VD overlay alone.
@@ -160,7 +156,7 @@ function oneDoublerOfDigitMachine(digit) {
 }
 const doublerDigitsAllDifferent = DIGITS.map(digit => new NFA(
   oneDoublerOfDigitMachine(digit), `digit ${digit} appears in exactly one doubler`,
-  ...canvas.cells().flatMap(cell => [answer.at(cell), flags.at(cell)])));
+  ...canvas.cells().flatMap(cell => [cell, flags.at(cell)])));
 
 // Killer cages. Cell tables transcribed from the puzzle's drawn cage outlines.
 const CAGES = [
@@ -200,14 +196,12 @@ function cageSumMachine(total) {
 }
 const cageEffectiveSums = CAGES.map(([total, cage]) => new NFA(
   cageSumMachine(total), 'cage sum with doubler',
-  ...cells(cage).flatMap(cell => [answer.at(cell), flags.at(cell)])));
+  ...cells(cage).flatMap(cell => [cell, flags.at(cell)])));
 const cageNonzeroUniqueness = CAGES.map(([, cage]) => new NFA(
-  noRepeatedDigitMachine, 'cage nonblank digits differ', ...answer.at(cells(cage))));
+  noRepeatedDigitMachine, 'cage nonblank digits differ', ...cells(cage)));
 
 return [
   shape,
-  new Given('R1C1', BLANK), // Pin the otherwise-unused ISS main-grid cell.
-  answerVar,
   flagsVar,
   flags.makeReplicate(new Given(flags.cells()[0], NOT_DOUBLER, DOUBLER)),
   placements.toVar('selected 3x3 top-left corners'),

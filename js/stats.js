@@ -10,7 +10,7 @@ const TOP_COST = 30;
 const MIN_COST_SAMPLE = 10;
 // Guess counts only mean something for a faithful encoding whose search ran to
 // completion, so the cost chart counts these statuses and nothing else.
-const SOLVED = new Set(['validated', 'off-grid']);
+const SOLVED = new Set(['validated']);
 // …and the too-slow rate is over the puzzles that got that far: the ones whose
 // encoding pinned down a grid, leaving only the question of finishing.
 const SEARCHED = new Set([...SOLVED, 'too-slow']);

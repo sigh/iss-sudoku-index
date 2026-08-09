@@ -7,13 +7,9 @@
 // Equal digits may not be a knight's move apart. Arrow arms sum to their circles.
 // Green lines are whispers; white dots are consecutive, black dots have a 2:1 ratio,
 // and X marks sum to 10.
-const grid = new Var('G', 'Puzzle grid', '9x9');
-const cell = (row, col) => grid.cell(row, col);
-const rows = Array.from({length: 9}, (_, r) =>
-  Array.from({length: 9}, (_, c) => cell(r + 1, c + 1)));
-const at = (id) => cell(+id.match(/R(\d+)/)[1], +id.match(/C(\d+)/)[1]);
-const dots = (pairs, relation, label) => pairs.map(([a, b]) =>
-  new Pair(relation, label, at(a), at(b)));
+const shape = new Shape('9x9', '1-9', 'Raw');
+const graph = cellGraph(shape);
+const rows = graph.rows();
 const whites = [
   ['R2C1', 'R2C2'], ['R2C2', 'R2C3'], ['R3C4', 'R3C5'],
   ['R3C5', 'R3C6'], ['R3C6', 'R3C7'], ['R2C6', 'R2C7'],
@@ -34,27 +30,24 @@ const knightPairs = [];
 for (let r = 1; r <= 9; r++) for (let c = 1; c <= 9; c++)
   for (const [dr, dc] of [[1, 2], [2, 1], [2, -1], [1, -2]])
     if (r + dr <= 9 && c + dc >= 1 && c + dc <= 9)
-      knightPairs.push([cell(r, c), cell(r + dr, c + dc)]);
-const consecutive = Pair.fnToKey((a, b) => Math.abs(a - b) === 1, 9);
-const ratio = Pair.fnToKey((a, b) => a === 2 * b || b === 2 * a, 9);
-const ten = Pair.fnToKey((a, b) => a + b === 10, 9);
+      knightPairs.push([makeCellId(r, c), makeCellId(r + dr, c + dc)]);
 
-// ISS main-grid cells always enforce row and column uniqueness, so the real board
-// is a 9x9 Var group. The single main-grid cell is fixed solely to remove scaffold freedom.
+// Rows and columns may repeat, so the grid is Raw: no implicit constraints
+// beyond the marked 3x3 boxes below.
 return [
-  new Shape('1x1', 9), new Given('R1C1', 1), grid,
+  shape,
   ...Array.from({length: 3}, (_, br) => Array.from({length: 3}, (_, bc) =>
     new AllDifferent(...rows.slice(3 * br, 3 * br + 3).flatMap(row => row.slice(3 * bc, 3 * bc + 3))))),
   ...knightPairs.map((cells) => new AllDifferent(...cells)),
-  new Arrow(at('R2C3'), at('R2C4'), at('R2C5'), at('R2C6'), at('R2C7'), at('R2C8')),
-  new Arrow(at('R3C7'), at('R4C8'), at('R5C9'), at('R6C9')),
-  new Arrow(at('R4C6'), at('R4C7')),
-  new Arrow(at('R4C3'), at('R4C4'), at('R4C5'), at('R5C6')),
-  new Arrow(at('R5C3'), at('R5C4')),
-  new Arrow(at('R6C4'), at('R6C3'), at('R6C2'), at('R6C1')),
-  new Whisper(5, at('R1C5'), at('R1C6'), at('R1C7'), at('R1C8'), at('R1C9'), at('R2C9')),
-  new Whisper(5, at('R9C3'), at('R8C4'), at('R9C5'), at('R8C6'), at('R9C7')),
-  ...dots(whites, consecutive, 'white dot'),
-  ...dots(blacks, ratio, 'black dot'),
-  ...dots([['R1C3', 'R1C4'], ['R3C9', 'R4C9'], ['R3C1', 'R4C1']], ten, 'X'),
+  new Arrow('R2C3', 'R2C4', 'R2C5', 'R2C6', 'R2C7', 'R2C8'),
+  new Arrow('R3C7', 'R4C8', 'R5C9', 'R6C9'),
+  new Arrow('R4C6', 'R4C7'),
+  new Arrow('R4C3', 'R4C4', 'R4C5', 'R5C6'),
+  new Arrow('R5C3', 'R5C4'),
+  new Arrow('R6C4', 'R6C3', 'R6C2', 'R6C1'),
+  new Whisper(5, 'R1C5', 'R1C6', 'R1C7', 'R1C8', 'R1C9', 'R2C9'),
+  new Whisper(5, 'R9C3', 'R8C4', 'R9C5', 'R8C6', 'R9C7'),
+  ...whites.map(([a, b]) => new WhiteDot(a, b)),
+  ...blacks.map(([a, b]) => new BlackDot(a, b)),
+  ...[['R1C3', 'R1C4'], ['R3C9', 'R4C9'], ['R3C1', 'R4C1']].map(([a, b]) => new X(a, b)),
 ];
