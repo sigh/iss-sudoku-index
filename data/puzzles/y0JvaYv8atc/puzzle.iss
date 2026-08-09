@@ -1,0 +1,16 @@
+.Cage~8~R3C1~R3C2~R3C3
+.Cage~22~R2C8~R3C7~R3C8
+.Cage~8~R7C7~R7C8~R8C7
+.Cage~7~R6C3~R7C3~R8C3
+.Cage~15~R4C5~R5C5~R6C5
+.Cage~11~R5C1~R5C2
+.Cage~11~R5C8~R5C9
+.Cage~17~R8C4~R8C5~R8C6
+.Cage~13~R1C4~R2C3~R2C4
+.Sandwich~12~R3
+.Sandwich~25~R8
+.Sandwich~10~R9
+.Sandwich~26~C8
+.Sandwich~14~C3
+.Sandwich~15~C5
+.Sandwich~13~C1

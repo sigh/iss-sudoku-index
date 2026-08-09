@@ -1,0 +1,16 @@
+.~R1C9_4~R3C3_1~R7C7_5~R9C1_5
+.Sandwich~13~R4
+.Sandwich~16~R7
+.Sandwich~13~C7
+.Or
+.LittleKiller~13~R4C1
+.LittleKiller~13~R1C4
+.End
+.Or
+.LittleKiller~13~R1C7
+.LittleKiller~13~R3C9
+.End
+.Or
+.LittleKiller~16~R7C9
+.LittleKiller~16~R9C7
+.End

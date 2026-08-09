@@ -1,0 +1,11 @@
+.~R3C3_1~R3C7_2~R4C4_3~R4C6_4~R5C5_5~R6C4_6~R6C6_7~R7C3_8~R7C7_9
+.XSum~C3~9~
+.XSum~C4~10~16
+.XSum~C6~1~11
+.XSum~C9~40~
+.XSum~C1~~1
+.XSum~C7~~13
+.XSum~R3~42~9
+.XSum~R6~8~
+.XSum~R7~7~26
+.XSum~R4~~8

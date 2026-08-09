@@ -1,6 +1,37 @@
 {
-  "generated_at": "2026-08-08T05:48:27.089806+00:00",
+  "generated_at": "2026-08-09T07:29:33.037178+00:00",
   "rows": [
+    {
+      "puzzle_id": "kM6Kwwkv3aM",
+      "puzzle_title": "Homogeneous",
+      "video_title": "That's No Sudoku! It's A \"Marty Sears\" Puzzle!!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/0htle6wxey"
+      ],
+      "date": "2026-08-08",
+      "status": "too-slow",
+      "constraint_types": [
+        "1x1",
+        "0-9",
+        "Var",
+        "ConnectedValues",
+        "ContainExact",
+        "Arrow",
+        "Whisper",
+        "Pair: black dot",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 251263,
+      "solve_ms": 845.2,
+      "iss_size": 1256,
+      "iss_url_length": 1287,
+      "script_size": 3121
+    },
     {
       "puzzle_id": "sdzoFUAFMIc",
       "puzzle_title": "Maximum Effort",
@@ -6061,30 +6092,6 @@
       "iss_size": 476,
       "iss_url_length": 514,
       "script_size": 1532
-    },
-    {
-      "puzzle_id": "FYaBR_jWnFs",
-      "puzzle_title": "Return of the Birds",
-      "video_title": "The Sudoku Ratio Birds are Back!",
-      "author": "Jrosas",
-      "sources": [
-        "https://sudokupad.app/p8ushghwpc"
-      ],
-      "date": "2026-05-03",
-      "status": "validated",
-      "constraint_types": [
-        "WhiteDot",
-        "NFA: same bird-type ratio"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 255,
-      "solve_ms": 46.4,
-      "iss_size": 1239,
-      "iss_url_length": 1292,
-      "script_size": 3222
     }
   ]
 }

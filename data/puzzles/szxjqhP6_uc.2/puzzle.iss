@@ -1,0 +1,15 @@
+.~R1C1_9~R1C4_7~R1C6_3~R1C9_1~R2C8_3~R4C1_3~R4C4_9~R4C9_2~R5C2_9~R5C5_8~R5C8_5~R6C1_1~R6C6_7~R6C9_4~R8C2_4~R9C1_2~R9C4_4~R9C6_6~R9C9_8
+.LittleKiller~15~R1C2
+.LittleKiller~15~R1C3
+.LittleKiller~15~R2C9
+.LittleKiller~15~R3C9
+.LittleKiller~15~R9C8
+.LittleKiller~15~R9C7
+.LittleKiller~15~R8C1
+.LittleKiller~15~R7C1
+.LittleKiller~15~R6C1
+.LittleKiller~15~R1C4
+.LittleKiller~15~R4C9
+.LittleKiller~15~R9C6
+.LittleKiller~15~R5C9
+.LittleKiller~15~R5C1

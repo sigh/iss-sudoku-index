@@ -1,0 +1,11 @@
+.AntiKnight
+.Cage~14~R1C1~R1C2
+.Cage~4~R2C4~R2C5
+.Cage~14~R3C7~R3C8
+.Cage~5~R5C8~R5C9
+.Cage~13~R9C2~R9C3
+.Cage~13~R8C5~R8C6
+.Var~D~diagonal%20distinct-value%20witnesses~2
+.~VD1_3~VD2_3
+.CountDistinct~VD1~R1C1~R2C2~R3C3~R4C4~R5C5~R6C6~R7C7~R8C8~R9C9
+.CountDistinct~VD2~R1C9~R2C8~R3C7~R4C6~R5C5~R6C4~R7C3~R8C2~R9C1

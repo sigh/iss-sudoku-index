@@ -19,9 +19,9 @@
 // cell is therefore a Var:
 //   VD  the 9x9 answer grid          VR  the region label of each cell
 //   VN  the constants 1..9           VE..VM  per-region views used by CIRCLES
-// The 9x9 main grid itself carries nothing; it is pinned to one fixed sudoku so
-// that it adds no search, and is kept at 9x9 only because the connectivity
-// constraint requires a var group with one cell per grid cell.
+// The layers carry their own 9x9 layout, so the main grid holds no part of the
+// puzzle: it is a single pinned cell that exists only to declare the 1-9 value
+// range the layers draw from.
 
 const CIRCLES = [
   'R2C4', 'R3C2', 'R3C3', 'R3C5', 'R5C5', 'R6C7', 'R8C3', 'R9C5', 'R9C9',
@@ -53,13 +53,8 @@ const regions = grid.makeOverlay('VR');
 const views = 'EFGHIJKLM'.split('').map(letter => grid.makeOverlay('V' + letter));
 const LABELS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// The main grid holds nothing, so pin it to a fixed sudoku: row r is 1..9
-// rotated by 3r + floor(r / 3).
-const filler = grid.cells().map(cell => {
-  const { row, col } = parseCellId(cell);
-  return new Given(
-    cell, ((3 * (row - 1) + Math.floor((row - 1) / 3) + (col - 1)) % 9) + 1);
-});
+// The one main-grid cell holds nothing; pin it so it adds no search.
+const filler = [new Given('R1C1', 1)];
 
 // SOMEDOKU. VN holds the constants 1..9, used as CountDistinct controls.
 const counts = new Var('N', 'Counts 1-9', 9);
@@ -165,7 +160,7 @@ const regionSumLines = LINES.map(cells => {
 });
 
 return [
-  new Shape('9x9'),
+  new Shape('1x1', 9),
   digits.toVar('Digits'),
   regions.toVar('Regions'),
   ...views.map((view, j) => view.toVar(`Region ${j + 1} view`)),

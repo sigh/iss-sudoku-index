@@ -22,28 +22,23 @@
 // 0s, which an ISS main grid cannot hold: its rows and columns are always
 // all-different. The puzzle therefore lives on two Var layers --
 //   VD  the value 0-9 of each cell        VR  the region label of each cell
-// -- and the 11x11 main grid carries nothing. It is pinned to a fixed Latin
-// square so that it adds no search, and is kept at 11x11 because ConnectedValues
-// requires a var group with one cell per grid cell.
+// -- which carry their own 11x11 layout. The main grid holds no part of the
+// puzzle, so it is a single pinned cell that exists only to declare the 0-9
+// value range the layers draw from.
 
 const SIZE = 11;
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const REGION_COUNT = 9;
 
-// Values run 0-10 only because an 11x11 grid needs at least 11 values; 10 is
-// never available to VD or VR (the exact multisets below rule it out).
-const shape = new Shape('11x11', '0-10');
+const shape = new Shape('1x1', '0-9');
 const grid = cellGraph('11x11');
 const values = grid.makeOverlay('VD');
 const regions = grid.makeOverlay('VR');
 const valueVars = values.toVar('Values');
 const regionVars = regions.toVar('Regions');
 
-// The main grid holds nothing: pin it to the cyclic Latin square value = r + c.
-const filler = grid.cells().map(cell => {
-  const { row, col } = parseCellId(cell);
-  return new Given(cell, (row - 1 + col - 1) % SIZE);
-});
+// The one main-grid cell holds nothing; pin it so it adds no search.
+const filler = [new Given('R1C1', 0)];
 
 // Nine regions of nine cells leave 121 - 81 = 40 cells outside every region.
 // The same multiset serves both layers: labels 1-9 nine times each for VR, and
@@ -194,7 +189,6 @@ const dots = [
 
 return [
   shape,
-  new NoBoxes(),
   valueVars,
   regionVars,
   ...filler,

@@ -1,0 +1,10 @@
+.~R3C1_8~R9C1_7~R9C7_9
+.Diagonal~1
+.Diagonal~-1
+.Thermo~R2C2~R1C3
+.Thermo~R3C3~R2C4~R1C5
+.Thermo~R4C4~R3C5~R2C6~R1C7
+.Thermo~R5C5~R4C6~R3C7~R2C8~R1C9
+.Thermo~R6C6~R5C7~R4C8~R3C9
+.Thermo~R7C7~R6C8~R5C9
+.Thermo~R8C8~R7C9
