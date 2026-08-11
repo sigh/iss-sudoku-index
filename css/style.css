@@ -130,7 +130,8 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
 
 .active-filters {
   display: flex;
-  flex: 0 1 auto;
+  flex: 1 1 100%;
+  order: 3;
   flex-wrap: wrap;
   gap: 6px;
   min-width: 0;
@@ -193,6 +194,7 @@ h1 { font-size: var(--fs-title); font-weight: bold; }
   display: flex;
   align-items: center;
   gap: 8px;
+  order: 2;
   margin-left: auto;
 }
 /* Small outlined control, used for buttons and links on both pages. */
