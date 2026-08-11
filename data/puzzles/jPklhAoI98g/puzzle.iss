@@ -1,0 +1,14 @@
+.AntiKnight
+.AntiKing
+.AntiConsecutive
+.BlackDot~R1C2~R1C3
+.BlackDot~R3C3~R4C3
+.BlackDot~R4C3~R4C4
+.BlackDot~R5C2~R6C2
+.BlackDot~R9C1~R9C2
+.BlackDot~R8C3~R9C3
+.BlackDot~R8C7~R8C8
+.BlackDot~R5C6~R5C7
+.BlackDot~R1C7~R2C7
+.BlackDot~R3C8~R3C9
+.BlackDot~R7C9~R8C9

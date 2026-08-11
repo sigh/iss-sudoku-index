@@ -1,0 +1,9 @@
+.Var~L~left-edge%20auxiliary%20digits%2C%20one%20per%20row%20(purple%20line)~9
+.Var~R~right-edge%20auxiliary%20digits%2C%20rows%202-8%20only~7
+.AllDifferent~VL1~VL2~VL3~VL4~VL5~VL6~VL7~VL8~VL9
+.Sum~10~R7C9~VR6
+.Sum~5~R6C9~VR5
+.Pair~CIBgQQAgAAAB~_black%20dot~R2C9~VR1
+.Pair~CoAKgCoAKgCoAC~_white%20dot~R3C9~VR2
+.SameValues~2~R8C9~VR7
+.SameValues~2~VR3~VR4

@@ -1,0 +1,14 @@
+.NumberedRoom~C1~3~
+.NumberedRoom~C2~5~8
+.NumberedRoom~C3~9~
+.NumberedRoom~C4~5~8
+.NumberedRoom~C5~9~3
+.NumberedRoom~C6~5~8
+.NumberedRoom~C8~5~8
+.NumberedRoom~C7~~9
+.NumberedRoom~R1~7~7
+.NumberedRoom~R4~4~
+.NumberedRoom~R7~3~
+.NumberedRoom~R9~9~
+.NumberedRoom~R2~~5
+.NumberedRoom~R3~~1

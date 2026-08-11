@@ -1,0 +1,10 @@
+.~R5C2_8~R5C4_1~R6C8_7~R7C6_7~R8C5_9
+.Replicate~_7f_7f_7f_7f_D
+.Pair~7u7u7u7u7u7u7G~_anti-four~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~7u7u7u7u7u7u7G~_anti-four~R1C1~R2C1
+.End
+.Renban~R5C6~R4C6~R3C6~R2C6
+.Renban~R2C6~R3C5~R4C4
+.Renban~R4C4~R4C5~R4C6~R4C7

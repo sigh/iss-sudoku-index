@@ -1,0 +1,10 @@
+.~R5C5_2~R7C8_9
+.Whisper~5~R2C1~R3C2~R2C3~R1C2
+.Whisper~5~R1C8~R2C7~R3C8~R2C9
+.Whisper~5~R5C7~R4C8~R5C9~R6C8
+.Whisper~5~R6C2~R5C1~R4C2~R5C3
+.Whisper~5~R7C6~R8C7
+.Whisper~5~R8C2~R7C1
+.Whisper~5~R9C2~R8C1
+.Whisper~5~R8C3~R9C4~R9C3~R8C4
+.AntiConsecutive

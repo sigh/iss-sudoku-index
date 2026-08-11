@@ -1,0 +1,14 @@
+.Arrow~R5C2~R5C1~R4C2~R5C3
+.Arrow~R5C6~R4C6~R4C5
+.Arrow~R6C4~R5C4~R5C5
+.Arrow~R4C8~R4C9~R5C8~R4C7
+.Arrow~R7C9~R6C8~R6C7
+.Arrow~R7C6~R7C7~R7C8
+.Arrow~R7C5~R8C5~R9C5
+.Arrow~R9C1~R8C2~R7C3
+.Replicate~_7f_7f_7f_7f_D
+.Pair~3bv927v_-7v_-H~_not%205%20or%2010~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~3bv927v_-7v_-H~_not%205%20or%2010~R1C1~R2C1
+.End

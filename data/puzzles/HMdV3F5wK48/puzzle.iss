@@ -1,0 +1,13 @@
+.Whisper~5~R3C1~R3C2~R3C3
+.Whisper~5~R1C5~R1C6~R2C6~R2C5
+.Whisper~5~R2C7~R2C8~R2C9~R3C8
+.Whisper~5~R5C4~R4C4~R4C5~R5C5
+.Whisper~5~R5C2~R6C2~R6C3~R5C3
+.Whisper~5~R7C6~R8C6
+.Whisper~5~R9C8~R9C9
+.Replicate~_7f_7f_7f_7f_D
+.Pair~3bv927v_-7v_-H~_not%205%20or%2010~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~3bv927v_-7v_-H~_not%205%20or%2010~R1C1~R2C1
+.End

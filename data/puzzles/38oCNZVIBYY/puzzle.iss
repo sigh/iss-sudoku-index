@@ -1,0 +1,13 @@
+.AntiKnight
+.AntiConsecutive
+.Quad~R3C6~3
+.Quad~R6C3~2
+.ContainAtLeast~2~R5C1~R5C2~R5C3~R5C4
+.ContainAtLeast~2~R7C1~R7C2~R7C3~R7C4
+.ContainAtLeast~6~R1C3~R2C3~R3C3~R4C3
+.ContainAtLeast~2~R1C4~R2C4~R3C4~R4C4
+.ContainAtLeast~1~R1C6~R2C6~R3C6~R4C6
+.ContainAtLeast~2~R3C9~R3C8~R3C7~R3C6
+.ContainAtLeast~1~R6C9~R6C8~R6C7~R6C6
+.ContainAtLeast~3~R8C9~R8C8~R8C7~R8C6
+.ContainAtLeast~6~R9C9~R9C8~R9C7~R9C6

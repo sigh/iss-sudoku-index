@@ -1,0 +1,16 @@
+.Cage~7~R2C6~R2C7
+.Cage~12~R3C8~R4C8
+.Cage~13~R6C2~R7C2
+.Cage~3~R8C3~R8C4
+.EqualSum~R2C3~R2C4~-~R3C2~R4C2~-~R3C5~R4C5~-~R5C3~R5C4~-~R5C6~R5C7~-~R6C5~R7C5~-~R6C8~R7C8~-~R8C6~R8C7
+.LittleKiller~3~R1C2
+.LittleKiller~4~R2C9
+.LittleKiller~17~R8C1
+.LittleKiller~16~R9C8
+.WhiteDot~R3C1~R3C2
+.WhiteDot~R4C6~R4C7
+.WhiteDot~R4C9~R5C9
+.WhiteDot~R5C6~R6C6
+.WhiteDot~R6C3~R7C3
+.Palindrome~R2C3~R3C2~R4C2
+.Palindrome~R5C7~R5C6~R6C5~R7C5~R8C6~R8C7~R7C8

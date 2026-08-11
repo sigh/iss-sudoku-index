@@ -1,0 +1,12 @@
+.Diagonal~1
+.Diagonal~-1
+.Thermo~R5C5~R4C4
+.Whisper~5~R1C1~R2C2~R3C3
+.Whisper~5~R7C7~R8C8~R9C9
+.Whisper~5~R3C4~R4C3
+.Whisper~5~R3C5~R4C4~R5C3
+.Whisper~5~R3C7~R3C6~R4C6~R4C5~R5C6~R6C6~R6C5~R5C4~R6C4~R6C3~R7C3
+.Renban~R7C4~R7C5
+.Renban~R7C6~R7C7~R6C7
+.Renban~R4C7~R5C7
+.BlackDot~R7C5~R7C6

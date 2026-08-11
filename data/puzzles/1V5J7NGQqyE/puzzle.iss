@@ -1,0 +1,9 @@
+.~R1C9_1
+.AntiKnight
+.AllDifferent~R1C5~R2C5~R3C5~R4C5~R5C5~R5C4~R5C3~R5C2~R5C1
+.Cage~42~R6C9~R6C8~R6C7~R6C6~R7C6~R8C6~R9C6
+.Thermo~R1C4~R2C4~R3C4~R4C4~R4C3~R4C2~R4C1
+.Sandwich~8~C1
+.Sandwich~12~C6
+.Sandwich~7~C8
+.Sandwich~21~R4

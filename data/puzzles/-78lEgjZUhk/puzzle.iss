@@ -1,0 +1,16 @@
+.NumberedRoom~C4~1~
+.NumberedRoom~C5~5~5
+.NumberedRoom~C6~~1
+.NumberedRoom~R1~3~3
+.NumberedRoom~R4~4~2
+.NumberedRoom~R6~4~2
+.NumberedRoom~R9~7~7
+.X~R1C2~R1C3
+.X~R2C2~R2C3
+.X~R1C8~R2C8
+.X~R5C6~R6C6
+.X~R8C7~R8C8
+.X~R9C7~R9C8
+.X~R8C2~R9C2
+.BlackDot~R1C7~R2C7
+.BlackDot~R8C3~R9C3

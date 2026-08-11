@@ -1,0 +1,13 @@
+.Sandwich~3~R1
+.Sandwich~25~R5
+.Sandwich~10~C2
+.Sandwich~10~C3
+.Sandwich~19~C5
+.Sandwich~10~C8
+.Sandwich~10~C9
+.Replicate~_7f_7f_7f_7f_D
+.Pair~3bv927v_-7v_-H~_adjacent%20cells%20do%20not%20sum%20to%205%20or%2010~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~3bv927v_-7v_-H~_adjacent%20cells%20do%20not%20sum%20to%205%20or%2010~R1C1~R2C1
+.End

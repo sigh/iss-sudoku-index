@@ -1,0 +1,12 @@
+.Thermo~R1C1~R1C2~R1C3
+.Thermo~R1C1~R2C1~R3C1
+.Thermo~R2C2~R3C3~R4C4~R5C5~R6C6~R7C7~R8C8
+.Thermo~R1C7~R2C8~R3C9
+.Thermo~R7C1~R8C2~R9C3
+.WhiteDot~R1C6~R2C6
+.WhiteDot~R5C7~R5C8
+.WhiteDot~R5C8~R5C9
+.BlackDot~R2C5~R2C6
+.BlackDot~R5C1~R5C2
+.BlackDot~R5C2~R5C3
+.AntiKnight
