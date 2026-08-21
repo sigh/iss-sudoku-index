@@ -4,24 +4,22 @@
 // Source: https://sudokupad.app/vmnal5hbuj?setting-nogrid=1
 
 // Only a diamond-shaped 41-cell subset of the 9x9 canvas is playable; the
-// other 40 cells carry no region, no clue, and no rules-text reference.
-// Rows/columns don't span the diamond's partial lengths, so the grid is
-// Raw: no implicit constraints, and every rule -- including row/column and
-// region membership -- is stated explicitly below. Only the 41 live cells
-// get puzzle constraints; the other 40 (the corners outside the diamond)
-// are pinned to a fixed sentinel value so their otherwise-free domain
-// cannot multiply the solution count.
+// other 40 cells carry no tile, no region, no clue and no rules-text
+// reference. Rows and columns do not span the diamond's partial lengths, so
+// the grid is Raw: no implicit constraints, and every rule is stated
+// explicitly below. The 40 cells outside the diamond are pinned to a fixed
+// sentinel value so their otherwise-free domain cannot multiply the
+// solution count.
 //
 // Encoded:
 // - each row's and column's live cells hold a non-repeating consecutive
-//   digit set: Renban (a set-wise, not sequential-pairs-only, "consecutive
-//   and non-repeating" constraint) over that row's or column's live cells.
-//   A length-1 row/column needs no constraint: a single digit is trivially
-//   a consecutive set of size one.
+//   digit set: Renban over that row's or column's live cells. A length-1
+//   row/column needs no constraint: a single digit is a consecutive set of
+//   size one.
 // - each of the five regions is AllDifferent over its own cells.
-// - "cells sharing an edge can't have the same digit" is not separately
-//   encoded: every adjacent live pair already shares a row or column, and
-//   the Renban above forces that row's/column's cells pairwise distinct.
+// - "cells sharing an edge can't have the same digit", over the edges of the
+//   drawn tessellation (see TILING below): one two-cell AllDifferent per
+//   shared edge.
 
 // Region cells, transcribed from the source's drawn regions (each a
 // hidden, no-total, all-different cage). Together they union to exactly
@@ -38,6 +36,7 @@ const REGIONS = [
 // the region cells above.
 const live = new Set();
 for (const region of REGIONS) for (const [r, c] of region) live.add(`${r},${c}`);
+const isLive = (r, c) => live.has(`${r},${c}`);
 
 // The grid is Raw, so there are no automatic row/column all-different rules.
 const shape = new Shape('9x9', '1-9', 'Raw');
@@ -53,11 +52,44 @@ function lineConstraints(isRow) {
     const cells = [];
     for (let j = 1; j <= 9; j++) {
       const [r, c] = isRow ? [i, j] : [j, i];
-      if (live.has(`${r},${c}`)) cells.push(cell(r, c));
+      if (isLive(r, c)) cells.push(cell(r, c));
     }
     if (cells.length > 1) groups.push(new Renban(...cells));
   }
   return groups;
+}
+
+// TILING. The drawn art does not draw the playable cells as squares: it
+// tiles the diamond as a truncated square tiling. A cell with r+c even is
+// drawn as an octagon spanning 1.4 grid units (vertices at +/-0.3, +/-0.7
+// from its centre); a cell with r+c odd is drawn as a small axis-aligned
+// square of side 0.6 in the gap between four such octagons. Consequently an
+// octagon has EIGHT edges -- four shared with the small squares orthogonally
+// adjacent to it, and four (its slanted corner edges) shared with the
+// octagons DIAGONALLY adjacent to it -- while a small square has only its
+// four orthogonal edges. Two small squares touch at no point at all.
+//
+// So "cells sharing an edge" is: every orthogonally adjacent live pair, plus
+// every diagonally adjacent live pair of octagons. Diagonal pairs of small
+// squares are deliberately excluded: they share no edge in the drawing.
+const isOctagon = (r, c) => (r + c) % 2 === 0;
+function edgePairs() {
+  const pairs = [];
+  for (let r = 1; r <= 9; r++) {
+    for (let c = 1; c <= 9; c++) {
+      if (!isLive(r, c)) continue;
+      // Only forward offsets, so each edge is emitted once.
+      const offsets = isOctagon(r, c)
+        ? [[0, 1], [1, 0], [1, 1], [1, -1]]
+        : [[0, 1], [1, 0]];
+      for (const [dr, dc] of offsets) {
+        if (isLive(r + dr, c + dc)) {
+          pairs.push(new AllDifferent(cell(r, c), cell(r + dr, c + dc)));
+        }
+      }
+    }
+  }
+  return pairs;
 }
 
 // The 40 cells outside the diamond do not exist in the puzzle; pin each to
@@ -65,7 +97,7 @@ function lineConstraints(isRow) {
 const deadCellGivens = [];
 for (let r = 1; r <= 9; r++)
   for (let c = 1; c <= 9; c++)
-    if (!live.has(`${r},${c}`)) deadCellGivens.push(new Given(cell(r, c), 1));
+    if (!isLive(r, c)) deadCellGivens.push(new Given(cell(r, c), 1));
 
 // Givens, from the source's per-cell values (1-indexed here).
 const givens = [
@@ -79,6 +111,7 @@ return [
   ...regionConstraints,
   ...lineConstraints(true),
   ...lineConstraints(false),
+  ...edgePairs(),
   ...deadCellGivens,
   ...givens,
 ];

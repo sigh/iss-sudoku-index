@@ -44,7 +44,6 @@ for (let br = 0; br < 3; br++) {
     const cells = [];
     for (let dr = 1; dr <= 3; dr++) {
       for (let dc = 1; dc <= 3; dc++) {
-        // lint-ok: manual-box-arithmetic
         cells.push(makeCellId(br * 3 + dr, bc * 3 + dc));
       }
     }

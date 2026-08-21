@@ -32,12 +32,12 @@ const quibCircleData = [
   { cells: ['R5C5', 'R5C6', 'R6C5', 'R6C6'], values: [1, 7, 9] },
   { cells: ['R2C2', 'R2C3', 'R3C2', 'R3C3'], values: [3, 4, 8] },
   { cells: ['R1C5', 'R1C6', 'R2C5', 'R2C6'], values: [6, 7, 9] },
-  { cells: ['R1C8', 'R1C9', 'R2C8', 'R2C9'], values: [1, 4, 7] }, // lint-ok: manual-box-arithmetic (candidate digit set, not box construction)
+  { cells: ['R1C8', 'R1C9', 'R2C8', 'R2C9'], values: [1, 4, 7] },
   { cells: ['R2C7', 'R2C8', 'R3C7', 'R3C8'], values: [2, 5, 9] },
   { cells: ['R4C4', 'R4C5', 'R5C4', 'R5C5'], values: [2, 4, 8] },
   { cells: ['R4C5', 'R4C6', 'R5C5', 'R5C6'], values: [2, 5, 9] },
-  { cells: ['R5C4', 'R5C5', 'R6C4', 'R6C5'], values: [1, 4, 7] }, // lint-ok: manual-box-arithmetic (candidate digit set, not box construction)
-  { cells: ['R4C8', 'R4C9', 'R5C8', 'R5C9'], values: [1, 4, 7] }, // lint-ok: manual-box-arithmetic (candidate digit set, not box construction)
+  { cells: ['R5C4', 'R5C5', 'R6C4', 'R6C5'], values: [1, 4, 7] },
+  { cells: ['R4C8', 'R4C9', 'R5C8', 'R5C9'], values: [1, 4, 7] },
   { cells: ['R5C1', 'R5C2', 'R6C1', 'R6C2'], values: [3, 4, 6] },
   { cells: ['R8C1', 'R8C2', 'R9C1', 'R9C2'], values: [2, 5, 9] },
   { cells: ['R7C2', 'R7C3', 'R8C2', 'R8C3'], values: [1, 7, 9] },

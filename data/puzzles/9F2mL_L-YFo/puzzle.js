@@ -3,125 +3,160 @@
 // Video: https://www.youtube.com/watch?v=9F2mL_L-YFo
 // Source: https://sudokupad.app/f0zxtm2lrs
 
-// Nine non-overlapping 3x3 regions contain 1-9 once each; all remaining cells
-// are empty. Digits do not repeat in a row or column. The grey thermometer
-// increases from R4C3 to R3C4. Outside-diagonal sums satisfy their shown
-// inequalities and the x, y, z relationships. Fog/revealing is UI-only.
-// Rows/columns don't repeat-check by default, so the grid is Raw: no
-// implicit constraints; rows/columns are stated explicitly below.
-const shape = new Shape('11x11', '1-10', 'Raw');
-const graph = cellGraph(shape);
-const cell = (row, col) => makeCellId(row, col);
-const rows = Array.from({ length: 11 }, (_, r) =>
-  Array.from({ length: 11 }, (_, c) => cell(r + 1, c + 1)));
-const columns = Array.from({ length: 11 }, (_, c) =>
-  Array.from({ length: 11 }, (_, r) => cell(r + 1, c + 1)));
-const block = (row, col) =>
-  Array.from({ length: 3 }, (_, dr) =>
-    Array.from({ length: 3 }, (_, dc) => cell(row + dr, col + dc))).flat();
+// Rules encoded here:
+//  1. Nine non-overlapping 3x3 regions are placed in the 11x11 grid, each
+//     holding the digits 1-9 once each. Every cell outside all nine regions is
+//     empty.
+//  2. No digit repeats along a row or along a column; empty cells may repeat.
+//  3. Digits on the grey thermometer strictly increase from its bulb end.
+//  4. Each outside clue gives the sum of the digits along the diagonal its
+//     arrow points down. Four clues are inequalities (<23, >17, >16, >32); the
+//     other eight are expressions in the shared unknowns x, y and z and so
+//     constrain one another.
+// The fog and the reveal-on-correct-digit behaviour are presentation only and
+// say nothing about the final grid. Nothing is omitted.
+//
+// The main grid is Raw rather than Sudoku: only 81 of the 121 cells hold a
+// digit, while a Sudoku grid's rows and columns are all-different across the
+// whole alphabet. Raw carries no implicit constraints, so every rule is stated
+// here. Main grid values: 1-9 = the digit in this cell, 0 = this cell is empty.
+const shape = new Shape('11x11', '0-9', 'Raw');
+const grid = cellGraph(shape);
+const geom = grid.gridGeometry();
+const cells = grid.cells();
+const BLANK = 0;
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// The 81 possible drawn 3x3 placements are selection bits. A selected placement
-// contains 1-9 exactly once; its flag also makes each covered board cell nonzero.
-const placements = Array.from({ length: 9 }, (_, r) =>
-  Array.from({ length: 9 }, (_, c) => ({ row: r + 1, col: c + 1 }))).flat();
-const selectorVars = new Var('S', '3x3 region placement flags', placements.length);
-const selectors = selectorVars.cells();
-const occupiedVars = new Var('O', 'filled-cell flags', '11x11');
-const occupied = occupiedVars.cells();
-const biasVars = new Var('B', 'one-valued coverage offsets', 8);
-const bias = biasVars.cells();
-const occupationKey = Pair.fnToKey((digit, flag) =>
-  (flag === 1 && digit === 10) || (flag === 2 && digit <= 9), 10);
+// Two auxiliary whole-grid layers, each indexed by the grid cell it shadows.
+const T = grid.makeOverlay('VT');  // 1 = a 3x3 region has its top-left corner here
+const F = grid.makeOverlay('VF');  // 1 = this cell lies inside one of the regions
+const flagDomain = overlay =>
+  overlay.makeReplicate(new Given(overlay.cells()[0], 0, 1));
 
-// This NFA permits repeated blank markers (10) but rejects a repeated digit.
-const noRepeatedDigit = NFA.encodeSpec({
-  startState: { seen: 0 },
-  transition: ({ seen }, value) => {
-    if (value === 10) return { seen };
+// A region's corner needs a whole 3x3 block below and right of it.
+const cornerRoom = T.makeReplicate(
+  new Given(T.cells()[0], 0),
+  T.at(cells.filter(cell => grid.block(cell, 3, 3) === null)));
+
+const filledKey = Pair.fnToKey((digit, flag) => (digit !== BLANK) === (flag === 1), geom);
+const filled = cells.map(cell => new Pair(filledKey, 'filled', cell, F.at(cell)));
+
+// A cell lies in a region exactly when one region corner sits in the 3x3 window
+// that ends at that cell, and never more than one: the single equation is both
+// the "cells inside a region are the filled ones" rule and the non-overlap rule.
+const coverage = cells.map(cell => {
+  const window = [];
+  for (let dRow = -2; dRow <= 0; dRow++) {
+    for (let dCol = -2; dCol <= 0; dCol++) {
+      const corner = grid.step(cell, dRow, dCol);
+      if (corner !== null) window.push(T.at(corner));
+    }
+  }
+  // At R1C1 the window is that cell alone and the equation degenerates to
+  // "R1C1 is filled exactly when a region starts there".
+  return window.length === 1
+    ? new SameValues(2, window[0], F.at(cell))
+    : new EqualSum(window, [F.at(cell)]);
+});
+
+const regionCount = new Sum(9, ...T.cells());
+
+// Where a region does start, its nine cells hold 1-9 once each.
+const regionDigits = cells
+  .filter(cell => grid.block(cell, 3, 3) !== null)
+  .map(cell => new Or([
+    new Given(T.at(cell), 0),
+    new ContainExact(DIGITS.join('_'), ...grid.block(cell, 3, 3)),
+  ]));
+
+// One machine per row and column: a digit may not be seen twice, while the
+// blank 0 may repeat freely. State = the set of digits seen so far.
+const noRepeatSpec = NFA.encodeSpec({
+  startState: 0,
+  transition: (seen, value) => {
+    if (value === BLANK) return seen;
     const bit = 1 << (value - 1);
-    return (seen & bit) ? undefined : { seen: seen | bit };
+    return (seen & bit) ? undefined : (seen | bit);
   },
   accept: () => true,
-  maxDepth: 11,
-}, 10);
-const noRepeat = cells => new NFA(noRepeatedDigit, 'no-repeat-nonzero', cells);
-const sumBound = (name, min, max, cells) => {
+  maxDepth: cells.length / geom.numRows,
+}, geom);
+const houses = [...grid.rows(), ...grid.columns()].map(
+  house => new NFA(noRepeatSpec, 'no-repeat', ...house));
+
+// The single grey line, R3C4-R4C3 in drawn order, with the bulb marked at R4C3
+// (the drawn path's last point), so the increasing direction is R4C3 -> R3C4.
+// The rule speaks about the digits on the thermometer; the rules never say a
+// thermometer cell must lie inside a region, so a blank end leaves it silent.
+const thermoKey = Pair.fnToKey(
+  (bulb, tip) => bulb === BLANK || tip === BLANK || bulb < tip, geom);
+const thermo = new Pair(
+  thermoKey, 'thermo-increase', makeCellId(4, 3), makeCellId(3, 4));
+
+// The twelve outside clues, transcribed from the twelve drawn arrows: each
+// arrow head touches the grid edge at a lattice corner and the diagonal is the
+// ray leaving that corner in the arrow's own direction. The badge paired with
+// each arrow is the one drawn against it.
+// (Columns and rows past 9 are lettered in cell ids, so they are built rather
+// than written out: R4C11 is "R4Cb".)
+const ray = (row, col, dRow, dCol) => grid.ray(makeCellId(row, col), dRow, dCol);
+const under23 = ray(1, 4, 1, -1);       // "<23",     R1C4 down-left to R4C1
+const topXminus5 = ray(1, 7, 1, -1);    // "x-5",     R1C7 down-left to R7C1
+const over17 = ray(1, 9, 1, -1);        // ">17",     R1C9 down-left to R9C1
+const sixMinusZ = ray(4, 11, 1, -1);    // "6-z",     R4C11 down-left to R11C4
+const clueY = ray(6, 11, -1, -1);       // "y",       R6C11 up-left to R1C6
+const c131minus3x = ray(8, 11, -1, -1); // "131-3x",  R8C11 up-left to R1C4
+const over16 = ray(11, 3, -1, 1);       // ">16",     R11C3 up-right to R3C11
+const botXminus5 = ray(11, 5, -1, 1);   // "x-5",     R11C5 up-right to R5C11
+const over32 = ray(11, 6, -1, 1);       // ">32",     R11C6 up-right to R6C11
+const clueZ = ray(8, 1, -1, 1);         // "z",       R8C1 up-right to R1C8
+const c52minusY = ray(6, 1, 1, 1);      // "52-y",    R6C1 down-right to R11C6
+const xPlus5 = ray(4, 1, 1, 1);         // "x+5",     R4C1 down-right to R11C8
+
+// An inequality clue as a running total whose state saturates at the bound:
+// past the bound no further digit can bring the total back, so the machine
+// stays small. cap is the first total that need not be tracked exactly.
+const sumBound = (name, cells, min, max) => {
   const cap = max === null ? min : max + 1;
-  const nfa = NFA.encodeSpec({
-    startState: { sum: 0 },
-    transition: ({ sum }, value) => ({ sum: Math.min(cap, sum + (value === 10 ? 0 : value)) }),
-    accept: ({ sum }) => sum >= min && (max === null || sum <= max),
+  const spec = NFA.encodeSpec({
+    startState: 0,
+    transition: (sum, value) => Math.min(cap, sum + value),
+    accept: sum => sum >= min && (max === null || sum <= max),
     maxDepth: cells.length,
-  }, 10);
-  return new NFA(nfa, name, cells);
+  }, geom);
+  return new NFA(spec, name, ...cells);
 };
-
-const diagonal = (row, col, dr, dc) => {
-  const cells = [];
-  while (row >= 1 && row <= 11 && col >= 1 && col <= 11) {
-    cells.push(cell(row, col));
-    row += dr;
-    col += dc;
-  }
-  return cells;
-};
-// The following paths are transcribed from the twelve outside arrows and badges.
-const diagonals = {
-  a: diagonal(1, 4, 1, -1), b: diagonal(1, 7, 1, -1),
-  c: diagonal(1, 9, 1, -1), d: diagonal(4, 11, 1, -1),
-  e: diagonal(6, 11, -1, -1), f: diagonal(8, 11, -1, -1),
-  g: diagonal(11, 3, -1, 1), h: diagonal(11, 5, -1, 1),
-  i: diagonal(11, 6, -1, 1), j: diagonal(8, 1, -1, 1),
-  k: diagonal(6, 1, 1, 1), l: diagonal(4, 1, 1, 1),
-};
-const flagFor = square => occupied[graph.cells().indexOf(square)];
-const effectiveTerms = (cells, coefficient = 1) => [
-  ...cells,
-  ...cells.flatMap(square => Array.from({ length: 10 * coefficient }, () => flagFor(square))),
+const inequalities = [
+  sumBound('under-23', under23, 0, 22),
+  sumBound('over-17', over17, 18, null),
+  sumBound('over-16', over16, 17, null),
+  sumBound('over-32', over32, 33, null),
 ];
-const shiftedSum = (total, cells) => new Sum(total + 20 * cells.length, ...cells,
-  ...cells.map(square => [flagFor(square), 10]));
 
-const placementsConstraints = placements.flatMap(({ row, col }, i) => {
-  const cells = block(row, col);
-  return [new Or([
-    new Given(selectors[i], 1),
-    new And([new Given(selectors[i], 2), new ContainExact('1_2_3_4_5_6_7_8_9', ...cells)]),
-  ])];
-});
-const coverageConstraints = rows.flatMap((row, r) => row.map((square, c) => {
-  const flags = placements.flatMap(({ row: top, col: left }, i) =>
-    r + 1 >= top && r + 1 < top + 3 && c + 1 >= left && c + 1 < left + 3
-      ? [selectors[i]] : []);
-  return [
-    new EqualSum(flags, [occupied[r * 11 + c], ...bias.slice(0, flags.length - 1)]),
-    new Pair(occupationKey, 'occupied-exactly-when-nonzero', square, occupied[r * 11 + c]),
-  ];
-})).flat();
+// The eight algebraic clues say only that some x, y, z exist with
+// x-5 = sum(topXminus5) = sum(botXminus5), x+5 = sum(xPlus5),
+// 131-3x = sum(c131minus3x), y = sum(clueY), 52-y = sum(c52minusY),
+// z = sum(clueZ), 6-z = sum(sixMinusZ). Eliminating the three unknowns (take
+// x = sum(topXminus5)+5, y = sum(clueY), z = sum(clueZ)) leaves exactly these
+// five equations, which is the whole content of the eight clues.
+const algebraic = [
+  // both x-5 diagonals hold the same total
+  new EqualSum(topXminus5, botXminus5),
+  // x+5 is 10 more than x-5
+  new Sum(10, ...xPlus5, ...topXminus5.map(cell => [cell, -1])),
+  // (131-3x) + 3*(x-5) = 116
+  new Sum(116, ...c131minus3x, ...topXminus5.map(cell => [cell, 3])),
+  // y + (52-y) = 52
+  new Sum(52, ...clueY, ...c52minusY),
+  // z + (6-z) = 6
+  new Sum(6, ...clueZ, ...sixMinusZ),
+];
 
 return [
   shape,
-  selectorVars,
-  occupiedVars,
-  biasVars,
-  ...bias.map(square => new Given(square, 1)),
-  new Sum(90, ...selectors),
-  ...placementsConstraints,
-  ...coverageConstraints,
-  ...rows.map(noRepeat),
-  ...columns.map(noRepeat),
-  new Given(cell(4, 3), 1, 2, 3, 4, 5, 6, 7, 8, 9),
-  new Given(cell(3, 4), 1, 2, 3, 4, 5, 6, 7, 8, 9),
-  new Thermo(cell(4, 3), cell(3, 4)),
-  sumBound('sum-under-23', 0, 22, diagonals.a),
-  sumBound('sum-over-17', 18, null, diagonals.c),
-  sumBound('sum-over-16', 17, null, diagonals.g),
-  sumBound('sum-over-32', 33, null, diagonals.i),
-  new EqualSum(effectiveTerms(diagonals.b), effectiveTerms(diagonals.h)),
-  new Sum(696, ...diagonals.f, ...diagonals.f.map(square => [flagFor(square), 10]),
-    ...diagonals.b.map(square => [square, 3]), ...diagonals.b.map(square => [flagFor(square), 30])),
-  new Sum(30, ...diagonals.l, ...diagonals.l.map(square => [flagFor(square), 10]),
-    ...diagonals.b.map(square => [square, -1]), ...diagonals.b.map(square => [flagFor(square), -10])),
-  shiftedSum(6, [...diagonals.d, ...diagonals.j]),
-  shiftedSum(52, [...diagonals.e, ...diagonals.k]),
+  T.toVar('T'), F.toVar('F'),
+  flagDomain(T), flagDomain(F), cornerRoom,
+  ...filled, ...coverage, regionCount, ...regionDigits,
+  ...houses, thermo,
+  ...inequalities, ...algebraic,
 ];

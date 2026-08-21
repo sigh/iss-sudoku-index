@@ -3,30 +3,21 @@
 // Video: https://www.youtube.com/watch?v=zxT9wi6z8nc
 // Source: https://app.crackingthecryptic.com/sudoku/fRrnrqL873
 
-// Normal sudoku rules apply (rows, columns, and boxes all-different --
-// standard for a plain 9x9 Shape).
+// Normal sudoku rules apply (rows, columns and boxes all-different).
 //
-// There are three outside clues (payload overlays #0-#2, each centred on a
-// single row/column lane at depth 0.5 outside the grid -- SudokuPad's
-// standard single-outside-clue position, e.g. [-0.5, 6.5] sits directly
-// above column 7's cell centre 6.5, not on a grid-line vertex): 13 left of
-// row 4, 13 above column 7, 16 right of row 7. Per the rules each is both:
-//   (a) a Sandwich total for its row/column (sum of the digits strictly
-//       between the 1 and the 9 in that line), and
-//   (b) a little-killer diagonal-sum clue "in both directions" from its
-//       entry cell (R4C1, R1C7, R7C9 respectively) -- "on each diagonal
-//       from the number, the digits must sum to the number provided;
-//       digits can repeat along these diagonals".
+// Three numbers are printed outside the grid: 13 left of row 4, 13 above
+// column 7, 16 right of row 7. Per the rules each number does double duty --
+// "Clues outside the grid are sandwich clues and little killer clues in both
+// directions":
+//   (a) Sandwich total for the row/column it sits beside -- the sum of the
+//       digits strictly between the 1 and the 9 in that line.
+//   (b) Little killer total on *each* of the two diagonals that run from the
+//       number into the grid: "On each diagonal from the number, the digits
+//       must sum to the number provided. Digits can repeat along these
+//       diagonals." Both diagonals are required, not one of them -- "each
+//       diagonal" / "in both directions".
 //
-// None of the three entry cells is a grid corner, so each has two distinct
-// candidate diagonals into the grid, and the payload draws no arrow to pick
-// one. Requiring *both* diagonals of every clue to independently equal its
-// total (the literal "in both directions") is unsatisfiable -- checked with
-// solve.js at a 5000-backtrack cap, immediate reject, well inside the "debug
-// a specific rejection" allowance. With that literal reading eliminated,
-// the two remaining directions per clue are equally supported by the source,
-// so each is encoded as an open disjunction over its two candidate
-// diagonals (never selected by which one solves the puzzle).
+// No rule is omitted.
 
 const geometry = cellGeometry('9x9');
 const graph = cellGraph('9x9');
@@ -37,20 +28,26 @@ const sandwiches = [
   Sandwich.fromCells(13, graph.column(7), geometry),
 ];
 
-// Little-killer diagonals: cell lists run outward from each clue's entry
-// cell (R4C1, R1C7, R7C9), one per candidate direction.
-const leftR4 = new Or([
-  LittleKiller.fromCells(13, graph.ray('R4C1', 1, 1), geometry),
-  LittleKiller.fromCells(13, graph.ray('R4C1', -1, 1), geometry),
-]);
-const topC7 = new Or([
-  LittleKiller.fromCells(13, graph.ray('R1C7', 1, -1), geometry),
-  LittleKiller.fromCells(13, graph.ray('R1C7', 1, 1), geometry),
-]);
-const rightR7 = new Or([
-  LittleKiller.fromCells(16, graph.ray('R7C9', -1, -1), geometry),
-  LittleKiller.fromCells(16, graph.ray('R7C9', 1, -1), geometry),
-]);
+// A number printed in an outside lane cell sits beside a row/column but
+// between two diagonals: the diagonal "from the number" starts at the cell
+// diagonally adjacent to it, not at the orthogonally adjacent cell of the
+// lane it labels. So the 13 left of row 4 (lane cell R4C0) runs up-right
+// from R3C1 and down-right from R5C1; row 4's own cells are on neither.
+const littleKiller = (total, start, dRow, dCol) =>
+  LittleKiller.fromCells(total, graph.ray(start, dRow, dCol), geometry);
+
+const leftOfRow4 = [
+  littleKiller(13, 'R3C1', -1, 1),  // R3C1 R2C2 R1C3
+  littleKiller(13, 'R5C1', 1, 1),   // R5C1 R6C2 R7C3 R8C4 R9C5
+];
+const aboveColumn7 = [
+  littleKiller(13, 'R1C6', 1, -1),  // R1C6 R2C5 R3C4 R4C3 R5C2 R6C1
+  littleKiller(13, 'R1C8', 1, 1),   // R1C8 R2C9
+];
+const rightOfRow7 = [
+  littleKiller(16, 'R6C9', -1, -1), // R6C9 R5C8 R4C7 R3C6 R2C5 R1C4
+  littleKiller(16, 'R8C9', 1, -1),  // R8C9 R9C8
+];
 
 return [
   new Shape('9x9'),
@@ -62,7 +59,7 @@ return [
   new Given('R9C1', 5),
 
   ...sandwiches,
-  leftR4,
-  topC7,
-  rightR7,
+  ...leftOfRow4,
+  ...aboveColumn7,
+  ...rightOfRow7,
 ];

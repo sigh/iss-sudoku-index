@@ -40,7 +40,6 @@ const notBothBlank = Pair.fnToKey((a, b) => !(a === 0 && b === 0), shape);
 // A Raw grid has no default boxes -- graph.box(n)/boxes() is empty by design
 // on this grid type -- so the nine standard 3x3 blocks are built explicitly
 // from their top-left corners.
-// lint-ok: manual-box-arithmetic
 const boxTopLefts = [1, 4, 7].flatMap((r) => [1, 4, 7].map((c) => [r, c]));
 const boxes = boxTopLefts.map(
   ([r, c]) => graph.block(makeCellId(r, c), 3, 3));

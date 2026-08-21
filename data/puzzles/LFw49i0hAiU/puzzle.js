@@ -3,53 +3,94 @@
 // Video: https://www.youtube.com/watch?v=LFw49i0hAiU
 // Source: https://sudokupad.app/4pqenuxwmn?setting-nogrid=1
 
-// Encodes the complete upper-left normal 9x9 Sudoku and the four Counting Cards
-// suit sets. The rules describe four interlocked Sudoku grids of different
-// sizes in total (their own example names a 6x6 grid); the other grids'
-// geometry is omitted below because their boundary strokes do not resolve to
-// a complete, cell-aligned set of rows, columns, and boxes in the source.
+// Rules:
+//   In each N-by-N grid, normal N-by-N Sudoku rules apply; overlapping cells
+//   contain the same digit.
+//   COUNTING CARDS - a digit on a suit indicates how many times that digit
+//   appears on that suit.
 //
-// The 14x13 canvas repeats digits across its non-overlapping regions (it is
-// not itself one Sudoku), so the grid is Raw: no implicit rows, columns,
-// boxes, or all-different; only the rules stated below apply.
-const shape = new Shape('14x13', 9, 'Raw');
-const cell = (row, col) => makeCellId(row, col);
-const upperLeftGraph = cellGraph('9x9');
-const toCanvas = (gridCell) => {
-  const { row, col } = parseCellId(gridCell);
-  return cell(row, col);
-};
+// The board is a 14x13 card table carrying four separate Sudoku grids that
+// overlap.  Rows, columns and boxes of the table itself carry no rule, so the
+// grid type is Raw and every unit below is stated explicitly.  "Overlapping
+// cells contain the same digit" then needs no constraint: a shared table cell
+// is one cell.
+//
+// Nothing is omitted.
 
-// The black-outlined upper-left 9x9 board is the complete normal Sudoku grid.
-const upperLeftSudoku = [
-  ...Array.from({ length: 9 }, (_, row) =>
-    new AllDifferent(...Array.from({ length: 9 }, (_, col) => cell(row + 1, col + 1)))),
-  ...Array.from({ length: 9 }, (_, col) =>
-    new AllDifferent(...Array.from({ length: 9 }, (_, row) => cell(row + 1, col + 1)))),
-  ...upperLeftGraph.boxes().map(box => new AllDifferent(...box.map(toCanvas))),
+const shape = new Shape('14x13', 9, 'Raw');
+const graph = cellGraph(shape);
+
+// Grid frames, read off the drawn borders (the source is played with
+// setting-nogrid=1, so every line is drawn by hand: 6px = a grid outline,
+// 4px = that grid's box dividers, 1px = its cell borders).
+// [label, top row, left column, size, box height, box width]
+const GRIDS = [
+  ['9x9 black', 1, 1, 9, 3, 3],
+  ['6x6 red', 6, 8, 6, 2, 3],
+  ['4x4 red', 9, 2, 4, 2, 2],
+  ['4x4 black', 11, 5, 4, 2, 2],
 ];
 
-// The printed suit symbols are the card sets named by the Counting Cards rule.
-const diamonds = [
-  [1, 4], [1, 2], [3, 1], [3, 3], [3, 4], [2, 3], [4, 1], [5, 2],
-  [6, 3], [6, 5], [6, 6], [7, 7], [8, 5], [7, 2], [9, 1], [12, 2],
-  [11, 2], [11, 4], [13, 5], [12, 6], [11, 7], [13, 8], [3, 8], [4, 7],
-  [4, 8], [5, 8], [2, 9], [8, 8], [10, 8], [7, 11], [8, 11], [8, 12],
-  [8, 13], [10, 13], [9, 11], [11, 10],
-].map(([row, col]) => cell(row, col));
-const hearts = [[12, 7], [14, 7], [14, 8]].map(([row, col]) => cell(row, col));
-const clubs = [
-  [7, 10], [10, 11], [10, 9], [11, 12], [10, 2], [5, 6], [5, 3], [4, 3],
-  [4, 4], [1, 7],
-].map(([row, col]) => cell(row, col));
-const spades = [[10, 4], [10, 5], [14, 5], [14, 6], [9, 10], [8, 10], [6, 13]]
-  .map(([row, col]) => cell(row, col));
+const range = n => [...Array(n).keys()];
+
+// One AllDifferent per row, column and box of each grid, and the digit range of
+// each grid's cells: an N-by-N Sudoku uses 1..N, so a cell shared by two grids
+// takes the smaller range.
+const units = [];
+const digitCap = new Map();
+for (const [, top, left, n, boxH, boxW] of GRIDS) {
+  const at = (i, j) => makeCellId(top + i, left + j);
+  for (const i of range(n)) {
+    units.push(range(n).map(j => at(i, j)));
+    units.push(range(n).map(j => at(j, i)));
+  }
+  for (let r = 0; r < n; r += boxH) {
+    for (let c = 0; c < n; c += boxW) {
+      units.push(range(boxH).flatMap(i => range(boxW).map(j => at(r + i, c + j))));
+    }
+  }
+  for (const i of range(n)) {
+    for (const j of range(n)) {
+      digitCap.set(at(i, j), Math.min(digitCap.get(at(i, j)) ?? 9, n));
+    }
+  }
+}
+
+const sudokuUnits = units.map(cells => new AllDifferent(...cells));
+const digitRanges = [...digitCap].filter(([, n]) => n < 9).map(
+  ([cell, n]) => new Given(cell, ...range(n).map(v => v + 1)));
+
+// The 48 table cells outside every grid hold no digit.  They are padding on a
+// Raw board that has no holes, so pin them to one value; nothing else in the
+// script refers to them.
+const padding = graph.rows().flat().filter(cell => !digitCap.has(cell)).map(
+  cell => new Given(cell, 1));
+
+// Suit badges, one per marked table cell, transcribed from the drawn symbols.
+const SUITS = {
+  diamonds: [[1, 2], [1, 4], [2, 3], [2, 9], [3, 1], [3, 3], [3, 4], [3, 8],
+             [4, 1], [4, 7], [4, 8], [5, 2], [5, 8], [6, 3], [6, 5], [6, 6],
+             [7, 2], [7, 7], [7, 11], [8, 5], [8, 8], [8, 11], [8, 12], [8, 13],
+             [9, 1], [9, 11], [10, 8], [10, 13], [11, 2], [11, 4], [11, 7],
+             [11, 10], [12, 2], [12, 6], [13, 5], [13, 8]],
+  hearts: [[12, 7], [14, 7], [14, 8]],
+  clubs: [[1, 7], [4, 3], [4, 4], [5, 3], [5, 6], [7, 10], [10, 2], [10, 9],
+          [10, 11], [11, 12]],
+  spades: [[6, 13], [8, 10], [9, 10], [10, 4], [10, 5], [14, 5], [14, 6]],
+};
+
+// One counting set per suit, covering that suit's cells across all four grids.
+// The rules sentence puts no grid scope on "on that suit"; a per-grid count is
+// also arithmetically impossible, because the red 4x4 carries exactly two
+// spades in one row (R10C4, R10C5), whose two distinct digits would each have
+// to be their own count of 1.
+const countingCards = Object.values(SUITS).map(
+  cells => new CountingCircles(...cells.map(([r, c]) => makeCellId(r, c))));
 
 return [
   shape,
-  ...upperLeftSudoku,
-  new CountingCircles(...diamonds),
-  new CountingCircles(...hearts),
-  new CountingCircles(...clubs),
-  new CountingCircles(...spades),
+  ...digitRanges,
+  ...padding,
+  ...sudokuUnits,
+  ...countingCards,
 ];

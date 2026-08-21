@@ -3,16 +3,23 @@
 // Video: https://www.youtube.com/watch?v=xiCxfhQ8O6c
 // Source: https://sudokupad.app/FdDGGJQf7R
 
-// Normal Sudoku applies. Cage digits are distinct. The 14 cages use exactly four
-// distinct totals; touching cages have different totals, and each digit occurs in
-// at most one cage of each total.
-// The widened alphabet supplies base-16 auxiliary total cells; grid cells remain 1-9.
+// Rules encoded here, in full; nothing is omitted:
+//   - Normal Sudoku.
+//   - Digits may not repeat in a cage.
+//   - Each cage sums to one of four distinct totals, which must be determined.
+//   - Cages that share an edge must have different sums.
+//   - No digit may appear in more than one cage with the same sum.
+//
+// A cage holds at most four cells, so a cage total lies in 1..30 and does not fit
+// a single cell of a 9-value alphabet. The alphabet is widened to 0-15 so that a
+// total can be held as two base-16 auxiliary cells, and the playable grid cells
+// are restricted back to 1-9.
 const shape = new Shape('9x9', '0-15');
 const graph = cellGraph(shape);
-const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-const gridDomain = graph.makeReplicate(new Given('R1C1', ...digits));
+const gridDigits = graph.makeReplicate(new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-// Cage cells transcribed from the source drawing, in its cage-array order.
+// Cage cells, transcribed from the cages drawn in the source grid. No cage carries
+// a printed total.
 const cageCells = [
   ['R7C8', 'R8C8'],
   ['R5C8', 'R6C8'],
@@ -29,92 +36,80 @@ const cageCells = [
   ['R4C3', 'R4C4'],
   ['R4C5', 'R5C4', 'R5C5'],
 ];
+const LABELS = [1, 2, 3, 4];
 
-const cageTotals = new Var('C', 'cage totals', '14x2');
-const targetTotals = new Var('T', 'the four cage totals', '4x2');
-const choices = new Var('L', 'cage total choices', 14);
-const digitFlags = new Var('D', 'cage digit occurrences', '14x9');
-const cageHigh = cageCells.map((_, i) => cageTotals.cell(i + 1, 1));
-const cageLow = cageCells.map((_, i) => cageTotals.cell(i + 1, 2));
-const targetHigh = [1, 2, 3, 4].map(i => targetTotals.cell(i, 1));
-const targetLow = [1, 2, 3, 4].map(i => targetTotals.cell(i, 2));
+// The four totals, each split into a 16s cell and a units cell; and, per cage,
+// which of the four totals it takes.
+const totals = new Var('T', 'the four cage totals', '4x2');
+const labels = new Var('L', 'cage total labels', cageCells.length);
+const totalSixteens = k => totals.cell(k, 1);
+const totalUnits = k => totals.cell(k, 2);
+const cageLabel = i => labels.cell(i + 1);
 
-// A total is 16*high + low, so two auxiliary cells cover every possible cage sum.
-const cageSumEquations = cageCells.map((cells, i) => new Sum(0,
-  ...cells, [cageHigh[i], -16], [cageLow[i], -1]));
-const highBits = [...cageHigh, ...targetHigh].map(cell => new Given(cell, 0, 1));
+// 16 * sixteens + units <= 30, so the 16s cell is a single bit.
+const totalRange = LABELS.map(k => new Given(totalSixteens(k), 0, 1));
+const labelRange = labels.cells().map(cell => new Given(cell, ...LABELS));
 
-const distinctPair = (highA, lowA, highB, lowB, name) => new Or([
-  new AllDifferent(highA, highB),
-  new AllDifferent(lowA, lowB),
-]);
-const equal = (a, b) => new SameValues(2, a, b);
-
-const cageChoices = choices.cells().map((choice, i) => new Or(
-  [1, 2, 3, 4].map((value, j) => new And([
-    new Given(choice, value),
-    equal(cageHigh[i], targetHigh[j]),
-    equal(cageLow[i], targetLow[j]),
+// "each cage sums to one of four ... totals": the cage's cells sum to the total
+// its label selects.
+const cageSums = cageCells.map((cells, i) => new Or(
+  LABELS.map(k => new And([
+    new Given(cageLabel(i), k),
+    new Sum(0, ...cells, [totalSixteens(k), -16], [totalUnits(k), -1]),
   ]))));
-const targetDistinct = [0, 1, 2, 3].flatMap(i =>
-  [0, 1, 2, 3].slice(i + 1).map(j =>
-    distinctPair(targetHigh[i], targetLow[i], targetHigh[j], targetLow[j], 'different totals')));
 
-const touching = cageCells.map((cells, i) => cageCells.slice(i + 1).map((other, offset) => {
-  const sharesEdge = cells.some(a => other.some(b => {
-    const pa = parseCellId(a), pb = parseCellId(b);
-    return Math.abs(pa.row - pb.row) + Math.abs(pa.column - pb.column) === 1;
-  }));
-  return sharesEdge ? i + offset + 1 : null;
-}).filter(j => j !== null));
-const touchingDifferent = touching.flatMap((neighbours, i) => neighbours.map(j =>
-  distinctPair(cageHigh[i], cageLow[i], cageHigh[j], cageLow[j], 'touching cages differ')));
+// "four distinct totals": two totals differ when either base-16 cell differs.
+const totalsDistinct = LABELS.flatMap((j, index) => LABELS.slice(index + 1).map(k =>
+  new Or([
+    new AllDifferent(totalSixteens(j), totalSixteens(k)),
+    new AllDifferent(totalUnits(j), totalUnits(k)),
+  ])));
 
+// The labels name the four totals, and which name goes to which total is an
+// artifact of this encoding rather than anything the puzzle asks for. This machine
+// pins the canonical naming - reading the cages in the order above, label 1 is used
+// first, then label 2, and so on - and, by requiring the run to reach label 4,
+// enforces that all four totals are actually taken. Its state is the highest label
+// used so far; a label more than one past that is out of canonical order.
+const canonicalLabels = new NFA(NFA.encodeSpec({
+  startState: { highest: 0 },
+  transition: ({ highest }, value) =>
+    value >= 1 && value <= highest + 1 ? { highest: Math.max(highest, value) } : undefined,
+  accept: ({ highest }) => highest === LABELS.length,
+}, shape), 'canonical total labels', labels.cells());
+
+// Since the four totals are distinct, two cages share a sum exactly when they share
+// a label, so the remaining two rules are stated over the labels.
 const cageDistinct = cageCells.filter(cells => cells.length > 1)
   .map(cells => new AllDifferent(...cells));
 
-// Each flag is 1 exactly when its digit appears in that cage; the machine's two
-// states record the flag and whether the digit has been seen while scanning the cage.
-const occurrenceMachines = digits.map(digit => NFA.encodeSpec({
-  startState: { phase: 'flag' },
-  transition: (state, value) => {
-    if (state.phase === 'flag') {
-      return value === 0 || value === 1 ? { phase: 'cage', flag: value, seen: false } : undefined;
-    }
-    return { phase: 'cage', flag: state.flag, seen: state.seen || value === digit };
-  },
-  accept: state => state.phase === 'cage' && state.flag === (state.seen ? 1 : 0),
-}, shape));
-const digitOccurrences = cageCells.flatMap((cells, cage) => digits.map(digit =>
-  new NFA(occurrenceMachines[digit - 1], 'digit occurrence',
-    [digitFlags.cell(cage + 1, digit), ...cells])));
-const labelsExcept = value => [1, 2, 3, 4].filter(other => other !== value);
-const noRepeatedDigitForTotal = [1, 2, 3, 4].flatMap(total => digits.flatMap(digit =>
-  cageCells.flatMap((_, first) => cageCells.slice(first + 1).map((__, offset) => {
-    const second = first + offset + 1;
-    return new Or([
-      new Given(choices.cell(first + 1), ...labelsExcept(total)),
-      new Given(choices.cell(second + 1), ...labelsExcept(total)),
-      new Given(digitFlags.cell(first + 1, digit), 0),
-      new Given(digitFlags.cell(second + 1, digit), 0),
-    ]);
-  }))));
+const sharesEdge = (a, b) => a.some(cell => graph.neighbours(cell).some(n => b.includes(n)));
+const cagePairs = cageCells.flatMap((cells, i) =>
+  cageCells.slice(i + 1).map((other, offset) => [i, i + 1 + offset]));
+
+const neighbouringCagesDiffer = cagePairs
+  .filter(([i, j]) => sharesEdge(cageCells[i], cageCells[j]))
+  .map(([i, j]) => new AllDifferent(cageLabel(i), cageLabel(j)));
+
+// "no digit may appear in more than one cage with the same sum": two cages with the
+// same label have no digit in common, which with each cage's own distinctness is one
+// AllDifferent over the union.
+const sameTotalCagesDisjoint = cagePairs.map(([i, j]) => new Or([
+  new AllDifferent(cageLabel(i), cageLabel(j)),
+  new AllDifferent(...cageCells[i], ...cageCells[j]),
+]));
 
 return [
   shape,
-  gridDomain,
-  cageTotals,
-  targetTotals,
-  choices,
-  digitFlags,
-  ...highBits,
-  ...choices.cells().map(cell => new Given(cell, 1, 2, 3, 4)),
-  new ContainAtLeast('1_2_3_4', ...choices.cells()),
-  ...cageSumEquations,
-  ...cageChoices,
-  ...targetDistinct,
-  ...touchingDifferent,
+  gridDigits,
+  totals,
+  labels,
+  ...totalRange,
+  ...labelRange,
+  ...cageSums,
+  ...totalsDistinct,
+  canonicalLabels,
   ...cageDistinct,
-  ...digitOccurrences,
-  ...noRepeatedDigitForTotal,
+  ...neighbouringCagesDiffer,
+  ...sameTotalCagesDisjoint,
 ];

@@ -23,6 +23,12 @@
 .X~R1C5~R1C6
 .X~R2C4~R3C4
 .X~R3C3~R3C4
+.Replicate~v7fb7XXzbvRf_D
+.Pair~_7v_-7v_-7v_-H~_not%2010~R1C1~R1C2
+.End
+.Replicate~__q9-__d6__v
+.Pair~_7v_-7v_-7v_-H~_not%2010~R1C1~R2C1
+.End
 .Or
 .And
 .AllDifferent~R1C2~R1C3~R1C4~R1C5~R1C6~R1C7~R1C8~R1C9

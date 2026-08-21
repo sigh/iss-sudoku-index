@@ -19,9 +19,14 @@ const oneDoublerPerUnit = [
   ...graph.rows(),
   ...graph.columns(),
   ...graph.boxes(),
-].map(unit => new Sum(11, ...unit.map(flag)));
+  // Nine flags per unit, one of them a doubler: 8*1 + 1*2 = 10.
+].map(unit => new Sum(10, ...unit.map(flag)));
 
-// This two-symbol machine counts occurrences of one Sudoku digit with flag 2.
+// Each digit appears in exactly one doubler. One machine per digit scans the
+// grid as digit, flag, digit, flag, ... `digitMatch` holds whether the digit
+// just read is the target one and is undefined while a digit is next; `count`
+// tallies target-digit cells whose flag is 2, and the branch dies as soon as a
+// second one is seen.
 const oneDoublerOfDigit = digit => {
   const machine = NFA.encodeSpec({
     startState: { count: 0 },
@@ -85,6 +90,6 @@ return [
   flags.toVar('doubler flags'),
   flagDomains,
   ...oneDoublerPerUnit,
-  // The exact once-per-digit doubler condition is omitted.
+  ...oneDoublerPerDigit,
   ...remoteSums,
 ];
