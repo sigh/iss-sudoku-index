@@ -3,39 +3,66 @@
 // Video: https://www.youtube.com/watch?v=Drw9MHw-y2U
 // Source: https://app.crackingthecryptic.com/sudoku/j4t8fTBL3F
 //
-// Each of nine colours stands for one fixed, unknown digit 1-9: every cell
-// drawn in a given colour holds that colour's digit, and different colours
-// hold different digits. Grey is used twice, told apart by shape (a filled
-// square vs a filled circle), matching the rules' note that the grey circle
-// is a 9th colour distinct from the grey square.
+// Rules: "Each colour represents a number from 1-9. Each box has its number
+// placed on the grid. If that number's colour is in that box, then only the
+// colour is shown. The grey circle represents a 9th colour."
 //
-// Encoded per colour group as one cell per equal set (SameValues(cells.length,
-// ...cells) forces every listed cell equal), plus one AllDifferent over a
-// representative cell from each group so the nine colours take nine distinct
-// values.
+// Encoded:
+//  - Standard sudoku (rows, columns, boxes), the seven plain-digit givens.
+//  - Each colour stands for one fixed digit: SameValues per colour class, plus
+//    one AllDifferent over a representative of each class so the nine colours
+//    take the nine digits.
+//  - "Each box has its number placed on the grid": boxes 1, 3, 4, 5, 7, 8 and 9
+//    carry that digit as a plain given. Boxes 2 and 6 show theirs as a colour
+//    instead, so box 2 holds a 2 and box 6 a 6 on one of its coloured cells.
+//
+// Nothing is omitted. The contrapositive of "if that number's colour is in that
+// box, then only the colour is shown" -- that colour-N does not appear in box N
+// for the seven boxes whose digit is printed -- needs no constraint: a colour-N
+// cell in box N would be a second N alongside the printed given.
 
-const colourGroups = [
-  ['R1C7', 'R3C6', 'R4C4', 'R6C1', 'R9C9'], // black squares
-  ['R2C1', 'R4C8', 'R5C3', 'R7C4', 'R6C6'], // red squares
-  ['R1C1', 'R3C9', 'R4C7', 'R9C3'],         // gold squares
-  ['R3C4', 'R6C2', 'R7C6', 'R4C9'],         // grey circles (the 9th colour)
-  ['R1C5', 'R2C2', 'R7C7'],                 // blue squares
-  ['R3C3', 'R8C9', 'R7C1'],                 // yellowgreen squares
-  ['R3C7', 'R7C3', 'R8C8'],                 // brown squares
-  ['R5C7', 'R9C5', 'R6C3'],                 // purple squares
-  ['R3C2'],                                 // grey square (single cell)
-];
+// Drawn data: 31 single-cell coloured underlays. Grey appears twice, told apart
+// by the drawn shape (one filled square vs four filled circles); the rules note
+// that the grey circle is a ninth colour, distinct from the grey square.
+const colourGroups = {
+  black:      ['R1C7', 'R3C6', 'R4C4', 'R6C1', 'R9C9'],
+  red:        ['R2C1', 'R4C8', 'R5C3', 'R7C4', 'R6C6'],
+  gold:       ['R1C1', 'R3C9', 'R4C7', 'R9C3'],
+  greyCircle: ['R3C4', 'R6C2', 'R7C6', 'R4C9'],
+  blue:       ['R1C5', 'R2C2', 'R7C7'],
+  green:      ['R3C3', 'R8C9', 'R7C1'],
+  brown:      ['R3C7', 'R7C3', 'R8C8'],
+  purple:     ['R5C7', 'R9C5', 'R6C3'],
+  greySquare: ['R3C2'],
+};
 
-const sameColourGroups = colourGroups
+const allColourCells = Object.values(colourGroups).flat();
+
+const sameColour = Object.values(colourGroups)
   .filter((cells) => cells.length >= 2)
   .map((cells) => new SameValues(cells.length, ...cells));
 
 const distinctColours = new AllDifferent(
-  ...colourGroups.map((cells) => cells[0])
-);
+  ...Object.values(colourGroups).map((cells) => cells[0]));
+
+// The coloured cells of a box, derived from the drawn markers above.
+// boxRow/boxCol are 1-based band and stack indices.
+const colourCellsInBox = (boxRow, boxCol) => allColourCells.filter((id) => {
+  const { row, col } = parseCellId(id);
+  return Math.ceil(row / 3) === boxRow && Math.ceil(col / 3) === boxCol;
+});
+
+// Boxes 2 and 6 are the two with no printed digit, so each shows its own digit
+// as a colour: the digit sits on one of that box's coloured cells, which one
+// being unknown. ContainAtLeast requires the digit somewhere in that set.
+const hiddenBoxDigits = [
+  new ContainAtLeast('2', ...colourCellsInBox(1, 2)),
+  new ContainAtLeast('6', ...colourCellsInBox(2, 3)),
+];
 
 return [
   new Shape('9x9'),
+  // Printed digits: box N shows the digit N.
   new Given('R1C2', 1),
   new Given('R1C8', 3),
   new Given('R4C1', 4),
@@ -43,6 +70,7 @@ return [
   new Given('R7C8', 9),
   new Given('R8C5', 8),
   new Given('R9C2', 7),
-  ...sameColourGroups,
+  ...sameColour,
   distinctColours,
+  ...hiddenBoxDigits,
 ];

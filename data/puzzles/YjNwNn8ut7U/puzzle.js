@@ -3,20 +3,23 @@
 // Video: https://www.youtube.com/watch?v=YjNwNn8ut7U
 // Source: https://app.crackingthecryptic.com/sudoku/9jJDgBpLjN
 
-// Rules encoded here:
-//  - Normal sudoku: rows, columns and the default 3x3 boxes hold 1-9 once
-//    each.
-//  - Cages: digits sum to the small corner total. The rules do not state cage
-//    distinctness, so Sum rather than Cage.
-//  - Two square regions, one per drawn circle (R1C1, R6C6): each is the
-//    upper-left cell of an s x s region, s being the digit placed there
-//    (neither is given, so s is solved for). "Digits CAN repeat within a
-//    region" adds no distinctness rule of its own -- row/column/box
-//    distinctness already stand and are left as-is; the clause only says a
-//    region carries no extra all-different beyond those. The two regions do
-//    not overlap. No other cell is circled, so no other region exists; every
-//    other cell is an ordinary sudoku cell. The two regions' digit sums are
-//    tied equal.
+// Rules encoded:
+// - Normal sudoku: default 9x9 rows, columns and 3x3 boxes.
+// - Cages: digits sum to the small corner clue. The rules state only the
+//   sum, so Sum rather than Cage; every drawn cage happens to lie within a
+//   single row, column or box, so the two are equivalent here anyway.
+// - Circles: exactly two circles are drawn, on R1C1 and R6C6. Each circled
+//   cell is the upper-left cell of a square region whose side length is that
+//   cell's own (unknown) digit, and the two regions' digit sums are equal.
+//   Encoded as an Or over every (side at R1C1, side at R6C6) pair for which
+//   both squares lie on the grid; each branch pins the two circled digits
+//   and ties the two blocks' sums with EqualSum. The side bound is the
+//   grid-fit requirement implicit in "a region of size x by x" (at R6C6 a
+//   side of 5+ would leave the grid); the rules do not forbid the two
+//   regions overlapping, so no on-grid pair is excluded.
+// - "Digits CAN repeat within a region" and "the digits in the circles can
+//   be different" are clarifications, adding no constraint: the regions get
+//   no all-different of their own, and the circle digits are not tied.
 // Nothing is omitted.
 
 const graph = cellGraph('9x9');
@@ -27,7 +30,7 @@ const GIVENS = [
   ['R6C2', 4], ['R6C3', 5], ['R7C7', 8], ['R8C8', 5],
 ];
 
-// The 7 drawn cages, as [total, cells].
+// The 7 drawn cages, as [total, cells], from the drawn cage outlines.
 const CAGES = [
   [9, ['R1C2', 'R2C2', 'R2C1']],
   [13, ['R1C7', 'R2C7', 'R3C7']],
@@ -38,34 +41,23 @@ const CAGES = [
   [11, ['R7C4', 'R8C4', 'R8C5']],
 ];
 
-// The 2 drawn circles, each an unknown-size region's own upper-left corner.
+// The 2 drawn circles: each cell anchors its own square region.
 const CIRCLES = ['R1C1', 'R6C6'];
-const maxSizeAt = (cell) => {
-  const { row, col } = parseCellId(cell);
-  return Math.min(10 - row, 10 - col);
-};
 
-// Regions overlap iff their row ranges and column ranges both intersect.
-function overlaps(cellA, sizeA, cellB, sizeB) {
-  const a = parseCellId(cellA), b = parseCellId(cellB);
-  const rowsOverlap = a.row < b.row + sizeB && b.row < a.row + sizeA;
-  const colsOverlap = a.col < b.col + sizeB && b.col < a.col + sizeA;
-  return rowsOverlap && colsOverlap;
-}
-
-// One branch per (size at R1C1, size at R6C6) pair that keeps both regions on
-// the grid and disjoint: pin both circled digits to their sizes and tie the
-// two regions' digit sums equal.
+// One branch per pair of side lengths that keeps both squares on the grid
+// (block() is null off-grid): pin both circled digits to their region's side
+// and tie the two regions' digit sums equal.
 const [circleA, circleB] = CIRCLES;
 const branches = [];
-for (let sizeA = 1; sizeA <= maxSizeAt(circleA); sizeA++) {
-  for (let sizeB = 1; sizeB <= maxSizeAt(circleB); sizeB++) {
-    if (overlaps(circleA, sizeA, circleB, sizeB)) continue;
-    const blockA = graph.block(circleA, sizeA, sizeA);
-    const blockB = graph.block(circleB, sizeB, sizeB);
+for (let sideA = 1; sideA <= 9; sideA++) {
+  const blockA = graph.block(circleA, sideA, sideA);
+  if (!blockA) continue;
+  for (let sideB = 1; sideB <= 9; sideB++) {
+    const blockB = graph.block(circleB, sideB, sideB);
+    if (!blockB) continue;
     branches.push(new And([
-      new Given(circleA, sizeA),
-      new Given(circleB, sizeB),
+      new Given(circleA, sideA),
+      new Given(circleB, sideB),
       new EqualSum(blockA, blockB),
     ]));
   }

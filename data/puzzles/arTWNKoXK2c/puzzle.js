@@ -3,28 +3,35 @@
 // Video: https://www.youtube.com/watch?v=arTWNKoXK2c
 // Source: https://app.crackingthecryptic.com/sudoku/JBNhmrn8dq
 //
-// Standard rows/columns/boxes, no givens.
+// Rules encoded here (standard rows/columns/boxes, no givens):
 //
-// The riddle fixes which of the 43 hallway bulbs stay lit: bulb n is toggled
-// once per divisor of n, so it ends on iff n has an odd divisor count, iff n
-// is a perfect square. Among 1..43 that is {1,4,9,16,25,36} -- a fact derived
-// from the rules text itself, not from the solution.
+//   Riddle: 43 bulbs start off; person n (1..43) pulls every n-th cord. Bulb n
+//   is pulled once per divisor of n, so it ends lit exactly when n has an odd
+//   number of divisors, i.e. when n is a perfect square. Among 1..43 that is
+//   {1, 4, 9, 16, 25, 36}. This is arithmetic the rules text sets out; nothing
+//   outside the rules is used to obtain it.
 //
-// The hallway is the drawn 43-cell region (a cage with no total -- its
-// no-total cage geometry only marks scope, since a 43-cell all-different is
-// impossible on 9 values). Rules text: "the hallway starts with Bulb 1 in
-// R1C3", matching this region's first listed cell; every one of the five
-// drawn arrows below also runs in the direction of increasing position along
-// this same order, so hallway position order = the region's listed cell
-// order (see the `hallway` array below for the full 1..43 walk).
+//   "Lit hallway cells are brighter (higher) than their hallway neighbors.
+//    Hallway cells get darker (lower) as you get further away from a lit cell.
+//    Between every two lit cells in the hallway there will be a darkest
+//    (lowest) cell. It can be anywhere between the two lit cells."
+//   Along the hallway walk: from each lit cell the digits strictly fall to one
+//   darkest cell and then strictly rise to the next lit cell; the position of
+//   that darkest cell is free. After the last lit cell (bulb 36) the remaining
+//   cells only get further from a lit cell, so they strictly fall to the end
+//   of the hallway.
 //
-// Lit positions {1,4,9,16,25,36} land on R1C3, R1C6, R3C9, R3C2, R5C7, R7C2.
-// Brightness rule: each lit cell outranks its hallway neighbor(s); moving
-// away from a lit cell, digits strictly fall to an unfixed darkest cell then
-// strictly rise to the next lit cell (position 1 has only a right neighbor;
-// after the last lit cell at position 36, positions 37-43 just keep falling
-// with no further rise).
+//   "Arrows show the way through the hall. Digits along an arrow sum to the
+//    circled digit."
+//
+// Nothing is omitted. The 43-cell region drawn as a totalless cage marks the
+// hallway; it is not a sum or all-different clue (43 cells cannot be
+// all-different over 9 values), so it contributes scope only.
 
+// Hallway walk, position 1..43. Cells in the drawn 43-cell hallway region, in
+// the order the region lists them; position 1 is R1C3, which the rules name as
+// bulb 1, and each of the five drawn arrows points from a lower to a higher
+// position in this order.
 const hallway = [
   'R1C3', 'R1C4', 'R1C5', 'R1C6', 'R1C7', 'R1C8', 'R1C9',
   'R2C9',
@@ -37,49 +44,45 @@ const hallway = [
   'R9C1', 'R9C2', 'R9C3', 'R9C4', 'R9C5',
 ];
 
-// Position (1-indexed) of every perfect square <= 43: the lit bulbs.
+// Perfect squares in 1..43 -- the lit bulbs.
 const litPositions = [1, 4, 9, 16, 25, 36];
 
-// One NFA per stretch between consecutive lit positions: strictly falling
-// from the first (lit) cell to an unfixed valley, then strictly rising to
-// the next (lit) cell. `phase` starts 'desc'; the first move must fall
-// (the lit cell must outrank its neighbor); a rise switches phase to 'asc'
-// once, permanently (no returning to 'desc'); a tie is always rejected.
-// Accepting only in phase 'asc' forces the segment to end on a rise, so the
-// next lit cell is also confirmed higher than its preceding neighbor.
+// One machine per stretch of hallway running from one lit cell to the next,
+// both included. States: `fall` means the next digit must be lower (it is the
+// step away from the leading lit cell, which the first rule requires to drop);
+// `desc` means still descending but the darkest cell may be reached at any
+// point; `asc` means the rise to the next lit cell has begun and cannot be
+// undone. Equal adjacent digits are rejected everywhere, and only `asc` is
+// accepting, so the stretch ends on a rise into the trailing lit cell.
 const valleySpec = NFA.encodeSpec({
-  startState: { phase: 'desc', prev: null },
+  startState: { phase: 'fall', prev: null },
   transition: ({ phase, prev }, value) => {
-    if (prev === null) return { phase: 'desc', prev: value };
+    if (prev === null) return { phase: 'fall', prev: value };
+    if (phase === 'fall') {
+      return value < prev ? { phase: 'desc', prev: value } : undefined;
+    }
     if (phase === 'desc') {
       if (value < prev) return { phase: 'desc', prev: value };
       if (value > prev) return { phase: 'asc', prev: value };
       return undefined;
     }
-    // phase === 'asc'
-    if (value > prev) return { phase: 'asc', prev: value };
-    return undefined;
+    return value > prev ? { phase: 'asc', prev: value } : undefined;
   },
   accept: ({ phase }) => phase === 'asc',
 }, 9);
 
-const valleys = [];
-for (let i = 0; i + 1 < litPositions.length; i++) {
-  const from = litPositions[i];
+const valleys = litPositions.slice(0, -1).map((from, i) => {
   const to = litPositions[i + 1];
-  const cells = hallway.slice(from - 1, to); // inclusive of both lit cells
-  valleys.push(new NFA(valleySpec, `valley${from}_${to}`, ...cells));
-}
+  return new NFA(valleySpec, `valley${from}_${to}`, ...hallway.slice(from - 1, to));
+});
 
-// After the last lit cell (position 36) the hallway only keeps darkening:
-// strictly decreasing all the way to position 43, with no further rise.
-// Thermo enforces strictly increasing from its first cell, so list the tail
-// back-to-front (position 43 first) to get strictly decreasing 36 -> 43.
-const tailCells = hallway.slice(35, 43).reverse();
-const tail = new Thermo(...tailCells);
+// Tail after the last lit bulb (position 36): strictly falling to position 43.
+// Thermo is strictly increasing from its first cell, so the tail is listed
+// end-first.
+const tail = new Thermo(...hallway.slice(litPositions[litPositions.length - 1] - 1).reverse());
 
-// Arrow sum clues: circled cell (lower hallway position) = sum of the line
-// cells (higher hallway positions).
+// Arrows: circled cell (drawn as the purple circle at the arrow's tail) equals
+// the sum of the cells the shaft passes through.
 const arrows = [
   new Arrow('R1C7', 'R1C8', 'R1C9'),
   new Arrow('R3C8', 'R3C7', 'R3C6'),
