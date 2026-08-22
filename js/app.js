@@ -5,7 +5,8 @@ import { buildRow, SORT_KEYS } from './table.js';
 import { openScriptModal } from './script_modal.js';
 import { ISS_BASE, el, encodeCodeParam, fetchJson, showLoadError } from './util.js';
 import { DEFAULT_STATE, UrlState, activeFilterKey, defaultSortDesc } from './url_state.js';
-import { Timeline, inRange, monthDomain, monthOf } from './timeline.js';
+import { Timeline } from './timeline.js';
+import { inRange, monthDomain, monthOf } from './months.js';
 
 // Rows are appended to the table in chunks as the user scrolls (windowed
 // rendering) so a large index doesn't stall filtering/sorting re-renders.
@@ -138,7 +139,6 @@ function createState() {
     rowsComplete: false,
     searchIndex: new WeakMap(),
     authorCounts: new Map(),
-    monthDomain: [],
     hiddenStatuses: new Set(),
   };
 }
@@ -186,12 +186,12 @@ class IndexApp {
     this.renderedCount = 0;
     this.sentinelObserver = null;
     this.chipObserver = null;
-    this.skipUrlSync = false;
     this.visibleFrame = 0;
+    this.dateFrame = 0;
     this.url = new UrlState(this.state, () => this.restoreView());
     this.timeline = new Timeline(this.dom.timeline, {
       onChange: range => this.setDateRange(range),
-      onCommit: () => this.url.sync(),
+      onCommit: () => this.url.resume(),
     });
   }
 
@@ -252,8 +252,7 @@ class IndexApp {
     this.state.rowsComplete = complete;
     this.state.searchIndex = buildSearchIndex(rows);
     this.state.authorCounts = countAuthors(rows);
-    this.state.monthDomain = monthDomain(rows);
-    this.timeline.setDomain(this.state.monthDomain);
+    this.timeline.setDomain(monthDomain(rows));
   }
 
   // Back/Forward, once UrlState has read the entry back into state. The URL
@@ -286,7 +285,7 @@ class IndexApp {
     this.renderRows(rows);
     this.renderActiveFilters();
     this.renderControls(rows.length, statusCounts, monthCounts);
-    if (!this.skipUrlSync) this.url.sync();
+    this.url.sync();
   }
 
   isDateDescSort() {
@@ -309,19 +308,14 @@ class IndexApp {
     const limit = this.sentinelObserver ? RENDER_CHUNK : Infinity;
     const chunk = this.pendingRows.slice(this.renderedCount, this.renderedCount + limit);
     this.renderedCount += chunk.length;
-    const els = chunk.map(row => {
-      const rowEl = buildRow(row, {
+    const els = chunk.map(row => buildRow(row, {
       density: this.state.density,
       authorCounts: this.state.authorCounts,
       onAuthorFilter: author => this.addActiveFilter('author', author),
       onConstraintFilter: name => this.addActiveFilter('constraint', name),
       onIdFilter: id => this.setFilter(id),
       onOpenScript: scriptRow => this.openScript(scriptRow),
-      });
-      // Read back by syncVisibleMonths() to mark the timeline.
-      rowEl.dataset.month = monthOf(row);
-      return rowEl;
-    });
+    }));
     this.dom.rows.append(...els);
     for (const rowEl of els) this.observeRowChips(rowEl);
     this.queueVisibleSync();
@@ -340,7 +334,8 @@ class IndexApp {
     });
   }
 
-  // The months of the rows on screen. Rows stack vertically in document order,
+  // The months of the rows on screen (each <tr> carries its own, see buildRow).
+  // Rows stack vertically in document order,
   // so the first one below the fold can be found by binary search rather than
   // by walking the whole rendered list. Deliberately not derived from the sort
   // order: under a non-date sort the on-screen rows are scattered across the
@@ -377,7 +372,6 @@ class IndexApp {
     this.renderSearchSummary(visibleCount);
     this.syncLegendButtons(statusCounts);
     this.timeline.update(monthCounts, { from: this.state.dateFrom, to: this.state.dateTo });
-    this.queueVisibleSync();
     this.syncSortHeaders();
   }
 
@@ -583,15 +577,19 @@ class IndexApp {
     this.render();
   }
 
-  // The timeline repaints live as the pointer moves, so its onChange must not
-  // reach UrlState -- otherwise a single drag would push a history entry per
-  // month crossed. The gesture's end (onCommit) writes the one entry.
+  // A drag emits a range per month crossed, and each render re-queries every row
+  // and rebuilds the visible chunk. State updates now (so a commit mid-frame
+  // still writes the right URL) but the render is coalesced to one per frame.
+  // UrlState.suspend() holds the history entry until the gesture commits.
   setDateRange(range) {
     this.state.dateFrom = range ? range.from : null;
     this.state.dateTo = range ? range.to : null;
-    this.skipUrlSync = true;
-    this.render();
-    this.skipUrlSync = false;
+    this.url.suspend();
+    if (this.dateFrame) return;
+    this.dateFrame = requestAnimationFrame(() => {
+      this.dateFrame = 0;
+      this.render();
+    });
   }
 
   clearFilters() {

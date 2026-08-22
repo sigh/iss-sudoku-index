@@ -6,6 +6,7 @@
 // link is ready by the time it's clicked.
 
 import { statusMeta, hueFor } from './status.js';
+import { monthOf } from './months.js';
 import { ISS_BASE, el } from './util.js';
 
 const YOUTUBE_ICON = 'https://www.youtube.com/favicon.ico';
@@ -327,6 +328,8 @@ export function buildRow(row, {
   const actions = { onAuthorFilter, onConstraintFilter, onIdFilter, onOpenScript };
   const tr = document.createElement('tr');
   tr.dataset.density = density;
+  // Read back by IndexApp.visibleMonths() to mark the timeline.
+  tr.dataset.month = monthOf(row);
   tr.append(
     videoCell(row, density),
     puzzleCell(row, density, authorCounts, actions),

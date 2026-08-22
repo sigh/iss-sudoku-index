@@ -4,6 +4,7 @@
 
 import { STATUS } from './status.js';
 import { SORT_KEYS } from './table.js';
+import { isMonth } from './months.js';
 import { DENSITIES } from './util.js';
 
 // Every field that survives in a URL, at its default. Anything at its default is
@@ -28,11 +29,9 @@ export function activeFilterKey(filter) {
   return `${filter.exclude ? 'not-' : ''}${filter.type}:${filter.value}`;
 }
 
-const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
-
 function readMonth(params, name) {
   const value = params.get(name);
-  return value && MONTH_RE.test(value) ? value : null;
+  return isMonth(value) ? value : null;
 }
 
 // The range is a pair: a half-written URL (one edge valid, the other junk) is
@@ -115,6 +114,7 @@ export class UrlState {
     this.state = state;
     this.typing = false;
     this.lastWasTyping = false;
+    this.suspended = false;
     window.addEventListener('popstate', () => {
       this.read();
       onRestore();
@@ -132,6 +132,20 @@ export class UrlState {
     history.replaceState(null, '', urlFor(this.state));
   }
 
+  // Holds off history writes for the duration of a live gesture -- dragging the
+  // timeline repaints on every month crossed, and each of those repaints
+  // renders (and so syncs). resume() writes the single entry the gesture earns.
+  // Kept here beside markTyping() so every history policy lives in one place,
+  // rather than as a flag each sync() call site has to remember to check.
+  suspend() {
+    this.suspended = true;
+  }
+
+  resume() {
+    this.suspended = false;
+    this.sync();
+  }
+
   // Marks the next sync as a search-box keystroke. Those replace each other
   // rather than stacking, so a typed word costs one history entry, not one per
   // character -- but the first keystroke of a run still gets its own entry, so
@@ -141,6 +155,7 @@ export class UrlState {
   }
 
   sync() {
+    if (this.suspended) return;
     const typing = this.typing;
     this.typing = false;
     const url = urlFor(this.state);

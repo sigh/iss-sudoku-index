@@ -358,6 +358,10 @@ h1 {
 .timeline {
   /* The single knob for the strip's height. */
   --tl-track-h: 18px;
+  /* Derived from the palette so retheming the primary carries the strip with
+     it -- these were the accent colour respelled as literals. */
+  --tl-fill: color-mix(in srgb, var(--color-primary) 35%, transparent);
+  --tl-window-bg: color-mix(in srgb, var(--color-primary) 12%, transparent);
   display: flex;
   flex-direction: column;
   gap: 1px;
@@ -394,7 +398,6 @@ h1 {
 /* No gap between bars: at ~110 months and growing this reads as a density
    strip, not a bar chart. Year boundaries carry the orientation instead. */
 .tl-bar {
-  position: relative;
   display: flex;
   align-items: flex-end;
   flex: 1 1 0;
@@ -408,7 +411,7 @@ h1 {
   /* A non-zero month must never be mistakable for an empty one. */
   min-height: 2px;
   /* Three tiers, palest to strongest: in the range, and on screen right now. */
-  background: hsl(203 95% 58% / 0.35);
+  background: var(--tl-fill);
 }
 
 .tl-bar.tl-live>i {
@@ -432,7 +435,7 @@ h1 {
   position: absolute;
   top: 0;
   bottom: 0;
-  background: hsl(203 95% 58% / 0.12);
+  background: var(--tl-window-bg);
   border-left: 2px solid var(--color-primary-dark);
   border-right: 2px solid var(--color-primary-dark);
   pointer-events: none;
