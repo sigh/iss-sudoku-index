@@ -1,0 +1,14 @@
+.Sandwich~27~R3
+.Sandwich~0~R4
+.Sandwich~0~R6
+.Sandwich~28~R7
+.Sandwich~16~C2
+.Sandwich~2~C4
+.Sandwich~18~C6
+.Sandwich~21~C8
+.Quad~R1C1~4~5
+.Quad~R1C6~6
+.Quad~R3C6~1~2~3
+.Quad~R6C3~1~3~4
+.Quad~R8C3~3
+.Quad~R8C8~7~8

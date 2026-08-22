@@ -1,0 +1,14 @@
+.Diagonal~-1
+.Diagonal~1
+.BlackDot~R1C2~R1C3
+.BlackDot~R2C2~R2C3
+.BlackDot~R1C8~R2C8
+.BlackDot~R1C9~R2C9
+.BlackDot~R4C8~R4C9
+.BlackDot~R7C8~R7C9
+.BlackDot~R8C8~R8C9
+.BlackDot~R7C2~R8C2
+.BlackDot~R7C3~R8C3
+.BlackDot~R6C2~R6C3
+.LittleKiller~37~R4C1
+.LittleKiller~27~R5C9

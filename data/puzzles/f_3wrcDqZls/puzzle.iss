@@ -1,0 +1,12 @@
+.~R2C8_6~R3C3_3~R5C1_4~R5C3_9~R5C9_2~R6C3_5~R6C5_7~R6C8_4~R8C1_3~R8C2_8~R8C7_1~R1C6_1_4_9
+.AllDifferent~R6C5~R7C5~R8C5~R9C5
+.Or
+.Sum~16~R6C5~R7C5~R8C5~R9C5
+.Sum~25~R6C5~R7C5~R8C5~R9C5
+.End
+.Replicate~_7f_7f_7f_7f_D
+.Pair~f99f_b9X-_3_3H~_No%20squares~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~f99f_b9X-_3_3H~_No%20squares~R1C1~R2C1
+.End
