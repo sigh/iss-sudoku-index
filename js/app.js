@@ -3,23 +3,12 @@
 import { STATUS, statusMeta } from './status.js';
 import { buildRow, SORT_KEYS } from './table.js';
 import { openScriptModal } from './script_modal.js';
-import { DENSITIES, ISS_BASE, el, encodeCodeParam, fetchJson, showLoadError } from './util.js';
+import { ISS_BASE, el, encodeCodeParam, fetchJson, showLoadError } from './util.js';
+import { DEFAULT_STATE, UrlState, activeFilterKey, defaultSortDesc } from './url_state.js';
 
 // Rows are appended to the table in chunks as the user scrolls (windowed
 // rendering) so a large index doesn't stall filtering/sorting re-renders.
 const RENDER_CHUNK = 200;
-
-const DEFAULT_STATE = {
-  filterText: '',
-  activeFilters: [],
-  sortBy: 'date',
-  sortDesc: true,
-  density: 'medium',
-};
-
-function defaultSortDesc(col) {
-  return col === 'date' || col === 'constraint';
-}
 
 // The export omits fields derivable from puzzle_id (see export_web.py): the
 // canonical video URL, video_id when it matches, and the default artifact dir.
@@ -37,27 +26,6 @@ function countAuthors(rows) {
     counts.set(row.author, (counts.get(row.author) || 0) + 1);
   }
   return counts;
-}
-
-function activeFilterKey(filter) {
-  return `${filter.exclude ? 'not-' : ''}${filter.type}:${filter.value}`;
-}
-
-function readActiveFilters(params) {
-  const filters = [
-    ...params.getAll('constraint').map(value => ({ type: 'constraint', value, exclude: false })),
-    ...params.getAll('author').map(value => ({ type: 'author', value, exclude: false })),
-    ...params.getAll('not-constraint').map(value => ({ type: 'constraint', value, exclude: true })),
-    ...params.getAll('not-author').map(value => ({ type: 'author', value, exclude: true })),
-  ];
-  const seen = new Set();
-  return filters.filter(filter => {
-    if (!filter.value) return false;
-    const key = activeFilterKey(filter);
-    if (seen.has(key)) return false;
-    seen.add(key);
-    return true;
-  });
 }
 
 function parseUrlLike(text) {
@@ -173,41 +141,6 @@ function createState() {
   };
 }
 
-function readStateFromUrl(params, state) {
-  state.filterText = params.get('filter') || '';
-  state.activeFilters = readActiveFilters(params);
-
-  const hide = params.get('hide');
-  if (hide) state.hiddenStatuses = new Set(hide.split(',').filter(s => STATUS[s]));
-
-  const col = params.get('sort');
-  if (col && SORT_KEYS[col]) {
-    state.sortBy = col;
-    const dir = params.get('dir');
-    state.sortDesc = dir ? dir !== 'asc' : defaultSortDesc(col);
-  }
-
-  const density = params.get('density');
-  if (DENSITIES.has(density)) state.density = density;
-}
-
-function writeStateToUrl(state) {
-  const params = new URLSearchParams();
-  if (state.filterText.trim()) params.set('filter', state.filterText.trim());
-  for (const filter of state.activeFilters) {
-    params.append(`${filter.exclude ? 'not-' : ''}${filter.type}`, filter.value);
-  }
-  if (state.hiddenStatuses.size) params.set('hide', [...state.hiddenStatuses].join(','));
-  if (state.sortBy !== 'date' || state.sortDesc !== true) {
-    params.set('sort', state.sortBy);
-    params.set('dir', state.sortDesc ? 'desc' : 'asc');
-  }
-  if (state.density !== 'medium') params.set('density', state.density);
-
-  const qs = params.toString();
-  history.replaceState(null, '', location.pathname + (qs ? `?${qs}` : ''));
-}
-
 // statusCounts ignores hiddenStatuses so each legend chip reports what
 // toggling it would show, not what it currently shows.
 function queryRows(state) {
@@ -243,6 +176,7 @@ class IndexApp {
     this.renderedCount = 0;
     this.sentinelObserver = null;
     this.chipObserver = null;
+    this.url = new UrlState(this.state, () => this.restoreView());
   }
 
   collectDom() {
@@ -266,9 +200,8 @@ class IndexApp {
   }
 
   start() {
-    this.readState();
-    this.dom.filter.value = this.state.filterText;
-    for (const input of this.dom.density) input.checked = input.value === this.state.density;
+    this.url.start();
+    this.syncControls();
     this.wire();
     this.load().catch(err => showLoadError(this.dom.loading, err));
   }
@@ -304,12 +237,18 @@ class IndexApp {
     this.state.authorCounts = countAuthors(rows);
   }
 
-  readState() {
-    readStateFromUrl(new URLSearchParams(location.search), this.state);
+  // Back/Forward, once UrlState has read the entry back into state. The URL
+  // already matches, so the render's own sync() is a no-op.
+  restoreView() {
+    this.syncControls();
+    this.render();
   }
 
-  syncUrl() {
-    writeStateToUrl(this.state);
+  // The controls the user drives directly rather than through a re-render, so
+  // they have to be pushed back when state changes underneath them.
+  syncControls() {
+    this.dom.filter.value = this.state.filterText;
+    for (const input of this.dom.density) input.checked = input.value === this.state.density;
   }
 
   render() {
@@ -321,14 +260,14 @@ class IndexApp {
       this.dom.count.textContent = '';
       this.dom.empty.hidden = true;
       this.syncSortHeaders();
-      this.syncBrowserState();
+      this.url.sync();
       return;
     }
     const { rows, statusCounts } = queryRows(this.state);
     this.renderRows(rows);
     this.renderActiveFilters();
     this.renderControls(rows.length, statusCounts);
-    this.syncBrowserState();
+    this.url.sync();
   }
 
   isDateDescSort() {
@@ -370,10 +309,6 @@ class IndexApp {
     this.renderSearchSummary(visibleCount);
     this.syncLegendButtons(statusCounts);
     this.syncSortHeaders();
-  }
-
-  syncBrowserState() {
-    this.syncUrl();
   }
 
   renderSearchSummary(visibleCount) {
@@ -515,7 +450,10 @@ class IndexApp {
 
   queueFilter(text) {
     clearTimeout(this.filterTimer);
-    this.filterTimer = setTimeout(() => this.setFilter(text), 100);
+    this.filterTimer = setTimeout(() => {
+      this.url.markTyping();
+      this.setFilter(text);
+    }, 100);
   }
 
   addActiveFilter(type, value) {
