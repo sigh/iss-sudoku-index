@@ -352,6 +352,113 @@ h1 {
   font-variant-numeric: tabular-nums;
 }
 
+/* --- Timeline (date range strip) --- */
+/* Fixed heights throughout: the strip lives in the sticky controls block, so it
+   must not change size when counts land or a range is selected. */
+.timeline {
+  /* The single knob for the strip's height. */
+  --tl-track-h: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.tl-track {
+  position: relative;
+  height: var(--tl-track-h);
+  border-bottom: 1px solid var(--border);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.tl-track:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
+}
+
+.tl-track[data-hover="pan"] {
+  cursor: grab;
+}
+
+.tl-track[data-hover="start"],
+.tl-track[data-hover="end"] {
+  cursor: ew-resize;
+}
+
+.tl-bars {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}
+
+/* No gap between bars: at ~110 months and growing this reads as a density
+   strip, not a bar chart. Year boundaries carry the orientation instead. */
+.tl-bar {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  flex: 1 1 0;
+  min-width: 0;
+  height: 100%;
+}
+
+.tl-bar>i {
+  width: 100%;
+  height: var(--h);
+  /* A non-zero month must never be mistakable for an empty one. */
+  min-height: 2px;
+  /* Three tiers, palest to strongest: in the range, and on screen right now. */
+  background: hsl(203 95% 58% / 0.35);
+}
+
+.tl-bar.tl-live>i {
+  background: var(--color-primary);
+}
+
+.tl-bar.tl-zero>i {
+  min-height: 0;
+}
+
+.tl-bar.tl-out>i {
+  background: var(--border-strong);
+  opacity: 0.55;
+}
+
+.tl-bar[data-month$="-01"] {
+  border-left: 1px solid var(--border);
+}
+
+.tl-window {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  background: hsl(203 95% 58% / 0.12);
+  border-left: 2px solid var(--color-primary-dark);
+  border-right: 2px solid var(--color-primary-dark);
+  pointer-events: none;
+}
+
+.tl-years {
+  position: relative;
+  height: 11px;
+  font-size: 9px;
+  color: var(--text-muted);
+  user-select: none;
+}
+
+.tl-year {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  white-space: nowrap;
+}
+
+/* The first year on the axis rarely starts in January; centring its label on a
+   mid-year tick would misplace it, so it hugs the left edge instead. */
+.tl-year.partial {
+  transform: none;
+}
+
 /* --- Table --- */
 table {
   width: 100%;
@@ -1012,6 +1119,12 @@ pre.modal-code {
 
 /* Narrow screens: drop status label + chips to keep the row compact. */
 @media (max-width: 640px) {
+  /* Bars are flex: 1 1 0, so they simply get thinner rather than needing a
+     coarser bucket; only the height comes down. */
+  .timeline {
+    --tl-track-h: 14px;
+  }
+
   :root {
     --page-x: var(--gap);
   }

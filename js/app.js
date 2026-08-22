@@ -5,6 +5,7 @@ import { buildRow, SORT_KEYS } from './table.js';
 import { openScriptModal } from './script_modal.js';
 import { ISS_BASE, el, encodeCodeParam, fetchJson, showLoadError } from './util.js';
 import { DEFAULT_STATE, UrlState, activeFilterKey, defaultSortDesc } from './url_state.js';
+import { Timeline, inRange, monthDomain, monthOf } from './timeline.js';
 
 // Rows are appended to the table in chunks as the user scrolls (windowed
 // rendering) so a large index doesn't stall filtering/sorting re-renders.
@@ -137,23 +138,32 @@ function createState() {
     rowsComplete: false,
     searchIndex: new WeakMap(),
     authorCounts: new Map(),
+    monthDomain: [],
     hiddenStatuses: new Set(),
   };
 }
 
-// statusCounts ignores hiddenStatuses so each legend chip reports what
-// toggling it would show, not what it currently shows.
+// Each control's own counts ignore that control: statusCounts ignores
+// hiddenStatuses and monthCounts ignores the date range, so every chip and bar
+// reports what selecting it would show rather than what is showing now.
 function queryRows(state) {
   const needles = searchNeedles(state.filterText);
   const sortKey = SORT_KEYS[state.sortBy];
   const dir = state.sortDesc ? -1 : 1;
   const rows = [];
   const statusCounts = {};
+  const monthCounts = new Map();
   for (const row of state.rows) {
     if (!matchesText(row, needles, state.searchIndex)) continue;
     if (!state.activeFilters.every(filter => matchesActiveFilter(row, filter))) continue;
+    const statusHidden = state.hiddenStatuses.has(row.status);
+    if (!statusHidden) {
+      const month = monthOf(row);
+      if (month) monthCounts.set(month, (monthCounts.get(month) || 0) + 1);
+    }
+    if (!inRange(row, state.dateFrom, state.dateTo)) continue;
     statusCounts[row.status] = (statusCounts[row.status] || 0) + 1;
-    if (state.hiddenStatuses.has(row.status)) continue;
+    if (statusHidden) continue;
     rows.push(row);
   }
   rows.sort((a, b) => {
@@ -163,7 +173,7 @@ function queryRows(state) {
       if (ka > kb) return 1 * dir;
       return 0;
   });
-  return { rows, statusCounts };
+  return { rows, statusCounts, monthCounts };
 }
 
 class IndexApp {
@@ -176,7 +186,13 @@ class IndexApp {
     this.renderedCount = 0;
     this.sentinelObserver = null;
     this.chipObserver = null;
+    this.skipUrlSync = false;
+    this.visibleFrame = 0;
     this.url = new UrlState(this.state, () => this.restoreView());
+    this.timeline = new Timeline(this.dom.timeline, {
+      onChange: range => this.setDateRange(range),
+      onCommit: () => this.url.sync(),
+    });
   }
 
   collectDom() {
@@ -192,6 +208,7 @@ class IndexApp {
       filter: document.getElementById('filter'),
       activeFilters: document.getElementById('active-filters'),
       legend: document.getElementById('legend'),
+      timeline: document.getElementById('timeline'),
       count: document.getElementById('count'),
       resetFilters: document.getElementById('reset-filters'),
       density: [...document.querySelectorAll('input[name="density"]')],
@@ -235,6 +252,8 @@ class IndexApp {
     this.state.rowsComplete = complete;
     this.state.searchIndex = buildSearchIndex(rows);
     this.state.authorCounts = countAuthors(rows);
+    this.state.monthDomain = monthDomain(rows);
+    this.timeline.setDomain(this.state.monthDomain);
   }
 
   // Back/Forward, once UrlState has read the entry back into state. The URL
@@ -263,11 +282,11 @@ class IndexApp {
       this.url.sync();
       return;
     }
-    const { rows, statusCounts } = queryRows(this.state);
+    const { rows, statusCounts, monthCounts } = queryRows(this.state);
     this.renderRows(rows);
     this.renderActiveFilters();
-    this.renderControls(rows.length, statusCounts);
-    this.url.sync();
+    this.renderControls(rows.length, statusCounts, monthCounts);
+    if (!this.skipUrlSync) this.url.sync();
   }
 
   isDateDescSort() {
@@ -290,24 +309,75 @@ class IndexApp {
     const limit = this.sentinelObserver ? RENDER_CHUNK : Infinity;
     const chunk = this.pendingRows.slice(this.renderedCount, this.renderedCount + limit);
     this.renderedCount += chunk.length;
-    const els = chunk.map(row => buildRow(row, {
+    const els = chunk.map(row => {
+      const rowEl = buildRow(row, {
       density: this.state.density,
       authorCounts: this.state.authorCounts,
       onAuthorFilter: author => this.addActiveFilter('author', author),
       onConstraintFilter: name => this.addActiveFilter('constraint', name),
       onIdFilter: id => this.setFilter(id),
       onOpenScript: scriptRow => this.openScript(scriptRow),
-    }));
+      });
+      // Read back by syncVisibleMonths() to mark the timeline.
+      rowEl.dataset.month = monthOf(row);
+      return rowEl;
+    });
     this.dom.rows.append(...els);
     for (const rowEl of els) this.observeRowChips(rowEl);
+    this.queueVisibleSync();
     if (this.renderedCount < this.pendingRows.length) {
       this.sentinelObserver.observe(this.dom.sentinel);
     }
   }
 
-  renderControls(visibleCount, statusCounts) {
+  // Coalesced to one measure per frame: scroll fires far faster than the strip
+  // can usefully change, and the scan below forces layout.
+  queueVisibleSync() {
+    if (this.visibleFrame) return;
+    this.visibleFrame = requestAnimationFrame(() => {
+      this.visibleFrame = 0;
+      this.timeline.setVisible(this.visibleMonths());
+    });
+  }
+
+  // The months of the rows on screen. Rows stack vertically in document order,
+  // so the first one below the fold can be found by binary search rather than
+  // by walking the whole rendered list. Deliberately not derived from the sort
+  // order: under a non-date sort the on-screen rows are scattered across the
+  // axis, and the strip should show that honestly.
+  visibleMonths() {
+    const rows = this.dom.rows.children;
+    const months = new Set();
+    if (!rows.length) return months;
+    // The controls block is sticky, so rows behind it are not really on screen.
+    const top = this.dom.controls.getBoundingClientRect().bottom;
+    const bottom = window.innerHeight;
+
+    let lo = 0;
+    let hi = rows.length - 1;
+    let first = rows.length;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      if (rows[mid].getBoundingClientRect().bottom >= top) {
+        first = mid;
+        hi = mid - 1;
+      } else {
+        lo = mid + 1;
+      }
+    }
+    for (let i = first; i < rows.length; i++) {
+      if (rows[i].getBoundingClientRect().top > bottom) break;
+      const month = rows[i].dataset.month;
+      if (month) months.add(month);
+    }
+    return months;
+  }
+
+  renderControls(visibleCount, statusCounts, monthCounts) {
     this.renderSearchSummary(visibleCount);
     this.syncLegendButtons(statusCounts);
+    this.timeline.update(monthCounts, { from: this.state.dateFrom, to: this.state.dateTo });
+    this.queueVisibleSync();
     this.syncSortHeaders();
   }
 
@@ -325,7 +395,9 @@ class IndexApp {
   hasSearchState() {
     return !!this.state.filterText.trim()
       || this.state.activeFilters.length > 0
-      || this.state.hiddenStatuses.size > 0;
+      || this.state.hiddenStatuses.size > 0
+      || !!this.state.dateFrom
+      || !!this.state.dateTo;
   }
 
   renderActiveFilters() {
@@ -511,9 +583,22 @@ class IndexApp {
     this.render();
   }
 
+  // The timeline repaints live as the pointer moves, so its onChange must not
+  // reach UrlState -- otherwise a single drag would push a history entry per
+  // month crossed. The gesture's end (onCommit) writes the one entry.
+  setDateRange(range) {
+    this.state.dateFrom = range ? range.from : null;
+    this.state.dateTo = range ? range.to : null;
+    this.skipUrlSync = true;
+    this.render();
+    this.skipUrlSync = false;
+  }
+
   clearFilters() {
     this.state.hiddenStatuses.clear();
     this.state.activeFilters = [];
+    this.state.dateFrom = null;
+    this.state.dateTo = null;
     this.setFilter('');
     this.dom.filter.focus();
   }
@@ -559,8 +644,10 @@ class IndexApp {
 
     const syncToTop = () => {
       this.dom.toTop.hidden = window.scrollY <= 0;
+      this.queueVisibleSync();
     };
     window.addEventListener('scroll', syncToTop, { passive: true });
+    window.addEventListener('resize', () => this.queueVisibleSync(), { passive: true });
     syncToTop();
     this.dom.toTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 

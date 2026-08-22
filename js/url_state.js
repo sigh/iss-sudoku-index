@@ -14,6 +14,8 @@ export const DEFAULT_STATE = {
   sortBy: 'date',
   sortDesc: true,
   density: 'medium',
+  dateFrom: null,
+  dateTo: null,
 };
 
 export function defaultSortDesc(col) {
@@ -24,6 +26,27 @@ export function defaultSortDesc(col) {
 // identity for de-duping and for the active-filter pills' dataset keys.
 export function activeFilterKey(filter) {
   return `${filter.exclude ? 'not-' : ''}${filter.type}:${filter.value}`;
+}
+
+const MONTH_RE = /^\d{4}-(0[1-9]|1[0-2])$/;
+
+function readMonth(params, name) {
+  const value = params.get(name);
+  return value && MONTH_RE.test(value) ? value : null;
+}
+
+// The range is a pair: a half-written URL (one edge valid, the other junk) is
+// dropped whole rather than silently becoming an open-ended range.
+function readDateRange(state, params) {
+  const from = readMonth(params, 'from');
+  const to = readMonth(params, 'to');
+  if ((params.has('from') && !from) || (params.has('to') && !to)) {
+    state.dateFrom = null;
+    state.dateTo = null;
+    return;
+  }
+  state.dateFrom = from && to && from > to ? to : from;
+  state.dateTo = from && to && from > to ? from : to;
 }
 
 function readActiveFilters(params) {
@@ -60,6 +83,8 @@ function readInto(state, params) {
 
   const density = params.get('density');
   state.density = DENSITIES.has(density) ? density : DEFAULT_STATE.density;
+
+  readDateRange(state, params);
 }
 
 function urlFor(state) {
@@ -74,6 +99,8 @@ function urlFor(state) {
     params.set('dir', state.sortDesc ? 'desc' : 'asc');
   }
   if (state.density !== DEFAULT_STATE.density) params.set('density', state.density);
+  if (state.dateFrom) params.set('from', state.dateFrom);
+  if (state.dateTo) params.set('to', state.dateTo);
 
   const qs = params.toString();
   return location.pathname + (qs ? `?${qs}` : '');
