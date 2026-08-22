@@ -356,6 +356,7 @@ class IndexApp {
       authorCounts: this.state.authorCounts,
       onAuthorFilter: author => this.addActiveFilter('author', author),
       onConstraintFilter: name => this.addActiveFilter('constraint', name),
+      onIdFilter: id => this.setFilter(id),
       onOpenScript: scriptRow => this.openScript(scriptRow),
     }));
     this.dom.rows.append(...els);

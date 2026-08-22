@@ -282,6 +282,21 @@ td.col-num .qual-label { white-space: nowrap; }
 .puzzle-title-row a { display: inline-flex; align-items: center; flex: none; }
 .source-links { display: inline-flex; align-items: center; gap: 5px; flex: none; }
 .puzzle-title { font-weight: bold; }
+/* Puzzle-id filter handle: revealed on row hover/focus, but always taking up its
+   space so the reveal doesn't reflow the title. */
+.id-chip {
+  flex: none;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  color: var(--text-muted);
+  background: none;
+  cursor: pointer;
+  opacity: 0;
+}
+.id-chip:hover { color: var(--color-primary-dark); }
+tr:hover .id-chip, tr:focus-within .id-chip { opacity: 1; }
+@media (hover: none) { .id-chip { opacity: 1; } }
 .puzzle-author { color: var(--text-muted); font-size: var(--fs-small); }
 .puzzle-author.inline { white-space: nowrap; }
 .author-filter {

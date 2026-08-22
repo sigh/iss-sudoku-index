@@ -137,9 +137,22 @@ function authorLine(author, authorCounts, actions, inline = false) {
   return wrap;
 }
 
+// The puzzle id, as a filter handle: the search box already matches on the id, so
+// one click narrows the table to this row and the id lands in the page URL — where
+// it can be read and shared. Hidden at rest (see .id-chip) to keep rows quiet.
+function idFilterButton(id, actions) {
+  const btn = el('button', 'id-chip', '#');
+  btn.type = 'button';
+  btn.title = `Filter to ${id}`;
+  btn.setAttribute('aria-label', `Filter to puzzle ${id}`);
+  btn.addEventListener('click', () => actions.onIdFilter?.(id));
+  return btn;
+}
+
 function puzzleCell(row, density, authorCounts, actions) {
   const td = el('td', 'col-puzzle');
   const titleRow = el('div', 'puzzle-title-row');
+  if (row.puzzle_id) titleRow.append(idFilterButton(row.puzzle_id, actions));
   const sources = row.sources || [];
   if (sources.length) {
     const icons = el('span', 'source-links');
@@ -308,9 +321,10 @@ export function buildRow(row, {
   authorCounts = new Map(),
   onAuthorFilter,
   onConstraintFilter,
+  onIdFilter,
   onOpenScript,
 } = {}) {
-  const actions = { onAuthorFilter, onConstraintFilter, onOpenScript };
+  const actions = { onAuthorFilter, onConstraintFilter, onIdFilter, onOpenScript };
   const tr = document.createElement('tr');
   tr.dataset.density = density;
   tr.append(
