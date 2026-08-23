@@ -3,8 +3,8 @@
 // Video: https://www.youtube.com/watch?v=uZhwZ27yHV4
 // Source: https://app.crackingthecryptic.com/sudoku/92LftNNtD4
 
-// Normal sudoku rules apply. A Yin-Yang shading (black/white) partitions the
-// grid into two orthogonally-connected sets with no monochrome 2x2 block.
+// Normal sudoku rules apply. The shading is the YinYang constraint's YY cell
+// group (black/white, each connected, no monochrome 2x2 block).
 // Grey dots mark adjacent same-coloured cell pairs: on two black cells the
 // digits are in a 1:2 ratio; on two white cells the digits are consecutive.
 // "ALL possible grey dots are given" licenses the converse as a rule: any
@@ -19,12 +19,7 @@ const UNSHADED = 2; // white
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-
-// Every shade Var is either shaded (black) or unshaded (white).
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // Grey dots drawn between adjacent cells (19 total).
 const dots = [
@@ -84,34 +79,10 @@ const negRules = allEdges
     ]),
   ]);
 
-// No 2x2 block may be all one colour: one stamped NFA on the top-left
-// block, replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   new Given('R8C6', 2),
-  shadeDomain,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...dotRules,
   ...negRules,
 ];

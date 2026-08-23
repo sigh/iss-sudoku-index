@@ -11,8 +11,7 @@
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
+const shade = graph.makeOverlay('YY');
 
 const redLine = [
   'R8C9', 'R8C8', 'R9C7', 'R8C6', 'R7C7', 'R6C7', 'R5C6', 'R6C5',
@@ -22,26 +21,7 @@ const redLine = [
   'R1C8', 'R2C8', 'R3C9', 'R4C9', 'R5C9', 'R6C9', 'R7C9',
 ];
 
-// The shade overlay is transcribed from the two possible states required by
-// the Yin-Yang rules; the red-line list is the payload's drawn walk order.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 9);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+// The red-line list is the payload's drawn walk order.
 
 // This machine reads alternating shade and digit cells. Its set records the
 // current same-shade run, which is checked whenever the shade changes.
@@ -106,14 +86,10 @@ const redLinePairs = redLine.slice(0, -1).map((cell, index) => [
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   new Given('R1C8', 5),
   new Given('R9C9', 1),
-  shadeDomain,
   new Given(shade.at('R7C9'), SHADED),
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   new NFA(redLineMachine, 'red-line-shade-runs', interleavedRedLine),
   ...redLinePairs.map(cells => new NFA(shadeChangeMachine, 'red-line-shade-change', cells)),
 ];

@@ -9,39 +9,19 @@
 // and sum to the printed total, but a shaded cell in the cage counts as its
 // negative: total = sum(unshaded cage digits) - sum(shaded cage digits).
 //
-// Model: a VS shade Var (SHADED/UNSHADED) per cell. Global connectivity is
-// one ConnectedValues per shade over the shade overlay; no-monochrome-2x2 is
-// a local NFA replicated over every 2x2 block. Each cage keeps its own
-// AllDifferent (digits distinct within the cage) plus one NFA that reads
-// the cage's cells as interleaved (digit, shade) pairs and
-// accumulates the signed running total, accepting only when the final
-// signed sum equals the printed (already-signed) total. Unlike a
-// colour-swap-symmetric Yin-Yang puzzle, swapping every cell's shade flips
-// the sign of every non-zero cage total, so this puzzle has no shade-
-// relabeling symmetry and needs no canonicalizing pin.
+// Shading is the native YinYang constraint. Swapping every cell's shade
+// flips the sign of every non-zero cage total, so this puzzle has no shade-
+// relabeling symmetry and needs no canonicalizing pin. Each cage keeps its
+// own AllDifferent plus one NFA that reads the cage's cells as interleaved
+// (digit, shade) pairs and accepts only when the signed running total
+// equals the printed (already-signed) total.
 
 const SHADED = 1, UNSHADED = 2;
 const DIGIT_VALUES = 9;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeOf = cell => shade.at(cell);
-const gridCells = graph.cells();
-
-// Every cell is SHADED or UNSHADED: one Given template stamped over the
-// whole grid via Replicate instead of 81 identical Givens.
-const shadeCells = shade.at(gridCells);
-const shadeGivens = shade.makeReplicate(new Given(shadeCells[0], SHADED, UNSHADED));
-
-// No 2x2 block of cells is entirely one shade.
-const notAllSameNFA = NFA.encodeSpec({
-  startState: null,
-  transition: (state, v) => state === null
-    ? { first: v, allSame: true }
-    : { first: state.first, allSame: state.allSame && v === state.first },
-  accept: (state) => state !== null && !state.allSame,
-}, UNSHADED);
-const monoOrigin = shadeOf('R1C1');
 
 // Cages: [total, ...cells]. Each total is that cage's own printed clue
 // (already signed); cells transcribed from the puzzle's drawn cage geometry.
@@ -102,20 +82,7 @@ const cageConstraints = cages.flatMap(([total, ...cells]) => [
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeGivens,
-
-  // Global connectivity: shaded cells form one region, unshaded cells form
-  // the other.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-
-  // No 2x2 block of cells is entirely one shade.
-  shade.makeReplicate(
-    new NFA(
-      notAllSameNFA, 'no-mono-2x2',
-      shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2')),
-    shade.block(monoOrigin, 8, 8)),
+  new YinYang(),
 
   ...cageConstraints,
 ];

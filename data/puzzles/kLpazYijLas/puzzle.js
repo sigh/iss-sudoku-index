@@ -9,30 +9,7 @@
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-// Every overlay cell is either shaded or unshaded.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-// A 2x2 reads four shade values; its state records the partial block and rejects
-// the completed block only when all four values agree.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 9);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no monochrome 2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 // Each circle's entries are [total, cells touching that drawn circle].
 const circles = [
@@ -77,10 +54,6 @@ function shadedSum(total, cells) {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...circles.map(([total, cells]) => shadedSum(total, cells)),
 ];

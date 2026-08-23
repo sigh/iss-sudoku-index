@@ -11,28 +11,8 @@ const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeOf = cell => shade.at(cell);
-const gridCells = graph.cells();
-
-// Restrict every shade Var to the two Yin-Yang states.
-const shadeDomain = shade.makeReplicate(
-  new Given(shadeOf('R1C1'), SHADED, UNSHADED));
-
-// No 2x2 block may be monochromatic. The machine is stamped over all 64
-// block origins by translating its four overlay cells together.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { first: null, mixed: false },
-  transition: ({ first, mixed }, value) => first === null
-    ? { first: value, mixed: false }
-    : { first, mixed: mixed || value !== first },
-  accept: ({ mixed }) => mixed,
-}, 9);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-monochrome-2x2',
-    ...shade.at(graph.block('R1C1', 2, 2))),
-  shade.at(blockOrigins));
 
 const cages = [
   ['R8C1', 'R8C2', 'R9C1', 'R9C2'],
@@ -83,20 +63,14 @@ const balancedCages = cages.map(cells => new NFA(
 return [
   new Shape('9x9'),
   new NoBoxes(),
-  shade.toVar('yin-yang shade'),
-  shadeDomain,
+  new YinYang(),
 
   new Given('R5C5', 7),
-
-  // Both shade classes form one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
 
   // Shade labels are interchangeable under every rule. Pin one reference
   // cell to remove only that global naming symmetry.
   new Given(shadeOf('R1C1'), SHADED),
 
-  noMono2x2,
   ...balancedCages,
 
   new SameValues(2, 'R1C9', 'R9C1'),

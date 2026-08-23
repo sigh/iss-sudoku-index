@@ -8,28 +8,7 @@ const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-// No 2x2 area is entirely shaded or entirely unshaded.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { values: [] },
-  transition: ({ values, done }, value) => {
-    if (done) return { done: true };
-    const next = [...values, value];
-    if (next.length < 4) return { values: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 const zippers = [
   ['R4C8', 'R5C8', 'R6C7'],
@@ -89,11 +68,6 @@ function signedZipper(path) {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
-  // Each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...zippers.flatMap(signedZipper),
 ];

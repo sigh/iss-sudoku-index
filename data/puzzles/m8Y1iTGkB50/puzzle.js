@@ -3,11 +3,12 @@
 // Video: https://www.youtube.com/watch?v=m8Y1iTGkB50
 // Source: https://sudokupad.app/pzyl7pacx7
 
-// Shade state is 1 for light and 2 for dark. A contribution layer stores zero
-// for light cells and the digit for dark cells, so digit + contribution is the
-// ordinary digit or twice the digit.
-const LIGHT = 1;
-const DARK = 2;
+// Shading is native YinYang, whose two shades are the grid's two lowest
+// values (this puzzle's Shape starts at 0): LIGHT=0, DARK=1. A contribution
+// layer stores zero for light cells and the digit for dark cells, so
+// digit + contribution is the ordinary digit or twice the digit.
+const LIGHT = 0;
+const DARK = 1;
 
 // The zero-based auxiliary range is needed for the dark-cell contribution.
 // Sixteen values is ISS's maximum; the puzzle itself remains digit 1-9.
@@ -15,7 +16,7 @@ const shape = new Shape('9x9', '0-15');
 const graph = cellGraph(shape);
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const contribution = graph.makeOverlay('VC');
 
 // These are the seven drawn lines, split at their white dots. Each nested pair
@@ -79,28 +80,6 @@ const contributions = gridCells.map(cell => new NFA(
   contribution.at(cell),
 ));
 
-// Every 2x2 contains both colours. The NFA rejects exactly the two monochrome
-// assignments and is replicated over all 64 block origins.
-const noMonochrome2x2Machine = NFA.encodeSpec({
-  startState: { first: 0, count: 0, differs: false },
-  transition: ({ first, count, differs }, value) => {
-    if (value !== LIGHT && value !== DARK) return undefined;
-    if (count >= 4) return undefined;
-    if (count === 0) return { first: value, count: 1, differs: false };
-    return { first, count: count + 1, differs: differs || value !== first };
-  },
-  accept: ({ count, differs }) => count === 4 && differs,
-}, geometry);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMonochrome2x2 = shade.makeReplicate(
-  new NFA(
-    noMonochrome2x2Machine,
-    'no-monochrome-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2)),
-  ),
-  shade.at(blockOrigins),
-);
-
 const segmentRules = splitLines.flatMap(segments => [
   // Each effective sum is the sum of the segment's digits and contributions.
   new EqualSum(...segments.map(segment =>
@@ -115,12 +94,8 @@ return [
   shape,
   // Widening is only for auxiliary effective values; playable cells stay 1-9.
   graph.makeReplicate(new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-  shade.toVar('light-dark shade'),
+  new YinYang(),
   contribution.toVar('dark contribution'),
-  shade.makeReplicate(new Given(shade.cells()[0], LIGHT, DARK)),
-  new ConnectedValues('VS', LIGHT),
-  new ConnectedValues('VS', DARK),
-  noMonochrome2x2,
   ...contributions,
   ...segmentRules,
 ];

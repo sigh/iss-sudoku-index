@@ -10,10 +10,7 @@
 const LAND = 1;
 const WATER = 2;
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], LAND, WATER));
+const shade = graph.makeOverlay('YY');
 
 // The drawn coloured line paths, in their drawn order.
 const lines = [
@@ -74,27 +71,8 @@ function zipperWhenWet(line) {
   ]);
 }
 
-// No 2x2 area may be all land or all water. The literal blocks come from the
-// ordinary 9x9 grid geometry and are replicated at every valid top-left cell.
-const noMono2x2 = gridCells
-  .filter(cell => graph.block(cell, 2, 2))
-  .map(cell => {
-    const block = shade.at(graph.block(cell, 2, 2));
-    // A block is non-monochrome exactly when some ordered cell pair is land/water.
-    return new Or(block.flatMap(land => block
-      .filter(water => water !== land)
-      .map(water => new And([
-        new Given(land, LAND),
-        new Given(water, WATER),
-      ]))));
-  });
-
 return [
   new Shape('9x9'),
-  shade.toVar('land or water'),
-  shadeDomain,
-  new ConnectedValues('VS', LAND),
-  new ConnectedValues('VS', WATER),
-  ...noMono2x2,
+  new YinYang(),
   ...lines.map(zipperWhenWet),
 ];

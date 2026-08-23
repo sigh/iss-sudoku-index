@@ -1,0 +1,11 @@
+.LittleKiller~11~R3C9
+.LittleKiller~7~R4C9
+.LittleKiller~8~R9C8
+.LittleKiller~7~R9C7
+.LittleKiller~22~R9C6
+.LittleKiller~39~R9C4
+.LittleKiller~32~R6C1
+.LittleKiller~48~R2C1
+.LittleKiller~34~R1C4
+.~R3C4_1_3_5_7_9~R3C6_1_3_5_7_9
+.Palindrome~R8C7~R7C8~R6C8~R5C8~R4C8~R3C8~R2C7~R1C6~R1C5~R1C4~R2C3~R3C2~R4C2~R5C2~R6C2~R7C2~R8C3~R7C4~R8C5~R7C6

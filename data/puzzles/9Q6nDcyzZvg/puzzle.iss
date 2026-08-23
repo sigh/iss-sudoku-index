@@ -1,0 +1,15 @@
+.Arrow~R8C8~R8C7~R8C6~R8C5
+.Arrow~R7C7~R6C6
+.Arrow~R7C7~R7C8~R6C8
+.Arrow~R2C8~R3C8~R4C8~R5C8
+.Arrow~R3C7~R2C7~R2C6
+.Arrow~R2C2~R2C3~R2C4~R2C5
+.Arrow~R3C3~R3C2~R4C2
+.Arrow~R7C3~R8C3~R8C4
+.Arrow~R8C2~R7C2~R6C2~R5C2
+.Sandwich~8~R2
+.Sandwich~9~R5
+.Sandwich~5~R8
+.Sandwich~11~C2
+.Sandwich~14~C5
+.Sandwich~12~C8

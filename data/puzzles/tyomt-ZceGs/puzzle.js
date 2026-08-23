@@ -11,29 +11,7 @@ const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-// Every shade Var is either shaded or unshaded.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-// No 2x2 block may be monochrome.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 const circles = [
   'R1C1', 'R2C1', 'R3C2', 'R3C8', 'R4C7',
@@ -95,11 +73,7 @@ const splitPeaRules = splitPeas.map(cells => new NFA(
 
 return [
   new Shape('9x9'),
-  shade.toVar('Yin-Yang shading'),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...unshadedCircles,
   ...minesweeperRules,
   ...splitPeaRules,

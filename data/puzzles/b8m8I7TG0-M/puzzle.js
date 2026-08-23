@@ -11,7 +11,7 @@
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 
 // Paths transcribed from the grey lines in the source artwork.
 const paths = [
@@ -62,32 +62,10 @@ function pathRules(cells) {
   return rules;
 }
 
-// The no-monochrome condition scans each 2x2 shade block.
-const noMono2x2Spec = NFA.encodeSpec({
-  startState: { values: [] },
-  transition: (state, value) => {
-    if (state.done) return state;
-    const { values } = state;
-    const next = [...values, value];
-    if (next.length < 4) return { values: next };
-    return next.some(v => v !== next[0]) ? { done: true } : undefined;
-  },
-  accept: state => state.done === true,
-}, 9);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Spec, 'no-monochrome-2x2',
-    ...shade.at(graph.block('R1C1', 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   new Given('R1C1', 4), new Given('R4C4', 4),
   new Given('R5C3', 3), new Given('R9C5', 3),
-  shade.makeReplicate(new Given(shade.at('R1C1'), SHADED, UNSHADED)),
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...paths.flatMap(pathRules),
 ];

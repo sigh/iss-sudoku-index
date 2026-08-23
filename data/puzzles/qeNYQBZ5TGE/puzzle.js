@@ -3,166 +3,233 @@
 // Video: https://www.youtube.com/watch?v=qeNYQBZ5TGE
 // Source: https://sudokupad.app/urcfy6f7yx
 
-// Normal 9x9 sudoku rules apply. The grid divides into galaxies: orthogonally
-// connected groups of cells with 180 degree rotational symmetry about their
-// centres, each centre marked by one large circle. Every cell is in exactly one
-// galaxy, galaxies do not overlap, and digits may not repeat in a galaxy. A
-// number orbiting a centre is the sum of all digits in that galaxy. A "Z"
-// orbiting a centre marks a zipper galaxy, where each digit and the cell
-// rotationally opposite to it sum to the circled digit.
+// Rules encoded here:
+//   * Normal sudoku.
+//   * Spiral galaxies: the grid divides into galaxies, orthogonally connected
+//     groups of cells with 180 degree rotational symmetry about their centres.
+//     Each centre is marked with a large circle. Every cell is in exactly one
+//     galaxy and galaxies do not overlap.
+//   * Digits may not repeat in a galaxy.
+//   * A number orbiting a galaxy centre is the sum of all digits in that
+//     galaxy.
+//   * A "Z" orbiting a galaxy centre marks a zipper galaxy: each digit and the
+//     digit rotationally opposite to it sum to the circled digit.
+// Omitted: Fog of War, and the single-cell FOGLIGHT cage at R6C6, control what
+// SudokuPad reveals while solving; they place no rule on the finished grid.
 //
-// Fog of war and the FOGLIGHT cage govern what is revealed while solving; they
-// place no rule on the completed grid and are not encoded.
-//
-// The galaxy outlines are not drawn, so the division is part of the solve. The
-// script enumerates every division the centres, symmetry, connectivity and
-// complete coverage allow, then returns the disjunction over all of them, so no
-// division is picked out of band.
+// Model: one label per cell naming the galaxy that owns it. Eighteen labels do
+// not fit one value range, so the labels are split across two whole-grid
+// overlays, VG for the first nine galaxies and VH for the last nine; the split
+// is a capacity split with no puzzle meaning. In each overlay the extra value
+// OTHER means "this cell's galaxy is labelled on the other overlay", and a
+// per-cell Pair makes exactly one of the two overlays name a galaxy, which is
+// what makes the galaxies a partition with no overlaps and nothing left over.
 
-const shape = new Shape('9x9');
-const graph = cellGraph(shape);
-const cells = graph.cells();
-const cellIndex = new Map(cells.map((cell, i) => [cell, i]));
-const neighbours = cells.map(cell => graph.neighbours(cell).map(n => cellIndex.get(n)));
+const GRID = '9x9';
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const gridCells = cellGraph(GRID).cells();
 
-// Transcribed from the large circles and the small circles orbiting them.
-// `at` is the cell under a cell-centred circle, or the two cells straddled by an
-// edge-centred circle. `sum` is the orbiting number, or null where none is
-// printed; `zipper` marks the six centres whose orbiting circle holds a "Z"
-// (drawn in purple, unlike the plain grey centres).
-const centres = [
-  { at: ['R1C6'], sum: null },
-  { at: ['R1C2', 'R2C2'], sum: 14 },
-  { at: ['R2C5'], sum: null },
-  { at: ['R2C7'], sum: null },
+// Transcribed from the eighteen large circles and the small circles orbiting
+// them. `at` is the cell a circle is drawn in, or the two cells an
+// edge-straddling circle is drawn across. `sum` is the number in an orbiting
+// circle, `zipper` marks the six centres whose orbiting circle holds a "Z".
+const GALAXIES = [
+  { at: ['R1C6'], sum: null, zipper: false },
+  { at: ['R1C2', 'R2C2'], sum: 14, zipper: false },
+  { at: ['R2C5'], sum: null, zipper: false },
+  { at: ['R2C7'], sum: null, zipper: false },
   { at: ['R3C3'], sum: 45, zipper: true },
-  { at: ['R4C1'], sum: 35 },
+  { at: ['R4C1'], sum: 35, zipper: false },
   { at: ['R4C5'], sum: 24, zipper: true },
   { at: ['R4C9'], sum: null, zipper: true },
   { at: ['R5C5'], sum: 12, zipper: true },
   { at: ['R5C8'], sum: 28, zipper: true },
   { at: ['R6C6'], sum: 15, zipper: true },
-  { at: ['R7C1', 'R7C2'], sum: null },
-  { at: ['R7C3'], sum: 35 },
-  { at: ['R8C5'], sum: 25 },
-  { at: ['R8C7'], sum: null },
-  { at: ['R8C8', 'R8C9'], sum: null },
-  { at: ['R9C3'], sum: null },
-  { at: ['R9C9'], sum: null },
+  { at: ['R7C1', 'R7C2'], sum: null, zipper: false },
+  { at: ['R7C3'], sum: 35, zipper: false },
+  { at: ['R8C5'], sum: 25, zipper: false },
+  { at: ['R8C7'], sum: null, zipper: false },
+  { at: ['R8C8', 'R8C9'], sum: null, zipper: false },
+  { at: ['R9C3'], sum: null, zipper: false },
+  { at: ['R9C9'], sum: null, zipper: false },
 ];
 
-// Rotation by 180 degrees about a centre. An edge-centred circle sits on the
-// midpoint of its two cells, so the reflected coordinates stay integral either
-// way. Returns -1 when the image leaves the grid, which bars the cell from that
-// galaxy.
-function reflector(at) {
-  const points = at.map(parseCellId);
-  const rowSum = Math.min(...points.map(p => p.row)) + Math.max(...points.map(p => p.row));
-  const colSum = Math.min(...points.map(p => p.col)) + Math.max(...points.map(p => p.col));
-  return cell => {
-    const { row, col } = parseCellId(cell);
-    const r = rowSum - row;
-    const c = colSum - col;
-    return r >= 1 && r <= 9 && c >= 1 && c <= 9 ? cellIndex.get(makeCellId(r, c)) : -1;
+// Half-cell coordinates, so a centre drawn on a cell and a centre drawn on the
+// edge between two cells are alike integral: cell RiCj has centre (2i-1, 2j-1),
+// and the midpoint of two cells is the mean of theirs.
+const halfCoords = (cell) => {
+  const { row, col } = parseCellId(cell);
+  return { r: 2 * row - 1, c: 2 * col - 1 };
+};
+const centreOf = (g) => {
+  const points = g.at.map(halfCoords);
+  return {
+    r: points.reduce((a, p) => a + p.r, 0) / points.length,
+    c: points.reduce((a, p) => a + p.c, 0) / points.length,
   };
-}
+};
+const gridCellSet = new Set(gridCells);
+// The cell diametrically opposite `cell` through galaxy `g`'s centre, or null
+// when that lands outside the grid.
+const rotate = (cell, g) => {
+  const { r, c } = halfCoords(cell);
+  const centre = centreOf(g);
+  const image = makeCellId((2 * centre.r - r + 1) / 2, (2 * centre.c - c + 1) / 2);
+  return gridCellSet.has(image) ? image : null;
+};
 
-const mirror = centres.map(centre => {
-  const reflect = reflector(centre.at);
-  return cells.map(reflect);
+// Cell counts a galaxy can have. Rotation pairs its cells up, leaving only the
+// cell holding a cell-drawn centre unpaired, so a galaxy is odd-sized when its
+// circle is drawn on a cell and even-sized when it is drawn on an edge. Digits
+// do not repeat, so there are at most nine cells; where a total is printed, n
+// distinct digits reach only 1+..+n at least and 9+..+(10-n) at most.
+const possibleSizes = (g) => DIGITS.filter(n => {
+  if (n % 2 !== g.at.length % 2) return false;
+  if (g.sum === null) return true;
+  return g.sum >= (n * (n + 1)) / 2 && g.sum <= (n * (19 - n)) / 2;
 });
-const anchors = centres.map(centre => centre.at.map(cell => cellIndex.get(cell)));
 
-// Candidate-set narrowing for the division search. It uses only the geometry
-// rules -- symmetry about the marked centre, orthogonal connectivity back to
-// that centre, and every cell landing in some galaxy -- and never a digit clue,
-// so the enumeration below cannot be biased by the numbers.
-function propagate(candidates) {
-  for (;;) {
-    let changed = false;
-    for (let k = 0; k < centres.length; ++k) {
-      for (let i = 0; i < candidates.length; ++i) {
-        if (!candidates[i].has(k)) continue;
-        const m = mirror[k][i];
-        if (m < 0 || !candidates[m].has(k)) {
-          candidates[i].delete(k);
-          changed = true;
-        }
-      }
-      if (anchors[k].some(i => !candidates[i].has(k))) return false;
-      const queue = [...anchors[k]];
-      const seen = new Set(queue);
-      for (let q = 0; q < queue.length; ++q) {
-        for (const n of neighbours[queue[q]]) {
-          if (candidates[n].has(k) && !seen.has(n)) {
-            seen.add(n);
-            queue.push(n);
-          }
-        }
-      }
-      for (let i = 0; i < candidates.length; ++i) {
-        if (candidates[i].has(k) && !seen.has(i)) {
-          candidates[i].delete(k);
-          changed = true;
-        }
-      }
-    }
-    if (candidates.some(set => set.size === 0)) return false;
-    if (!changed) return true;
-  }
-}
-
-function search(candidates, found, limit) {
-  if (found.length >= limit || !propagate(candidates)) return;
-  let pick = -1;
-  for (let i = 0; i < candidates.length; ++i) {
-    if (candidates[i].size > 1 && (pick < 0 || candidates[i].size < candidates[pick].size)) pick = i;
-  }
-  // Every cell is down to one owner, and propagate() has just re-checked
-  // symmetry and connectivity against those singletons, so this is a legal
-  // division.
-  if (pick < 0) {
-    found.push(candidates.map(set => [...set][0]));
-    return;
-  }
-  for (const k of candidates[pick]) {
-    const branch = candidates.map(set => new Set(set));
-    branch[pick] = new Set([k]);
-    search(branch, found, limit);
-  }
-}
-
-const start = cells.map((cell, i) => new Set(centres.map((centre, k) => k).filter(k => mirror[k][i] >= 0)));
-anchors.forEach((ids, k) => ids.forEach(i => { start[i] = new Set([k]); }));
-const divisions = [];
-// The cap only guards against an unbounded search; hitting it would mean legal
-// divisions were dropped and the disjunction below is no longer the whole rule.
-const DIVISION_LIMIT = 64;
-search(start, divisions, DIVISION_LIMIT);
-if (divisions.length === 0 || divisions.length >= DIVISION_LIMIT) {
-  throw new Error(`galaxy enumeration produced ${divisions.length} divisions`);
-}
-
-function divisionRules(owner) {
-  const galaxies = centres.map((centre, k) => cells.filter((cell, i) => owner[i] === k));
-  // Cage already forbids repeats, so a galaxy with a printed total needs no
-  // separate all-different.
-  const galaxyDigits = centres.flatMap((centre, k) => {
-    if (centre.sum !== null) return [new Cage(centre.sum, ...galaxies[k])];
-    return galaxies[k].length > 1 ? [new AllDifferent(...galaxies[k])] : [];
+// Which cells a galaxy could reach. A cell at half-distance d from the centre
+// has its rotational image d cells away across the grid, and a path between the
+// two inside a connected galaxy needs at least d+1 cells, so d <= maxSize-1. A
+// cell whose image falls outside the grid cannot be in the galaxy at all.
+const zoneOf = (g) => {
+  const limit = Math.max(...possibleSizes(g)) - 1;
+  const centre = centreOf(g);
+  return gridCells.filter(cell => {
+    const { r, c } = halfCoords(cell);
+    return Math.abs(r - centre.r) + Math.abs(c - centre.c) <= limit && rotate(cell, g);
   });
-  // Every zipper centre is cell-centred, so its galaxy has odd size: the centre
-  // cell plus rotational pairs. Laying the pairs out as one line with the centre
-  // cell in the middle makes Zipper's "for odd length lines, the centre digit is
-  // the sum" read each pair against the circled digit.
-  const zippers = centres.flatMap((centre, k) => {
-    if (!centre.zipper) return [];
-    const centreIndex = cellIndex.get(centre.at[0]);
-    const left = galaxies[k].map(cellIndex.get.bind(cellIndex)).filter(i => i < mirror[k][i]);
-    const right = [...left].reverse().map(i => cells[mirror[k][i]]);
-    return [new Zipper(...left.map(i => cells[i]), cells[centreIndex], ...right)];
-  });
-  return [...galaxyDigits, ...zippers];
-}
+};
+const zones = GALAXIES.map(zoneOf);
 
-return [shape, new Or(divisions.map(division => new And(divisionRules(division))))];
+// Eighteen labels exceed the value range, so they are split over two overlays
+// of nine, each carrying one extra value for "laid out on the other overlay".
+const LAYERS = 2;
+const PER_LAYER = Math.ceil(GALAXIES.length / LAYERS);
+const OTHER = PER_LAYER + 1;
+const layerOf = (i) => Math.floor(i / PER_LAYER);
+const labelOf = (i) => (i % PER_LAYER) + 1;
+
+const shape = new Shape(GRID, OTHER);
+const graph = cellGraph(shape);
+const geometry = graph.gridGeometry();
+const PREFIXES = ['VG', 'VH'];
+const overlays = PREFIXES.map(prefix => graph.makeOverlay(prefix));
+const overlayOf = (i) => overlays[layerOf(i)];
+const cellOrder = new Map(gridCells.map((cell, i) => [cell, i]));
+
+// Grid cells hold digits; the extra value exists only to mark a cell whose
+// galaxy is labelled on the other overlay.
+const digitDomain = graph.makeReplicate(new Given(gridCells[0], ...DIGITS));
+
+// Each overlay cell names a galaxy of that overlay whose zone covers the cell,
+// or OTHER.
+const labelDomain = overlays.flatMap((overlay, layer) => gridCells.map(cell =>
+  new Given(overlay.at(cell), OTHER,
+    ...GALAXIES.flatMap((g, i) =>
+      layerOf(i) === layer && zones[i].includes(cell) ? [labelOf(i)] : []))));
+
+// Exactly one of the two overlays names a galaxy for each cell.
+const oneLabelKey = Pair.fnToKey((a, b) => (a === OTHER) !== (b === OTHER), geometry);
+const oneLabel = gridCells.map(cell => new Pair(
+  oneLabelKey, 'one-galaxy-per-cell', overlays[0].at(cell), overlays[1].at(cell)));
+
+// A galaxy contains its own centre: the large circle is drawn inside the cell,
+// or across the edge shared by the two cells, that it marks.
+const anchors = GALAXIES.flatMap((g, i) =>
+  g.at.map(cell => new Given(overlayOf(i).at(cell), labelOf(i))));
+
+// 180 degree symmetry: a cell is in the galaxy exactly when its image is.
+const symmetry = GALAXIES.flatMap((g, i) => {
+  const label = labelOf(i);
+  const key = Pair.fnToKey((a, b) => (a === label) === (b === label), geometry);
+  return zones[i].flatMap(cell => {
+    const image = rotate(cell, g);
+    if (cellOrder.get(image) <= cellOrder.get(cell)) return [];
+    return [new Pair(key, `galaxy-${i + 1}-symmetry`,
+      ...overlayOf(i).at([cell, image]))];
+  });
+});
+
+const connectivity = GALAXIES.map(
+  (g, i) => new ConnectedValues(PREFIXES[layerOf(i)], labelOf(i)));
+
+// The printed total and the no-repeats rule are both functions of the set of
+// digits a galaxy holds, so one machine per galaxy scans its zone as
+// (label, digit) pairs and accumulates that set as a bitmask. `reading` is true
+// while the next cell read is the digit belonging to the label just seen.
+const galaxyContents = GALAXIES.flatMap((g, i) => {
+  // A one-cell zone with no printed total leaves nothing for the machine to
+  // check: a single digit can neither repeat nor miss a total.
+  if (g.sum === null && zones[i].length < 2) return [];
+  const label = labelOf(i);
+  const machine = NFA.encodeSpec({
+    startState: { mask: 0, reading: false, inGalaxy: false },
+    transition: (state, value) => {
+      if (!state.reading) {
+        return { mask: state.mask, reading: true, inGalaxy: value === label };
+      }
+      if (!state.inGalaxy) {
+        return { mask: state.mask, reading: false, inGalaxy: false };
+      }
+      if (value > DIGITS.length) return undefined;  // OTHER is not a digit
+      const bit = 1 << (value - 1);
+      if (state.mask & bit) return undefined;  // digits do not repeat
+      return { mask: state.mask | bit, reading: false, inGalaxy: false };
+    },
+    accept: (state) => {
+      if (state.reading) return false;
+      if (g.sum === null) return true;
+      const sum = DIGITS.reduce(
+        (total, d) => total + (state.mask & (1 << (d - 1)) ? d : 0), 0);
+      return sum === g.sum;
+    },
+  }, geometry);
+  return [new NFA(machine, `galaxy-${i + 1}-contents`,
+    ...zones[i].flatMap(cell => [overlayOf(i).at(cell), cell]))];
+});
+
+// Zipper galaxies. Every "Z" centre is drawn on a cell, and that cell's digit
+// is the circled digit; it is the total the pairs make, so it is not itself
+// paired with anything (a cell is its own rotational image only there). One
+// machine per rotational pair reads [label, digit, opposite digit, centre
+// digit] and, when the label puts the pair in the galaxy, requires the two
+// digits to sum to the centre digit.
+const zippers = GALAXIES.flatMap((g, i) => {
+  if (!g.zipper) return [];
+  const label = labelOf(i);
+  const machine = NFA.encodeSpec({
+    startState: 'label',
+    transition: (state, value) => {
+      if (state === 'label') return value === label ? 'first' : 'skip1';
+      if (state === 'skip1') return 'skip2';
+      if (state === 'skip2') return 'skip3';
+      if (state === 'skip3') return 'done';
+      if (value > DIGITS.length) return undefined;  // OTHER is not a digit
+      if (state === 'first') return { half: value };
+      if (state.half !== undefined) return { total: state.half + value };
+      return state.total === value ? 'done' : undefined;
+    },
+    accept: (state) => state === 'done',
+  }, geometry);
+  return zones[i].flatMap(cell => {
+    const image = rotate(cell, g);
+    if (cellOrder.get(image) <= cellOrder.get(cell)) return [];
+    return [new NFA(machine, `galaxy-${i + 1}-zipper`,
+      overlayOf(i).at(cell), cell, image, g.at[0])];
+  });
+});
+
+return [
+  shape,
+  ...overlays.map((overlay, layer) => overlay.toVar(`galaxy-labels-${layer + 1}`)),
+  digitDomain,
+  ...labelDomain,
+  ...oneLabel,
+  ...anchors,
+  ...symmetry,
+  ...connectivity,
+  ...galaxyContents,
+  ...zippers,
+];

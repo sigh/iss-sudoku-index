@@ -24,7 +24,7 @@
 //
 // Nothing is omitted.
 
-const HOT = 1, COLD = 2;                 // zone overlay VZ
+const HOT = 1, COLD = 2;                 // zone overlay YY (native YinYang)
 const EMPTY = 1, FINKZ = 2, PHINX = 3;   // walk-membership overlay VP
 
 // A step is stored on the edge it crosses and records the rat taking it and the
@@ -40,7 +40,7 @@ const isForwardStep = value => value === FINKZ_FWD || value === PHINX_FWD;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 
-const zone = graph.makeOverlay('VZ');
+const zone = graph.makeOverlay('YY');
 const path = graph.makeOverlay('VP');
 
 // The drawn markers.
@@ -245,23 +245,6 @@ const walks = [
 ];
 
 // --- Zones ----------------------------------------------------------------
-// Reads the four cells of a 2x2 area and rejects the two monochrome readings.
-const no2x2Machine = NFA.encodeSpec({
-  startState: { first: null, same: true },
-  transition: (state, value) => {
-    if (value !== HOT && value !== COLD) return undefined;
-    if (state.first === null) return { first: value, same: true };
-    return { first: state.first, same: state.same && value === state.first };
-  },
-  accept: state => state.first !== null && !state.same,
-  maxDepth: 4,
-}, geometry);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const no2x2 = zone.makeReplicate(
-  new NFA(no2x2Machine, 'no-2x2-zone',
-    ...zone.at(graph.block(graph.cells()[0], 2, 2))),
-  zone.at(blockOrigins));
-
 // Phinx walks only on hot cells and Finkz only on cold cells; an unvisited cell
 // may be either zone.
 const testConstraintKey = Pair.fnToKey(
@@ -270,10 +253,6 @@ const testConstraintKey = Pair.fnToKey(
     (pathValue !== FINKZ || zoneValue === COLD), geometry);
 
 const zones = [
-  zone.makeReplicate(new Given(zone.cells()[0], HOT, COLD)),
-  new ConnectedValues('VZ', HOT),
-  new ConnectedValues('VZ', COLD),
-  no2x2,
   ...drawnWalls.map(([a, b]) => new AllDifferent(zone.at(a), zone.at(b))),
   ...graph.cells().map(cell => new Pair(
     testConstraintKey, 'rat-zone', path.at(cell), zone.at(cell))),
@@ -334,7 +313,7 @@ const currantClues = Object.entries(currants).flatMap(([kind, edges]) => {
 
 return [
   new Shape('9x9'),
-  zone.toVar('hot or cold'),
+  new YinYang(),
   path.toVar('rats'),
   stepVar,
   ...zones,

@@ -22,18 +22,7 @@ const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
 
 // The shading is solver state: one Var per grid cell, holding SHADED/UNSHADED.
-const shade = graph.makeOverlay('VS');
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-// "No 2x2 area is entirely shaded or unshaded" = every 2x2 square of the shade
-// overlay holds at least one of each shade, which is a quadruple over that
-// square. block() returns null off-grid, so the origins are the 25 cells that
-// start an in-grid 2x2.
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const mixed2x2 = shade.makeReplicate(
-  new Quad(shade.cells()[0], SHADED, UNSHADED),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 // Counting Yin Yang, one machine per digit. The rule only speaks about digits
 // that occupy a shaded cell, so the shaded count of `digit` is either `digit`
@@ -72,11 +61,7 @@ const quadruples = [
 
 return [
   new Shape('6x6'),
-  shade.toVar('shade'),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  mixed2x2,
+  new YinYang(),
   ...countingYinYang,
   ...quadruples,
 ];

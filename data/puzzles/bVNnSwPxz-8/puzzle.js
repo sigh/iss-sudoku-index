@@ -12,8 +12,7 @@ const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
+const shade = graph.makeOverlay('YY');
 
 const cages = [
   { total: 11, cells: ['R1C1', 'R1C2', 'R2C1', 'R2C2'] },
@@ -29,28 +28,6 @@ const cages = [
 ];
 
 const balanceDigits = new Var('B', 'cage balance digits', `${cages.length}x2`);
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
-
-// No 2x2 block may be monochrome.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // Each machine scans [high, low, digit, shade, digit, shade, ...]. Starting a
 // remaining quantity at the represented balance lets unshaded digits subtract
@@ -169,12 +146,8 @@ const distinctBalances = cages.flatMap((_, i) =>
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   balanceDigits,
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...cageRules,
   ...distinctBalances,
 ];

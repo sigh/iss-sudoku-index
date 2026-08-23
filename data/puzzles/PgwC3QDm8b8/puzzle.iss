@@ -1,13 +1,5 @@
 .~R1C1_3~R1C7_8~R4C4_7~R5C6_3~R7C2_4~R9C5_8~R9C9_9
-.Var~S~shade~9x9
-.Replicate~_____________H~VS1
-.~VS1_1_2
-.End
-.Replicate~_7f_7f_7f_7f~VS1
-.NFA~UgIX_EMhTHQlX_CEIQhCEP_WxjGMYxn_Y1jGMYxn_YxzGMYxn_Yxj2MYxn_YxjIMYxn_YxjGRYxn_YxjGMkxn_YxjGMZNn_YxjGMYyn_ra1rWta3_ta1rWta3_te1rWta3_tbFrWta3_ta2bWta3_ta1tWta3_ta1rbta3_ta1rW5a3_ta1rWt23_ta1rWtb3-CEIQhCH_hCEIQhCH-hCEIQhD-whCEIQh-4QhCEIQ-8IQhCEIe-EIQhCEO_CEIQhCG_hCEIQhC_whCEIQhA~_no-mono-2x2~VS1~VS2~VS10~VS11
-.End
-.ConnectedValues~VS~1
-.ConnectedValues~VS~2
+.YinYang
 .WhiteDot~R5C1~R5C2
 .WhiteDot~R5C6~R5C7
 .WhiteDot~R2C4~R3C4
@@ -30,7 +22,7 @@
 .~R1C1_9~R2C1_1
 .End
 .End
-.~VS1_1~VS10_1
+.~YY1_1~YY10_1
 .End
 .And
 .Or
@@ -41,7 +33,7 @@
 .~R1C1_9~R3C1_1
 .End
 .End
-.~VS1_1~VS10_1~VS19_1
+.~YY1_1~YY10_1~YY19_1
 .End
 .And
 .Or
@@ -52,7 +44,7 @@
 .~R1C1_9~R4C1_1
 .End
 .End
-.~VS1_1~VS10_1~VS19_1~VS28_1
+.~YY1_1~YY10_1~YY19_1~YY28_1
 .End
 .And
 .Or
@@ -63,7 +55,7 @@
 .~R1C1_9~R5C1_1
 .End
 .End
-.~VS1_1~VS10_1~VS19_1~VS28_1~VS37_1
+.~YY1_1~YY10_1~YY19_1~YY28_1~YY37_1
 .End
 .And
 .Or
@@ -74,7 +66,7 @@
 .~R1C1_9~R6C1_1
 .End
 .End
-.~VS1_1~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1
+.~YY1_1~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1
 .End
 .And
 .Or
@@ -85,7 +77,7 @@
 .~R1C1_9~R7C1_1
 .End
 .End
-.~VS1_1~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1
+.~YY1_1~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1
 .End
 .And
 .Or
@@ -96,7 +88,7 @@
 .~R1C1_9~R8C1_1
 .End
 .End
-.~VS1_1~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1
+.~YY1_1~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1
 .End
 .And
 .Or
@@ -107,7 +99,7 @@
 .~R1C1_9~R9C1_1
 .End
 .End
-.~VS1_1~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1~VS73_1
+.~YY1_1~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1~YY73_1
 .End
 .And
 .Or
@@ -118,7 +110,7 @@
 .~R2C1_9~R3C1_1
 .End
 .End
-.~VS10_1~VS19_1
+.~YY10_1~YY19_1
 .End
 .And
 .Or
@@ -129,7 +121,7 @@
 .~R2C1_9~R4C1_1
 .End
 .End
-.~VS10_1~VS19_1~VS28_1
+.~YY10_1~YY19_1~YY28_1
 .End
 .And
 .Or
@@ -140,7 +132,7 @@
 .~R2C1_9~R5C1_1
 .End
 .End
-.~VS10_1~VS19_1~VS28_1~VS37_1
+.~YY10_1~YY19_1~YY28_1~YY37_1
 .End
 .And
 .Or
@@ -151,7 +143,7 @@
 .~R2C1_9~R6C1_1
 .End
 .End
-.~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1
+.~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1
 .End
 .And
 .Or
@@ -162,7 +154,7 @@
 .~R2C1_9~R7C1_1
 .End
 .End
-.~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1
+.~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1
 .End
 .And
 .Or
@@ -173,7 +165,7 @@
 .~R2C1_9~R8C1_1
 .End
 .End
-.~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1
+.~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1
 .End
 .And
 .Or
@@ -184,7 +176,7 @@
 .~R2C1_9~R9C1_1
 .End
 .End
-.~VS10_1~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1~VS73_1
+.~YY10_1~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1~YY73_1
 .End
 .And
 .Or
@@ -195,7 +187,7 @@
 .~R3C1_9~R4C1_1
 .End
 .End
-.~VS19_1~VS28_1
+.~YY19_1~YY28_1
 .End
 .And
 .Or
@@ -206,7 +198,7 @@
 .~R3C1_9~R5C1_1
 .End
 .End
-.~VS19_1~VS28_1~VS37_1
+.~YY19_1~YY28_1~YY37_1
 .End
 .And
 .Or
@@ -217,7 +209,7 @@
 .~R3C1_9~R6C1_1
 .End
 .End
-.~VS19_1~VS28_1~VS37_1~VS46_1
+.~YY19_1~YY28_1~YY37_1~YY46_1
 .End
 .And
 .Or
@@ -228,7 +220,7 @@
 .~R3C1_9~R7C1_1
 .End
 .End
-.~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1
+.~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1
 .End
 .And
 .Or
@@ -239,7 +231,7 @@
 .~R3C1_9~R8C1_1
 .End
 .End
-.~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1
+.~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1
 .End
 .And
 .Or
@@ -250,7 +242,7 @@
 .~R3C1_9~R9C1_1
 .End
 .End
-.~VS19_1~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1~VS73_1
+.~YY19_1~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1~YY73_1
 .End
 .And
 .Or
@@ -261,7 +253,7 @@
 .~R4C1_9~R5C1_1
 .End
 .End
-.~VS28_1~VS37_1
+.~YY28_1~YY37_1
 .End
 .And
 .Or
@@ -272,7 +264,7 @@
 .~R4C1_9~R6C1_1
 .End
 .End
-.~VS28_1~VS37_1~VS46_1
+.~YY28_1~YY37_1~YY46_1
 .End
 .And
 .Or
@@ -283,7 +275,7 @@
 .~R4C1_9~R7C1_1
 .End
 .End
-.~VS28_1~VS37_1~VS46_1~VS55_1
+.~YY28_1~YY37_1~YY46_1~YY55_1
 .End
 .And
 .Or
@@ -294,7 +286,7 @@
 .~R4C1_9~R8C1_1
 .End
 .End
-.~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1
+.~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1
 .End
 .And
 .Or
@@ -305,7 +297,7 @@
 .~R4C1_9~R9C1_1
 .End
 .End
-.~VS28_1~VS37_1~VS46_1~VS55_1~VS64_1~VS73_1
+.~YY28_1~YY37_1~YY46_1~YY55_1~YY64_1~YY73_1
 .End
 .And
 .Or
@@ -316,7 +308,7 @@
 .~R5C1_9~R6C1_1
 .End
 .End
-.~VS37_1~VS46_1
+.~YY37_1~YY46_1
 .End
 .And
 .Or
@@ -327,7 +319,7 @@
 .~R5C1_9~R7C1_1
 .End
 .End
-.~VS37_1~VS46_1~VS55_1
+.~YY37_1~YY46_1~YY55_1
 .End
 .And
 .Or
@@ -338,7 +330,7 @@
 .~R5C1_9~R8C1_1
 .End
 .End
-.~VS37_1~VS46_1~VS55_1~VS64_1
+.~YY37_1~YY46_1~YY55_1~YY64_1
 .End
 .And
 .Or
@@ -349,7 +341,7 @@
 .~R5C1_9~R9C1_1
 .End
 .End
-.~VS37_1~VS46_1~VS55_1~VS64_1~VS73_1
+.~YY37_1~YY46_1~YY55_1~YY64_1~YY73_1
 .End
 .And
 .Or
@@ -360,7 +352,7 @@
 .~R6C1_9~R7C1_1
 .End
 .End
-.~VS46_1~VS55_1
+.~YY46_1~YY55_1
 .End
 .And
 .Or
@@ -371,7 +363,7 @@
 .~R6C1_9~R8C1_1
 .End
 .End
-.~VS46_1~VS55_1~VS64_1
+.~YY46_1~YY55_1~YY64_1
 .End
 .And
 .Or
@@ -382,7 +374,7 @@
 .~R6C1_9~R9C1_1
 .End
 .End
-.~VS46_1~VS55_1~VS64_1~VS73_1
+.~YY46_1~YY55_1~YY64_1~YY73_1
 .End
 .And
 .Or
@@ -393,7 +385,7 @@
 .~R7C1_9~R8C1_1
 .End
 .End
-.~VS55_1~VS64_1
+.~YY55_1~YY64_1
 .End
 .And
 .Or
@@ -404,7 +396,7 @@
 .~R7C1_9~R9C1_1
 .End
 .End
-.~VS55_1~VS64_1~VS73_1
+.~YY55_1~YY64_1~YY73_1
 .End
 .And
 .Or
@@ -415,7 +407,7 @@
 .~R8C1_9~R9C1_1
 .End
 .End
-.~VS64_1~VS73_1
+.~YY64_1~YY73_1
 .End
 .End
 .Or
@@ -428,7 +420,7 @@
 .~R1C2_9~R2C2_1
 .End
 .End
-.~VS2_1~VS11_1
+.~YY2_1~YY11_1
 .End
 .And
 .Or
@@ -439,7 +431,7 @@
 .~R1C2_9~R3C2_1
 .End
 .End
-.~VS2_1~VS11_1~VS20_1
+.~YY2_1~YY11_1~YY20_1
 .End
 .And
 .Or
@@ -450,7 +442,7 @@
 .~R1C2_9~R4C2_1
 .End
 .End
-.~VS2_1~VS11_1~VS20_1~VS29_1
+.~YY2_1~YY11_1~YY20_1~YY29_1
 .End
 .And
 .Or
@@ -461,7 +453,7 @@
 .~R1C2_9~R5C2_1
 .End
 .End
-.~VS2_1~VS11_1~VS20_1~VS29_1~VS38_1
+.~YY2_1~YY11_1~YY20_1~YY29_1~YY38_1
 .End
 .And
 .Or
@@ -472,7 +464,7 @@
 .~R1C2_9~R6C2_1
 .End
 .End
-.~VS2_1~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1
+.~YY2_1~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1
 .End
 .And
 .Or
@@ -483,7 +475,7 @@
 .~R1C2_9~R7C2_1
 .End
 .End
-.~VS2_1~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1
+.~YY2_1~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1
 .End
 .And
 .Or
@@ -494,7 +486,7 @@
 .~R1C2_9~R8C2_1
 .End
 .End
-.~VS2_1~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1
+.~YY2_1~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1
 .End
 .And
 .Or
@@ -505,7 +497,7 @@
 .~R1C2_9~R9C2_1
 .End
 .End
-.~VS2_1~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1~VS74_1
+.~YY2_1~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1~YY74_1
 .End
 .And
 .Or
@@ -516,7 +508,7 @@
 .~R2C2_9~R3C2_1
 .End
 .End
-.~VS11_1~VS20_1
+.~YY11_1~YY20_1
 .End
 .And
 .Or
@@ -527,7 +519,7 @@
 .~R2C2_9~R4C2_1
 .End
 .End
-.~VS11_1~VS20_1~VS29_1
+.~YY11_1~YY20_1~YY29_1
 .End
 .And
 .Or
@@ -538,7 +530,7 @@
 .~R2C2_9~R5C2_1
 .End
 .End
-.~VS11_1~VS20_1~VS29_1~VS38_1
+.~YY11_1~YY20_1~YY29_1~YY38_1
 .End
 .And
 .Or
@@ -549,7 +541,7 @@
 .~R2C2_9~R6C2_1
 .End
 .End
-.~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1
+.~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1
 .End
 .And
 .Or
@@ -560,7 +552,7 @@
 .~R2C2_9~R7C2_1
 .End
 .End
-.~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1
+.~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1
 .End
 .And
 .Or
@@ -571,7 +563,7 @@
 .~R2C2_9~R8C2_1
 .End
 .End
-.~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1
+.~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1
 .End
 .And
 .Or
@@ -582,7 +574,7 @@
 .~R2C2_9~R9C2_1
 .End
 .End
-.~VS11_1~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1~VS74_1
+.~YY11_1~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1~YY74_1
 .End
 .And
 .Or
@@ -593,7 +585,7 @@
 .~R3C2_9~R4C2_1
 .End
 .End
-.~VS20_1~VS29_1
+.~YY20_1~YY29_1
 .End
 .And
 .Or
@@ -604,7 +596,7 @@
 .~R3C2_9~R5C2_1
 .End
 .End
-.~VS20_1~VS29_1~VS38_1
+.~YY20_1~YY29_1~YY38_1
 .End
 .And
 .Or
@@ -615,7 +607,7 @@
 .~R3C2_9~R6C2_1
 .End
 .End
-.~VS20_1~VS29_1~VS38_1~VS47_1
+.~YY20_1~YY29_1~YY38_1~YY47_1
 .End
 .And
 .Or
@@ -626,7 +618,7 @@
 .~R3C2_9~R7C2_1
 .End
 .End
-.~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1
+.~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1
 .End
 .And
 .Or
@@ -637,7 +629,7 @@
 .~R3C2_9~R8C2_1
 .End
 .End
-.~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1
+.~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1
 .End
 .And
 .Or
@@ -648,7 +640,7 @@
 .~R3C2_9~R9C2_1
 .End
 .End
-.~VS20_1~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1~VS74_1
+.~YY20_1~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1~YY74_1
 .End
 .And
 .Or
@@ -659,7 +651,7 @@
 .~R4C2_9~R5C2_1
 .End
 .End
-.~VS29_1~VS38_1
+.~YY29_1~YY38_1
 .End
 .And
 .Or
@@ -670,7 +662,7 @@
 .~R4C2_9~R6C2_1
 .End
 .End
-.~VS29_1~VS38_1~VS47_1
+.~YY29_1~YY38_1~YY47_1
 .End
 .And
 .Or
@@ -681,7 +673,7 @@
 .~R4C2_9~R7C2_1
 .End
 .End
-.~VS29_1~VS38_1~VS47_1~VS56_1
+.~YY29_1~YY38_1~YY47_1~YY56_1
 .End
 .And
 .Or
@@ -692,7 +684,7 @@
 .~R4C2_9~R8C2_1
 .End
 .End
-.~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1
+.~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1
 .End
 .And
 .Or
@@ -703,7 +695,7 @@
 .~R4C2_9~R9C2_1
 .End
 .End
-.~VS29_1~VS38_1~VS47_1~VS56_1~VS65_1~VS74_1
+.~YY29_1~YY38_1~YY47_1~YY56_1~YY65_1~YY74_1
 .End
 .And
 .Or
@@ -714,7 +706,7 @@
 .~R5C2_9~R6C2_1
 .End
 .End
-.~VS38_1~VS47_1
+.~YY38_1~YY47_1
 .End
 .And
 .Or
@@ -725,7 +717,7 @@
 .~R5C2_9~R7C2_1
 .End
 .End
-.~VS38_1~VS47_1~VS56_1
+.~YY38_1~YY47_1~YY56_1
 .End
 .And
 .Or
@@ -736,7 +728,7 @@
 .~R5C2_9~R8C2_1
 .End
 .End
-.~VS38_1~VS47_1~VS56_1~VS65_1
+.~YY38_1~YY47_1~YY56_1~YY65_1
 .End
 .And
 .Or
@@ -747,7 +739,7 @@
 .~R5C2_9~R9C2_1
 .End
 .End
-.~VS38_1~VS47_1~VS56_1~VS65_1~VS74_1
+.~YY38_1~YY47_1~YY56_1~YY65_1~YY74_1
 .End
 .And
 .Or
@@ -758,7 +750,7 @@
 .~R6C2_9~R7C2_1
 .End
 .End
-.~VS47_1~VS56_1
+.~YY47_1~YY56_1
 .End
 .And
 .Or
@@ -769,7 +761,7 @@
 .~R6C2_9~R8C2_1
 .End
 .End
-.~VS47_1~VS56_1~VS65_1
+.~YY47_1~YY56_1~YY65_1
 .End
 .And
 .Or
@@ -780,7 +772,7 @@
 .~R6C2_9~R9C2_1
 .End
 .End
-.~VS47_1~VS56_1~VS65_1~VS74_1
+.~YY47_1~YY56_1~YY65_1~YY74_1
 .End
 .And
 .Or
@@ -791,7 +783,7 @@
 .~R7C2_9~R8C2_1
 .End
 .End
-.~VS56_1~VS65_1
+.~YY56_1~YY65_1
 .End
 .And
 .Or
@@ -802,7 +794,7 @@
 .~R7C2_9~R9C2_1
 .End
 .End
-.~VS56_1~VS65_1~VS74_1
+.~YY56_1~YY65_1~YY74_1
 .End
 .And
 .Or
@@ -813,7 +805,7 @@
 .~R8C2_9~R9C2_1
 .End
 .End
-.~VS65_1~VS74_1
+.~YY65_1~YY74_1
 .End
 .End
 .Or
@@ -826,7 +818,7 @@
 .~R1C3_9~R2C3_1
 .End
 .End
-.~VS3_1~VS12_1
+.~YY3_1~YY12_1
 .End
 .And
 .Or
@@ -837,7 +829,7 @@
 .~R1C3_9~R3C3_1
 .End
 .End
-.~VS3_1~VS12_1~VS21_1
+.~YY3_1~YY12_1~YY21_1
 .End
 .And
 .Or
@@ -848,7 +840,7 @@
 .~R1C3_9~R4C3_1
 .End
 .End
-.~VS3_1~VS12_1~VS21_1~VS30_1
+.~YY3_1~YY12_1~YY21_1~YY30_1
 .End
 .And
 .Or
@@ -859,7 +851,7 @@
 .~R1C3_9~R5C3_1
 .End
 .End
-.~VS3_1~VS12_1~VS21_1~VS30_1~VS39_1
+.~YY3_1~YY12_1~YY21_1~YY30_1~YY39_1
 .End
 .And
 .Or
@@ -870,7 +862,7 @@
 .~R1C3_9~R6C3_1
 .End
 .End
-.~VS3_1~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1
+.~YY3_1~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1
 .End
 .And
 .Or
@@ -881,7 +873,7 @@
 .~R1C3_9~R7C3_1
 .End
 .End
-.~VS3_1~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1
+.~YY3_1~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1
 .End
 .And
 .Or
@@ -892,7 +884,7 @@
 .~R1C3_9~R8C3_1
 .End
 .End
-.~VS3_1~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1
+.~YY3_1~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1
 .End
 .And
 .Or
@@ -903,7 +895,7 @@
 .~R1C3_9~R9C3_1
 .End
 .End
-.~VS3_1~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1~VS75_1
+.~YY3_1~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1~YY75_1
 .End
 .And
 .Or
@@ -914,7 +906,7 @@
 .~R2C3_9~R3C3_1
 .End
 .End
-.~VS12_1~VS21_1
+.~YY12_1~YY21_1
 .End
 .And
 .Or
@@ -925,7 +917,7 @@
 .~R2C3_9~R4C3_1
 .End
 .End
-.~VS12_1~VS21_1~VS30_1
+.~YY12_1~YY21_1~YY30_1
 .End
 .And
 .Or
@@ -936,7 +928,7 @@
 .~R2C3_9~R5C3_1
 .End
 .End
-.~VS12_1~VS21_1~VS30_1~VS39_1
+.~YY12_1~YY21_1~YY30_1~YY39_1
 .End
 .And
 .Or
@@ -947,7 +939,7 @@
 .~R2C3_9~R6C3_1
 .End
 .End
-.~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1
+.~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1
 .End
 .And
 .Or
@@ -958,7 +950,7 @@
 .~R2C3_9~R7C3_1
 .End
 .End
-.~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1
+.~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1
 .End
 .And
 .Or
@@ -969,7 +961,7 @@
 .~R2C3_9~R8C3_1
 .End
 .End
-.~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1
+.~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1
 .End
 .And
 .Or
@@ -980,7 +972,7 @@
 .~R2C3_9~R9C3_1
 .End
 .End
-.~VS12_1~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1~VS75_1
+.~YY12_1~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1~YY75_1
 .End
 .And
 .Or
@@ -991,7 +983,7 @@
 .~R3C3_9~R4C3_1
 .End
 .End
-.~VS21_1~VS30_1
+.~YY21_1~YY30_1
 .End
 .And
 .Or
@@ -1002,7 +994,7 @@
 .~R3C3_9~R5C3_1
 .End
 .End
-.~VS21_1~VS30_1~VS39_1
+.~YY21_1~YY30_1~YY39_1
 .End
 .And
 .Or
@@ -1013,7 +1005,7 @@
 .~R3C3_9~R6C3_1
 .End
 .End
-.~VS21_1~VS30_1~VS39_1~VS48_1
+.~YY21_1~YY30_1~YY39_1~YY48_1
 .End
 .And
 .Or
@@ -1024,7 +1016,7 @@
 .~R3C3_9~R7C3_1
 .End
 .End
-.~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1
+.~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1
 .End
 .And
 .Or
@@ -1035,7 +1027,7 @@
 .~R3C3_9~R8C3_1
 .End
 .End
-.~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1
+.~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1
 .End
 .And
 .Or
@@ -1046,7 +1038,7 @@
 .~R3C3_9~R9C3_1
 .End
 .End
-.~VS21_1~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1~VS75_1
+.~YY21_1~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1~YY75_1
 .End
 .And
 .Or
@@ -1057,7 +1049,7 @@
 .~R4C3_9~R5C3_1
 .End
 .End
-.~VS30_1~VS39_1
+.~YY30_1~YY39_1
 .End
 .And
 .Or
@@ -1068,7 +1060,7 @@
 .~R4C3_9~R6C3_1
 .End
 .End
-.~VS30_1~VS39_1~VS48_1
+.~YY30_1~YY39_1~YY48_1
 .End
 .And
 .Or
@@ -1079,7 +1071,7 @@
 .~R4C3_9~R7C3_1
 .End
 .End
-.~VS30_1~VS39_1~VS48_1~VS57_1
+.~YY30_1~YY39_1~YY48_1~YY57_1
 .End
 .And
 .Or
@@ -1090,7 +1082,7 @@
 .~R4C3_9~R8C3_1
 .End
 .End
-.~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1
+.~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1
 .End
 .And
 .Or
@@ -1101,7 +1093,7 @@
 .~R4C3_9~R9C3_1
 .End
 .End
-.~VS30_1~VS39_1~VS48_1~VS57_1~VS66_1~VS75_1
+.~YY30_1~YY39_1~YY48_1~YY57_1~YY66_1~YY75_1
 .End
 .And
 .Or
@@ -1112,7 +1104,7 @@
 .~R5C3_9~R6C3_1
 .End
 .End
-.~VS39_1~VS48_1
+.~YY39_1~YY48_1
 .End
 .And
 .Or
@@ -1123,7 +1115,7 @@
 .~R5C3_9~R7C3_1
 .End
 .End
-.~VS39_1~VS48_1~VS57_1
+.~YY39_1~YY48_1~YY57_1
 .End
 .And
 .Or
@@ -1134,7 +1126,7 @@
 .~R5C3_9~R8C3_1
 .End
 .End
-.~VS39_1~VS48_1~VS57_1~VS66_1
+.~YY39_1~YY48_1~YY57_1~YY66_1
 .End
 .And
 .Or
@@ -1145,7 +1137,7 @@
 .~R5C3_9~R9C3_1
 .End
 .End
-.~VS39_1~VS48_1~VS57_1~VS66_1~VS75_1
+.~YY39_1~YY48_1~YY57_1~YY66_1~YY75_1
 .End
 .And
 .Or
@@ -1156,7 +1148,7 @@
 .~R6C3_9~R7C3_1
 .End
 .End
-.~VS48_1~VS57_1
+.~YY48_1~YY57_1
 .End
 .And
 .Or
@@ -1167,7 +1159,7 @@
 .~R6C3_9~R8C3_1
 .End
 .End
-.~VS48_1~VS57_1~VS66_1
+.~YY48_1~YY57_1~YY66_1
 .End
 .And
 .Or
@@ -1178,7 +1170,7 @@
 .~R6C3_9~R9C3_1
 .End
 .End
-.~VS48_1~VS57_1~VS66_1~VS75_1
+.~YY48_1~YY57_1~YY66_1~YY75_1
 .End
 .And
 .Or
@@ -1189,7 +1181,7 @@
 .~R7C3_9~R8C3_1
 .End
 .End
-.~VS57_1~VS66_1
+.~YY57_1~YY66_1
 .End
 .And
 .Or
@@ -1200,7 +1192,7 @@
 .~R7C3_9~R9C3_1
 .End
 .End
-.~VS57_1~VS66_1~VS75_1
+.~YY57_1~YY66_1~YY75_1
 .End
 .And
 .Or
@@ -1211,7 +1203,7 @@
 .~R8C3_9~R9C3_1
 .End
 .End
-.~VS66_1~VS75_1
+.~YY66_1~YY75_1
 .End
 .End
 .Or
@@ -1224,7 +1216,7 @@
 .~R1C5_9~R2C5_1
 .End
 .End
-.~VS5_1~VS14_1
+.~YY5_1~YY14_1
 .End
 .And
 .Or
@@ -1235,7 +1227,7 @@
 .~R1C5_9~R3C5_1
 .End
 .End
-.~VS5_1~VS14_1~VS23_1
+.~YY5_1~YY14_1~YY23_1
 .End
 .And
 .Or
@@ -1246,7 +1238,7 @@
 .~R1C5_9~R4C5_1
 .End
 .End
-.~VS5_1~VS14_1~VS23_1~VS32_1
+.~YY5_1~YY14_1~YY23_1~YY32_1
 .End
 .And
 .Or
@@ -1257,7 +1249,7 @@
 .~R1C5_9~R5C5_1
 .End
 .End
-.~VS5_1~VS14_1~VS23_1~VS32_1~VS41_1
+.~YY5_1~YY14_1~YY23_1~YY32_1~YY41_1
 .End
 .And
 .Or
@@ -1268,7 +1260,7 @@
 .~R1C5_9~R6C5_1
 .End
 .End
-.~VS5_1~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1
+.~YY5_1~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1
 .End
 .And
 .Or
@@ -1279,7 +1271,7 @@
 .~R1C5_9~R7C5_1
 .End
 .End
-.~VS5_1~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1
+.~YY5_1~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1
 .End
 .And
 .Or
@@ -1290,7 +1282,7 @@
 .~R1C5_9~R8C5_1
 .End
 .End
-.~VS5_1~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1
+.~YY5_1~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1
 .End
 .And
 .Or
@@ -1301,7 +1293,7 @@
 .~R1C5_9~R9C5_1
 .End
 .End
-.~VS5_1~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1~VS77_1
+.~YY5_1~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1~YY77_1
 .End
 .And
 .Or
@@ -1312,7 +1304,7 @@
 .~R2C5_9~R3C5_1
 .End
 .End
-.~VS14_1~VS23_1
+.~YY14_1~YY23_1
 .End
 .And
 .Or
@@ -1323,7 +1315,7 @@
 .~R2C5_9~R4C5_1
 .End
 .End
-.~VS14_1~VS23_1~VS32_1
+.~YY14_1~YY23_1~YY32_1
 .End
 .And
 .Or
@@ -1334,7 +1326,7 @@
 .~R2C5_9~R5C5_1
 .End
 .End
-.~VS14_1~VS23_1~VS32_1~VS41_1
+.~YY14_1~YY23_1~YY32_1~YY41_1
 .End
 .And
 .Or
@@ -1345,7 +1337,7 @@
 .~R2C5_9~R6C5_1
 .End
 .End
-.~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1
+.~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1
 .End
 .And
 .Or
@@ -1356,7 +1348,7 @@
 .~R2C5_9~R7C5_1
 .End
 .End
-.~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1
+.~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1
 .End
 .And
 .Or
@@ -1367,7 +1359,7 @@
 .~R2C5_9~R8C5_1
 .End
 .End
-.~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1
+.~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1
 .End
 .And
 .Or
@@ -1378,7 +1370,7 @@
 .~R2C5_9~R9C5_1
 .End
 .End
-.~VS14_1~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1~VS77_1
+.~YY14_1~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1~YY77_1
 .End
 .And
 .Or
@@ -1389,7 +1381,7 @@
 .~R3C5_9~R4C5_1
 .End
 .End
-.~VS23_1~VS32_1
+.~YY23_1~YY32_1
 .End
 .And
 .Or
@@ -1400,7 +1392,7 @@
 .~R3C5_9~R5C5_1
 .End
 .End
-.~VS23_1~VS32_1~VS41_1
+.~YY23_1~YY32_1~YY41_1
 .End
 .And
 .Or
@@ -1411,7 +1403,7 @@
 .~R3C5_9~R6C5_1
 .End
 .End
-.~VS23_1~VS32_1~VS41_1~VS50_1
+.~YY23_1~YY32_1~YY41_1~YY50_1
 .End
 .And
 .Or
@@ -1422,7 +1414,7 @@
 .~R3C5_9~R7C5_1
 .End
 .End
-.~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1
+.~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1
 .End
 .And
 .Or
@@ -1433,7 +1425,7 @@
 .~R3C5_9~R8C5_1
 .End
 .End
-.~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1
+.~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1
 .End
 .And
 .Or
@@ -1444,7 +1436,7 @@
 .~R3C5_9~R9C5_1
 .End
 .End
-.~VS23_1~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1~VS77_1
+.~YY23_1~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1~YY77_1
 .End
 .And
 .Or
@@ -1455,7 +1447,7 @@
 .~R4C5_9~R5C5_1
 .End
 .End
-.~VS32_1~VS41_1
+.~YY32_1~YY41_1
 .End
 .And
 .Or
@@ -1466,7 +1458,7 @@
 .~R4C5_9~R6C5_1
 .End
 .End
-.~VS32_1~VS41_1~VS50_1
+.~YY32_1~YY41_1~YY50_1
 .End
 .And
 .Or
@@ -1477,7 +1469,7 @@
 .~R4C5_9~R7C5_1
 .End
 .End
-.~VS32_1~VS41_1~VS50_1~VS59_1
+.~YY32_1~YY41_1~YY50_1~YY59_1
 .End
 .And
 .Or
@@ -1488,7 +1480,7 @@
 .~R4C5_9~R8C5_1
 .End
 .End
-.~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1
+.~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1
 .End
 .And
 .Or
@@ -1499,7 +1491,7 @@
 .~R4C5_9~R9C5_1
 .End
 .End
-.~VS32_1~VS41_1~VS50_1~VS59_1~VS68_1~VS77_1
+.~YY32_1~YY41_1~YY50_1~YY59_1~YY68_1~YY77_1
 .End
 .And
 .Or
@@ -1510,7 +1502,7 @@
 .~R5C5_9~R6C5_1
 .End
 .End
-.~VS41_1~VS50_1
+.~YY41_1~YY50_1
 .End
 .And
 .Or
@@ -1521,7 +1513,7 @@
 .~R5C5_9~R7C5_1
 .End
 .End
-.~VS41_1~VS50_1~VS59_1
+.~YY41_1~YY50_1~YY59_1
 .End
 .And
 .Or
@@ -1532,7 +1524,7 @@
 .~R5C5_9~R8C5_1
 .End
 .End
-.~VS41_1~VS50_1~VS59_1~VS68_1
+.~YY41_1~YY50_1~YY59_1~YY68_1
 .End
 .And
 .Or
@@ -1543,7 +1535,7 @@
 .~R5C5_9~R9C5_1
 .End
 .End
-.~VS41_1~VS50_1~VS59_1~VS68_1~VS77_1
+.~YY41_1~YY50_1~YY59_1~YY68_1~YY77_1
 .End
 .And
 .Or
@@ -1554,7 +1546,7 @@
 .~R6C5_9~R7C5_1
 .End
 .End
-.~VS50_1~VS59_1
+.~YY50_1~YY59_1
 .End
 .And
 .Or
@@ -1565,7 +1557,7 @@
 .~R6C5_9~R8C5_1
 .End
 .End
-.~VS50_1~VS59_1~VS68_1
+.~YY50_1~YY59_1~YY68_1
 .End
 .And
 .Or
@@ -1576,7 +1568,7 @@
 .~R6C5_9~R9C5_1
 .End
 .End
-.~VS50_1~VS59_1~VS68_1~VS77_1
+.~YY50_1~YY59_1~YY68_1~YY77_1
 .End
 .And
 .Or
@@ -1587,7 +1579,7 @@
 .~R7C5_9~R8C5_1
 .End
 .End
-.~VS59_1~VS68_1
+.~YY59_1~YY68_1
 .End
 .And
 .Or
@@ -1598,7 +1590,7 @@
 .~R7C5_9~R9C5_1
 .End
 .End
-.~VS59_1~VS68_1~VS77_1
+.~YY59_1~YY68_1~YY77_1
 .End
 .And
 .Or
@@ -1609,7 +1601,7 @@
 .~R8C5_9~R9C5_1
 .End
 .End
-.~VS68_1~VS77_1
+.~YY68_1~YY77_1
 .End
 .End
 .Or
@@ -1622,7 +1614,7 @@
 .~R1C7_9~R2C7_1
 .End
 .End
-.~VS7_1~VS16_1
+.~YY7_1~YY16_1
 .End
 .And
 .Or
@@ -1633,7 +1625,7 @@
 .~R1C7_9~R3C7_1
 .End
 .End
-.~VS7_1~VS16_1~VS25_1
+.~YY7_1~YY16_1~YY25_1
 .End
 .And
 .Or
@@ -1644,7 +1636,7 @@
 .~R1C7_9~R4C7_1
 .End
 .End
-.~VS7_1~VS16_1~VS25_1~VS34_1
+.~YY7_1~YY16_1~YY25_1~YY34_1
 .End
 .And
 .Or
@@ -1655,7 +1647,7 @@
 .~R1C7_9~R5C7_1
 .End
 .End
-.~VS7_1~VS16_1~VS25_1~VS34_1~VS43_1
+.~YY7_1~YY16_1~YY25_1~YY34_1~YY43_1
 .End
 .And
 .Or
@@ -1666,7 +1658,7 @@
 .~R1C7_9~R6C7_1
 .End
 .End
-.~VS7_1~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1
+.~YY7_1~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1
 .End
 .And
 .Or
@@ -1677,7 +1669,7 @@
 .~R1C7_9~R7C7_1
 .End
 .End
-.~VS7_1~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1
+.~YY7_1~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1
 .End
 .And
 .Or
@@ -1688,7 +1680,7 @@
 .~R1C7_9~R8C7_1
 .End
 .End
-.~VS7_1~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1
+.~YY7_1~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1
 .End
 .And
 .Or
@@ -1699,7 +1691,7 @@
 .~R1C7_9~R9C7_1
 .End
 .End
-.~VS7_1~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1~VS79_1
+.~YY7_1~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1~YY79_1
 .End
 .And
 .Or
@@ -1710,7 +1702,7 @@
 .~R2C7_9~R3C7_1
 .End
 .End
-.~VS16_1~VS25_1
+.~YY16_1~YY25_1
 .End
 .And
 .Or
@@ -1721,7 +1713,7 @@
 .~R2C7_9~R4C7_1
 .End
 .End
-.~VS16_1~VS25_1~VS34_1
+.~YY16_1~YY25_1~YY34_1
 .End
 .And
 .Or
@@ -1732,7 +1724,7 @@
 .~R2C7_9~R5C7_1
 .End
 .End
-.~VS16_1~VS25_1~VS34_1~VS43_1
+.~YY16_1~YY25_1~YY34_1~YY43_1
 .End
 .And
 .Or
@@ -1743,7 +1735,7 @@
 .~R2C7_9~R6C7_1
 .End
 .End
-.~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1
+.~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1
 .End
 .And
 .Or
@@ -1754,7 +1746,7 @@
 .~R2C7_9~R7C7_1
 .End
 .End
-.~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1
+.~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1
 .End
 .And
 .Or
@@ -1765,7 +1757,7 @@
 .~R2C7_9~R8C7_1
 .End
 .End
-.~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1
+.~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1
 .End
 .And
 .Or
@@ -1776,7 +1768,7 @@
 .~R2C7_9~R9C7_1
 .End
 .End
-.~VS16_1~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1~VS79_1
+.~YY16_1~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1~YY79_1
 .End
 .And
 .Or
@@ -1787,7 +1779,7 @@
 .~R3C7_9~R4C7_1
 .End
 .End
-.~VS25_1~VS34_1
+.~YY25_1~YY34_1
 .End
 .And
 .Or
@@ -1798,7 +1790,7 @@
 .~R3C7_9~R5C7_1
 .End
 .End
-.~VS25_1~VS34_1~VS43_1
+.~YY25_1~YY34_1~YY43_1
 .End
 .And
 .Or
@@ -1809,7 +1801,7 @@
 .~R3C7_9~R6C7_1
 .End
 .End
-.~VS25_1~VS34_1~VS43_1~VS52_1
+.~YY25_1~YY34_1~YY43_1~YY52_1
 .End
 .And
 .Or
@@ -1820,7 +1812,7 @@
 .~R3C7_9~R7C7_1
 .End
 .End
-.~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1
+.~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1
 .End
 .And
 .Or
@@ -1831,7 +1823,7 @@
 .~R3C7_9~R8C7_1
 .End
 .End
-.~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1
+.~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1
 .End
 .And
 .Or
@@ -1842,7 +1834,7 @@
 .~R3C7_9~R9C7_1
 .End
 .End
-.~VS25_1~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1~VS79_1
+.~YY25_1~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1~YY79_1
 .End
 .And
 .Or
@@ -1853,7 +1845,7 @@
 .~R4C7_9~R5C7_1
 .End
 .End
-.~VS34_1~VS43_1
+.~YY34_1~YY43_1
 .End
 .And
 .Or
@@ -1864,7 +1856,7 @@
 .~R4C7_9~R6C7_1
 .End
 .End
-.~VS34_1~VS43_1~VS52_1
+.~YY34_1~YY43_1~YY52_1
 .End
 .And
 .Or
@@ -1875,7 +1867,7 @@
 .~R4C7_9~R7C7_1
 .End
 .End
-.~VS34_1~VS43_1~VS52_1~VS61_1
+.~YY34_1~YY43_1~YY52_1~YY61_1
 .End
 .And
 .Or
@@ -1886,7 +1878,7 @@
 .~R4C7_9~R8C7_1
 .End
 .End
-.~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1
+.~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1
 .End
 .And
 .Or
@@ -1897,7 +1889,7 @@
 .~R4C7_9~R9C7_1
 .End
 .End
-.~VS34_1~VS43_1~VS52_1~VS61_1~VS70_1~VS79_1
+.~YY34_1~YY43_1~YY52_1~YY61_1~YY70_1~YY79_1
 .End
 .And
 .Or
@@ -1908,7 +1900,7 @@
 .~R5C7_9~R6C7_1
 .End
 .End
-.~VS43_1~VS52_1
+.~YY43_1~YY52_1
 .End
 .And
 .Or
@@ -1919,7 +1911,7 @@
 .~R5C7_9~R7C7_1
 .End
 .End
-.~VS43_1~VS52_1~VS61_1
+.~YY43_1~YY52_1~YY61_1
 .End
 .And
 .Or
@@ -1930,7 +1922,7 @@
 .~R5C7_9~R8C7_1
 .End
 .End
-.~VS43_1~VS52_1~VS61_1~VS70_1
+.~YY43_1~YY52_1~YY61_1~YY70_1
 .End
 .And
 .Or
@@ -1941,7 +1933,7 @@
 .~R5C7_9~R9C7_1
 .End
 .End
-.~VS43_1~VS52_1~VS61_1~VS70_1~VS79_1
+.~YY43_1~YY52_1~YY61_1~YY70_1~YY79_1
 .End
 .And
 .Or
@@ -1952,7 +1944,7 @@
 .~R6C7_9~R7C7_1
 .End
 .End
-.~VS52_1~VS61_1
+.~YY52_1~YY61_1
 .End
 .And
 .Or
@@ -1963,7 +1955,7 @@
 .~R6C7_9~R8C7_1
 .End
 .End
-.~VS52_1~VS61_1~VS70_1
+.~YY52_1~YY61_1~YY70_1
 .End
 .And
 .Or
@@ -1974,7 +1966,7 @@
 .~R6C7_9~R9C7_1
 .End
 .End
-.~VS52_1~VS61_1~VS70_1~VS79_1
+.~YY52_1~YY61_1~YY70_1~YY79_1
 .End
 .And
 .Or
@@ -1985,7 +1977,7 @@
 .~R7C7_9~R8C7_1
 .End
 .End
-.~VS61_1~VS70_1
+.~YY61_1~YY70_1
 .End
 .And
 .Or
@@ -1996,7 +1988,7 @@
 .~R7C7_9~R9C7_1
 .End
 .End
-.~VS61_1~VS70_1~VS79_1
+.~YY61_1~YY70_1~YY79_1
 .End
 .And
 .Or
@@ -2007,7 +1999,7 @@
 .~R8C7_9~R9C7_1
 .End
 .End
-.~VS70_1~VS79_1
+.~YY70_1~YY79_1
 .End
 .End
 .Or
@@ -2020,7 +2012,7 @@
 .~R1C9_9~R2C9_1
 .End
 .End
-.~VS9_1~VS18_1
+.~YY9_1~YY18_1
 .End
 .And
 .Or
@@ -2031,7 +2023,7 @@
 .~R1C9_9~R3C9_1
 .End
 .End
-.~VS9_1~VS18_1~VS27_1
+.~YY9_1~YY18_1~YY27_1
 .End
 .And
 .Or
@@ -2042,7 +2034,7 @@
 .~R1C9_9~R4C9_1
 .End
 .End
-.~VS9_1~VS18_1~VS27_1~VS36_1
+.~YY9_1~YY18_1~YY27_1~YY36_1
 .End
 .And
 .Or
@@ -2053,7 +2045,7 @@
 .~R1C9_9~R5C9_1
 .End
 .End
-.~VS9_1~VS18_1~VS27_1~VS36_1~VS45_1
+.~YY9_1~YY18_1~YY27_1~YY36_1~YY45_1
 .End
 .And
 .Or
@@ -2064,7 +2056,7 @@
 .~R1C9_9~R6C9_1
 .End
 .End
-.~VS9_1~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1
+.~YY9_1~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1
 .End
 .And
 .Or
@@ -2075,7 +2067,7 @@
 .~R1C9_9~R7C9_1
 .End
 .End
-.~VS9_1~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1
+.~YY9_1~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1
 .End
 .And
 .Or
@@ -2086,7 +2078,7 @@
 .~R1C9_9~R8C9_1
 .End
 .End
-.~VS9_1~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1
+.~YY9_1~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1
 .End
 .And
 .Or
@@ -2097,7 +2089,7 @@
 .~R1C9_9~R9C9_1
 .End
 .End
-.~VS9_1~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1~VS81_1
+.~YY9_1~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1~YY81_1
 .End
 .And
 .Or
@@ -2108,7 +2100,7 @@
 .~R2C9_9~R3C9_1
 .End
 .End
-.~VS18_1~VS27_1
+.~YY18_1~YY27_1
 .End
 .And
 .Or
@@ -2119,7 +2111,7 @@
 .~R2C9_9~R4C9_1
 .End
 .End
-.~VS18_1~VS27_1~VS36_1
+.~YY18_1~YY27_1~YY36_1
 .End
 .And
 .Or
@@ -2130,7 +2122,7 @@
 .~R2C9_9~R5C9_1
 .End
 .End
-.~VS18_1~VS27_1~VS36_1~VS45_1
+.~YY18_1~YY27_1~YY36_1~YY45_1
 .End
 .And
 .Or
@@ -2141,7 +2133,7 @@
 .~R2C9_9~R6C9_1
 .End
 .End
-.~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1
+.~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1
 .End
 .And
 .Or
@@ -2152,7 +2144,7 @@
 .~R2C9_9~R7C9_1
 .End
 .End
-.~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1
+.~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1
 .End
 .And
 .Or
@@ -2163,7 +2155,7 @@
 .~R2C9_9~R8C9_1
 .End
 .End
-.~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1
+.~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1
 .End
 .And
 .Or
@@ -2174,7 +2166,7 @@
 .~R2C9_9~R9C9_1
 .End
 .End
-.~VS18_1~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1~VS81_1
+.~YY18_1~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1~YY81_1
 .End
 .And
 .Or
@@ -2185,7 +2177,7 @@
 .~R3C9_9~R4C9_1
 .End
 .End
-.~VS27_1~VS36_1
+.~YY27_1~YY36_1
 .End
 .And
 .Or
@@ -2196,7 +2188,7 @@
 .~R3C9_9~R5C9_1
 .End
 .End
-.~VS27_1~VS36_1~VS45_1
+.~YY27_1~YY36_1~YY45_1
 .End
 .And
 .Or
@@ -2207,7 +2199,7 @@
 .~R3C9_9~R6C9_1
 .End
 .End
-.~VS27_1~VS36_1~VS45_1~VS54_1
+.~YY27_1~YY36_1~YY45_1~YY54_1
 .End
 .And
 .Or
@@ -2218,7 +2210,7 @@
 .~R3C9_9~R7C9_1
 .End
 .End
-.~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1
+.~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1
 .End
 .And
 .Or
@@ -2229,7 +2221,7 @@
 .~R3C9_9~R8C9_1
 .End
 .End
-.~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1
+.~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1
 .End
 .And
 .Or
@@ -2240,7 +2232,7 @@
 .~R3C9_9~R9C9_1
 .End
 .End
-.~VS27_1~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1~VS81_1
+.~YY27_1~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1~YY81_1
 .End
 .And
 .Or
@@ -2251,7 +2243,7 @@
 .~R4C9_9~R5C9_1
 .End
 .End
-.~VS36_1~VS45_1
+.~YY36_1~YY45_1
 .End
 .And
 .Or
@@ -2262,7 +2254,7 @@
 .~R4C9_9~R6C9_1
 .End
 .End
-.~VS36_1~VS45_1~VS54_1
+.~YY36_1~YY45_1~YY54_1
 .End
 .And
 .Or
@@ -2273,7 +2265,7 @@
 .~R4C9_9~R7C9_1
 .End
 .End
-.~VS36_1~VS45_1~VS54_1~VS63_1
+.~YY36_1~YY45_1~YY54_1~YY63_1
 .End
 .And
 .Or
@@ -2284,7 +2276,7 @@
 .~R4C9_9~R8C9_1
 .End
 .End
-.~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1
+.~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1
 .End
 .And
 .Or
@@ -2295,7 +2287,7 @@
 .~R4C9_9~R9C9_1
 .End
 .End
-.~VS36_1~VS45_1~VS54_1~VS63_1~VS72_1~VS81_1
+.~YY36_1~YY45_1~YY54_1~YY63_1~YY72_1~YY81_1
 .End
 .And
 .Or
@@ -2306,7 +2298,7 @@
 .~R5C9_9~R6C9_1
 .End
 .End
-.~VS45_1~VS54_1
+.~YY45_1~YY54_1
 .End
 .And
 .Or
@@ -2317,7 +2309,7 @@
 .~R5C9_9~R7C9_1
 .End
 .End
-.~VS45_1~VS54_1~VS63_1
+.~YY45_1~YY54_1~YY63_1
 .End
 .And
 .Or
@@ -2328,7 +2320,7 @@
 .~R5C9_9~R8C9_1
 .End
 .End
-.~VS45_1~VS54_1~VS63_1~VS72_1
+.~YY45_1~YY54_1~YY63_1~YY72_1
 .End
 .And
 .Or
@@ -2339,7 +2331,7 @@
 .~R5C9_9~R9C9_1
 .End
 .End
-.~VS45_1~VS54_1~VS63_1~VS72_1~VS81_1
+.~YY45_1~YY54_1~YY63_1~YY72_1~YY81_1
 .End
 .And
 .Or
@@ -2350,7 +2342,7 @@
 .~R6C9_9~R7C9_1
 .End
 .End
-.~VS54_1~VS63_1
+.~YY54_1~YY63_1
 .End
 .And
 .Or
@@ -2361,7 +2353,7 @@
 .~R6C9_9~R8C9_1
 .End
 .End
-.~VS54_1~VS63_1~VS72_1
+.~YY54_1~YY63_1~YY72_1
 .End
 .And
 .Or
@@ -2372,7 +2364,7 @@
 .~R6C9_9~R9C9_1
 .End
 .End
-.~VS54_1~VS63_1~VS72_1~VS81_1
+.~YY54_1~YY63_1~YY72_1~YY81_1
 .End
 .And
 .Or
@@ -2383,7 +2375,7 @@
 .~R7C9_9~R8C9_1
 .End
 .End
-.~VS63_1~VS72_1
+.~YY63_1~YY72_1
 .End
 .And
 .Or
@@ -2394,7 +2386,7 @@
 .~R7C9_9~R9C9_1
 .End
 .End
-.~VS63_1~VS72_1~VS81_1
+.~YY63_1~YY72_1~YY81_1
 .End
 .And
 .Or
@@ -2405,7 +2397,7 @@
 .~R8C9_9~R9C9_1
 .End
 .End
-.~VS72_1~VS81_1
+.~YY72_1~YY81_1
 .End
 .End
 .Or
@@ -2418,7 +2410,7 @@
 .~R1C1_9~R1C2_1
 .End
 .End
-.~VS1_1~VS2_1
+.~YY1_1~YY2_1
 .End
 .And
 .Or
@@ -2429,7 +2421,7 @@
 .~R1C1_9~R1C3_1
 .End
 .End
-.~VS1_1~VS2_1~VS3_1
+.~YY1_1~YY2_1~YY3_1
 .End
 .And
 .Or
@@ -2440,7 +2432,7 @@
 .~R1C1_9~R1C4_1
 .End
 .End
-.~VS1_1~VS2_1~VS3_1~VS4_1
+.~YY1_1~YY2_1~YY3_1~YY4_1
 .End
 .And
 .Or
@@ -2451,7 +2443,7 @@
 .~R1C1_9~R1C5_1
 .End
 .End
-.~VS1_1~VS2_1~VS3_1~VS4_1~VS5_1
+.~YY1_1~YY2_1~YY3_1~YY4_1~YY5_1
 .End
 .And
 .Or
@@ -2462,7 +2454,7 @@
 .~R1C1_9~R1C6_1
 .End
 .End
-.~VS1_1~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1
+.~YY1_1~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1
 .End
 .And
 .Or
@@ -2473,7 +2465,7 @@
 .~R1C1_9~R1C7_1
 .End
 .End
-.~VS1_1~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1
+.~YY1_1~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1
 .End
 .And
 .Or
@@ -2484,7 +2476,7 @@
 .~R1C1_9~R1C8_1
 .End
 .End
-.~VS1_1~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1
+.~YY1_1~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1
 .End
 .And
 .Or
@@ -2495,7 +2487,7 @@
 .~R1C1_9~R1C9_1
 .End
 .End
-.~VS1_1~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1~VS9_1
+.~YY1_1~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1~YY9_1
 .End
 .And
 .Or
@@ -2506,7 +2498,7 @@
 .~R1C2_9~R1C3_1
 .End
 .End
-.~VS2_1~VS3_1
+.~YY2_1~YY3_1
 .End
 .And
 .Or
@@ -2517,7 +2509,7 @@
 .~R1C2_9~R1C4_1
 .End
 .End
-.~VS2_1~VS3_1~VS4_1
+.~YY2_1~YY3_1~YY4_1
 .End
 .And
 .Or
@@ -2528,7 +2520,7 @@
 .~R1C2_9~R1C5_1
 .End
 .End
-.~VS2_1~VS3_1~VS4_1~VS5_1
+.~YY2_1~YY3_1~YY4_1~YY5_1
 .End
 .And
 .Or
@@ -2539,7 +2531,7 @@
 .~R1C2_9~R1C6_1
 .End
 .End
-.~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1
+.~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1
 .End
 .And
 .Or
@@ -2550,7 +2542,7 @@
 .~R1C2_9~R1C7_1
 .End
 .End
-.~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1
+.~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1
 .End
 .And
 .Or
@@ -2561,7 +2553,7 @@
 .~R1C2_9~R1C8_1
 .End
 .End
-.~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1
+.~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1
 .End
 .And
 .Or
@@ -2572,7 +2564,7 @@
 .~R1C2_9~R1C9_1
 .End
 .End
-.~VS2_1~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1~VS9_1
+.~YY2_1~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1~YY9_1
 .End
 .And
 .Or
@@ -2583,7 +2575,7 @@
 .~R1C3_9~R1C4_1
 .End
 .End
-.~VS3_1~VS4_1
+.~YY3_1~YY4_1
 .End
 .And
 .Or
@@ -2594,7 +2586,7 @@
 .~R1C3_9~R1C5_1
 .End
 .End
-.~VS3_1~VS4_1~VS5_1
+.~YY3_1~YY4_1~YY5_1
 .End
 .And
 .Or
@@ -2605,7 +2597,7 @@
 .~R1C3_9~R1C6_1
 .End
 .End
-.~VS3_1~VS4_1~VS5_1~VS6_1
+.~YY3_1~YY4_1~YY5_1~YY6_1
 .End
 .And
 .Or
@@ -2616,7 +2608,7 @@
 .~R1C3_9~R1C7_1
 .End
 .End
-.~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1
+.~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1
 .End
 .And
 .Or
@@ -2627,7 +2619,7 @@
 .~R1C3_9~R1C8_1
 .End
 .End
-.~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1
+.~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1
 .End
 .And
 .Or
@@ -2638,7 +2630,7 @@
 .~R1C3_9~R1C9_1
 .End
 .End
-.~VS3_1~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1~VS9_1
+.~YY3_1~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1~YY9_1
 .End
 .And
 .Or
@@ -2649,7 +2641,7 @@
 .~R1C4_9~R1C5_1
 .End
 .End
-.~VS4_1~VS5_1
+.~YY4_1~YY5_1
 .End
 .And
 .Or
@@ -2660,7 +2652,7 @@
 .~R1C4_9~R1C6_1
 .End
 .End
-.~VS4_1~VS5_1~VS6_1
+.~YY4_1~YY5_1~YY6_1
 .End
 .And
 .Or
@@ -2671,7 +2663,7 @@
 .~R1C4_9~R1C7_1
 .End
 .End
-.~VS4_1~VS5_1~VS6_1~VS7_1
+.~YY4_1~YY5_1~YY6_1~YY7_1
 .End
 .And
 .Or
@@ -2682,7 +2674,7 @@
 .~R1C4_9~R1C8_1
 .End
 .End
-.~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1
+.~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1
 .End
 .And
 .Or
@@ -2693,7 +2685,7 @@
 .~R1C4_9~R1C9_1
 .End
 .End
-.~VS4_1~VS5_1~VS6_1~VS7_1~VS8_1~VS9_1
+.~YY4_1~YY5_1~YY6_1~YY7_1~YY8_1~YY9_1
 .End
 .And
 .Or
@@ -2704,7 +2696,7 @@
 .~R1C5_9~R1C6_1
 .End
 .End
-.~VS5_1~VS6_1
+.~YY5_1~YY6_1
 .End
 .And
 .Or
@@ -2715,7 +2707,7 @@
 .~R1C5_9~R1C7_1
 .End
 .End
-.~VS5_1~VS6_1~VS7_1
+.~YY5_1~YY6_1~YY7_1
 .End
 .And
 .Or
@@ -2726,7 +2718,7 @@
 .~R1C5_9~R1C8_1
 .End
 .End
-.~VS5_1~VS6_1~VS7_1~VS8_1
+.~YY5_1~YY6_1~YY7_1~YY8_1
 .End
 .And
 .Or
@@ -2737,7 +2729,7 @@
 .~R1C5_9~R1C9_1
 .End
 .End
-.~VS5_1~VS6_1~VS7_1~VS8_1~VS9_1
+.~YY5_1~YY6_1~YY7_1~YY8_1~YY9_1
 .End
 .And
 .Or
@@ -2748,7 +2740,7 @@
 .~R1C6_9~R1C7_1
 .End
 .End
-.~VS6_1~VS7_1
+.~YY6_1~YY7_1
 .End
 .And
 .Or
@@ -2759,7 +2751,7 @@
 .~R1C6_9~R1C8_1
 .End
 .End
-.~VS6_1~VS7_1~VS8_1
+.~YY6_1~YY7_1~YY8_1
 .End
 .And
 .Or
@@ -2770,7 +2762,7 @@
 .~R1C6_9~R1C9_1
 .End
 .End
-.~VS6_1~VS7_1~VS8_1~VS9_1
+.~YY6_1~YY7_1~YY8_1~YY9_1
 .End
 .And
 .Or
@@ -2781,7 +2773,7 @@
 .~R1C7_9~R1C8_1
 .End
 .End
-.~VS7_1~VS8_1
+.~YY7_1~YY8_1
 .End
 .And
 .Or
@@ -2792,7 +2784,7 @@
 .~R1C7_9~R1C9_1
 .End
 .End
-.~VS7_1~VS8_1~VS9_1
+.~YY7_1~YY8_1~YY9_1
 .End
 .And
 .Or
@@ -2803,7 +2795,7 @@
 .~R1C8_9~R1C9_1
 .End
 .End
-.~VS8_1~VS9_1
+.~YY8_1~YY9_1
 .End
 .End
 .Or
@@ -2816,7 +2808,7 @@
 .~R3C1_9~R3C2_1
 .End
 .End
-.~VS19_1~VS20_1
+.~YY19_1~YY20_1
 .End
 .And
 .Or
@@ -2827,7 +2819,7 @@
 .~R3C1_9~R3C3_1
 .End
 .End
-.~VS19_1~VS20_1~VS21_1
+.~YY19_1~YY20_1~YY21_1
 .End
 .And
 .Or
@@ -2838,7 +2830,7 @@
 .~R3C1_9~R3C4_1
 .End
 .End
-.~VS19_1~VS20_1~VS21_1~VS22_1
+.~YY19_1~YY20_1~YY21_1~YY22_1
 .End
 .And
 .Or
@@ -2849,7 +2841,7 @@
 .~R3C1_9~R3C5_1
 .End
 .End
-.~VS19_1~VS20_1~VS21_1~VS22_1~VS23_1
+.~YY19_1~YY20_1~YY21_1~YY22_1~YY23_1
 .End
 .And
 .Or
@@ -2860,7 +2852,7 @@
 .~R3C1_9~R3C6_1
 .End
 .End
-.~VS19_1~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1
+.~YY19_1~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1
 .End
 .And
 .Or
@@ -2871,7 +2863,7 @@
 .~R3C1_9~R3C7_1
 .End
 .End
-.~VS19_1~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1
+.~YY19_1~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1
 .End
 .And
 .Or
@@ -2882,7 +2874,7 @@
 .~R3C1_9~R3C8_1
 .End
 .End
-.~VS19_1~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1
+.~YY19_1~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1
 .End
 .And
 .Or
@@ -2893,7 +2885,7 @@
 .~R3C1_9~R3C9_1
 .End
 .End
-.~VS19_1~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1~VS27_1
+.~YY19_1~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1~YY27_1
 .End
 .And
 .Or
@@ -2904,7 +2896,7 @@
 .~R3C2_9~R3C3_1
 .End
 .End
-.~VS20_1~VS21_1
+.~YY20_1~YY21_1
 .End
 .And
 .Or
@@ -2915,7 +2907,7 @@
 .~R3C2_9~R3C4_1
 .End
 .End
-.~VS20_1~VS21_1~VS22_1
+.~YY20_1~YY21_1~YY22_1
 .End
 .And
 .Or
@@ -2926,7 +2918,7 @@
 .~R3C2_9~R3C5_1
 .End
 .End
-.~VS20_1~VS21_1~VS22_1~VS23_1
+.~YY20_1~YY21_1~YY22_1~YY23_1
 .End
 .And
 .Or
@@ -2937,7 +2929,7 @@
 .~R3C2_9~R3C6_1
 .End
 .End
-.~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1
+.~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1
 .End
 .And
 .Or
@@ -2948,7 +2940,7 @@
 .~R3C2_9~R3C7_1
 .End
 .End
-.~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1
+.~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1
 .End
 .And
 .Or
@@ -2959,7 +2951,7 @@
 .~R3C2_9~R3C8_1
 .End
 .End
-.~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1
+.~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1
 .End
 .And
 .Or
@@ -2970,7 +2962,7 @@
 .~R3C2_9~R3C9_1
 .End
 .End
-.~VS20_1~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1~VS27_1
+.~YY20_1~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1~YY27_1
 .End
 .And
 .Or
@@ -2981,7 +2973,7 @@
 .~R3C3_9~R3C4_1
 .End
 .End
-.~VS21_1~VS22_1
+.~YY21_1~YY22_1
 .End
 .And
 .Or
@@ -2992,7 +2984,7 @@
 .~R3C3_9~R3C5_1
 .End
 .End
-.~VS21_1~VS22_1~VS23_1
+.~YY21_1~YY22_1~YY23_1
 .End
 .And
 .Or
@@ -3003,7 +2995,7 @@
 .~R3C3_9~R3C6_1
 .End
 .End
-.~VS21_1~VS22_1~VS23_1~VS24_1
+.~YY21_1~YY22_1~YY23_1~YY24_1
 .End
 .And
 .Or
@@ -3014,7 +3006,7 @@
 .~R3C3_9~R3C7_1
 .End
 .End
-.~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1
+.~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1
 .End
 .And
 .Or
@@ -3025,7 +3017,7 @@
 .~R3C3_9~R3C8_1
 .End
 .End
-.~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1
+.~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1
 .End
 .And
 .Or
@@ -3036,7 +3028,7 @@
 .~R3C3_9~R3C9_1
 .End
 .End
-.~VS21_1~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1~VS27_1
+.~YY21_1~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1~YY27_1
 .End
 .And
 .Or
@@ -3047,7 +3039,7 @@
 .~R3C4_9~R3C5_1
 .End
 .End
-.~VS22_1~VS23_1
+.~YY22_1~YY23_1
 .End
 .And
 .Or
@@ -3058,7 +3050,7 @@
 .~R3C4_9~R3C6_1
 .End
 .End
-.~VS22_1~VS23_1~VS24_1
+.~YY22_1~YY23_1~YY24_1
 .End
 .And
 .Or
@@ -3069,7 +3061,7 @@
 .~R3C4_9~R3C7_1
 .End
 .End
-.~VS22_1~VS23_1~VS24_1~VS25_1
+.~YY22_1~YY23_1~YY24_1~YY25_1
 .End
 .And
 .Or
@@ -3080,7 +3072,7 @@
 .~R3C4_9~R3C8_1
 .End
 .End
-.~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1
+.~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1
 .End
 .And
 .Or
@@ -3091,7 +3083,7 @@
 .~R3C4_9~R3C9_1
 .End
 .End
-.~VS22_1~VS23_1~VS24_1~VS25_1~VS26_1~VS27_1
+.~YY22_1~YY23_1~YY24_1~YY25_1~YY26_1~YY27_1
 .End
 .And
 .Or
@@ -3102,7 +3094,7 @@
 .~R3C5_9~R3C6_1
 .End
 .End
-.~VS23_1~VS24_1
+.~YY23_1~YY24_1
 .End
 .And
 .Or
@@ -3113,7 +3105,7 @@
 .~R3C5_9~R3C7_1
 .End
 .End
-.~VS23_1~VS24_1~VS25_1
+.~YY23_1~YY24_1~YY25_1
 .End
 .And
 .Or
@@ -3124,7 +3116,7 @@
 .~R3C5_9~R3C8_1
 .End
 .End
-.~VS23_1~VS24_1~VS25_1~VS26_1
+.~YY23_1~YY24_1~YY25_1~YY26_1
 .End
 .And
 .Or
@@ -3135,7 +3127,7 @@
 .~R3C5_9~R3C9_1
 .End
 .End
-.~VS23_1~VS24_1~VS25_1~VS26_1~VS27_1
+.~YY23_1~YY24_1~YY25_1~YY26_1~YY27_1
 .End
 .And
 .Or
@@ -3146,7 +3138,7 @@
 .~R3C6_9~R3C7_1
 .End
 .End
-.~VS24_1~VS25_1
+.~YY24_1~YY25_1
 .End
 .And
 .Or
@@ -3157,7 +3149,7 @@
 .~R3C6_9~R3C8_1
 .End
 .End
-.~VS24_1~VS25_1~VS26_1
+.~YY24_1~YY25_1~YY26_1
 .End
 .And
 .Or
@@ -3168,7 +3160,7 @@
 .~R3C6_9~R3C9_1
 .End
 .End
-.~VS24_1~VS25_1~VS26_1~VS27_1
+.~YY24_1~YY25_1~YY26_1~YY27_1
 .End
 .And
 .Or
@@ -3179,7 +3171,7 @@
 .~R3C7_9~R3C8_1
 .End
 .End
-.~VS25_1~VS26_1
+.~YY25_1~YY26_1
 .End
 .And
 .Or
@@ -3190,7 +3182,7 @@
 .~R3C7_9~R3C9_1
 .End
 .End
-.~VS25_1~VS26_1~VS27_1
+.~YY25_1~YY26_1~YY27_1
 .End
 .And
 .Or
@@ -3201,7 +3193,7 @@
 .~R3C8_9~R3C9_1
 .End
 .End
-.~VS26_1~VS27_1
+.~YY26_1~YY27_1
 .End
 .End
 .Or
@@ -3214,7 +3206,7 @@
 .~R9C1_9~R9C2_1
 .End
 .End
-.~VS73_1~VS74_1
+.~YY73_1~YY74_1
 .End
 .And
 .Or
@@ -3225,7 +3217,7 @@
 .~R9C1_9~R9C3_1
 .End
 .End
-.~VS73_1~VS74_1~VS75_1
+.~YY73_1~YY74_1~YY75_1
 .End
 .And
 .Or
@@ -3236,7 +3228,7 @@
 .~R9C1_9~R9C4_1
 .End
 .End
-.~VS73_1~VS74_1~VS75_1~VS76_1
+.~YY73_1~YY74_1~YY75_1~YY76_1
 .End
 .And
 .Or
@@ -3247,7 +3239,7 @@
 .~R9C1_9~R9C5_1
 .End
 .End
-.~VS73_1~VS74_1~VS75_1~VS76_1~VS77_1
+.~YY73_1~YY74_1~YY75_1~YY76_1~YY77_1
 .End
 .And
 .Or
@@ -3258,7 +3250,7 @@
 .~R9C1_9~R9C6_1
 .End
 .End
-.~VS73_1~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1
+.~YY73_1~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1
 .End
 .And
 .Or
@@ -3269,7 +3261,7 @@
 .~R9C1_9~R9C7_1
 .End
 .End
-.~VS73_1~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1
+.~YY73_1~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1
 .End
 .And
 .Or
@@ -3280,7 +3272,7 @@
 .~R9C1_9~R9C8_1
 .End
 .End
-.~VS73_1~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1
+.~YY73_1~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1
 .End
 .And
 .Or
@@ -3291,7 +3283,7 @@
 .~R9C1_9~R9C9_1
 .End
 .End
-.~VS73_1~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1~VS81_1
+.~YY73_1~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1~YY81_1
 .End
 .And
 .Or
@@ -3302,7 +3294,7 @@
 .~R9C2_9~R9C3_1
 .End
 .End
-.~VS74_1~VS75_1
+.~YY74_1~YY75_1
 .End
 .And
 .Or
@@ -3313,7 +3305,7 @@
 .~R9C2_9~R9C4_1
 .End
 .End
-.~VS74_1~VS75_1~VS76_1
+.~YY74_1~YY75_1~YY76_1
 .End
 .And
 .Or
@@ -3324,7 +3316,7 @@
 .~R9C2_9~R9C5_1
 .End
 .End
-.~VS74_1~VS75_1~VS76_1~VS77_1
+.~YY74_1~YY75_1~YY76_1~YY77_1
 .End
 .And
 .Or
@@ -3335,7 +3327,7 @@
 .~R9C2_9~R9C6_1
 .End
 .End
-.~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1
+.~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1
 .End
 .And
 .Or
@@ -3346,7 +3338,7 @@
 .~R9C2_9~R9C7_1
 .End
 .End
-.~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1
+.~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1
 .End
 .And
 .Or
@@ -3357,7 +3349,7 @@
 .~R9C2_9~R9C8_1
 .End
 .End
-.~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1
+.~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1
 .End
 .And
 .Or
@@ -3368,7 +3360,7 @@
 .~R9C2_9~R9C9_1
 .End
 .End
-.~VS74_1~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1~VS81_1
+.~YY74_1~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1~YY81_1
 .End
 .And
 .Or
@@ -3379,7 +3371,7 @@
 .~R9C3_9~R9C4_1
 .End
 .End
-.~VS75_1~VS76_1
+.~YY75_1~YY76_1
 .End
 .And
 .Or
@@ -3390,7 +3382,7 @@
 .~R9C3_9~R9C5_1
 .End
 .End
-.~VS75_1~VS76_1~VS77_1
+.~YY75_1~YY76_1~YY77_1
 .End
 .And
 .Or
@@ -3401,7 +3393,7 @@
 .~R9C3_9~R9C6_1
 .End
 .End
-.~VS75_1~VS76_1~VS77_1~VS78_1
+.~YY75_1~YY76_1~YY77_1~YY78_1
 .End
 .And
 .Or
@@ -3412,7 +3404,7 @@
 .~R9C3_9~R9C7_1
 .End
 .End
-.~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1
+.~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1
 .End
 .And
 .Or
@@ -3423,7 +3415,7 @@
 .~R9C3_9~R9C8_1
 .End
 .End
-.~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1
+.~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1
 .End
 .And
 .Or
@@ -3434,7 +3426,7 @@
 .~R9C3_9~R9C9_1
 .End
 .End
-.~VS75_1~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1~VS81_1
+.~YY75_1~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1~YY81_1
 .End
 .And
 .Or
@@ -3445,7 +3437,7 @@
 .~R9C4_9~R9C5_1
 .End
 .End
-.~VS76_1~VS77_1
+.~YY76_1~YY77_1
 .End
 .And
 .Or
@@ -3456,7 +3448,7 @@
 .~R9C4_9~R9C6_1
 .End
 .End
-.~VS76_1~VS77_1~VS78_1
+.~YY76_1~YY77_1~YY78_1
 .End
 .And
 .Or
@@ -3467,7 +3459,7 @@
 .~R9C4_9~R9C7_1
 .End
 .End
-.~VS76_1~VS77_1~VS78_1~VS79_1
+.~YY76_1~YY77_1~YY78_1~YY79_1
 .End
 .And
 .Or
@@ -3478,7 +3470,7 @@
 .~R9C4_9~R9C8_1
 .End
 .End
-.~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1
+.~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1
 .End
 .And
 .Or
@@ -3489,7 +3481,7 @@
 .~R9C4_9~R9C9_1
 .End
 .End
-.~VS76_1~VS77_1~VS78_1~VS79_1~VS80_1~VS81_1
+.~YY76_1~YY77_1~YY78_1~YY79_1~YY80_1~YY81_1
 .End
 .And
 .Or
@@ -3500,7 +3492,7 @@
 .~R9C5_9~R9C6_1
 .End
 .End
-.~VS77_1~VS78_1
+.~YY77_1~YY78_1
 .End
 .And
 .Or
@@ -3511,7 +3503,7 @@
 .~R9C5_9~R9C7_1
 .End
 .End
-.~VS77_1~VS78_1~VS79_1
+.~YY77_1~YY78_1~YY79_1
 .End
 .And
 .Or
@@ -3522,7 +3514,7 @@
 .~R9C5_9~R9C8_1
 .End
 .End
-.~VS77_1~VS78_1~VS79_1~VS80_1
+.~YY77_1~YY78_1~YY79_1~YY80_1
 .End
 .And
 .Or
@@ -3533,7 +3525,7 @@
 .~R9C5_9~R9C9_1
 .End
 .End
-.~VS77_1~VS78_1~VS79_1~VS80_1~VS81_1
+.~YY77_1~YY78_1~YY79_1~YY80_1~YY81_1
 .End
 .And
 .Or
@@ -3544,7 +3536,7 @@
 .~R9C6_9~R9C7_1
 .End
 .End
-.~VS78_1~VS79_1
+.~YY78_1~YY79_1
 .End
 .And
 .Or
@@ -3555,7 +3547,7 @@
 .~R9C6_9~R9C8_1
 .End
 .End
-.~VS78_1~VS79_1~VS80_1
+.~YY78_1~YY79_1~YY80_1
 .End
 .And
 .Or
@@ -3566,7 +3558,7 @@
 .~R9C6_9~R9C9_1
 .End
 .End
-.~VS78_1~VS79_1~VS80_1~VS81_1
+.~YY78_1~YY79_1~YY80_1~YY81_1
 .End
 .And
 .Or
@@ -3577,7 +3569,7 @@
 .~R9C7_9~R9C8_1
 .End
 .End
-.~VS79_1~VS80_1
+.~YY79_1~YY80_1
 .End
 .And
 .Or
@@ -3588,7 +3580,7 @@
 .~R9C7_9~R9C9_1
 .End
 .End
-.~VS79_1~VS80_1~VS81_1
+.~YY79_1~YY80_1~YY81_1
 .End
 .And
 .Or
@@ -3599,6 +3591,6 @@
 .~R9C8_9~R9C9_1
 .End
 .End
-.~VS80_1~VS81_1
+.~YY80_1~YY81_1
 .End
 .End

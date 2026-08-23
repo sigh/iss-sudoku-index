@@ -3,46 +3,19 @@
 // Video: https://www.youtube.com/watch?v=ZqHffWwJoQI
 // Source: https://app.crackingthecryptic.com/sudoku/JJdp66fnQ7
 
-// Normal sudoku rules apply. A shading (Yin-Yang): shaded cells form one
-// orthogonally connected region, unshaded cells form another, and no 2x2
-// block is monochrome. Digits on each arrow sum to the digit in its circle
-// (standard arrow rule). The circle digit is also equal to the sum of the
-// digits of the shaded cells in the straight line beyond the arrow's tip (the
-// direction the drawn arrowhead points), starting at the next cell after the
-// tip and running to the grid edge -- an unshaded cell in that line
-// contributes nothing.
+// Normal sudoku rules apply. A shading (Yin-Yang, native YinYang constraint).
+// Digits on each arrow sum to the digit in its circle (standard arrow rule).
+// The circle digit is also equal to the sum of the digits of the shaded
+// cells in the straight line beyond the arrow's tip (the direction the drawn
+// arrowhead points), starting at the next cell after the tip and running to
+// the grid edge -- an unshaded cell in that line contributes nothing.
 
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
-
-// No 2x2 block may be all shaded or all unshaded: one NFA on the top-left
-// block, replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 // circle: the arrow's bulb cell. arm: the arrow-sum cells (bulb = sum of arm).
 // ray: the cells beyond the tip, continuing in the direction the drawn
@@ -105,12 +78,7 @@ const rayMaskedSums = arrows.map(({ circle, ray }, index) => new NFA(
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...arrowSums,
   ...rayMaskedSums,
 ];

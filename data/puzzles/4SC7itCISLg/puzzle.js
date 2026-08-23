@@ -3,29 +3,16 @@
 // Video: https://www.youtube.com/watch?v=4SC7itCISLg
 // Source: https://sudokupad.app/yttrio/modular-yin-yang
 
-// Full encoding. Global Yin-Yang connectivity is one ConnectedValues
-// constraint per shade over the shade overlay; local shading and clue rules
-// are encoded below.
+// Full encoding. Shading is the YinYang constraint's YY cell group
+// (connected regions, no mono 2x2); clue rules are encoded below.
 
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeCell = cell => shade.at(cell);
 const gridCells = graph.cells();
-
-// No 2x2 area is fully shaded or fully unshaded.
-const noMono2x2NFA = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 9);
 
 // For every 2x2 area, no two shaded cells share a modulo-3 class
 // ([1,4,7] / [2,5,8] / [3,6,9]). Scans the block's four cells as interleaved
@@ -48,8 +35,6 @@ const mod3NFA = NFA.encodeSpec({
 }, 9);
 
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const firstShade = shade.cells()[0];
-const firstBlock = graph.block(blockOrigins[0], 2, 2);
 
 // Arrows: the digit in the arrow's cell counts shaded cells seen from that
 // cell to the grid edge along the arrow's direction, not counting itself.
@@ -91,21 +76,7 @@ const mod3Constraints = blockOrigins.map(cell => {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-
-  // Domain: every shade cell is SHADED or UNSHADED.
-  shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED)),
-
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-
-  // no-mono-2x2 only reads the shade overlay, so every block's 4 cells share
-  // one cell group (VS) with a uniform (row, col) offset from block to block;
-  // Replicate applies cleanly here.
-  shade.makeReplicate(
-    new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.at(firstBlock)),
-    shade.at(blockOrigins)),
+  new YinYang(),
 
   ...mod3Constraints,
   ...arrowConstraints,

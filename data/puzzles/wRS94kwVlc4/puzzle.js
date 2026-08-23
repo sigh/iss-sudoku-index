@@ -10,11 +10,9 @@
 // with no monochrome 2x2 block. In one region every digit counts double for
 // the cage/diagonal sums; in the other every digit counts as its negative.
 //
-// Modeling the region split: a whole-grid Var overlay 'VR' holds each cell's
-// region (DOUBLE or NEGATE). ConnectedValues enforces each region is a single
-// connected area (they partition the grid, so this is the disjoint
-// single-value-per-set case the primitive supports). A local rule forbids a
-// monochrome 2x2 window (Or of pairwise 2-cell AllDifferent from one corner).
+// Modeling the region split: the native YinYang constraint provides the
+// region flag as the grid-shaped 'YY' overlay (shaded/unshaded = the grid's
+// two lowest values, here 0 and 1), each shade connected, no monochrome 2x2.
 //
 // Modeling the weighted sum: a digit's contribution is 2*d when DOUBLE, -d
 // when NEGATE -- a product of two unknowns (digit and region), which Sum
@@ -33,10 +31,10 @@ const shape = new Shape('6x6', '0-6');
 const graph = cellGraph(shape);
 const cells = graph.cells();
 
-const region = graph.makeOverlay('VR');   // region flag per cell
+const region = graph.makeOverlay('YY');   // region flag per cell (YinYang shading)
 const p = graph.makeOverlay('VP');        // digit if DOUBLE, else 0, per cell
-const DOUBLE = 1;
-const NEGATE = 2;
+const DOUBLE = 0;
+const NEGATE = 1;
 
 // Cages: seven 2x2 blocks, each drawn with total 0.
 const cages = [
@@ -67,40 +65,11 @@ function weightedZeroSum(cageCells) {
 
 return [
   shape,
-  region.toVar('region (1=double, 2=negate)'),
+  new YinYang(),
   p.toVar('digit if double region, else 0'),
 
   // Restrict the widened 0-6 alphabet back to real sudoku digits 1-6.
   ...cells.map(cell => new Given(cell, 1, 2, 3, 4, 5, 6)),
-
-  // Region flag domain.
-  ...cells.map(cell => new Given(region.at(cell), DOUBLE, NEGATE)),
-
-  // Each region is exactly one orthogonally-connected area (the two flag
-  // values partition the whole grid, satisfying ConnectedValues' single-value
-  // disjoint-set requirement).
-  new ConnectedValues('VR', DOUBLE),
-  new ConnectedValues('VR', NEGATE),
-
-  // No 2x2 area is entirely one region: for every 2x2 window, at least one
-  // cell's region differs from the window's first cell (sufficient to rule
-  // out all-4-equal for any domain size, not just the 2 region values).
-  ...(() => {
-    const blocks = [];
-    for (let r = 1; r < 6; r++) {
-      for (let c = 1; c < 6; c++) {
-        blocks.push(graph.block(makeCellId(r, c), 2, 2));
-      }
-    }
-    return blocks.map(block => {
-      const [a, b, c2, d] = region.at(block);
-      return new Or([
-        new AllDifferent(a, b),
-        new AllDifferent(a, c2),
-        new AllDifferent(a, d),
-      ]);
-    });
-  })(),
 
   // p (per cell) = digit if region is DOUBLE, else 0.
   ...cells.map(cell => new Or([

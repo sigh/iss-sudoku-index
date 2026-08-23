@@ -3,253 +3,267 @@
 // Video: https://www.youtube.com/watch?v=8SIWtnp0kIU
 // Source: https://app.crackingthecryptic.com/sudoku/m7Grm47T9H
 
-// Normal sudoku rules apply. 18 dots mark the 180-degree rotational-symmetry
-// centres of "galaxies" of orthogonally connected cells that partition the
-// whole grid, one galaxy per dot. Each row, column, and 3x3 box holds exactly
-// 2 stars, every galaxy holds exactly 1 star, and no two stars are a king's
-// move apart. Digits cannot repeat within a galaxy; a galaxy carrying a
-// number clue sums to it, excluding the star cell's own digit.
+// Rules encoded here:
+//   * Normal sudoku.
+//   * The 18 drawn dots are the centres of "galaxies": orthogonally connected
+//     groups of cells that are 180-degree rotationally symmetric about their
+//     own dot. Every cell belongs to exactly one galaxy.
+//   * Each row, column and 3x3 box holds exactly 2 stars, every galaxy holds
+//     exactly 1 star, and no two stars are a king's move apart.
+//   * Digits do not repeat within a galaxy.
+//   * A galaxy holding one of the 14 small number clues sums to that number,
+//     with the galaxy's star cell excluded from the total.
+// Nothing is omitted.
 //
-// The galaxy division itself is not drawn -- only the 18 dot positions and
-// 14 sum clues are. It is derived below from geometry alone: a galaxy
-// contains the cell(s) its own dot touches, is orthogonally connected, is
-// 180-degree symmetric about its dot, and the 18 galaxies cover the grid.
-// That geometry alone (no digit or star information) is checked below to
-// force a unique division -- the same genre convention and search shape as
-// 3qJu_cp1gVE (Dynamic Nebula).
+// Model: the galaxy division is not drawn, so it is a solver choice here, not
+// something worked out in advance -- one label Var per grid cell names the
+// galaxy that owns it, and a second Var per cell flags the stars. Which galaxy
+// a number clue belongs to is likewise unknown, so each clue is applied to
+// every galaxy that could hold its cell, conditioned on that cell's label.
+// The value range tops out at 16 labels, so the 18 galaxies are split over two
+// label layers, VA and VB, each carrying 9 galaxies plus a sentinel meaning
+// "this cell's galaxy is on the other layer".
 
-const shape = new Shape('9x9');
+const GRID = '9x9';
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const LAYER_SIZE = 9;              // galaxies per label layer
+const SENTINEL = LAYER_SIZE + 1;   // label value: galaxy lives on the other layer
+const NO_STAR = 1, STAR = 2;
+// Digits do not repeat within a galaxy, so a galaxy holds at most 9 cells.
+const MAX_GALAXY_CELLS = DIGITS.length;
+
+// The 18 dots, transcribed from the drawn circles. Coordinates are in
+// half-cell units, so that a dot on a cell centre, on an edge midpoint or on a
+// grid corner is alike integral: cell RiCj has centre (2i-1, 2j-1). The
+// comment names the cells each dot is drawn on.
+const DOTS = [
+  { r: 5, c: 1 },    // R3C1
+  { r: 4, c: 4 },    // R2C2/R2C3/R3C2/R3C3
+  { r: 1, c: 6 },    // R1C3|R1C4
+  { r: 2, c: 11 },   // R1C6|R2C6
+  { r: 5, c: 9 },    // R3C5
+  { r: 1, c: 15 },   // R1C8
+  { r: 5, c: 14 },   // R3C7|R3C8
+  { r: 5, c: 17 },   // R3C9
+  { r: 11, c: 16 },  // R6C8|R6C9
+  { r: 10, c: 11 },  // R5C6|R6C6
+  { r: 10, c: 6 },   // R5C3/R5C4/R6C3/R6C4
+  { r: 10, c: 2 },   // R5C1/R5C2/R6C1/R6C2
+  { r: 14, c: 3 },   // R7C2|R8C2
+  { r: 16, c: 5 },   // R8C3|R9C3
+  { r: 17, c: 9 },   // R9C5
+  { r: 13, c: 12 },  // R7C6|R7C7
+  { r: 16, c: 14 },  // R8C7/R8C8/R9C7/R9C8
+  { r: 16, c: 17 },  // R8C9|R9C9
+];
+
+// The 14 small number clues, transcribed from the drawn text overlays; each is
+// printed inside one cell.
+const CLUES = [
+  { cell: 'R2C1', sum: 16 },
+  { cell: 'R7C3', sum: 16 },
+  { cell: 'R2C6', sum: 6 },
+  { cell: 'R2C8', sum: 28 },
+  { cell: 'R4C9', sum: 30 },
+  { cell: 'R5C7', sum: 15 },
+  { cell: 'R4C6', sum: 37 },
+  { cell: 'R4C4', sum: 29 },
+  { cell: 'R5C3', sum: 22 },
+  { cell: 'R6C1', sum: 30 },
+  { cell: 'R7C5', sum: 31 },
+  { cell: 'R8C8', sum: 23 },
+  { cell: 'R9C6', sum: 9 },
+  { cell: 'R9C1', sum: 22 },
+];
+
+const shape = new Shape(GRID, SENTINEL);
 const graph = cellGraph(shape);
 const geometry = graph.gridGeometry();
-const cells = graph.cells();
-const cellIndex = new Map(cells.map((cell, i) => [cell, i]));
-const neighbours = cells.map(
-  cell => graph.neighbours(cell).map(n => cellIndex.get(n)));
-
-// The 18 dot centres, transcribed from the drawn overlay circles
-// (`overlays[0..17].center` in the source payload; [row, col], continuous,
-// 0-indexed).
-const dotCenters = [
-  [2.5, 0.5], [2, 2], [0.5, 3], [1, 5.5], [2.5, 4.5], [0.5, 7.5], [2.5, 7],
-  [2.5, 8.5], [5.5, 8], [5, 5.5], [5, 3], [5, 1], [7, 1.5], [8, 2.5],
-  [8.5, 4.5], [6.5, 6], [8, 7], [8, 8.5],
-];
-
-// A dot sitting at a cell centre, an edge midpoint, or a corner touches 1, 2,
-// or 4 cells respectively; that touched set is always inside its own galaxy
-// (a galaxy contains its own symmetry centre), anchoring the search below.
-function touchedCells([rowVal, colVal]) {
-  const rowFrac = rowVal % 1 !== 0;
-  const colFrac = colVal % 1 !== 0;
-  if (rowFrac && colFrac) {
-    return [makeCellId(Math.floor(rowVal) + 1, Math.floor(colVal) + 1)];
-  }
-  if (!rowFrac && colFrac) {
-    const c = Math.floor(colVal) + 1;
-    return [makeCellId(rowVal, c), makeCellId(rowVal + 1, c)];
-  }
-  if (rowFrac && !colFrac) {
-    const r = Math.floor(rowVal) + 1;
-    return [makeCellId(r, colVal), makeCellId(r, colVal + 1)];
-  }
-  return [
-    makeCellId(rowVal, colVal), makeCellId(rowVal, colVal + 1),
-    makeCellId(rowVal + 1, colVal), makeCellId(rowVal + 1, colVal + 1),
-  ];
-}
-const dots = dotCenters.map(center => ({ center, anchor: touchedCells(center) }));
-
-// Reflecting a cell 180 degrees about a dot: the touched-cell min+max row/col
-// is twice the dot's own row/col, so subtracting a cell's row/col from that
-// reflects it through the dot.
-function reflector(center) {
-  const twiceRow = 2 * center[0] + 1;
-  const twiceCol = 2 * center[1] + 1;
-  return (cell) => {
-    const { row, col } = parseCellId(cell);
-    const r = twiceRow - row, c = twiceCol - col;
-    if (r < 1 || r > 9 || c < 1 || c > 9) return -1;
-    return cellIndex.get(makeCellId(r, c));
-  };
-}
-
-// mirror[k][i]: cell i reflected through dot k's centre, or -1 off-grid
-// (which rules cell i out of galaxy k).
-const mirror = dots.map(dot => {
-  const reflect = reflector(dot.center);
-  return cells.map(reflect);
-});
-const anchors = dots.map(dot => dot.anchor.map(cell => cellIndex.get(cell)));
-
-// `candidates[i]` is the set of dots whose galaxy could still own cell i. Both
-// prunings below only ever discard an ownership that no legal division could
-// have used, so a run that leaves every set a singleton has found a division,
-// and one that empties a set has refuted the branch. (Same shape as the
-// validated search in 3qJu_cp1gVE.)
-function propagate(candidates) {
-  for (; ;) {
-    let changed = false;
-    for (let k = 0; k < dots.length; ++k) {
-      // Symmetry: cell i can belong to galaxy k only if its mirror image does.
-      for (let i = 0; i < candidates.length; ++i) {
-        if (!candidates[i].has(k)) continue;
-        const m = mirror[k][i];
-        if (m < 0 || !candidates[m].has(k)) {
-          candidates[i].delete(k);
-          changed = true;
-        }
-      }
-      // Connectivity: cell i can belong to galaxy k only if it still reaches
-      // the dot through cells that are themselves candidates for k.
-      if (anchors[k].some(i => !candidates[i].has(k))) return false;
-      const queue = [...anchors[k]];
-      const seen = new Set(queue);
-      for (let q = 0; q < queue.length; ++q) {
-        for (const n of neighbours[queue[q]]) {
-          if (candidates[n].has(k) && !seen.has(n)) {
-            seen.add(n);
-            queue.push(n);
-          }
-        }
-      }
-      for (let i = 0; i < candidates.length; ++i) {
-        if (candidates[i].has(k) && !seen.has(i)) {
-          candidates[i].delete(k);
-          changed = true;
-        }
-      }
-    }
-    if (candidates.some(set => set.size === 0)) return false;
-    if (!changed) return true;
-  }
-}
-
-function search(candidates, found, limit) {
-  if (found.length >= limit || !propagate(candidates)) return;
-  let pick = -1;
-  for (let i = 0; i < candidates.length; ++i) {
-    if (candidates[i].size > 1 &&
-      (pick < 0 || candidates[i].size < candidates[pick].size)) pick = i;
-  }
-  if (pick < 0) {
-    found.push(candidates.map(set => [...set][0]));
-    return;
-  }
-  for (const k of candidates[pick]) {
-    const branch = candidates.map(set => new Set(set));
-    branch[pick] = new Set([k]);
-    search(branch, found, limit);
-  }
-}
-
-const start = cells.map(
-  (cell, i) => new Set(dots.map((d, k) => k).filter(k => mirror[k][i] >= 0)));
-anchors.forEach((idxs, k) => idxs.forEach(i => { start[i] = new Set([k]); }));
-
-const divisions = [];
-search(start, divisions, 2);
-if (divisions.length !== 1) {
-  throw new Error(
-    `expected the 18 dots to force one galaxy division, found ${divisions.length}`);
-}
-const owner = divisions[0];
-const galaxies = dots.map((dot, k) => cells.filter((cell, i) => owner[i] === k));
-
-// --- clues over those galaxies ---------------------------------------------
-
-// The 14 drawn number clues (`overlays[18..31]` in the source payload), one
-// cell each; each clue belongs to whichever computed galaxy contains its cell.
-const sumClues = [
-  ['R2C1', 16], ['R7C3', 16], ['R2C6', 6], ['R2C8', 28], ['R4C9', 30],
-  ['R5C7', 15], ['R4C6', 37], ['R4C4', 29], ['R5C3', 22], ['R6C1', 30],
-  ['R7C5', 31], ['R8C8', 23], ['R9C6', 9], ['R9C1', 22],
-];
-function galaxyOf(cell) {
-  const k = galaxies.findIndex(g => g.includes(cell));
-  if (k < 0) throw new Error(`cell ${cell} not covered by any computed galaxy`);
-  return k;
-}
-const sumByGalaxy = new Map(sumClues.map(([cell, sum]) => [galaxyOf(cell), sum]));
-if (sumByGalaxy.size !== sumClues.length) {
-  throw new Error('two number clues landed in the same computed galaxy');
-}
-
-// "Digits can't repeat within a galaxy": AllDifferent over every multi-cell
-// galaxy; a single-cell galaxy needs no separate rule.
-const galaxyAllDifferent = galaxies
-  .filter(g => g.length > 1)
-  .map(g => new AllDifferent(...g));
-
-// --- stars -------------------------------------------------------------
-
-const NOT_STAR = 1, STAR = 2;
+const gridCells = graph.cells();
+const LAYER_PREFIXES = ['VA', 'VB'];
+const labelLayers = LAYER_PREFIXES.map(prefix => graph.makeOverlay(prefix));
 const stars = graph.makeOverlay('VS');
-// Every star-flag cell shares the same {NOT_STAR, STAR} domain: one Given
-// template, replicated over the whole overlay.
+
+// Galaxy g is label `labelOf(g)` on layer `layerOf(g)`; the split into two
+// layers is by drawing order and carries no meaning.
+const layerIndex = (g) => Math.floor(g / LAYER_SIZE);
+const layerOf = (g) => labelLayers[layerIndex(g)];
+const labelOf = (g) => (g % LAYER_SIZE) + 1;
+const labelCell = (g, cell) => layerOf(g).at(cell);
+
+const halfCoords = (cell) => {
+  const { row, col } = parseCellId(cell);
+  return { r: 2 * row - 1, c: 2 * col - 1 };
+};
+const gridCellSet = new Set(gridCells);
+const cellOrder = new Map(gridCells.map((cell, i) => [cell, i]));
+// The cell diametrically opposite `cell` through dot `dot`, or null off-grid.
+const rotate = (cell, dot) => {
+  const { r, c } = halfCoords(cell);
+  const image = makeCellId((2 * dot.r - r + 1) / 2, (2 * dot.c - c + 1) / 2);
+  return gridCellSet.has(image) ? image : null;
+};
+
+// Which cells a galaxy could reach: a cell at half-cell distance d from the
+// dot drags its rotational image along, and those two are d cells apart, so a
+// connected galaxy containing them holds at least d+1 cells. A cell whose
+// image falls outside the grid cannot be in the galaxy at all.
+const zoneOf = (dot) => gridCells.filter(cell => {
+  const { r, c } = halfCoords(cell);
+  return Math.abs(r - dot.r) + Math.abs(c - dot.c) <= MAX_GALAXY_CELLS - 1
+    && rotate(cell, dot);
+});
+const zones = DOTS.map(zoneOf);
+
+// Grid cells hold digits; the extra value exists only for the label sentinel.
+const digitDomain = graph.makeReplicate(new Given(gridCells[0], ...DIGITS));
 const starDomain = stars.makeReplicate(
-  new Given(stars.cells()[0], NOT_STAR, STAR));
+  new Given(stars.cells()[0], NO_STAR, STAR));
 
-// Exactly 2 stars per row/column/box, exactly 1 per galaxy.
-const starCounts = [
-  ...stars.rows().map(row => new ContainExact('2_2', ...row)),
-  ...stars.columns().map(col => new ContainExact('2_2', ...col)),
-  ...stars.boxes().map(box => new ContainExact('2_2', ...box)),
-  ...galaxies.map(g => new ContainExact('2', ...stars.at(g))),
-];
+// A cell's label on each layer is the sentinel or one of the galaxies on that
+// layer whose zone reaches it.
+const labelDomain = labelLayers.flatMap((layer, i) => gridCells.map(
+  cell => new Given(
+    layer.at(cell), SENTINEL,
+    ...zones.flatMap((zone, g) => (layerOf(g) === layer && zone.includes(cell))
+      ? [labelOf(g)] : []))));
 
-// No two stars a king's move apart: one Pair template per relative offset
-// (the 4 offsets below cover every unordered king-move pair once),
-// replicated over every cell for which that offset stays on the grid.
-const notBothStarKey = Pair.fnToKey(
-  (a, b) => !(a === STAR && b === STAR), geometry);
-// graph.step(cell, dr, dc) is the native helper for one fixed offset
-// direction; kingNeighbours() returns all 8 directions at once and cannot be
-// grouped by offset for Replicate below. And the overlay's own convenience
-// replicate helper always anchors at the overlay's first cell, which cannot
-// serve as the template's own-offset anchor here, so Replicate is
-// constructed directly below instead.
-const KING_OFFSETS = [[0, 1], [1, -1], [1, 0], [1, 1]];
-const kingNoTwoStars = KING_OFFSETS.map(([dr, dc]) => {
-  const originsGrid = cells.filter(cell => graph.step(cell, dr, dc) !== null);
-  const originsVar = stars.at(originsGrid);
-  const targetGrid = graph.step(originsGrid[0], dr, dc);
-  const template = new Pair(
-    notBothStarKey, '', stars.at(originsGrid[0]), stars.at(targetGrid));
-  return new Replicate(
-    [template],
-    Replicate.encodeTargetCells(originsVar, originsVar[0], stars),
-    originsVar[0]);
+// Every cell belongs to exactly one galaxy: exactly one of its two label cells
+// names a galaxy, and the other is the sentinel.
+const oneLayerKey = Pair.fnToKey(
+  (a, b) => (a === SENTINEL) !== (b === SENTINEL), geometry);
+const oneGalaxyPerCell = gridCells.map(cell => new Pair(
+  oneLayerKey, 'one-galaxy-per-cell',
+  labelLayers[0].at(cell), labelLayers[1].at(cell)));
+
+// 180-degree symmetry: a cell is in the galaxy exactly when its image is.
+const symmetry = DOTS.flatMap((dot, g) => {
+  const label = labelOf(g);
+  const key = Pair.fnToKey((a, b) => (a === label) === (b === label), geometry);
+  return zones[g].flatMap(cell => {
+    const image = rotate(cell, dot);
+    // one constraint per rotational pair, and none for a self-paired cell
+    if (cellOrder.get(image) <= cellOrder.get(cell)) return [];
+    return [new Pair(key, `galaxy-${g + 1}-symmetry`,
+      labelCell(g, cell), labelCell(g, image))];
+  });
 });
 
-// Galaxy sum, excluding the star cell's digit: an NFA scans a galaxy's cells
-// as interleaved (digit, star-flag) pairs and accumulates the digit only when
-// the flag reads NOT_STAR, rejecting as soon as the running sum would exceed
-// the target (sums only ever increase, so that branch can never recover).
-function galaxySumMachine(target) {
-  return NFA.encodeSpec({
-    startState: { phase: 'digit', sum: 0 },
+const connectivity = DOTS.map(
+  (dot, g) => new ConnectedValues(LAYER_PREFIXES[layerIndex(g)], labelOf(g)));
+
+// Exactly one star per galaxy: scan the galaxy's zone as (label, star) pairs
+// and count the stars whose cell carries this galaxy's label.
+const starPerGalaxy = DOTS.map((dot, g) => {
+  const label = labelOf(g);
+  const machine = NFA.encodeSpec({
+    startState: { count: 0, inGalaxy: null },
     transition: (state, value) => {
-      if (state.phase === 'digit') {
-        return { phase: 'flag', sum: state.sum, digit: value };
+      if (state.inGalaxy === null) {
+        return { count: state.count, inGalaxy: value === label };
       }
-      const sum = state.sum + (value === NOT_STAR ? state.digit : 0);
-      if (sum > target) return undefined;
-      return { phase: 'digit', sum };
+      const count = state.count + (state.inGalaxy && value === STAR ? 1 : 0);
+      if (count > 1) return undefined;
+      return { count, inGalaxy: null };
     },
-    accept: state => state.phase === 'digit' && state.sum === target,
-  }, geometry.numValues);
-}
-const galaxySums = [...sumByGalaxy.entries()].map(([k, target]) => {
-  const stream = galaxies[k].flatMap(cell => [cell, stars.at(cell)]);
-  return new NFA(galaxySumMachine(target), 'galaxy-sum-excl-star', ...stream);
+    accept: (state) => state.inGalaxy === null && state.count === 1,
+  }, geometry);
+  return new NFA(machine, `galaxy-${g + 1}-one-star`,
+    ...zones[g].flatMap(cell => [labelCell(g, cell), stars.at(cell)]));
 });
+
+// Digits do not repeat within a galaxy: scan the zone as (label, digit) pairs
+// and collect the galaxy's digits as a bitmask, rejecting a repeat.
+const galaxyDigits = DOTS.map((dot, g) => {
+  const label = labelOf(g);
+  const machine = NFA.encodeSpec({
+    startState: { mask: 0, inGalaxy: null },
+    transition: (state, value) => {
+      if (state.inGalaxy === null) {
+        return { mask: state.mask, inGalaxy: value === label };
+      }
+      if (!state.inGalaxy) return { mask: state.mask, inGalaxy: null };
+      const bit = 1 << (value - 1);
+      if (state.mask & bit) return undefined;
+      return { mask: state.mask | bit, inGalaxy: null };
+    },
+    accept: (state) => state.inGalaxy === null,
+  }, geometry);
+  return new NFA(machine, `galaxy-${g + 1}-distinct`,
+    ...zones[g].flatMap(cell => [labelCell(g, cell), cell]));
+});
+
+// A number clue constrains whichever galaxy holds its cell, and that is not
+// drawn either. So each clue gets one machine per galaxy whose zone reaches
+// the clue cell, and the clue cell's own label -- read as the machine's first
+// symbol, by putting its cell first in the scan -- switches the machine on:
+// off, it accepts anything; on, the galaxy's non-star digits must total the
+// clue. `member` tracks whether the cell being read belongs to the galaxy and
+// is not its star, so only those cells add to the running sum.
+const clueSums = CLUES.flatMap(({ cell, sum }) => DOTS.flatMap((dot, g) => {
+  if (!zones[g].includes(cell)) return [];
+  const label = labelOf(g);
+  const machine = NFA.encodeSpec({
+    startState: { stage: 'first', sum: 0, member: false },
+    transition: (state, value) => {
+      if (state.stage === 'first') {
+        return value === label
+          ? { stage: 'star', sum: 0, member: true }
+          : { stage: 'off', sum: 0, member: false };
+      }
+      if (state.stage === 'off') return state;
+      if (state.stage === 'label') {
+        return { stage: 'star', sum: state.sum, member: value === label };
+      }
+      if (state.stage === 'star') {
+        return {
+          stage: 'digit', sum: state.sum,
+          member: state.member && value === NO_STAR,
+        };
+      }
+      const total = state.sum + (state.member ? value : 0);
+      if (total > sum) return undefined;
+      return { stage: 'label', sum: total, member: false };
+    },
+    accept: (state) => state.stage === 'off'
+      || (state.stage === 'label' && state.sum === sum),
+  }, geometry);
+  const scan = [cell, ...zones[g].filter(other => other !== cell)];
+  return [new NFA(machine, `galaxy-${g + 1}-sum-${cell}`,
+    ...scan.flatMap(other => [labelCell(g, other), stars.at(other), other]))];
+}));
+
+const starCounts = graph.rowsColumnsBoxes().map(
+  unit => new ContainExact(`${STAR}_${STAR}`, ...stars.at(unit)));
+
+// No two stars a king's move apart: two cells are a king's move apart exactly
+// when some 2x2 block holds both, so no 2x2 block may hold two stars.
+const atMostOneStar = NFA.encodeSpec({
+  startState: 0,
+  transition: (count, value) => {
+    const next = count + (value === STAR ? 1 : 0);
+    return next > 1 ? undefined : next;
+  },
+  accept: () => true,
+}, geometry);
+const starsNotAdjacent = stars.makeReplicate(
+  new NFA(atMostOneStar, 'stars-not-adjacent',
+    ...stars.at(graph.block(gridCells[0], 2, 2))),
+  stars.at(gridCells.filter(cell => graph.block(cell, 2, 2))));
 
 return [
   shape,
+  ...labelLayers.map((layer, i) => layer.toVar(`galaxy-labels-${i + 1}`)),
   stars.toVar('stars'),
+  digitDomain,
   starDomain,
+  ...labelDomain,
+  ...oneGalaxyPerCell,
+  ...symmetry,
+  ...connectivity,
+  ...starPerGalaxy,
+  ...galaxyDigits,
+  ...clueSums,
   ...starCounts,
-  ...kingNoTwoStars,
-  ...galaxyAllDifferent,
-  ...galaxySums,
+  starsNotAdjacent,
 ];

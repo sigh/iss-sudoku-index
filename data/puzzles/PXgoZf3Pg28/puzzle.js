@@ -12,7 +12,7 @@ const UNSHADED = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 
 // Drawn daisy data from the background artwork; each daisy is also a given.
 const daisies = [
@@ -99,34 +99,10 @@ function noDaisyRule(cell) {
     ...shade.at(neighbours), cell);
 }
 
-// The NFA records whether the four shade values are all equal.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true, seen: [] };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(entry => entry === next[0]) ? undefined : { done: true, seen: [] };
-  },
-  accept: state => state.done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-monochrome-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
-
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   ...daisies.map(([cell, value]) => new Given(cell, value)),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...gridCells.map(shadeRule),
   ...daisies.map(([cell]) => daisyCount(cell)),
   ...gridCells.filter(cell => !daisySet.has(cell)).map(noDaisyRule),

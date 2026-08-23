@@ -11,28 +11,7 @@ const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-// Every 2x2 block contains both colours.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 // Drawn grey ring, in its walk order; the repeated closing R3C1 is omitted.
 const ring = [
@@ -90,12 +69,8 @@ const ringGroups = new Or(Array.from({ length: 10 }, (_, initialCarry) =>
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   new Given('R5C5', 9),
-  shadeDomain,
   new Given(shade.at('R1C1'), SHADED),
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ringGroups,
 ];

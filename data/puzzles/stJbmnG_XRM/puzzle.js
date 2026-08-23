@@ -3,24 +3,18 @@
 // Video: https://www.youtube.com/watch?v=stJbmnG_XRM
 // Source: https://app.crackingthecryptic.com/sudoku/gj49HRdbGh
 
-// Full encoding. Every cell is shaded or unshaded (Yin-Yang); each colour
-// forms one orthogonally-connected region (ConnectedValues per shade) and no
-// 2x2 block is monochrome. Every circled cell is shaded, and its own digit
-// equals the count of shaded cells seen from it (itself plus an
-// uninterrupted run in each of the four directions, stopped by the first
-// unshaded cell or the grid edge). Pink lines are Renban (consecutive,
-// non-repeating digits, any order).
+// Full encoding. The shading is the YinYang constraint's YY cell group.
+// Every circled cell is shaded, and its own digit equals the count of
+// shaded cells seen from it (itself plus an uninterrupted run in each of
+// the four directions, stopped by the first unshaded cell or the grid
+// edge). Pink lines are Renban (consecutive, non-repeating digits, any
+// order).
 
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // Circled cells, read from the `overlays` array (all circle, blank text).
 const circles = [
@@ -30,27 +24,6 @@ const circles = [
 
 // Every circled cell is shaded.
 const circleGivens = circles.map(cell => new Given(shade.at(cell), SHADED));
-
-// No 2x2 block may be all shaded or all unshaded: one NFA on the top-left
-// block, replicated to every block origin.
-const geometry = graph.gridGeometry();
-const gridCells = graph.cells();
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // Directional run-length overlays, one Var per circle per direction. A run's
 // value is (run length + 1), so it fits the grid's 1-9 domain (max possible
@@ -113,18 +86,12 @@ const renbans = renbanLines.map(cells => new Renban(...cells));
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   runUp.toVar('run-up'),
   runDown.toVar('run-down'),
   runLeft.toVar('run-left'),
   runRight.toVar('run-right'),
-  shadeDomain,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected
-  // region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
   ...circleGivens,
-  noMono2x2,
   ...runConstraints,
   ...sightCounts,
   ...renbans,

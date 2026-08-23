@@ -11,12 +11,7 @@ const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-// The two Var values name the otherwise interchangeable Yin-Yang colours.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // Drawn counting circles, in source-array order.
 const circles = [
@@ -46,32 +41,11 @@ const parityShadeKey = Pair.fnToKey(
 const circleParity = circles.map(cell => new Pair(
   parityShadeKey, 'circled digit parity and shade', cell, shade.at(cell)));
 
-// This NFA reads one 2x2 shade block and rejects it only if all four values agree.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-monochromatic-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('Yin-Yang shade'),
+  new YinYang(),
   new Given('R7C4', 7),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
   new CountingCircles(...circles),
   ...circleParity,
   ...dotRules,
-  noMono2x2,
 ];

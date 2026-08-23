@@ -21,7 +21,7 @@ const SELECTED = 2;
 const shape = new Shape('11x11', 10, 'Raw');
 const graph = cellGraph(shape);
 const cornerGrid = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const occupied = graph.makeOverlay('VO');
 const corner = cornerGrid.makeOverlay('VC');
 
@@ -54,7 +54,6 @@ const greaterThanFourCell = 'R3C4';
 
 const domains = [
   graph.makeReplicate(new Given(graph.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9, EMPTY)),
-  shade.makeReplicate(new Given(shade.cells()[0], SHADED, UNSHADED)),
   occupied.makeReplicate(new Given(occupied.cells()[0], UNSELECTED, SELECTED)),
   corner.makeReplicate(new Given(corner.cells()[0], UNSELECTED, SELECTED)),
 ];
@@ -112,27 +111,6 @@ const noRowColumnRepeats = [...graph.rows(), ...graph.columns()].map(cells =>
 const noCageRepeats = cages.map(({ cells }) =>
   new NFA(noRepeatedDigitsMachine, 'no repeated cage digits', ...cells));
 
-// Yin-Yang: reject a 2x2 whose four shade values are identical.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, shape);
-const blockOrigins = canvasCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(
-    noMono2x2Machine,
-    'no monochromatic 2x2',
-    ...shade.at(graph.block(canvasCells[0], 2, 2)),
-  ),
-  shade.at(blockOrigins),
-);
-
 // Sum digits of one chosen shade. Inputs alternate shade, digit.
 const shadeSumMachine = target => NFA.encodeSpec({
   startState: [
@@ -162,7 +140,7 @@ const cageSums = cages.map(({ total, cells }) => {
 
 return [
   shape,
-  shade.toVar('Yin-Yang shade'),
+  new YinYang(),
   occupied.toVar('region occupancy'),
   corner.toVar('3x3 region top-left'),
   ...domains,
@@ -172,9 +150,6 @@ return [
   ...candidateRegions,
   ...noRowColumnRepeats,
   ...noCageRepeats,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   new Given(shade.cells()[0], SHADED),
   ...cageSums,
   new Given(greaterThanFourCell, 5, 6, 7, 8, 9),

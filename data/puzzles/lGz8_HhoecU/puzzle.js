@@ -4,13 +4,13 @@
 // Source: https://sudokupad.app/bmh85ce33k
 
 // Normal sudoku applies. Each cage has distinct digits and a signed total:
-// shaded digits add and unshaded digits subtract. Shaded and unshaded cells
-// each form one orthogonally connected area, and no 2x2 block is monochrome.
+// shaded digits add and unshaded digits subtract. Shading follows the native
+// YinYang constraint.
 
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 
 // The drawn cage cells and their printed signed totals.
 const cages = [
@@ -50,30 +50,9 @@ function signedCage(total, cells) {
   return new NFA(machine, `signed ${total} cage`, ...stream);
 }
 
-// A 2x2 shade window is valid unless all four shade values agree.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 9);
-const blocks = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-monochrome-2x2',
-    ...shade.at(graph.block('R1C1', 2, 2))),
-  shade.at(blocks));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shade.makeReplicate(new Given(shade.cells()[0], SHADED, UNSHADED)),
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...cages.flatMap(([total, cells]) => [
     new AllDifferent(...cells),
     signedCage(total, cells),

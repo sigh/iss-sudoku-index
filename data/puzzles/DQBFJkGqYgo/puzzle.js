@@ -17,39 +17,8 @@
 const graph = cellGraph('9x9');
 
 // Yin-Yang shade overlay: 1 or 2 per cell, one value per color.
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeAt = cell => shade.at(cell);
-
-// No 2x2 block of cells is a single color: scan the 4 shade cells of each
-// window (order doesn't matter, only "are they all equal") and reject if
-// they are.
-function no2x2Spec() {
-  return NFA.encodeSpec({
-    startState: { first: null, allSame: true },
-    transition: (state, value) =>
-      state.first === null ? { first: value, allSame: true }
-        : { first: state.first, allSame: state.allSame && value === state.first },
-    accept: (state) => !state.allSame,
-  }, 9);
-}
-
-// The 64 windows are one template (the no-monochrome-2x2 NFA over a 2x2 block)
-// stamped at every top-left corner R1C1..R8C8 with a uniform grid offset, so a
-// single Replicate over the shade overlay expresses all of them. The template
-// reads the 2x2 shade window at R1C1; each target origin shifts that window by
-// the same relative offsets within the shade subgraph.
-function no2x2Constraints() {
-  const window = shade.at(graph.block(makeCellId(1, 1), 2, 2));
-  const targets = [];
-  for (let r = 1; r <= 8; r++) {
-    for (let c = 1; c <= 8; c++) {
-      targets.push(shadeAt(makeCellId(r, c)));
-    }
-  }
-  return [shade.makeReplicate(
-    [new NFA(no2x2Spec(), 'no2x2', ...window)],
-    targets)];
-}
 
 // X-Sum-of-one-color state machine: reads an interleaved [digit, shade,
 // digit, shade, ...] sequence (one row/column, in the clue's reading
@@ -145,21 +114,8 @@ function xsumConstraints() {
   });
 }
 
-// Every cell is shade 1 or 2: one Given template stamped over every grid
-// cell via the shade overlay.
-function shadeDomainConstraints() {
-  const targets = shade.at(graph.cells());
-  return [shade.makeReplicate([new Given(targets[0], 1, 2)], targets)];
-}
-
 return [
   new Shape('9x9'),
-  shade.toVar('Shade'),
-  ...shadeDomainConstraints(),
-  ...no2x2Constraints(),
-  // Global Yin-Yang connectivity: each shade forms one orthogonally
-  // connected region (closes the previously-omitted half of the rule).
-  new ConnectedValues('VS', 1),
-  new ConnectedValues('VS', 2),
+  new YinYang(),
   ...xsumConstraints(),
 ];

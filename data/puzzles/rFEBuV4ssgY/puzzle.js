@@ -5,9 +5,9 @@
 
 // Standard sudoku rows/columns/boxes apply (unchanged).
 //
-// Shading: a VS overlay holds SHADED/UNSHADED per cell. Both shades must form
-// one connected region each (ConnectedValues), no 2x2 block may be
-// monochrome, and the grey-marked cell R1C4 is shaded.
+// Shading: native YinYang over the YY overlay -- both shades form one
+// connected region each, no 2x2 block may be monochrome, and the
+// grey-marked cell R1C4 is shaded.
 //
 // The red line is drawn as two strokes sharing endpoint R1C1 (both waypoint
 // lists start at [0.5,0.5]); read as one continuous 37-cell path.
@@ -25,13 +25,7 @@ const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // The red line, one continuous path (reversing the first drawn stroke and
 // appending the second, since both share their R1C1 endpoint).
@@ -42,25 +36,6 @@ const linePath = [
   'R2C7', 'R1C8', 'R2C9', 'R3C8', 'R4C9', 'R5C8', 'R6C8', 'R7C8', 'R8C7',
   'R9C6',
 ];
-
-// No 2x2 block may be all-shaded or all-unshaded: one NFA on the top-left
-// block's shade cells, replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, graph.gridGeometry().numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // Different-shade adjacent pairs along the line must differ by >= 5; equal
 // shade pairs are unconstrained by this rule. Per edge, scan
@@ -151,14 +126,9 @@ return [
   new Given('R1C2', 9),
   new Given('R3C4', 5),
   new Given('R4C3', 5),
-  shade.toVar('shade'),
-  shadeDomain,
+  new YinYang(),
   // The grey cell is shaded.
   new Given(shade.at('R1C4'), SHADED),
-  // Yin-yang-style connectivity: each shade forms one connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...lineShadeDiffRules,
   lineRuns,
 ];

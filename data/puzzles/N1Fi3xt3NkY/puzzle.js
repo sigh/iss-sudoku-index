@@ -27,13 +27,8 @@ const gridCells = graph.cells();
 
 // Region labels deduced by ChaosConstruction, and the shading overlay.
 const cc = graph.makeOverlay('CC');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeCell = cell => shade.at(cell);
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
 
 // A region is orthogonally connected, so "each region is entirely shaded or
 // entirely unshaded" holds exactly when no two orthogonally adjacent cells of
@@ -50,24 +45,6 @@ const regionShadeLinks = adjacentPairs.map(([a, b]) => new Or([
   new SameValues(2, shadeCell(a), shadeCell(b)),
 ]));
 
-// No 2x2 block may be all shaded or all unshaded: one NFA over the top-left
-// block's four shade cells, replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // The arrows drawn inside each cell, as (dRow, dCol) steps.
 const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
@@ -123,12 +100,7 @@ return [
   new Shape('9x9'),
   new ChaosConstruction(),
   new NoBoxes(),
-  shade.toVar('shade'),
-  shadeDomain,
-  // Yin-yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...regionShadeLinks,
   ...arrowCounts,
 ];

@@ -1,0 +1,17 @@
+.~R4C5_9~R4C7_1~R5C5_1~R6C1_8~R9C1_9
+.Thermo~R2C2~R1C1
+.Thermo~R2C4~R1C3
+.Thermo~R2C6~R1C7
+.Thermo~R2C8~R1C9
+.Thermo~R4C2~R3C1
+.Thermo~R4C4~R3C3
+.Thermo~R4C6~R3C7
+.Thermo~R4C8~R3C9
+.Thermo~R6C2~R7C1
+.Thermo~R8C2~R9C1
+.Thermo~R6C4~R7C3
+.Thermo~R8C4~R9C3
+.Thermo~R6C6~R7C7
+.Thermo~R6C8~R7C9
+.Thermo~R8C6~R9C7
+.Thermo~R8C8~R9C9

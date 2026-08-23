@@ -12,54 +12,21 @@
 // arrow / X / black dot), no VALUE repeats across any cell that belongs to
 // that type anywhere in the grid -- not just within one line or clue.
 //
-// ENCODED HERE: normal sudoku; a VS shade flag (1 = unshaded, 2 = shaded) per
-// cell, with global Yin-Yang connectivity (each shade forms one orthogonally
-// connected region) via ConnectedValues over the whole-grid VS overlay; and,
-// since values run 1-18 (too wide for a single ISS cell domain), every
-// value-consuming rule (2x2, renban, arrow, X, black dot, and the four
-// cross-clue uniqueness groups) is an NFA that reads each cell's raw (digit,
-// shade) pair and computes 2*digit-2+shade internally.
+// ENCODED HERE: normal sudoku; native YinYang for the shading (YY overlay,
+// values 1 = unshaded, 2 = shaded); and, since values run 1-18 (too wide for
+// a single ISS cell domain), every value-consuming rule (renban, arrow, X,
+// black dot, and the four cross-clue uniqueness groups) is an NFA that reads
+// each cell's raw (digit, shade) pair and computes 2*digit-2+shade internally.
 
-const UNSHADED = 1;
-const SHADED = 2;
 const DIGIT_VALUES = 9;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeOf = cell => shade.at(cell);
-const gridCells = graph.cells();
-
-// Every cell is UNSHADED or SHADED: one Given template stamped over the
-// whole grid via Replicate instead of 81 identical Givens.
-const shadeCells = gridCells.map(cell => shadeOf(cell));
-const shadeGivens = shade.makeReplicate(new Given(shadeCells[0], UNSHADED, SHADED));
 
 const value = (digit, shadeValue) => 2 * digit - 2 + shadeValue;
 const dsOf = cell => [cell, shadeOf(cell)];
 const dsFlat = cells => cells.flatMap(dsOf);
-
-// No 2x2 block is entirely shaded or entirely unshaded. All 64 blocks are the
-// same 2x2 template (relative to its own top-left cell), translated across
-// every top-left position from R1C1 to R8C8 -- a uniform shift in the VS
-// overlay, which mirrors the grid's row-major layout. Replicate expresses
-// this as one template plus a target-cell set instead of 64 hand-written NFAs.
-const notAllSameNFA = NFA.encodeSpec({
-  startState: null,
-  transition: (state, v) => state === null
-    ? { first: v, allSame: true }
-    : { first: state.first, allSame: state.allSame && v === state.first },
-  accept: (state) => state !== null && !state.allSame,
-}, SHADED);
-
-const blockTemplate = new NFA(notAllSameNFA, 'no-monochrome-2x2',
-  shadeOf(makeCellId(1, 1)), shadeOf(makeCellId(1, 2)),
-  shadeOf(makeCellId(2, 1)), shadeOf(makeCellId(2, 2)));
-const blockTargets = Array.from({ length: 8 }, (_, r) =>
-  Array.from({ length: 8 }, (_, c) =>
-    shadeOf(makeCellId(r + 1, c + 1))
-  )
-).flat();
-const blockReplicate = shade.makeReplicate(blockTemplate, blockTargets);
 
 // --- Renban lines (purple): the cells' VALUES form a consecutive, non-
 // repeating set, in any order. Classic pairwise trick: n values are a
@@ -197,13 +164,7 @@ function groupUniquenessConstraints(cells) {
 
 return [
   new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-  shadeGivens,
-  // Global Yin-Yang connectivity: all shaded cells form one orthogonally
-  // connected region, and all unshaded cells form another.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  blockReplicate,
+  new YinYang(),
   ...renbanConstraints,
   ...arrowConstraints,
   ...xConstraints,

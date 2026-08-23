@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-22T14:03:07.682620+00:00",
+  "generated_at": "2026-08-23T14:14:02.245251+00:00",
   "rows": [
     {
       "puzzle_id": "kM6Kwwkv3aM",
@@ -282,12 +282,9 @@
       "date": "2026-08-03",
       "status": "validated",
       "constraint_types": [
-        "Var",
-        "Replicate",
-        "ConnectedValues",
+        "YinYang",
         "Or",
         "And",
-        "NFA: no-mono-2x2",
         "Pair: thermo",
         "Pair: dot",
         "Given"
@@ -296,11 +293,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 34,
-      "solve_ms": 17.1,
-      "iss_size": 5797,
-      "iss_url_length": 5400,
-      "script_size": 5084
+      "guesses": 35,
+      "solve_ms": 12.8,
+      "iss_size": 5353,
+      "iss_url_length": 4964,
+      "script_size": 3572
     },
     {
       "puzzle_id": "Lw7SG_Hjg-Q",
@@ -1578,24 +1575,21 @@
       "date": "2026-07-12",
       "status": "validated",
       "constraint_types": [
-        "Var",
-        "Replicate",
-        "ConnectedValues",
+        "YinYang",
         "Or",
         "GreaterThan",
         "Sum",
-        "NFA: no-mono-2x2",
         "Given"
       ],
       "search_completed": true,
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 455,
-      "solve_ms": 274.1,
-      "iss_size": 15269,
-      "iss_url_length": 13863,
-      "script_size": 4042
+      "guesses": 413,
+      "solve_ms": 223.4,
+      "iss_size": 14826,
+      "iss_url_length": 13428,
+      "script_size": 2882
     },
     {
       "puzzle_id": "vWyihZrZvU8",
@@ -1796,12 +1790,9 @@
       "date": "2026-07-08",
       "status": "validated",
       "constraint_types": [
-        "Var",
-        "Replicate",
-        "ConnectedValues",
+        "YinYang",
         "Or",
         "And",
-        "NFA: no-mono-2x2",
         "NFA: sum-1",
         "NFA: sum-3",
         "NFA: sum-2",
@@ -1813,11 +1804,11 @@
       "hit_cap": false,
       "unique_solution": true,
       "solutions_found": 1,
-      "guesses": 304,
-      "solve_ms": 173.6,
-      "iss_size": 343919,
-      "iss_url_length": 342991,
-      "script_size": 5928
+      "guesses": 261,
+      "solve_ms": 87.9,
+      "iss_size": 343733,
+      "iss_url_length": 342813,
+      "script_size": 4773
     },
     {
       "puzzle_id": "iAkuAoIgR4o",
@@ -3808,15 +3799,12 @@
       "date": "2026-06-09",
       "status": "validated",
       "constraint_types": [
-        "Var",
-        "Replicate",
-        "ConnectedValues",
+        "YinYang",
         "WhiteDot",
         "AllDifferent",
         "PillArrow",
         "Or",
         "And",
-        "NFA: no-mono-2x2",
         "Given"
       ],
       "search_completed": true,
@@ -3824,10 +3812,10 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 0,
-      "solve_ms": 7.1,
-      "iss_size": 15381,
-      "iss_url_length": 14706,
-      "script_size": 3841
+      "solve_ms": 7.6,
+      "iss_size": 14938,
+      "iss_url_length": 14271,
+      "script_size": 2658
     },
     {
       "puzzle_id": "Yv_RMyYTeRU",
@@ -5177,10 +5165,7 @@
       "date": "2026-05-19",
       "status": "partial",
       "constraint_types": [
-        "Var",
-        "Replicate",
-        "ConnectedValues",
-        "NFA: 2x2 block",
+        "YinYang",
         "NFA: no repeat 9",
         "NFA: no repeat 8",
         "NFA: no repeat 7",
@@ -5189,18 +5174,17 @@
         "NFA: no repeat 4",
         "NFA: no repeat 3",
         "NFA: no repeat 2",
-        "NFA: no repeat 1",
-        "Given"
+        "NFA: no repeat 1"
       ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": false,
       "solutions_found": 871,
       "guesses": 1077,
-      "solve_ms": 196.0,
-      "iss_size": 10536,
-      "iss_url_length": 10611,
-      "script_size": 5846
+      "solve_ms": 69.4,
+      "iss_size": 10349,
+      "iss_url_length": 10428,
+      "script_size": 4076
     },
     {
       "puzzle_id": "ECyhFDcyaIc",

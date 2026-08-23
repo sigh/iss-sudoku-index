@@ -1,0 +1,10 @@
+.Indexing~C~R1C1~R2C1~R3C1~R4C1~R5C1~R6C1~R7C1~R8C1~R9C1
+.Indexing~C~R1C5~R2C5~R3C5~R4C5~R5C5~R6C5~R7C5~R8C5~R9C5
+.Indexing~C~R1C9~R2C9~R3C9~R4C9~R5C9~R6C9~R7C9~R8C9~R9C9
+.Skyscraper~C6~5~
+.Skyscraper~C9~5~
+.Skyscraper~R4~5~
+.Skyscraper~R5~5~5
+.Skyscraper~R8~5~
+.Skyscraper~R6~~5
+.Skyscraper~C1~~5

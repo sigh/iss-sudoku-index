@@ -5,12 +5,11 @@
 
 // Normal sudoku rules (rows, columns, boxes) apply by default.
 //
-// The solver partitions every cell into two orthogonally connected regions,
-// GREEN and ORANGE (VG overlay below), with no 2x2 area fully inside one
-// region. A cell's "value" is its digit when GREEN, or its fixed row+column
-// number when ORANGE -- a constant that does not depend on the digit placed
-// there. Thermometers increase strictly in value from bulb to tip; black
-// dots relate two cells' values by doubling. Both rules are encoded as a
+// The GREEN/ORANGE region split is the YinYang constraint's YY cell group.
+// A cell's "value" is its digit when GREEN, or its fixed row+column number
+// when ORANGE -- a constant that does not depend on the digit placed there.
+// Thermometers increase strictly in value from bulb to tip; black dots
+// relate two cells' values by doubling. Both rules are encoded as a
 // disjunction over the four GREEN/ORANGE combinations of the pair, since
 // "value" is a different function of the cell in each case:
 //   - both GREEN: an ordinary Pair over the two digits.
@@ -23,14 +22,7 @@ const GREEN = 1;
 const ORANGE = 2;
 
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const gridCells = graph.cells();
-const region = graph.makeOverlay('VG');
-
-// Every cell is GREEN or ORANGE.
-const firstRegion = region.cells()[0];
-const regionDomain = region.makeReplicate(
-  new Given(firstRegion, GREEN, ORANGE));
+const region = graph.makeOverlay('YY');
 
 // row + column number for a cell, 1-indexed -- the ORANGE-region value.
 function rowColSum(cell) {
@@ -109,36 +101,9 @@ const dots = [
 const dotRules = dots.map(([a, b]) => valueRelation(
   'dot', a, b, (x, y) => x === 2 * y || y === 2 * x));
 
-// No 2x2 area may lie fully within one region: one NFA machine checking the
-// top-left block's four cells are not all the same region, replicated to
-// every block origin. This scans the 2-valued (GREEN/ORANGE) region overlay,
-// never grid digits, but takes the Shape's numValues (9) as its declared
-// alphabet -- a safe upper bound the lint tool can verify.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = region.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...region.at(graph.block(gridCells[0], 2, 2))),
-  region.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  region.toVar('region'),
-  regionDomain,
-  // Region connectivity: each colour forms one orthogonally connected area.
-  new ConnectedValues('VG', GREEN),
-  new ConnectedValues('VG', ORANGE),
-  noMono2x2,
+  new YinYang(),
   ...thermoRules,
   ...dotRules,
 ];

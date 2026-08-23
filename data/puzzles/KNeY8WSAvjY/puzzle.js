@@ -3,21 +3,22 @@
 // Video: https://www.youtube.com/watch?v=KNeY8WSAvjY
 // Source: https://sudokupad.app/qwd7jxoeym
 
-// Yin-Yang: every cell is shaded HOT or COLD; each shade is one orthogonally
-// connected region, and no 2x2 block is monochrome. Hot/cold: a cell's
-// "value" (as used by the split-pea sums below) is its digit + 1 when HOT,
-// digit - 1 when COLD; the plain digit alone still fills the row/column/box.
+// Yin-Yang (native): every cell is shaded HOT or COLD; each shade is one
+// orthogonally connected region, and no 2x2 block is monochrome. Hot/cold: a
+// cell's "value" (as used by the split-pea sums below) is its digit + 1 when
+// HOT, digit - 1 when COLD; the plain digit alone still fills the row/column/box.
 // Split peas: every circle-to-circle run on the drawn green polylines sums
 // its non-circle cells to the concatenation of its two circles' values, in
 // either order -- encoded as an Or of both digit/coefficient orderings.
 // A drawn stroke threading more than two circles is split into one segment
 // per adjacent circle pair.
 
-const HOT = 1;
-const COLD = 2;
+// Native YinYang restricts its shading to the grid's two lowest values (this
+// puzzle's Shape starts at 0), so HOT=0, COLD=1.
+const HOT = 0;
+const COLD = 1;
 
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
 
 // Circle-to-circle segments, transcribed in path order from the drawn
 // geometry. R4C1/R2C1 and R1C5/R1C7 each anchor more than one segment,
@@ -47,18 +48,16 @@ const segmentCells = [
   ...new Set(segments.flatMap(({ circles, arm }) => [...circles, ...arm]))];
 
 // Shade overlay: every grid cell is HOT or COLD (the two Yin-Yang regions).
-const shade = graph.makeOverlay('VS');
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], HOT, COLD));
+const shade = graph.makeOverlay('YY');
 
 // Effective-value overlay, only for cells that sit on a pea line. A hot
 // digit-9 cell reads as 10 and a cold digit-1 cell reads as 0, so the alphabet
 // is widened to 0-10 (main-grid cells are then restricted back to 1-9 below).
-// eff - digit + 2*shade = 3 <=> eff = digit + 1 (shade=HOT=1) or digit - 1
-// (shade=COLD=2).
+// eff - digit + 2*shade = 1 <=> eff = digit + 1 (shade=HOT=0) or digit - 1
+// (shade=COLD=1).
 const eff = graph.makeOverlay('VE', segmentCells);
 const effLinks = segmentCells.map(cell => new Sum(
-  3, [eff.at(cell), 1], [cell, -1], [shade.at(cell), 2]));
+  1, [eff.at(cell), 1], [cell, -1], [shade.at(cell), 2]));
 
 function segmentConstraint({ circles: [a, b], arm }) {
   const armEff = eff.at(arm);
@@ -69,33 +68,11 @@ function segmentConstraint({ circles: [a, b], arm }) {
   ]);
 }
 
-// No 2x2 block may be all-HOT or all-COLD.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(graph.cells()[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9', '0-10'),
   graph.makeReplicate(new Given(graph.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-  shade.toVar('shade'),
+  new YinYang(),
   eff.toVar('effective value'),
-  shadeDomain,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', HOT),
-  new ConnectedValues('VS', COLD),
-  noMono2x2,
   ...effLinks,
   ...segments.map(segmentConstraint),
 ];

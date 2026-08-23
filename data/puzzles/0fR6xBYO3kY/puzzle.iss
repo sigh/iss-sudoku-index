@@ -1,0 +1,11 @@
+.~R8C5_6
+.AntiKnight
+.Whisper~5~R9C6~R8C7
+.Whisper~5~R7C3~R7C4
+.Whisper~5~R7C1~R7C2
+.Whisper~5~R6C7~R5C8
+.Whisper~5~R6C5~R6C4
+.Whisper~5~R5C3~R4C4
+.Whisper~5~R3C5~R4C5~R3C6~R2C6~R2C7~R1C6~R2C5~R1C5
+.Whisper~5~R1C3~R2C4~R3C3~R4C2~R3C1
+.Whisper~5~R8C6~R9C7

@@ -10,9 +10,8 @@
 // the other colour; which colour each clue reads is not given and must be
 // deduced (guaranteed to see at least three of that colour).
 //
-// Model: a VS shade Var (YIN/YANG) per cell. Global Yin-Yang connectivity is
-// ConnectedValues per shade over the shade overlay, and no-monochrome-2x2 is
-// a local NFA over every 2x2 block (both per xin_yang_v2.js). Each Sum Frame
+// Model: the native YinYang constraint supplies the YY shade Var (YIN/YANG)
+// per cell, its connectivity, and the no-monochrome-2x2 rule. Each Sum Frame
 // clue is Or(NFA reading the line as it would if the clue targets YIN,
 // NFA reading it as if it targets YANG): the NFA scans the line's cells as
 // an interleaved (digit, shade) stream, counts cells matching its baked-in
@@ -22,32 +21,8 @@
 const YIN = 1, YANG = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeOf = cell => shade.at(cell);
-const gridCells = graph.cells();
-
-// Every cell is YIN or YANG: one Given template stamped over the whole grid
-// via Replicate instead of 81 identical Givens.
-const shadeCells = gridCells.map(cell => shadeOf(cell));
-const shadeGivens = shade.makeReplicate(
-  [new Given(shadeCells[0], YIN, YANG)],
-  shadeCells);
-
-// --- No 2x2 block of cells is entirely one colour. ---
-const notAllSameNFA = NFA.encodeSpec({
-  startState: null,
-  transition: (state, v) => state === null
-    ? { first: v, allSame: true }
-    : { first: state.first, allSame: state.allSame && v === state.first },
-  accept: (state) => state !== null && !state.allSame,
-}, YANG);
-const monoOrigin = shadeOf('R1C1');
-const noMono2x2 = shade.makeReplicate(
-  [new NFA(
-    notAllSameNFA, 'no-monochrome-2x2',
-    shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2'))],
-  shade.block(monoOrigin, 8, 8),
-);
 
 // --- Coloured Sum Frame clues. ---
 // For a fixed target colour, reads the line's cells (interleaved with their
@@ -107,16 +82,11 @@ const sumFrameClues = [
 
 return [
   new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-  shadeGivens,
+  new YinYang(),
 
   new Given('R3C7', 7),
   new Given('R5C5', 8),
   new Given('R7C3', 6),
-
-  // Global Yin-Yang connectivity: each colour forms one connected region.
-  new ConnectedValues('VS', YIN),
-  new ConnectedValues('VS', YANG),
 
   // The rules never name which colour is which, and every constraint above
   // and below is exactly invariant under swapping YIN<->YANG everywhere (a
@@ -126,8 +96,6 @@ return [
   // the model reports that single canonical labeling instead of counting the
   // redundant relabeling as a second solution.
   new Given(shadeOf('R1C1'), YIN),
-
-  noMono2x2,
 
   ...sumFrameClues,
 ];

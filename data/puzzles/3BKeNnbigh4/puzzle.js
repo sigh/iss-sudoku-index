@@ -20,11 +20,11 @@
 // contiguous shaded blocks (blocks separated by >=1 unshaded cell). The
 // number of clues for a row/column equals its count of white (non-grey)
 // cells in the band -- read from the payload's grey `underlay` rectangles,
-// which mark every band cell that is NOT a clue position. Clue order is the
-// standard outside-clue-stack convention: nearest-to-farthest from the grid
-// = first-to-last shaded block reading into the grid from that edge (row
-// clues sit to the left, reading right-to-left from the grid edge; column
-// clues sit above, reading top-to-bottom from the grid edge).
+// which mark every band cell that is NOT a clue position. Clue order here is
+// nearest-to-farthest from the grid = first-to-last shaded block reading into
+// the grid from that edge. That is this encoding's reading, not a settled
+// convention: the genre reads the band as printed, which for a left or top
+// band is farthest-from-grid first.
 //
 // No printed value exists anywhere in the payload for any arrow circle or
 // outside clue (every circle overlay has `text: ""`; there is no other

@@ -3,16 +3,16 @@
 // Video: https://www.youtube.com/watch?v=4bri-zC18Ps
 // Source: https://sudokupad.app/7wf14f41d2
 
-// The shade overlay uses 1 for red and 2 for blue. Each line's color-dependent
-// rules are disjunctions with the corresponding monochromatic exception.
+// The shading is the YinYang constraint's YY cell group, using 1 for red and 2
+// for blue. Each line's color-dependent rules are disjunctions with the
+// corresponding monochromatic exception.
 
 const RED = 1;
 const BLUE = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const gridCells = graph.cells();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 
 const lines = [
   ['R5C9', 'R6C9', 'R7C9', 'R8C9', 'R9C9', 'R9C8', 'R9C7', 'R9C6', 'R9C5'],
@@ -27,27 +27,6 @@ const lines = [
   ['R4C8', 'R4C7', 'R4C6', 'R5C5'],
   ['R6C2', 'R7C2', 'R8C2'],
 ];
-
-// Every shade Var is red or blue.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(new Given(firstShade, RED, BLUE));
-
-// Reject a monochromatic 2x2 block, replicated over all 64 block origins.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no monochromatic 2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 const alternatingParityKey = Pair.fnToKey(
   (a, b) => (a + b) % 2 === 1,
@@ -77,10 +56,6 @@ const lineRules = lines.flatMap(cells => [
 
 return [
   new Shape('9x9'),
-  shade.toVar('cell colors'),
-  shadeDomain,
-  new ConnectedValues('VS', RED),
-  new ConnectedValues('VS', BLUE),
-  noMono2x2,
+  new YinYang(),
   ...lineRules,
 ];

@@ -3,15 +3,15 @@
 // Video: https://www.youtube.com/watch?v=ehi5FkxgrWs
 // Source: https://sudokupad.app/gf8l5f4s64
 
-// Full encoding. Global Yin-Yang connectivity is one ConnectedValues
-// constraint per shade over the shade overlay; local shading and reciprocal
-// sum/product cages are encoded below.
+// Full encoding. Shading is the YinYang constraint's YY cell group
+// (connected regions, no mono 2x2); reciprocal sum/product cages are
+// encoded below.
 
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeCell = cell => shade.at(cell);
 const gridCells = graph.cells();
 
@@ -134,18 +134,6 @@ const cageConstraint = (kind, target, cells) => {
   return new Or(branches);
 };
 
-const noMono2x2NFA = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (value !== SHADED && value !== UNSHADED) return undefined;
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 9);
-
 const cages = [
   ['sum', 1, ['R6C4', 'R6C5', 'R6C6', 'R6C7', 'R7C7', 'R8C6', 'R8C7']],
   ['sum', 1, ['R4C4', 'R4C5', 'R4C6']],
@@ -159,23 +147,8 @@ const cages = [
   ['product', 5, ['R1C2', 'R1C3', 'R2C3', 'R2C4', 'R2C5']],
 ];
 
-const firstShade = shade.cells()[0];
-const monoOrigin = shadeCell('R1C1');
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED)),
-  // Global Yin-Yang connectivity: each shade forms one orthogonally connected
-  // region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  // The no-mono-2x2 NFA is the same machine at every valid 2x2 anchor
-  // (R1C1..R8C8), each a uniform translation of the same relative cell
-  // pattern over the shade overlay, so Replicate shortens the 64 stamped
-  // copies to one template.
-  shade.makeReplicate(
-    new NFA(noMono2x2NFA, 'no-mono-2x2', ...shade.block(monoOrigin, 2, 2)),
-    shade.block(monoOrigin, 8, 8)),
+  new YinYang(),
   ...cages.map(([kind, target, cells]) => cageConstraint(kind, target, cells)),
 ];

@@ -6,34 +6,15 @@
 // Normal Sudoku, Yin-Yang shading, row-9 shade counts, and the columnwise
 // hidden thermometers are encoded. Red dots sum to 9; circled digits are +9
 // only when their shaded-column order is compared.
+// The shading is the YinYang constraint's YY cell group. The drawn puzzle
+// supplies no pre-shaded cells; shaded/unshaded labels are fixed by the row-9
+// count rule.
 
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const gridCells = graph.cells();
-
-// The two shade states cover every cell.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.at(gridCells[0]), SHADED, UNSHADED));
-
-// Every 2x2 must contain both shade states. The drawn puzzle supplies no
-// pre-shaded cells; shaded/unshaded labels are fixed by the row-9 count rule.
-const noMono2x2Spec = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: state => state.done === true,
-}, 9);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Spec, 'no-monochrome-2x2',
-    ...shade.at(graph.block('R1C1', 2, 2))),
-  shade.at(blockOrigins));
 
 // Row-9 digits count shaded cells in their own columns. Each scan reads the
 // nine shade flags followed by that column's row-9 digit.
@@ -98,11 +79,7 @@ const redDots = [
 
 return [
   new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...shadeCounts,
   ...hiddenThermos,
   ...redDots.map(cells => new Sum(9, ...cells)),

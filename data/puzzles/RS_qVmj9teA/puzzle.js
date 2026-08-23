@@ -4,39 +4,15 @@
 // Source: https://app.crackingthecryptic.com/sudoku/2gT2TmHmRm
 
 // Normal sudoku rules apply (standard 3x3 boxes, no given digits). Yin-Yang:
-// shade cells so all shaded cells are orthogonally connected, all unshaded
-// cells are orthogonally connected, and no 2x2 block is fully shaded or
-// fully unshaded. Each outside clue gives the sum of the digits in the first
-// continuous block of shaded cells seen scanning inward from that side.
+// shading is the YinYang constraint's YY cell group. Each outside clue gives
+// the sum of the digits in the first continuous block of shaded cells seen
+// scanning inward from that side.
 
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-
-// Every shade Var is either shaded or unshaded.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-// No 2x2 block may be all shaded or all unshaded: one NFA on the top-left
-// block, replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, graph.gridGeometry().numValues);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(graph.cells()[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 // An outside clue's target is the digits of the first unbroken run of shaded
 // cells scanning `lineCells` from index 0 (the end nearest the clue). Try
@@ -90,11 +66,6 @@ const outsideClues = [
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...outsideClues.map(({ total, cells }) => outsideShadedSum(total, cells)),
 ];

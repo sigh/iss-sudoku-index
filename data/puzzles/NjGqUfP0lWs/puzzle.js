@@ -3,18 +3,15 @@
 // Video: https://www.youtube.com/watch?v=NjGqUfP0lWs
 // Source: https://sudokupad.app/t2HrhT8rMM
 
-// Encode the jigsaw grid, the two connected shades, non-monochromatic 2x2s,
-// shade-selected arrow sums, and shade-region cage sums. The supplied shaded
-// sandwich total is 9 above active column C8. The all-different condition on
-// the remaining row and column sandwich totals is omitted.
+// Encode the jigsaw grid, the YinYang shading, shade-selected arrow sums, and
+// shade-region cage sums. The supplied shaded sandwich total is 9 above
+// active column C8. The all-different condition on the remaining row and
+// column sandwich totals is omitted.
 
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // Drawn jigsaw-region cells, transcribed from the source regions after removing
 // the one-cell top and left canvas frame.
@@ -29,21 +26,6 @@ const regions = [
   ['R8C5','R8C6','R9C5','R9C6','R7C6','R7C5','R7C4','R8C4','R9C4'],
   ['R7C7','R7C9','R7C8','R8C7','R8C8','R8C9','R9C9','R9C8','R9C7'],
 ];
-
-// No 2x2 block may be all shaded or all unshaded.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 9);
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2', ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(gridCells.filter(cell => graph.block(cell, 2, 2))));
 
 // Each branch fixes an arrow's shade pattern, then sums exactly the arm cells
 // whose shade matches the circle's shade.
@@ -140,11 +122,7 @@ return [
   new Shape('9x9'),
   new NoBoxes(),
   ...regions.map(cells => new Jigsaw('9x9', ...cells)),
-  shade.toVar('shade'),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...arrows,
   ...cages,
   shadedSandwich(9, graph.column('R1C8')),

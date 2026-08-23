@@ -5,10 +5,9 @@
 
 // Full encoding.
 // - Normal sudoku: default Shape('9x9') row/column/box all-different.
-// - Yin-Yang: a shade overlay Var restricted to {SHADED, UNSHADED}. Global
-//   connectivity ("all shaded cells orthogonally connected" and likewise for
-//   unshaded) is one ConnectedValues per shade over the whole-grid overlay.
-//   No monochrome 2x2 is a Replicate'd NFA over each 2x2 block.
+// - Yin-Yang: the shading is the YinYang constraint's YY cell group
+//   (grid's two lowest values mean shaded/unshaded); connectivity and the
+//   no-monochrome-2x2 rule are built in.
 // - Fortress: a shaded cell must be greater than every orthogonal unshaded
 //   neighbour. For each undirected edge (a, b) this is two directed clauses:
 //   Or(b is shaded, a is unshaded, a > b) -- "if a is shaded and b is
@@ -26,27 +25,9 @@ const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeCell = cell => shade.at(cell);
 const gridCells = graph.cells();
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-
-// No 2x2 block may be all shaded or all unshaded.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = Array.from(gridCells).filter(cell => graph.block(cell, 2, 2));
 
 // Fortress: a shaded cell must exceed each unshaded orthogonal neighbour.
 const seenEdges = new Set();
@@ -90,15 +71,7 @@ const arrowConstraints = arrows.map(([cell, [dr, dc]]) => {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED)),
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  shade.makeReplicate(
-    new NFA(noMono2x2Machine, 'no-mono-2x2',
-      ...shade.at(graph.block(gridCells[0], 2, 2))),
-    shade.at(blockOrigins)),
+  new YinYang(),
   ...fortressConstraints,
   ...arrowConstraints,
 ];

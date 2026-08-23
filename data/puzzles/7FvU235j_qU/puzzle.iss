@@ -1,0 +1,12 @@
+.LittleKiller~13~R4C9
+.LittleKiller~11~R2C9
+.LittleKiller~10~R9C6
+.LittleKiller~5~R9C8
+.LittleKiller~27~R6C1
+.LittleKiller~9~R8C1
+.LittleKiller~30~R1C4
+.LittleKiller~15~R1C2
+.Between~R2C1~R2C3~R3C4~R4C5~R5C4~R4C3~R3C2~R1C2
+.Between~R1C8~R2C7~R3C6~R4C5~R5C6~R4C7~R3C8~R2C9
+.Between~R8C9~R7C8~R6C7~R5C6~R6C5~R7C6~R8C7~R9C8
+.Between~R9C2~R8C3~R7C4~R6C5~R5C4~R6C3~R7C2~R8C1

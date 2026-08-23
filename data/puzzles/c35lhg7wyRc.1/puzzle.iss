@@ -1,0 +1,9 @@
+.~R2C3_8~R2C7_3~R3C5_2~R5C5_1~R6C4_4~R6C6_8~R7C3_6~R7C7_2~R8C2_3~R8C8_7
+.Sandwich~35~C1
+.Sandwich~6~C3
+.Sandwich~21~C5
+.Sandwich~20~C9
+.Sandwich~35~R1
+.Sandwich~0~R3
+.Sandwich~21~R5
+.Sandwich~9~R9

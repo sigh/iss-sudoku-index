@@ -1,0 +1,13 @@
+.Diagonal~-1
+.Diagonal~1
+.Arrow~R1C1~R1C2~R1C3~R2C3
+.Arrow~R1C9~R2C9~R3C9~R3C8
+.Arrow~R9C9~R9C8~R9C7~R8C7
+.Arrow~R9C1~R8C1~R7C1~R7C2
+.Whisper~5~R4C5~R5C5~R6C5
+.Whisper~5~R5C4~R5C5~R5C6
+.Whisper~5~R2C2~R3C3~R4C4
+.Whisper~5~R4C6~R3C7~R2C6
+.Whisper~5~R6C6~R7C7~R6C8
+.Whisper~5~R8C6~R9C6
+.Whisper~5~R5C1~R6C2

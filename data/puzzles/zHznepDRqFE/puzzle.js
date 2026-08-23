@@ -7,9 +7,7 @@
 //
 // Yin-Yang: shade some cells so shaded cells are orthogonally connected,
 // unshaded cells are orthogonally connected, and no 2x2 block is entirely
-// shaded or entirely unshaded. Encoded as a shade Var overlay plus
-// ConnectedValues per shade and a no-mono-2x2 NFA (same pattern as
-// xin_yang_v2.js).
+// shaded or entirely unshaded. This is the YinYang constraint's YY cell group.
 //
 // Values: an unshaded cell's value equals its own digit; a shaded cell's
 // value equals the highest digit among its (up to 4) orthogonal neighbours.
@@ -30,30 +28,10 @@ const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
 
-const shade = graph.makeOverlay('VS');
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 const value = graph.makeOverlay('VV');
 const valueCell = cell => value.at(cell);
-
-// No 2x2 block of the shading may be monochrome.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, v) => {
-    if (done === true) return { done: true };
-    const next = [...seen, v];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(x => x === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // A shaded cell's value must equal the max digit among its orthogonal
 // neighbours: every neighbour digit <= value, and at least one equals it.
@@ -127,13 +105,8 @@ const cageConstraints = cages.map(([cells, total]) => {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   value.toVar('value'),
-  shadeDomain,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...valueLinks,
   ...cageConstraints,
 ];

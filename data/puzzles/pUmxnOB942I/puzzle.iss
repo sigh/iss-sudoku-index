@@ -1,0 +1,17 @@
+.Renban~R2C2~R3C2~R4C2
+.Renban~R2C3~R3C3~R4C3
+.Renban~R2C4~R3C4~R4C4
+.Renban~R6C2~R6C3~R6C4
+.Renban~R7C2~R7C3~R7C4
+.Renban~R8C2~R8C3~R8C4
+.Renban~R2C6~R2C7~R2C8
+.Renban~R3C6~R3C7~R3C8
+.Renban~R4C6~R4C7~R4C8
+.Renban~R6C6~R7C6~R8C6
+.Renban~R6C7~R7C7~R8C7
+.Renban~R6C8~R7C8~R8C8
+.Sandwich~33~C1
+.Sandwich~33~R9
+.Sandwich~32~C9
+.GreaterThan~R6C3~R6C2
+.GreaterThan~R5C8~R5C7

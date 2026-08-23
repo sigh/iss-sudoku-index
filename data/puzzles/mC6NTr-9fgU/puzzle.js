@@ -6,9 +6,8 @@
 // Full encoding. Normal sudoku (default rows/cols/boxes) plus:
 // - Between(...): cells between the two named circles are strictly between
 //   their values (one Between per drawn line, circle endpoints first/last).
-// - A shade overlay ('VS') for the Yin-Yang region: SHADED/UNSHADED per
-//   cell, each shade orthogonally connected (ConnectedValues) and no 2x2
-//   block monochrome (replicated NFA).
+// - YinYang(): the shade overlay ('YY') with its two-shade, single-connected-
+//   region-per-shade, no-monochrome-2x2 semantics built in.
 // - Circles are always UNSHADED, and their grid digit equals the count of
 //   shaded cells among their up-to-8 king-move neighbours (minesweeper).
 
@@ -16,34 +15,7 @@ const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
-
-// No 2x2 block may be all shaded or all unshaded: one NFA on the top-left
-// block, replicated to every block origin. Domain-agnostic: only checks
-// whether all four seen values match, so it works for the shade overlay's
-// {SHADED, UNSHADED} pair even though numValues below is the grid's 9.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(graph.cells()[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 // The 12 circles (one white-circle underlay per cell listed).
 const circles = [
@@ -82,13 +54,8 @@ return [
   new Shape('9x9'),
   new Given('R6C6', 9),
   new Given('R7C8', 9),
-  shade.toVar('shade'),
-  shadeDomain,
+  new YinYang(),
   ...circlesUnshaded,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...minesweeperCounts,
   ...betweenLines,
 ];

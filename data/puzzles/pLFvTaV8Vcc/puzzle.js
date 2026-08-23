@@ -3,46 +3,20 @@
 // Video: https://www.youtube.com/watch?v=pLFvTaV8Vcc
 // Source: https://sudokupad.app/2susajautc
 
-// Normal Sudoku applies. The two galaxy labels cover every cell, are connected,
-// have a possible 180-degree centre, do not fill a 2x2, and one label has the
-// German-whisper adjacency rule. Each arrow digit counts its pointed-at cells
-// with the arrow cell's label.
+// Normal Sudoku applies. The two galaxy labels are the native YinYang 'YY'
+// group (connected, no 2x2 monochrome); a rotational-symmetry rule and one
+// label's German-whisper adjacency are layered on top. Each arrow digit
+// counts its pointed-at cells with the arrow cell's label.
 
 const FIRST = 1;
 const SECOND = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const cells = graph.cells();
-const galaxy = graph.makeOverlay('VG');
-const galaxyCells = galaxy.cells();
+const galaxy = graph.makeOverlay('YY');
 
-const galaxyDomain = galaxy.makeReplicate(
-  new Given(galaxyCells[0], FIRST, SECOND));
 // Galaxy names are not part of the puzzle, so fix their swap symmetry here.
 const labelRepresentative = new Given(galaxy.at('R1C1'), FIRST);
-
-// Both labels are non-empty connected orthogonal regions.
-const connectedGalaxies = [
-  new ConnectedValues('VG', FIRST),
-  new ConnectedValues('VG', SECOND),
-];
-
-// Source rule: no 2x2 area is entirely in either galaxy.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = cells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = galaxy.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...galaxy.at(graph.block(cells[0], 2, 2))),
-  galaxy.at(blockOrigins));
 
 // A finite galaxy inside this grid has a centre at a cell centre or grid-line
 // intersection. Each branch chooses one of those 17 by 17 centres for a label.
@@ -141,11 +115,8 @@ const arrowCounts = arrows.map(([cell, ray]) => new NFA(
 
 return [
   new Shape('9x9'),
-  galaxy.toVar('galaxies'),
-  galaxyDomain,
+  new YinYang(),
   labelRepresentative,
-  ...connectedGalaxies,
-  noMono2x2,
   rotationalSymmetry(FIRST),
   rotationalSymmetry(SECOND),
   whispers,

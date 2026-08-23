@@ -1,0 +1,27 @@
+// Title: Lift Off
+// Author: Flywinged
+// Video: https://www.youtube.com/watch?v=8KUGMwmm5nM
+// Source: https://app.crackingthecryptic.com/sudoku/hJmD6F2dgT
+
+// Normal sudoku rules apply (row/col/box all-different, the ISS default).
+// Digits along an arrow sum to the digit in the arrow's attached circle
+// (Arrow's first cell is the circle; no printed sum, so no Given there).
+// Arrow 2's bulb is R4C3: the source waypoint is ambiguous between R4C3
+// and R4C4, resolved by matching all 10 overlay circles one-to-one against
+// the 11 arrows' bulbs (two arrows share the R8C2 bulb).
+
+return [
+  new Shape('9x9'),
+
+  new Arrow('R5C5', 'R4C6', 'R3C7', 'R2C8', 'R1C9'),
+  new Arrow('R4C3', 'R4C4', 'R3C5', 'R3C6', 'R2C7'),
+  new Arrow('R7C6', 'R6C6', 'R5C7', 'R4C7', 'R3C8'),
+  new Arrow('R4C2', 'R3C3', 'R2C4'),
+  new Arrow('R3C2', 'R4C1', 'R5C1'),
+  new Arrow('R7C1', 'R7C2', 'R6C3', 'R5C4'),
+  new Arrow('R8C2', 'R8C1', 'R9C2'),
+  new Arrow('R8C2', 'R7C3', 'R6C4'),
+  new Arrow('R9C3', 'R8C3', 'R7C4', 'R6C5'),
+  new Arrow('R8C7', 'R9C6', 'R9C5'),
+  new Arrow('R6C8', 'R7C7', 'R8C6'),
+];

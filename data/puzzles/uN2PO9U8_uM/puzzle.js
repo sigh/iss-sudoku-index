@@ -28,11 +28,7 @@ const LIGHT = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-
-// Every shade Var is either dark or light.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(new Given(firstShade, DARK, LIGHT));
+const shade = graph.makeOverlay('YY');
 
 // Index line cells in line order (position 1 = the diamond), read off the
 // drawn line paths (waypoints interpolated cell-by-cell).
@@ -90,33 +86,9 @@ const dotRules = whiteDots.flatMap(([a, b]) => [
   new SameValues(2, shade.at(a), shade.at(b)),
 ]);
 
-// No 2x2 block may be all dark or all light: one NFA on the top-left block,
-// replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(graph.cells()[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
-  // Yin-Yang connectivity: each color forms one orthogonally connected region.
-  new ConnectedValues('VS', DARK),
-  new ConnectedValues('VS', LIGHT),
-  noMono2x2,
+  new YinYang(),
   ...dotRules,
   ...indexLineRules,
 ];

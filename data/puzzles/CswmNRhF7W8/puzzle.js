@@ -3,7 +3,7 @@
 // Video: https://www.youtube.com/watch?v=CswmNRhF7W8
 // Source: https://sudokupad.app/6hc3f9hbqu
 
-// Yin-Yang shading is stored in VS: 1 is shaded and 2 is unshaded.
+// Yin-Yang shading is stored in YY: 1 is shaded and 2 is unshaded.
 // Each outside clue scans alternating grid digits and shade flags, counting
 // record-high digits only when their flag is shaded.
 
@@ -12,27 +12,7 @@ const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { values: [] },
-  transition: ({ values, done }, value) => {
-    if (done) return { done: true };
-    const next = [...values, value];
-    if (next.length < 4) return { values: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 const dots = [
   ['R2C3', 'R2C4'],
@@ -98,13 +78,9 @@ const skyscraperRules = views.map(({ clue, cells }) => {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   new Given('R1C5', 1),
   new Given('R7C9', 6),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...dotRules,
   ...skyscraperRules,
 ];

@@ -3,37 +3,15 @@
 // Video: https://www.youtube.com/watch?v=_Q1fvtndpsA
 // Source: https://sudokupad.app/qc37ejydvj
 
-// Full encoding. Global Yin-Yang connectivity is one ConnectedValues
-// constraint per shade over the shade overlay; local shading and clue rules
-// are encoded below.
+// Full encoding. The shading is the YinYang constraint's YY cell group;
+// the clue rules over it are encoded below.
 
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeCell = cell => shade.at(cell);
-const gridCells = graph.cells();
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-
-// No 2x2 block may be all shaded or all unshaded.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const mono2x2Origin = 'R1C1';
-const mono2x2Targets = shade.at(gridCells
-  .filter(cell => graph.block(cell, 2, 2)));
 
 const dots = [
   ['R1C4', 'R2C4'],
@@ -106,22 +84,13 @@ const sightCounts = arrows.flatMap(({ pill }) => {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   new Given('R2C6', 6),
   new Given('R2C8', 8),
   new Given('R6C2', 7),
   new Given('R7C6', 5),
-  shade.makeReplicate([new Given(firstShade, SHADED, UNSHADED)], shade.cells()),
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
   ...whiteDots,
   ...shadeDifferences,
-  shade.makeReplicate(
-    [new NFA(noMono2x2Machine, 'no-mono-2x2',
-      ...shade.at(graph.block(mono2x2Origin, 2, 2)))],
-    mono2x2Targets,
-  ),
   ...pillArrows,
   ...sightCounts,
 ];

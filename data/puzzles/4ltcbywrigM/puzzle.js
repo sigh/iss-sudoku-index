@@ -3,9 +3,9 @@
 // Video: https://www.youtube.com/watch?v=4ltcbywrigM
 // Source: https://sudokupad.app/usquoo8ao3
 
-// Standard sudoku plus Yin-Yang shading (both colours orthogonally
-// connected, no 2x2 block monochrome; shading itself is not given -- the
-// solver discovers it). Fog/reveal state is solving UI and is not encoded.
+// Standard sudoku plus Yin-Yang shading (native YinYang constraint; shading
+// itself is not given -- the solver discovers it). Fog/reveal state is
+// solving UI and is not encoded.
 // Unshaded Whispers: two orthogonally adjacent cells that are BOTH unshaded
 // must differ by >= 5; a pair with a shaded side is unconstrained. Kropki:
 // three white dots (consecutive digits). The rules' "Given Digits" clause is
@@ -17,13 +17,8 @@ const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const gridCells = graph.cells();
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
 
 // White-dot (Kropki, consecutive) edges, from the source's three drawn
 // edge-sized white/black-bordered dot overlays.
@@ -33,25 +28,6 @@ const dots = [
   ['R6C6', 'R7C6'],
 ];
 const dotRules = dots.map(([a, b]) => new WhiteDot(a, b));
-
-// No 2x2 block may be all shaded or all unshaded: one NFA on the top-left
-// block, replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // Unshaded Whispers: reads (shadeA, digitA, shadeB, digitB) for an
 // orthogonally adjacent pair. If both shades are UNSHADED, the digits must
@@ -86,12 +62,7 @@ const whispers = gridCells.flatMap(cell => [[0, 1], [1, 0]]
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...dotRules,
   ...whispers,
 ];

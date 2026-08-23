@@ -5,12 +5,8 @@
 //
 // Normal sudoku rules apply (standard boxes, no givens).
 //
-// Yin-Yang shading: shade some cells so that all shaded cells are orthogonally
-// connected and all unshaded cells are orthogonally connected. No 2x2 area may
-// be completely shaded or unshaded. This script encodes a shade Var per cell
-// (restricted to 2 states), "no monochrome 2x2", and global single-component
-// connectivity for each colour via one ConnectedValues per shade over the
-// whole-grid shade overlay.
+// Yin-Yang shading uses the native YinYang constraint's YY cell group (two
+// shades, one connected region each, no monochrome 2x2).
 //
 // Line + shading interaction: there is one closed loop (55 of the 81 cells).
 // Walking the loop, every maximal run of consecutively-visited cells that
@@ -41,27 +37,8 @@
 
 const shape = new Shape('9x9');
 const graph = cellGraph(shape);
-const shadeShape = new Shape('1x1', 2);
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeAt = cell => shade.at(cell);
-
-// No monochrome 2x2: for every 2x2 block of shade cells, not all four equal.
-const notAllSameSpec = NFA.encodeSpec({
-  startState: null,
-  transition: (state, value) => {
-    if (state === null) return [{ first: value, differs: false }];
-    return [{ first: state.first, differs: state.differs || value !== state.first }];
-  },
-  accept: (state) => state !== null && state.differs,
-}, shadeShape);
-
-// All 64 blocks are the same NFA applied to a uniform (dRow, dCol) shift of
-// one template block, so Replicate stamps the template instead of hand-
-// rolling each shifted copy.
-const blockTemplate = [
-  new NFA(notAllSameSpec, '2x2 block',
-    shadeAt('R1C1'), shadeAt('R1C2'), shadeAt('R2C1'), shadeAt('R2C2')),
-];
 
 // The closed loop, in path order (55 cells).
 const loopCells = [
@@ -80,29 +57,9 @@ const loopCells = [
 const lap = loopCells.flatMap(cell => [shadeAt(cell), cell]);
 const scanCells = [...lap, ...lap];
 
-// Every cell is either shaded (2) or unshaded (1): one Given template
-// stamped over every grid cell via the shade overlay.
-function shadeDomainConstraints() {
-  const targets = shadeAt(Array.from(graph.cells()));
-  return [shade.makeReplicate([new Given(targets[0], 1, 2)], targets)];
-}
-
 return [
   shape,
-  shade.toVar('yin-yang shading'),
-  ...shadeDomainConstraints(),
-  // Global Yin-Yang connectivity: each shade forms one orthogonally-connected
-  // region over the whole-grid shade overlay.
-  new ConnectedValues('VS', 1),
-  new ConnectedValues('VS', 2),
-  shade.makeReplicate(
-    blockTemplate,
-    Array.from({ length: 8 }, (_, r) =>
-      Array.from({ length: 8 }, (_, c) =>
-        shadeAt(makeCellId(r + 1, c + 1))
-      )
-    ).flat(),
-  ),
+  new YinYang(),
   // No digit repeats within a segment: one small NFA per digit value.
   ...Array.from({ length: 9 }, (_, d) => {
     const repeatSpec = NFA.encodeSpec({

@@ -14,8 +14,7 @@
 // pink lines are renbans.
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-const shadeVar = shade.toVar('forest shade');
+const shade = graph.makeOverlay('YY');
 
 const circles = [
   'R1C4', 'R4C1', 'R8C9', 'R9C8', 'R1C7', 'R3C8', 'R2C7', 'R1C5',
@@ -80,30 +79,6 @@ const sightCountSpec = NFA.encodeSpec({
     state.phase === 'blocked',
 }, 9);
 
-function shadeDomainConstraints() {
-  const cells = shade.at(graph.cells());
-  return [shade.makeReplicate([new Given(cells[0], 1, 2)], cells)];
-}
-
-function noMonochrome2x2Constraints() {
-  const spec = NFA.encodeSpec({
-    startState: null,
-    transition: (state, value) => state === null
-      ? { first: value, differs: false }
-      : { first: state.first, differs: state.differs || value !== state.first },
-    accept: state => state !== null && state.differs,
-  }, 9);
-  const template = [new NFA(spec, 'no monochrome 2x2',
-    shade.at('R1C1'), shade.at('R1C2'), shade.at('R2C1'), shade.at('R2C2'))];
-  const targets = [];
-  for (let row = 1; row <= 8; row++) {
-    for (let col = 1; col <= 8; col++) {
-      targets.push(shadeVar.cell(row, col));
-    }
-  }
-  return [shade.makeReplicate(template, targets)];
-}
-
 function countingConstraints() {
   return countingCells.flatMap((cell, clueIndex) => {
     const directionalCounts = directions.map((direction, directionIndex) => {
@@ -127,14 +102,10 @@ function countingConstraints() {
 
 return [
   new Shape('9x9'),
-  shadeVar,
+  new YinYang(),
   sightCounts,
-  ...shadeDomainConstraints(),
   // Shade labels are interchangeable; this removes only the global swap.
   new Given(shade.at('R1C1'), 1),
-  new ConnectedValues('VS', 1),
-  new ConnectedValues('VS', 2),
-  ...noMonochrome2x2Constraints(),
   ...countingConstraints(),
   ...whispers.map(cells => new Whisper(5, ...cells)),
   ...renbans.map(cells => new Renban(...cells)),

@@ -3,38 +3,17 @@
 // Video: https://www.youtube.com/watch?v=izvJhyG8ZN8
 // Source: https://sudokupad.app/pyunvd8iy4
 
-// The VS overlay records the two Yin-Yang colours. Each FSOE NFA scans
-// digit/shade pairs and branches over which shade that particular clue sees.
+// The YY overlay records the YinYang shading. Each FSOE NFA scans digit/shade
+// pairs and branches over which shade that particular clue sees.
 
 const SHADE_A = 1;
 const SHADE_B = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
+const shade = graph.makeOverlay('YY');
 
 const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADE_A, SHADE_B));
-
-// No 2x2 block may be monochrome. Replicate the rule from the top-left block
-// to all 64 possible 2x2 origins.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // Scan alternating digit and shade cells. Before the first shade is read, the
 // machine branches over the colour seen by this clue. Digits of the other
@@ -117,7 +96,7 @@ const firstSeenClues = clueDefs.map(({ clue, cells }, index) => {
 
 return [
   new Shape('9x9'),
-  shade.toVar('Yin-Yang shade'),
+  new YinYang(),
   new Given('R1C1', 9),
   new Given('R1C4', 8),
   new Given('R1C7', 7),
@@ -127,12 +106,8 @@ return [
   new Given('R7C1', 3),
   new Given('R7C4', 2),
   new Given('R7C7', 1),
-  shadeDomain,
   // The two colour names are interchangeable; choose a canonical label to
   // remove that auxiliary-only symmetry without fixing any visible shading.
   new Given(firstShade, SHADE_A),
-  new ConnectedValues('VS', SHADE_A),
-  new ConnectedValues('VS', SHADE_B),
-  noMono2x2,
   ...firstSeenClues,
 ];

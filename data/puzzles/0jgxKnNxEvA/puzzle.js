@@ -21,8 +21,7 @@ const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
+const shade = graph.makeOverlay('YY');
 
 // Cells of the four drawn grey polylines, in stroke order (diagonal steps
 // included), and the ten drawn circles.
@@ -114,10 +113,6 @@ const blackDots = [
   ['R5C1', 'R5C2'], ['R8C3', 'R8C4'], ['R9C6', 'R9C7'], ['R7C8', 'R8C8'],
 ];
 
-// Every shade Var is shaded or unshaded.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
 // Minesweeper machine: the first segment is the circle cell, supplying the
 // target digit; the second is its king neighbourhood, whose shaded members are
 // counted.
@@ -149,34 +144,9 @@ const mineClues = circles.flatMap(circle => [
     [circle], shade.at(graph.kingNeighbours(circle))),
 ]);
 
-// No 2x2 block is all one shade: one NFA over the top-left block, replicated to
-// every in-grid block origin.
-const noMono2x2Spec = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Spec, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
-  // Each shade forms exactly one orthogonally connected region.  Neither shade
-  // can be empty here: the circles are unshaded, and no 2x2 area may be fully
-  // unshaded.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
+  new YinYang(),
   ...mineClues,
   ...whiteDots.map(([a, b]) => new WhiteDot(a, b)),
   ...blackDots.map(([a, b]) => new BlackDot(a, b)),

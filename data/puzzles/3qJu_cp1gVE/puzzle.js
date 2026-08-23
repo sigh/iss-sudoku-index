@@ -3,185 +3,227 @@
 // Video: https://www.youtube.com/watch?v=3qJu_cp1gVE
 // Source: https://sudokupad.app/b1sckx3s0b
 
-// Normal 9x9 sudoku rules apply and the grid starts empty.
-// Spiral Galaxies: the grid divides into "galaxies" of orthogonally connected
-// cells, each 180-degree rotationally symmetric about its own centre. All
-// galaxy centres are marked with a square and every cell lies in exactly one
-// galaxy. Digits do not repeat within a galaxy, and where the square carries a
-// number the galaxy's digits sum to it; a square reading ">0" gives no total.
-// A circled digit counts the cells of the galaxy containing it.
-// Fog is solving UI -- it hides cells until they are deduced and places no
-// condition on the finished grid -- so it is not encoded.
+// Rules encoded here:
+//   * Normal 9x9 sudoku. The grid has no givens.
+//   * Spiral Galaxies: the grid divides into "galaxies" of orthogonally
+//     connected cells, each 180-degree rotationally symmetric about its own
+//     centre. Every galaxy centre is marked with a square, and every cell
+//     belongs to exactly one galaxy.
+//   * Digits do not repeat within a galaxy.
+//   * Where the square carries a number, the galaxy's digits sum to it. A
+//     square reading ">0" carries no number, and its galaxy therefore has no
+//     stated total (every galaxy's digits already sum to something positive).
+//   * A circled digit equals the number of cells in the galaxy holding it.
+// Fog is solving UI: it hides cells until they are deduced and places no
+// condition on the finished grid, so it is not encoded.
+// Nothing is omitted.
+//
+// Model: two Var overlays hold, per cell, the label of the galaxy that owns
+// it. The division itself is never computed here -- it is the puzzle's central
+// deduction, and the solver makes it.
 
-const shape = new Shape('9x9');
-const graph = cellGraph(shape);
-const cells = graph.cells();
+const GRID = '9x9';
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// The 26 drawn squares. `at` is the cells the square is painted on: one cell
-// for a square in a cell's middle, and the two cells it straddles for a square
-// on a shared edge -- so the square's own position is the midpoint of `at`.
-// `sum` is the number written on the square, null where it reads ">0".
-const squares = [
-  { at: ['R1C1', 'R2C1'], sum: 4 },
-  { at: ['R1C2', 'R1C3'], sum: null },
-  { at: ['R1C5', 'R1C6'], sum: 10 },
-  { at: ['R2C4'], sum: 21 },
-  { at: ['R2C6'], sum: null },
-  { at: ['R2C7'], sum: 39 },
-  { at: ['R2C8', 'R3C8'], sum: 14 },
-  { at: ['R3C1', 'R3C2'], sum: null },
-  { at: ['R4C2', 'R4C3'], sum: 18 },
-  { at: ['R4C7'], sum: null },
-  { at: ['R4C8', 'R4C9'], sum: 35 },
-  { at: ['R5C1'], sum: null },
-  { at: ['R5C3', 'R5C4'], sum: 37 },
-  { at: ['R5C5', 'R6C5'], sum: 29 },
-  { at: ['R5C9'], sum: null },
-  { at: ['R6C6'], sum: null },
-  { at: ['R7C1', 'R7C2'], sum: null },
-  { at: ['R7C3'], sum: null },
-  { at: ['R7C6'], sum: null },
-  { at: ['R7C8', 'R7C9'], sum: null },
-  { at: ['R8C1', 'R9C1'], sum: 13 },
-  { at: ['R8C3', 'R9C3'], sum: null },
-  { at: ['R8C7', 'R9C7'], sum: null },
-  { at: ['R8C9', 'R9C9'], sum: null },
-  { at: ['R9C4'], sum: null },
-  { at: ['R9C6'], sum: null },
+// The 26 drawn yellow squares, transcribed from the art. Positions are in
+// half-cell units so that a square painted on a cell centre and one painted on
+// a shared edge are alike integral: cell RiCj has centre (2i-1, 2j-1).
+// `sum` is the number printed on the square, null where it reads ">0".
+const SQUARES = [
+  { r: 1, c: 4, sum: null },   // edge R1C2|R1C3
+  { r: 1, c: 10, sum: 10 },    // edge R1C5|R1C6
+  { r: 2, c: 1, sum: 4 },      // edge R1C1|R2C1
+  { r: 3, c: 7, sum: 21 },     // R2C4
+  { r: 3, c: 11, sum: null },  // R2C6
+  { r: 3, c: 13, sum: 39 },    // R2C7
+  { r: 4, c: 15, sum: 14 },    // edge R2C8|R3C8
+  { r: 5, c: 2, sum: null },   // edge R3C1|R3C2
+  { r: 7, c: 4, sum: 18 },     // edge R4C2|R4C3
+  { r: 7, c: 13, sum: null },  // R4C7
+  { r: 7, c: 16, sum: 35 },    // edge R4C8|R4C9
+  { r: 9, c: 1, sum: null },   // R5C1
+  { r: 9, c: 6, sum: 37 },     // edge R5C3|R5C4
+  { r: 9, c: 17, sum: null },  // R5C9
+  { r: 10, c: 9, sum: 29 },    // edge R5C5|R6C5
+  { r: 11, c: 11, sum: null }, // R6C6
+  { r: 13, c: 2, sum: null },  // edge R7C1|R7C2
+  { r: 13, c: 5, sum: null },  // R7C3
+  { r: 13, c: 11, sum: null }, // R7C6
+  { r: 13, c: 16, sum: null }, // edge R7C8|R7C9
+  { r: 16, c: 1, sum: 13 },    // edge R8C1|R9C1
+  { r: 16, c: 5, sum: null },  // edge R8C3|R9C3
+  { r: 16, c: 13, sum: null }, // edge R8C7|R9C7
+  { r: 16, c: 17, sum: null }, // edge R8C9|R9C9
+  { r: 17, c: 7, sum: null },  // R9C4
+  { r: 17, c: 11, sum: null }, // R9C6
 ];
 
-// The 5 drawn circles.
-const circles = ['R3C3', 'R3C5', 'R4C8', 'R6C2', 'R6C7'];
+// The 5 drawn turquoise circles.
+const CIRCLES = ['R3C3', 'R3C5', 'R4C8', 'R6C2', 'R6C7'];
 
-// --- galaxy shapes, derived from the squares -------------------------------
-//
-// The division itself is not drawn, so it is worked out here from the square
-// positions and the stated galaxy geometry alone (symmetry about the square,
-// orthogonal connectivity, one galaxy per square, every cell used exactly
-// once). No digit clue takes part. The search below returns every division
-// that satisfies that geometry; it returns exactly one, and the guard after it
-// fails loudly if that ever stops holding, so the digit rules further down are
-// applied to concrete regions.
+// A label overlay holds at most 15 labels plus a marker, so the 26 galaxies are
+// split over two overlays; a cell carries a real label on exactly one of them
+// and the OTHER marker on the other. Alternating keeps the two halves equal.
+const LAYERS = ['VA', 'VB'];
+const layerOf = (index) => index % LAYERS.length;
+const labelOf = (index) => Math.floor(index / LAYERS.length) + 1;
+const OTHER = Math.max(...SQUARES.map((_, i) => labelOf(i))) + 1;
 
-const cellIndex = new Map(cells.map((cell, i) => [cell, i]));
-const neighbours = cells.map(
-  cell => graph.neighbours(cell).map(n => cellIndex.get(n)));
+const shape = new Shape(GRID, OTHER);
+const graph = cellGraph(shape);
+const geometry = graph.gridGeometry();
+const gridCells = graph.cells();
+const overlays = LAYERS.map(prefix => graph.makeOverlay(prefix));
+const cellOrder = new Map(gridCells.map((cell, i) => [cell, i]));
 
-// min+max of the square's own rows/cols is twice the square's midpoint, so
-// subtracting a cell's row/col from it reflects that cell through the square.
-function reflector(at) {
-  const points = at.map(parseCellId);
-  const rows = points.map(p => p.row);
-  const cols = points.map(p => p.col);
-  const rowSum = Math.min(...rows) + Math.max(...rows);
-  const colSum = Math.min(...cols) + Math.max(...cols);
-  return (cell) => {
-    const { row, col } = parseCellId(cell);
-    const r = rowSum - row;
-    const c = colSum - col;
-    const inGrid = r >= 1 && r <= 9 && c >= 1 && c <= 9;
-    return inGrid ? cellIndex.get(makeCellId(r, c)) : -1;
-  };
-}
+const halfCoords = (cell) => {
+  const { row, col } = parseCellId(cell);
+  return { r: 2 * row - 1, c: 2 * col - 1 };
+};
+// The cell diametrically opposite `cell` through square `sq`, or null when that
+// lands outside the grid.
+const rotate = (cell, sq) => {
+  const { r, c } = halfCoords(cell);
+  const image = makeCellId((2 * sq.r - r + 1) / 2, (2 * sq.c - c + 1) / 2);
+  return cellOrder.has(image) ? image : null;
+};
 
-// mirror[k][i] is cell i reflected through square k, or -1 if that lands
-// outside the grid (which rules cell i out of galaxy k).
-const mirror = squares.map(square => {
-  const reflect = reflector(square.at);
-  return cells.map(reflect);
-});
-// A galaxy contains its own centre, so the cells the square is painted on are
-// pinned to it.
-const anchors = squares.map(square => square.at.map(cell => cellIndex.get(cell)));
+// Cell counts a galaxy can have. Its digits are distinct and drawn from 1-9, so
+// there are at most 9 of them; with n of them the sum lies between 1+..+n and
+// 9+..+(10-n), which a printed total narrows further.
+const maxSize = (sq) => Math.max(...DIGITS.filter(n =>
+  sq.sum === null ||
+  (sq.sum >= (n * (n + 1)) / 2 && sq.sum <= (n * (19 - n)) / 2)));
 
-// `candidates[i]` is the set of squares whose galaxy could still own cell i.
-// Both prunings below only ever discard an ownership that no legal division
-// could have used, so a run that leaves every set a singleton has found a
-// division, and one that empties a set has refuted the branch.
-function propagate(candidates) {
-  for (; ;) {
-    let changed = false;
-    for (let k = 0; k < squares.length; ++k) {
-      // Symmetry: cell i can belong to galaxy k only if its mirror image does.
-      for (let i = 0; i < candidates.length; ++i) {
-        if (!candidates[i].has(k)) continue;
-        const m = mirror[k][i];
-        if (m < 0 || !candidates[m].has(k)) {
-          candidates[i].delete(k);
-          changed = true;
-        }
-      }
-      // Connectivity: cell i can belong to galaxy k only if it still reaches
-      // the square through cells that are themselves candidates for k.
-      if (anchors[k].some(i => !candidates[i].has(k))) return false;
-      const queue = [...anchors[k]];
-      const seen = new Set(queue);
-      for (let q = 0; q < queue.length; ++q) {
-        for (const n of neighbours[queue[q]]) {
-          if (candidates[n].has(k) && !seen.has(n)) {
-            seen.add(n);
-            queue.push(n);
-          }
-        }
-      }
-      for (let i = 0; i < candidates.length; ++i) {
-        if (candidates[i].has(k) && !seen.has(i)) {
-          candidates[i].delete(k);
-          changed = true;
-        }
-      }
-    }
-    if (candidates.some(set => set.size === 0)) return false;
-    if (!changed) return true;
-  }
-}
+// Which cells a galaxy could reach. A cell at half-distance d from the square
+// drags its rotational image along, and a connected galaxy holding both needs
+// at least d+1 cells, so d <= maxSize-1; a cell whose image falls off the grid
+// cannot be in the galaxy at all. Both bounds follow from the rules encoded
+// below, so this only prunes.
+const zoneOf = (sq) => {
+  const limit = maxSize(sq) - 1;
+  return gridCells.filter(cell => {
+    const { r, c } = halfCoords(cell);
+    return Math.abs(r - sq.r) + Math.abs(c - sq.c) <= limit && rotate(cell, sq);
+  });
+};
+const zones = SQUARES.map(zoneOf);
+const zoneSets = zones.map(zone => new Set(zone));
 
-function search(candidates, found, limit) {
-  if (found.length >= limit || !propagate(candidates)) return;
-  let pick = -1;
-  for (let i = 0; i < candidates.length; ++i) {
-    if (candidates[i].size > 1 &&
-      (pick < 0 || candidates[i].size < candidates[pick].size)) pick = i;
-  }
-  if (pick < 0) {
-    found.push(candidates.map(set => [...set][0]));
-    return;
-  }
-  for (const k of candidates[pick]) {
-    const branch = candidates.map(set => new Set(set));
-    branch[pick] = new Set([k]);
-    search(branch, found, limit);
-  }
-}
+// Grid cells hold digits; the widened value range exists only for the labels.
+const digitDomain = graph.makeReplicate(new Given(gridCells[0], ...DIGITS));
 
-const start = cells.map(
-  (cell, i) => new Set(squares.map((square, k) => k).filter(k => mirror[k][i] >= 0)));
-anchors.forEach((cellIds, k) => cellIds.forEach(i => { start[i] = new Set([k]); }));
+// Each cell carries one label per overlay, and only labels whose zone reaches
+// it.
+const labelDomain = LAYERS.flatMap((prefix, layer) => gridCells.map(cell =>
+  new Given(overlays[layer].at(cell), OTHER, ...SQUARES.flatMap((sq, i) =>
+    layerOf(i) === layer && zoneSets[i].has(cell) ? [labelOf(i)] : []))));
 
-const divisions = [];
-search(start, divisions, 2);
-if (divisions.length !== 1) {
-  throw new Error(
-    `expected the squares to force one galaxy division, found ${divisions.length}`);
-}
-const owner = divisions[0];
-const galaxies = squares.map((square, k) => cells.filter((cell, i) => owner[i] === k));
+// Exactly one of the two overlays names a galaxy for a cell, which is what
+// makes the galaxies a partition with no overlaps and nothing left over.
+const partition = (() => {
+  const key = Pair.fnToKey((a, b) => (a === OTHER) !== (b === OTHER), geometry);
+  return gridCells.map(cell => new Pair(key, 'one-galaxy-per-cell',
+    overlays[0].at(cell), overlays[1].at(cell)));
+})();
 
-// --- digit rules over those galaxies ---------------------------------------
-
-// A totalled square is a Cage (distinct and summing); an untotalled one keeps
-// only the no-repeat half. Single-cell galaxies need neither.
-const galaxyDigits = squares.flatMap((square, k) => {
-  if (square.sum !== null) return [new Cage(square.sum, ...galaxies[k])];
-  if (galaxies[k].length > 1) return [new AllDifferent(...galaxies[k])];
-  return [];
+// 180-degree symmetry: a cell is in the galaxy exactly when its image is.
+const symmetry = SQUARES.flatMap((sq, i) => {
+  const label = labelOf(i);
+  const overlay = overlays[layerOf(i)];
+  const key = Pair.fnToKey((a, b) => (a === label) === (b === label), geometry);
+  return zones[i].flatMap(cell => {
+    const image = rotate(cell, sq);
+    if (cellOrder.get(image) <= cellOrder.get(cell)) return [];
+    return [new Pair(key, `galaxy-${i + 1}-symmetry`,
+      ...overlay.at([cell, image]))];
+  });
 });
 
-const circleCounts = circles.map(
-  cell => new Given(cell, galaxies[owner[cellIndex.get(cell)]].length));
+const connectivity = SQUARES.map(
+  (sq, i) => new ConnectedValues(LAYERS[layerOf(i)], labelOf(i)));
+
+// No repeated digit, and the printed total, are both functions of the set of
+// digits a galaxy holds, so one machine per galaxy scans its zone as
+// (label, digit) pairs and accumulates that set as a 9-bit mask. `reading` is
+// true while the next symbol is the digit belonging to the label just seen.
+const digitsOfMask = (mask) => DIGITS.filter(d => mask & (1 << (d - 1)));
+const galaxyContents = SQUARES.map((sq, i) => {
+  const label = labelOf(i);
+  const machine = NFA.encodeSpec({
+    startState: { mask: 0, reading: false, inGalaxy: false },
+    transition: (state, value) => {
+      if (!state.reading) {
+        return { mask: state.mask, reading: true, inGalaxy: value === label };
+      }
+      if (!state.inGalaxy) {
+        return { mask: state.mask, reading: false, inGalaxy: false };
+      }
+      // Grid cells never exceed 9; the wider alphabet is only for labels.
+      if (value > DIGITS.length) return undefined;
+      const bit = 1 << (value - 1);
+      if (state.mask & bit) return undefined;  // digits do not repeat
+      return { mask: state.mask | bit, reading: false, inGalaxy: false };
+    },
+    accept: (state) => {
+      if (state.reading) return false;
+      if (sq.sum === null) return true;
+      const digits = digitsOfMask(state.mask);
+      return digits.reduce((a, b) => a + b, 0) === sq.sum;
+    },
+  }, geometry);
+  return new NFA(machine, `galaxy-${i + 1}-contents`,
+    ...zones[i].flatMap(cell => [overlays[layerOf(i)].at(cell), cell]));
+});
+
+// A circled digit counts the cells of its own galaxy. Which galaxy that is, is
+// unknown, so there is one machine per galaxy whose zone reaches the circle. It
+// counts the galaxy's cells; the circle's own (label, digit) pair is scanned
+// first, so `first` marks it and `circleDigit` records its digit -- staying 0
+// when the circle turned out not to be in this galaxy.
+const circleCounts = SQUARES.flatMap((sq, i) => {
+  const label = labelOf(i);
+  const overlay = overlays[layerOf(i)];
+  return CIRCLES.filter(circle => zoneSets[i].has(circle)).map(circle => {
+    const machine = NFA.encodeSpec({
+      startState:
+        { count: 0, circleDigit: 0, reading: false, inGalaxy: false, first: true },
+      transition: (state, value) => {
+        if (!state.reading) {
+          return { ...state, reading: true, inGalaxy: value === label };
+        }
+        if (!state.inGalaxy) {
+          return { ...state, reading: false, first: false };
+        }
+        // Grid cells never exceed 9; the wider alphabet is only for labels.
+        if (value > DIGITS.length) return undefined;
+        const count = state.count + 1;
+        if (count > DIGITS.length) return undefined;  // digits do not repeat
+        return {
+          count,
+          circleDigit: state.first ? value : state.circleDigit,
+          reading: false,
+          inGalaxy: false,
+          first: false,
+        };
+      },
+      accept: (state) => !state.reading &&
+        (state.circleDigit === 0 || state.circleDigit === state.count),
+    }, geometry);
+    const scanned = [circle, ...zones[i].filter(cell => cell !== circle)];
+    return new NFA(machine, `galaxy-${i + 1}-circle-${circle}`,
+      ...scanned.flatMap(cell => [overlay.at(cell), cell]));
+  });
+});
 
 return [
   shape,
-  ...galaxyDigits,
+  ...overlays.map((overlay, layer) => overlay.toVar(`galaxy-${LAYERS[layer]}`)),
+  digitDomain,
+  ...labelDomain,
+  ...partition,
+  ...symmetry,
+  ...connectivity,
+  ...galaxyContents,
   ...circleCounts,
 ];

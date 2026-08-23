@@ -14,12 +14,7 @@ const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // Every rule below treats "shaded" and "unshaded" symmetrically (the X-Sum
 // clues read "the same shading as itself", never a named colour), so the
@@ -27,27 +22,7 @@ const shadeDomain = shade.makeReplicate(
 // solution to this encoding with an identical digit grid. Pin one cell's
 // label to remove that solver-internal duplicate; it cannot exclude the
 // true digit grid, since swapping the labels never changes it.
-const pinShadeLabel = new Given(firstShade, SHADED);
-
-// No 2x2 block may be all shaded or all unshaded: one NFA on the top-left
-// block, replicated to every block origin.
-const geometry = graph.gridGeometry();
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(graph.cells()[0], 2, 2))),
-  shade.at(blockOrigins));
+const pinShadeLabel = new Given(shade.cells()[0], SHADED);
 
 // Windows of a line (row or column) that contain `index` and are bounded, on
 // each side that is still inside the grid, by the opposite shade. Returns the
@@ -134,12 +109,7 @@ const clues = {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
+  new YinYang(),
   pinShadeLabel,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...Object.entries(clues).map(([cell, target]) => internalXSum(cell, target)),
 ];

@@ -14,7 +14,7 @@ const UNSHADED = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 
 // The arrow table is transcribed from the chevrons in the supplied background
 // artwork. Each direction points away from the listed cell.
@@ -77,18 +77,6 @@ function countMachine(matches) {
 const arrowCountMachine = countMachine(true);
 const noArrowCountMachine = countMachine(false);
 
-// A 2x2 block may not be all shaded or all unshaded.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { values: [] },
-  transition: ({ values, done }, value) => {
-    if (done) return { done: true };
-    const next = [...values, value];
-    if (next.length < 4) return { values: next, done: false };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-
 const shadingRules = gridCells.map(cell => {
   const { row, col } = parseCellId(cell);
   const boxTop = Math.floor((row - 1) / 3) * 3 + 1;
@@ -107,19 +95,9 @@ const arrowRules = gridCells.flatMap(cell => directions.map(([name, dRow, dCol])
     shown ? 'shaded-count' : 'not-shaded-count', cell, ...shade.at(rayFrom(cell, dRow, dCol)));
 }));
 
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shade.makeReplicate(new Given(shade.cells()[0], SHADED, UNSHADED)),
+  new YinYang(),
   ...shadingRules,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...arrowRules,
 ];

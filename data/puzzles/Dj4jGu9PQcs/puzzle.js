@@ -21,34 +21,10 @@
 // unshaded to name one representative of that swap.
 
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
+const shade = graph.makeOverlay('YY');
 
 const UNSHADED = 1;
 const SHADED = 2;
-
-// Every shade Var holds one of the two shades.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], UNSHADED, SHADED));
-
-// No 2x2 block is all one shade: one NFA over the top-left block's four shade
-// cells, replicated to every block origin. The machine collects the four
-// values and accepts only once it has seen four that are not all equal.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(gridCells.filter(cell => graph.block(cell, 2, 2))));
 
 // The drawn lines. Provenance: the source's line strokes, each drawn twice
 // (a white outline layer under a lightsteelblue layer over the same edges).
@@ -137,11 +113,7 @@ function splitLineConstraint({ cells, edges, circle }) {
 
 return [
   new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-  shadeDomain,
-  noMono2x2,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
+  new YinYang(),
   new Given(shade.at('R1C1'), UNSHADED),
   ...lines.map(splitLineConstraint),
 ];

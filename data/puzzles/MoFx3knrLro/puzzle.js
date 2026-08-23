@@ -3,9 +3,8 @@
 // Video: https://www.youtube.com/watch?v=MoFx3knrLro
 // Source: https://sudokupad.app/de2dt3ohoq
 
-// Yin Yang: shade some cells so shaded cells form one orthogonally-connected
-// region, unshaded cells form one orthogonally-connected region, and no 2x2
-// block is fully shaded or fully unshaded.
+// Yin Yang: the shading is the YinYang constraint's YY cell group (each
+// shade one orthogonally-connected region, no 2x2 block monochrome).
 //
 // Every cage/dot/line/quadruple below is drawn once but obeys one of two
 // opposite rules depending on its own shading: RIGHT (all its cells share one
@@ -33,39 +32,16 @@ const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // Which physical region counts as "shaded" is a label the rules never fix:
-// every clue above and the connectivity/no-mono-2x2 rules only ever compare
-// cells to each other, never to an absolute shade name. Pin one arbitrary
-// cell's shade as a representative to break that label symmetry -- this
-// does not narrow which digit grids or region shapes are accepted, only
-// which of the two mirror-image shadings of a given shape is reported.
+// every clue above only ever compares cells to each other, never to an
+// absolute shade name. Pin one arbitrary cell's shade as a representative
+// to break that label symmetry -- this does not narrow which digit grids
+// or region shapes are accepted, only which of the two mirror-image
+// shadings of a given shape is reported.
+const firstShade = shade.cells()[0];
 const shadeRepresentative = new Given(firstShade, SHADED);
-
-// No 2x2 block may be all shaded or all unshaded: one NFA on the top-left
-// block, replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(graph.cells()[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // Builds the RIGHT/WROGN Or for one clue: its own shading picks which rule
 // set (thenConstraints for RIGHT, elseConstraints for WROGN) applies.
@@ -183,13 +159,8 @@ const quadConstraints = quads.map(({ topLeft, cells, values }) => conditional(
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
+  new YinYang(),
   shadeRepresentative,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...cageConstraints,
   ...dotConstraints,
   ...nabnerConstraints,

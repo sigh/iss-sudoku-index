@@ -1,0 +1,13 @@
+.~R5C5_5
+.Arrow~R2C2~R3C2~R4C2~R5C1
+.Arrow~R2C3~R2C4~R2C5~R2C6
+.Arrow~R5C3~R5C4~R6C5
+.Arrow~R5C7~R5C6~R4C5
+.Arrow~R8C7~R8C6~R8C5~R8C4
+.Arrow~R8C8~R7C8~R6C8~R5C9
+.Sandwich~33~C1
+.Sandwich~32~C2
+.Sandwich~12~R2
+.Sandwich~19~R8
+.Sandwich~7~C8
+.Sandwich~26~C9

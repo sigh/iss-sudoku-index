@@ -3,38 +3,18 @@
 // Video: https://www.youtube.com/watch?v=fu2oq_8TGJo
 // Source: https://sudokupad.app/f3xngr79fu
 
-// Normal Sudoku applies. Shaded and unshaded cells are each orthogonally
-// connected, and no 2x2 block is monochromatic. A shaded cell's pseudo value
-// is row + column; an unshaded cell's pseudo value is its digit. On each
-// circled purple line, equally distant pseudo values sum to the centre's.
-// Fog and the FOGLIGHT UI marker do not constrain the final grid.
+// Normal Sudoku applies. The shading is the YinYang constraint's YY cell
+// group: every cell is shaded or unshaded, each shade is one orthogonally
+// connected region, and no 2x2 block is monochromatic. A shaded cell's
+// pseudo value is row + column; an unshaded cell's pseudo value is its
+// digit. On each circled purple line, equally distant pseudo values sum to
+// the centre's. Fog and the FOGLIGHT UI marker do not constrain the final grid.
 
 const SHADED = 1;
 const UNSHADED = 2;
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], SHADED, UNSHADED));
-
-// This machine reads a 2x2 shade block and rejects its two monochromatic cases.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
+const shade = graph.makeOverlay('YY');
 
 const zippers = [
   ['R8C9', 'R7C9', 'R7C8', 'R8C8', 'R9C8', 'R9C7', 'R9C6'],
@@ -105,11 +85,7 @@ const pseudoZippers = zippers.flatMap(line => {
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
+  new YinYang(),
   new Given('R6C9', 2),
-  shadeDomain,
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...pseudoZippers,
 ];

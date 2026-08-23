@@ -6,8 +6,7 @@
 // Normal sudoku (default row/column/box all-different; regions are the
 // standard 3x3 boxes).
 //
-// Shading: every cell is one of two colours (Yin-Yang), each colour forming
-// exactly one orthogonally-connected region, with no monochrome 2x2 block.
+// Shading: the YinYang constraint's YY cell group.
 //
 // Large circles (Quad): every listed value must appear somewhere in the
 // circle's surrounding 2x2 area.
@@ -29,39 +28,14 @@ const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
-
-// Symmetry break: no rule here (connectivity, no-mono-2x2, dot-opposite,
-// vision-count, quads) names an absolute colour, so swapping
-// SHADED<->UNSHADED everywhere is always an equally valid completion of any
-// solution. Pin one representative -- R1C1 (=firstShade) to SHADED -- which
+// Symmetry break: no rule here (dot-opposite, vision-count, quads) names an
+// absolute colour, so swapping SHADED<->UNSHADED everywhere is always an
+// equally valid completion of any solution. Pin R1C1 to SHADED, which
 // narrows nothing about the actual shading, only which of the two
 // interchangeable labels the region containing R1C1 gets.
-const shadeSymmetryBreak = new Given(firstShade, SHADED);
-
-// No 2x2 block may be all one shade: one NFA on the top-left block,
-// replicated to every block origin.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 9);
-const blockOrigins = graph.cells().filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(graph.cells()[0], 2, 2))),
-  shade.at(blockOrigins));
+const shadeSymmetryBreak = new Given(shade.cells()[0], SHADED);
 
 // Dots (edge marks; drawn as white fill/black border for a white dot, black
 // fill for a black dot).
@@ -168,13 +142,8 @@ const visionCounts = visionCells.map(visionCountConstraint);
 
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
+  new YinYang(),
   shadeSymmetryBreak,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
   ...whiteDots,
   ...blackDots,
   ...dotShadeDifferences,

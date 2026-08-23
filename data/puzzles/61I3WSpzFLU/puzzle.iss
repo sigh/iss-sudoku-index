@@ -1,0 +1,13 @@
+.Thermo~R4C7~R3C6~R4C5~R5C4~R4C3
+.Thermo~R3C5~R3C4~R2C4~R2C3
+.Pair~CoAKgCoAKgCoAC~_white%20dot~R3C6~R4C5
+.Or
+.Pair~CIBgQQAgAAAB~_black%20dot~R3C3~R4C4
+.Pair~CIBgQQAgAAAB~_black%20dot~R3C4~R4C3
+.End
+.Replicate~_7fbbf_7f_7f
+.Pair~9X-VPtXf1f9W_F~_~R1C1~R2C2
+.End
+.Replicate~_7fr7e_7f_7f~R1C2
+.Pair~9X-VPtXf1f9W_F~_~R1C2~R2C1
+.End

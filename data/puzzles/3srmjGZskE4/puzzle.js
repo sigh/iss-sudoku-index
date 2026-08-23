@@ -10,10 +10,8 @@
 // from its even digits (one colour holds all the odds on that line, the
 // other holds all the evens). Digits joined by a white dot are consecutive.
 //
-// Model: a VS shade Var (YIN/YANG) per cell. Global Yin-Yang connectivity is
-// one ConnectedValues constraint per shade over the shade overlay.
-// No-monochrome-2x2 is a local NFA over each 2x2 block of shade cells. The
-// equal (unknown) line total is EqualSum over the 17 lines. The per-line
+// Model: the shading is the YinYang constraint's YY cell group (YIN/YANG).
+// The equal (unknown) line total is EqualSum over the 17 lines. The per-line
 // odd/even-by-colour split is modelled as: for every cell, t = (digit
 // parity) XOR (shade bit); a line satisfies the rule exactly when t is the
 // same for every one of its cells (whichever colour ends up as "odds" and
@@ -25,24 +23,8 @@ const YIN = 1, YANG = 2;
 const DIGIT_VALUES = 9;
 
 const graph = cellGraph('9x9');
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const shadeOf = cell => shade.at(cell);
-const gridCells = graph.cells();
-
-// --- No 2x2 block of cells is entirely one colour. ---
-const notAllSameNFA = NFA.encodeSpec({
-  startState: null,
-  transition: (state, v) => state === null
-    ? { first: v, allSame: true }
-    : { first: state.first, allSame: state.allSame && v === state.first },
-  accept: (state) => state !== null && !state.allSame,
-}, YANG);
-const monoOrigin = shadeOf('R1C1');
-
-// Every cell is YIN or YANG: one Given template stamped over the whole grid
-// via Replicate instead of 81 identical Givens.
-const shadeCells = gridCells.map(cell => shadeOf(cell));
-const shadeGivens = shade.makeReplicate(new Given(shadeCells[0], YIN, YANG));
 
 // --- Lines: drawn as thick white/grey strokes; each pair of cells here is a
 // segment of one such line, read off the decoded waypoints. ---
@@ -86,13 +68,7 @@ const lineParityNFA = NFA.encodeSpec({
 
 return [
   new Shape('9x9'),
-  shade.toVar('yin-yang shade'),
-
-  shadeGivens,
-
-  // --- Global Yin-Yang connectivity: each colour forms one connected region. ---
-  new ConnectedValues('VS', YIN),
-  new ConnectedValues('VS', YANG),
+  new YinYang(),
 
   // The rules never name which colour is which -- every constraint above is
   // exactly invariant under swapping YIN<->YANG everywhere, so any solution's
@@ -101,13 +77,6 @@ return [
   // reference cell so the model reports that single canonical labeling
   // instead of counting the meaningless relabeling as a second solution.
   new Given(shadeOf('R1C1'), YIN),
-
-  // --- No 2x2 block of cells is entirely one colour. ---
-  shade.makeReplicate(
-    new NFA(
-      notAllSameNFA, 'no-monochrome-2x2',
-      shadeOf('R1C1'), shadeOf('R1C2'), shadeOf('R2C1'), shadeOf('R2C2')),
-    shade.block(monoOrigin, 8, 8)),
 
   // The digits along each line sum to the same (unknown, deduced) total.
   new EqualSum(...lines),

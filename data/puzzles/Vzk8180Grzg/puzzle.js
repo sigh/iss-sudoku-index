@@ -1,0 +1,38 @@
+// Title: Rumors
+// Author: tallcat
+// Video: https://www.youtube.com/watch?v=Vzk8180Grzg
+// Source: https://app.crackingthecryptic.com/sudoku/8njQg7GTd7
+
+// Normal sudoku rules (default rows/cols/boxes). Green lines: adjacent
+// digits along a line must differ by at least 5 (Whisper(5)).
+
+const givens = [
+  ['R1C1', 2],
+  ['R7C5', 3],
+];
+
+// Green line segments, transcribed from the drawn `lines` array. Each is a
+// separate polyline (none share cells with another), so each is its own
+// Whisper(5) with no wrap-around repeat needed.
+const greenLines = [
+  ['R3C1', 'R4C2'],
+  ['R2C3', 'R3C2', 'R4C3'],
+  ['R2C4', 'R3C3', 'R4C4', 'R5C3'],
+  ['R2C5', 'R3C4', 'R4C5'],
+  ['R2C7', 'R3C6', 'R4C7', 'R5C6'],
+  ['R2C8', 'R3C7', 'R4C8', 'R5C7'],
+  ['R2C9', 'R3C8', 'R4C9'],
+  ['R6C9', 'R7C8', 'R8C9'],
+  ['R6C8', 'R7C7', 'R8C8'],
+  ['R6C7', 'R7C6', 'R8C7'],
+  ['R6C4', 'R7C3', 'R8C4'],
+  ['R6C3', 'R7C2', 'R8C3'],
+  ['R7C1', 'R6C2'],
+  ['R9C3', 'R9C4'],
+];
+
+return [
+  new Shape('9x9'),
+  ...givens.map(([cell, value]) => new Given(cell, value)),
+  ...greenLines.map(cells => new Whisper(5, ...cells)),
+];

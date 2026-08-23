@@ -10,9 +10,7 @@
 const SHADE_A = 1;
 const SHADE_B = 2;
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
+const shade = graph.makeOverlay('YY');
 
 const cages = [
   [16, ['R1C1', 'R1C2', 'R1C3', 'R2C1', 'R2C2', 'R3C1']],
@@ -55,32 +53,11 @@ const whiteDots = [
   ['R2C2', 'R2C3'], ['R6C1', 'R7C1'], ['R6C5', 'R7C5'], ['R8C7', 'R9C7'],
 ];
 
-// The NFA rejects only the two monochromatic 2x2 label patterns.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('region'),
-  shade.makeReplicate(new Given(shade.cells()[0], SHADE_A, SHADE_B)),
+  new YinYang(),
   // Region names are interchangeable, so choose a canonical name at R1C1.
   new Given(shade.at('R1C1'), SHADE_A),
-  new ConnectedValues('VS', SHADE_A),
-  new ConnectedValues('VS', SHADE_B),
-  noMono2x2,
   ...cageRules,
   ...cageDistinct,
   ...blackDots.map(([a, b]) => new BlackDot(a, b)),

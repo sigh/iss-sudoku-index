@@ -3,52 +3,31 @@
 // Video: https://www.youtube.com/watch?v=7xyfTKUsFO4
 // Source: https://sudokupad.app/fa86g835k3
 
-// Normal Sudoku uses written digits 1-9. A full-grid shade overlay stores
-// 1 = unshaded and 2 = shaded. A parallel effective-value overlay stores the
-// written digit in an unshaded cell and digit + 5 in a shaded cell. The Shape
-// is widened to 14 only so that this effective layer can hold values 10-14;
-// every playable grid cell is restricted back to 1-9.
+// Normal Sudoku uses written digits 1-9. The shading is the YinYang
+// constraint's YY cell group, giving 1 = unshaded and 2 = shaded. A parallel
+// effective-value overlay stores the written digit in an unshaded cell and
+// digit + 5 in a shaded cell. The Shape is widened to 14 only so that this
+// effective layer can hold values 10-14; every playable grid cell is
+// restricted back to 1-9. minValue stays 1, so YinYang's two shades are still
+// 1 and 2.
 
 const UNSHADED = 1;
 const SHADED = 2;
 const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 const shape = new Shape('9x9', 14);
 const graph = cellGraph(shape);
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const value = graph.makeOverlay('VV');
 const shadeAt = cell => shade.at(cell);
 const valueAt = cell => value.at(cell);
 const cells = graph.cells();
 
-// Restore the true domains after widening the Shape.
+// Restore the true digit domain after widening the Shape.
 const digitDomain = graph.makeReplicate(new Given(cells[0], ...DIGITS));
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], UNSHADED, SHADED));
 
 // value = digit + 5 * (shade - 1), or value - digit - 5*shade = -5.
 const effectiveValues = cells.map(cell => new Sum(
   -5, valueAt(cell), [cell, -1], [shadeAt(cell), -5]));
-
-// Reject a 2x2 block only when all four shade flags are identical. The state
-// retains only the first shade and whether a different shade has appeared.
-const noMono2x2Spec = NFA.encodeSpec({
-  startState: { count: 0, first: null, mixed: false },
-  transition: ({ count, first, mixed }, next) => {
-    if (count >= 4) return undefined;
-    return {
-      count: count + 1,
-      first: first === null ? next : first,
-      mixed: mixed || (first !== null && next !== first),
-    };
-  },
-  accept: ({ count, mixed }) => count === 4 && mixed,
-  maxDepth: 4,
-}, 14);
-const blockOrigins = cells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Spec, 'no-monochrome-2x2',
-    ...shade.at(graph.block(cells[0], 2, 2))),
-  shade.at(blockOrigins));
 
 // Each entry is one drawn blue line, already divided at box borders. All
 // segments belonging to one entry must have equal effective-value sums.
@@ -122,14 +101,9 @@ const blackDots = BLACK_DOTS.map(([a, b]) =>
 return [
   shape,
   digitDomain,
-  shade.toVar('Yin-Yang shade'),
-  shadeDomain,
+  new YinYang(),
   value.toVar('effective value'),
   ...effectiveValues,
-  // Both shade classes must each form one orthogonally connected region.
-  new ConnectedValues('VS', UNSHADED),
-  new ConnectedValues('VS', SHADED),
-  noMono2x2,
   ...regionSumLines,
   ...renbans,
   ...equalDots,

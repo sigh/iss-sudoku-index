@@ -8,25 +8,18 @@
 // their printed total with all-different digits (the single-cell R1C9 cage
 // has no total, so it needs no local Cage/AllDifferent constraint).
 //
-// Yin-Yang: a shade overlay Var forms the two-colour split (global
-// connectivity via ConnectedValues, one per shade; no monochrome 2x2 via a
-// replicated NFA). Two more rules tie each cage/thermometer cell's own
-// digit parity to its own shade: cage cells shade with even digits, thermo
-// cells shade with odd digits -- encoded as a per-cell Pair between the grid
-// digit and the shade Var at the same cell.
+// Yin-Yang: the shading is the YinYang constraint's YY cell group. Two more
+// rules tie each cage/thermometer cell's own digit parity to its own shade:
+// cage cells shade with even digits, thermo cells shade with odd digits --
+// encoded as a per-cell Pair between the grid digit and the shade Var at
+// the same cell.
 
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
-
-// Every shade Var is either shaded or unshaded.
-const firstShade = shade.cells()[0];
-const shadeDomain = shade.makeReplicate(
-  new Given(firstShade, SHADED, UNSHADED));
+const shade = graph.makeOverlay('YY');
 
 // Thermometers: bulb cell first. The drawn bulb circle (payload underlay)
 // matches each line's first waypoint, except the R8C8/R9C7 thermometer,
@@ -82,36 +75,11 @@ const thermoCells = thermometers.flat();
 const thermoParityRules = thermoCells.map(cell =>
   new Pair(thermoOddShadedKey, 'thermo-parity', cell, shade.at(cell)));
 
-// No 2x2 block may be all shaded or all unshaded: one NFA on the grid's
-// top-left 2x2 window, replicated to every possible 2x2 window origin (not
-// just box-aligned ones).
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...shade.at(graph.block(gridCells[0], 2, 2))),
-  shade.at(blockOrigins));
-
 return [
   new Shape('9x9'),
-  shade.toVar('shade'),
-  shadeDomain,
+  new YinYang(),
   ...thermoConstraints,
   ...cageConstraints,
   ...cageParityRules,
   ...thermoParityRules,
-  // Yin-Yang connectivity: each shade forms one orthogonally connected region.
-  new ConnectedValues('VS', SHADED),
-  new ConnectedValues('VS', UNSHADED),
-  noMono2x2,
 ];

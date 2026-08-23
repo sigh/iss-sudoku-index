@@ -15,7 +15,7 @@ const shape = new Shape('9x9');
 const graph = cellGraph(shape);
 const gridCells = graph.cells();
 const boxes = graph.boxes();
-const shade = graph.makeOverlay('VS');
+const shade = graph.makeOverlay('YY');
 const yellowValue = graph.makeOverlay('VY');
 const shadeOf = cell => shade.at(cell);
 const yellowOf = cell => yellowValue.at(cell);
@@ -33,19 +33,6 @@ const yellowContributions = gridCells.map(cell => new Or([
     new Given(yellowOf(cell), 1),
   ]),
 ]));
-
-// No 2x2 block may be entirely one colour.
-const noMonoMachine = NFA.encodeSpec({
-  startState: null,
-  transition: (state, value) => state === null
-    ? { first: value, allSame: true }
-    : { first: state.first, allSame: state.allSame && value === state.first },
-  accept: state => state !== null && !state.allSame,
-}, 9);
-const noMono2x2 = shade.makeReplicate(
-  new NFA(noMonoMachine, 'no-monochrome-2x2',
-    ...shade.at(graph.block('R1C1', 2, 2))),
-  shade.at(gridCells.filter(cell => graph.block(cell, 2, 2))));
 
 const frames = [
   ['R1C2', 'R1C3'],
@@ -106,15 +93,12 @@ const blackDots = [
 
 return [
   shape,
-  shade.toVar('cell colour'),
+  new YinYang(),
   yellowValue.toVar('yellow contribution'),
   ...yellowContributions,
-  new ConnectedValues('VS', YELLOW),
-  new ConnectedValues('VS', BLUE),
   // The clue system is invariant under globally swapping the two colour
   // labels, so pin one cell to remove only that meaningless label symmetry.
   new Given(shadeOf('R1C1'), YELLOW),
-  noMono2x2,
   ...frameTotals,
   ...xClues,
   ...blackDots,
