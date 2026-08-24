@@ -1,0 +1,13 @@
+.~R3C1_3~R3C2_4~R4C1_8~R4C4_2~R4C5_6~R4C6_1~R5C1_1~R5C2_6~R5C5_9~R5C8_7~R5C9_3~R6C5_7~R6C8_1~R7C8_6~R7C9_4
+.Replicate~_5P_5P_5P_5P
+.Pair~9X_1f9X_1f9X_F~_not%20consecutive%20(knight)~R1C1~R2C3
+.End
+.Replicate~_5P_5P_5P_5P~R1C3
+.Pair~9X_1f9X_1f9X_F~_not%20consecutive%20(knight)~R1C3~R2C1
+.End
+.Replicate~_7f_7f_7f_D
+.Pair~9X_1f9X_1f9X_F~_not%20consecutive%20(knight)~R1C1~R3C2
+.End
+.Replicate~_7f_7f_7f_D~R1C2
+.Pair~9X_1f9X_1f9X_F~_not%20consecutive%20(knight)~R1C2~R3C1
+.End

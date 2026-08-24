@@ -1,0 +1,11 @@
+.~R5C5_9~R3C4_1_3_5_7_9~R4C7_1_3_5_7_9~R6C3_1_3_5_7_9~R7C6_1_3_5_7_9~R2C2_2_4_6_8~R2C8_2_4_6_8~R8C8_2_4_6_8~R8C2_2_4_6_8
+.AntiKnight
+.Diagonal~1
+.Diagonal~-1
+.Palindrome~R3C2~R3C3~R4C2~R4C3
+.Palindrome~R2C6~R2C7~R3C6~R3C7
+.Palindrome~R6C7~R6C8~R7C7~R7C8
+.Palindrome~R7C3~R7C4~R8C3~R8C4
+.Arrow~R1C9~R2C8~R3C7
+.Arrow~R9C1~R8C2~R7C3
+.LittleKiller~35~R9C5

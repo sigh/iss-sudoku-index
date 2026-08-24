@@ -1,0 +1,13 @@
+.AntiKnight
+.Thermo~R3C3~R2C4~R1C5
+.Thermo~R3C3~R4C2~R5C1
+.Thermo~R6C4~R6C3~R6C2~R6C1
+.Thermo~R7C4~R8C4
+.Thermo~R9C4~R9C3
+.Thermo~R1C6~R2C6~R3C6
+.Arrow~R3C6~R2C7~R3C8
+.Arrow~R3C6~R4C5~R5C5
+.Arrow~R6C4~R5C4~R4C4
+.Arrow~R7C9~R7C8~R8C7
+.LittleKiller~6~R2C9
+.LittleKiller~14~R9C8

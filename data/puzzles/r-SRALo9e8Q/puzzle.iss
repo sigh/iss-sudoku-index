@@ -1,0 +1,16 @@
+.Quad~R1C3~3~8
+.Quad~R1C6~1~2~3
+.Quad~R2C2~8
+.Quad~R2C7~7
+.Quad~R3C1~4~5~6
+.Quad~R3C8~4~7~9
+.Quad~R6C1~6~7~9
+.Quad~R6C8~1~4
+.Quad~R7C2~2
+.Quad~R7C7~6
+.Quad~R8C3~1~3~8
+.Quad~R8C6~1~2~5
+.WhiteDot~R2C5~R3C5
+.WhiteDot~R5C2~R5C3
+.WhiteDot~R5C7~R5C8
+.WhiteDot~R7C5~R8C5

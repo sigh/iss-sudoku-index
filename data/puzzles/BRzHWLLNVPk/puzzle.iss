@@ -1,0 +1,12 @@
+.~R1C8_9~R2C9_8
+.DisjointSets
+.LittleKiller~37~R8C9
+.LittleKiller~25~R5C9
+.LittleKiller~25~R3C1
+.LittleKiller~16~R5C1
+.LittleKiller~11~R8C1
+.LittleKiller~12~R9C7
+.Between~R6C1~R5C1~R6C2~R7C3~R8C4~R9C5~R9C4
+.Between~R3C1~R4C2~R5C3~R6C4~R7C5~R8C6~R9C7
+.Between~R3C4~R4C5~R5C6~R6C7
+.Between~R2C5~R3C5~R4C6~R4C7~R4C8~R4C9

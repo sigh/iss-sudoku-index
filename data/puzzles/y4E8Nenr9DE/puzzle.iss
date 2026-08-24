@@ -1,0 +1,9 @@
+.XSum~C7~28~
+.XSum~R1~28~28
+.XSum~R3~28~
+.XSum~R4~28~28
+.XSum~R5~~28
+.XSum~R7~28~
+.XSum~R8~~28
+.XSum~C3~~28
+.XSum~C4~~28

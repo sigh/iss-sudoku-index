@@ -1,0 +1,12 @@
+.~R9C9_7
+.Thermo~R3C2~R2C2~R2C3~R2C4~R3C4~R4C3~R5C2
+.Thermo~R4C7~R3C7~R3C8~R3C9~R4C9~R5C8~R6C7
+.Thermo~R7C3~R6C3~R6C4~R6C5~R7C5~R8C4~R9C3
+.Arrow~R7C1~R7C2~R8C1
+.LittleKiller~7~R9C7
+.Replicate~_7f_7f_7f_7f_D
+.Pair~f_93f_93_____H~_no%20orthogonal%20sum%207~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~f_93f_93_____H~_no%20orthogonal%20sum%207~R1C1~R2C1
+.End

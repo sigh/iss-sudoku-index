@@ -1,0 +1,16 @@
+.~R3C3_8~R5C3_4~R5C5_8~R5C7_6~R7C7_3
+.WhiteDot~R5C1~R5C2
+.Pair~AEAAAAAAAAAAB~_diff%208~R5C9~R6C9~~R8C8~R9C8~~R3C6~R4C6~~R3C6~R3C7~~R6C2~R7C2
+.Pair~QAEABQBUAEABQ~_diff%204~R6C2~R6C3~~R8C3~R8C4~~R8C4~R9C4~~R2C2~R3C2~~R2C3~R2C4~~R1C4~R1C5~~R2C5~R3C5~~R3C5~R3C6~~R4C6~R5C6~~R4C6~R4C7~~R6C6~R6C7~~R9C6~R9C7~~R8C9~R9C9~~R7C8~R8C8~~R3C8~R3C9~~R2C7~R2C8~~R1C8~R1C9~~R1C2~R1C3~~R3C7~R4C7
+.Replicate~1ZXv5b_rb_bffD
+.Pair~v_7_-v-r_7_-vH~_no%20diff%204~R1C1~R1C2
+.End
+.Replicate~_v9_-7____9e
+.Pair~v_7_-v-r_7_-vH~_no%20diff%204~R1C1~R2C1
+.End
+.Replicate~_7ff7f_7f_7f_D
+.Pair~_7__________-H~_no%20diff%208~R1C1~R1C2
+.End
+.Replicate~___f___r___v
+.Pair~_7__________-H~_no%20diff%208~R1C1~R2C1
+.End

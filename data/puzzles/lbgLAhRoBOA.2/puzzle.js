@@ -3,19 +3,33 @@
 // Video: https://www.youtube.com/watch?v=lbgLAhRoBOA
 // Source: https://app.crackingthecryptic.com/sudoku/t8PmGmHHnq
 
-// Normal sudoku rules (standard 3x3 boxes). Fifteen cells carry a small
-// directional arrow mark (no line, just a direction). Rule: if an arrow
-// cell holds digit d < 9, then d + 1 must appear somewhere among the cells
-// strictly beyond it, along the marked direction, to the grid edge. d = 9
-// imposes nothing. Unmarked cells carry no such requirement.
+// Normal sudoku rules apply (standard 3x3 boxes). Fifteen cells carry a small
+// directional mark: "An arrow points to the next highest number. So if 8 is in
+// an arrow cell, 9 must appear somewhere in the direction in which the arrow
+// points."
 //
-// Directions are read from each arrow's drawn tail-to-head waypoints.
+// Encoded: for an arrow cell holding d, d + 1 appears in at least one cell
+// strictly beyond it along the marked direction, out to the grid edge. The
+// scope is the whole ray because the rules sentence says the digit must appear
+// "somewhere in the direction", naming no nearer limit.
+//
+// Two relaxations, both deliberate:
+//   * d = 9 imposes nothing. The rules text never says what an arrow on a 9
+//     means; the reading on which "points to the next highest number" fails
+//     for a cell with no higher digit, and so bars 9 from all fifteen arrow
+//     cells, is not encoded.
+//   * Nothing constrains which cells lie between the arrow and its d + 1. The
+//     reading on which the first ray cell exceeding d must itself be d + 1 is
+//     not encoded; the rules text says only that d + 1 appears.
+// Cells without a mark carry no requirement.
 
 const graph = cellGraph('9x9');
 
 // Direction vectors as (dRow, dCol).
 const RIGHT = [0, 1], LEFT = [0, -1], UP = [-1, 0], DOWN = [1, 0];
 
+// Transcribed from the fifteen drawn arrow marks, each a short stroke centred
+// in one cell; the direction is the stroke's tail-to-head sense.
 const arrows = {
   R1C6: RIGHT,
   R2C4: RIGHT,
@@ -34,15 +48,12 @@ const arrows = {
   R9C4: LEFT,
 };
 
-// Single-segment NFA: the first cell in the sequence is the arrow's own
-// cell, the rest are the ray beyond it (excluding the arrow cell itself,
-// via .slice(1) on the inclusive ray helper).
+// One machine per arrow, scanning the arrow cell followed by its ray.
 //
-// State is `null` until the arrow cell's own value is read: it sets the
-// state to 'ok' when that value is 9 (nothing further required), or to the
-// needed value (d + 1) otherwise. Every following ray cell matching the
-// needed value flips the state to 'ok'; the state is otherwise unchanged.
-// The whole sequence is accepted only in state 'ok'.
+// `null` is the start state, before the arrow cell's own digit has been read.
+// Reading that digit d records what the ray owes: 'ok' already when d is 9
+// (nothing is owed), otherwise `{need: d + 1}`. A later ray cell holding the
+// owed value switches to 'ok', which is the only accepting state.
 const spec = NFA.encodeSpec({
   startState: null,
   transition: (state, value) => {
@@ -66,6 +77,8 @@ return [
   new Given('R6C2', 8), new Given('R6C8', 4),
   new Given('R8C4', 9), new Given('R8C5', 5), new Given('R8C6', 1),
 
+  // `graph.ray` is inclusive of its origin, so the arrow cell is passed once
+  // as the head of the scan and dropped from the tail.
   ...Object.entries(arrows).map(([cell, dir]) =>
     new NFA(spec, `point-${cell}`, [cell, ...graph.ray(cell, ...dir).slice(1)])),
 ];

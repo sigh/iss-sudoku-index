@@ -1,0 +1,12 @@
+.~R2C6_4~R2C9_6~R3C7_4~R5C3_9~R5C6_1~R5C9_2~R6C4_9~R6C7_1~R8C3_8~R8C6_7~R8C9_3~R9C4_8~R9C7_7
+.Palindrome~R2C1~R3C2~R4C3
+.Palindrome~R2C3~R3C4
+.Palindrome~R2C4~R3C5~R4C6
+.Palindrome~R2C7~R3C8~R4C9
+.Palindrome~R5C1~R6C2~R7C3
+.Palindrome~R5C4~R6C5~R7C6
+.Palindrome~R5C7~R6C8~R7C9
+.LittleKiller~24~R8C9
+.LittleKiller~17~R7C1
+.AntiKnight
+.DisjointSets

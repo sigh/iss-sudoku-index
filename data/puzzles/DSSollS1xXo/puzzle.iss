@@ -1,0 +1,8 @@
+.LittleKiller~56~R1C1
+.LittleKiller~44~R2C1
+.LittleKiller~30~R5C1
+.LittleKiller~28~R9C3
+.LittleKiller~9~R3C9
+.LittleKiller~17~R4C9
+.PillArrow~3~R9C1~R9C2~R9C3~R8C4~R7C5~R6C6~R7C7~R6C8~R5C9~R4C8~R3C7~R2C6~R3C5~R4C4~R3C3~R4C2~R5C1~R6C2~R7C3
+.Arrow~R8C7~R7C6

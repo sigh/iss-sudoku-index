@@ -1,0 +1,12 @@
+.Cage~5~R2C4~R2C3
+.Cage~19~R2C2~R3C2~R4C2
+.Cage~19~R5C2~R6C2~R6C3~R6C4
+.Cage~5~R4C7~R4C6
+.Cage~19~R6C6~R6C7~R5C6
+.Cage~19~R7C8~R8C8~R8C6~R8C7
+.LittleKiller~19~R1C3
+.LittleKiller~19~R1C5
+.LittleKiller~19~R5C1
+.LittleKiller~5~R6C1
+.LittleKiller~19~R1C1
+.LittleKiller~5~R2C9

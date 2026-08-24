@@ -1,0 +1,15 @@
+.~R7C2_3~R8C3_4
+.LittleKiller~3~R2C9
+.LittleKiller~33~R1C6
+.LittleKiller~36~R1C1
+.LittleKiller~3~R8C1
+.LittleKiller~33~R9C4
+.LittleKiller~15~R4C9
+.Arrow~R3C2~R2C1~R1C2~R2C3
+.Arrow~R2C8~R3C7~R4C7
+.Arrow~R5C4~R4C5~R5C6~R6C5
+.Arrow~R7C8~R8C9~R9C8~R8C7
+.Palindrome~R3C1~R4C2~R4C3
+.Palindrome~R3C4~R3C5~R4C6
+.Palindrome~R6C4~R7C5~R7C6
+.Palindrome~R6C7~R6C8~R7C9
