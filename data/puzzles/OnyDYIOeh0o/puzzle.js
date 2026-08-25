@@ -1,0 +1,26 @@
+// Title: Flor de Barcelona (Barcelona Floor Tile)
+// Author: Ferran Rojas
+// Video: https://www.youtube.com/watch?v=OnyDYIOeh0o
+// Source: https://app.crackingthecryptic.com/webapp/mL6Mtp2dqg
+
+// Standard 9x9 sudoku (rows/columns/3x3 boxes).
+// Cages: distinct digits summing to the printed total -> Cage.
+// Anti-knight: applies to every cell pair a knight's move apart, globally.
+
+return [
+  new Shape('9x9'),
+
+  new Given('R1C1', 1),
+  new Given('R9C9', 2),
+
+  new Cage(24, 'R2C2', 'R2C3', 'R3C2', 'R4C2'),
+  new Cage(29, 'R2C4', 'R3C4', 'R3C5', 'R3C6'),
+  new Cage(19, 'R2C6', 'R2C7', 'R2C8', 'R3C8'),
+  new Cage(22, 'R4C7', 'R4C8', 'R5C7', 'R6C7'),
+  new Cage(24, 'R6C8', 'R7C8', 'R8C7', 'R8C8'),
+  new Cage(27, 'R7C4', 'R7C5', 'R7C6', 'R8C6'),
+  new Cage(19, 'R7C2', 'R8C2', 'R8C3', 'R8C4'),
+  new Cage(22, 'R4C3', 'R5C3', 'R6C2', 'R6C3'),
+
+  new AntiKnight(),
+];

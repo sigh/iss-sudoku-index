@@ -1,0 +1,12 @@
+.AntiKnight
+.Cage~20~R2C3~R2C4~R3C3
+.Cage~20~R2C6~R2C7~R3C7
+.Cage~6~R5C4~R5C5~R5C6
+.Cage~12~R6C3~R7C3~R7C4
+.Cage~17~R6C7~R7C6~R7C7
+.Cage~17~R8C1~R9C1~R9C2
+.Cage~10~R8C9~R9C8~R9C9
+.LittleKiller~22~R1C6
+.LittleKiller~21~R4C1
+.LittleKiller~13~R6C9
+.LittleKiller~19~R9C4

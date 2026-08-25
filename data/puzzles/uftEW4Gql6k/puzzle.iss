@@ -1,0 +1,13 @@
+.Thermo~R3C1~R4C2
+.Thermo~R7C9~R6C8
+.Thermo~R5C5~R6C5~R7C5
+.Thermo~R5C5~R5C6
+.Thermo~R5C5~R5C4
+.Thermo~R6C4~R6C3~R5C3~R4C3~R4C4
+.Thermo~R6C6~R6C7~R5C7~R4C7~R4C6
+.LittleKiller~44~R1C1
+.LittleKiller~47~R8C9
+.LittleKiller~57~R2C1
+.LittleKiller~46~R1C8
+.LittleKiller~54~R1C9
+.LittleKiller~47~R9C2

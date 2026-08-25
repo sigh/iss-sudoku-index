@@ -1,0 +1,11 @@
+.DisjointSets
+.LittleKiller~11~R1C3
+.LittleKiller~25~R1C5
+.LittleKiller~41~R1C7
+.LittleKiller~40~R1C9
+.LittleKiller~46~R9C3
+.LittleKiller~28~R9C5
+.LittleKiller~12~R9C7
+.LittleKiller~34~R1C1
+.LittleKiller~53~R8C9
+.LittleKiller~30~R2C1

@@ -1,0 +1,17 @@
+.~R1C3_5~R1C9_4~R2C1_3~R2C2_1~R2C9_2~R3C4_9~R3C6_6~R4C3_8~R5C3_7~R5C5_5~R7C5_8~R8C1_4~R9C2_2~R9C8_3~R9C9_1
+.Cage~8~R1C5~R2C5
+.Cage~13~R6C4~R7C4
+.Cage~8~R7C7~R8C7
+.Cage~24~R4C7~R5C6~R5C7
+.Replicate~_5P_5P_5P_5P
+.Pair~-__7__v___-__D~_OddKnight~R1C1~R2C3
+.End
+.Replicate~_5P_5P_5P_5P~R1C3
+.Pair~-__7__v___-__D~_OddKnight~R1C3~R2C1
+.End
+.Replicate~_7f_7f_7f_D
+.Pair~-__7__v___-__D~_OddKnight~R1C1~R3C2
+.End
+.Replicate~_7f_7f_7f_D~R1C2
+.Pair~-__7__v___-__D~_OddKnight~R1C2~R3C1
+.End

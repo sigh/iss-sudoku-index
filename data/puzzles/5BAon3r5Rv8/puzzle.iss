@@ -1,0 +1,15 @@
+.Thermo~R1C6~R2C6
+.Thermo~R3C8~R3C7
+.Thermo~R3C4~R3C3
+.Thermo~R6C1~R5C1
+.Thermo~R9C8~R8C8
+.Thermo~R9C4~R9C5
+.Quad~R1C1~2~5~7
+.Quad~R2C4~1~4~6~8
+.Quad~R4C2~1~2~7~9
+.Quad~R5C5~5~6~7~9
+.Quad~R7C1~2~3~5~6
+.Quad~R8C6~1~3~5~7
+.Quad~R1C7~3~4~8
+.Quad~R4C7~1~5~8~9
+.Quad~R7C8~2~4~8

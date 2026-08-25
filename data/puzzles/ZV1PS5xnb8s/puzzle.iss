@@ -1,0 +1,13 @@
+.AntiConsecutive
+.X~R1C3~R1C4
+.X~R6C1~R7C1
+.X~R4C9~R5C9
+.Quad~R1C1~1~3~4~6
+.Quad~R6C3~1~3~6~8
+.Quad~R8C1~1~2~5~7
+.Quad~R3C3~1~2~5~7
+.Quad~R1C8~1~5~7~8
+.Quad~R8C8~2~5~6~9
+.Quad~R3C6~4~6~7~9
+.Quad~R6C6~3~5~7
+.~R6C6_3_5_7~R6C7_3_5_7~R7C6_3_5_7~R7C7_3_5_7

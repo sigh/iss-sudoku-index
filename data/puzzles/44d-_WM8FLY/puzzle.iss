@@ -1,0 +1,15 @@
+.Replicate~_7f_7f_7f_7f
+.Pair~9X_1f9X_1f9X_F~_diagonal%20non-consecutive~R1C1~R2C2
+.End
+.Replicate~_7f_7f_7f_7f
+.Pair~9X_1f9X_1f9X_F~_diagonal%20non-consecutive~R1C2~R2C1
+.End
+.PillArrow~2~R1C2~R1C3~R2C4~R3C5~R4C6~R5C7
+.Arrow~R5C1~R4C1~R3C2
+.Arrow~R8C7~R7C6~R6C5
+.Arrow~R4C8~R3C8~R2C9
+.LittleKiller~7~R1C2
+.LittleKiller~16~R8C1
+.LittleKiller~22~R9C4
+.LittleKiller~7~R9C6
+.LittleKiller~11~R2C9
