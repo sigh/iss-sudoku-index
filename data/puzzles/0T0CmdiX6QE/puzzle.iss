@@ -1,0 +1,6 @@
+.WhiteDot~R8C7~R8C8
+.WhiteDot~R5C6~R6C6
+.WhiteDot~R1C3~R1C4
+.WhiteDot~R7C8~R8C8
+.Pair~9X_1f9X_1f9X_F~_non-consecutive~R7C3~R7C4~~R3C6~R4C6~~R5C7~R5C8
+.Pair~qqqqqqqqqqqqqC~_one-even-one-odd~R7C4~R8C4~~R4C5~R5C5~~R4C7~R4C8~~R4C9~R5C9~~R1C1~R1C2~~R6C2~R6C3~~R1C8~R1C9~~R9C5~R9C6

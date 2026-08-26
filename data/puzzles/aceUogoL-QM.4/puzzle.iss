@@ -1,0 +1,13 @@
+.~R1C1_3~R1C4_1~R1C6_2~R1C9_5~R2C1_5~R2C9_6~R3C2_2~R3C4_3~R3C6_4~R3C8_9~R4C4_5~R4C6_6~R6C1_6~R6C3_1~R6C7_3~R6C9_4~R9C1_2~R9C4_7~R9C6_3~R9C9_1
+.Replicate~_7f_7f_7f_7f_D
+.Pair~___________P_B~_high-digit-no-touch~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~___________P_B~_high-digit-no-touch~R1C1~R2C1
+.End
+.Replicate~_7f_7f_7f_7f
+.Pair~___________P_B~_high-digit-no-touch~R1C1~R2C2
+.End
+.Replicate~_7f_7f_7f_7f~R1C2
+.Pair~___________P_B~_high-digit-no-touch~R1C2~R2C1
+.End

@@ -1,0 +1,10 @@
+.Shape~6x6
+.~R1C6_1~R2C5_2~R3C4_3~R5C2_4~R6C1_5~R6C4_1
+.SameValues~2~R1C2~R2C5
+.SameValues~2~R2C1~R3C4
+.SameValues~2~R2C2~R3C5
+.SameValues~2~R3C2~R4C5
+.SameValues~2~R4C2~R5C5
+.SameValues~2~R5C1~R6C4
+.SameValues~2~R5C2~R6C5
+.SameValues~2~R5C3~R6C6

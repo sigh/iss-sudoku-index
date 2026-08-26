@@ -1,0 +1,10 @@
+.~R3C4_2~R3C6_3~R4C3_1~R4C7_4~R5C5_9~R6C3_8~R6C7_5~R7C4_7~R7C6_6
+.Skyscraper~C5~5~5
+.Skyscraper~C7~5~
+.Skyscraper~C3~~3
+.Skyscraper~R3~7~
+.Skyscraper~R6~4~
+.Skyscraper~R9~4~
+.Skyscraper~R1~~3
+.Skyscraper~R4~~6
+.Skyscraper~R7~~7

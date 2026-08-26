@@ -1,0 +1,13 @@
+.Cage~6~R1C1~R1C2~R1C3
+.Cage~6~R2C4~R2C5~R3C4
+.Cage~6~R8C2~R8C3~R9C3
+.Cage~6~R3C7~R3C8~R4C8
+.Cage~10~R4C1~R5C1~R5C2~R6C1
+.Cage~10~R5C4~R5C5~R6C5~R6C6
+.X~R3C6~R3C7
+.Replicate~_7ff7f_7f_7f_D
+.Pair~9zv_6rv-6rve6F~_NotXV~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~9zv_6rv-6rve6F~_NotXV~R1C1~R2C1
+.End

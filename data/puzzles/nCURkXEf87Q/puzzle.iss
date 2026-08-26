@@ -1,0 +1,13 @@
+.~R1C8_7~R1C9_2~R2C1_7~R2C2_1~R3C3_2~R3C6_7~R3C7_1~R3C8_3~R5C2_4~R5C5_7~R6C2_3~R6C4_1~R7C6_1~R8C4_6~R8C5_4~R8C6_3~R8C7_2~R8C8_9
+.Replicate~_7f_7f_7f_7f_D
+.Pair~___v__79___9_H~_no%20358%20king%20clash~R1C1~R1C2
+.End
+.Replicate~____________
+.Pair~___v__79___9_H~_no%20358%20king%20clash~R1C1~R2C1
+.End
+.Replicate~_7f_7f_7f_7f
+.Pair~___v__79___9_H~_no%20358%20king%20clash~R1C1~R2C2
+.End
+.Replicate~_7f_7f_7f_7f~R1C2
+.Pair~___v__79___9_H~_no%20358%20king%20clash~R1C2~R2C1
+.End
