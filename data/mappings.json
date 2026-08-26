@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-25T12:03:46.593337+00:00",
+  "generated_at": "2026-08-26T10:12:44.776821+00:00",
   "rows": [
     {
       "puzzle_id": "kM6Kwwkv3aM",
@@ -29758,6 +29758,30 @@
       "script_size": 3035
     },
     {
+      "puzzle_id": "cXiZh5J0NPU",
+      "puzzle_title": "Todaily",
+      "video_title": "A Great Day to be a Clown",
+      "author": "Riffclown",
+      "sources": [
+        "https://tinyurl.com/Todaily"
+      ],
+      "date": "2025-04-09",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 71,
+      "solve_ms": 8.8,
+      "iss_size": 240,
+      "iss_url_length": 288,
+      "script_size": 933
+    },
+    {
       "puzzle_id": "bD4brROHUL4",
       "puzzle_title": "Regional Constraints",
       "video_title": "This Will Make You Feel REALLY Clever!",
@@ -35938,6 +35962,29 @@
       "iss_size": 68016,
       "iss_url_length": 66076,
       "script_size": 4602
+    },
+    {
+      "puzzle_id": "JBYv2NQV1x8",
+      "puzzle_title": "The Loneliest Number",
+      "video_title": "Throwback Sunday: Classic Sudoku",
+      "author": "Thomas Snyder",
+      "sources": [
+        "https://tinyurl.com/TheLoneliestNumber"
+      ],
+      "date": "2024-12-29",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 9,
+      "solve_ms": 3.5,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 721
     },
     {
       "puzzle_id": "0RbPUwT7rrE",
@@ -82028,6 +82075,30 @@
       "script_size": 1891
     },
     {
+      "puzzle_id": "bYOwPT0KfTk.2",
+      "video_id": "bYOwPT0KfTk",
+      "puzzle_title": "Have a Holly Jolly Classic",
+      "video_title": "Feliz NaviGAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/mryfdtnb"
+      ],
+      "date": "2023-01-19",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.0,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 747
+    },
+    {
       "puzzle_id": "aPT8H962E1I",
       "puzzle_title": "Transmission",
       "video_title": "The Return Of Phistomefel",
@@ -96490,6 +96561,31 @@
       "script_size": 9100
     },
     {
+      "puzzle_id": "gKQTO43SAxY.3",
+      "video_id": "gKQTO43SAxY",
+      "puzzle_title": "5/25: Your Brain On Sudoku",
+      "video_title": "Great Balls of GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/ykbdhh6e"
+      ],
+      "date": "2022-06-24",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.1,
+      "iss_size": 389,
+      "iss_url_length": 427,
+      "script_size": 1130
+    },
+    {
       "puzzle_id": "Au1VM5Fd0OA",
       "puzzle_title": "Boundary Value Problem",
       "video_title": "Covid Man's Boundary Value Problem",
@@ -97627,6 +97723,30 @@
       "script_size": 8522
     },
     {
+      "puzzle_id": "liEAjQvQYe8.4",
+      "video_id": "liEAjQvQYe8",
+      "puzzle_title": "May 1, 2021: Classic Sudoku",
+      "video_title": "Is there GAS at Rascasse?",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/yc294vb7"
+      ],
+      "date": "2022-05-28",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.8,
+      "iss_size": 218,
+      "iss_url_length": 270,
+      "script_size": 814
+    },
+    {
       "puzzle_id": "SgsodDT5gck",
       "puzzle_title": "Eye Of Sauron",
       "video_title": "The Eye Of Sauron: The Sudoku",
@@ -97978,6 +98098,29 @@
       "script_size": 2603
     },
     {
+      "puzzle_id": "WInU57ZbXho",
+      "puzzle_title": "Lion's Den",
+      "video_title": "Simon In The Lion's Den",
+      "author": "Tallcat",
+      "sources": [
+        "https://tinyurl.com/tc-lionsden"
+      ],
+      "date": "2022-05-21",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 933,
+      "solve_ms": 33.8,
+      "iss_size": 300,
+      "iss_url_length": 340,
+      "script_size": 946
+    },
+    {
       "puzzle_id": "xfVspZDFZTI",
       "puzzle_title": "Assassin9",
       "video_title": "Sudoku for Ninjas",
@@ -98025,6 +98168,30 @@
       "iss_size": 312,
       "iss_url_length": 351,
       "script_size": 932
+    },
+    {
+      "puzzle_id": "W5F2S7JpTgs.3",
+      "video_id": "W5F2S7JpTgs",
+      "puzzle_title": "April 20, 2022: Cross Hares",
+      "video_title": "Overdue GAS Bill",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/2p8rmrpa"
+      ],
+      "date": "2022-05-19",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.1,
+      "iss_size": 558,
+      "iss_url_length": 583,
+      "script_size": 1290
     },
     {
       "puzzle_id": "CLmbNVDbWbY",
@@ -98588,6 +98755,30 @@
       "iss_size": 593,
       "iss_url_length": 631,
       "script_size": 2936
+    },
+    {
+      "puzzle_id": "wnE1j-agx2Y.1",
+      "video_id": "wnE1j-agx2Y",
+      "puzzle_title": "Apr 13, 2022: Classic Sudoku",
+      "video_title": "Back at the GAS station",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/4btvn4hr"
+      ],
+      "date": "2022-05-10",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.0,
+      "iss_size": 225,
+      "iss_url_length": 277,
+      "script_size": 830
     },
     {
       "puzzle_id": "-78lEgjZUhk",
@@ -99338,6 +99529,54 @@
       "script_size": 2221
     },
     {
+      "puzzle_id": "Lh_j9DLhIY4.2",
+      "video_id": "Lh_j9DLhIY4",
+      "puzzle_title": "3/30/22: Chamber of Secrets",
+      "video_title": "GASson d'avril",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/2p93mftm"
+      ],
+      "date": "2022-04-23",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.3,
+      "iss_size": 634,
+      "iss_url_length": 655,
+      "script_size": 1386
+    },
+    {
+      "puzzle_id": "Lh_j9DLhIY4.6",
+      "video_id": "Lh_j9DLhIY4",
+      "puzzle_title": "April 1, 2022: Classy Sudoku",
+      "video_title": "GASson d'avril",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/3u8yvp3p"
+      ],
+      "date": "2022-04-23",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.0,
+      "iss_size": 155,
+      "iss_url_length": 207,
+      "script_size": 674
+    },
+    {
       "puzzle_id": "vpUs_PjUZ6Y",
       "puzzle_title": "Z Is For Zebra",
       "video_title": "The First Sudoku He Ever Made??",
@@ -99539,6 +99778,30 @@
       "iss_size": 732,
       "iss_url_length": 778,
       "script_size": 3038
+    },
+    {
+      "puzzle_id": "rZ-4REgffY8.3",
+      "video_id": "rZ-4REgffY8",
+      "puzzle_title": "Mar 26, 2022: Classic Sudoku",
+      "video_title": "GAS with Your Name on it",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/mr2hu5ur"
+      ],
+      "date": "2022-04-18",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.1,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 725
     },
     {
       "puzzle_id": "MyyjOPJyzr0",
@@ -99920,6 +100183,54 @@
       "script_size": 2196
     },
     {
+      "puzzle_id": "-pInDSLVfCo.1",
+      "video_id": "-pInDSLVfCo",
+      "puzzle_title": "3.14: 22/7 GAS Edition",
+      "video_title": "A Gassive Attack",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/ync59rbs"
+      ],
+      "date": "2022-04-07",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.3,
+      "iss_size": 155,
+      "iss_url_length": 207,
+      "script_size": 668
+    },
+    {
+      "puzzle_id": "-pInDSLVfCo.5",
+      "video_id": "-pInDSLVfCo",
+      "puzzle_title": "Mar. 18, 2022: GAS o'clock",
+      "video_title": "A Gassive Attack",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/2nh5etdk"
+      ],
+      "date": "2022-04-07",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.9,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 747
+    },
+    {
       "puzzle_id": "rSyqqxKz5pc",
       "puzzle_title": "Vision",
       "video_title": "A Vision For Sudoku",
@@ -100073,6 +100384,30 @@
       "iss_size": 9006,
       "iss_url_length": 8449,
       "script_size": 3481
+    },
+    {
+      "puzzle_id": "XUQkX8NiRXw.1",
+      "video_id": "XUQkX8NiRXw",
+      "puzzle_title": "3/9/22: You Can Count On Us",
+      "video_title": "Inspiring GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/yejwx73f"
+      ],
+      "date": "2022-04-03",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.0,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 733
     },
     {
       "puzzle_id": "5p51R3kOovQ",
@@ -100235,6 +100570,54 @@
       "iss_size": 349,
       "iss_url_length": 394,
       "script_size": 1513
+    },
+    {
+      "puzzle_id": "VrmINT5PAyk.2",
+      "video_id": "VrmINT5PAyk",
+      "puzzle_title": "March 5, 2022: Classic Sudoku",
+      "video_title": "Noble GAS",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/yc4smp2y"
+      ],
+      "date": "2022-03-30",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.6,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 741
+    },
+    {
+      "puzzle_id": "VrmINT5PAyk.3",
+      "video_id": "VrmINT5PAyk",
+      "puzzle_title": "March 6, 2022: Free Bird",
+      "video_title": "Noble GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/2p9ctjwy"
+      ],
+      "date": "2022-03-30",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 5.1,
+      "iss_size": 370,
+      "iss_url_length": 403,
+      "script_size": 1035
     },
     {
       "puzzle_id": "etCqE5cseaY",
@@ -101040,6 +101423,54 @@
       "script_size": 5669
     },
     {
+      "puzzle_id": "HaK08DW5pJE.3",
+      "video_id": "HaK08DW5pJE",
+      "puzzle_title": "February 19, 2022: Pufferfish",
+      "video_title": "Hitting the GAS Again",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/35wu87xv"
+      ],
+      "date": "2022-03-16",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.0,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 705
+    },
+    {
+      "puzzle_id": "HaK08DW5pJE.5",
+      "video_id": "HaK08DW5pJE",
+      "puzzle_title": "Feb. 21, 2022: Classic Sudoku",
+      "video_title": "Hitting the GAS Again",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/yuxhdz7r"
+      ],
+      "date": "2022-03-16",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.1,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 711
+    },
+    {
       "puzzle_id": "gAQFb5frn8U",
       "puzzle_title": "FourCast",
       "video_title": "Where Are The Arrows Hiding?!",
@@ -101146,6 +101577,29 @@
       "iss_size": 174,
       "iss_url_length": 220,
       "script_size": 1519
+    },
+    {
+      "puzzle_id": "ShHzi6izpGQ",
+      "puzzle_title": "Scientific Method",
+      "video_title": "What Scientific Method is required here?",
+      "author": "Tallcat",
+      "sources": [
+        "https://tinyurl.com/sczzz8en"
+      ],
+      "date": "2022-03-13",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 248,
+      "solve_ms": 16.2,
+      "iss_size": 341,
+      "iss_url_length": 381,
+      "script_size": 1015
     },
     {
       "puzzle_id": "sOSrJCXdSCQ",
@@ -101472,6 +101926,30 @@
       "iss_size": 370,
       "iss_url_length": 405,
       "script_size": 1339
+    },
+    {
+      "puzzle_id": "iRucvNT4Tkc.2",
+      "video_id": "iRucvNT4Tkc",
+      "puzzle_title": "Feb 3, 2022: Classic Sudoku",
+      "video_title": "Donning the GAS Mantle",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/2d4pjspr"
+      ],
+      "date": "2022-03-04",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.8,
+      "iss_size": 211,
+      "iss_url_length": 263,
+      "script_size": 799
     },
     {
       "puzzle_id": "371wJkGtCZA",
@@ -101917,6 +102395,29 @@
       "iss_size": 375,
       "iss_url_length": 418,
       "script_size": 1159
+    },
+    {
+      "puzzle_id": "g0IlYmsN1es",
+      "puzzle_title": "Happy Birthday \ud83d\udc3e (Keystone)",
+      "video_title": "A Killer for your Birthday?",
+      "author": "Wyrm & Rangsk",
+      "sources": [
+        "https://tinyurl.com/3u9fm4zt"
+      ],
+      "date": "2022-02-24",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 431,
+      "solve_ms": 22.9,
+      "iss_size": 389,
+      "iss_url_length": 428,
+      "script_size": 1101
     },
     {
       "puzzle_id": "EOnC5zBhsJs",
@@ -102855,6 +103356,55 @@
       "iss_size": 308,
       "iss_url_length": 348,
       "script_size": 1808
+    },
+    {
+      "puzzle_id": "0sOQm77GSSA.1",
+      "video_id": "0sOQm77GSSA",
+      "puzzle_title": "Jan 13, 2022: Killer Sudoku",
+      "video_title": "Back to the GAS Giants",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/4u7mumyp"
+      ],
+      "date": "2022-02-10",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.2,
+      "iss_size": 347,
+      "iss_url_length": 383,
+      "script_size": 1063
+    },
+    {
+      "puzzle_id": "0sOQm77GSSA.4",
+      "video_id": "0sOQm77GSSA",
+      "puzzle_title": "Jan 16, 2021: Classic Sudoku",
+      "video_title": "Back to the GAS Giants",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/28h6bt64"
+      ],
+      "date": "2022-02-10",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.4,
+      "iss_size": 225,
+      "iss_url_length": 277,
+      "script_size": 830
     },
     {
       "puzzle_id": "B4H2LOdFB3k",
@@ -106583,6 +107133,54 @@
       "script_size": 850
     },
     {
+      "puzzle_id": "tK6z5BAkQ_M.4",
+      "video_id": "tK6z5BAkQ_M",
+      "puzzle_title": "Dec 7, 2021: Classic Sudoku",
+      "video_title": "A Festive Gas Burst!",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/53aauwnh"
+      ],
+      "date": "2021-12-30",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.7,
+      "iss_size": 204,
+      "iss_url_length": 256,
+      "script_size": 784
+    },
+    {
+      "puzzle_id": "tK6z5BAkQ_M.5",
+      "video_id": "tK6z5BAkQ_M",
+      "puzzle_title": "Dec. 8, 2021: US Duck Socials",
+      "video_title": "A Festive Gas Burst!",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/25r9t8zk"
+      ],
+      "date": "2021-12-30",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.0,
+      "iss_size": 204,
+      "iss_url_length": 256,
+      "script_size": 780
+    },
+    {
       "puzzle_id": "a8zf3hMN0cs",
       "puzzle_title": "A Very Odd Killer",
       "video_title": "Is This Sudoku Man Quite Mad?",
@@ -107010,6 +107608,31 @@
       "script_size": null
     },
     {
+      "puzzle_id": "tT3tiN5GBvQ.1",
+      "video_id": "tT3tiN5GBvQ",
+      "puzzle_title": "Nov. 29, 2021: Paying Respect",
+      "video_title": "The GASman Cometh",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/y9x45ycd"
+      ],
+      "date": "2021-12-21",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.2,
+      "iss_size": 354,
+      "iss_url_length": 390,
+      "script_size": 1066
+    },
+    {
       "puzzle_id": "ewNCuu4sHgM",
       "puzzle_title": "Xmas-Sums",
       "video_title": "The Most Popular Sudoku Setter In The World?",
@@ -107138,6 +107761,30 @@
       "iss_size": 272,
       "iss_url_length": 313,
       "script_size": 1731
+    },
+    {
+      "puzzle_id": "4BA_LntMqbA.2",
+      "video_id": "4BA_LntMqbA",
+      "puzzle_title": "Nov 25, 2021: Easy as 1, 2, 3",
+      "video_title": "GAS On, GAS Off",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/25kkcrfn"
+      ],
+      "date": "2021-12-18",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.9,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 726
     },
     {
       "puzzle_id": "pGYrlDIQx80",
@@ -109145,6 +109792,31 @@
       "script_size": 2507
     },
     {
+      "puzzle_id": "bHhinEJrUxg.5",
+      "video_id": "bHhinEJrUxg",
+      "puzzle_title": "October 24, 2021: Slasher",
+      "video_title": "The Real GAS Speedrun",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/w5svuvv2"
+      ],
+      "date": "2021-11-11",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.2,
+      "iss_size": 399,
+      "iss_url_length": 433,
+      "script_size": 1125
+    },
+    {
       "puzzle_id": "XVLO5AXcnq8",
       "puzzle_title": "Quorum Rings",
       "video_title": "Is This The Greatest Quadruple In Sudoku History?",
@@ -109765,6 +110437,30 @@
       "script_size": 881
     },
     {
+      "puzzle_id": "B1GJadtsIRg.3",
+      "video_id": "B1GJadtsIRg",
+      "puzzle_title": "Oct 12, 2021: Eeeeevil Sudoku",
+      "video_title": "A big problem with GAS",
+      "author": "clover. in disguise",
+      "sources": [
+        "https://tinyurl.com/47jprf2s"
+      ],
+      "date": "2021-11-01",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.9,
+      "iss_size": 155,
+      "iss_url_length": 207,
+      "script_size": 681
+    },
+    {
       "puzzle_id": "LBaJMAJLbuM",
       "puzzle_title": "Easter Egg",
       "video_title": "Nonograms With Maths",
@@ -110044,6 +110740,30 @@
       "iss_size": 299,
       "iss_url_length": 342,
       "script_size": 1016
+    },
+    {
+      "puzzle_id": "pSFx3JiwwTw.2",
+      "video_id": "pSFx3JiwwTw",
+      "puzzle_title": "October 6, 2021: Nein Nines",
+      "video_title": "A Burst of GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/k4wfy4xv"
+      ],
+      "date": "2021-10-26",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.1,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 703
     },
     {
       "puzzle_id": "0fR6xBYO3kY",
@@ -110796,6 +111516,55 @@
       "script_size": 4783
     },
     {
+      "puzzle_id": "rnZRKAvcfBk.4",
+      "video_id": "rnZRKAvcfBk",
+      "puzzle_title": "Sep 23, 2021: Classic Sudoku",
+      "video_title": "Give it Some GAS",
+      "author": "Sam Cappleman-Lynes",
+      "sources": [
+        "https://tinyurl.com/ehtww6hs"
+      ],
+      "date": "2021-10-08",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.8,
+      "iss_size": 197,
+      "iss_url_length": 249,
+      "script_size": 770
+    },
+    {
+      "puzzle_id": "rnZRKAvcfBk.5",
+      "video_id": "rnZRKAvcfBk",
+      "puzzle_title": "Sept. 24, 2021: Modern Sudoku",
+      "video_title": "Give it Some GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/uur2kn3"
+      ],
+      "date": "2021-10-08",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.9,
+      "iss_size": 747,
+      "iss_url_length": 772,
+      "script_size": 1642
+    },
+    {
       "puzzle_id": "ZpnxS2rPyhM",
       "puzzle_title": "Think Outside The Cage",
       "video_title": "Thinking Outside The... Cage?!!",
@@ -110969,6 +111738,30 @@
       "iss_size": 166,
       "iss_url_length": 211,
       "script_size": 1660
+    },
+    {
+      "puzzle_id": "v_YvOgNiUks.4",
+      "video_id": "v_YvOgNiUks",
+      "puzzle_title": "Sept. 18, 2021: Dead or Alive",
+      "video_title": "Literally Cooking ... with GAS",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/3tf22cae"
+      ],
+      "date": "2021-10-03",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 3.8,
+      "iss_size": 405,
+      "iss_url_length": 440,
+      "script_size": 1107
     },
     {
       "puzzle_id": "sYkVepmbfbE",
@@ -111477,6 +112270,30 @@
       "script_size": 1080
     },
     {
+      "puzzle_id": "McjswDKMFbI.2",
+      "video_id": "McjswDKMFbI",
+      "puzzle_title": "September 6, 2021: \u03c0-Seas 5",
+      "video_title": "No GAS Shortage Here",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/cr424vtt"
+      ],
+      "date": "2021-09-23",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.1,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 747
+    },
+    {
       "puzzle_id": "RUCIA8Ot9T0",
       "puzzle_title": "Trickling Down",
       "video_title": "The New Sudoku Phenomenon",
@@ -111655,6 +112472,30 @@
       "iss_size": 297,
       "iss_url_length": 340,
       "script_size": 1682
+    },
+    {
+      "puzzle_id": "z-CQLijElrk.7",
+      "video_id": "z-CQLijElrk",
+      "puzzle_title": "September 4, 2021: Classic",
+      "video_title": "Going Full GAS",
+      "author": "clover!",
+      "sources": [
+        "https://tinyurl.com/zu6zwajs"
+      ],
+      "date": "2021-09-19",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 1.9,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 696
     },
     {
       "puzzle_id": "8ag9zLUIiJo",
@@ -111994,6 +112835,30 @@
       "iss_size": 475,
       "iss_url_length": 505,
       "script_size": 1483
+    },
+    {
+      "puzzle_id": "7sWnbrADeWo.4",
+      "video_id": "7sWnbrADeWo",
+      "puzzle_title": "August 24, 2021: TT Krayt Dino",
+      "video_title": "Let's Get GASsy!",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/c8j6cc69"
+      ],
+      "date": "2021-09-10",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.1,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 691
     },
     {
       "puzzle_id": "1vBDaAfooU4",
@@ -113090,6 +113955,30 @@
       "iss_size": 128,
       "iss_url_length": 177,
       "script_size": 1769
+    },
+    {
+      "puzzle_id": "jWpJqOra_Jk.3",
+      "video_id": "jWpJqOra_Jk",
+      "puzzle_title": "August 3, 2021: 129 Snowflake",
+      "video_title": "The Speedrun that Decelerates",
+      "author": "Philip Newman",
+      "sources": [
+        "https://tinyurl.com/zdevva6w"
+      ],
+      "date": "2021-08-21",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.6,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 750
     },
     {
       "puzzle_id": "pNafMzLth3A",
@@ -130026,6 +130915,30 @@
       "script_size": 1772
     },
     {
+      "puzzle_id": "_tNCgxLYUbQ",
+      "puzzle_title": "The Puzzle of the Big Cages",
+      "video_title": "The Puzzle of the Big Cages",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/gm2Rbq8BNt"
+      ],
+      "date": "2020-11-28",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 5.9,
+      "iss_size": 447,
+      "iss_url_length": 489,
+      "script_size": 1253
+    },
+    {
       "puzzle_id": "0sX7Ga9Dino",
       "puzzle_title": "Little Kropkiller",
       "video_title": "A Brilliant Opening Gambit",
@@ -130679,6 +131592,30 @@
       "script_size": 870
     },
     {
+      "puzzle_id": "Rt-cu8vYN9c",
+      "puzzle_title": "Unlucky",
+      "video_title": "Friday 13th Sudoku? The Nightmare Begins",
+      "author": "Lisztes",
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/BR6MLPg472"
+      ],
+      "date": "2020-11-13",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 50,
+      "solve_ms": 10.5,
+      "iss_size": 521,
+      "iss_url_length": 549,
+      "script_size": 1253
+    },
+    {
       "puzzle_id": "uwI3loUMiDU",
       "puzzle_title": "Pinwheel",
       "video_title": "This Sudoku Trick Seems Like Magic",
@@ -131013,6 +131950,29 @@
       "iss_size": 266,
       "iss_url_length": 307,
       "script_size": 1461
+    },
+    {
+      "puzzle_id": "jxRqJjioRtg",
+      "puzzle_title": "\"Just\" a Classic sudoku?",
+      "video_title": "\"Just\" a Classic sudoku?",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/4L3rGTqPMg"
+      ],
+      "date": "2020-11-06",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.0,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 713
     },
     {
       "puzzle_id": "-IDVvDbj0FM",
@@ -132253,6 +133213,30 @@
       "script_size": 2574
     },
     {
+      "puzzle_id": "TQ0lso4fJzk.1",
+      "video_id": "TQ0lso4fJzk",
+      "puzzle_title": "How NOT To Cheat At Sudoku!",
+      "video_title": "How NOT To Cheat At Sudoku!",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/jHQR32FrfP"
+      ],
+      "date": "2020-10-06",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 7,
+      "solve_ms": 3.7,
+      "iss_size": 148,
+      "iss_url_length": 200,
+      "script_size": 671
+    },
+    {
       "puzzle_id": "gZfhAziMci4",
       "puzzle_title": "pH Anti-Knight Killer Sudoku",
       "video_title": "When Sudoku Meets Chess...!",
@@ -132470,6 +133454,1065 @@
       "iss_size": 492,
       "iss_url_length": 524,
       "script_size": 1654
+    },
+    {
+      "puzzle_id": "N3j2pPheCpw",
+      "puzzle_title": "Stripe Sudoku",
+      "video_title": "Stripe Sudoku",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/TPMRr8mpgJ"
+      ],
+      "date": "2020-10-01",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 3.3,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 717
+    },
+    {
+      "puzzle_id": "lW4-MdAkrvU",
+      "puzzle_title": "The Greatest Puzzle ARG Ever!",
+      "video_title": "The Greatest Puzzle ARG Ever!",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/B9h9GNnBTH"
+      ],
+      "date": "2020-10-01",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 808,
+      "solve_ms": 27.1,
+      "iss_size": 347,
+      "iss_url_length": 386,
+      "script_size": 1051
+    },
+    {
+      "puzzle_id": "Wy_k0Tywpb4",
+      "puzzle_title": "The Great Sudoku \"Cheat\" Scandal",
+      "video_title": "The Great Sudoku \"Cheat\" Scandal",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/RjBN4Q97J3"
+      ],
+      "date": "2020-09-29",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.9,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 721
+    },
+    {
+      "puzzle_id": "WHJOvBpezys",
+      "puzzle_title": "Cracking Classic Sudoku",
+      "video_title": "Cracking Classic Sudoku",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/3qjmtHmF9Q"
+      ],
+      "date": "2020-09-25",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.9,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 697
+    },
+    {
+      "puzzle_id": "Gh9lnDdoLb4",
+      "puzzle_title": "Killer Hippo",
+      "video_title": "Killer Hippo",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/F7pHprq69M"
+      ],
+      "date": "2020-09-21",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 11,
+      "solve_ms": 8.1,
+      "iss_size": 371,
+      "iss_url_length": 409,
+      "script_size": 1066
+    },
+    {
+      "puzzle_id": "0LxWqn5xuH8",
+      "puzzle_title": "\"Warning: This is not going to be Easy\"",
+      "video_title": "\"Warning: This is not going to be Easy\"",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/3ddhn7NF7T"
+      ],
+      "date": "2020-09-17",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.8,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 743
+    },
+    {
+      "puzzle_id": "Uex5HJh0wiY",
+      "puzzle_title": "Standing On The Shoulders Of Puzzle Giants",
+      "video_title": "Standing On The Shoulders Of Puzzle Giants",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/phpn2FJHRb"
+      ],
+      "date": "2020-09-16",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 8,
+      "solve_ms": 6.1,
+      "iss_size": 363,
+      "iss_url_length": 402,
+      "script_size": 1089
+    },
+    {
+      "puzzle_id": "lfFNqOT0fSM",
+      "puzzle_title": "Our Classic Techniques",
+      "video_title": "Our Classic Techniques",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/BgQTDDr7rH"
+      ],
+      "date": "2020-09-10",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.8,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 726
+    },
+    {
+      "puzzle_id": "56dqWhnKk_U",
+      "puzzle_title": "Tiananmen Squares",
+      "video_title": "Tiananmen Squares",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/GtNbJpFdR4"
+      ],
+      "date": "2020-09-09",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 331,
+      "solve_ms": 19.6,
+      "iss_size": 398,
+      "iss_url_length": 435,
+      "script_size": 1109
+    },
+    {
+      "puzzle_id": "1K9HowSZuOw",
+      "puzzle_title": "Can You Escape This Knot?",
+      "video_title": "Can You Escape This Knot?",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/nnQ482qjHq"
+      ],
+      "date": "2020-09-02",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 514,
+      "solve_ms": 24.3,
+      "iss_size": 317,
+      "iss_url_length": 354,
+      "script_size": 988
+    },
+    {
+      "puzzle_id": "INGqGDp-USQ",
+      "puzzle_title": "A Puzzle That Keeps You Young!",
+      "video_title": "A Puzzle That Keeps You Young!",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/M4p6f43H2q"
+      ],
+      "date": "2020-08-29",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 5.0,
+      "iss_size": 403,
+      "iss_url_length": 437,
+      "script_size": 1109
+    },
+    {
+      "puzzle_id": "e9_FkcNAZcA",
+      "puzzle_title": "The Sudoku Trick Very Few Experts Know",
+      "video_title": "The Sudoku Trick Very Few Experts Know",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/nqT4FjpTn6"
+      ],
+      "date": "2020-08-26",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 178,
+      "solve_ms": 17.1,
+      "iss_size": 453,
+      "iss_url_length": 490,
+      "script_size": 1215
+    },
+    {
+      "puzzle_id": "1T6WlU4kBy0",
+      "puzzle_title": "Three Great Sudoku Techniques",
+      "video_title": "Three Great Sudoku Techniques",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/6tT7bNDfQj"
+      ],
+      "date": "2020-08-25",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.9,
+      "iss_size": 204,
+      "iss_url_length": 256,
+      "script_size": 793
+    },
+    {
+      "puzzle_id": "mQGr7_m0hlY",
+      "puzzle_title": "In which a so-called \"Expert\" finally learns to Check his work ...",
+      "video_title": "In which a so-called \"Expert\" finally learns to Check his work ...",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/Mfh3L8RD96"
+      ],
+      "date": "2020-08-20",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.1,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 740
+    },
+    {
+      "puzzle_id": "MXUgYxHmKq4",
+      "puzzle_title": "Techniques for Classics",
+      "video_title": "Techniques for Classics",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/BhLbLBpdGQ"
+      ],
+      "date": "2020-08-09",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.8,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 712
+    },
+    {
+      "puzzle_id": "mFcnfGW2SYY",
+      "puzzle_title": "Techniques for Hard Classic Sudoku",
+      "video_title": "Techniques for Hard Classic Sudoku",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/FhhGMpjtdr"
+      ],
+      "date": "2020-08-02",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.0,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 738
+    },
+    {
+      "puzzle_id": "CdJZA4nWcMc",
+      "puzzle_title": "Classic Sudoku - Not too Hard",
+      "video_title": "Classic Sudoku - Not too Hard",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/6Rr9hnFdRn"
+      ],
+      "date": "2020-07-22",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.8,
+      "iss_size": 204,
+      "iss_url_length": 256,
+      "script_size": 793
+    },
+    {
+      "puzzle_id": "zEGSANsZJFk",
+      "puzzle_title": "A Clever Classic Strategy",
+      "video_title": "A Clever Classic Strategy",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/4NR789bfTN"
+      ],
+      "date": "2020-07-14",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.8,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 714
+    },
+    {
+      "puzzle_id": "Yj_qDTA7kzw",
+      "puzzle_title": "This Is What A World-Class Sudoku Looks Like!",
+      "video_title": "This Is What A World-Class Sudoku Looks Like!",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/b44fr3NGf6"
+      ],
+      "date": "2020-07-12",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 11,
+      "solve_ms": 5.5,
+      "iss_size": 359,
+      "iss_url_length": 399,
+      "script_size": 1092
+    },
+    {
+      "puzzle_id": "EciHY-dxIIE",
+      "puzzle_title": "A Classic Technique",
+      "video_title": "A Classic Technique",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/j62Rm8qq9j"
+      ],
+      "date": "2020-05-27",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.9,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 753
+    },
+    {
+      "puzzle_id": "sYBz4TZH-Co",
+      "puzzle_title": "Techniques for Hard Sudoku",
+      "video_title": "Techniques for Hard Sudoku",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/RjP3PL8dbt"
+      ],
+      "date": "2020-05-05",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.9,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 700
+    },
+    {
+      "puzzle_id": "jN6jveTebHw",
+      "puzzle_title": "Techniques for Starting Hard Sudokus",
+      "video_title": "Techniques for Starting Hard Sudokus",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/h97M9bnjR4"
+      ],
+      "date": "2020-04-27",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 7,
+      "solve_ms": 3.3,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 710
+    },
+    {
+      "puzzle_id": "t62Y3pOjEvw",
+      "puzzle_title": "A 'Hard' Puzzle - Solved with a Neat Trick",
+      "video_title": "A 'Hard' Puzzle - Solved with a Neat Trick",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/2tMJ2BhrH3"
+      ],
+      "date": "2020-04-25",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.1,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 716
+    },
+    {
+      "puzzle_id": "A64ktXOXjvc",
+      "puzzle_title": "Sudoku at its Most Elegant",
+      "video_title": "Sudoku at its Most Elegant",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/Qnpd7Mgt6R"
+      ],
+      "date": "2020-04-17",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.8,
+      "iss_size": 197,
+      "iss_url_length": 249,
+      "script_size": 775
+    },
+    {
+      "puzzle_id": "K5qoSr8Kxcc",
+      "puzzle_title": "Expert Sudoku Skills: Hidden Pairs",
+      "video_title": "Expert Sudoku Skills: Hidden Pairs",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/JGR8mqggLJ"
+      ],
+      "date": "2020-04-10",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 5.1,
+      "iss_size": 148,
+      "iss_url_length": 200,
+      "script_size": 678
+    },
+    {
+      "puzzle_id": "Ygb3bIFAJzY",
+      "puzzle_title": "How To Sharpen Your Sudoku Skills",
+      "video_title": "How To Sharpen Your Sudoku Skills",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/2t6fgFRHfj"
+      ],
+      "date": "2020-04-04",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.3,
+      "iss_size": 148,
+      "iss_url_length": 200,
+      "script_size": 677
+    },
+    {
+      "puzzle_id": "8C-A7xmBLRU",
+      "puzzle_title": "Beyond Diabolical... Sudoku Madness!",
+      "video_title": "Beyond Diabolical... Sudoku Madness!",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/pG7NL9f68f"
+      ],
+      "date": "2020-04-03",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 3.0,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 770
+    },
+    {
+      "puzzle_id": "DZXg_hTLhX0",
+      "puzzle_title": "Bonus Classic: Vicious Sudoku?",
+      "video_title": "Bonus Classic: Vicious Sudoku?",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/Qj3m4RJnbT"
+      ],
+      "date": "2020-04-02",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.9,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 749
+    },
+    {
+      "puzzle_id": "eSRDazbPOSA",
+      "puzzle_title": "Classic Sudoku Bonus",
+      "video_title": "Classic Sudoku Bonus",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/FMqDr9LdLn"
+      ],
+      "date": "2020-03-30",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 6,
+      "solve_ms": 3.4,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 739
+    },
+    {
+      "puzzle_id": "gFGPisnJqV8",
+      "puzzle_title": "Classic Sudoku Bonus Puzzle",
+      "video_title": "Classic Sudoku Bonus Puzzle",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/FJGdqBMDFg"
+      ],
+      "date": "2020-03-27",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 3.0,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 701
+    },
+    {
+      "puzzle_id": "O0uASyvv554",
+      "puzzle_title": "Classic Sudoku:  Bonus Puzzle 4:  [This is STUNNING]",
+      "video_title": "Classic Sudoku:  Bonus Puzzle 4:  [This is STUNNING]",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/8M9rgRNpL2"
+      ],
+      "date": "2020-03-26",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 3.0,
+      "iss_size": 148,
+      "iss_url_length": 200,
+      "script_size": 696
+    },
+    {
+      "puzzle_id": "91IMeXpKp-0",
+      "puzzle_title": "Self-Isolation Sudokus:  Bonus Video 1",
+      "video_title": "Self-Isolation Sudokus:  Bonus Video 1",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/HQnj4Mp8QP"
+      ],
+      "date": "2020-03-23",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.9,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 757
+    },
+    {
+      "puzzle_id": "-bFaflNauSc",
+      "puzzle_title": "Instinct vs Technique? The XYZ wing",
+      "video_title": "Instinct vs Technique? The XYZ wing",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/Jh3Th2pqn8"
+      ],
+      "date": "2020-02-24",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 3.0,
+      "iss_size": 211,
+      "iss_url_length": 263,
+      "script_size": 814
+    },
+    {
+      "puzzle_id": "9m9t8ie9-EE",
+      "puzzle_title": "One Of The Best Classic Sudokus Ever",
+      "video_title": "One Of The Best Classic Sudokus Ever",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/PrfmJPgdft"
+      ],
+      "date": "2020-02-19",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 6,
+      "solve_ms": 3.5,
+      "iss_size": 141,
+      "iss_url_length": 193,
+      "script_size": 665
+    },
+    {
+      "puzzle_id": "vnbphOAiGIc",
+      "puzzle_title": "Classic Sudoku from Logic Masters India",
+      "video_title": "Classic Sudoku from Logic Masters India",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/9rF4Ddghpf"
+      ],
+      "date": "2020-02-06",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.0,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 758
+    },
+    {
+      "puzzle_id": "__iuI88zmvY",
+      "puzzle_title": "Is This a Beastly Sudoku?",
+      "video_title": "Is This a Beastly Sudoku?",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/nhpnRp73fJ"
+      ],
+      "date": "2020-01-23",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.8,
+      "iss_size": 155,
+      "iss_url_length": 207,
+      "script_size": 684
+    },
+    {
+      "puzzle_id": "5keOyddJ1JA",
+      "puzzle_title": "Three Diabolical Sudoku Techniques",
+      "video_title": "Three Diabolical Sudoku Techniques",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/T8qj67f8Mg"
+      ],
+      "date": "2020-01-12",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.0,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 753
+    },
+    {
+      "puzzle_id": "_XjiaoiSWys",
+      "puzzle_title": "A Brilliant Killer Sudoku - Themed for 1/11",
+      "video_title": "A Brilliant Killer Sudoku - Themed for 1/11",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/NtJtjqdgT8"
+      ],
+      "date": "2020-01-10",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 4.1,
+      "iss_size": 474,
+      "iss_url_length": 506,
+      "script_size": 1240
+    },
+    {
+      "puzzle_id": "PTK-uH_Nw68",
+      "puzzle_title": "The Last Sudoku Of The Decade",
+      "video_title": "The Last Sudoku Of The Decade",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/LR7M2Jq8PG"
+      ],
+      "date": "2019-12-31",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.8,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 733
+    },
+    {
+      "puzzle_id": "JtZmkXyY83c",
+      "puzzle_title": "The Decider - a Race against Time",
+      "video_title": "The Decider - a Race against Time",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/NHJ7rj7ft7"
+      ],
+      "date": "2019-12-21",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.1,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 752
+    },
+    {
+      "puzzle_id": "sWotLm9GQtY",
+      "puzzle_title": "And ... he's back!  Austrian Sudoku & Crossword News",
+      "video_title": "And ... he's back!  Austrian Sudoku & Crossword News",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/NG4MnR2hTp"
+      ],
+      "date": "2019-12-08",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.9,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 741
+    },
+    {
+      "puzzle_id": "FKX_JjPQFo8",
+      "puzzle_title": "Diabolical Sudoku With A Classy Finish",
+      "video_title": "Diabolical Sudoku With A Classy Finish",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/mDbH63GThm"
+      ],
+      "date": "2019-10-18",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.6,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 757
+    },
+    {
+      "puzzle_id": "hSWn2CLPQTw",
+      "puzzle_title": "\"Hard\" Sudoku Masterclass:  2 Minutes 26 Seconds!",
+      "video_title": "\"Hard\" Sudoku Masterclass:  2 Minutes 26 Seconds!",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/QM8q4DTQFM"
+      ],
+      "date": "2019-10-07",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 3.1,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 738
+    },
+    {
+      "puzzle_id": "sCoFX_KHUdM",
+      "puzzle_title": "What To Do When A Sudoku Has A Sting In The Tail...",
+      "video_title": "What To Do When A Sudoku Has A Sting In The Tail...",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/jqm8hjD9pq"
+      ],
+      "date": "2019-08-21",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.1,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 740
+    },
+    {
+      "puzzle_id": "XkDefcuSZwc",
+      "puzzle_title": "A classic sudoku from Norway",
+      "video_title": "A classic sudoku from Norway",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/RGbb2TQ4Bd"
+      ],
+      "date": "2019-07-09",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.8,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 717
+    },
+    {
+      "puzzle_id": "G_7VXwdc0ow",
+      "puzzle_title": "Easy enough ... if you can spot the trick",
+      "video_title": "Easy enough ... if you can spot the trick",
+      "author": null,
+      "sources": [
+        "https://cracking-the-cryptic.web.app/sudoku/RLDD8HfnTN"
+      ],
+      "date": "2019-06-23",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.0,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 730
     },
     {
       "puzzle_id": "LHeVtCTUhGI",
@@ -134226,25 +136269,6 @@
       "script_size": 708
     },
     {
-      "puzzle_id": "tpSKVUOlyRY",
-      "puzzle_title": "One Of The Best Sudoku Of 2018 From GMPuzzles!",
-      "video_title": "One Of The Best Sudoku Of 2018 From GMPuzzles!",
-      "author": "Thomas Snyder",
-      "sources": [],
-      "date": "2019-02-24",
-      "status": "no-source",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "solve_ms": null,
-      "iss_size": null,
-      "iss_url_length": null,
-      "script_size": null
-    },
-    {
       "puzzle_id": "_PDgklMapNE",
       "puzzle_title": "Classic Sudoku",
       "video_title": "Advanced Sudoku:  A Double Swordfish",
@@ -135681,25 +137705,6 @@
       "script_size": 1018
     },
     {
-      "puzzle_id": "VayOZz79fz8",
-      "puzzle_title": "Drop Area",
-      "video_title": "The US Puzzle Championship 2018:  Drop Area by John Bulten",
-      "author": "John Bulten",
-      "sources": [],
-      "date": "2018-06-25",
-      "status": "no-source",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "solve_ms": null,
-      "iss_size": null,
-      "iss_url_length": null,
-      "script_size": null
-    },
-    {
       "puzzle_id": "zPppoCiZ7wc",
       "puzzle_title": "Classic Sudoku",
       "video_title": "Diabolical sudoku:  uniqueness is your friend:  22 June 18",
@@ -136193,25 +138198,6 @@
       "script_size": 1238
     },
     {
-      "puzzle_id": "Rsr8Rln6jik",
-      "puzzle_title": "Solving a sudoku from gmpuzzles.com",
-      "video_title": "Solving a sudoku from gmpuzzles.com",
-      "author": null,
-      "sources": [],
-      "date": "2018-05-09",
-      "status": "no-source",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "solve_ms": null,
-      "iss_size": null,
-      "iss_url_length": null,
-      "script_size": null
-    },
-    {
       "puzzle_id": "YLmycJV6k1s",
       "puzzle_title": "Classic Sudoku",
       "video_title": "Cracking a puzzle recommended on Twitter",
@@ -136419,44 +138405,6 @@
       "iss_size": 176,
       "iss_url_length": 228,
       "script_size": 1173
-    },
-    {
-      "puzzle_id": "9tEK7k6jTmg",
-      "puzzle_title": "Tutorial with UK Sudoku Champion Tom Collyer",
-      "video_title": "Tutorial with UK Sudoku Champion Tom Collyer",
-      "author": "Thomas Snyder",
-      "sources": [],
-      "date": "2018-02-25",
-      "status": "no-source",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "solve_ms": null,
-      "iss_size": null,
-      "iss_url_length": null,
-      "script_size": null
-    },
-    {
-      "puzzle_id": "ZdbtPLI5q4I",
-      "puzzle_title": "Solving The Best Killer Sudoku you'll find anywhere",
-      "video_title": "Solving The Best Killer Sudoku you'll find anywhere",
-      "author": "Serkan Yurekli",
-      "sources": [],
-      "date": "2018-01-29",
-      "status": "no-source",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "solve_ms": null,
-      "iss_size": null,
-      "iss_url_length": null,
-      "script_size": null
     },
     {
       "puzzle_id": "f54CZrQUxMo",
