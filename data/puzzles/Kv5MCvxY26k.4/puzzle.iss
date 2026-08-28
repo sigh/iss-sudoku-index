@@ -1,0 +1,13 @@
+.~R1C4_6~R1C5_7~R1C6_8~R2C2_1~R4C4_4~R4C6_1~R6C4_7~R6C6_6~R8C8_9~R9C4_5~R9C5_6~R9C6_7
+.NumberedRoom~R1~1~
+.NumberedRoom~C1~1~
+.NumberedRoom~R3~6~6
+.NumberedRoom~C3~6~
+.NumberedRoom~C5~2~3
+.NumberedRoom~R5~9~9
+.NumberedRoom~C2~~6
+.NumberedRoom~R7~5~5
+.NumberedRoom~C7~~3
+.NumberedRoom~C8~5~
+.NumberedRoom~C9~~2
+.NumberedRoom~R9~~2

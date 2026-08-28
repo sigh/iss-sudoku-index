@@ -1,0 +1,16 @@
+.~R5C5_4
+.Sandwich~18~R1
+.Sandwich~0~R2
+.Sandwich~21~R3
+.Sandwich~15~R5
+.Sandwich~26~R7
+.Sandwich~13~R8
+.Sandwich~15~R9
+.Sandwich~0~C1
+.Sandwich~0~C2
+.Sandwich~0~C3
+.Sandwich~0~C5
+.Sandwich~10~C7
+.Sandwich~23~C8
+.Sandwich~22~C9
+.AntiConsecutive

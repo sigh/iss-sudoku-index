@@ -1,0 +1,9 @@
+.AntiKnight
+.LittleKiller~24~R1C3
+.LittleKiller~52~R3C1
+.LittleKiller~17~R4C1
+.LittleKiller~30~R5C1
+.LittleKiller~32~R6C1
+.LittleKiller~16~R7C1
+.LittleKiller~9~R8C1
+.LittleKiller~19~R9C7

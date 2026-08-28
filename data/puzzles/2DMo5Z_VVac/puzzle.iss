@@ -1,0 +1,12 @@
+.Whisper~5~R1C1~R2C2
+.Whisper~5~R2C4~R1C5~R2C6
+.Whisper~5~R2C8~R1C9
+.Whisper~5~R4C2~R5C2~R6C2
+.Whisper~5~R4C9~R5C9~R6C9
+.Whisper~5~R3C3~R4C4~R5C4~R5C5~R5C6~R4C6~R3C7
+.Whisper~5~R7C3~R8C2~R9C3~R9C4~R9C5~R8C6~R7C5
+.Sandwich~20~R3
+.Sandwich~27~R5
+.Sandwich~9~R9
+.Sandwich~3~C2
+.Sandwich~35~C5

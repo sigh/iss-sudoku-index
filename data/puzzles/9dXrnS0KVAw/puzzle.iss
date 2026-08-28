@@ -1,0 +1,12 @@
+.Diagonal~-1
+.Diagonal~1
+.LittleKiller~19~R1C3
+.LittleKiller~28~R1C4
+.LittleKiller~17~R1C5
+.LittleKiller~21~R4C9
+.LittleKiller~14~R8C9
+.LittleKiller~11~R9C7
+.LittleKiller~12~R9C6
+.LittleKiller~13~R8C1
+.LittleKiller~9~R7C1
+.LittleKiller~66~R2C1

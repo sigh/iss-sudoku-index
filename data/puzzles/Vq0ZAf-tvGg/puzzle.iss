@@ -1,0 +1,12 @@
+.Sandwich~20~R1
+.Sandwich~20~R4
+.Sandwich~33~R5
+.Sandwich~0~R7
+.Sandwich~27~C4
+.Sandwich~13~C6
+.Sandwich~13~C9
+.Arrow~R4C4~R3C3~R2C2
+.Arrow~R4C6~R3C7~R2C8~R1C9
+.Arrow~R6C4~R7C3~R8C2~R9C1
+.Arrow~R6C6~R7C7~R8C8~R9C9
+.Pair~-n_4H-gH4AGg~_ascend~R2C2~R3C3~~R1C9~R2C8~R3C7~~R9C1~R8C2~R7C3~~R9C9~R8C8~R7C7

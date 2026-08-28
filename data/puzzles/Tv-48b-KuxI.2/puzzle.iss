@@ -1,0 +1,2 @@
+.Thermo~R3C7~R2C7
+.Thermo~R7C4~R7C3~R7C2

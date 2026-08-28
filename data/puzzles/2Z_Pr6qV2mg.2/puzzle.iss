@@ -1,0 +1,16 @@
+.Palindrome~R5C1~R4C1~R3C2~R2C3~R1C4
+.Palindrome~R5C9~R6C9~R7C8~R8C7~R9C6
+.Palindrome~R4C9~R3C8~R2C7~R1C6~R1C5
+.Palindrome~R9C5~R9C4~R8C3~R7C2~R6C1
+.Palindrome~R5C3~R6C4~R7C5
+.Palindrome~R5C7~R4C6~R3C5
+.Quad~R4C1~1~2~3~4
+.Quad~R1C5~2~3~4~5
+.Quad~R5C8~3~4~5~6
+.Quad~R8C4~4~5~6~7
+.Quad~R6C3~2~3~6~8
+.Quad~R3C6~1~2~6~9
+.Quad~R1C8~3~6~8~9
+.Quad~R8C1~3~7~8~9
+.Quad~R5C5~1~2~4~7
+.Quad~R4C4~4~5~6~8

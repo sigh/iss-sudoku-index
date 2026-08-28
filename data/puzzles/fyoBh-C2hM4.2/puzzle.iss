@@ -1,0 +1,14 @@
+.ContainExact~1_2_3~R4C4~R5C3~R5C4
+.ContainExact~7_8_9~R5C6~R5C7~R6C6
+.ContainExact~6_7_8~R6C7~R6C8~R7C7
+.ContainExact~2_3_4~R3C3~R4C2~R4C3
+.ContainExact~5_6_7~R3C8~R4C8~R4C9
+.ContainExact~4_5~R1C7~R1C8
+.ContainExact~6_8~R9C2~R9C3
+.ContainExact~3_4_5~R6C1~R6C2~R7C2
+.ContainExact~2_6_7_8~R1C3~R1C4~R2C3~R2C4
+.ContainExact~2_3_4_6~R2C6~R2C7~R3C6~R3C7
+.ContainExact~1_3_5_6~R8C8~R8C9~R9C8~R9C9
+.ContainExact~4_5_7_9~R1C1~R1C2~R2C1~R2C2
+.ContainExact~4_5_6_7~R7C3~R7C4~R8C3~R8C4
+.ContainExact~3_4_5_8~R8C6~R8C7~R9C6~R9C7

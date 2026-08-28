@@ -1,0 +1,9 @@
+.Palindrome~R5C1~R6C1~R6C2~R5C2~R4C3~R3C4~R2C5~R1C5~R1C4~R2C4
+.Palindrome~R8C6~R9C6~R9C5~R8C5~R7C6~R6C7~R5C8~R4C8~R4C9~R5C9
+.Quad~R1C4~1~2~3
+.Quad~R3C3~3~4~5
+.Quad~R8C5~7~8~9
+.Quad~R6C6~5~6~7
+.LittleKiller~9~R1C4
+.LittleKiller~31~R9C6
+.LittleKiller~33~R1C9

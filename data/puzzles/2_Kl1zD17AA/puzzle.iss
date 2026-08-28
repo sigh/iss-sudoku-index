@@ -1,0 +1,17 @@
+.Sandwich~19~R1
+.Sandwich~4~R2
+.Sandwich~7~R3
+.Sandwich~35~R5
+.Sandwich~19~R7
+.Sandwich~4~R8
+.Sandwich~7~R9
+.Sandwich~19~C1
+.Sandwich~5~C2
+.Sandwich~0~C3
+.Sandwich~35~C5
+.Sandwich~23~C7
+.Sandwich~8~C9
+.LittleKiller~11~R9C7
+.LittleKiller~8~R9C8
+.LittleKiller~49~R1C1
+.LittleKiller~29~R5C9

@@ -1,0 +1,14 @@
+.Renban~R4C8~R4C7~R5C6
+.Renban~R2C7~R1C8~R1C9
+.Renban~R2C5~R2C4~R3C3~R3C2
+.Renban~R6C2~R6C3~R5C4
+.Renban~R8C5~R8C6~R7C7~R7C8
+.Renban~R8C3~R9C2~R9C1
+.Quad~R7C5~1~2~3~4
+.Quad~R2C4~6~7~8~9
+.Quad~R6C7~5~6~7~8
+.Quad~R3C2~2~3~4~5
+.Quad~R6C2~4~5~6~8
+.Quad~R3C7~1~4~5~6
+.Quad~R1C8~4~5~7~9
+.Quad~R8C1~1~5~7~9

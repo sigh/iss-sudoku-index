@@ -1,0 +1,3 @@
+.Shape~6x6
+.AntiKnight
+.~R1C2_6~R1C5_3~R2C3_1~R3C3_5~R3C4_2~R6C1_1~R6C6_4

@@ -1,0 +1,3 @@
+.~R1C2_2~R1C8_3~R2C1_1~R2C9_4~R3C4_2~R3C6_3~R4C3_1~R4C7_4~R6C3_8~R6C7_5~R7C4_7~R7C6_6~R8C1_8~R8C9_5~R9C2_7~R9C8_6
+.Pair~qqqqqqqqqqqqqC~_col3-top%20parity%20change~R2C3~R3C3~_col5-top%20parity%20change~R5C5~R6C5~_row3-left%20parity%20change~R3C2~R3C3~_row3-right%20parity%20change~R3C8~R3C7~_row4-left%20parity%20change~R4C2~R4C3~_row5-left%20parity%20change~R5C5~R5C6~_row7-right%20parity%20change~R7C7~R7C6
+.Pair~VVVVVVVVVVVVVF~_col3-top%20same-parity%20run~R1C3~R2C3~_col5-top%20same-parity%20run~R1C5~R2C5~R3C5~R4C5~R5C5~_row3-left%20same-parity%20run~R3C1~R3C2~_row3-right%20same-parity%20run~R3C9~R3C8~_row4-left%20same-parity%20run~R4C1~R4C2~_row5-left%20same-parity%20run~R5C1~R5C2~R5C3~R5C4~R5C5~_row7-right%20same-parity%20run~R7C9~R7C8~R7C7

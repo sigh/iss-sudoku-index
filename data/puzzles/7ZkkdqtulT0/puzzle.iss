@@ -1,0 +1,14 @@
+.~R3C4_4
+.AntiKing
+.AntiKnight
+.WhiteDot~R3C3~R4C3
+.WhiteDot~R3C5~R4C5
+.WhiteDot~R6C4~R7C4
+.WhiteDot~R6C6~R7C6
+.Replicate~_7f_7f_7f_7f_D
+.Pair~9X_1f9X_1f9X_F~_anti-consecutive~R1C1~R1C2
+.End
+.Replicate~___r____6___
+.Pair~9X_1f9X_1f9X_F~_anti-consecutive~R1C1~R2C1
+.End
+.NFA~VgEF_ggxBRhyCQB4CizDfwUcaegj7CjEEk1Kocqsv7ijUFGGWv8Weksw2477jEE2XHn_8aiou06_AAYQDEAYwDIAZQFMAogFOApAJCBIwFKBJQRKCIQRIEIgRQEIxBSIIiBCgJgECCARACgAQgCAQSADAAQICA~_green%20product%20%3D%20blue%202-digit%20number~R3C3~R3C4~R4C4~R4C5

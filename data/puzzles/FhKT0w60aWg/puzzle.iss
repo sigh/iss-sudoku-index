@@ -1,0 +1,10 @@
+.~R2C2_5~R2C3_9~R7C8_2~R7C9_5
+.Thermo~R6C4~R6C5
+.Thermo~R2C8~R2C9
+.XSum~C6~6~
+.XSum~R6~5~
+.Sandwich~6~C6
+.Sandwich~5~R6
+.Skyscraper~C6~6~
+.Skyscraper~R6~5~
+.AntiKnight

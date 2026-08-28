@@ -1,0 +1,17 @@
+.~R5C5_9
+.AntiKnight
+.Diagonal~1
+.Diagonal~-1
+.Sandwich~6~C1
+.Sandwich~29~C3
+.Sandwich~17~C4
+.Sandwich~8~C5
+.Sandwich~0~C6
+.Sandwich~0~C7
+.Sandwich~12~C9
+.Sandwich~8~R2
+.Sandwich~28~R3
+.Sandwich~35~R4
+.Sandwich~27~R6
+.Sandwich~16~R7
+.Sandwich~0~R8

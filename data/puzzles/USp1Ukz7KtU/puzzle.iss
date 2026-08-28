@@ -1,0 +1,12 @@
+.StrictXV
+.X~R2C4~R2C5
+.X~R6C4~R7C4
+.X~R7C5~R7C6
+.V~R5C1~R6C1
+.V~R9C4~R9C5
+.Quad~R2C2~1~2~3~4
+.Quad~R2C7~1~2~3~5
+.Quad~R7C2~1~2~3~5
+.Quad~R7C7~1~2~3~4
+.Quad~R4C3~5~7
+.Quad~R5C6~5~7

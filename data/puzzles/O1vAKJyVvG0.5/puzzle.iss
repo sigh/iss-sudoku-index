@@ -1,0 +1,9 @@
+.XSum~R1~3~42
+.XSum~R3~40~5
+.XSum~R4~6~39
+.XSum~R6~36~9
+.XSum~R7~10~35
+.XSum~R9~31~14
+.XSum~C3~14~
+.XSum~C5~20~25
+.XSum~C7~~30

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-27T13:54:52.211563+00:00",
+  "generated_at": "2026-08-29T00:45:47.064840+00:00",
   "rows": [
     {
       "puzzle_id": "xxfHKmrfsE4",
@@ -118,17 +118,19 @@
         "https://sudokupad.app/cpuk8wsdg7"
       ],
       "date": "2026-08-22",
-      "status": "decode-failed",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
-      "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "solve_ms": null,
-      "iss_size": null,
-      "iss_url_length": null,
-      "script_size": null
+      "status": "validated",
+      "constraint_types": [
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 4.3,
+      "iss_size": 643,
+      "iss_url_length": 717,
+      "script_size": 2807
     },
     {
       "puzzle_id": "bC9kxrikDF4",

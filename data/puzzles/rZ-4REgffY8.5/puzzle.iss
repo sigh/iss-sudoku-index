@@ -1,0 +1,17 @@
+.~R1C5_9~R5C1_8~R5C9_3~R9C5_4
+.ContainAtLeast~1_2~R1C1~R1C2~R1C3
+.ContainAtLeast~1_2~R1C9~R2C9~R3C9
+.ContainAtLeast~1_2~R9C7~R9C8~R9C9
+.ContainAtLeast~1_2~R7C1~R8C1~R9C1
+.ContainAtLeast~3_4~R1C2~R2C2~R3C2
+.ContainAtLeast~4_5~R2C7~R2C8~R2C9
+.ContainAtLeast~5_6~R7C8~R8C8~R9C8
+.ContainAtLeast~6_7~R8C1~R8C2~R8C3
+.ContainAtLeast~5_6~R3C1~R3C2~R3C3
+.ContainAtLeast~6_7~R1C7~R2C7~R3C7
+.ContainAtLeast~7_8~R7C7~R7C8~R7C9
+.ContainAtLeast~4_5~R7C3~R8C3~R9C3
+.ContainAtLeast~1_3~R1C4~R2C4~R3C4
+.ContainAtLeast~4_5~R6C1~R6C2~R6C3
+.ContainAtLeast~1_7~R4C7~R4C8~R4C9
+.ContainAtLeast~2_3~R7C6~R8C6~R9C6

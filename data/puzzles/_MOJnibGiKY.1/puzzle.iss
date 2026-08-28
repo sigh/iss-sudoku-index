@@ -1,0 +1,16 @@
+.~R1C3_8~R1C5_7~R2C6_4~R3C1_3~R5C1_4~R5C8_5~R6C2_1~R6C7_7~R6C9_3~R7C6_6~R8C5_1~R8C9_2~R9C6_8~R9C8_9
+.FullRank~R1~1~
+.FullRank~R2~35~
+.FullRank~R4~32~
+.FullRank~R7~8~30
+.FullRank~R5~~36
+.FullRank~R8~~6
+.FullRank~R9~~3
+.FullRank~C1~4~
+.FullRank~C2~7~
+.FullRank~C3~29~
+.FullRank~C7~33~
+.FullRank~C5~~5
+.FullRank~C6~~31
+.FullRank~C8~~34
+.FullRank~C9~~2

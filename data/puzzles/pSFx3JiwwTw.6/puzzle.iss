@@ -1,0 +1,7 @@
+.Shape~6x6
+.~R1C1_1~R1C6_3~R2C1_5~R2C3_3~R3C6_2~R6C1_2~R6C6_4
+.Palindrome~R1C3~R1C4~R2C4
+.Palindrome~R2C2~R2C3~R3C3
+.Palindrome~R4C3~R4C2~R5C2
+.Palindrome~R5C3~R6C3~R6C4
+.Palindrome~R4C5~R4C6~R5C6

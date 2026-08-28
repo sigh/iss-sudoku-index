@@ -1,0 +1,10 @@
+.~R2C1_3~R2C7_2~R3C9_8~R4C3_7~R8C5_1~R8C6_7
+.V~R5C4~R6C4
+.X~R5C5~R6C5
+.Sum~15~R5C6~R6C6
+.Replicate~_7f_7f_7f_7f_D
+.Pair~3bv927v_e7t3eH~_not%20V%2FX%2FXV~R1C1~R1C2
+.End
+.Replicate~______H_____
+.Pair~3bv927v_e7t3eH~_not%20V%2FX%2FXV~R1C1~R2C1
+.End

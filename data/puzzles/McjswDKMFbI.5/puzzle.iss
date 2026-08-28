@@ -1,0 +1,14 @@
+.Between~R9C6~R8C7~R7C8~R6C9
+.Between~R6C1~R7C2~R8C3~R9C4
+.Between~R1C6~R2C7~R3C8~R4C9
+.Between~R4C1~R3C2~R2C3~R1C4
+.Quad~R2C2~1~2~8~9
+.Quad~R7C7~1~3~7~9
+.Quad~R2C7~2~3~6~8
+.Quad~R7C2~2~4~7~8
+.Quad~R4C4~1~2~4~5
+.Quad~R5C5~5~6~8~9
+.Quad~R3C5~2~3~4~5
+.Quad~R6C4~3~7~8~9
+.Quad~R4C6~3~5~7~8
+.Quad~R5C3~1~3~4~7

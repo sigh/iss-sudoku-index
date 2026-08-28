@@ -1,0 +1,15 @@
+.BlackDot~R6C6~R7C6
+.Sandwich~33~C5
+.Sandwich~29~R6
+.Sandwich~28~C6
+.Sandwich~26~R5
+.Sandwich~17~R3
+.Sandwich~30~C3
+.Sandwich~13~C7
+.LittleKiller~33~R9C6
+.LittleKiller~29~R5C9
+.LittleKiller~28~R1C5
+.LittleKiller~26~R6C1
+.LittleKiller~17~R1C2
+.LittleKiller~30~R9C4
+.LittleKiller~13~R9C8

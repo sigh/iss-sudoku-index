@@ -1,0 +1,15 @@
+.Shape~6x6
+.NoBoxes
+.ChaosConstruction
+.~R1C1_1~R2C2_2~R3C3_3~R4C4_4~R5C5_5~R6C6_6~R6C5_2
+.AllDifferent~CC2~CC8
+.AllDifferent~CC7~CC8
+.AllDifferent~CC8~CC14
+.AllDifferent~CC3~CC4
+.AllDifferent~CC15~CC21
+.AllDifferent~CC16~CC22
+.AllDifferent~CC21~CC22
+.AllDifferent~CC33~CC34
+.AllDifferent~CC23~CC29
+.AllDifferent~CC28~CC29
+.AllDifferent~CC29~CC35

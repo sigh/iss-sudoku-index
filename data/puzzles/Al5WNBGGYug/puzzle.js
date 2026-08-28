@@ -3,75 +3,75 @@
 // Video: https://www.youtube.com/watch?v=Al5WNBGGYug
 // Source: https://app.crackingthecryptic.com/webapp/L8jmdmmJP8
 
-// Normal sudoku rules apply. A drawn V between two cells means their digits
-// sum to 5; a drawn X means they sum to 10; no drawn mark between two cells
-// means neither sum is allowed. "Knapp daneben" ("just missed it") makes
-// every drawn V/X hint wrong: the true relation at a marked edge is not the
-// one shown. Unmarked edges carry no hint to begin with, so they are not
-// twisted and keep the plain "neither 5 nor 10" rule stated above.
+// Normal sudoku rules apply. A V between two cells means the two digits sum to
+// 5; an X means they sum to 10; between two cells with no sign, neither holds.
+// All hints are "knapp daneben": each drawn hint is one before or one after the
+// symbol that should be there.
 //
-// The 101 edges below carry no drawn mark, so digits there must not sum to
-// 5 or 10. That is the only rule this script encodes -- see the omitted
-// marked-edge rule below and the result's omitted_rules/notes.
+// Nothing drawn on this board is a V, an X, or a legal digit. Every edge mark is
+// the letter W, and the two cell marks are a 0 and a 9. Reading each hint one
+// step off in its own sequence:
+//   - W sits between V and X in the alphabet, so a marked edge carries a V or an
+//     X and the mark does not say which: that pair sums to 5 or to 10.
+//   - the cell marked 0 is one step from -1 or 1, and only 1 is a digit.
+//   - the cell marked 9 is one step from 8 or 10, and only 8 is a digit.
+// An edge with no mark carries no sign, so the negative rule applies there.
 
-// Drawn hint-mark edges, transcribed from the source's 43 overlay positions
-// (all identical white-on-white "W" text boxes -- position only, no V/X
-// letter is recoverable, so it is unknown which are V and which are X).
-// Used only to exclude these edges from the no-sign-edge rule below: since
-// "knapp daneben" makes a marked edge's true relation "not the one shown",
-// and the shown one is unknown, the only sound assertion per marked edge is
-// Or(not-V, not-X), a tautology (a sum cannot equal both 5 and 10 at once).
-// No constraint is added for these 43 edges.
-const drawnMarkedEdges = [
-  ['R1C1', 'R1C2'], ['R1C2', 'R1C3'], ['R1C1', 'R2C1'], ['R2C2', 'R3C2'],
-  ['R2C2', 'R2C3'], ['R3C2', 'R3C3'], ['R3C3', 'R4C3'], ['R2C4', 'R2C5'],
-  ['R2C4', 'R3C4'], ['R3C4', 'R3C5'], ['R3C5', 'R4C5'], ['R1C5', 'R1C6'],
-  ['R1C6', 'R1C7'], ['R2C6', 'R2C7'], ['R2C7', 'R3C7'], ['R3C6', 'R3C7'],
-  ['R1C9', 'R2C9'], ['R2C9', 'R3C9'], ['R3C8', 'R3C9'], ['R5C8', 'R6C8'],
-  ['R4C3', 'R4C4'], ['R4C1', 'R5C1'], ['R4C4', 'R5C4'], ['R4C5', 'R5C5'],
-  ['R5C2', 'R5C3'], ['R5C5', 'R5C6'], ['R5C4', 'R6C4'], ['R6C4', 'R7C4'],
-  ['R6C5', 'R7C5'], ['R6C4', 'R6C5'], ['R6C6', 'R6C7'], ['R6C1', 'R7C1'],
-  ['R8C1', 'R9C1'], ['R7C2', 'R7C3'], ['R7C3', 'R8C3'], ['R9C2', 'R9C3'],
-  ['R7C4', 'R7C5'], ['R7C5', 'R7C6'], ['R7C6', 'R7C7'], ['R8C6', 'R9C6'],
-  ['R9C7', 'R9C8'], ['R8C8', 'R8C9'], ['R8C9', 'R9C9'],
+// The 43 drawn edge marks, transcribed from the board's edge overlays (all 43
+// are the same white "W" mark; only their positions differ).
+const markedEdges = [
+  ['R1C1', 'R1C2'], ['R1C1', 'R2C1'], ['R1C2', 'R1C3'], ['R1C5', 'R1C6'],
+  ['R1C6', 'R1C7'], ['R1C9', 'R2C9'], ['R2C2', 'R2C3'], ['R2C2', 'R3C2'],
+  ['R2C4', 'R2C5'], ['R2C4', 'R3C4'], ['R2C6', 'R2C7'], ['R2C7', 'R3C7'],
+  ['R2C9', 'R3C9'], ['R3C2', 'R3C3'], ['R3C3', 'R4C3'], ['R3C4', 'R3C5'],
+  ['R3C5', 'R4C5'], ['R3C6', 'R3C7'], ['R3C8', 'R3C9'], ['R4C1', 'R5C1'],
+  ['R4C3', 'R4C4'], ['R4C4', 'R5C4'], ['R4C5', 'R5C5'], ['R5C2', 'R5C3'],
+  ['R5C4', 'R6C4'], ['R5C5', 'R5C6'], ['R5C8', 'R6C8'], ['R6C1', 'R7C1'],
+  ['R6C4', 'R6C5'], ['R6C4', 'R7C4'], ['R6C5', 'R7C5'], ['R6C6', 'R6C7'],
+  ['R7C2', 'R7C3'], ['R7C3', 'R8C3'], ['R7C4', 'R7C5'], ['R7C5', 'R7C6'],
+  ['R7C6', 'R7C7'], ['R8C1', 'R9C1'], ['R8C6', 'R9C6'], ['R8C8', 'R8C9'],
+  ['R8C9', 'R9C9'], ['R9C2', 'R9C3'], ['R9C7', 'R9C8'],
 ];
-const markedKey = (a, b) => [a, b].sort().join('-');
-const markedSet = new Set(drawnMarkedEdges.map(([a, b]) => markedKey(a, b)));
 
-// Every orthogonally-adjacent cell pair in the grid, minus the 43 marked
-// edges above, is a "no sign" edge: sum(digits) !== 5 and !== 10. Split by
-// direction (same row vs same column) so each direction can be applied as one
-// Replicate template instead of one Pair per edge.
-const graph = cellGraph('9x9');
-const seen = new Set();
-const horizontalOrigins = []; // left cell of each same-row no-sign edge
-const verticalOrigins = [];   // top cell of each same-column no-sign edge
-for (const cell of graph.cells()) {
-  for (const neighbour of graph.neighbours(cell)) {
-    const key = markedKey(cell, neighbour);
-    if (seen.has(key) || markedSet.has(key)) continue;
-    seen.add(key);
-    const { row: r1, col: c1 } = parseCellId(cell);
-    const { row: r2, col: c2 } = parseCellId(neighbour);
-    // Store with the top/left cell first so the two direction groups each
-    // share one fixed relative offset (+1 column, or +1 row).
-    if (r1 === r2) {
-      horizontalOrigins.push(c1 < c2 ? cell : neighbour);
-    } else {
-      verticalOrigins.push(r1 < r2 ? cell : neighbour);
+// Every orthogonally adjacent pair of the 9x9 grid.
+function allAdjacentPairs() {
+  const pairs = [];
+  for (let r = 1; r <= 9; r++) {
+    for (let c = 1; c <= 9; c++) {
+      if (c < 9) pairs.push([makeCellId(r, c), makeCellId(r, c + 1)]);
+      if (r < 9) pairs.push([makeCellId(r, c), makeCellId(r + 1, c)]);
     }
   }
+  return pairs;
 }
 
-const notFiveOrTenKey = Pair.fnToKey((a, b) => a + b !== 5 && a + b !== 10, 9);
-const horizontalTemplate =
-  new Pair(notFiveOrTenKey, 'no-sign edge: not 5, not 10', 'R1C1', 'R1C2');
-const verticalTemplate =
-  new Pair(notFiveOrTenKey, 'no-sign edge: not 5, not 10', 'R1C1', 'R2C1');
+const edgeKey = pair => [...pair].sort().join('-');
+const marked = new Set(markedEdges.map(edgeKey));
+const unmarkedEdges = allAdjacentPairs().filter(p => !marked.has(edgeKey(p)));
+
+// No sign on this edge: neither the V relation nor the X relation holds.
+const noSignKey = Pair.fnToKey((a, b) => a + b !== 5 && a + b !== 10, 9);
+
+const graph = cellGraph('9x9');
 
 return [
   new Shape('9x9'),
 
-  graph.makeReplicate(horizontalTemplate, horizontalOrigins),
-  graph.makeReplicate(verticalTemplate, verticalOrigins),
+  // The two "knapp daneben" digit hints, resolved above.
+  new Given('R6C8', 1),
+  new Given('R9C4', 8),
+
+  ...markedEdges.map(([a, b]) => new Or([new V(a, b), new X(a, b)])),
+
+  // Each unmarked edge is a shifted copy of one template pair: one template for
+  // the horizontal offset, one for the vertical. (StrictXV cannot serve here --
+  // it rejects V/X constraints that sit inside an Or.)
+  graph.makeReplicate(
+    new Pair(noSignKey, 'no sign', 'R1C1', 'R1C2'),
+    unmarkedEdges.filter(([a, b]) => parseCellId(a).row === parseCellId(b).row)
+      .map(([a]) => a)),
+  graph.makeReplicate(
+    new Pair(noSignKey, 'no sign', 'R1C1', 'R2C1'),
+    unmarkedEdges.filter(([a, b]) => parseCellId(a).col === parseCellId(b).col)
+      .map(([a]) => a)),
 ];

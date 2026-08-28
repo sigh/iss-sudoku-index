@@ -1,0 +1,12 @@
+.LittleKiller~37~R1C6
+.LittleKiller~53~R9C2
+.LittleKiller~25~R4C1
+.LittleKiller~46~R2C1
+.LittleKiller~40~R6C9
+.LittleKiller~24~R9C4
+.LittleKiller~48~R7C9
+.LittleKiller~37~R1C7
+.GreaterThan~R2C5~R1C5~R3C5~R2C4~R2C6
+.GreaterThan~R5C8~R4C8~R6C8~R5C7~R5C9
+.GreaterThan~R8C5~R7C5~R9C5~R8C4~R8C6
+.GreaterThan~R5C2~R4C2~R6C2~R5C1~R5C3

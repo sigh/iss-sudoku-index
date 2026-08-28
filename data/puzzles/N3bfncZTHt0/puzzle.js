@@ -3,104 +3,106 @@
 // Video: https://www.youtube.com/watch?v=N3bfncZTHt0
 // Source: https://app.crackingthecryptic.com/sudoku/mr3fHnMfQp
 
-// Standard 9x9 sudoku, plus a shading: shaded cells are orthogonally
-// connected; no 2x2 block is entirely shaded or entirely unshaded; outside
-// clues give the sum of the shaded digits in that row/column; every circled
-// cell is shaded; and a circled cell's own digit equals the number of shaded
-// cells (itself included) in its own box.
+// Normal sudoku rules apply, with one given: R5C5 = 4. Some cells must be
+// shaded, so that:
+//   1) all shaded cells are orthogonally connected;
+//   2) no 2x2 region is entirely shaded or entirely unshaded;
+//   3) no group of unshaded cells is enclosed by shaded cells;
+//   4) the clue outside a row or column is the sum of that line's shaded digits;
+//   5) all circled cells are shaded;
+//   6) the digit in a circle is the number of shaded cells in its box.
 //
-// Omitted: "no group of unshaded cells is enclosed by shaded cells." ISS has
-// no primitive for "every component of a shading class reaches the grid
-// border" when that class may hold several components (here, the unshaded
-// side, which this ruleset does not require to be a single region) --
-// blocker #861 (constraint-gap, CONSOLIDATED ASK, "boundary/anchor
-// reachability for a class with several components").
+// The alphabet is widened to 0-9 so that an auxiliary cell can hold 0; the grid
+// cells are restricted back to 1-9 below.
 
 const SHADED = 1;
 const UNSHADED = 2;
 
-// Widened so the shading-conditioned row/column sums (below) have a real 0
-// to fall back on for unshaded cells; grid cells are pinned back to 1-9.
 const shape = new Shape('9x9', '0-9');
 const graph = cellGraph(shape);
+const gridCells = graph.cells();
 
-const shade = graph.makeOverlay('VS');
-const eff = graph.makeOverlay('VE'); // shaded-value-or-0, for the outside sums
+// --- Shading layer -------------------------------------------------------
+// Rule 3 forbids an unshaded group that is walled in, i.e. every unshaded cell
+// must reach the outside of the grid through unshaded cells. So the shading
+// layer is an 11x11 board: the 9x9 grid inset by one, surrounded by a border
+// ring of cells that are permanently unshaded. Rule 3 is then exactly "the
+// unshaded cells form one connected region", the ring being part of it, and
+// rule 1 is the same statement for the shaded cells.
+const shadeLayer = cellGraph('11x11').makeOverlay('VS');
+const shadeVar = shadeLayer.toVar('shading');
+// The grid sits inside the ring, so grid RxCy is layer cell (x + 1, y + 1).
+const shadeAt = (cell) => {
+  const { row, col } = parseCellId(cell);
+  return shadeVar.cell(row + 1, col + 1);
+};
+const gridShade = new Set(gridCells.map(shadeAt));
+const ringShade = shadeLayer.cells().filter(cell => !gridShade.has(cell));
 
+const shading = [
+  shadeVar,
+  shadeLayer.makeReplicate(new Given(shadeVar.cell(1), SHADED, UNSHADED)),
+  ...ringShade.map(cell => new Given(cell, UNSHADED)),
+  new ConnectedValues('VS', SHADED),
+  new ConnectedValues('VS', UNSHADED),
+];
+
+// --- Shaded-digit layer --------------------------------------------------
+// One cell per grid cell, holding that cell's digit when it is shaded and 0
+// when it is not, so that rule 4 is a plain sum along a row or column.
+const weight = graph.makeOverlay('VW');
+// The two halves of that definition: the weight is the cell's own digit or 0,
+// and it is non-zero exactly on the shaded cells.
+const digitKey = Pair.fnToKey((digit, w) => w === 0 || w === digit, shape);
+const shadeKey = Pair.fnToKey((s, w) => (s === SHADED) === (w !== 0), shape);
+
+const weights = [
+  weight.toVar('shaded digit'),
+  ...gridCells.map(
+    cell => new Pair(digitKey, 'digit or 0', cell, weight.at(cell))),
+  ...gridCells.map(
+    cell => new Pair(shadeKey, 'nonzero iff shaded', shadeAt(cell), weight.at(cell))),
+];
+
+// --- Rule 2 --------------------------------------------------------------
+// Every 2x2 block of the grid must show both shades.
+const noMonochrome2x2 = gridCells
+  .map(cell => graph.block(cell, 2, 2))
+  .filter(block => block !== null)
+  .map(block => new ContainAtLeast(
+    `${SHADED}_${UNSHADED}`, ...block.map(shadeAt)));
+
+// --- Rule 4 --------------------------------------------------------------
+// Clues printed to the left of each row and above each column, in order.
+const rowClues = [17, 38, 9, 44, 13, 40, 24, 43, 8];
+const colClues = [38, 21, 30, 30, 7, 15, 28, 38, 29];
+
+const lineSums = [
+  ...rowClues.map((clue, i) => new Sum(clue, ...weight.row(i + 1))),
+  ...colClues.map((clue, i) => new Sum(clue, ...weight.column(i + 1))),
+];
+
+// --- Rules 5 and 6 -------------------------------------------------------
+// Circled cells, read off the drawn circles.
 const circles = ['R2C5', 'R3C3', 'R3C8', 'R5C1', 'R5C8', 'R8C5', 'R9C1', 'R9C8'];
 
-// left-to-right outside clues, printed top-to-bottom -> row sums R1..R9
-const rowSums = [17, 38, 9, 44, 13, 40, 24, 43, 8];
-// top outside clues, printed left-to-right -> column sums C1..C9
-const colSums = [38, 21, 30, 30, 7, 15, 28, 38, 29];
-
-// --- Domains ---
-const domains = [
-  graph.makeReplicate(new Given(graph.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-  shade.makeReplicate(new Given(shade.cells()[0], SHADED, UNSHADED)),
-];
-
-// --- Shading connectivity and anti-monochrome-2x2 ---
-const connectivity = [
-  new ConnectedValues('VS', SHADED),
-];
-
-// "Not all four the same shade" over every 2x2 block: with a 2-valued
-// domain, the corner cell differing from any one neighbour already breaks
-// the monochrome block, and the converse holds too (if none differ, all four
-// are equal to the corner).
-const noMonoBlocks = graph.cells()
-  .map(cell => graph.block(cell, 2, 2))
-  .filter(Boolean)
-  .map(([tl, tr, bl, br]) => new Or([
-    new AllDifferent(...shade.at([tl, tr])),
-    new AllDifferent(...shade.at([tl, bl])),
-    new AllDifferent(...shade.at([tl, br])),
-  ]));
-
-// --- Circled cells: shaded, and digit == shaded-cell count of their box ---
-const boxes = graph.boxes();
-const boxOf = (cell) => boxes.find(box => box.includes(cell));
-
-const circleShaded = circles.map(cell => new Given(shade.at(cell), SHADED));
-
-// digit + sum(shade values over the box) == 18 iff digit == shaded count:
-// each shaded cell contributes SHADED=1 and each unshaded UNSHADED=2, so
-// summing shade values over the 9-cell box gives 18 - (shaded count); adding
-// the circled cell's own digit to that must reach 18 exactly when the digit
-// equals the shaded count.
-const circleCounts = circles.map(
-  cell => new Sum(18, cell, ...shade.at(boxOf(cell))));
-
-// --- Outside clues: sum of shaded digits per row/column ---
-// eff.at(cell) == digit at cell when shaded, 0 when unshaded.
-const eqKey = Pair.fnToKey((a, b) => a === b, shape);
-const effRelations = graph.cells().map(cell => new Or([
-  new And([
-    new Given(shade.at(cell), SHADED),
-    new Pair(eqKey, 'eff equals digit when shaded', cell, eff.at(cell)),
-  ]),
-  new And([
-    new Given(shade.at(cell), UNSHADED),
-    new Given(eff.at(cell), 0),
-  ]),
-]));
-
-const outsideSums = [
-  ...rowSums.map((total, i) => new Sum(total, ...eff.at(graph.row(i + 1)))),
-  ...colSums.map((total, i) => new Sum(total, ...eff.at(graph.column(i + 1)))),
+const circleRules = [
+  ...circles.map(cell => new Given(shadeAt(cell), SHADED)),
+  // A box's nine shading cells sum to 9*UNSHADED minus its shaded count, so
+  // rule 6 is "circled digit + that sum = 9*UNSHADED".
+  ...circles.map(cell => new Sum(
+    9 * UNSHADED, cell,
+    ...graph.boxes().find(box => box.includes(cell)).map(shadeAt))),
 ];
 
 return [
   shape,
+  // Only the auxiliary shaded-digit cells may hold 0.
+  graph.makeReplicate(new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
   new Given('R5C5', 4),
-  shade.toVar('shading'),
-  eff.toVar('shaded value or 0'),
-  ...domains,
-  ...connectivity,
-  ...noMonoBlocks,
-  ...circleShaded,
-  ...circleCounts,
-  ...effRelations,
-  ...outsideSums,
+  ...shading,
+  ...weights,
+  ...noMonochrome2x2,
+  ...lineSums,
+  ...circleRules,
 ];

@@ -3,287 +3,188 @@
 // Video: https://www.youtube.com/watch?v=AMy-NDeJxLI
 // Source: https://app.crackingthecryptic.com/webapp/GBfd7PptH8
 
-// Normal sudoku rules apply, plus 13 single-cell circles and (omitted, see
-// below) 2 double-width circles. Each circle starts an arrow: a path, one
-// cell wide, that grows out from the circle and neither crosses nor touches
-// itself orthogonally anywhere. The path's digits (not counting the circle)
-// sum to the circle's own digit. Two arrows never share a cell. Blue cells
-// can never be part of any arrow; orange cells may or may not be; every
-// other cell (including every circle) must be part of exactly one arrow.
+// Normal sudoku rules apply. There are no given digits: the whole puzzle is
+// 15 arrow circles plus cell shading, and every arrow's path is unknown.
 //
-// Modelling an arrow whose path is entirely undrawn: every cell gets an
-// "identity" (which of the 13 modelled arrows it belongs to, or none) and a
-// "role" (that arrow's circle, or its 1st-9th shaft cell counting out from
-// the circle, capped at 9 since a single-digit target can never need a
-// longer shaft). A chain of NFAs then forces, per arrow: exactly one circle
-// cell (pinned to the drawn location, not discovered); each shaft rank
-// present at most once, and only contiguously above an already-present rank;
-// each rank-k shaft cell orthogonally adjacent to its own rank-(k-1)
-// predecessor (rank 1's predecessor is the circle); no *other* same-identity
-// neighbour anywhere (closes the no-self-touch rule, since the rank chain
-// already accounts for every legitimate adjacency); and the shaft digits
-// summing to the circle digit. A cell's single identity value automatically
-// keeps different arrows' cells disjoint ("never share a cell"); the colour
-// rule is a domain restriction per cell (blue forced unused, plain cells
-// forced used, orange left free).
+// An arrow grows out of its circle as a one-cell-wide path which neither
+// crosses nor touches itself orthogonally (the setter's clarification: it
+// behaves like a snake, so a 2x2 block is a self-touch and is illegal). The
+// digits on the path, excluding the circle, add up to the number in the
+// circle. A two-cell circle holds a two-digit number read left to right, and
+// its arrow may start from either of the two circle cells. Two arrows must not
+// intersect anywhere. A white cell must be part of exactly one arrow, a blue
+// cell may not be part of any arrow, and an orange cell may or may not be.
+// "All circles are given" is the setter's statement that no further circles
+// (and so no further arrows) exist -- this encoding has exactly these 15.
 //
-// Omission: the two double-width (two-digit) circles at R7C4-R7C5 and
-// R8C4-R8C5 are not modelled. Their target (10-98) makes the digit-sum NFA's
-// (target, running-sum) state space exceed the 4096 compile-time state cap
-// that a single-digit target keeps comfortably clear (see the capped `sum`
-// comment in makeArrowSumMachine below); their arm could also legitimately
-// need more shaft positions than the 16-value hard cap on a Var layer allows
-// once a single-digit-target arrow's much shorter shaft is already using
-// part of that budget. Both of their cells are pinned "not part of any
-// modelled arrow" (identity = UNUSED_ID) instead: sound, since by the rule
-// they can only ever belong to their own two arrows, never to one of the 13
-// modelled ones. No sum, path-shape, or membership rule is enforced for
-// these two arrows.
+// Model: one identity Var per cell saying which arrow owns it (1-15) or that
+// it is unowned (16). A single identity per cell is what makes arrows
+// cell-disjoint. The shape of one arrow then needs only three facts:
+// ConnectedValues for its identity, a maximum induced degree of 2, and a
+// degree-1 cell at the circle end. Connected + degree <= 2 forces a path or a
+// cycle; a degree-1 vertex rules out the cycle and is an endpoint of the
+// resulting simple path, and "no cell has three arrow neighbours" is exactly
+// the no-self-touch rule. So no path-order/rank overlay is needed at all.
 
-const shape = new Shape('9x9', 14);
+const NUM_ARROWS = 15;
+const UNUSED = NUM_ARROWS + 1; // identity value for a cell on no arrow
+const shape = new Shape('9x9', UNUSED);
 const graph = cellGraph(shape);
 const gridCells = graph.cells();
 
-// Role/rank encoding shared by every layer below.
-const UNUSED_RANK = 1; // paired rank value for an unused cell
-const CIRCLE_RANK = 2; // rank value meaning "this arrow's circle"
-const SHAFT_MIN = CIRCLE_RANK + 1; // rank value of shaft position 1
-const MAX_SHAFT_LEN = 9; // a single-digit target (<=9) can never need more
-const shaftRankValue = (n) => CIRCLE_RANK + n; // shaft position n (1-9) -> rank value
-
-const NUM_ARROWS = 13;
-const UNUSED_ID = NUM_ARROWS + 1; // identity value meaning "not part of any modelled arrow"
-
-// The 13 single-cell circles, transcribed from the drawn white rounded-rect
-// underlays (0.8x0.8, white fill, R#C# from their cell-centred coordinates).
-const bulbs = [
-  'R1C2', 'R1C3', 'R1C4', 'R2C6', 'R3C7', 'R3C8', 'R4C4', 'R4C5',
-  'R5C3', 'R6C2', 'R6C3', 'R7C1', 'R8C1',
+// Drawn geometry, transcribed from the 1x1 background squares and the circle
+// overlays of the source grid.
+const BLUE = ['R1C5', 'R2C8', 'R3C4', 'R4C1', 'R4C9'];
+const ORANGE = [
+  'R1C8', 'R3C5', 'R4C7', 'R4C8',
+  'R5C1', 'R5C6', 'R5C7', 'R5C8', 'R5C9',
+  'R6C1', 'R6C6', 'R6C7', 'R6C8', 'R6C9',
+  'R7C6', 'R7C7', 'R7C8', 'R7C9',
+  'R8C6', 'R8C7', 'R8C8', 'R8C9',
+  'R9C5', 'R9C6', 'R9C7', 'R9C8', 'R9C9',
+];
+// Each arrow's circle cells. A one-cell circle is a single digit; a two-cell
+// circle is a horizontal pill, listed tens cell first (read left to right).
+const ARROWS = [
+  ['R1C2'], ['R1C3'], ['R1C4'], ['R2C6'], ['R3C7'], ['R3C8'], ['R4C4'],
+  ['R4C5'], ['R5C3'], ['R6C2'], ['R6C3'], ['R7C1'], ['R8C1'],
+  ['R7C4', 'R7C5'], ['R8C4', 'R8C5'],
 ];
 
-// The two omitted double-width circles (1.6x0.8 white rounded-rect underlays
-// spanning two horizontally adjacent cells) -- see the header omission note.
-const omittedDoubleCircleCells = ['R7C4', 'R7C5', 'R8C4', 'R8C5'];
-
-// Blue underlay cells (#34BBE6): never part of any arrow.
-const blueCells = ['R1C5', 'R2C8', 'R3C4', 'R4C1', 'R4C9'];
-
-// Orange underlay cells (#EB7532): may or may not be part of an arrow.
-const orangeCells = [
-  'R1C8', 'R3C5', 'R4C7', 'R4C8', 'R5C1', 'R5C6', 'R5C7', 'R5C8', 'R5C9',
-  'R6C1', 'R6C6', 'R6C7', 'R6C8', 'R6C9', 'R7C6', 'R7C7', 'R7C8', 'R7C9',
-  'R8C6', 'R8C7', 'R8C8', 'R8C9', 'R9C5', 'R9C6', 'R9C7', 'R9C8', 'R9C9',
-];
-
-// Every other cell: plain (unmarked, not a circle) -- must be part of exactly
-// one modelled arrow.
-const specialCells = new Set([
-  ...bulbs, ...omittedDoubleCircleCells, ...blueCells, ...orangeCells,
-]);
-const plainCells = gridCells.filter((cell) => !specialCells.has(cell));
+const shaded = new Set([...BLUE, ...ORANGE]);
+const white = gridCells.filter((cell) => !shaded.has(cell));
+const circleCells = new Set(ARROWS.flat());
+const arrowIdOf = (cell) => ARROWS.findIndex((cells) => cells.includes(cell)) + 1;
 
 const identity = graph.makeOverlay('VI');
-const rank = graph.makeOverlay('VR');
+const arrowValues = Array.from({ length: NUM_ARROWS }, (_, i) => i + 1);
 
-// Couples the two layers per cell: identity=UNUSED iff rank=UNUSED, and a
-// used identity (1-13) always carries a real role (circle or shaft rank).
-const placementKey = Pair.fnToKey(
-  (id, rankValue) => (id === UNUSED_ID && rankValue === UNUSED_RANK)
-    || (id <= NUM_ARROWS && rankValue >= CIRCLE_RANK),
-  14,
-);
+// Counts, among a cell's orthogonal neighbours, how many carry the same arrow
+// identity as the cell itself -- that cell's degree within its own arrow. The
+// scan is [centre identity, then each in-grid neighbour's identity]. `limit`
+// is the largest degree allowed; `exact` additionally demands that degree.
+// An unowned centre constrains nothing.
+const makeDegreeMachine = (limit, exact) => NFA.encodeSpec({
+  startState: { id: null, count: 0 },
+  transition: (state, value) => {
+    if (state.id === null) return { id: value, count: 0 };
+    if (state.id === UNUSED) return state;
+    const count = state.count + (value === state.id ? 1 : 0);
+    return count > limit ? undefined : { id: state.id, count };
+  },
+  accept: (state) => !exact || state.id === UNUSED || state.count === exact,
+  maxDepth: 5, // a centre plus at most 4 orthogonal neighbours
+}, shape);
 
-// Rank `level` (0 = circle, 1-9 = shaft position) occurs at most once for
-// `arrowId`; level 0 occurs exactly once (the drawn circle, pinned below);
-// level k>0 only when level k-1 also occurs, forcing the used shaft ranks to
-// be a contiguous prefix above the circle. Scans every cell's [identity,
-// rank] pair.
-function makeRankCountMachine(arrowId, level) {
-  const rankValue = level === 0 ? CIRCLE_RANK : shaftRankValue(level);
-  const prevRankValue = level === 0 ? null
-    : level === 1 ? CIRCLE_RANK : shaftRankValue(level - 1);
-  return NFA.encodeSpec({
-    startState: { phase: 0, id: null, prevCount: 0, curCount: 0 },
-    transition: (state, value) => {
-      if (state.phase === 0) return { ...state, phase: 1, id: value };
-      const matches = state.id === arrowId;
-      const prevCount = state.prevCount
-        + (prevRankValue !== null && matches && value === prevRankValue ? 1 : 0);
-      const curCount = state.curCount + (matches && value === rankValue ? 1 : 0);
-      if (prevCount > 1 || curCount > 1) return undefined;
-      return { phase: 0, id: null, prevCount, curCount };
-    },
-    accept: (state) => state.phase === 0 && (
-      level === 0 ? state.curCount === 1 : state.curCount <= state.prevCount
-    ),
-  }, shape);
-}
+// A two-cell circle's shaft leaves from one of the two circle cells, so that
+// cell has degree 2 (the other circle cell plus the first shaft cell) and the
+// other circle cell is the far end of the path, with degree 1. Scans the first
+// circle cell's identity and its neighbours' identities, then the second
+// cell's and its neighbours'; `firstLen` is where the second block starts.
+// (A multi-segment scan would need a 17th symbol, one past this shape's
+// 16-value alphabet, so the block boundary is carried as a position instead.)
+const makePillEndpointMachine = (firstLen) => NFA.encodeSpec({
+  startState: { pos: 0, id: null, count: 0, ok: false },
+  transition: (state, value) => {
+    if (state.pos === 0) return { pos: 1, id: value, count: 0, ok: false };
+    if (state.pos === firstLen) {
+      return { pos: state.pos + 1, id: value, count: 0, ok: state.count === 1 };
+    }
+    return {
+      ...state,
+      pos: state.pos + 1,
+      count: state.count + (value === state.id ? 1 : 0),
+    };
+  },
+  accept: (state) => state.ok || state.count === 1,
+  maxDepth: 10, // two circle cells, each with at most 4 orthogonal neighbours
+}, shape);
 
-// A rank-k (k>=1) cell of `arrowId` must have an orthogonally-adjacent
-// rank-(k-1) cell of the same identity (rank 1's predecessor is the circle,
-// rank 2). Combined with the count machines above this forces a genuine
-// connected chain from the circle out to the far end. Scans the centre
-// cell's [identity, rank], then each in-grid orthogonal neighbour's
-// [identity, rank].
-function makePredecessorMachine(arrowId) {
-  return NFA.encodeSpec({
-    startState: {
-      phase: 0, centerMatches: false, centerRank: null, neighbourId: null, ok: true,
-    },
-    transition: (state, value) => {
-      if (state.phase === 0) return { ...state, phase: 1, centerMatches: value === arrowId };
-      if (state.phase === 1) return { ...state, phase: 2, centerRank: value };
-      if (state.phase === 2) return { ...state, phase: 3, neighbourId: value };
-      const found = state.centerMatches && state.centerRank > CIRCLE_RANK
-        && state.neighbourId === arrowId && value === state.centerRank - 1;
-      return { ...state, phase: 2, neighbourId: null, ok: state.ok || found };
-    },
-    accept: (state) => state.phase === 2
-      && (!state.centerMatches || state.centerRank <= CIRCLE_RANK || state.ok),
-    maxDepth: 10,
-  }, shape);
-}
-
-// The rules say an arrow "neither crosses nor touches itself orthogonally":
-// no same-identity neighbour of a cell may sit at any rank other than one
-// more or one less than that cell's own rank. The predecessor machine above
-// only requires the *correct* adjacency to exist somewhere; this machine
-// forbids every *other* same-identity adjacency, which is exactly what turns
-// the rank chain into a genuinely self-avoiding, non-self-touching path
-// (rank values are already unique per arrow, so same-identity same-rank
-// cannot occur). Scans the centre cell's [identity, rank], then each
-// neighbour's [identity, rank].
-function makeNoSelfTouchMachine(arrowId) {
-  return NFA.encodeSpec({
-    startState: {
-      phase: 0, centerMatches: false, centerRank: null, neighbourId: null, ok: true,
-    },
-    transition: (state, value) => {
-      if (state.phase === 0) return { ...state, phase: 1, centerMatches: value === arrowId };
-      if (state.phase === 1) return { ...state, phase: 2, centerRank: value };
-      if (state.phase === 2) return { ...state, phase: 3, neighbourId: value };
-      const bothMatch = state.centerMatches && state.neighbourId === arrowId;
-      const violation = bothMatch && Math.abs(value - state.centerRank) !== 1;
+// The arrow sum, counted down rather than up: the circle digits are read
+// first and set `remaining`, and every later cell owned by this arrow
+// subtracts its digit. Counting down keeps the state bounded by the target
+// (at most 98 for a two-digit circle) with no separate target field, which a
+// running-sum machine could not do within the compiled-state limit.
+// Scan order: the circle digit(s), then [identity, digit] for every other cell.
+const makeSumMachine = (arrowId, numCircleCells) => NFA.encodeSpec({
+  startState: { phase: 0, remaining: 0, owned: false },
+  transition: (state, value) => {
+    // Phase 0..numCircleCells-1 accumulate the circle's decimal digits.
+    if (state.phase < numCircleCells) {
       return {
-        ...state, phase: 2, neighbourId: null, ok: state.ok && !violation,
+        phase: state.phase + 1,
+        remaining: state.remaining * 10 + value,
+        owned: false,
       };
-    },
-    accept: (state) => state.phase === 2 && state.ok,
-    maxDepth: 10,
-  }, shape);
-}
+    }
+    // Then alternate: identity of a cell, then that cell's digit.
+    if (state.phase === numCircleCells) {
+      return { ...state, phase: numCircleCells + 1, owned: value === arrowId };
+    }
+    const remaining = state.remaining - (state.owned ? value : 0);
+    if (remaining < 0) return undefined;
+    return { phase: numCircleCells, remaining, owned: false };
+  },
+  accept: (state) => state.phase === numCircleCells && state.remaining === 0,
+}, shape);
 
-// Scans every cell's [identity, rank, digit]: sums the digits of
-// `arrowId`'s shaft cells and separately reads its circle cell's digit,
-// then requires the two to match.
-function makeArrowSumMachine(arrowId) {
-  // Collapses each cell's [identity, rank] into two booleans (isCircle,
-  // isShaft) as soon as both are read, rather than carrying the raw
-  // identity/rank values alongside the running target/sum -- the cross
-  // product of those would blow the NFA state cap. This is what a
-  // single-digit target (<=9) keeps small enough to stay under the cap; a
-  // two-digit target (10-98, the omitted double-width circles) would not.
-  return NFA.encodeSpec({
-    startState: {
-      phase: 0, matches: false, isCircle: false, isShaft: false, target: null, sum: 0,
-    },
-    transition: (state, value) => {
-      if (state.phase === 0) return { ...state, phase: 1, matches: value === arrowId };
-      if (state.phase === 1) {
-        return {
-          ...state,
-          phase: 2,
-          isCircle: state.matches && value === CIRCLE_RANK,
-          isShaft: state.matches && value >= SHAFT_MIN,
-        };
-      }
-      const target = state.isCircle ? value : state.target;
-      const sum = state.sum + (state.isShaft ? value : 0);
-      // Cap sum at the largest possible circle digit even before the circle
-      // cell is scanned -- otherwise it grows unboundedly while target is
-      // still null, and the compiler must track every value.
-      if (sum > 9) return undefined;
-      if (target !== null && sum > target) return undefined;
-      return {
-        phase: 0, matches: false, isCircle: false, isShaft: false, target, sum,
-      };
-    },
-    accept: (state) => state.phase === 0 && state.target !== null && state.sum === state.target,
-  }, shape);
-}
+const atMostTwoMachine = makeDegreeMachine(2, null);
+const exactlyOneMachine = makeDegreeMachine(1, 1);
 
-const arrowIds = Array.from({ length: NUM_ARROWS }, (_, i) => i + 1);
-
-const rankCountConstraints = arrowIds.flatMap((arrowId) => Array.from(
-  { length: MAX_SHAFT_LEN + 1 },
-  (_, level) => new NFA(
-    makeRankCountMachine(arrowId, level),
-    'arrow rank occurrence',
-    ...gridCells.flatMap((cell) => [identity.at(cell), rank.at(cell)]),
-  ),
-));
-
-const predecessorConstraints = arrowIds.flatMap((arrowId) => {
-  const machine = makePredecessorMachine(arrowId);
-  return gridCells.map((cell) => new NFA(
-    machine,
-    'consecutive arrow ranks touch',
-    identity.at(cell), rank.at(cell),
-    ...graph.neighbours(cell).flatMap((other) => [identity.at(other), rank.at(other)]),
+const degreeConstraints = gridCells
+  // A one-cell circle gets the stronger exact-degree constraint below.
+  .filter((cell) => !(circleCells.has(cell) && ARROWS[arrowIdOf(cell) - 1].length === 1))
+  .map((cell) => new NFA(
+    atMostTwoMachine, 'arrow cells have at most two arrow neighbours',
+    identity.at(cell), ...identity.at(graph.neighbours(cell)),
   ));
-});
 
-const noSelfTouchConstraints = arrowIds.flatMap((arrowId) => {
-  const machine = makeNoSelfTouchMachine(arrowId);
-  return gridCells.map((cell) => new NFA(
-    machine,
-    'arrow does not touch itself',
-    identity.at(cell), rank.at(cell),
-    ...graph.neighbours(cell).flatMap((other) => [identity.at(other), rank.at(other)]),
+// The circle is the end the arrow grows out of, so it has exactly one arrow
+// neighbour. Grounds: the rule calls the circle the start of a single path,
+// and the two-digit clarification ("the arrow can start from the 'ones' digit
+// or the 'tens' digit") only has content if an arrow has one growth point.
+const circleEndpointConstraints = ARROWS
+  .filter((cells) => cells.length === 1)
+  .map(([cell]) => new NFA(
+    exactlyOneMachine, 'one-cell circle is the end of its arrow',
+    identity.at(cell), ...identity.at(graph.neighbours(cell)),
   ));
+
+const pillEndpointConstraints = ARROWS
+  .filter((cells) => cells.length === 2)
+  .map((cells) => {
+    const blocks = cells.map(
+      (cell) => [identity.at(cell), ...identity.at(graph.neighbours(cell))]);
+    return new NFA(
+      makePillEndpointMachine(blocks[0].length),
+      'two-cell circle: the arrow leaves from one of its cells',
+      ...blocks.flat(),
+    );
+  });
+
+const sumConstraints = ARROWS.map((cells, index) => {
+  const others = gridCells.filter((cell) => !cells.includes(cell));
+  return new NFA(
+    makeSumMachine(index + 1, cells.length), 'arrow sum',
+    ...cells,
+    ...others.flatMap((cell) => [identity.at(cell), cell]),
+  );
 });
-
-const sumConstraints = arrowIds.map((arrowId) => new NFA(
-  makeArrowSumMachine(arrowId),
-  'arrow sum',
-  ...gridCells.flatMap((cell) => [identity.at(cell), rank.at(cell), cell]),
-));
-
-// Pin each drawn circle to its arrow.
-const circleGivens = bulbs.flatMap((cell, index) => {
-  const arrowId = index + 1;
-  return [
-    new Given(identity.at(cell), arrowId),
-    new Given(rank.at(cell), CIRCLE_RANK),
-  ];
-});
-
-// Colour-rule domain restrictions.
-const blueGivens = blueCells.map((cell) => new Given(identity.at(cell), UNUSED_ID));
-const omittedDoubleCircleGivens = omittedDoubleCircleCells.map(
-  (cell) => new Given(identity.at(cell), UNUSED_ID),
-);
-const plainGivens = plainCells.map(
-  (cell) => new Given(identity.at(cell), ...arrowIds),
-);
-// Orange cells are left with their default full domain (free to be used or
-// unused).
 
 return [
   shape,
-  // Widening is only for arrow identity/role state; puzzle digits stay 1-9.
-  graph.makeReplicate(new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-  identity.toVar('arrow identity (1-13), or 14 if not part of a modelled arrow'),
-  rank.toVar('role: 1 unused, 2 circle, 3-11 shaft position 1-9 out from the circle'),
-  ...gridCells.map((cell) => new Pair(
-    placementKey, 'identity/rank coupling', identity.at(cell), rank.at(cell),
-  )),
-  ...circleGivens,
-  ...blueGivens,
-  ...omittedDoubleCircleGivens,
-  ...plainGivens,
-  ...rankCountConstraints,
-  ...predecessorConstraints,
-  ...noSelfTouchConstraints,
+  // The alphabet is widened only to hold 15 arrow identities plus "unowned";
+  // the puzzle's digits stay 1-9.
+  graph.makeReplicate(new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)),
+  identity.toVar('arrow identity (1-15), or 16 if on no arrow'),
+  ...ARROWS.flatMap((cells, index) => cells.map(
+    (cell) => new Given(identity.at(cell), index + 1))),
+  ...BLUE.map((cell) => new Given(identity.at(cell), UNUSED)),
+  ...white.filter((cell) => !circleCells.has(cell)).map(
+    (cell) => new Given(identity.at(cell), ...arrowValues)),
+  ...arrowValues.map((id) => new ConnectedValues('VI', id)),
+  ...degreeConstraints,
+  ...circleEndpointConstraints,
+  ...pillEndpointConstraints,
   ...sumConstraints,
 ];
