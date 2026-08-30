@@ -1,0 +1,15 @@
+.~R7C7_8~R8C1_4
+.Sandwich~12~R1
+.Sandwich~23~R2
+.Sandwich~0~R6
+.Sandwich~3~R7
+.Sandwich~0~R9
+.Sandwich~0~C2
+.Sandwich~0~C8
+.Or
+.Sandwich~21~C4
+.Sandwich~21~C5
+.End
+.Arrow~R9C1~R9C2~R9C3
+.Arrow~R7C9~R8C9~R8C8
+.Arrow~R6C6~R7C6~R8C6~R8C5

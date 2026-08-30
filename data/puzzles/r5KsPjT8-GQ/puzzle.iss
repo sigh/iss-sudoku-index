@@ -1,0 +1,10 @@
+.LittleKiller~18~R1C9
+.LittleKiller~20~R7C1
+.LittleKiller~18~R5C1
+.LittleKiller~20~R1C3
+.LittleKiller~20~R3C9
+.LittleKiller~20~R5C9
+.LittleKiller~18~R7C9
+.LittleKiller~18~R8C9
+.LittleKiller~20~R9C6
+.LittleKiller~20~R9C7

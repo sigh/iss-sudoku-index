@@ -1,0 +1,9 @@
+.LittleKiller~14~R1C4
+.LittleKiller~33~R1C5
+.LittleKiller~40~R1C6
+.LittleKiller~46~R1C7
+.LittleKiller~13~R5C9
+.LittleKiller~24~R6C9
+.LittleKiller~24~R7C9
+.LittleKiller~16~R9C6
+.LittleKiller~18~R6C1

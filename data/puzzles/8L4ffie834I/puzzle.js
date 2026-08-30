@@ -49,7 +49,7 @@ const digitSetNFA = accept => NFA.encodeSpec({
     return mask | bit;
   },
   accept,
-}, SENTINEL);
+}, M);
 
 // Row/column/box: all of 0-6 present. The six A cells (never sentinel) give six
 // distinct bits, so reaching all seven bits forces exactly one non-sentinel VB
@@ -117,7 +117,7 @@ function pairNFA(lo, hi) {
       return { a: 0, cnt };
     },
     accept: () => true,
-  }, SENTINEL);
+  }, M);
 }
 
 // Canonicalize the Schrodinger representation (second digit < first) so a pair

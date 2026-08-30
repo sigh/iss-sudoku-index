@@ -1,0 +1,16 @@
+.~R7C1_1
+.Diagonal~1
+.Diagonal~-1
+.Sandwich~2~C1
+.Sandwich~8~C2
+.Sandwich~5~C3
+.Sandwich~15~C4
+.Sandwich~27~C6
+.Sandwich~28~C7
+.Sandwich~24~C8
+.Sandwich~0~C9
+.Sandwich~2~R2
+.Sandwich~31~R6
+.Sandwich~26~R7
+.Sandwich~11~R8
+.Sandwich~29~R9

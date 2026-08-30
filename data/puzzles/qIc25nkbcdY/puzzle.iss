@@ -1,0 +1,12 @@
+.~R4C6_4~R5C6_6~R6C6_9~R9C9_8
+.Sandwich~22~R1
+.Sandwich~11~R3
+.Sandwich~33~R5
+.Sandwich~22~R9
+.Sandwich~0~C1
+.Sandwich~2~C2
+.Sandwich~0~C4
+.Sandwich~2~C5
+.Sandwich~20~C8
+.Sandwich~20~C9
+.Palindrome~R8C7~R8C6~R8C5~R8C4~R8C3~R7C3~R6C4~R6C5~R6C6~R5C7~R4C7~R3C7~R2C6~R2C5~R2C4~R3C3~R4C3

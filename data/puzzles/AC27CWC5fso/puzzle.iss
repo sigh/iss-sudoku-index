@@ -1,0 +1,14 @@
+.~R5C9_3~R7C6_3~R8C2_4
+.Thermo~R5C5~R4C5~R4C6~R4C7~R4C8~R3C8
+.Thermo~R9C9~R8C9
+.Thermo~R6C2~R6C3~R6C4~R7C4
+.Thermo~R6C2~R6C3~R6C4~R5C4~R5C3
+.Sandwich~10~R2
+.Sandwich~29~R3
+.Sandwich~13~R5
+.Sandwich~24~R6
+.Sandwich~17~R7
+.Sandwich~2~C5
+.Sandwich~0~C6
+.Sandwich~33~C7
+.Sandwich~4~C8
