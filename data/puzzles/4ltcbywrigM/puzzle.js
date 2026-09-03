@@ -3,66 +3,55 @@
 // Video: https://www.youtube.com/watch?v=4ltcbywrigM
 // Source: https://sudokupad.app/usquoo8ao3
 
-// Standard sudoku plus Yin-Yang shading (native YinYang constraint; shading
-// itself is not given -- the solver discovers it). Fog/reveal state is
-// solving UI and is not encoded.
-// Unshaded Whispers: two orthogonally adjacent cells that are BOTH unshaded
-// must differ by >= 5; a pair with a shaded side is unconstrained. Kropki:
-// three white dots (consecutive digits). The rules' "Given Digits" clause is
-// not encoded -- no digit, colour, or position data for it is recoverable;
-// it is the puzzle's own joke ("But ... the Given Digit is WHITE!").
+// Rules encoded here:
+//  - Normal 9x9 sudoku.
+//  - Yin Yang: every cell is shaded or unshaded; all shaded cells form one
+//    orthogonally connected group, all unshaded cells form one orthogonally
+//    connected group, and no 2x2 region is entirely one shade.
+//  - Unshaded Whispers: two orthogonally adjacent unshaded cells differ by at
+//    least 5.
+//  - Kropki: a white dot separates consecutive digits.
+//  - Given Digits: the white digit drawn on the board is given.
+// The fog clauses ("Clearing Fog", and shaded cells staying covered once the
+// grid is complete) say what a solver sees while filling the grid; they place
+// no condition on the finished grid, so nothing is encoded for them.
 
+// YinYang's YY overlay uses the grid's two lowest values for the two shades.
 const SHADED = 1;
 const UNSHADED = 2;
 
 const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
 const shade = graph.makeOverlay('YY');
-const gridCells = graph.cells();
 
-// White-dot (Kropki, consecutive) edges, from the source's three drawn
-// edge-sized white/black-bordered dot overlays.
-const dots = [
+// Drawn data: the three white circles, each centred on the edge between the
+// two cells listed.
+const whiteDots = [
   ['R2C7', 'R2C8'],
   ['R3C6', 'R3C7'],
   ['R6C6', 'R7C6'],
 ];
-const dotRules = dots.map(([a, b]) => new WhiteDot(a, b));
 
-// Unshaded Whispers: reads (shadeA, digitA, shadeB, digitB) for an
-// orthogonally adjacent pair. If both shades are UNSHADED, the digits must
-// differ by >= 5; otherwise the pair is unconstrained (skip on either side).
-const whisperMachine = NFA.encodeSpec({
-  startState: { phase: 'aShade' },
-  transition: (state, value) => {
-    switch (state.phase) {
-      case 'aShade':
-        return { phase: 'aDigit', active: value === UNSHADED };
-      case 'aDigit':
-        return { phase: 'bShade', active: state.active, aDigit: value };
-      case 'bShade':
-        return {
-          phase: 'bDigit',
-          active: state.active && value === UNSHADED,
-          aDigit: state.aDigit,
-        };
-      case 'bDigit':
-        if (!state.active) return { phase: 'done' };
-        return Math.abs(state.aDigit - value) >= 5 ? { phase: 'done' } : undefined;
-    }
-  },
-  accept: ({ phase }) => phase === 'done',
-}, geometry.numValues);
-// Right/down steps only: each orthogonal pair is covered once.
-const whispers = gridCells.flatMap(cell => [[0, 1], [1, 0]]
-  .map(([dR, dC]) => graph.step(cell, dR, dC))
-  .filter(Boolean)
-  .map(other => new NFA(whisperMachine, 'unshaded-whisper',
-    shade.at(cell), cell, shade.at(other), other)));
+// Each unordered orthogonally adjacent pair once: the right and down steps.
+const edges = graph.cells().flatMap(
+  cell => [graph.step(cell, 0, 1), graph.step(cell, 1, 0)]
+    .filter(next => next !== null)
+    .map(next => [cell, next]));
+
+// The whisper binds an edge only when both of its cells are unshaded. With
+// two shades, "not both unshaded" is "at least one is shaded", so the
+// conditional is a three-way Or over the edge.
+const unshadedWhispers = edges.map(([a, b]) => new Or([
+  new Given(shade.at(a), SHADED),
+  new Given(shade.at(b), SHADED),
+  new Whisper(5, a, b),
+]));
 
 return [
   new Shape('9x9'),
   new YinYang(),
-  ...dotRules,
-  ...whispers,
+  // The white 7 drawn inside R2C2: a bar across the top of the cell and a
+  // stroke descending to the left.
+  new Given('R2C2', 7),
+  ...whiteDots.map(([a, b]) => new WhiteDot(a, b)),
+  ...unshadedWhispers,
 ];

@@ -3,192 +3,202 @@
 // Video: https://www.youtube.com/watch?v=HCeC3df8Lvk
 // Source: https://sudokupad.app/kglg9thtij
 
-// Normal sudoku rules apply.
-//
-// Fire/Water cells: there are nine Fire cells, exactly one in each row, column,
-// and box (a hidden permutation set, not marked in the grid). There are also
-// nine Water cells, independently following the same one-per-row/column/box
-// rule. A cell may be a Fire cell, a Water cell, both, or neither.
-//
-// The "value" of a Fire or Water cell is its digit multiplied by the minimum
-// number of orthogonal steps (Manhattan distance) between that box's Fire cell
-// and its Water cell. A cell that is simultaneously Fire and Water has distance
-// 0, so its value is 0. Every other cell's value is just its digit.
-//
-// Killer: dashed cages hold distinct digits, and their VALUES (not necessarily
-// the raw digits) sum to the total in the top-left corner.
+// Rules encoded here:
+//  - Normal sudoku on a 9x9 grid with the standard 3x3 boxes; no givens.
+//  - Nine Fire cells: exactly one per row, per column and per box, holding a
+//    complete set of the digits 1-9. Nine Water cells under the same rules.
+//    A cell may be Fire and Water at once.
+//  - The value of a Fire or Water cell is its digit times the minimum number of
+//    orthogonal steps between its box's Fire cell and Water cell, measured
+//    inside that 3x3 box; a cell that is both has value 0. Every other cell's
+//    value is its digit.
+//  - Killer cages: digits do not repeat, and the values sum to the printed total.
+// Nothing is omitted. The one addition is the symmetry pin at the bottom, for
+// the Fire/Water label swap the rules explicitly leave undetermined.
 
-const graph = cellGraph('9x9');
+// The board carries 1-9 but the overlays need a spare symbol for "unmarked", so
+// the alphabet is widened to 0-9 and the board is pinned back to 1-9 below.
+const shape = new Shape('9x9', '0-9');
+const graph = cellGraph(shape);
 
-// ISS caps a grid's value range at 16, so a Fire/Water "value" (up to 9 * 4 =
-// 36, from a digit of 9 at one corner of a box and its partner at the
-// opposite corner, Manhattan distance 4) can't live in one cell/Var. Split it
-// into a tens digit (0-3) and a ones digit (0-9), each shifted by +1 for the
-// grid's 1-based alphabet (so range 1-4 and 1-10) -- both comfortably under 16.
-const RANGE = 10;
-const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
+// Transcribed from the drawn dashed cages: total, then the cage's cells.
+const CAGES = [
+  [45, ['R1C3', 'R1C4', 'R2C3']],
+  [41, ['R1C5', 'R2C4', 'R2C5']],
+  [43, ['R8C7', 'R9C6', 'R9C7']],
+  [41, ['R8C5', 'R8C6', 'R9C5']],
+  [15, ['R3C1', 'R3C2', 'R4C2']],
+  [17, ['R6C8', 'R7C8', 'R7C9']],
+  [10, ['R3C6', 'R3C7', 'R4C6']],
+  [10, ['R6C4', 'R7C3', 'R7C4']],
+  [12, ['R1C7', 'R1C8', 'R2C8']],
+  [12, ['R8C2', 'R9C2', 'R9C3']],
+];
 
-// Fire/Water flags: one Var per grid cell, encoded {1 = not in the set,
-// 2 = in the set}, following the doubler-flag convention (booleans share the
-// grid's 1-based value alphabet).
+// Each overlay cell holds the digit of the cell when it carries that mark, and
+// 0 when it does not, so the placement rules are counting rules on the overlay
+// and the "complete set of 1-9" rule is a count of each digit across it.
 const fire = graph.makeOverlay('VF');
 const water = graph.makeOverlay('VW');
 
-// Exactly one flagged cell per house (row/column/box): with 9 cells encoded
-// 1/2 and exactly one 2, the house sums to 8*1 + 1*2 = 10.
-const oneHotPerHouse = (flags) => graph.rowsColumnsBoxes().map(
-  (house) => new Sum(10, ...house.map((cell) => flags.at(cell))));
-
-// Per-box local coordinates (0,1,2 within the box, row-major), needed to work
-// out the in-box Fire/Water distance. boxIndexOf matches graph.boxes()'s
-// reading-order numbering (verified against its topLeft formula).
 const boxes = graph.boxes();
-const boxIndexOf = (cell) => {
-  const { row, col } = parseCellId(cell);
-  return Math.floor((row - 1) / 3) * 3 + Math.floor((col - 1) / 3) + 1;
-};
+const boxIndexOf = cell => boxes.findIndex(box => box.includes(cell));
 
-// Local-coordinate Vars (encoded local-coord + 1, so range 1-3), one per box,
-// for each of the four quantities: fire's row/col, water's row/col.
-const fireLocalRow = new Var('FR', 'fire local row in box (0-2, +1 shift)', 9);
-const fireLocalCol = new Var('FC', 'fire local col in box (0-2, +1 shift)', 9);
-const waterLocalRow = new Var('WR', 'water local row in box (0-2, +1 shift)', 9);
-const waterLocalCol = new Var('WC', 'water local col in box (0-2, +1 shift)', 9);
+// Position of a box's marked cell, 1..9 in the box's reading order.
+const firePos = new Var('FP', 'fire cell position within its box', 9);
+const waterPos = new Var('WP', 'water cell position within its box', 9);
+// The per-box multiplier: the in-box step count between the two marked cells.
+const boxSteps = new Var('D', 'fire-to-water step count per box', 9);
 
-// With exactly one flagEnc = 2 per box (the rest = 1):
-//   sum(coord_i * flagEnc_i) = sum(coord_i) + coord_of_the_flagged_cell
-// so   encVar (= coord_of_the_flagged_cell + 1)
-//    = sum(coord_i * flagEnc_i) - sum(coord_i) + 1
-// Rearranged into Sum's "coefficients sum to a constant" form:
-//   sum(coord_i * flagEnc_i) - encVar = sum(coord_i) - 1
-const localCoordConstraint = (encCell, flags, coordFn) => boxes.map((boxCells, bi) => {
-  const coordTotal = boxCells.reduce((acc, _, i) => acc + coordFn(i), 0);
-  const terms = boxCells
-    .map((cell, i) => [flags.at(cell), coordFn(i)])
-    .filter(([, coeff]) => coeff !== 0);
-  return new Sum(coordTotal - 1, [encCell.cell(bi + 1), -1], ...terms);
-});
-const localRowOf = (i) => Math.floor(i / 3);
-const localColOf = (i) => i % 3;
+// Only cage cells need a materialised multiplier; the rest are never read.
+const cageCells = [...new Set(CAGES.flatMap(([, cells]) => cells))];
+const mult = graph.makeOverlay('VM', cageCells);
 
-// Absolute difference of two encoded local coordinates (each range 1-3, true
-// range 0-2), via an Or of the two possible signs -- the branch whose
-// subtraction would be negative is simply infeasible against diffCell's
-// 1-3 domain, so the solver is left with the correct one.
-//   diffCell - 1 = |aCell - bCell|   (the +1 shift cancels in the subtraction)
-// Branch A (a >= b): aCell - bCell - diffCell = -1
-// Branch B (b >= a): bCell - aCell - diffCell = -1
-const absDiff = (aCell, bCell, diffCell) => new Or([
-  new Sum(-1, aCell, [bCell, -1], [diffCell, -1]),
-  new Sum(-1, bCell, [aCell, -1], [diffCell, -1]),
-]);
+const digits = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+// A box position is 1..9 in reading order.
+const positionValues = digits;
+// A 3x3 box has diameter 4, so the step count and every multiplier is 0..4.
+const stepValues = [0, 1, 2, 3, 4];
 
-const diffRow = new Var('XR', 'abs row diff in box (0-2, +1 shift)', 9);
-const diffCol = new Var('XC', 'abs col diff in box (0-2, +1 shift)', 9);
-// Distance = diffRow + diffCol (both true, unshifted): with the +1 shift on
-// each term, distEnc - 1 = (diffRowEnc - 1) + (diffColEnc - 1).
-const dist = new Var('DS', 'box fire/water Manhattan distance (0-4, +1 shift)', 9);
+// An overlay cell either sits out (0) or repeats its board cell's digit.
+const markedIsDigit = Pair.fnToKey((mark, digit) => mark === 0 || mark === digit, shape);
 
-const boxDistanceConstraints = range(1, 9).flatMap((b) => [
-  absDiff(fireLocalRow.cell(b), waterLocalRow.cell(b), diffRow.cell(b)),
-  absDiff(fireLocalCol.cell(b), waterLocalCol.cell(b), diffCol.cell(b)),
-  new Sum(1, diffRow.cell(b), diffCol.cell(b), [dist.cell(b), -1]),
-]);
+// Exactly eight unmarked cells in a house is exactly one marked cell in it.
+const houses = graph.rowsColumnsBoxes();
+const oneMarkPerHouse = layer => houses.map(
+  cells => new ContainExact('0_0_0_0_0_0_0_0', ...layer.at(cells)));
 
-// One cage-cell's "value" (digit, or digit*box-distance when the cell is Fire
-// or Water) is digit * multiplier, a product of two variables -- not
-// expressible as one linear Sum. Branch on the digit (9 options); once the
-// digit is pinned to a constant d, branch on whether the cell is Fire/Water
-// and, if so, on the box's exact distance (5 options) -- 1 + 5 = 6 cases, each
-// pinning tensCell/onesCell to the resulting value's known tens/ones digits:
-//   - not Fire and not Water:              value = d            (tens 0)
-//   - Fire and/or Water, distance = e-1:   value = d * (e - 1)
-const cellValueConstraint = (cell, fireCell, waterCell, distCell, tensCell, onesCell) => {
-  const pinValue = (value) => [
-    new Sum(Math.floor(value / 10) + 1, tensCell),
-    new Sum((value % 10) + 1, onesCell),
-  ];
-  return new Or(range(1, 9).map((d) => new And([
-    new Sum(d, cell), // pin this cage cell's digit to d
-    new Or([
-      new And([ // not Fire and not Water: plain digit value
-        new Sum(1, fireCell),
-        new Sum(1, waterCell),
-        ...pinValue(d),
-      ]),
-      ...range(1, 5).map((e) => new And([ // Fire and/or Water at distance e-1
-        new Or([new Sum(2, fireCell), new Sum(2, waterCell)]),
-        new Sum(e, distCell),
-        ...pinValue(d * (e - 1)),
-      ])),
-    ]),
-  ])));
-};
+// [position, ...the box's nine overlay cells]: the marked cell is the one at
+// the stated position. State is the position read first plus how many box cells
+// have been consumed.
+const posSpec = NFA.encodeSpec({
+  startState: null,
+  transition: (state, value) => {
+    if (state === null) {
+      return positionValues.includes(value) ? { p: value, i: 0 } : undefined;
+    }
+    const i = state.i + 1;
+    if ((value !== 0) !== (i === state.p)) return undefined;
+    return { p: state.p, i };
+  },
+  accept: state => state !== null && state.i === 9,
+  maxDepth: 10,
+}, shape);
 
-const CAGES = [
-  { cells: ['R1C3', 'R1C4', 'R2C3'], total: 45 },
-  { cells: ['R1C5', 'R2C4', 'R2C5'], total: 41 },
-  { cells: ['R8C7', 'R9C6', 'R9C7'], total: 43 },
-  { cells: ['R8C5', 'R8C6', 'R9C5'], total: 41 },
-  { cells: ['R3C1', 'R3C2', 'R4C2'], total: 15 },
-  { cells: ['R6C8', 'R7C8', 'R7C9'], total: 17 },
-  { cells: ['R3C6', 'R3C7', 'R4C6'], total: 10 },
-  { cells: ['R6C4', 'R7C3', 'R7C4'], total: 10 },
-  { cells: ['R1C7', 'R1C8', 'R2C8'], total: 12 },
-  { cells: ['R8C2', 'R9C2', 'R9C3'], total: 12 },
-];
-const cageCells = CAGES.flatMap((cage) => cage.cells);
-const cageValueTens = new Var('CT', 'cage-cell value tens digit (0-3, +1 shift)', cageCells.length);
-const cageValueOnes = new Var('CO', 'cage-cell value ones digit (0-9, +1 shift)', cageCells.length);
-const cageTensOf = new Map(cageCells.map((cell, i) => [cell, cageValueTens.cell(i + 1)]));
-const cageOnesOf = new Map(cageCells.map((cell, i) => [cell, cageValueOnes.cell(i + 1)]));
+// Row/column of a box position, 1..3 each.
+const posRow = p => Math.ceil(p / 3);
+const posCol = p => (p - 1) % 3 + 1;
 
-const cageCellValueConstraints = cageCells.map((cell) => cellValueConstraint(
-  cell, fire.at(cell), water.at(cell), dist.cell(boxIndexOf(cell)),
-  cageTensOf.get(cell), cageOnesOf.get(cell)));
+// [firePos, waterPos, steps]: the step count is the in-box Manhattan distance
+// between the two positions. A 3x3 box is convex, so no shortest orthogonal
+// path between two of its cells leaves the box.
+const stepsSpec = NFA.encodeSpec({
+  startState: 'awaiting fire',
+  transition: (state, value) => {
+    if (state === 'awaiting fire') {
+      return positionValues.includes(value) ? { fp: value } : undefined;
+    }
+    if (state.wp === undefined) {
+      return positionValues.includes(value) ? { fp: state.fp, wp: value } : undefined;
+    }
+    const steps = Math.abs(posRow(state.fp) - posRow(state.wp))
+      + Math.abs(posCol(state.fp) - posCol(state.wp));
+    return steps === value ? 'done' : undefined;
+  },
+  accept: state => state === 'done',
+  maxDepth: 3,
+}, shape);
 
-const cageConstraints = CAGES.flatMap(({ cells, total }) => [
-  new AllDifferent(...cells),
-  // value = 10*(tensEnc-1) + (onesEnc-1), so sum(value) = 10*sum(tensEnc) +
-  // sum(onesEnc) - 11*cells.length.
-  new Sum(
-    total + 11 * cells.length,
-    ...cells.map((cell) => [cageTensOf.get(cell), 10]),
-    ...cells.map((cell) => cageOnesOf.get(cell))),
-]);
+// [fire, water, boxSteps, mult] for one cell: a marked cell is multiplied by
+// its box's step count, an unmarked one by 1. A cell that is both Fire and
+// Water is in a box whose two marks coincide, so its step count is already 0.
+const multSpec = NFA.encodeSpec({
+  startState: { step: 0 },
+  transition: (state, value) => {
+    if (state.step === 0) return { step: 1, marked: value !== 0 };
+    if (state.step === 1) return { step: 2, marked: state.marked || value !== 0 };
+    if (state.step === 2) return { step: 3, m: state.marked ? value : 1 };
+    return state.m === value ? { step: 4 } : undefined;
+  },
+  accept: state => state.step === 4,
+  maxDepth: 4,
+}, shape);
+
+// [digit, mult, digit, mult, ...] over a cage: the products must reach the
+// total. State carries the running total and the digit still awaiting its
+// multiplier; the total only grows, so overshooting it is a dead branch.
+const cageSpec = total => NFA.encodeSpec({
+  startState: { sum: 0, d: null },
+  transition: (state, value) => {
+    if (state.d === null) return { sum: state.sum, d: value };
+    const sum = state.sum + state.d * value;
+    return sum > total ? undefined : { sum, d: null };
+  },
+  accept: state => state.d === null && state.sum === total,
+  maxDepth: 6,
+}, shape);
+
+// Swapping the two sets leaves every value unchanged, and the rules say the
+// sets cannot be told apart, so exactly one representative of each swapped pair
+// is kept: the fire positions must not exceed the water positions
+// lexicographically. Scans [FP1, WP1, FP2, WP2, ...]; once a box has a strictly
+// smaller fire position the rest is free.
+const labelPinSpec = NFA.encodeSpec({
+  startState: { settled: false, p: null },
+  transition: (state, value) => {
+    if (state.settled) return state;
+    if (state.p === null) return { settled: false, p: value };
+    if (value > state.p) return { settled: true, p: null };
+    if (value === state.p) return { settled: false, p: null };
+    return undefined;
+  },
+  accept: state => state.p === null,
+  maxDepth: 18,
+}, shape);
 
 return [
-  new Shape('9x9', RANGE),
-  // Restrict every main-grid cell back to true digits 1-9 (the extended
-  // Shape range above exists only for the auxiliary Vars below).
-  graph.makeReplicate(new Given(graph.cells()[0], ...range(1, 9))),
+  shape,
+  fire.toVar('fire digit (0 = not a fire cell)'),
+  water.toVar('water digit (0 = not a water cell)'),
+  mult.toVar('cage cell value multiplier'),
+  firePos,
+  waterPos,
+  boxSteps,
 
-  fire.toVar('fire cell flags (2 = fire)'),
-  water.toVar('water cell flags (2 = water)'),
-  fire.makeReplicate(new Given(fire.cells()[0], 1, 2)),
-  water.makeReplicate(new Given(water.cells()[0], 1, 2)),
-  ...oneHotPerHouse(fire),
-  ...oneHotPerHouse(water),
+  graph.makeReplicate(new Given(graph.cells()[0], ...digits)),
+  ...firePos.cells().map(cell => new Given(cell, ...positionValues)),
+  ...waterPos.cells().map(cell => new Given(cell, ...positionValues)),
+  ...boxSteps.cells().map(cell => new Given(cell, ...stepValues)),
+  ...mult.cells().map(cell => new Given(cell, ...stepValues)),
 
-  fireLocalRow, fireLocalCol, waterLocalRow, waterLocalCol,
-  ...fireLocalRow.cells().map((cell) => new Given(cell, 1, 2, 3)),
-  ...fireLocalCol.cells().map((cell) => new Given(cell, 1, 2, 3)),
-  ...waterLocalRow.cells().map((cell) => new Given(cell, 1, 2, 3)),
-  ...waterLocalCol.cells().map((cell) => new Given(cell, 1, 2, 3)),
-  ...localCoordConstraint(fireLocalRow, fire, localRowOf),
-  ...localCoordConstraint(fireLocalCol, fire, localColOf),
-  ...localCoordConstraint(waterLocalRow, water, localRowOf),
-  ...localCoordConstraint(waterLocalCol, water, localColOf),
+  ...graph.cells().map(
+    cell => new Pair(markedIsDigit, 'fire digit', fire.at(cell), cell)),
+  ...graph.cells().map(
+    cell => new Pair(markedIsDigit, 'water digit', water.at(cell), cell)),
+  ...oneMarkPerHouse(fire),
+  ...oneMarkPerHouse(water),
+  new ContainExact('1_2_3_4_5_6_7_8_9', ...fire.cells()),
+  new ContainExact('1_2_3_4_5_6_7_8_9', ...water.cells()),
 
-  diffRow, diffCol, dist,
-  ...diffRow.cells().map((cell) => new Given(cell, 1, 2, 3)),
-  ...diffCol.cells().map((cell) => new Given(cell, 1, 2, 3)),
-  ...dist.cells().map((cell) => new Given(cell, 1, 2, 3, 4, 5)),
-  ...boxDistanceConstraints,
+  ...boxes.map((cells, i) => new NFA(
+    posSpec, 'fire position', firePos.cell(i + 1), ...fire.at(cells))),
+  ...boxes.map((cells, i) => new NFA(
+    posSpec, 'water position', waterPos.cell(i + 1), ...water.at(cells))),
+  ...boxes.map((cells, i) => new NFA(
+    stepsSpec, 'box step count',
+    firePos.cell(i + 1), waterPos.cell(i + 1), boxSteps.cell(i + 1))),
 
-  cageValueTens, cageValueOnes,
-  ...cageValueTens.cells().map((cell) => new Given(cell, ...range(1, 4))),
-  ...cageValueOnes.cells().map((cell) => new Given(cell, ...range(1, 10))),
-  ...cageCellValueConstraints,
-  ...cageConstraints,
+  ...cageCells.map(cell => new NFA(
+    multSpec, 'cell multiplier',
+    fire.at(cell), water.at(cell),
+    boxSteps.cell(boxIndexOf(cell) + 1), mult.at(cell))),
+
+  // "digits must not repeat"; the cage total is the value NFA below.
+  ...CAGES.map(([, cells]) => new AllDifferent(...cells)),
+  ...CAGES.map(([total, cells]) => new NFA(
+    cageSpec(total), `cage ${total}`,
+    ...cells.flatMap(cell => [cell, mult.at(cell)]))),
+
+  new NFA(labelPinSpec, 'fire/water label pin',
+    ...boxes.flatMap((_, i) => [firePos.cell(i + 1), waterPos.cell(i + 1)])),
 ];

@@ -6,7 +6,7 @@
 .AllDifferent~CC17~CC18
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R2C8~R2C9
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R2C8~R2C9
 .SameValues~2~CC17~CC18
 .End
 .End
@@ -16,7 +16,7 @@
 .AllDifferent~CC25~CC24
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R3C7~R3C6
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R3C7~R3C6
 .SameValues~2~CC25~CC24
 .End
 .End
@@ -26,7 +26,7 @@
 .AllDifferent~CC24~CC32
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R3C6~R4C5
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R3C6~R4C5
 .SameValues~2~CC24~CC32
 .End
 .End
@@ -36,7 +36,7 @@
 .AllDifferent~CC32~CC42
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R4C5~R5C6
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R4C5~R5C6
 .SameValues~2~CC32~CC42
 .End
 .End
@@ -46,7 +46,7 @@
 .AllDifferent~CC42~CC43
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R5C6~R5C7
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R5C6~R5C7
 .SameValues~2~CC42~CC43
 .End
 .End
@@ -56,7 +56,7 @@
 .AllDifferent~CC33~CC34
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R4C6~R4C7
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R4C6~R4C7
 .SameValues~2~CC33~CC34
 .End
 .End
@@ -66,7 +66,7 @@
 .AllDifferent~CC54~CC53
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R6C9~R6C8
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R6C9~R6C8
 .SameValues~2~CC54~CC53
 .End
 .End
@@ -76,7 +76,7 @@
 .AllDifferent~CC53~CC44
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R6C8~R5C8
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R6C8~R5C8
 .SameValues~2~CC53~CC44
 .End
 .End
@@ -86,7 +86,7 @@
 .AllDifferent~CC4~CC5
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R1C4~R1C5
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R1C4~R1C5
 .SameValues~2~CC4~CC5
 .End
 .End
@@ -96,7 +96,7 @@
 .AllDifferent~CC5~CC6
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R1C5~R1C6
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R1C5~R1C6
 .SameValues~2~CC5~CC6
 .End
 .End
@@ -106,7 +106,7 @@
 .AllDifferent~CC6~CC16
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R1C6~R2C7
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R1C6~R2C7
 .SameValues~2~CC6~CC16
 .End
 .End
@@ -116,7 +116,7 @@
 .AllDifferent~CC16~CC15
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R2C7~R2C6
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R2C7~R2C6
 .SameValues~2~CC16~CC15
 .End
 .End
@@ -126,7 +126,7 @@
 .AllDifferent~CC15~CC14
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R2C6~R2C5
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R2C6~R2C5
 .SameValues~2~CC15~CC14
 .End
 .End
@@ -136,7 +136,7 @@
 .AllDifferent~CC14~CC4
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R2C5~R1C4
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R2C5~R1C4
 .SameValues~2~CC14~CC4
 .End
 .End
@@ -146,7 +146,7 @@
 .AllDifferent~CC40~CC31
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R5C4~R4C4
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R5C4~R4C4
 .SameValues~2~CC40~CC31
 .End
 .End
@@ -156,7 +156,7 @@
 .AllDifferent~CC31~CC22
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R4C4~R3C4
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R4C4~R3C4
 .SameValues~2~CC31~CC22
 .End
 .End
@@ -166,7 +166,7 @@
 .AllDifferent~CC22~CC21
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R3C4~R3C3
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R3C4~R3C3
 .SameValues~2~CC22~CC21
 .End
 .End
@@ -176,8 +176,28 @@
 .AllDifferent~CC21~CC20
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R3C3~R3C2
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R3C3~R3C2
 .SameValues~2~CC21~CC20
+.End
+.End
+.Or
+.And
+.Pair~CoAKgCoAKgCoAC~_Consecutive~R3C2~R4C3
+.AllDifferent~CC20~CC30
+.End
+.And
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R3C2~R4C3
+.SameValues~2~CC20~CC30
+.End
+.End
+.Or
+.And
+.Pair~CoAKgCoAKgCoAC~_Consecutive~R4C3~R5C4
+.AllDifferent~CC30~CC40
+.End
+.And
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R4C3~R5C4
+.SameValues~2~CC30~CC40
 .End
 .End
 .Or
@@ -186,7 +206,7 @@
 .AllDifferent~CC19~CC28
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R3C1~R4C1
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R3C1~R4C1
 .SameValues~2~CC19~CC28
 .End
 .End
@@ -196,7 +216,7 @@
 .AllDifferent~CC28~CC37
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R4C1~R5C1
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R4C1~R5C1
 .SameValues~2~CC28~CC37
 .End
 .End
@@ -206,7 +226,7 @@
 .AllDifferent~CC37~CC29
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R5C1~R4C2
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R5C1~R4C2
 .SameValues~2~CC37~CC29
 .End
 .End
@@ -216,7 +236,7 @@
 .AllDifferent~CC29~CC19
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R4C2~R3C1
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R4C2~R3C1
 .SameValues~2~CC29~CC19
 .End
 .End
@@ -226,7 +246,7 @@
 .AllDifferent~CC11~CC3
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R2C2~R1C3
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R2C2~R1C3
 .SameValues~2~CC11~CC3
 .End
 .End
@@ -236,7 +256,7 @@
 .AllDifferent~CC3~CC2
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R1C3~R1C2
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R1C3~R1C2
 .SameValues~2~CC3~CC2
 .End
 .End
@@ -246,7 +266,17 @@
 .AllDifferent~CC2~CC1
 .End
 .And
-.Pair~CIBgQQAgAAAB~_Ratio~R1C2~R1C1
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R1C2~R1C1
 .SameValues~2~CC2~CC1
+.End
+.End
+.Or
+.And
+.Pair~CoAKgCoAKgCoAC~_Consecutive~R1C1~R2C2
+.AllDifferent~CC1~CC11
+.End
+.And
+.Pair~CIBgQQAgAAAB~_Ratio%201%3A2~R1C1~R2C2
+.SameValues~2~CC1~CC11
 .End
 .End

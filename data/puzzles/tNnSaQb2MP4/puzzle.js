@@ -3,26 +3,25 @@
 // Video: https://www.youtube.com/watch?v=tNnSaQb2MP4
 // Source: https://app.crackingthecryptic.com/sudoku/dh9t3PnBQ4
 
-// Standard 9x9 sudoku. The grid is shaded per the native YinYang constraint
-// (SHADED/UNSHADED). Every blue line is split, in its drawn order, into
-// maximal runs of matching shade; every run on a line must sum to the same
-// value N, with N free per line. A line that ends up entirely one colour
-// has only one run and is
-// rejected by construction, which is also "all lines must cross colours at
-// least once". Runs are enumerated as an Or over every non-constant
-// two-colouring of the line's cells (a running-sum NFA against an unknown
-// per-line target blows the state cap for the 9-cell line), each branch
-// pinning that colouring via Given and asserting EqualSum over its runs.
-
-const SHADED = 1;
-const UNSHADED = 2;
+// Rules encoded here:
+//  - Normal sudoku; the grid has no given digits.
+//  - The grid is shaded in two colours, each colour orthogonally connected and
+//    no 2x2 area monochrome (the YinYang layer YY).
+//  - The shading cuts each blue line into maximal runs of consecutive cells of
+//    one colour ("passes"). Every pass on a line sums to the same N; N is
+//    per-line, not shared between lines. Every line crosses colours at least
+//    once, i.e. has two or more passes.
+//  - Cells separated by an X sum to 10. The rules do not say the X marks are
+//    exhaustive, so no negative X rule is added.
+// No rule is omitted. The two colours are unnamed and every rule above treats
+// them alike, so the shading comes in swapped pairs; one cell's colour is
+// pinned below to fix a representative.
 
 const graph = cellGraph('9x9');
 const shade = graph.makeOverlay('YY');
 
-// Blue lines, transcribed in drawn waypoint order (deepskyblue strokes).
-// Consecutive cells in a line may be diagonal on the grid -- lines bind by
-// list order, not grid adjacency.
+// The ten light-blue strokes, each as its cell path in drawn order. Only the
+// order along the stroke matters; some steps are diagonal.
 const blueLines = [
   ['R7C8', 'R6C8', 'R5C8', 'R4C8', 'R3C8'],
   ['R1C7', 'R2C6', 'R2C5', 'R2C4', 'R3C3'],
@@ -36,37 +35,40 @@ const blueLines = [
   ['R5C5', 'R6C5', 'R6C4'],
 ];
 
-// For one line, enumerate every non-constant assignment of SHADED/UNSHADED to
-// its cells (excluding the two constant ones -- a line all one colour never
-// crosses colours), split each assignment into its maximal same-colour runs,
-// and require the runs to share one sum. Only the branch matching the true
-// shading of the grid can hold; every other branch is contradicted by its own
-// Given cells.
-function equalSumPerColourRun(cells) {
-  const n = cells.length;
-  const branches = [];
-  for (let mask = 1; mask < (1 << n) - 1; mask++) {
-    const colours = Array.from(
-      { length: n }, (_, i) => ((mask >> i) & 1) ? SHADED : UNSHADED);
-    const runs = [[cells[0]]];
-    for (let i = 1; i < n; i++) {
-      if (colours[i] === colours[i - 1]) runs[runs.length - 1].push(cells[i]);
-      else runs.push([cells[i]]);
-    }
-    branches.push(new And([
-      ...cells.map((cell, i) => new Given(shade.at(cell), colours[i])),
-      new EqualSum(...runs),
-    ]));
-  }
-  return new Or(branches);
-}
+// Cut `cells` after every position i whose bit is set in `mask`, giving the
+// passes that shading pattern produces.
+const splitPasses = (cells, mask) => cells.reduce((passes, cell, i) => {
+  passes[passes.length - 1].push(cell);
+  if (i + 1 < cells.length && (mask & (1 << i))) passes.push([]);
+  return passes;
+}, [[]]);
 
-// Overlay text "X" sits on the edge between R1C1 and R2C1.
-const xClue = new X('R1C1', 'R2C1');
+// Which passes a line has is fixed by which of its L-1 consecutive pairs share
+// a colour, so enumerate those patterns. The YY layer holds exactly two values,
+// so "same colour" is SameValues on the pair and "colour change" is
+// AllDifferent on it. mask starts at 1: mask 0 is the all-one-colour line the
+// rules forbid.
+const lineConstraint = (cells) => {
+  const shadeCells = shade.at(cells);
+  const masks = Array.from(
+    { length: (1 << (cells.length - 1)) - 1 }, (_, i) => i + 1);
+
+  return new Or(masks.map(mask => new And([
+    ...shadeCells.slice(0, -1).map(
+      (shadeCell, i) => ((mask & (1 << i))
+        ? new AllDifferent(shadeCell, shadeCells[i + 1])
+        : new SameValues(2, shadeCell, shadeCells[i + 1]))),
+    new EqualSum(...splitPasses(cells, mask)),
+  ])));
+};
 
 return [
   new Shape('9x9'),
   new YinYang(),
-  ...blueLines.map(equalSumPerColourRun),
-  xClue,
+  // White X on the border between R1C1 and R2C1.
+  new X('R1C1', 'R2C1'),
+  // Representative of the colour swap, not a puzzle clue: R1C1 takes the YY
+  // layer's first colour.
+  new Given(shade.at('R1C1'), 1),
+  ...blueLines.map(lineConstraint),
 ];

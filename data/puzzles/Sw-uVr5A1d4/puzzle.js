@@ -3,216 +3,292 @@
 // Video: https://www.youtube.com/watch?v=Sw-uVr5A1d4
 // Source: https://app.crackingthecryptic.com/sudoku/JqgBdhMBbn
 
-// Normal sudoku rules apply. R8C1 < R8C2 and R2C8 < R2C9 (both drawn "<"
-// marks are unrotated, so both read left-cell-less-than-right-cell).
+// Normal 9x9 sudoku, no given digits. Eight coloured circles form four colour
+// pairs. Each pair is joined by a "between line" stepping orthogonally or
+// diagonally between cell centres; every cell such a line visits other than its
+// two circles holds a digit strictly between the two circle digits. Lines may
+// not cross one another and may not share cells. A circle's own digit is also a
+// minesweeper count: the number of cells its own line visits among the up to
+// eight cells surrounding it, the circled cell itself excluded. Three signs on
+// cell borders point at the smaller of the two digits they separate.
 //
-// Four coloured circle pairs (green R1C1/R1C3, purple R4C4/R2C7, red
-// R4C2/R2C5, gold R6C7/R9C1, transcribed from the drawn overlay fills) must
-// each be joined by a "between line": an orthogonal-or-diagonal king-move
-// path the solver discovers between its two circles. Every cell strictly
-// between the two circles on that path holds a digit strictly between the
-// two circles' own digits; no two lines share a cell or cross each other;
-// and a circle's own digit equals how many of its up to 8 king-move
-// neighbours belong to its own line (not counting the circle itself).
-//
-// Modelled as one shared colour layer (which line, if any, owns each cell)
-// plus one used/unused Var per king-move edge, so a line is: degree 1 at its
-// two circles, degree 2 elsewhere on it, 0 off it -- counted only over edges
-// this construction has marked used (an edge used forces its two cells to
-// share a colour). Counting used edges rather than same-coloured neighbours
-// directly is what lets a line touch itself, which the rules never forbid.
-// Two degree-1 cells with everywhere else degree-2 already forces each
-// circle-to-circle path to exist as one component of its own coloured cells
-// (a graph with exactly two odd-degree vertices has exactly one path between
-// them); the residual gap -- an extra closed loop of the same colour,
-// disjoint from that path -- is the omitted rule below.
-//
-// "Can't cross" is read as a rule between the four different-coloured lines,
-// never a line crossing itself: at every lattice point where two diagonal
-// edges meet in an X, both may not be marked used unless they share a colour.
+// Nothing is omitted. The rules also say the lines need not be unique -- the
+// solver only has to be able to draw one valid line per colour -- which is a
+// statement about what has to be proved, not a further constraint; the line
+// layers below are existential in exactly that sense.
 
-const OFF = 5, GREEN = 1, PURPLE = 2, RED = 3, GOLD = 4;
-const UNUSED = 1, USED = 2;
+const NV = 9;
+const MOD_A = 7, MOD_B = 8;          // position counters, lcm 56 (see below)
+const UNUSED = 1, FWD = 2, BWD = 3;  // step Var: unused, a->b, b->a
+const OFF = 1;                       // counter value for a cell no line visits
+const START_POS = 2;                 // counter value of a line's first cell
+const NOLINE = 1;                    // label Var: cell is on no line
+const LABEL0 = 2;                    // label of the first colour
 
-// Circle pairs, transcribed from the four fill colours drawn on the grid.
-const COLOURS = [
-  { colour: GREEN, ends: ['R1C1', 'R1C3'] },
-  { colour: PURPLE, ends: ['R4C4', 'R2C7'] },
-  { colour: RED, ends: ['R4C2', 'R2C5'] },
-  { colour: GOLD, ends: ['R6C7', 'R9C1'] },
+// The eight circles, read off the drawn overlay circles by fill colour; the two
+// cells of each pair are the two ends of that colour's line. Which end is
+// called `from` is this encoding's own choice -- it seams the position counters
+// below -- and the rules do not distinguish the ends.
+const LINES = [
+  { colour: 'yellow-green', from: 'R1C1', to: 'R1C3' },
+  { colour: 'purple',       from: 'R4C4', to: 'R2C7' },
+  { colour: 'red',          from: 'R4C2', to: 'R2C5' },
+  { colour: 'gold',         from: 'R6C7', to: 'R9C1' },
 ];
-const circleColour = new Map();
-for (const { colour, ends } of COLOURS) {
-  for (const cell of ends) circleColour.set(cell, colour);
-}
+// The three inequality signs, as [larger, smaller]: two "<" glyphs on vertical
+// borders and one chevron on the R4C3/R5C3 border, each pointing at the smaller
+// digit.
+const INEQUALITIES = [['R8C2', 'R8C1'], ['R2C9', 'R2C8'], ['R5C3', 'R4C3']];
 
 const shape = new Shape('9x9');
 const graph = cellGraph(shape);
-const cells = graph.cells();
-const colours = graph.makeOverlay('VC');
+const gridCells = graph.cells();
+const label = graph.makeOverlay('VL');
+const posA = graph.makeOverlay('VA');
+const posB = graph.makeOverlay('VB');
 
-// --- King-move edges, one Var each. Each of the 4 forward directions is
-// stepped from every cell, so every undirected edge is created exactly once.
-const DIRECTIONS = [[0, 1], [1, 0], [1, 1], [1, -1]];
-const edges = [];
-const incident = new Map(cells.map(cell => [cell, []]));
-for (const a of cells) {
-  for (const [dR, dC] of DIRECTIONS) {
-    const b = graph.step(a, dR, dC);
-    if (!b) continue;
-    const id = 'VS' + (edges.length + 1);
-    edges.push({ id, a, b });
-    incident.get(a).push(id);
-    incident.get(b).push(id);
+const labelOf = n => LABEL0 + n;                  // line index -> label value
+const LABELS = LINES.map((_, n) => labelOf(n));
+const endpoints = new Map();                      // circle cell -> its line index
+LINES.forEach((line, n) => {
+  endpoints.set(line.from, n);
+  endpoints.set(line.to, n);
+});
+
+// --- Step variables -------------------------------------------------------
+// One Var per king-move adjacency, recording whether a line uses it and in
+// which direction; the direction is what the position counters need.
+const STEP_DIRS = [[0, 1], [1, 0], [1, 1], [1, -1]];
+const steps = [];
+const stepsAt = new Map(gridCells.map(cell => [cell, []]));
+for (const cell of gridCells) {
+  for (const [dR, dC] of STEP_DIRS) {
+    const other = graph.step(cell, dR, dC);
+    if (!other) continue;
+    const id = 'VS' + (steps.length + 1);
+    steps.push({ id, a: cell, b: other });
+    stepsAt.get(cell).push({ id, out: FWD, in: BWD });
+    stepsAt.get(other).push({ id, out: BWD, in: FWD });
   }
 }
-const edgeGroup = new Var('S', 'king-move edge used', edges.length);
+const stepIndex = new Map(steps.map(s => [s.a + '|' + s.b, s]));
+const stepBetween = (p, q) => stepIndex.get(p + '|' + q) || stepIndex.get(q + '|' + p);
 
-const cache = new Map();
+// --- Custom machines ------------------------------------------------------
+const memo = new Map();
 const cached = (key, build) => {
-  if (!cache.has(key)) cache.set(key, build());
-  return cache.get(key);
+  if (!memo.has(key)) memo.set(key, build());
+  return memo.get(key);
 };
 
-// Reads [own colour, ...incident edge-used flags]. A circle needs exactly one
-// used incident edge and a real (non-OFF) colour; any other coloured cell
-// needs exactly two; an OFF cell needs none.
-const cellSpec = isCircle => cached(`cell|${isCircle}`, () => NFA.encodeSpec({
-  startState: { colour: null, count: 0 },
-  transition: (state, value) => {
-    if (state.colour === null) return { colour: value, count: 0 };
-    if (value !== UNUSED && value !== USED) return undefined;
-    const count = state.count + (value === USED ? 1 : 0);
-    return count <= 2 ? { colour: state.colour, count } : undefined;
-  },
-  accept: state => isCircle
-    ? state.colour !== OFF && state.count === 1
-    : (state.colour === OFF ? state.count === 0 : state.count === 2),
-}, 9));
+const nextPos = (v, mod) => START_POS + ((v - START_POS + 1) % mod);
 
-// Reads [edge-used flag, colour of one end, colour of the other end]. A used
-// edge forces both ends to share one real colour.
-const edgeSpec = cached('edge', () => NFA.encodeSpec({
-  startState: { pos: 0 },
-  transition: (state, value) => {
-    if (state.pos === 0) return { pos: 1, step: value };
-    if (state.pos === 1) return { pos: 2, step: state.step, a: value };
-    if (state.pos !== 2) return undefined;
-    if (state.step === UNUSED) return { pos: 3, done: true };
-    return (value === state.a && value !== OFF) ? { pos: 3, done: true } : undefined;
+// Position counter: a step in use advances the counter by one along its
+// direction of travel, so a closed loop of steps would need a length that is
+// 0 mod the modulus. Reads [step, counter of a, counter of b].
+const counterNFA = mod => cached('cnt' + mod, () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return { k: 1, dir: value };
+    if (s.k === 1) return { k: 2, dir: s.dir, a: value };
+    if (s.k !== 2) return undefined;
+    if (s.dir === UNUSED) return { k: 3 };
+    if (s.a === OFF || value === OFF) return undefined;
+    if (s.dir === FWD) return value === nextPos(s.a, mod) ? { k: 3 } : undefined;
+    return s.a === nextPos(value, mod) ? { k: 3 } : undefined;
   },
-  accept: state => state.done === true,
-}, 9));
+  accept: s => s.k === 3,
+}, NV));
 
-// Reads [step of the down-right diagonal, step of the down-left diagonal,
-// colour of the down-right diagonal's cell, colour of the down-left
-// diagonal's cell]. Forbidden only when both diagonals are used and their
-// colours differ.
-const crossingSpec = cached('crossing', () => NFA.encodeSpec({
-  startState: { pos: 0 },
-  transition: (state, value) => {
-    if (state.pos === 0) return { pos: 1, s1: value };
-    if (state.pos === 1) return { pos: 2, s1: state.s1, s2: value };
-    if (state.pos === 2) return { pos: 3, s1: state.s1, s2: state.s2, cA: value };
-    if (state.pos !== 3) return undefined;
-    if (state.s1 === USED && state.s2 === USED && state.cA !== value) return undefined;
-    return { pos: 4, done: true };
-  },
-  accept: state => state.done === true,
-}, 9));
-
-// Reads [candidate cell's own colour, one circle's digit, its partner's
-// digit, the candidate's own digit]. When the candidate's colour matches
-// this pair, its digit must sit strictly between the two circles' digits.
-const betweenSpec = colour => cached(`between|${colour}`, () => NFA.encodeSpec({
-  startState: { pos: 0 },
-  transition: (state, value) => {
-    if (state.pos === 0) return { pos: 1, active: value === colour };
-    if (state.pos === 1) return { pos: 2, active: state.active, a: value };
-    if (state.pos === 2) {
-      return {
-        pos: 3, active: state.active,
-        lo: Math.min(state.a, value), hi: Math.max(state.a, value),
-      };
+// A step in use joins two cells of the same line, so their labels agree and are
+// not NOLINE. This is also what makes "lines may not share cells" hold: a cell
+// carries one label, so it belongs to at most one line.
+// Reads [step, label of a, label of b].
+const stepLabelNFA = cached('steplabel', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return { k: 1, used: value !== UNUSED };
+    if (s.k === 1) {
+      if (!s.used) return { k: 2, used: false };
+      return value === NOLINE ? undefined : { k: 2, used: true, lab: value };
     }
-    if (state.pos !== 3) return undefined;
-    if (!state.active) return { pos: 4, done: true };
-    return (value > state.lo && value < state.hi) ? { pos: 4, done: true } : undefined;
+    if (s.k !== 2) return undefined;
+    if (!s.used) return { k: 3 };
+    return value === s.lab ? { k: 3 } : undefined;
   },
-  accept: state => state.done === true,
-}, 9));
+  accept: s => s.k === 3,
+}, NV));
 
-// Reads [circle's own digit, ...its king-move neighbours' colours]. The
-// digit must equal how many neighbours share this circle's own (fixed,
-// known) colour.
-const countSpec = colour => cached(`count|${colour}`, () => NFA.encodeSpec({
-  startState: { target: null, count: 0 },
-  transition: (state, value) => {
-    if (state.target === null) return { target: value, count: 0 };
-    const hit = value === colour ? 1 : 0;
-    return { target: state.target, count: Math.min(state.count + hit, state.target + 1) };
+// Per-cell line shape. Reads the cell's label, both counters, then every step
+// it is an endpoint of. A cell off every line uses no step and holds OFF in
+// both counters; a cell a line passes through is entered once and left once.
+// A circle is an end of its own line, so it is entered once and never left, or
+// left once and never entered. The cell each line is left from but never
+// entered has both counters pinned to START_POS, which fixes the numbering; a
+// closed loop of steps has no such cell, so the counters must run all the way
+// round it and its length must be 0 mod MOD_A and mod MOD_B. Every cell of such
+// a loop would be a line cell that is not a circle, so its digit is strictly
+// between that line's two circle digits; every circle digit is a count over at
+// most eight neighbours, hence at most 8, so those interior digits come from at
+// most the six values 2..7 and the loop has at most 54 cells -- fewer than
+// lcm(MOD_A, MOD_B) = 56.
+const cellNFA = (incident, role) => cached(
+  'cell|' + role + '|' + incident.map(s => s.out).join(''),
+  () => NFA.encodeSpec({
+    startState: { k: 0 },
+    transition: (s, value) => {
+      if (s.k === 0) {
+        const on = value !== NOLINE;
+        if (role !== 'none' && !on) return undefined;
+        return { k: 1, on };
+      }
+      if (s.k === 1 || s.k === 2) {
+        if (role === 'from') {
+          if (value !== START_POS) return undefined;
+        } else if ((value !== OFF) !== s.on) return undefined;
+        return { k: s.k + 1, on: s.on, in: 0, out: 0 };
+      }
+      const idx = s.k - 3;
+      if (idx >= incident.length) return undefined;
+      const step = incident[idx];
+      let nIn = s.in, nOut = s.out;
+      if (value === step.in) nIn++;
+      else if (value === step.out) nOut++;
+      else if (value !== UNUSED) return undefined;
+      if (nIn > 1 || nOut > 1) return undefined;
+      return { k: s.k + 1, on: s.on, in: nIn, out: nOut };
+    },
+    accept: s => {
+      if (s.k !== 3 + incident.length) return false;
+      if (role === 'from') return s.in === 0 && s.out === 1;
+      if (role === 'to') return s.in === 1 && s.out === 0;
+      return s.on ? (s.in === 1 && s.out === 1) : (s.in === 0 && s.out === 0);
+    },
+  }, NV));
+
+// "between line": a cell carrying this line's label holds a digit strictly
+// between the line's two circle digits. Reads [label of the cell, the cell,
+// the line's two circle cells]; a cell carrying any other label is unaffected.
+const betweenNFA = lab => cached('between' + lab, () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return value === lab ? { k: 1, on: true } : { k: 1, on: false };
+    if (s.k === 1) return s.on ? { k: 2, on: true, d: value } : { k: 2, on: false };
+    if (s.k === 2) return s.on ? { k: 3, on: true, d: s.d, a: value } : { k: 3, on: false };
+    if (s.k !== 3) return undefined;
+    if (!s.on) return { k: 4 };
+    const lo = Math.min(s.a, value), hi = Math.max(s.a, value);
+    return lo < s.d && s.d < hi ? { k: 4 } : undefined;
   },
-  accept: state => state.target !== null && state.count === state.target,
-}, 9));
+  accept: s => s.k === 4,
+}, NV));
 
-// --- Domains: every cell may be any colour or OFF, then each circle is
-// pinned down further to its own single colour.
-const colourDomains = [
-  colours.makeReplicate(new Given(colours.cells()[0], GREEN, PURPLE, RED, GOLD, OFF)),
-  ...[...circleColour].map(([cell, colour]) => new Given(colours.at(cell), colour)),
+// Minesweeper count: the circle's own digit equals how many of its king
+// neighbours carry its line's label. Reads [the circle cell, then the label of
+// each neighbour]. The count is clamped one past the target, which is all the
+// machine ever needs to distinguish.
+const countNFA = lab => cached('count' + lab, () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return { k: 1, t: value, c: 0 };
+    const c = s.c + (value === lab ? 1 : 0);
+    return { k: 1, t: s.t, c: Math.min(c, s.t + 1) };
+  },
+  accept: s => s.k === 1 && s.c === s.t,
+}, NV));
+
+// "they can't cross ... with each other": between cell centres the only way two
+// king steps can pass through one another without sharing a cell is as the two
+// diagonals of one 2x2 block, and the sentence forbids it between two lines.
+// It is read reciprocally, as its "nor share cells with each other" half must
+// be, so two diagonals belonging to the same line are left alone; that is the
+// weaker of the two readings and cannot reject a legal grid. Reads the two
+// diagonal steps and then the labels of the block's two top cells, which are
+// one cell of each diagonal.
+const noCrossNFA = cached('nocross', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return { k: 1, u: value !== UNUSED };
+    if (s.k === 1) return { k: 2, both: s.u && value !== UNUSED };
+    if (s.k === 2) {
+      return s.both ? { k: 3, both: true, lab: value } : { k: 3, both: false };
+    }
+    if (s.k !== 3) return undefined;
+    if (!s.both) return { k: 4 };
+    return value === s.lab ? { k: 4 } : undefined;
+  },
+  accept: s => s.k === 4,
+}, NV));
+
+// --- Constraints ----------------------------------------------------------
+const layers = [
+  label.toVar('which line each cell is on'),
+  posA.toVar('position along its line, mod ' + MOD_A),
+  posB.toVar('position along its line, mod ' + MOD_B),
+  new Var('S', 'line steps', steps.length),
+];
+const domains = [
+  // NOLINE plus one label per line.
+  label.makeReplicate(new Given(label.at(gridCells[0]), NOLINE, ...LABELS)),
+  // OFF plus MOD_A positions. posB spans OFF plus MOD_B positions, which is the
+  // whole 1-9 alphabet, and the step Vars are restricted by the per-cell
+  // machines, which accept no value on them but unused / entered / left.
+  posA.makeReplicate(new Given(posA.at(gridCells[0]),
+    ...Array.from({ length: MOD_A + 1 }, (_, n) => n + 1))),
 ];
 
-// --- Local colour-degree rule, every cell.
-const localDegrees = cells.map(cell => new NFA(
-  cellSpec(circleColour.has(cell)), 'colour degree',
-  colours.at(cell), ...incident.get(cell)));
+// Each circle is on its own colour's line.
+const circleLabels = [...endpoints].map(
+  ([cell, n]) => new Given(label.at(cell), labelOf(n)));
 
-// --- A used edge's two ends share a colour.
-const edgeColourAgreement = edges.map(({ id, a, b }) => new NFA(
-  edgeSpec, 'edge colour agreement', id, colours.at(a), colours.at(b)));
+const lineShape = gridCells.map(cell => {
+  const incident = stepsAt.get(cell);
+  const n = endpoints.get(cell);
+  const role = n === undefined ? 'none'
+    : (LINES[n].from === cell ? 'from' : 'to');
+  return new NFA(cellNFA(incident, role), 'line-cell',
+    label.at(cell), posA.at(cell), posB.at(cell), ...incident.map(s => s.id));
+});
 
-// --- No cross-colour diagonal crossing, every interior lattice point.
-const crossing = [];
-for (let r = 1; r < 9; r++) {
-  for (let c = 1; c < 9; c++) {
-    const a = makeCellId(r, c), b = makeCellId(r + 1, c + 1);
-    const d = makeCellId(r, c + 1), e = makeCellId(r + 1, c);
-    const edge1 = edges.find(edge => edge.a === a && edge.b === b);
-    const edge2 = edges.find(edge => edge.a === d && edge.b === e);
-    crossing.push(new NFA(crossingSpec, 'no cross-colour crossing',
-      edge1.id, edge2.id, colours.at(a), colours.at(d)));
-  }
-}
+const stepLabels = steps.map(s => new NFA(stepLabelNFA, 'line-step',
+  s.id, label.at(s.a), label.at(s.b)));
 
-// --- Between-value rule: every non-circle cell, against every colour pair.
-const betweenRules = [];
-for (const cell of cells) {
-  if (circleColour.has(cell)) continue;
-  for (const { colour, ends } of COLOURS) {
-    betweenRules.push(new NFA(betweenSpec(colour), 'between the pair',
-      colours.at(cell), ends[0], ends[1], cell));
-  }
-}
+const counters = steps.flatMap(s => [
+  new NFA(counterNFA(MOD_A), 'line-order', s.id, posA.at(s.a), posA.at(s.b)),
+  new NFA(counterNFA(MOD_B), 'line-order', s.id, posB.at(s.a), posB.at(s.b)),
+]);
 
-// --- Minesweeper neighbour-count rule: every circle.
-const neighbourCounts = [];
-for (const { colour, ends } of COLOURS) {
-  for (const circle of ends) {
-    neighbourCounts.push(new NFA(countSpec(colour), 'circle neighbour count',
-      circle, ...colours.at(graph.kingNeighbours(circle))));
-  }
-}
+const noCross = gridCells.flatMap(cell => {
+  const block = graph.block(cell, 2, 2);
+  if (!block) return [];
+  const [tl, tr, bl, br] = block;
+  return [new NFA(noCrossNFA, 'no-crossing', stepBetween(tl, br).id,
+    stepBetween(tr, bl).id, label.at(tl), label.at(tr))];
+});
+
+// The circles are the ends of their line, not cells "along" it, so they are not
+// themselves required to lie between the two circle digits.
+const betweens = gridCells.filter(cell => !endpoints.has(cell)).flatMap(
+  cell => LINES.map((line, n) => new NFA(betweenNFA(labelOf(n)), 'between-line',
+    label.at(cell), cell, line.from, line.to)));
+
+const minesweeper = [...endpoints].map(([cell, n]) =>
+  new NFA(countNFA(labelOf(n)), 'circle-count',
+    cell, ...label.at(graph.kingNeighbours(cell))));
+
+const inequalities = INEQUALITIES.map(
+  ([larger, smaller]) => new GreaterThan(larger, smaller));
 
 return [
   shape,
-  colours.toVar('circle-pair colour'),
-  edgeGroup,
-  new GreaterThan('R8C2', 'R8C1'),
-  new GreaterThan('R2C9', 'R2C8'),
-  ...colourDomains,
-  ...localDegrees,
-  ...edgeColourAgreement,
-  ...crossing,
-  ...betweenRules,
-  ...neighbourCounts,
+  ...layers,
+  ...domains,
+  ...circleLabels,
+  ...lineShape,
+  ...stepLabels,
+  ...counters,
+  ...noCross,
+  ...betweens,
+  ...minesweeper,
+  ...inequalities,
 ];

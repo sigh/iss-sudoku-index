@@ -3,390 +3,518 @@
 // Video: https://www.youtube.com/watch?v=9xrJiqM7nw8
 // Source: https://sudokupad.app/hypzc2xwbi
 
-// Normal sudoku. Finkz stands on R1C1 and walks to the cupcake on R1C9. The
-// walk visits no cell twice, never crosses itself, and never passes through a
-// thick maze wall. A step is orthogonal, or diagonal across a 2x2 area free of
-// walls and carrying no round wall-spot on the corner the two cells share.
-// Entering a teleport transports Finkz instantly to the matching-coloured
-// teleport, from where the walk continues; matching teleports hold identical
-// digits, and teleports that do not match hold different digits.
-// Each row, column and box holds exactly one mirror cell, none of them a
-// teleport tile, and every mirror cell holds a different digit. A cell's
-// value is 10 minus its digit if it is a mirror cell, its digit otherwise.
-// A purple arrow sits on an open passage between two cells; the walk may use
-// that passage only in the drawn direction, and the value at the arrowhead
-// end is always the smaller of the two values.
-// Test constraint: two cells adjacent along the walk (not linked by a
-// teleport jump) have values differing by at least 5.
+// Normal sudoku on the digits. Finkz starts on R1C1 and must reach the cupcake
+// on R1C9 by a walk that visits no cell twice, never crosses itself, and never
+// crosses a thick maze wall. A step is orthogonal, or diagonal across a 2x2
+// block -- and a diagonal needs "a 2x2 space", so a wall on any of the four
+// unit edges meeting the shared corner blocks it, and a round wall-spot drawn
+// on that corner blocks it as well.
+//
+// MIRROR CELLS: exactly one per row, column and box; they carry no teleport;
+// a mirror cell's value is 10 minus its digit (every other cell's value is its
+// digit); the nine mirror digits are all different.
+//
+// TELEPORTS: three coloured cell pairs. Entering either cell of a pair
+// instantly carries Finkz to its match, so a pair is either wholly unused or
+// used as one extra "step" between its two cells (either direction), taken in
+// place of one ordinary move -- never in addition to one, since entering a
+// teleport is not optional. Matching teleports hold equal digits and
+// different-coloured teleports hold different digits, unconditionally (a digit
+// rule about the six cells themselves, independent of the path).
+//
+// ONE-WAY DOORS: six purple chevrons on cell borders. Each names the smaller of
+// the two values it sits between (unconditionally), and the border may only be
+// crossed in the direction the chevron points.
+//
+// TEST CONSTRAINT: two cells consecutive along the walk and physically adjacent
+// -- i.e. joined by an ordinary step rather than by a teleport jump -- have
+// values differing by at least 5.
 //
 // Nothing is omitted.
 
-// The alphabet is widened so the Var layers can carry the position counters;
-// the 81 grid cells, the mirror flag and the value layer are pinned back to
-// their true ranges below.
-const NV = 11;
-// Coprime moduli: a closed cycle of steps beside the walk would need a length
-// divisible by both, i.e. 90, and the grid holds 81 cells.
-const MOD_A = 10, MOD_B = 9;
-const OFF = 1;                  // counter value for a cell Finkz never visits
-const FIRST = 2;                // counter value of the walk's first cell
-// Step values. A step is stored once, on the (a, b) pair built below; FWD
-// means Finkz walked a->b and BWD means b->a, so the counters can tell
-// direction.
-const UNUSED = 1, FWD = 2, BWD = 3;
-
-const RAT_CELL = 'R1C1';        // the rat emoji
-const CUPCAKE = 'R1C9';         // the cupcake emoji
-
-// The maze walls: forestgreen (#15a028) polylines, thickness 12.16, on the
-// corner lattice where corner (i, j) is the top-left corner of cell RiCj, so
-// the lattice runs 1..10. The first entry also traces the grid boundary,
-// which separates no two grid cells.
-const WALLS = [
-  [[3, 2], [1, 2], [1, 10], [10, 10], [10, 1], [1, 1], [1, 2]],
-  [[1, 7], [3, 7]],
-  [[4, 10], [4, 9]],
-  [[10, 4], [8, 4]],
-  [[4, 8], [4, 4]],
-  [[4, 5], [3, 5]],
-  [[2, 3], [4, 3], [4, 2], [6, 2], [6, 3], [7, 3]],
-  [[8, 3], [9, 3], [9, 2]],
-  [[7, 2], [8, 2]],
-  [[7, 4], [7, 5]],
-  [[2, 4], [3, 4]],
-  [[2, 5], [2, 6], [3, 6]],
-  [[2, 8], [2, 9], [3, 9]],
-  [[6, 6], [7, 6]],
-  [[7, 7], [8, 7]],
-  [[5, 7], [6, 7]],
-];
-// The 37 round forestgreen wall-spots, each on a lattice corner (same
-// convention and colour as the walls above).
-const SPOTS = [
-  [2, 3], [2, 4], [2, 5], [2, 6], [2, 8], [2, 9], [3, 2], [3, 4], [3, 5],
-  [3, 6], [3, 7], [3, 9], [4, 2], [4, 3], [4, 4], [4, 8], [4, 9], [5, 3],
-  [5, 4], [5, 5], [5, 7], [6, 2], [6, 3], [6, 6], [6, 7], [7, 2], [7, 3],
-  [7, 4], [7, 5], [7, 6], [7, 7], [8, 2], [8, 3], [8, 4], [8, 7], [9, 2],
-  [9, 3],
-];
-// The three teleport pairs, read off the coloured target-shaped underlays and
-// their A/B/C labels.
-const TELEPORTS = [
-  ['R5C3', 'R3C8'],   // A, yellow
-  ['R6C4', 'R4C8'],   // B, purple
-  ['R6C6', 'R9C5'],   // C, green
-];
-// The six purple (#730dc5) one-way-door arrows, each a chevron drawn on an
-// open orthogonal passage; `from` is the base of the chevron (the larger
-// value), `to` the point it aims at (the smaller value, and the only
-// direction the walk may cross it).
-const ARROWS = [
-  ['R1C2', 'R1C3'],
-  ['R2C4', 'R1C4'],
-  ['R2C3', 'R3C3'],
-  ['R5C3', 'R4C3'],
-  ['R6C3', 'R5C3'],
-  ['R7C3', 'R7C2'],
-];
-
-const shape = new Shape('9x9', NV);
-const graph = cellGraph(shape);
-const gridCells = graph.cells();
-const posA = graph.makeOverlay('VA');   // walk position mod MOD_A
-const posB = graph.makeOverlay('VB');   // walk position mod MOD_B
-const mirr = graph.makeOverlay('VM');   // 1 = ordinary cell, 2 = mirror cell
-const val = graph.makeOverlay('VL');    // the cell's value (mirrored or not)
-
-// --- The maze ---------------------------------------------------------------
-// Split the wall polylines into unit lattice segments: 'H|i|j' runs from
-// corner (i, j) to (i, j+1) and separates R(i-1)Cj from RiCj; 'V|i|j' runs
-// from (i, j) to (i+1, j) and separates RiC(j-1) from RiCj.
-const wallSegments = new Set();
-for (const line of WALLS) {
-  for (let n = 1; n < line.length; n++) {
-    const [i0, j0] = line[n - 1], [i1, j1] = line[n];
-    if (i0 === i1) {
-      for (let j = Math.min(j0, j1); j < Math.max(j0, j1); j++) {
-        wallSegments.add(`H|${i0}|${j}`);
-      }
-    } else {
-      for (let i = Math.min(i0, i1); i < Math.max(i0, i1); i++) {
-        wallSegments.add(`V|${i}|${j0}`);
-      }
-    }
-  }
-}
-const spotSet = new Set(SPOTS.map(([i, j]) => `${i}|${j}`));
-
-// A diagonal step passes through the one corner its two cells share. It needs
-// a 2x2 space, whose only internal edges are the four wall slots meeting at
-// that corner, and it may not pass through a wall-spot.
-const cornerOpen = (i, j) => !spotSet.has(`${i}|${j}`) &&
-  !wallSegments.has(`V|${i - 1}|${j}`) && !wallSegments.has(`V|${i}|${j}`) &&
-  !wallSegments.has(`H|${i}|${j - 1}`) && !wallSegments.has(`H|${i}|${j}`);
-
-// Is the (dRow, dCol) step out of `cell` a legal move?
-const stepAllowed = (cell, dRow, dCol) => {
-  const { row, col } = parseCellId(cell);
-  if (dRow === 0) return !wallSegments.has(`V|${row}|${col + Math.max(dCol, 0)}`);
-  if (dCol === 0) return !wallSegments.has(`H|${row + Math.max(dRow, 0)}|${col}`);
-  return cornerOpen(row + Math.max(dRow, 0), col + Math.max(dCol, 0));
-};
-
-// --- Step variables -----------------------------------------------------------
-// One Var per move the maze leaves open, recording whether the walk uses it
-// and in which direction; a walled or spotted move gets no variable at all.
-// Each teleport pair adds one more such move, joining its two tiles wherever
-// they sit.
-const steps = [];
-const stepsAt = new Map(gridCells.map(cell => [cell, []]));
-const addStep = (a, b) => {
-  const step = { id: 'VS' + (steps.length + 1), a, b };
-  steps.push(step);
-  stepsAt.get(a).push({ id: step.id, out: FWD, in: BWD });
-  stepsAt.get(b).push({ id: step.id, out: BWD, in: FWD });
-  return step;
-};
-for (const cell of gridCells) {
-  for (const [dRow, dCol] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
-    const other = graph.step(cell, dRow, dCol);
-    if (!other || !stepAllowed(cell, dRow, dCol)) continue;
-    addStep(cell, other);
-  }
-}
-const footSteps = steps.slice();                       // the on-foot moves
-const teleportSteps = TELEPORTS.map(([a, b]) => addStep(a, b));
-const stepIndex = new Map(steps.map(s => [s.a + '|' + s.b, s]));
-const stepBetween = (p, q) => stepIndex.get(p + '|' + q) || stepIndex.get(q + '|' + p);
-
+const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, n) => lo + n);
 const memo = new Map();
 const cached = (key, build) => {
   if (!memo.has(key)) memo.set(key, build());
   return memo.get(key);
 };
 
-// --- Walk shape ---------------------------------------------------------------
-// Per-cell machine: reads the cell's two counters, then every step it is an
-// end of. A cell Finkz never visits takes the OFF counter in both layers and
-// uses no step; any other cell is entered once and left once. The rat's own
-// cell is only left, the cupcake only entered.
-//
-// A teleport tile is neither: "entering a teleport will cause Finkz to be
-// instantly transported", so a visited tile's one arrival or one departure
-// must be the tile's own teleport link (`specialIndex`, always the last entry
-// of `incident` since teleport steps are appended after every foot step).
-const ROLE_OF = new Map([[RAT_CELL, 'rat'], [CUPCAKE, 'cupcake'],
-...TELEPORTS.flat().map(cell => [cell, 'teleport'])]);
-function cellNFA(incident, role, specialIndex) {
-  const sig = 'cell|' + role + '|' + specialIndex + '|' +
-    incident.map(s => s.out).join(',');
+// The alphabet is widened to 16 so the Var overlays can carry step codes and
+// path-position counters; the 81 grid cells are pinned back to 1-9 below.
+const NV = 16;
+const shape = new Shape('9x9', NV);
+const graph = cellGraph(shape);
+const gridCells = graph.cells();
+
+const RAT = 'R1C1';      // the drawn rat emoji
+const CUPCAKE = 'R1C9';  // the drawn cupcake emoji
+
+// --- The drawn maze --------------------------------------------------------
+// WALLS is transcribed from the sixteen forestgreen thick lines drawn on the
+// grid (the grid frame is the first of them). Coordinates are exactly as
+// drawn: SudokuPad's [row, col], 0-indexed, integer = a lattice corner, so
+// corner (i, j) sits at the intersection just above-left of 0-indexed cell
+// (i, j).
+const WALLS = [
+  [[2, 1], [0, 1], [0, 9], [9, 9], [9, 0], [0, 0], [0, 1]],
+  [[0, 6], [2, 6]],
+  [[3, 9], [3, 8]],
+  [[9, 3], [7, 3]],
+  [[3, 7], [3, 3]],
+  [[3, 4], [2, 4]],
+  [[1, 2], [3, 2], [3, 1], [5, 1], [5, 2], [6, 2]],
+  [[7, 2], [8, 2], [8, 1]],
+  [[6, 1], [7, 1]],
+  [[6, 3], [6, 4]],
+  [[1, 3], [2, 3]],
+  [[1, 4], [1, 5], [2, 5]],
+  [[1, 7], [1, 8], [2, 8]],
+  [[5, 5], [6, 5]],
+  [[6, 6], [7, 6]],
+  [[4, 6], [5, 6]],
+];
+// SPOTS is transcribed from the thirty-seven forestgreen 0.32-size discs drawn
+// on lattice corners, same [row, col] convention.
+const SPOTS = [
+  [1, 2], [1, 3], [1, 4], [1, 5], [1, 7], [1, 8],
+  [2, 1], [2, 3], [2, 4], [2, 5], [2, 6], [2, 8],
+  [3, 1], [3, 2], [3, 3], [3, 7], [3, 8],
+  [4, 2], [4, 3], [4, 4], [4, 6],
+  [5, 1], [5, 2], [5, 5], [5, 6],
+  [6, 1], [6, 2], [6, 3], [6, 4], [6, 5], [6, 6],
+  [7, 1], [7, 2], [7, 3], [7, 6],
+  [8, 1], [8, 2],
+];
+// Split the walls into unit lattice segments. wallH.has('i|c') means a wall
+// spans the corner row i from column c to c+1; wallV.has('r|j') means a wall
+// spans the corner column j from row r to r+1.
+const wallH = new Set();
+const wallV = new Set();
+for (const line of WALLS) {
+  for (let n = 1; n < line.length; n++) {
+    const [r0, c0] = line[n - 1], [r1, c1] = line[n];
+    if (r0 === r1) {
+      for (let c = Math.min(c0, c1); c < Math.max(c0, c1); c++) wallH.add(`${r0}|${c}`);
+    } else {
+      for (let r = Math.min(r0, r1); r < Math.max(r0, r1); r++) wallV.add(`${r}|${c0}`);
+    }
+  }
+}
+const spotAt = new Set(SPOTS.map(([i, j]) => `${i}|${j}`));
+// An orthogonal step between 0-indexed adjacent cells is blocked by the wall
+// segment on their shared edge.
+const orthBlocked = (r, c, dr, dc) => dr === 0
+  ? wallV.has(`${r}|${c + Math.max(dc, 0)}`)
+  : wallH.has(`${r + Math.max(dr, 0)}|${c}`);
+// A diagonal step passes through the one lattice corner its 2x2 block shares.
+// The four unit edges meeting there are the 2x2's own internal edges, so a wall
+// on any of them means there is no "2x2 space" to move in; a drawn round
+// wall-spot closes the corner too. Three of the drawn spots -- (4,2), (4,3),
+// (4,4) -- sit on corners with no wall at all, which is what shows the spots
+// are a clue of their own rather than decoration on the wall ends.
+const cornerBlocked = (i, j) => wallV.has(`${i - 1}|${j}`) || wallV.has(`${i}|${j}`) ||
+  wallH.has(`${i}|${j - 1}`) || wallH.has(`${i}|${j}`) || spotAt.has(`${i}|${j}`);
+
+// --- Maze step variables ----------------------------------------------------
+// One Var per legal move (orthogonal or diagonal); illegal moves get no Var.
+// A step records whether it is unused and, if used, its direction of travel.
+const UNUSED = 1, FWD = 2, BWD = 3;
+const DIRS = [[0, 1], [1, 0], [1, 1], [1, -1]]; // each undirected edge once
+const steps = [];
+const stepByOrigin = new Map(); // 'r,c,dr,dc' -> step, for the no-crossing check
+const stepByPair = new Map();   // 'cellA|cellB' (both orders) -> step
+const stepsAt = new Map(gridCells.map(cell => [cell, []]));
+for (let r = 0; r < 9; r++) {
+  for (let c = 0; c < 9; c++) {
+    for (const [dr, dc] of DIRS) {
+      const r2 = r + dr, c2 = c + dc;
+      if (r2 < 0 || r2 > 8 || c2 < 0 || c2 > 8) continue;
+      const legal = (dr === 0 || dc === 0)
+        ? !orthBlocked(r, c, dr, dc)
+        : !cornerBlocked(r + 1, c + Math.max(dc, 0));
+      if (!legal) continue;
+      const a = makeCellId(r + 1, c + 1), b = makeCellId(r2 + 1, c2 + 1);
+      const id = 'VS' + (steps.length + 1);
+      const step = { id, a, b };
+      steps.push(step);
+      stepByOrigin.set(`${r},${c},${dr},${dc}`, step);
+      stepByPair.set(`${a}|${b}`, step);
+      stepByPair.set(`${b}|${a}`, step);
+      stepsAt.get(a).push({ id, in: BWD, out: FWD });
+      stepsAt.get(b).push({ id, in: FWD, out: BWD });
+    }
+  }
+}
+
+// --- Teleports ---------------------------------------------------------------
+// Transcribed from the six lettered markers drawn on the grid, paired by
+// letter/colour: A yellow, B plum/purple, C lightgreen.
+const TELEPORTS = [
+  ['R3C8', 'R5C3'], ['R4C8', 'R6C4'], ['R6C6', 'R9C5'],
+];
+const teleStepVar = new Var('T', 'teleport steps', TELEPORTS.length);
+const teleAt = new Map(); // grid cell -> { id, sideIsFirst }
+TELEPORTS.forEach(([a, b], idx) => {
+  const id = 'VT' + (idx + 1);
+  teleAt.set(a, { id, sideIsFirst: true });
+  teleAt.set(b, { id, sideIsFirst: false });
+});
+
+// --- One-way doors -----------------------------------------------------------
+// Transcribed from the six purple chevrons drawn on cell borders. `to` is the
+// cell each chevron points at -- both the only direction Finkz may cross that
+// border and, by the rule, the smaller of the two values.
+const DOORS = [
+  { from: 'R1C2', to: 'R1C3' },
+  { from: 'R2C4', to: 'R1C4' },
+  { from: 'R2C3', to: 'R3C3' },
+  { from: 'R5C3', to: 'R4C3' },
+  { from: 'R6C3', to: 'R5C3' },
+  { from: 'R7C3', to: 'R7C2' },
+];
+
+// --- Mirror cells, and the value each cell contributes ----------------------
+// Two full-grid overlays: a mirror flag and the cell's value. Nothing in the
+// art marks the mirror cells, so the flag is a solver choice; digit 5 mirrors
+// to itself, so the value alone could not stand in for the flag.
+const PLAIN = 1, MIRROR = 2;
+const flag = graph.makeOverlay('VF');
+const value = graph.makeOverlay('VV');
+// Reads digit, flag, value: value is the digit, or 10 minus it in a mirror.
+const valueNFA = cached('value-link', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, v) => {
+    if (s.k === 0) return v <= 9 ? { k: 1, digit: v } : undefined;
+    if (s.k === 1) {
+      if (v !== PLAIN && v !== MIRROR) return undefined;
+      return { k: 2, want: v === PLAIN ? s.digit : 10 - s.digit };
+    }
+    if (s.k !== 2) return undefined;
+    return v === s.want ? { k: 'done' } : undefined;
+  },
+  accept: s => s.k === 'done',
+}, NV));
+const valueLink = gridCells.map(cell =>
+  new NFA(valueNFA, 'mirror-value', cell, flag.at(cell), value.at(cell)));
+
+// One Var cell per row holds that row's mirror digit, so "every mirror cell
+// contains a different digit" becomes a single AllDifferent over the nine.
+// Reads flag, digit, the row's register: a mirror cell forces the register to
+// its digit, a plain cell says nothing. With exactly one mirror per row, the
+// register is pinned and adds no free choice.
+const mirrorDigits = new Var('D', 'mirror digit by row', 9);
+const registerNFA = cached('mirror-register', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, v) => {
+    if (s.k === 0) {
+      if (v === PLAIN) return { k: 'skip', left: 2 };
+      if (v !== MIRROR) return undefined;
+      return { k: 1 };
+    }
+    if (s.k === 'skip') return s.left > 1 ? { k: 'skip', left: s.left - 1 } : { k: 'done' };
+    if (s.k === 1) return v <= 9 ? { k: 2, digit: v } : undefined;
+    if (s.k !== 2) return undefined;
+    return v === s.digit ? { k: 'done' } : undefined;
+  },
+  accept: s => s.k === 'done',
+}, NV));
+const mirrorRules = [
+  ...range(1, 9).flatMap(n => [
+    new ContainExact(String(MIRROR), ...flag.row(n)),
+    new ContainExact(String(MIRROR), ...flag.column(n)),
+  ]),
+  ...flag.boxes().map(box => new ContainExact(String(MIRROR), ...box)),
+  // Mirror cells may not contain teleports.
+  ...[...teleAt.keys()].map(cell => new Given(flag.at(cell), PLAIN)),
+  ...gridCells.map(cell => new NFA(
+    registerNFA, 'mirror-digit', flag.at(cell), cell,
+    mirrorDigits.cell(parseCellId(cell).row))),
+  new AllDifferent(...mirrorDigits.cells()),
+];
+
+// --- Per-cell path-shape machines ------------------------------------------
+// Every machine reads its incident ordinary steps' values and counts how many
+// say "arriving" (matches step.in) vs "leaving" (matches step.out) at this
+// cell, capping at the cell's expected in/out degree.
+function scanDegree(incident, wantIn, wantOut) {
+  return {
+    startState: { k: 0, in: 0, out: 0 },
+    transition: (s, v) => {
+      if (s.k >= incident.length) return undefined;
+      const step = incident[s.k];
+      let { in: nIn, out: nOut } = s;
+      if (v === step.in) nIn++;
+      else if (v === step.out) nOut++;
+      else if (v !== UNUSED) return undefined;
+      if (nIn > wantIn || nOut > wantOut) return undefined;
+      return { k: s.k + 1, in: nIn, out: nOut };
+    },
+    accept: s => s.k === incident.length && s.in === wantIn && s.out === wantOut,
+  };
+}
+// The per-position in/out pattern, not just the incident count: two cells with
+// the same neighbour count can still disagree, position by position, on which
+// of FWD/BWD means "arriving" versus "leaving" on that shared step.
+const incidentSig = incident => incident.map(s => s.in + '/' + s.out).join(',');
+// Rat/cupcake: a fixed, unconditional role (always on the path).
+function fixedCellNFA(incident, wantIn, wantOut) {
+  const sig = 'fixed|' + wantIn + '|' + wantOut + '|' + incidentSig(incident);
+  return cached(sig, () => NFA.encodeSpec(scanDegree(incident, wantIn, wantOut), NV));
+}
+// A plain cell is off the path (0/0) or an interior path cell (1/1), using only
+// ordinary steps. Reads the cell's own path-position (VA) first purely as a
+// visited/unvisited flag -- its OFF-ness picks which degree the rest of the
+// scan must match, exactly as the position counters already define.
+function plainCellNFA(incident) {
+  const sig = 'plain|' + incidentSig(incident);
   return cached(sig, () => NFA.encodeSpec({
     startState: { k: 0 },
-    transition: (s, value) => {
-      if (s.k === 0) return { k: 1, vis: value !== OFF };
-      if (s.k === 1) {
-        if ((value !== OFF) !== s.vis) return undefined;
-        return { k: 2, vis: s.vis, in: 0, out: 0, spec: false };
-      }
-      const n = s.k - 2;
-      if (n >= incident.length) return undefined;
-      const step = incident[n];
-      const next = { k: s.k + 1, vis: s.vis, in: s.in, out: s.out, spec: s.spec };
-      if (value === step.in) { next.in++; if (n === specialIndex) next.spec = true; }
-      else if (value === step.out) { next.out++; if (n === specialIndex) next.spec = true; }
-      else if (value !== UNUSED) return undefined;
-      if (next.in > 1 || next.out > 1) return undefined;
-      return next;
+    transition: (s, v) => {
+      if (s.k === 0) return { k: 1, visited: v !== OFF, in: 0, out: 0 };
+      if (s.k - 1 >= incident.length) return undefined;
+      const step = incident[s.k - 1];
+      let { in: nIn, out: nOut } = s;
+      if (v === step.in) nIn++;
+      else if (v === step.out) nOut++;
+      else if (v !== UNUSED) return undefined;
+      const cap = s.visited ? 1 : 0;
+      if (nIn > cap || nOut > cap) return undefined;
+      return { k: s.k + 1, visited: s.visited, in: nIn, out: nOut };
     },
     accept: s => {
-      if (s.k !== 2 + incident.length) return false;
-      if (role === 'rat') return s.vis && s.out === 1 && s.in === 0;
-      if (role === 'cupcake') return s.vis && s.in === 1 && s.out === 0;
-      if (role === 'teleport') {
-        return s.vis ? (s.in === 1 && s.out === 1 && s.spec) : (s.in === 0 && s.out === 0);
-      }
-      return s.vis ? (s.in === 1 && s.out === 1) : (s.in === 0 && s.out === 0);
+      const cap = s.visited ? 1 : 0;
+      return s.k === 1 + incident.length && s.in === cap && s.out === cap;
     },
   }, NV));
 }
-const walkShape = gridCells.map(cell => {
+// A teleport cell's role (unvisited / entry / exit) is fixed entirely by its
+// own teleport-step value, read first; its ordinary steps must then match that
+// role exactly (never both an ordinary and a teleport edge on the same side --
+// entering a teleport is mandatory, not optional).
+function teleCellNFA(incident, sideIsFirst) {
+  const sig = 'tele|' + sideIsFirst + '|' + incidentSig(incident);
+  return cached(sig, () => NFA.encodeSpec({
+    startState: { k: -1 },
+    transition: (s, v) => {
+      if (s.k === -1) {
+        if (v === UNUSED) return { k: 0, in: 0, out: 0, wantIn: 0, wantOut: 0 };
+        if (v !== FWD && v !== BWD) return undefined;
+        const isEntry = (v === FWD) === sideIsFirst;
+        return { k: 0, in: 0, out: 0, wantIn: isEntry ? 1 : 0, wantOut: isEntry ? 0 : 1 };
+      }
+      if (s.k >= incident.length) return undefined;
+      const step = incident[s.k];
+      let { in: nIn, out: nOut } = s;
+      if (v === step.in) nIn++;
+      else if (v === step.out) nOut++;
+      else if (v !== UNUSED) return undefined;
+      if (nIn > s.wantIn || nOut > s.wantOut) return undefined;
+      return { ...s, k: s.k + 1, in: nIn, out: nOut };
+    },
+    accept: s => s.k === incident.length && s.in === s.wantIn && s.out === s.wantOut,
+  }, NV));
+}
+
+// A cell with only one ordinary neighbour (a maze dead end) needs at most two
+// cells of context, which is a Pair relation -- or, for a fixed-role cell, a
+// bare Given. These wrap the same in/out matching the NFA versions use.
+const matchKind = (v, step) => v === step.in ? 'in' : v === step.out ? 'out' : v === UNUSED ? 'none' : null;
+
+function fixedCellConstraint(incident, wantIn, wantOut) {
+  const cells = incident.map(s => s.id);
+  if (cells.length === 1) {
+    // Finkz's own cell is walled in on every side but one, so her first move is
+    // that one step, taken outwards.
+    const [s0] = incident;
+    return new Given(s0.id, wantOut === 1 ? s0.out : s0.in);
+  }
+  if (cells.length === 2) {
+    const [s0, s1] = incident;
+    const key = cached('fixed2|' + wantIn + '|' + wantOut + '|' + incidentSig(incident), () => Pair.fnToKey((a, b) => {
+      const m0 = matchKind(a, s0), m1 = matchKind(b, s1);
+      if (m0 === null || m1 === null) return false;
+      return (m0 === 'in' ? 1 : 0) + (m1 === 'in' ? 1 : 0) === wantIn &&
+        (m0 === 'out' ? 1 : 0) + (m1 === 'out' ? 1 : 0) === wantOut;
+    }, NV));
+    return new Pair(key, 'path-cell', ...cells);
+  }
+  return new NFA(fixedCellNFA(incident, wantIn, wantOut), 'path-cell', ...cells);
+}
+
+function plainCellConstraint(cell, incident) {
+  const cells = [posA.at(cell), ...incident.map(s => s.id)];
+  if (cells.length === 2) {
+    // One neighbour can never supply both an arriving and a leaving edge, so
+    // the only satisfiable case is unvisited with that neighbour's step unused.
+    const key = cached('plain2', () => Pair.fnToKey((va, v) => va === OFF && v === UNUSED, NV));
+    return new Pair(key, 'path-cell', ...cells);
+  }
+  return new NFA(plainCellNFA(incident), 'path-cell', ...cells);
+}
+
+function teleCellConstraint(incident, sideIsFirst, teleId) {
+  const cells = [teleId, ...incident.map(s => s.id)];
+  if (cells.length === 2) {
+    const [s0] = incident;
+    const key = cached('tele2|' + sideIsFirst + '|' + incidentSig(incident), () => Pair.fnToKey((t, v) => {
+      let wantIn = 0, wantOut = 0;
+      if (t !== UNUSED) {
+        if (t !== FWD && t !== BWD) return false;
+        const isEntry = (t === FWD) === sideIsFirst;
+        wantIn = isEntry ? 1 : 0;
+        wantOut = isEntry ? 0 : 1;
+      }
+      const m = matchKind(v, s0);
+      if (m === null) return false;
+      return (m === 'in' ? 1 : 0) === wantIn && (m === 'out' ? 1 : 0) === wantOut;
+    }, NV));
+    return new Pair(key, 'path-cell', ...cells);
+  }
+  return new NFA(teleCellNFA(incident, sideIsFirst), 'path-cell', ...cells);
+}
+
+// --- Path position (used both for subtour elimination below and as the
+// visited/unvisited flag the path-shape machines read) -------------------
+const MOD_A = 15, MOD_B = 11;
+const OFF = 1, FIRST = 2;
+const posA = graph.makeOverlay('VA');
+const posB = graph.makeOverlay('VB');
+
+const pathShape = gridCells.map(cell => {
   const incident = stepsAt.get(cell);
-  const role = ROLE_OF.get(cell) || 'plain';
-  const specialIndex = role === 'teleport' ? incident.length - 1 : -1;
-  return new NFA(cellNFA(incident, role, specialIndex), 'walk-cell',
-    posA.at(cell), posB.at(cell), ...incident.map(s => s.id));
+  if (cell === RAT) return fixedCellConstraint(incident, 0, 1);
+  if (cell === CUPCAKE) return fixedCellConstraint(incident, 1, 0);
+  const tele = teleAt.get(cell);
+  if (tele) return teleCellConstraint(incident, tele.sideIsFirst, tele.id);
+  return plainCellConstraint(cell, incident);
 });
 
-// Position counters. Numbering a real walk 1, 2, 3, ... from the rat's cell is
-// always possible, so "the arriving cell's counter is the leaving cell's plus
-// one" rejects no genuine walk; what it buys is that a closed cycle of steps
-// beside the walk would need a length divisible by MOD_A and by MOD_B. The
-// degree rules above admit such a cycle and nothing else rules it out.
+// The two counter layers are one fact told twice, so they must agree about
+// which cells are on the path; and a teleport cell is on the path exactly when
+// its teleport step is used (the machine above already gives it degree 0
+// otherwise). Without these the counters would be free to invent values on
+// cells the path never reaches.
+const bothOffKey = cached('both-off', () => Pair.fnToKey((a, b) => (a === OFF) === (b === OFF), NV));
+const teleOffKey = cached('tele-off', () => Pair.fnToKey((t, a) => (t === UNUSED) === (a === OFF), NV));
+const offAgreement = [
+  ...gridCells.map(cell => new Pair(bothOffKey, 'off-path-agreement', posA.at(cell), posB.at(cell))),
+  ...[...teleAt].map(([cell, tele]) =>
+    new Pair(teleOffKey, 'off-path-agreement', tele.id, posA.at(cell))),
+];
+
+// --- Subtour elimination: two coprime modular position counters -----------
+// Numbering a genuine path 1, 2, 3, ... from Finkz's cell (teleport jumps count
+// as ordinary moves) is always possible, so "the arriving cell's counter is the
+// leaving cell's plus one" is implied by the rules. Any closed loop of steps
+// then has a length divisible by both moduli, i.e. by 165 -- and there are only
+// 81 cells, so no loop can survive.
 const nextPos = (v, mod) => FIRST + ((v - FIRST + 1) % mod);
 const counterNFA = mod => cached('counter|' + mod, () => NFA.encodeSpec({
   startState: { k: 0 },
-  transition: (s, value) => {
-    if (s.k === 0) return { k: 1, dir: value };
-    if (s.k === 1) return { k: 2, dir: s.dir, a: value };
+  transition: (s, v) => {
+    if (s.k === 0) return { k: 1, dir: v };
+    if (s.k === 1) return { k: 2, dir: s.dir, a: v };
     if (s.k !== 2) return undefined;
     if (s.dir === UNUSED) return { done: true };
-    if (s.a === OFF || value === OFF) return undefined;
-    if (s.dir === FWD) return value === nextPos(s.a, mod) ? { done: true } : undefined;
-    return s.a === nextPos(value, mod) ? { done: true } : undefined;
+    if (s.a === OFF || v === OFF) return undefined;
+    if (s.dir === FWD) return v === nextPos(s.a, mod) ? { done: true } : undefined;
+    return s.a === nextPos(v, mod) ? { done: true } : undefined;
   },
   accept: s => s.done === true,
 }, NV));
-const counters = steps.flatMap(s => [
-  new NFA(counterNFA(MOD_A), 'walk-order', s.id, posA.at(s.a), posA.at(s.b)),
-  new NFA(counterNFA(MOD_B), 'walk-order', s.id, posB.at(s.a), posB.at(s.b)),
+const allEdges = [...steps, ...TELEPORTS.map(([a, b], idx) => ({ id: 'VT' + (idx + 1), a, b }))];
+const counters = allEdges.flatMap(s => [
+  new NFA(counterNFA(MOD_A), 'path-order', s.id, posA.at(s.a), posA.at(s.b)),
+  new NFA(counterNFA(MOD_B), 'path-order', s.id, posB.at(s.a), posB.at(s.b)),
 ]);
 
-// The two diagonals of a 2x2 area cross each other, and the walk may not
-// cross itself. Orthogonal steps meet only at cells they share, which no cell
-// being used twice already forbids, and a teleport is instantaneous rather
-// than a drawn line, so neither needs anything further.
-const noCrossKey = Pair.fnToKey((x, y) => x === UNUSED || y === UNUSED, NV);
-const noCross = gridCells.flatMap(cell => {
-  const right = graph.step(cell, 0, 1);
-  const down = graph.step(cell, 1, 0);
-  const diag = graph.step(cell, 1, 1);
-  if (!right || !down || !diag) return [];
-  const d1 = stepBetween(cell, diag);
-  const d2 = stepBetween(right, down);
-  return (d1 && d2) ? [new Pair(noCrossKey, 'no-crossing', d1.id, d2.id)] : [];
+// No two diagonals of the same 2x2 block may both be used (they would cross).
+const noCrossKey = cached('no-cross', () => Pair.fnToKey((x, y) => x === UNUSED || y === UNUSED, NV));
+const noCross = [];
+for (let r = 0; r <= 7; r++) {
+  for (let c = 0; c <= 7; c++) {
+    const d1 = stepByOrigin.get(`${r},${c},1,1`);
+    const d2 = stepByOrigin.get(`${r},${c + 1},1,-1`);
+    if (d1 && d2) noCross.push(new Pair(noCrossKey, 'no-crossing', d1.id, d2.id));
+  }
+}
+
+// --- One-way doors, both halves ---------------------------------------------
+// The value inequality holds of the two cells outright; the travel restriction
+// removes the wrong-way direction from that border's step Var.
+const smallerKey = cached('door-smaller', () => Pair.fnToKey((lo, hi) => lo < hi, NV));
+const doors = DOORS.flatMap(({ from, to }) => {
+  const step = stepByPair.get(`${from}|${to}`);
+  const allowed = step.a === from ? FWD : BWD;
+  return [
+    new Pair(smallerKey, 'one-way-smaller', value.at(to), value.at(from)),
+    new Given(step.id, UNUSED, allowed),
+  ];
 });
 
-// --- Teleports ------------------------------------------------------------
-// A visit to a teleport tile always spends its one arrival or its one
-// departure on the link (walking onto it means transported at once; arriving
-// by transport means leaving on foot next), so the link is used exactly when
-// the tile is visited, which the OFF counter value reports.
-const teleportLinkKey = Pair.fnToKey(
-  (position, step) => (position === OFF) === (step === UNUSED), NV);
-const teleportLinks = teleportSteps.flatMap(s => [
-  new Pair(teleportLinkKey, 'teleport-link', posA.at(s.a), s.id),
-  new Pair(teleportLinkKey, 'teleport-link', posA.at(s.b), s.id),
-]);
+// --- TEST CONSTRAINT ---------------------------------------------------------
+// Reads the step, then the two values it joins: a used ordinary step needs its
+// two values at least 5 apart. Teleport steps carry no such Var, so the jumps
+// are skipped, as the rule's parenthesis says.
+const gapNFA = cached('test-gap', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, v) => {
+    if (s.k === 0) {
+      if (v === UNUSED) return { k: 'skip', left: 2 };
+      if (v !== FWD && v !== BWD) return undefined;
+      return { k: 1 };
+    }
+    if (s.k === 'skip') return s.left > 1 ? { k: 'skip', left: s.left - 1 } : { k: 'done' };
+    if (s.k === 1) return v <= 9 ? { k: 2, a: v } : undefined;
+    if (s.k !== 2) return undefined;
+    return (v <= 9 && Math.abs(s.a - v) >= 5) ? { k: 'done' } : undefined;
+  },
+  accept: s => s.k === 'done',
+}, NV));
+const testGaps = steps.map(s =>
+  new NFA(gapNFA, 'adjacent-gap', s.id, value.at(s.a), value.at(s.b)));
+
+// --- Teleport digits ---------------------------------------------------------
 const teleportDigits = [
   ...TELEPORTS.map(([a, b]) => new SameValues(2, a, b)),
-  // Each pair already shares a digit, so one tile per pair carries "teleports
-  // that don't match always have different digits".
   new AllDifferent(...TELEPORTS.map(([a]) => a)),
 ];
 
-// --- Mirror cells ---------------------------------------------------------
-// One mirror cell per row, column and box: ContainExact(2, ...) over every
-// house says the mirror flag hits exactly once. No drawn mark says which
-// cell -- the flag is free, discovered like any other digit.
-const mirrorHouses = graph.rowsColumnsBoxes().map(
-  house => new ContainExact(String(2), ...mirr.at(house)));
-// Mirror cells may not hold a teleport.
-const mirrorNotTeleport = TELEPORTS.flat().map(cell => new Given(mirr.at(cell), 1));
-// VD<n> is row n's mirror digit; with exactly one mirror cell in the row (via
-// mirrorHouses above) it is forced to that cell's digit and nothing else, so
-// "every mirror cell holds a different digit" is one AllDifferent over the
-// nine rows.
-const mirrorDigit = n => 'VD' + n;
-const mirrorDigitKey = cached('mirror-digit', () => NFA.encodeSpec({
-  startState: { k: 0 },
-  transition: (s, value) => {
-    if (s.k === 0) return { k: 1, on: value === 2 };
-    if (s.k === 1) return { k: 2, on: s.on, digit: value };
-    if (s.k !== 2) return undefined;
-    return (!s.on || value === s.digit) ? { done: true } : undefined;
-  },
-  accept: s => s.done === true,
-}, NV));
-const mirrorDigits = graph.rows().flatMap((house, n) => house.map(
-  cell => new NFA(mirrorDigitKey, 'mirror-digit',
-    mirr.at(cell), cell, mirrorDigit(n + 1))));
-
-// A cell's value is 10 minus its digit when it is a mirror cell, its digit
-// otherwise.
-const valueKey = cached('cell-value', () => NFA.encodeSpec({
-  startState: { k: 0 },
-  transition: (s, value) => {
-    if (s.k === 0) return { k: 1, mirror: value === 2 };
-    if (s.k === 1) return { k: 2, want: s.mirror ? 10 - value : value };
-    if (s.k !== 2) return undefined;
-    return value === s.want ? { done: true } : undefined;
-  },
-  accept: s => s.done === true,
-}, NV));
-const cellValues = gridCells.map(cell =>
-  new NFA(valueKey, 'cell-value', mirr.at(cell), cell, val.at(cell)));
-
-// --- One-way doors ---------------------------------------------------------
-// "An arrow always points to the smaller of the two values it sits between":
-// a value fact that holds unconditionally, independent of the walk.
-const arrowOrderKey = cached('arrow-order', () => Pair.fnToKey((from, to) => from > to, NV));
-const arrowOrders = ARROWS.map(([from, to]) =>
-  new Pair(arrowOrderKey, 'one-way-door-order', val.at(from), val.at(to)));
-// The walk may cross the passage only base->head, so the step's direction
-// value opposite that reading is dropped from its domain.
-const arrowDirections = ARROWS.map(([from, to]) => {
-  const step = stepBetween(from, to);
-  const allowedDir = step.a === from ? FWD : BWD;
-  return new Given(step.id, UNUSED, allowedDir);
-});
-
-// --- Test constraint --------------------------------------------------------
-// Two cells adjacent along the walk (only an on-foot step -- a teleport jump
-// is excluded by the rule, and is anyway already forced to equal values by
-// teleportDigits/cellValues above) must have values differing by at least 5.
-const valueDiffKey = cached('value-diff', () => NFA.encodeSpec({
-  startState: { k: 0 },
-  transition: (s, value) => {
-    if (s.k === 0) return { k: 1, active: value !== UNUSED };
-    if (s.k === 1) return { k: 2, active: s.active, a: value };
-    if (s.k !== 2) return undefined;
-    if (!s.active) return { done: true };
-    return Math.abs(value - s.a) >= 5 ? { done: true } : undefined;
-  },
-  accept: s => s.done === true,
-}, NV));
-const valueDifferences = footSteps.map(s =>
-  new NFA(valueDiffKey, 'path-value-difference', s.id, val.at(s.a), val.at(s.b)));
-
-// --- Variables and domains ------------------------------------------------
-const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, n) => lo + n);
+// --- Variables and domains --------------------------------------------------
 const layers = [
-  posA.toVar('walk position mod ' + MOD_A),
-  posB.toVar('walk position mod ' + MOD_B),
-  mirr.toVar('mirror cells'),
-  val.toVar('cell value'),
-  new Var('S', 'walk steps', steps.length),
-  new Var('D', 'mirror digit by row', 9),
+  posA.toVar('path position mod ' + MOD_A),
+  posB.toVar('path position mod ' + MOD_B),
+  new Var('S', 'maze steps', steps.length),
+  teleStepVar,
+  flag.toVar('mirror flags'),
+  value.toVar('cell values'),
+  mirrorDigits,
 ];
 const domains = [
   graph.makeReplicate(new Given(gridCells[0], ...range(1, 9))),
-  // VA needs no domain of its own: the OFF sentinel plus MOD_A residues is
-  // exactly the widened alphabet.
-  posB.makeReplicate(new Given(posB.at(gridCells[0]), ...range(1, MOD_B + 1))),
-  mirr.makeReplicate(new Given(mirr.at(gridCells[0]), 1, 2)),
-  val.makeReplicate(new Given(val.at(gridCells[0]), ...range(1, 9))),
-  ...range(1, 9).map(n => new Given(mirrorDigit(n), ...range(1, 9))),
-  // The step Vars need no domain of their own beyond the arrow restrictions
-  // above: the walk-cell machines accept no value on them but unused/in/out.
-  // The rat's own cell is the first cell of the walk; without this the whole
-  // numbering of the walk could rotate freely through the residues.
-  new Given(posA.at(RAT_CELL), FIRST), new Given(posB.at(RAT_CELL), FIRST),
+  posB.makeReplicate(new Given(posB.cells()[0], ...range(1, MOD_B + 1))),
+  flag.makeReplicate(new Given(flag.cells()[0], PLAIN, MIRROR)),
+  value.makeReplicate(new Given(value.cells()[0], ...range(1, 9))),
+  ...mirrorDigits.cells().map(cell => new Given(cell, ...range(1, 9))),
+  // Finkz's own cell is the first cell of the path, pinning both position
+  // counters so the numbering can't float on unvisited cells or rotate.
+  new Given(posA.at(RAT), FIRST),
+  new Given(posB.at(RAT), FIRST),
+  // Step Vars need no domain of their own: the path-cell machines above accept
+  // no value on them but unused / in / out.
 ];
 
 return [
   shape,
   ...layers,
   ...domains,
-  ...walkShape,
+  ...valueLink,
+  ...mirrorRules,
+  ...pathShape,
+  ...offAgreement,
   ...counters,
   ...noCross,
-  ...teleportLinks,
+  ...doors,
+  ...testGaps,
   ...teleportDigits,
-  ...mirrorHouses,
-  ...mirrorNotTeleport,
-  ...mirrorDigits,
-  ...cellValues,
-  ...arrowOrders,
-  ...arrowDirections,
-  ...valueDifferences,
 ];

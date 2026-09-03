@@ -3,189 +3,231 @@
 // Video: https://www.youtube.com/watch?v=aANrohhFJ2g
 // Source: https://app.crackingthecryptic.com/sudoku/m73tnQmbbd
 
-// Normal sudoku rules apply. Draw a loop through the centres of some cells,
-// moving orthogonally cell to cell; every cell is INSIDE the loop, OUTSIDE
-// it, or ON it (part of the loop). No 2x2 area is entirely one type. Inside
-// cells form one orthogonally-connected area. A circled cell's colour fixes
-// its type (green=INSIDE, blue=OUTSIDE, yellow=ON); the digit written there
-// -- whether given or solved -- equals the count of same-type cells it sees
-// in the 4 orthogonal directions, including itself, where a different-type
-// cell blocks the sightline. Adjacent cells that are both non-loop (either
-// type) differ by 5 or more.
-//
-// OMITTED: "Cells outside the loop are orthogonally connected to the edge of
-// the grid." Unlike inside ("form one ... area"), the rules text does not
-// require outside to be a single region -- it may be several separate
-// bodies, each merely touching the border. ISS's ConnectedValues only
-// asserts one connected region per value; no primitive for per-component
-// border-reachability exists. Left unconstrained; see blockers.
+// Rules encoded below:
+//   Normal sudoku rules apply.
+//   Draw a loop (which never intersects with itself) through the centres of some
+//   cells; the loop moves from cell to cell orthogonally.
+//   Every cell is one of three types: inside the loop, outside the loop, or part
+//   of the loop.
+//   A 2x2 area cannot be entirely one cell type.
+//   A green circle is inside the loop, a blue circle outside, a yellow circle
+//   part of the loop.
+//   A digit in a circle is the number of cells of its own type it sees
+//   horizontally and vertically, including itself; the other cell types obstruct
+//   vision.
+//   Cells inside the loop form one orthogonally connected area, and cells
+//   outside the loop are orthogonally connected to the edge of the grid.
+//   Adjacent non-loop cells contain digits that differ by 5 or more; "adjacent"
+//   is read as orthogonally adjacent, the default in this ruleset's other
+//   pairwise wording.
+// Nothing is omitted. Single-loop-ness is not a constraint of its own: it
+// follows from the three rules that are encoded -- see the ConnectedValues note
+// at the end.
 
-const INSIDE = 1;
-const OUTSIDE = 2;
-const LOOP = 3;
+// Cell state, one value per cell of an 11x11 layer (the 9x9 grid plus a
+// one-cell border ring). A cell is outside the loop, inside it, or on it with
+// one of the six ways a loop can pass through a cell.
+const OUT = 1, IN = 2, HORIZ = 3, VERT = 4, UL = 5, UR = 6, DL = 7, DR = 8;
+const ALL_STATES = [OUT, IN, HORIZ, VERT, UL, UR, DL, DR];
+const LOOP_STATES = [HORIZ, VERT, UL, UR, DL, DR];
+
+const usesUp = s => s === VERT || s === UL || s === UR;
+const usesDown = s => s === VERT || s === DL || s === DR;
+const usesLeft = s => s === HORIZ || s === UL || s === DL;
+const usesRight = s => s === HORIZ || s === UR || s === DR;
+
+// The three cell types the rules speak about. LOOP merges the six shape codes,
+// which differ only in how the loop passes through the cell.
+const LOOP = 0;
+const cellType = s => (s === OUT || s === IN) ? s : LOOP;
 
 const graph = cellGraph('9x9');
-const numValues = graph.gridGeometry().numValues; // 9
+const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
 
-const type = graph.makeOverlay('VT');
-const typeVar = type.toVar('cell type');
+// The state layer is one cell larger on each side than the grid. The ring is
+// pinned OUT so that "outside cells reach the grid edge" becomes a single
+// connectivity assertion over the whole layer; no other rule reads the ring.
+const PAD = 1;
+const LAYER_SIZE = geometry.numRows + 2 * PAD;
+const layer = cellGraph(`${LAYER_SIZE}x${LAYER_SIZE}`).makeOverlay('VS');
+const stateLayer = layer.toVar('cell type');
+const stateAt = (cell) => {
+  const { row, col } = parseCellId(cell);
+  return stateLayer.cell(row + PAD, col + PAD);
+};
+const gridStateCells = new Set(gridCells.map(stateAt));
+const ringGivens = stateLayer.cells()
+  .filter(cell => !gridStateCells.has(cell))
+  .map(cell => new Given(cell, OUT));
 
-// Every VT cell holds one of the three types.
-const typeDomain = type.makeReplicate(
-  new Given(type.cells()[0], INSIDE, OUTSIDE, LOOP));
+// A grid cell may only take a shape whose edges stay on the grid.
+const stateDomains = gridCells.map(cell => {
+  const { row, col } = parseCellId(cell);
+  const allowed = ALL_STATES.filter(s =>
+    !(row === 1 && usesUp(s)) &&
+    !(row === geometry.numRows && usesDown(s)) &&
+    !(col === 1 && usesLeft(s)) &&
+    !(col === geometry.numCols && usesRight(s)));
+  return new Given(stateAt(cell), ...allowed);
+});
 
-// --- Givens -----------------------------------------------------------------
-// Plain digit (no circle): R1C6=5. Circled digits: R8C7=7 (yellow), R9C5=2
-// (blue). Circled, no digit given: R3C8, R4C2 (green) -- their digits are
-// left for the solver but still obey the self-referential visibility rule
-// below.
-const digitGivens = [
-  new Given('R1C6', 5),
-  new Given('R8C7', 7),
-  new Given('R9C5', 2),
-];
+// Edge agreement: two neighbouring cells must agree on whether the loop uses the
+// edge between them. With every cell carrying exactly two used edges (or none),
+// this makes the loop cells a union of simple closed loops, and lets the loop run
+// alongside itself, which "never intersects with itself" permits.
+const edgeAgreeKey = (fromA, fromB) =>
+  Pair.fnToKey((a, b) => fromA(a) === fromB(b), geometry);
+const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
+const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
 
-// Circle colour fixes cell type (transcribed from the payload's overlays).
-const circleTypes = [
-  new Given(type.at('R9C5'), OUTSIDE), // blue
-  new Given(type.at('R8C7'), LOOP),    // yellow
-  new Given(type.at('R3C8'), INSIDE),  // green
-  new Given(type.at('R4C2'), INSIDE),  // green
-];
-
-// --- Single loop: ON cells form one connected, 2-regular cycle -------------
-// LOOP-type membership plus degree-2 counted over orthogonal neighbours,
-// combined with single connectivity, closes a simple non-self-touching
-// cycle: connected + every loop cell having exactly two loop neighbours
-// rules out both extra components and any branch or self-crossing. The
-// rules text only says the loop "never intersects with itself" (no
-// diagonal-touch restriction), so none is added.
-const degreeMachine = NFA.encodeSpec({
-  startState: { phase: 'start' },
-  transition: ({ phase, onNeighbours }, value) => {
-    if (phase === 'start') {
-      return value === LOOP ? { phase: 'on', onNeighbours: 0 } : { phase: 'off' };
-    }
-    if (phase === 'off') return { phase: 'off' };
-    const count = onNeighbours + (value === LOOP ? 1 : 0);
-    return count > 2 ? undefined : { phase: 'on', onNeighbours: count };
-  },
-  accept: ({ phase, onNeighbours }) => phase === 'off' || onNeighbours === 2,
-}, numValues);
-const loopDegrees = gridCells.map(cell => new NFA(degreeMachine, 'loop-degree',
-  ...type.at([cell, ...graph.neighbours(cell)])));
-
-const singleLoop = [
-  new ConnectedValues('VT', LOOP),
-  ...loopDegrees,
-];
-
-// --- Inside: one connected region -------------------------------------------
-// Non-empty is guaranteed by the two green circle givens above.
-const insideConnected = new ConnectedValues('VT', INSIDE);
-
-// --- No 2x2 area is entirely one type ---------------------------------------
-// Reads the 4 cells of a 2x2 block; rejects only if all four match.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(v => v === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = type.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2',
-    ...type.at(graph.block(gridCells[0], 2, 2))),
-  type.at(blockOrigins));
-
-// --- Circle visibility: digit = 1 (self) + same-type run in each direction -
-// One NFA, reused per circled cell: reads the cell's own digit (target) and
-// own type (ref, also counting itself), then each of the 4 rays' types,
-// incrementing on a type match and blocking (no further increments) at the
-// first mismatch in that ray; SEGMENT_BREAK resets "blocked" per ray so the
-// count still accumulates across all 4 directions.
-const sightMachine = NFA.encodeSpec({
-  startState: { phase: 'digit' },
-  transition: (state, value) => {
-    if (state.phase === 'digit') return { phase: 'ref', target: value };
-    if (state.phase === 'ref') {
-      return { phase: 'count', target: state.target, ref: value, count: 1, blocked: false };
-    }
-    // phase === 'count'
-    if (value === SEGMENT_BREAK) return { ...state, blocked: false };
-    if (state.blocked) return state;
-    if (value === state.ref) {
-      return { ...state, count: Math.min(state.count + 1, state.target + 1) };
-    }
-    return { ...state, blocked: true };
-  },
-  accept: (state) => state.phase === 'count' && state.count === state.target,
-}, numValues, { multiSegment: true });
-
-function visibilityConstraint(cellId) {
-  const { row, col } = parseCellId(cellId);
-  const ray = (dr, dc) => {
-    const cells = [];
-    for (let r = row + dr, c = col + dc; r >= 1 && r <= 9 && c >= 1 && c <= 9; r += dr, c += dc) {
-      cells.push(typeVar.cell(r, c));
-    }
-    return cells;
-  };
-  const rays = [ray(-1, 0), ray(1, 0), ray(0, -1), ray(0, 1)].filter(r => r.length > 0);
-  return new NFA(sightMachine, 'sight', [cellId, type.at(cellId)], ...rays);
-}
-
-const circleCells = ['R9C5', 'R8C7', 'R3C8', 'R4C2'];
-const visibility = circleCells.map(visibilityConstraint);
-
-// --- Adjacent non-loop cells differ by >= 5 ---------------------------------
-// Reads (typeA, digitA, typeB, digitB) for one orthogonal edge. If either
-// cell is ON the loop the pair is unconstrained (absorb the rest of the
-// tokens via a skip countdown, as in nordschleife.js's multipleMachine).
-const diffMachine = NFA.encodeSpec({
-  startState: { phase: 'aType' },
+// Adjacent non-loop cells differ by at least 5. Reads
+// [stateA, digitA, stateB, digitB]; a loop cell at either end skips the
+// remaining symbols of the pair.
+const differenceMachine = NFA.encodeSpec({
+  startState: { phase: 'stateA' },
   transition: (state, value) => {
     switch (state.phase) {
-      case 'aType':
-        return value === LOOP ? { phase: 'skip', left: 3 } : { phase: 'aDigit' };
-      case 'aDigit':
-        return { phase: 'bType', aDigit: value };
-      case 'bType':
-        return value === LOOP
+      case 'stateA':
+        return cellType(value) === LOOP
+          ? { phase: 'skip', left: 3 } : { phase: 'digitA' };
+      case 'digitA':
+        return { phase: 'stateB', digitA: value };
+      case 'stateB':
+        return cellType(value) === LOOP
           ? { phase: 'skip', left: 1 }
-          : { phase: 'bDigit', aDigit: state.aDigit };
-      case 'bDigit': {
-        const diff = Math.abs(state.aDigit - value);
-        return diff >= 5 ? { phase: 'done' } : undefined;
-      }
+          : { phase: 'digitB', digitA: state.digitA };
+      case 'digitB':
+        return Math.abs(state.digitA - value) >= 5 ? { phase: 'done' } : undefined;
       case 'skip':
-        return state.left > 1 ? { phase: 'skip', left: state.left - 1 } : { phase: 'done' };
+        return state.left > 1
+          ? { phase: 'skip', left: state.left - 1 } : { phase: 'done' };
     }
   },
   accept: ({ phase }) => phase === 'done',
-}, numValues);
-// Right/down steps only: each orthogonal edge covered once.
-const nonLoopDiffs = gridCells.flatMap(cell => [[0, 1], [1, 0]]
-  .map(([dR, dC]) => graph.step(cell, dR, dC))
-  .filter(Boolean)
-  .map(other => new NFA(diffMachine, 'non-loop-diff',
-    type.at(cell), cell, type.at(other), other)));
+}, geometry.numValues);
+
+// Right and down steps cover every orthogonal pair exactly once. Both rules are
+// the same template at every cell that has such a neighbour, so the edge
+// agreement is stamped with Replicate over the state layer; the difference rule
+// reads grid cells too, which a single-layer Replicate cannot shift.
+const stepRules = [[0, 1], [1, 0]].map(([dR, dC], index) => {
+  const origins = gridCells.filter(cell => graph.step(cell, dR, dC));
+  const template = new Pair(
+    index === 0 ? edgeRightKey : edgeDownKey,
+    index === 0 ? 'edge-h' : 'edge-v',
+    stateLayer.cell(1, 1), stateLayer.cell(1 + dR, 1 + dC));
+  return [
+    layer.makeReplicate(template, origins.map(stateAt)),
+    ...origins.map(cell => {
+      const other = graph.step(cell, dR, dC);
+      return new NFA(differenceMachine, index === 0 ? 'diff-h' : 'diff-v',
+        stateAt(cell), cell, stateAt(other), other);
+    }),
+  ];
+}).flat();
+
+// Inside/outside is the even-odd rule for the loop as a closed curve. A ray cast
+// leftwards from a cell's centre, raised just above the row's centre line, meets
+// the loop exactly at the cells of that row that use their top edge, so a cell is
+// inside iff an odd number of cells before it in its row use their top edge.
+// Reads its row's state cells from column 1 up to and including the cell itself;
+// a loop cell is unconstrained.
+const insideParityMachine = NFA.encodeSpec({
+  startState: { parity: 0, last: null },
+  transition: ({ parity }, value) => ({
+    parity: parity ^ (usesUp(value) ? 1 : 0),
+    last: value,
+  }),
+  accept: ({ parity, last }) => {
+    if (last === IN) return parity === 1;
+    if (last === OUT) return parity === 0;
+    return true;
+  },
+}, geometry.numValues);
+const insideParity = gridCells.map(cell => new NFA(
+  insideParityMachine, 'inside',
+  ...graph.row(cell).slice(0, parseCellId(cell).col).map(stateAt)));
+
+// A 2x2 area cannot be entirely one cell type. Reads the four state cells of the
+// block and accepts only if two of them differ in type.
+const mixedBlockMachine = NFA.encodeSpec({
+  startState: { seen: null },
+  transition: ({ seen }, value) => {
+    if (seen === 'mixed') return { seen: 'mixed' };
+    const type = cellType(value);
+    if (seen === null) return { seen: type };
+    return seen === type ? { seen: type } : { seen: 'mixed' };
+  },
+  accept: ({ seen }) => seen === 'mixed',
+}, geometry.numValues);
+const mixedBlocks = layer.makeReplicate(
+  new NFA(mixedBlockMachine, 'block-2x2',
+    stateLayer.cell(1, 1), stateLayer.cell(1, 2),
+    stateLayer.cell(2, 1), stateLayer.cell(2, 2)),
+  gridCells.filter(cell => graph.block(cell, 2, 2)).map(stateAt));
+
+// The four circles, from the drawn overlay circles: green (#A3E048) is inside,
+// blue (#34BBE6) outside, yellow (#F7D038) on the loop.
+const circles = [
+  { cell: 'R4C2', type: IN },
+  { cell: 'R3C8', type: IN },
+  { cell: 'R9C5', type: OUT },
+  { cell: 'R8C7', type: LOOP },
+];
+
+const circleTypes = circles.map(({ cell, type }) => new Given(
+  stateAt(cell), ...(type === LOOP ? LOOP_STATES : [type])));
+
+// A circled digit counts the cells of the circle's own type it sees along the
+// four orthogonal rays, itself included, with the other two types blocking. The
+// digit is the first segment; each ray away from the circle is its own segment,
+// so `blocked` resets at every segment break.
+const sightMachine = (targetType) => NFA.encodeSpec({
+  startState: { target: null, count: 0, blocked: false },
+  transition: (state, value) => {
+    if (value === SEGMENT_BREAK) {
+      return { target: state.target, count: state.count, blocked: false };
+    }
+    if (state.target === null) return { target: value, count: 1, blocked: false };
+    if (state.blocked) return state;
+    if (cellType(value) !== targetType) {
+      return { target: state.target, count: state.count, blocked: true };
+    }
+    const count = state.count + 1;
+    return count > state.target
+      ? undefined : { target: state.target, count, blocked: false };
+  },
+  accept: ({ target, count }) => target !== null && count === target,
+}, geometry.numValues, { multiSegment: true });
+
+const sightCounts = circles.map(({ cell, type }) => {
+  const rays = [[-1, 0], [1, 0], [0, -1], [0, 1]]
+    .map(([dR, dC]) => graph.ray(cell, dR, dC).slice(1).map(stateAt))
+    .filter(ray => ray.length > 0);
+  return new NFA(sightMachine(type), 'sight', [cell], ...rays);
+});
 
 return [
   new Shape('9x9'),
-  typeVar,
-  typeDomain,
-  ...digitGivens,
+  new Given('R1C6', 5),
+  new Given('R8C7', 7),
+  new Given('R9C5', 2),
+  stateLayer,
+  ...ringGivens,
+  ...stateDomains,
+  ...stepRules,
+  ...insideParity,
+  mixedBlocks,
   ...circleTypes,
-  ...singleLoop,
-  insideConnected,
-  noMono2x2,
-  ...visibility,
-  ...nonLoopDiffs,
+  ...sightCounts,
+  // Inside cells form one orthogonally connected area; outside cells are
+  // orthogonally connected to the grid edge, which is the pinned ring.
+  // Together with the 2x2 rule these also force the loop to be a single loop:
+  // a second, disjoint loop puts either a second enclosed inside area (the
+  // first assertion then fails) or an enclosed outside area cut off from the
+  // ring (the second fails), and a loop enclosing no cell at all would need a
+  // 2x2 block of loop cells.
+  new ConnectedValues('VS', IN),
+  new ConnectedValues('VS', OUT),
 ];

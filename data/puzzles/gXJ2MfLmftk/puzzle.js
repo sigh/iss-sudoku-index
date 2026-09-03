@@ -2,112 +2,172 @@
 // Author: Math Pesto
 // Video: https://www.youtube.com/watch?v=gXJ2MfLmftk
 // Source: https://app.crackingthecryptic.com/sudoku/n7PPHLg8pT
+
+// Rules encoded, one clause per sentence of the puzzle's rules text:
+//  - Normal sudoku rules apply: the default 9x9 Shape's rows, columns and
+//    boxes.
+//  - Digits do not repeat in cages: one totalless Cage per drawn cage. The
+//    grid has no given digits and no cage carries a printed total, so every
+//    cage total is a quantity the solver has to work out.
+//  - Adjacent cages share at least one edge: this defines which cage pairs the
+//    dot rules speak about. Two cages are adjacent iff some cell of one is
+//    orthogonally adjacent to a cell of the other, so cages meeting only at a
+//    corner, or separated by a cell in no cage, are not adjacent. The 33
+//    adjacent pairs are derived below from the drawn cages, not listed by hand.
+//  - White dot between two adjacent cages: their totals are consecutive.
+//  - Black dot between two adjacent cages: their totals are in a 1:2 ratio.
+//  - Both dot rules are stated as "if the totals are <related> there IS a dot",
+//    so they are exhaustive: an adjacent cage pair with no dot drawn between
+//    it has totals that are neither consecutive nor in a 1:2 ratio. That
+//    negative half is encoded for all 14 dotless adjacent pairs.
 //
-// Normal sudoku rules apply (standard rows/columns/3x3 boxes; no givens).
-// 22 cages are drawn (no cage shows a total); digits must not repeat within
-// a cage. Cages cover 60 of the 81 cells -- cells outside every cage carry no
-// cage-uniqueness rule. "Adjacent" cages (per the rules sentence) means cages
-// sharing at least one grid edge; computed from the cage cell lists below,
-// there are 33 such adjacent cage pairs. A white dot between two cages means
-// their (unlabeled) sums are consecutive; a black dot means their sums are in
-// a 1:2 ratio. Both mark types are drawn on this board, so the rule is read
-// exhaustively both ways: every adjacent pair *without* a dot is a positive
-// claim that its sums are neither consecutive nor in a 1:2 ratio.
+// Nothing is omitted. One entailment is used to keep the encoding small: under
+// the exhaustive reading a white-dotted pair must also fail the 1:2 test and a
+// black-dotted pair must also fail the consecutive test. Both relations hold at
+// once only for totals 1 and 2, which needs a one-cell cage holding 1 next to a
+// cage totalling 2; the only one-cell cages are R4C5 and R4C8, and every cage
+// adjacent to either has at least two cells, so with the no-repeat rule its
+// total is at least 3. Those cross-checks therefore follow from the constraints
+// below and are not restated.
 
-// Cage cells, 1-indexed, transcribed from the puzzle's drawn cage outlines.
+const graph = cellGraph('9x9');
+
+// The 22 drawn cages, transcribed from the source's cage outlines; letters are
+// the labels used in the description. Two of them are single cells (J, P):
+// real cages for the dot rules, but no Cage constraint is emitted for them
+// since "digits do not repeat" says nothing about a lone cell.
 const cages = [
-  ['R1C1', 'R1C2', 'R2C1'],                       // 0
-  ['R2C2', 'R3C2'],                                // 1
-  ['R3C1', 'R4C1', 'R4C2', 'R5C2', 'R5C3'],        // 2
-  ['R1C3', 'R2C3', 'R3C3'],                        // 3
-  ['R1C4', 'R1C5'],                                // 4
-  ['R2C5', 'R3C4', 'R3C5'],                        // 5
-  ['R3C6', 'R4C6', 'R4C7'],                        // 6
-  ['R3C7', 'R3C8'],                                // 7
-  ['R1C8', 'R2C8', 'R2C9'],                        // 8
-  ['R4C8'],                                        // 9
-  ['R5C8', 'R5C9', 'R6C8', 'R6C9'],                // 10
-  ['R6C7', 'R7C7', 'R8C7'],                        // 11
-  ['R9C6', 'R9C7', 'R9C8', 'R9C9'],                // 12
-  ['R7C6', 'R8C6'],                                // 13
-  ['R5C5', 'R5C6', 'R6C4', 'R6C5'],                // 14
-  ['R4C5'],                                        // 15
-  ['R6C1', 'R6C2'],                                // 16
-  ['R7C2', 'R8C1', 'R8C2'],                        // 17
-  ['R7C3', 'R8C3'],                                // 18
-  ['R7C4', 'R7C5', 'R8C4'],                        // 19
-  ['R9C4', 'R9C5'],                                // 20
-  ['R9C1', 'R9C2', 'R9C3'],                        // 21
+  ['R1C1', 'R1C2', 'R2C1'],                    // A
+  ['R2C2', 'R3C2'],                            // B
+  ['R3C1', 'R4C1', 'R4C2', 'R5C2', 'R5C3'],    // C
+  ['R1C3', 'R2C3', 'R3C3'],                    // D
+  ['R1C4', 'R1C5'],                            // E
+  ['R2C5', 'R3C4', 'R3C5'],                    // F
+  ['R3C6', 'R4C6', 'R4C7'],                    // G
+  ['R3C7', 'R3C8'],                            // H
+  ['R1C8', 'R2C8', 'R2C9'],                    // I
+  ['R4C8'],                                    // J
+  ['R5C8', 'R5C9', 'R6C8', 'R6C9'],            // K
+  ['R6C7', 'R7C7', 'R8C7'],                    // L
+  ['R9C6', 'R9C7', 'R9C8', 'R9C9'],            // M
+  ['R7C6', 'R8C6'],                            // N
+  ['R5C5', 'R5C6', 'R6C4', 'R6C5'],            // O
+  ['R4C5'],                                    // P
+  ['R6C1', 'R6C2'],                            // Q
+  ['R7C2', 'R8C1', 'R8C2'],                    // R
+  ['R7C3', 'R8C3'],                            // S
+  ['R7C4', 'R7C5', 'R8C4'],                    // T
+  ['R9C4', 'R9C5'],                            // U
+  ['R9C1', 'R9C2', 'R9C3'],                    // V
 ];
 
-// Dot pairs, transcribed from the puzzle's drawn dot overlays: each dot's
-// edge sits between two specific cage cells, which identifies the cage pair.
-// Cage index pairs are 0-based, matching the `cages` array above.
-const whitePairs = [
-  [0, 2], [1, 2], [2, 16], [3, 4], [6, 15], [7, 9],
-  [12, 13], [12, 20], [14, 15], [14, 19], [16, 17], [17, 18], [17, 21],
-];
-const blackPairs = [
-  [4, 5], [5, 6], [9, 10], [10, 11], [11, 13],
+// The 19 drawn dots, each transcribed as its colour and the cell edge it
+// straddles. A dot constrains the two cage totals, not the two digits it sits
+// between, so only the pair of cages it separates matters below.
+const dots = [
+  ['white', 'R1C3', 'R1C4'],
+  ['white', 'R2C1', 'R3C1'],
+  ['white', 'R3C1', 'R3C2'],
+  ['white', 'R4C5', 'R5C5'],
+  ['white', 'R4C5', 'R4C6'],
+  ['white', 'R3C8', 'R4C8'],
+  ['white', 'R6C4', 'R7C4'],
+  ['white', 'R7C3', 'R7C4'],
+  ['white', 'R7C2', 'R7C3'],
+  ['white', 'R6C2', 'R7C2'],
+  ['white', 'R5C2', 'R6C2'],
+  ['white', 'R8C2', 'R9C2'],
+  ['white', 'R9C5', 'R9C6'],
+  ['white', 'R8C6', 'R9C6'],
+  ['black', 'R7C6', 'R7C7'],
+  ['black', 'R6C7', 'R6C8'],
+  ['black', 'R4C8', 'R5C8'],
+  ['black', 'R3C5', 'R3C6'],
+  ['black', 'R1C5', 'R2C5'],
 ];
 
-// Every adjacent cage pair not carrying a dot: 33 total adjacent pairs (any
-// two cages sharing a grid edge) minus the 19 with a drawn dot (14 white +
-// 5 black).
-function pairKey(a, b) { return `${Math.min(a, b)}_${Math.max(a, b)}`; }
-const dotted = new Set([...whitePairs, ...blackPairs].map(([a, b]) => pairKey(a, b)));
-const allAdjacentPairs = [
-  [0, 1], [0, 2], [0, 3], [1, 2], [1, 3], [2, 16], [3, 4], [3, 5], [4, 5],
-  [5, 6], [5, 15], [6, 7], [6, 9], [6, 14], [6, 15], [7, 8], [7, 9], [9, 10],
-  [10, 11], [11, 12], [11, 13], [12, 13], [12, 20], [13, 19], [14, 15],
-  [14, 19], [16, 17], [17, 18], [17, 21], [18, 19], [18, 21], [19, 20], [20, 21],
-];
-const noDotPairs = allAdjacentPairs.filter(([a, b]) => !dotted.has(pairKey(a, b)));
+const cageOfCell = new Map(
+  cages.flatMap((cells, i) => cells.map(cell => [cell, i])));
+const pairKey = (a, b) => `${Math.min(a, b)}-${Math.max(a, b)}`;
 
-// A cage sum can reach up to 45 (5 cells x max digit 9) while this NFA scans
-// it, before AllDifferent (a separate constraint) rules out the higher
-// values -- so the running sum is clamped at 46, a sink past every value a
-// 5-cell cage could actually reach.
-const SUM_CAP = 46;
-
-// Scans cage A's cells, a SEGMENT_BREAK, then cage B's cells, carrying each
-// cage's running total; accepts iff `relation(sumA, sumB)` holds on the two
-// final totals. One compiled spec per relation, reused across every pair
-// that needs it.
-function cageSumRelationSpec(relation) {
-  return NFA.encodeSpec({
-    startState: { phase: 'A', sum: 0, sumA: null },
-    transition: ({ phase, sum, sumA }, value) => {
-      if (value === SEGMENT_BREAK) {
-        // Exactly one break is expected, between the two segments.
-        if (phase !== 'A') return undefined;
-        return { phase: 'B', sum: 0, sumA: sum };
-      }
-      return { phase, sum: Math.min(sum + value, SUM_CAP), sumA };
-    },
-    accept: ({ phase, sum, sumA }) => phase === 'B' && relation(sumA, sum),
-  }, 9, { multiSegment: true });
+// Cage adjacency, read off the drawn cages: every orthogonal cell edge whose
+// two sides lie in different cages makes those cages adjacent.
+const adjacentCagePairs = new Map();
+for (const cell of graph.cells()) {
+  const a = cageOfCell.get(cell);
+  if (a === undefined) continue;
+  for (const neighbour of graph.neighbours(cell)) {
+    const b = cageOfCell.get(neighbour);
+    if (b === undefined || b === a) continue;
+    adjacentCagePairs.set(pairKey(a, b), [Math.min(a, b), Math.max(a, b)]);
+  }
 }
 
-const consecutive = (a, b) => Math.abs(a - b) === 1;
-const ratioTwo = (a, b) => a === 2 * b || b === 2 * a;
-const consecutiveSpec = cageSumRelationSpec(consecutive);
-const ratioTwoSpec = cageSumRelationSpec(ratioTwo);
-const neitherSpec = cageSumRelationSpec((a, b) => !consecutive(a, b) && !ratioTwo(a, b));
+const dotColourOfPair = new Map(dots.map(
+  ([colour, cellA, cellB]) =>
+    [pairKey(cageOfCell.get(cellA), cageOfCell.get(cellB)), colour]));
+
+// sum(cellsA) - sum(cellsB) == difference, as a coefficient Sum.
+const totalDifference = (cellsA, cellsB, difference) =>
+  new Sum(difference, ...cellsA, ...cellsB.map(cell => [cell, -1]));
+
+// coeffA * sum(cellsA) + coeffB * sum(cellsB) == 0, as a coefficient Sum.
+const totalCombinationIsZero = (cellsA, cellsB, coeffA, coeffB) =>
+  new Sum(0, ...cellsA.map(cell => [cell, coeffA]),
+    ...cellsB.map(cell => [cell, coeffB]));
+
+// "coeffA * sum(cellsA) + coeffB * sum(cellsB) is none of `forbidden`", which
+// no sum-style class states directly (Sum fixes a total, it cannot exclude
+// one). The machine reads cage A's cells as its first segment and cage B's as
+// its second, and carries only the running value of the combination -- not the
+// two totals separately -- so its state count stays linear in the range that
+// combination can reach. `maxDepth` bounds state creation: a running total is
+// unbounded over inputs of unrestricted length, and the bound counts the one
+// SEGMENT_BREAK alongside the cells.
+const forbidTotalCombination = (name, cellsA, cellsB, coeffA, coeffB, forbidden) =>
+  new NFA(
+    NFA.encodeSpec({
+      startState: { phase: 'A', value: 0 },
+      transition: (state, value) => {
+        if (value === SEGMENT_BREAK) return { phase: 'B', value: state.value };
+        const coeff = state.phase === 'A' ? coeffA : coeffB;
+        return { phase: state.phase, value: state.value + coeff * value };
+      },
+      accept: (state) =>
+        state.phase === 'B' && !forbidden.includes(state.value),
+      maxDepth: cellsA.length + cellsB.length + 1,
+    }, 9, { multiSegment: true }),
+    name, cellsA, cellsB);
+
+const dotConstraints = [...adjacentCagePairs.values()].flatMap(([a, b]) => {
+  const cellsA = cages[a];
+  const cellsB = cages[b];
+  switch (dotColourOfPair.get(pairKey(a, b))) {
+    case 'white':
+      return [new Or([
+        totalDifference(cellsA, cellsB, 1),
+        totalDifference(cellsA, cellsB, -1),
+      ])];
+    case 'black':
+      return [new Or([
+        totalCombinationIsZero(cellsA, cellsB, 1, -2),
+        totalCombinationIsZero(cellsA, cellsB, 2, -1),
+      ])];
+    default:
+      // No dot: the totals are neither consecutive nor in a 1:2 ratio.
+      return [
+        forbidTotalCombination(
+          `not-consecutive-${a}-${b}`, cellsA, cellsB, 1, -1, [1, -1]),
+        forbidTotalCombination(
+          `not-double-${a}-${b}`, cellsA, cellsB, 1, -2, [0]),
+        forbidTotalCombination(
+          `not-half-${a}-${b}`, cellsA, cellsB, 2, -1, [0]),
+      ];
+  }
+});
 
 return [
-  // Digits do not repeat within a cage (single-cell cages need no constraint).
-  ...cages.filter(cells => cells.length > 1).map(cells => new AllDifferent(...cells)),
-
-  // White dot: cage sums consecutive.
-  ...whitePairs.map(([a, b]) =>
-    new NFA(consecutiveSpec, 'white cage dot', cages[a], cages[b])),
-  // Black dot: cage sums in a 1:2 ratio.
-  ...blackPairs.map(([a, b]) =>
-    new NFA(ratioTwoSpec, 'black cage dot', cages[a], cages[b])),
-  // No dot on an adjacent pair: neither relation holds (exhaustiveness --
-  // both dot colours are used on this board, so an undrawn boundary is a
-  // positive claim, not silence).
-  ...noDotPairs.map(([a, b]) =>
-    new NFA(neitherSpec, 'no cage dot', cages[a], cages[b])),
+  new Shape('9x9'),
+  ...cages.filter(cells => cells.length > 1).map(cells => new Cage(0, ...cells)),
+  ...dotConstraints,
 ];

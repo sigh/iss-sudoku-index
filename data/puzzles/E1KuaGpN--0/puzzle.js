@@ -4,121 +4,107 @@
 // Source: https://app.crackingthecryptic.com/sudoku/tpjLQ6BhQ7
 
 // Rules encoded here:
-//  - Normal sudoku.
-//  - Anti-knight: cells a knight's move apart cannot repeat.
-//  - Grey dot: the two cells either side are consecutive OR in a 2:1 ratio
-//    (WhiteDot's relation or BlackDot's relation, not necessarily both true).
-//  - DIY arrows: 8 circles are drawn (never a digit), but their arrows are
-//    not drawn. Each circle's arrow is exactly 3 cells long, orthogonally
-//    connected and self-avoiding, must stay entirely within columns
-//    1,2,3,7,8,9 (whichever of the two column-bands is on the circle's own
-//    side, since the bands are separated by the forbidden columns and a
-//    connected path cannot cross them), and the arm digits must sum to the
-//    digit placed in the circle cell. Arrows may cross on the page but may
-//    not occupy the same cell.
-// OMITTED: that the arm additionally touches the circle's own cell. That
-// requirement is not in the rules text -- it is the standard arrow-sudoku
-// convention -- and combined with anti-knight and R5C5's given it makes the
-// puzzle unsatisfiable (checked exhaustively), so it is left out and every
-// 3-cell connected shape within the circle's own band is a candidate
-// regardless of whether it reaches the circle.
-// The 27-cell no-total region drawn over columns 4-6 exactly matches the
-// columns the rules forbid arrows from entering; the rules never mention a
-// cage there and 27 cells cannot be a real all-different cage (only 9
-// digits exist), so it is a background highlight, not a constraint -- and
-// is deliberately left unencoded.
+//   Normal sudoku rules apply.
+//   Cells separated by a knight's move (in chess) cannot contain the same digit.
+//   Cells separated by a grey dot contain digits that are either consecutive or
+//   in a 2:1 ratio.
+//   Standard arrow sudoku rules apply: digits along an arrow sum to the digit in
+//   that arrow's circle. The eight circles are drawn but the arrows are not: the
+//   solver draws them. Each arrow is exactly 3 cells long (4 including the
+//   circle), arrows may only extend into columns 1, 2, 3, 7, 8, 9, and arrows
+//   may cross each other but may not share cells.
+// Nothing is omitted. The drawn no-total cage around all 27 cells of columns
+// 4-6 is an annotation of the band arrows may not enter -- 27 cells cannot be
+// mutually distinct on a 9x9 grid -- and the rules give it no clue of its own.
 
-const graph = cellGraph('9x9');
+const shape = new Shape('9x9');
+const graph = cellGraph(shape);
 
-// The 8 drawn circles: white, grey-bordered, no digit shown.
+// The eight drawn circles (arrow bulbs), all in columns 4 and 6.
 const circles = [
-  'R3C4', 'R6C4', 'R4C4', 'R8C4',
-  'R4C6', 'R7C6', 'R6C6', 'R2C6',
+  'R3C4', 'R4C4', 'R6C4', 'R8C4',
+  'R2C6', 'R4C6', 'R6C6', 'R7C6',
 ];
 
-// The 4 drawn grey dots, each on the edge between the two listed cells.
-const greyDotEdges = [
+// The four grey dots, as the cell pairs they are drawn between.
+const greyDots = [
   ['R1C1', 'R2C1'],
   ['R1C8', 'R2C8'],
   ['R9C1', 'R9C2'],
   ['R9C8', 'R9C9'],
 ];
 
-// Rule: "Arrows can only extend into columns 123789 of the sudoku."
-const ARROW_COLS = new Set([1, 2, 3, 7, 8, 9]);
-const inArrowCols = (cell) => ARROW_COLS.has(parseCellId(cell).col);
-// The two halves of ARROW_COLS: a connected path can never cross the
-// forbidden columns 4-6 to get from one half to the other, so every arm
-// stays entirely on the same side as its circle.
-const bandOf = (cell) => (parseCellId(cell).col <= 3 ? 'L' : 'R');
+// Grey dot: consecutive, or one digit twice the other.
+const greyDotKey = Pair.fnToKey(
+  (a, b) => Math.abs(a - b) === 1 || a === 2 * b || b === 2 * a, shape);
 
-// Every 3-cell orthogonally-connected, self-avoiding shape that fits inside
-// one column-band (cols 1-3, or cols 7-9), deduplicated by cell set. Built
-// once per band and shared by every circle on that side (see the OMITTED
-// note above for why this does not also require touching the circle).
-const armsByBand = { L: [], R: [] };
-{
-  const seen = { L: new Set(), R: new Set() };
-  for (const start of graph.cells().filter(inArrowCols)) {
-    const band = bandOf(start);
-    for (const second of graph.neighbours(start)) {
-      if (!inArrowCols(second) || bandOf(second) !== band) continue;
-      for (const third of graph.neighbours(second)) {
-        if (third === start) continue;
-        if (!inArrowCols(third) || bandOf(third) !== band) continue;
-        const key = [start, second, third].sort().join(',');
-        if (seen[band].has(key)) continue;
-        seen[band].add(key);
-        armsByBand[band].push([start, second, third]);
-      }
+const ARM_LENGTH = 3;                                 // "exactly 3 cells long"
+const ARM_COLUMNS = new Set([1, 2, 3, 7, 8, 9]);      // "columns 123789"
+
+// An arm steps from cell to cell in any of the eight king directions. The rules
+// let two arrows cross without sharing a cell, and chains of orthogonal steps
+// through cell centres cannot cross without meeting in a cell, so the steps are
+// diagonal as well as orthogonal.
+const armNeighbours = (cell) => graph.kingNeighbours(cell).filter(
+  next => ARM_COLUMNS.has(parseCellId(next).col));
+
+// Every self-avoiding three-cell arm that could leave a circle: the first cell
+// adjacent to the circle, each later cell adjacent to the one before it. A
+// column-4 circle has no permitted neighbour outside column 3 and a column-6
+// circle none outside column 7, so each arm stays within its own outer band.
+function candidateArms(circle) {
+  const arms = [];
+  const extend = (arm, last) => {
+    if (arm.length === ARM_LENGTH) {
+      arms.push(arm);
+      return;
     }
-  }
+    for (const next of armNeighbours(last)) {
+      if (arm.includes(next)) continue;
+      extend([...arm, next], next);
+    }
+  };
+  extend([], circle);
+  return arms;
 }
-const candidateArms = (circle) =>
-  armsByBand[bandOf(graph.neighbours(circle).filter(inArrowCols)[0])];
 
-const arms = circles.map(candidateArms);
+const armsByCircle = circles.map(candidateArms);   // 68-87 arms per circle
 
-// Label overlay: every cell carries the label of the arm covering it, so two
-// arms can never claim the same cell ("may not share cells") -- a cell in
-// both would need two labels at once. Circles whose candidate arms can never
-// meet (the left-band and right-band circles are always disjoint from each
-// other) may safely reuse a label; colour the conflict graph greedily to
-// find how few labels are actually needed.
-const armSets = arms.map(list => list.map(cells => new Set(cells)));
-const canMeet = (i, j) => armSets[i].some(
-  a => armSets[j].some(b => [...b].some(cell => a.has(cell))));
-const conflicts = circles.map((_, i) => circles.map((_, j) => i !== j && canMeet(i, j)));
-const degrees = conflicts.map(row => row.filter(Boolean).length);
-const labels = new Array(circles.length);
-for (const i of circles.map((_, i) => i).sort((a, b) => degrees[b] - degrees[a])) {
-  const used = new Set(conflicts[i].map((meets, j) => meets ? labels[j] : null));
-  let label = 1;
-  while (used.has(label)) label++;
-  labels[i] = label;
-}
-const numLabels = Math.max(...labels);
-if (numLabels > 9) throw new Error(`need ${numLabels} arm labels, only 9 fit`);
+// Which arrow a cell belongs to: NO_ARROW, or NO_ARROW + 1 + the arrow's index.
+// One value per cell, so a cell can lie on at most one arm, which is the
+// "may not share cells" half of the crossing rule.
+const NO_ARROW = 1;
+const arrows = graph.makeOverlay('VA');
 
-const armOwner = graph.makeOverlay('VA');
+// A cell may only be labelled with an arrow that has some arm through it.
+const labelDomains = graph.cells().map(cell => new Given(
+  arrows.at(cell),
+  NO_ARROW,
+  ...armsByCircle.flatMap(
+    (arms, i) => arms.some(arm => arm.includes(cell))
+      ? [NO_ARROW + 1 + i] : [])));
+
+// One disjunction per circle, over that circle's candidate arms. A branch
+// labels its own arm's cells and, via ContainExact, caps the label's total
+// count at three, so no cell off the chosen arm carries the label; the label
+// domains above then leave every remaining cell at NO_ARROW.
+const arrowChoices = armsByCircle.map((arms, i) => {
+  const value = NO_ARROW + 1 + i;
+  const reachable = arrows.at(graph.cells().filter(
+    cell => arms.some(arm => arm.includes(cell))));
+  return new Or(arms.map(arm => new And([
+    ...arrows.at(arm).map(cell => new Given(cell, value)),
+    new ContainExact(Array(ARM_LENGTH).fill(value).join('_'), ...reachable),
+    new Arrow(circles[i], ...arm),
+  ])));
+});
 
 return [
-  new Shape('9x9'),
-  armOwner.toVar('ArmOwner'),
-
+  shape,
+  arrows.toVar('arrow'),
   new Given('R5C5', 5),
-
   new AntiKnight(),
-
-  ...greyDotEdges.map(([a, b]) => new Or([new WhiteDot(a, b), new BlackDot(a, b)])),
-
-  // Pick one arm per circle: it ties the arm's sum to the circled digit and
-  // stamps its label on the 3 arm cells, so a conflicting choice on another
-  // circle's arm is rejected by the label overlay above.
-  ...circles.map((circle, i) => new Or(
-    arms[i].map(cells => new And([
-      new Arrow(circle, ...cells),
-      ...cells.map(cell => new Given(armOwner.at(cell), labels[i])),
-    ]))
-  )),
+  ...greyDots.map(([a, b]) => new Pair(greyDotKey, 'grey', a, b)),
+  ...labelDomains,
+  ...arrowChoices,
 ];

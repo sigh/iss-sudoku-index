@@ -3,206 +3,225 @@
 // Video: https://www.youtube.com/watch?v=ZIm442_mXM8
 // Source: https://app.crackingthecryptic.com/sudoku/tGf29NLMRT
 
-// Normal sudoku, plus a hidden 1-cell-wide snake with a head and a tail that
-// enters each of the 9 boxes. It may not touch itself, not even diagonally
-// (so, orthogonally: connected with every on-snake cell having exactly one
-// or two on-snake orthogonal neighbours -- one at the head/tail, two
-// elsewhere; diagonally: no 2x2 block has only its two diagonal cells on).
-// Six arrows each start on a circled cell; the digits on the rest of that
-// arrow sum to the circled digit (the rules' "digits along an arrow must
-// sum to the number in the circle"). Separately, each circled cell's own
-// digit also counts the snake's cells in the circle's box, and (for the six
-// circles that carry an arrow) the two arrow cells nearest the circle, read
-// as a 2-digit number, give the sum of the snake's digits in that box. The
-// rules consistently name "the circle" and "the arrow" as separate objects
-// (rule 1 sums arrow digits *against* the circle's number), so "the first
-// two digits on the arrow" is read as excluding the circle cell itself --
-// for the two arrows whose non-circle path is only 2 cells long, that
-// reading also happens to be the whole path.
-// There is a seventh circle (R9C7) with no arrow -- it only carries the
-// count reading, not a 2-digit sum.
+// Normal sudoku rules apply. Digits along an arrow must sum to the number in the
+// circle. There is a 1-cell-wide snake (with a head and a tail) that enters each
+// box exactly once. It may not touch itself, not even diagonally. The number in
+// any circle indicates how many cells the snake occupies in that box. The first
+// two digits on the arrow, as read from the circle, give a 2-digit number showing
+// the sum of the snake's cells in the circle's box.
 //
-// Omitted: "enters each box exactly once", i.e. the snake's cells within a
-// box must form one contiguous run, never leaving a box and re-entering it --
-// no known way to state that a partial, solver-discovered path visits each of
-// several fixed regions in one contiguous interval. As a consequence, box2
-// and box5 (rows1-3/cols4-6 and rows4-6/cols4-6) carry no circle and so have
-// no lower bound on snake presence either -- nothing below requires the
-// snake to enter them at all.
+// Every sentence above is encoded; nothing is omitted.
 
-const ON = 1;                  // snake-membership values, stored in the Var cells
-const OFF = 2;
-
-const FLAG_OFF = 1;            // degree-flag values: off the snake
-const FLAG_ENDPOINT = 2;       // on the snake with exactly one on neighbour (head/tail)
-const FLAG_THROUGH = 3;        // on the snake with exactly two on neighbours
+// Snake membership lives in one Var cell per grid cell. The code also records
+// how many snake neighbours the cell has, so that "exactly two ends" is a count
+// over the codes rather than a second overlay.
+const OFF = 1;   // not on the snake
+const BODY = 2;  // on the snake, two snake neighbours
+const TIP = 3;   // on the snake, one snake neighbour (the head or the tail)
+const isOn = value => value !== OFF;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
+const boxes = graph.boxes();
+const snake = graph.makeOverlay('VS');
 
-// The snake-membership Var cell paired with each grid cell (VM1..VM81).
-const snake = graph.makeOverlay('VM');
-// The degree-flag Var cell paired with each grid cell (VD1..VD81).
-const degreeFlag = graph.makeOverlay('VD');
+// Drawn circles, one per box for seven of the nine boxes. Transcribed from the
+// seven white circle overlays.
+const circles = ['R2C2', 'R1C7', 'R4C3', 'R5C8', 'R7C2', 'R8C5', 'R9C7'];
 
-// --- Domains: every cell is on(1)/off(2) the snake, and carries one of the
-// three degree flags above.
-const snakeOrigin = snake.cells()[0];
-const flagOrigin = degreeFlag.cells()[0];
-const domains = [
-  snake.makeReplicate(new Given(snakeOrigin, ON, OFF)),
-  degreeFlag.makeReplicate(new Given(flagOrigin, FLAG_OFF, FLAG_ENDPOINT, FLAG_THROUGH)),
+// Drawn arrows: bulb (the circle it starts in) first, then the arm cells in
+// order away from the bulb, following each drawn shaft from its circle to its
+// arrowhead. R9C7's circle has no shaft, so it appears in `circles` only.
+const arrows = [
+  ['R4C3', 'R3C3', 'R2C3'],
+  ['R2C2', 'R3C3', 'R2C3'],
+  ['R1C7', 'R2C6', 'R2C7', 'R2C8'],
+  ['R5C8', 'R5C7', 'R4C8'],
+  ['R7C2', 'R6C2', 'R6C3', 'R6C4'],
+  ['R8C5', 'R7C5', 'R6C5', 'R5C5'],
 ];
 
-// --- Single connected snake body. ---
-const connectivity = new ConnectedValues('VM', ON);
+const boxOf = cell => boxes.find(box => box.includes(cell));
 
-// --- Degree: reads [flag, own membership, ...neighbour memberships]. An off
-// cell must carry FLAG_OFF (its neighbours are unconstrained by this rule).
-// An on cell must carry FLAG_ENDPOINT with exactly one on neighbour, or
-// FLAG_THROUGH with exactly two -- so on-snake cells are 1- or 2-regular,
-// which with connectivity above forces a single simple path (no branch, no
-// cycle).
+// --- Snake shape -----------------------------------------------------------
+
+// Degree: a BODY cell has exactly two snake neighbours, a TIP exactly one, and
+// an OFF cell is unconstrained. Reads the cell's own code, then each of its
+// orthogonal neighbours' codes.
 const degreeMachine = NFA.encodeSpec({
   startState: { phase: 'start' },
   transition: (state, value) => {
-    if (state.phase === 'start') return { phase: 'gotFlag', flag: value };
-    if (state.phase === 'gotFlag') {
-      return value === OFF
-        ? { phase: 'off', flag: state.flag }
-        : { phase: 'on', flag: state.flag, count: 0 };
+    if (state.phase === 'start') {
+      return isOn(value)
+        ? { phase: 'on', wanted: value === TIP ? 1 : 2, count: 0 }
+        : { phase: 'off' };
     }
-    if (state.phase === 'off') return state;
-    const count = Math.min(state.count + (value === ON ? 1 : 0), 3);
-    return { phase: 'on', flag: state.flag, count };
+    if (state.phase === 'off') return { phase: 'off' };
+    const count = state.count + (isOn(value) ? 1 : 0);
+    return count > state.wanted
+      ? undefined
+      : { phase: 'on', wanted: state.wanted, count };
   },
-  accept: (state) => {
-    if (state.phase === 'off') return state.flag === FLAG_OFF;
-    if (state.phase === 'on') {
-      return (state.flag === FLAG_ENDPOINT && state.count === 1) ||
-        (state.flag === FLAG_THROUGH && state.count === 2);
-    }
-    return false;
-  },
+  accept: state => state.phase === 'off' || state.count === state.wanted,
 }, geometry.numValues);
-const degrees = gridCells.map(cell => new NFA(degreeMachine, 'degree',
-  degreeFlag.at(cell), snake.at(cell), ...snake.at(graph.neighbours(cell))));
+const degrees = gridCells.map(cell => new NFA(degreeMachine, 'snake-degree',
+  ...snake.at([cell, ...graph.neighbours(cell)])));
 
-// --- Exactly two endpoints (the head and the tail) across the whole grid.
-const endpointCountMachine = NFA.encodeSpec({
-  startState: { count: 0 },
-  transition: ({ count }, value) =>
-    ({ count: Math.min(count + (value === FLAG_ENDPOINT ? 1 : 0), 3) }),
-  accept: ({ count }) => count === 2,
-}, geometry.numValues);
-const endpointCount = new NFA(
-  endpointCountMachine, 'endpoints', ...degreeFlag.at(gridCells));
+// Two ends: exactly two cells in the whole grid carry the TIP code. Together
+// with the degree rule and the connectivity below this makes the snake cells one
+// simple path -- head and tail at the two TIPs.
+const twoEnds = new ContainExact(`${TIP}_${TIP}`, ...snake.cells());
 
-// --- No diagonal self-touch: forbid a 2x2 block whose only on cells are a
-// diagonal pair. Reads the four membership cells of a 2x2 block, left to
-// right, top to bottom.
-const noDiagonalTouchMachine = NFA.encodeSpec({
+// No self-touch and 1-cell-wide: reads the four codes of a 2x2 block, left to
+// right then top to bottom. A diagonal pair with both other cells off is a
+// diagonal touch; a 90-degree turn (three on cells) is not, and must stay legal.
+// All four on is two cells wide.
+const noTouchMachine = NFA.encodeSpec({
   startState: { block: [] },
   transition: ({ block }, value) => {
-    if (block === null) return { block: null };
-    const next = [...block, value === ON];
+    if (block === null) return { block: null };  // this block already checked
+    const next = [...block, isOn(value)];
     if (next.length < 4) return { block: next };
     const [topLeft, topRight, bottomLeft, bottomRight] = next;
     const diagonalOnly =
       (topLeft && bottomRight && !topRight && !bottomLeft) ||
       (topRight && bottomLeft && !topLeft && !bottomRight);
-    return diagonalOnly ? undefined : { block: null };
+    const twoWide = topLeft && topRight && bottomLeft && bottomRight;
+    return (diagonalOnly || twoWide) ? undefined : { block: null };
   },
   accept: ({ block }) => block === null,
 }, geometry.numValues);
-// All 64 possible 2x2 blocks share this exact shape (top-left..bottom-right),
-// so they replicate as one template shifted from R1C1's block onto every
-// other valid top-left cell.
+// One machine per 2x2 block, stamped over the 64 blocks by their top-left cell.
 const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noDiagonalTouch = snake.makeReplicate(
-  new NFA(noDiagonalTouchMachine, 'no-touch', ...snake.at(graph.block(gridCells[0], 2, 2))),
+const noTouches = snake.makeReplicate(
+  new NFA(noTouchMachine, 'snake-no-touch',
+    ...snake.at(graph.block(blockOrigins[0], 2, 2))),
   snake.at(blockOrigins));
 
-// --- Arrows: transcribed from the drawn wayPoints, circle cell first. Six of
-// the seven circled cells carry one; box9's circle (R9C7) has none.
-const arrows = [
-  ['R4C3', 'R3C3', 'R2C3'],
-  ['R1C7', 'R2C6', 'R2C7', 'R2C8'],
-  ['R5C8', 'R5C7', 'R4C8'],
-  ['R8C5', 'R7C5', 'R6C5', 'R5C5'],
-  ['R7C2', 'R6C2', 'R6C3', 'R6C4'],
-  ['R2C2', 'R3C3', 'R2C3'],
-].map(cells => new Arrow(...cells));
+// One visit per box: the snake's cells inside a box form a single non-empty
+// orthogonally-connected group. Cells belonging to two separate visits could not
+// be orthogonally adjacent (the degree rule already forbids that), so a
+// connected non-empty group is exactly one entry into the box.
+//
+// The machine scans a box's nine codes in reading order. `front` holds the
+// component labels of the three most recently read cells -- the only ones a
+// later cell can join, since the next cell touches the previous cell and the
+// cell three back, which is `front[0]` (zero-padded, so the top row correctly
+// has nothing above it). `col` is only needed to drop the left neighbour at the
+// start of a row. Labels are renumbered by first appearance so that states
+// differing only in label names collapse. When a label falls out of `front` its
+// component can never grow again, so it must be the only one, and every
+// remaining cell must be off the snake (`sealed`).
+const relabel = front => {
+  const seen = new Map([[0, 0]]);
+  return front.map(label => {
+    if (!seen.has(label)) seen.set(label, seen.size);
+    return seen.get(label);
+  });
+};
+const boxVisitMachine = NFA.encodeSpec({
+  startState: { front: [0, 0, 0], sealed: false, col: 0 },
+  transition: ({ front, sealed, col }, value) => {
+    const on = isOn(value);
+    if (sealed && on) return undefined;             // a second, separate visit
+    const above = front[0];                         // cell three back
+    const left = col !== 0 ? front[2] : 0;          // cell one back, same row
+    let merged = front;
+    let label = 0;
+    if (on) {
+      const joins = [above, left].filter(l => l !== 0);
+      if (joins.length === 0) {
+        label = Math.max(...front) + 1;             // starts a new component
+      } else {
+        label = joins[0];
+        if (joins.length === 2 && joins[1] !== label) {
+          merged = front.map(l => (l === joins[1] ? label : l));
+        }
+      }
+    }
+    const next = [merged[1], merged[2], label];
+    const dropped = merged[0];
+    let nextSealed = sealed;
+    if (dropped !== 0 && !next.includes(dropped)) {
+      if (next.some(l => l !== 0)) return undefined;  // a second component
+      nextSealed = true;
+    }
+    return { front: relabel(next), sealed: nextSealed, col: (col + 1) % 3 };
+  },
+  accept: ({ front, sealed }) => {
+    const live = new Set(front.filter(label => label !== 0));
+    return sealed ? live.size === 0 : live.size === 1;
+  },
+}, geometry.numValues);
+const boxVisits = boxes.map(box => new NFA(boxVisitMachine, 'box-visit',
+  ...snake.at(box)));
 
-// --- Per-box circle readings. Each circled box lists its circle cell and,
-// where an arrow is attached, the two arrow cells nearest the circle.
-const circledBoxes = [
-  { box: 1, circle: 'R2C2', pair: ['R3C3', 'R2C3'] },
-  { box: 3, circle: 'R1C7', pair: ['R2C6', 'R2C7'] },
-  { box: 4, circle: 'R4C3', pair: ['R3C3', 'R2C3'] },
-  { box: 6, circle: 'R5C8', pair: ['R5C7', 'R4C8'] },
-  { box: 7, circle: 'R7C2', pair: ['R6C2', 'R6C3'] },
-  { box: 8, circle: 'R8C5', pair: ['R7C5', 'R6C5'] },
-  { box: 9, circle: 'R9C7', pair: null },
-];
+// --- Circle and arrow clues ------------------------------------------------
 
-// Count reading: reads [circle digit, ...box memberships] (the circle cell is
-// one of the nine). Accepts when the on-count equals the circle's digit.
+const arrowSums = arrows.map(cells => new Arrow(...cells));
+
+// A circle's digit counts the snake cells in the circle's box. Reads the circle
+// digit, then the codes of the box's nine cells.
 const countMachine = NFA.encodeSpec({
   startState: { target: null, count: 0 },
   transition: ({ target, count }, value) => {
-    if (target === null) return { target: value, count: 0 };
-    const next = count + (value === ON ? 1 : 0);
+    if (target === null) return { target: value, count: 0 };  // the circle digit
+    const next = count + (isOn(value) ? 1 : 0);
     return next > target ? undefined : { target, count: next };
   },
   accept: ({ target, count }) => target !== null && count === target,
 }, geometry.numValues);
-const counts = circledBoxes.map(({ box, circle }) => new NFA(countMachine, 'count',
-  circle, ...snake.at(graph.box(box))));
+const circleCounts = circles.map(circle => new NFA(countMachine, 'snake-count',
+  circle, ...snake.at(boxOf(circle))));
 
-// Sum reading: reads the pair's two digits (segment 1, target = 10a+b), then
-// [membership, digit] for each of the box's nine cells (segment 2), tracking
-// the still-owed remainder instead of the running sum so the compiled state
-// stays a single small field. Accepts when the remainder reaches exactly 0.
-const sumMachine = NFA.encodeSpec({
-  startState: { phase: 'a' },
+// The arrow's first two arm digits form a two-digit number equal to the sum of
+// the digits in the snake's cells of the circle's box. Reads those two digits,
+// then (code, digit) for each of the box's nine cells; a cell off the snake
+// contributes nothing and its digit is skipped. Nine distinct digits cap any box
+// total at 45, which bounds the countdown.
+const MAX_BOX_SUM = 45;
+const boxSumMachine = NFA.encodeSpec({
+  startState: { phase: 'tens' },
   transition: (state, value) => {
-    if (state.phase === 'a') return { phase: 'b', a: value };
-    if (state.phase === 'b') return { phase: 'wait', remaining: 10 * state.a + value };
-    if (value === SEGMENT_BREAK) {
-      return state.phase === 'wait' ? { phase: 'flag', remaining: state.remaining } : undefined;
+    switch (state.phase) {
+      case 'tens':
+        return { phase: 'ones', tens: value };
+      case 'ones': {
+        const total = state.tens * 10 + value;
+        return total > MAX_BOX_SUM ? undefined : { phase: 'code', left: total };
+      }
+      case 'code':
+        return isOn(value)
+          ? { phase: 'digit', left: state.left }
+          : { phase: 'skip', left: state.left };
+      case 'digit':
+        return value > state.left
+          ? undefined
+          : { phase: 'code', left: state.left - value };
+      case 'skip':
+        return { phase: 'code', left: state.left };
     }
-    if (state.phase === 'flag') {
-      return { phase: 'digit', remaining: state.remaining, pendingOn: value === ON };
-    }
-    // phase 'digit'
-    const owed = state.remaining - (state.pendingOn ? value : 0);
-    return owed < 0 ? undefined : { phase: 'flag', remaining: owed };
   },
-  accept: (state) => state.phase === 'flag' && state.remaining === 0,
-}, geometry.numValues, { multiSegment: true });
-const sums = circledBoxes
-  .filter(({ pair }) => pair !== null)
-  .map(({ box, pair }) => new NFA(sumMachine, 'sum',
-    pair,
-    graph.box(box).flatMap(cell => [snake.at(cell), cell]),
-  ));
+  accept: ({ phase, left }) => phase === 'code' && left === 0,
+}, geometry.numValues);
+const boxSums = arrows.map(([bulb, ...arm]) => new NFA(boxSumMachine, 'snake-sum',
+  arm[0], arm[1],
+  ...boxOf(bulb).flatMap(cell => [snake.at(cell), cell])));
 
 return [
   new Shape('9x9'),
   new Given('R3C5', 8),
   new Given('R9C9', 9),
-
-  snake.toVar('snake membership'),
-  degreeFlag.toVar('snake degree flag'),
-  ...domains,
-  connectivity,
+  snake.toVar('snake'),
+  snake.makeReplicate(new Given(snake.cells()[0], OFF, BODY, TIP)),
+  // A single snake: the on-snake cells form one orthogonally-connected region.
+  new ConnectedValues('VS', [BODY, TIP]),
   ...degrees,
-  endpointCount,
-  noDiagonalTouch,
-
-  ...arrows,
-  ...counts,
-  ...sums,
+  twoEnds,
+  noTouches,
+  ...boxVisits,
+  ...arrowSums,
+  ...circleCounts,
+  ...boxSums,
 ];

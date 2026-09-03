@@ -3,60 +3,67 @@
 // Video: https://www.youtube.com/watch?v=1leqvgtT3_w
 // Source: https://sudokupad.app/yp4js8z1ck
 
-// Chaos Construction: divide the grid into nine 9-cell orthogonally
-// connected regions; each row, column, and region holds 1-9 once.
-//
-// Kreska: adjacent digits along a line must either be consecutive and lie
-// in different regions, or have a 1:2 ratio and lie in the same region.
-// (1 and 2 satisfy both digit conditions at once, so either region
-// relation is allowed for that pair -- no separate encoding needed for
-// that clarifying sentence.) The drawn lines step diagonally in places;
-// "adjacent" means consecutive along the drawn line, not grid-orthogonal
-// adjacency.
+// Rules encoded:
+//  * Chaos Construction: divide the grid into regions of 9 orthogonally
+//    connected cells, every cell in exactly one region; digits 1-9 appear once
+//    in each row, column and region.  There are no boxes and no givens.
+//  * Kreska: two digits adjacent along a line are either consecutive and in
+//    different regions, or in a 1:2 ratio and in the same region.  The rules'
+//    note that an adjacent 1 and 2 may satisfy either condition needs no
+//    special case: that pair passes both digit tests, so the disjunction below
+//    already leaves its region relation free.
+// Nothing is omitted.
 
-// Each line's cell path in drawn order. `closed: true` marks the two lines
-// whose payload waypoints explicitly repeat the first cell (a genuine
-// closing edge); the other lines are open paths.
+// The eight drawn cyan strokes, each as its cell path in drawn order.
+// `closed` marks a stroke whose path returns to its first cell, so its
+// wrap-around pair is a line adjacency too.  Consecutive cells on a stroke are
+// sometimes diagonal neighbours, so "adjacent along a line" is taken as
+// consecutive-along-the-stroke rather than orthogonal adjacency.
 const LINES = [
   { cells: ['R2C8', 'R2C9'], closed: false },
   { cells: ['R3C7', 'R3C6', 'R4C5', 'R5C6', 'R5C7'], closed: false },
   { cells: ['R4C6', 'R4C7'], closed: false },
   { cells: ['R6C9', 'R6C8', 'R5C8'], closed: false },
   { cells: ['R1C4', 'R1C5', 'R1C6', 'R2C7', 'R2C6', 'R2C5'], closed: true },
-  { cells: ['R5C4', 'R4C4', 'R3C4', 'R3C3', 'R3C2'], closed: false },
+  { cells: ['R5C4', 'R4C4', 'R3C4', 'R3C3', 'R3C2', 'R4C3'], closed: true },
   { cells: ['R3C1', 'R4C1', 'R5C1', 'R4C2'], closed: true },
-  { cells: ['R2C2', 'R1C3', 'R1C2', 'R1C1'], closed: false },
+  { cells: ['R2C2', 'R1C3', 'R1C2', 'R1C1'], closed: true },
 ];
 
-function linePairs({ cells, closed }) {
-  const pairs = [];
-  for (let i = 1; i < cells.length; i++) pairs.push([cells[i - 1], cells[i]]);
-  if (closed) pairs.push([cells[cells.length - 1], cells[0]]);
-  return pairs;
-}
+const linePairs = LINES.flatMap(({ cells, closed }) => {
+  const path = closed ? [...cells, cells[0]] : cells;
+  return path.slice(1).map((cell, i) => [path[i], cell]);
+});
 
-// The chaos-construction region-label cell paired with each grid cell.
+const shape = new Shape('9x9');
+
+// Digit tests for the two halves of the Kreska rule.  Both run over main-grid
+// cells, so the key is built with the grid's own value range.
+const consecutiveKey = Pair.fnToKey((a, b) => Math.abs(a - b) === 1, shape);
+const ratioKey = Pair.fnToKey((a, b) => a === 2 * b || b === 2 * a, shape);
+
+// ChaosConstruction exposes the region label of each grid cell as a paired
+// 'CC' cell, so "same/different region" is an equality/inequality between the
+// two labels.
 const cc = cellGraph('9x9').makeOverlay('CC');
 
-const consecutiveKey = Pair.fnToKey((a, b) => a === b + 1 || a === b - 1, 9);
-const ratioKey = Pair.fnToKey((a, b) => a === b * 2 || b === a * 2, 9);
-
-// Each adjacent pair on a Kreska line: (consecutive AND different region)
-// OR (1:2 ratio AND same region).
-const kreskaPairs = LINES.flatMap(linePairs).map(([a, b]) => new Or([
-  new And([
-    new Pair(consecutiveKey, 'Consecutive', a, b),
-    new AllDifferent(cc.at(a), cc.at(b)),
-  ]),
-  new And([
-    new Pair(ratioKey, 'Ratio', a, b),
-    new SameValues(2, cc.at(a), cc.at(b)),
-  ]),
-]));
+const kreska = linePairs.map(([a, b]) => {
+  const [labelA, labelB] = cc.at([a, b]);
+  return new Or([
+    new And([
+      new Pair(consecutiveKey, 'Consecutive', a, b),
+      new AllDifferent(labelA, labelB),
+    ]),
+    new And([
+      new Pair(ratioKey, 'Ratio 1:2', a, b),
+      new SameValues(2, labelA, labelB),
+    ]),
+  ]);
+});
 
 return [
-  new Shape('9x9'),
+  shape,
   new ChaosConstruction(),
   new NoBoxes(),
-  ...kreskaPairs,
+  ...kreska,
 ];

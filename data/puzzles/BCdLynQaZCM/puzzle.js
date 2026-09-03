@@ -1,155 +1,140 @@
-// Title: Sum Irregular Shapes
+// Title: unknown
 // Author: BebopKid
 // Video: https://www.youtube.com/watch?v=BCdLynQaZCM
 // Source: https://app.crackingthecryptic.com/webapp/bHm83hpP6m
 
-// Standard rules: rows, columns and nine 9-cell shapes each contain 1-9. The
-// shapes (jigsaw regions) are not drawn -- the solver must discover a
-// partition of the grid into nine orthogonally-connected 9-cell regions.
-// Encoded as ChaosConstruction (regions discovered by the solver: size 9,
-// connected, each holds every value once) with NoBoxes replacing the default
-// box groups; rows/columns keep the grid's normal all-different groups.
-//
-// For every row and column, printed clues outside the grid give the sum of
-// each maximal run of cells that share one region, in order, reading from the
-// clue nearest the grid outward -- this is the standard "outside clue reads
-// into the grid from its own edge" idiom used by Sandwich/X-Sum/Skyscraper
-// clues, extended here to a stack of clues for a row or column split into
-// several regions. A "-" clue means that segment's sum is not given (still
-// forced to be some value, just unconstrained). Which physical end of each
-// clue stack is "first" is not spelled out in the rules text, so both
-// orientations are kept live per line via Or().
-//
-// Every row/column clue-stack length was cross-checked against the grid: a
-// stack with no "-" always summed to exactly 45 (the row/column's full
-// total), confirming the clue-to-cell mapping below.
-//
-// The payload also carries two isolated cells (values 1 and 9, separated by
-// a "-") far outside the grid and every clue stack, with no path of coloured
-// cells connecting them to either. They are not reachable as real board
-// cells under this geometry and are treated as a legend/demo of the given
-// and "-" notation rather than puzzle content, so they are not encoded.
+// Rows, columns and nine 9-cell shapes all contain 1-9; the shapes are to be
+// determined. Clues outside the grid give the sums of each segment, in order,
+// in that row/column, a segment being a maximal run of cells of that line
+// lying in one shape. A dash clue is a segment whose sum is not shown, so a
+// line's clue list also fixes how many segments the line has.
+// There are no givens. Nothing is omitted.
+
+// Clue lists, in reading order (left to right for a row, top to bottom for a
+// column), transcribed from the grey clue strips that butt against the grid:
+// canvas R6-R14 x C1-C7 for the rows, canvas R1-R5 x C8-C16 for the columns.
+// null is a dash slot.
+const ROW_CLUES = [
+  [6, 9, null, null],                   // R1
+  [7, 12, null, null, 12],              // R2
+  [8, 11, null, null, 5, 9, 2],         // R3
+  [5, 7, null, null, 11, 5, 8],         // R4
+  [9, 9, null, null, 5, 9, 4],          // R5
+  [9, 16, 1, 14, null, null],           // R6
+  [5, 11, null, null, null, 3, 7],      // R7
+  [null, null, 8, 18, 3, 7],            // R8
+  [12, 33],                             // R9
+];
+
+const COLUMN_CLUES = [
+  [null, 41, null],                     // C1
+  [null, null, 13, 13],                 // C2
+  [29, 15, 1],                          // C3
+  [14, 17, 14],                         // C4
+  [31, null, null],                     // C5
+  [20, null, null, 7],                  // C6
+  [null, null, 10, 15, 8],              // C7
+  [8, 6, 21, 10],                       // C8
+  [34, 11],                             // C9
+];
 
 const graph = cellGraph('9x9');
 const cc = graph.makeOverlay('CC');
 
-// Segment-sum clue stacks, decoded from the payload's outside-clue overlays.
-// Order is nearest-the-grid first; `null` is an unclued ("-") segment.
-const ROW_TARGETS = [
-  [null, null, 9, 6],
-  [12, null, null, 12, 7],
-  [2, 9, 5, null, null, 11, 8],
-  [8, 5, 11, null, null, 7, 5],
-  [4, 9, 5, null, null, 9, 9],
-  [null, null, 14, 1, 16, 9],
-  [7, 3, null, null, null, 11, 5],
-  [7, 3, 18, 8, null, null],
-  [33, 12],
-];
-const COL_TARGETS = [
-  [null, 41, null],
-  [13, 13, null, null],
-  [1, 15, 29],
-  [14, 17, 14],
-  [null, null, 31],
-  [7, null, null, 20],
-  [8, 15, 10, null, null],
-  [10, 21, 6, 8],
-  [11, 34],
-];
+// ISS exposes no border mask over the chaos-region labels, so each border gets
+// its own flag cell. VH<n> is the border between a cell and its right
+// neighbour, VV<n> the border between a cell and its lower neighbour; both are
+// held on the pair's own left/upper cell, so the overlays cover columns 1-8
+// and rows 1-8 respectively.
+const hPairCells = graph.cells().filter(cell => parseCellId(cell).col < 9);
+const vPairCells = graph.cells().filter(cell => parseCellId(cell).row < 9);
+const vh = graph.makeOverlay('VH', hPairCells);
+const vv = graph.makeOverlay('VV', vPairCells);
 
-// Border-flag alphabet: any two distinct values from the grid's own 1-9
-// range work, since these Var cells are auxiliary bookkeeping, not digits.
-const SAME = 1;
-const DIFF = 9;
+// Flag values. Only 1 and 2 are ever accepted by the machines below, which is
+// what confines these cells to two states.
+const SAME = 1;   // the two cells share a shape
+const DIFF = 2;   // a shape border runs between them
 
-// One flag per adjacent cell pair inside a row (8) or column (8): a 9x8 Var
-// block per axis, addressed by (row/col, gap index) through the built-in 2D
-// cell() indexing rather than hand-rolled arithmetic.
-const rowFlags = new Var('RF', 'Row border flags', '9x8');
-const colFlags = new Var('CF', 'Col border flags', '9x8');
-const rowFlag = (r, i) => rowFlags.cell(r, i); // i: 1..8, gap between col i, i+1
-const colFlag = (c, i) => colFlags.cell(c, i);
-
-// [ccA, flag, ccB] accepts only when flag correctly reports whether the two
-// region labels differ.
-const borderFlagSpec = NFA.encodeSpec({
-  startState: { a: null, flag: null },
-  transition: ({ a, flag }, value) => {
-    if (a === null) return { a: value, flag: null };
-    if (flag === null) return { a, flag: value };
-    const actuallyDiffer = value !== a;
-    const flagSaysDiffer = flag === DIFF;
-    return actuallyDiffer === flagSaysDiffer ? { a, flag, ok: true } : undefined;
+// Reads [label(a), flag, label(b)] and accepts only when the flag says exactly
+// whether the two chaos-region labels differ. `seen` counts cells read so far.
+const borderFlagNFA = NFA.encodeSpec({
+  startState: { seen: 0, label: 0, flag: 0 },
+  transition({ seen, label, flag }, value) {
+    if (seen === 0) return { seen: 1, label: value, flag: 0 };
+    if (seen === 1) {
+      if (value !== SAME && value !== DIFF) return undefined;
+      return { seen: 2, label, flag: value };
+    }
+    if (seen === 2) {
+      if ((value !== label) !== (flag === DIFF)) return undefined;
+      return { seen: 3, label: 0, flag: 0 };
+    }
+    return undefined;
   },
-  accept: (s) => s.ok === true,
+  accept: ({ seen }) => seen === 3,
 }, 9);
 
-// Scans [value, flag, value, flag, ..., value] (9 values, 8 flags). `targets`
-// gives each segment's required sum in encounter order (null = unclued).
-// Running sum resets at each flag that reports a region change; the final
-// segment is checked in `accept` since the scan ends on a value, not a flag.
-function segmentSpec(targets) {
-  const lastIdx = targets.length - 1;
-  return NFA.encodeSpec({
-    startState: { onValue: true, segIdx: 0, sum: 0 },
-    transition: ({ onValue, segIdx, sum }, value) => {
-      if (onValue) {
-        const newSum = sum + value;
-        if (newSum > 45) return undefined;
-        return { onValue: false, segIdx, sum: newSum };
-      }
-      if (value !== DIFF) return { onValue: true, segIdx, sum };
-      const target = targets[segIdx];
-      if (target !== null && sum !== target) return undefined;
-      if (segIdx >= lastIdx) return undefined; // more borders than expected segments
-      return { onValue: true, segIdx: segIdx + 1, sum: 0 };
-    },
-    accept: ({ segIdx, sum }) =>
-      segIdx === lastIdx && (targets[segIdx] === null || sum === targets[segIdx]),
-  }, 9);
-}
+// Reads one line as [digit, flag, digit, flag, ..., digit]. `seg` is how many
+// segments have been closed, i.e. the index of the clue the running total is
+// working towards; `sum` is that total, tracked only while the current clue is
+// a number, since a dash clue compares against nothing. `digitNext` says which
+// kind of cell comes next. Crossing a border closes the current segment, so a
+// line is accepted only when its border count is exactly one less than its
+// clue count and every numeric clue was met exactly.
+const lineScanNFA = (clues) => NFA.encodeSpec({
+  startState: { seg: 0, sum: 0, digitNext: true },
+  transition({ seg, sum, digitNext }, value) {
+    if (digitNext) {
+      const target = clues[seg];
+      if (target === null) return { seg, sum: 0, digitNext: false };
+      const total = sum + value;
+      if (total > target) return undefined;
+      return { seg, sum: total, digitNext: false };
+    }
+    if (value === SAME) return { seg, sum, digitNext: true };
+    if (value !== DIFF) return undefined;
+    const target = clues[seg];
+    if (target !== null && sum !== target) return undefined;
+    if (seg + 1 === clues.length) return undefined;
+    return { seg: seg + 1, sum: 0, digitNext: true };
+  },
+  accept: ({ seg, sum, digitNext }) => (
+    !digitNext && seg === clues.length - 1 &&
+    (clues[seg] === null || sum === clues[seg])),
+}, 9);
 
-function lineConstraints(values, ccCells, flags, targetsNear) {
-  const borderChecks = [];
-  for (let i = 0; i < 8; i++) {
-    borderChecks.push(new NFA(borderFlagSpec, 'Border', ccCells[i], flags[i], ccCells[i + 1]));
-  }
-  const scanCells = [];
-  for (let i = 0; i < 9; i++) {
-    scanCells.push(values[i]);
-    if (i < 8) scanCells.push(flags[i]);
-  }
-  const targetsFar = targetsNear.slice().reverse();
-  const segmentOr = new Or([
-    new NFA(segmentSpec(targetsNear), 'SegNear', ...scanCells),
-    new NFA(segmentSpec(targetsFar), 'SegFar', ...scanCells),
-  ]);
-  return [...borderChecks, segmentOr];
-}
+// [c1, flag(c1,c2), c2, ..., flag(c8,c9), c9] for one line.
+const interleave = (cells, flags) =>
+  cells.flatMap((cell, i) => i === 0 ? [cell] : [flags[i - 1], cell]);
 
-const rowConstraints = [];
-for (let r = 1; r <= 9; r++) {
-  const flags = Array.from({ length: 8 }, (_, i) => rowFlag(r, i + 1));
-  rowConstraints.push(
-    ...lineConstraints(graph.row(r), cc.row(r), flags, ROW_TARGETS[r - 1])
-  );
-}
+const borderFlags = [
+  ...hPairCells.map(cell => [cell, vh.at(cell), graph.step(cell, 0, 1)]),
+  ...vPairCells.map(cell => [cell, vv.at(cell), graph.step(cell, 1, 0)]),
+].map(([cell, flag, neighbour]) =>
+  new NFA(borderFlagNFA, 'Border', cc.at(cell), flag, cc.at(neighbour)));
 
-const colConstraints = [];
-for (let c = 1; c <= 9; c++) {
-  const flags = Array.from({ length: 8 }, (_, i) => colFlag(c, i + 1));
-  colConstraints.push(
-    ...lineConstraints(graph.column(c), cc.column(c), flags, COL_TARGETS[c - 1])
-  );
-}
+const rowSums = ROW_CLUES.map((clues, i) => {
+  const cells = graph.row(i + 1);
+  return new NFA(
+    lineScanNFA(clues), `RowSums${i + 1}`,
+    ...interleave(cells, vh.at(cells.slice(0, -1))));
+});
+
+const columnSums = COLUMN_CLUES.map((clues, i) => {
+  const cells = graph.column(i + 1);
+  return new NFA(
+    lineScanNFA(clues), `ColSums${i + 1}`,
+    ...interleave(cells, vv.at(cells.slice(0, -1))));
+});
 
 return [
   new Shape('9x9'),
   new NoBoxes(),
   new ChaosConstruction(),
-  rowFlags,
-  colFlags,
-  ...rowConstraints,
-  ...colConstraints,
+  vh.toVar('Right border'),
+  vv.toVar('Lower border'),
+  ...borderFlags,
+  ...rowSums,
+  ...columnSums,
 ];
