@@ -4,202 +4,226 @@
 // Source: https://app.crackingthecryptic.com/sudoku/nGtnmLtndn
 
 // Rules encoded here, in full:
-//  * Normal sudoku: 1-9 once per row, column and box.
-//  * 11 cages, each anchored at one printed total cell (below). A cage's cell
-//    membership, shape and path order are entirely solver-discovered:
-//    - a non-branching simple path of >= 2 orthogonally connected cells;
-//    - starts or ends at its own total cell;
-//    - the total cell is the topmost cell of the cage (leftmost breaks ties);
-//    - the path may touch itself: two cells of the same cage may be
-//      grid-adjacent without being *consecutive* along the path, and only
-//      consecutive (used-edge) pairs carry the digit-difference rule below;
-//    - digits along the cage sum to the printed total and never repeat;
-//    - consecutive digits along the path differ by >= 5;
-//    - cages never share a cell.
-//
-// Membership is unknown, so cage total, no-repeat and >=5-difference are all
-// expressed over the whole grid rather than over a fixed cell list:
-//  - CAGE: one Var per grid cell, value 0 (not in any cage) or 1-11 (which
-//    cage). The topmost-leftmost rule is a domain restriction: a cell cannot
-//    hold label k if it sits above, or in the same row and left of, label k's
-//    own total cell. Each total cell's own domain is pinned to its own label.
-//  - One boolean Var per grid edge (E) marks whether that edge is a
-//    *consecutive path step* of some cage. E=1 forces both endpoints to share
-//    the same nonzero CAGE label (via a Pair over the CAGE cells) and forces
-//    their digits to differ by >= 5 (via a Pair over the grid cells); E=0
-//    carries no constraint, which is what lets a cage touch itself without
-//    tripping the >=5 rule on the touching (non-consecutive) pair.
-//  - Per-cell degree (count of incident E=1 edges) is capped at 2 with a
-//    slack Var (Sum to 2, slack in [0, incidentCount-2]) so no cage cell
-//    branches; each total cell's degree is pinned to exactly 1, since it is
-//    always a path endpoint.
-//  - ConnectedValues ties each cage label's cells into one connected region.
-//  - The total (Cage.Sum) and no-repeat (Cage.AllDifferent) rules are read
-//    off the whole grid with one NFA each: for the total, scan
-//    [digit, cageLabel] for every cell in a fixed order, adding the digit to
-//    a running sum only on cells carrying that cage's label, and accept when
-//    the final sum equals the printed total. No-repeat is one small NFA per
-//    (cage, digit) pair over the same scan, rejecting a second occurrence of
-//    that digit among that cage's cells.
-//
-// Latent gap: the E/degree/ConnectedValues model is sound (never rejects the
-// true solution) but does not fully close single-path connectivity. A cage's
-// cells could in principle split into two components that are only
-// cell-adjacent (touching, not edge-connected), e.g. a stray self-contained
-// loop hanging off the real path by mere adjacency. This can only add extra
-// completions, never lose the real one.
+//   Normal sudoku rules apply.
+//   Eleven cage totals are printed, each in a single cell. The cages themselves
+//   are not drawn and must be deduced. Each cage is a snake path of orthogonally
+//   connected cells that starts or ends at its total cell, is at least 2 cells
+//   long, and never branches. The total cell is the cage's topmost cell, and
+//   among the cage's cells in that row its leftmost. The snake may run alongside
+//   itself (non-consecutive cells of one snake may be orthogonally adjacent).
+//   Cages may not overlap. Digits in a cage sum to the total and do not repeat.
+//   Adjacent digits along a snake differ by at least 5.
+// No rule is omitted. Cells in no cage are unconstrained beyond sudoku.
 
-const TOTALS = [
-  { cell: 'R1C1', total: 7 },
-  { cell: 'R2C2', total: 40 },
-  { cell: 'R1C3', total: 10 },
-  { cell: 'R3C9', total: 9 },
-  { cell: 'R5C1', total: 10 },
-  { cell: 'R6C2', total: 40 },
-  { cell: 'R6C3', total: 14 },
-  { cell: 'R9C2', total: 10 },
-  { cell: 'R5C5', total: 8 },
-  { cell: 'R8C9', total: 14 },
-  { cell: 'R5C8', total: 16 },
+// The eleven printed totals, each read from its own single-cell clue.
+const CLUES = [
+  ['R1C1', 7], ['R1C3', 10], ['R2C2', 40], ['R3C9', 9],
+  ['R5C1', 10], ['R5C5', 8], ['R5C8', 16], ['R6C2', 40],
+  ['R6C3', 14], ['R8C9', 14], ['R9C2', 10],
 ];
-const NUM_CAGES = TOTALS.length; // 11
-const anchorByCell = new Map(TOTALS.map((t, i) => [t.cell, i + 1]));
 
-// Widen the shape so the CAGE label (0-11) fits alongside the real 1-9
-// digits; every playable grid cell is then restricted back to 1-9 below.
-const shape = new Shape('9x9', '0-11');
+// Every digit string one cage can hold, derived from the three digit rules --
+// distinct digits, adjacent digits differing by at least 5, total = the clue,
+// at least two cells. Each is listed from the total cell, which is one end of
+// the snake, so a cage is pinned by (which clue, which of these strings).
+const sequencesFor = (total) => {
+  const found = [];
+  const walk = (seq, sum) => {
+    if (sum === total && seq.length >= 2) found.push(seq.slice());
+    if (sum >= total) return;
+    for (let d = 1; d <= 9; d++) {
+      if (seq.includes(d)) continue;
+      if (seq.length && Math.abs(d - seq[seq.length - 1]) < 5) continue;
+      if (sum + d > total) continue;
+      seq.push(d);
+      walk(seq, sum + d);
+      seq.pop();
+    }
+  };
+  walk([], 0);
+  return found;
+};
+const CAGE_SEQS = CLUES.map(([, total]) => sequencesFor(total));
+const MAX_LEN = CAGE_SEQS.map(seqs => Math.max(...seqs.map(s => s.length)));
+
+const shape = new Shape('9x9', 12);   // widened only to hold the overlay states
 const graph = cellGraph(shape);
 const gridCells = graph.cells();
 
-// --- Real grid digits are restricted back to 1-9 -------------------------
-const digitRestriction = graph.makeReplicate(
-  new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9));
+// Four overlays carry the deduced cages. Each grid cell gets:
+//   VP  the direction to its predecessor along its snake, or NONE
+//   VS  the direction to its successor, or NONE
+//   VG  which cage it belongs to (NO_CAGE, or 2 + the clue's index)
+//   VQ  which of that cage's digit strings the cage uses (NO_CAGE, or 1 + index)
+// Snakes are oriented away from the total cell, so the total cell is the cell
+// with no predecessor. A cell carries at most one predecessor and at most one
+// successor, which is both "must not branch" and "cages may not overlap"; two
+// snake cells may still be adjacent without being joined, which is the
+// "may touch itself" allowance.
+const NO_CAGE = 1, NONE = 1;
+const DIRS = [
+  { dr: -1, dc: 0, code: 2, opp: 4 },   // up
+  { dr: 0, dc: 1, code: 3, opp: 5 },    // right
+  { dr: 1, dc: 0, code: 4, opp: 2 },    // down
+  { dr: 0, dc: -1, code: 5, opp: 3 },   // left
+];
+const pred = graph.makeOverlay('VP');
+const succ = graph.makeOverlay('VS');
+const cage = graph.makeOverlay('VG');
+const variant = graph.makeOverlay('VQ');
 
-// --- CAGE label overlay ----------------------------------------------------
-const cage = graph.makeOverlay('VCAGE');
-const cageVar = cage.toVar('cage-label');
+// Which cells cage k can reach: the total cell is the topmost, then leftmost
+// cell of its cage, and a snake of at most MAX_LEN cells cannot step further
+// than MAX_LEN - 1 cells away from its end.
+const canHold = (cell, k) => {
+  const here = parseCellId(cell), clue = parseCellId(CLUES[k][0]);
+  if (here.row < clue.row) return false;
+  if (here.row === clue.row && here.col < clue.col) return false;
+  const dist = Math.abs(here.row - clue.row) + Math.abs(here.col - clue.col);
+  return dist <= MAX_LEN[k] - 1;
+};
+const cagesAt = new Map(gridCells.map(
+  cell => [cell, CLUES.map((_, k) => k).filter(k => canHold(cell, k))]));
+const clueIndex = new Map(CLUES.map(([cell], k) => [cell, k]));
 
-// Domain per cell: the total cell is pinned to its own label; any other cell
-// may be 0 (no cage) or any label k whose own total cell it does not precede
-// in "topmost, ties broken leftmost" order.
-const cageDomainGivens = gridCells.map(cell => {
-  const label = anchorByCell.get(cell);
-  if (label !== undefined) return new Given(cage.at(cell), label);
-  const { row, col } = parseCellId(cell);
-  const allowed = [0, ...TOTALS
-    .map((t, idx) => ({ idx, a: parseCellId(t.cell) }))
-    .filter(({ a }) => !(row < a.row || (row === a.row && col < a.col)))
-    .map(({ idx }) => idx + 1)];
-  return new Given(cage.at(cell), ...allowed);
+// --- Per-cell rule, reading [VP, VS, VG, VQ, digit].
+// A cell outside every cage has no predecessor, no successor and no digit rule.
+// A cell inside cage k using digit string s holds one of s's digits: s's first
+// digit exactly when it has no predecessor (it is then the total cell), s's
+// last digit exactly when it has no successor, and one of s's interior digits
+// otherwise. A two-cell string has no interior, so both of its cells are ends.
+// `isClue` is the "a snake can only start at a total cell" half: everywhere else
+// a cell with no predecessor is in no cage at all.
+const cellRule = (isClue) => NFA.encodeSpec({
+  startState: 'p',
+  transition: (state, value) => {
+    if (state === 'p') return 's' + (value === NONE ? 1 : 0);
+    if (state[0] === 's') return 'g' + state[1] + (value === NONE ? 1 : 0);
+    if (state[0] === 'g') {
+      const pNone = state[1] === '1', sNone = state[2] === '1';
+      if (value === NO_CAGE) return (pNone && sNone) ? 'qfree' : undefined;
+      const k = value - 2;
+      if (k >= CLUES.length) return undefined;
+      if (pNone && !isClue) return undefined;
+      return 'q' + state[1] + state[2] + ':' + k;
+    }
+    if (state === 'qfree') {
+      return value === NO_CAGE ? 'v:1_2_3_4_5_6_7_8_9' : undefined;
+    }
+    if (state[0] === 'q') {
+      const pNone = state[1] === '1', sNone = state[2] === '1';
+      const seq = CAGE_SEQS[+state.slice(4)][value - 2];
+      if (!seq) return undefined;
+      const first = seq[0], last = seq[seq.length - 1];
+      const allowed = seq.filter(d => (pNone ? d === first : d !== first)
+        && (sNone ? d === last : d !== last));
+      return allowed.length ? 'v:' + allowed.join('_') : undefined;
+    }
+    if (state[0] === 'v') {
+      return state.slice(2).split('_').includes(String(value)) ? 'done' : undefined;
+    }
+    return undefined;
+  },
+  accept: (state) => state === 'done',
+  maxDepth: 5,
+}, shape);
+const CELL_RULE = [cellRule(false), cellRule(true)];
+
+// --- Per-directed-edge rule, reading
+// [VS(a), VP(b), VG(a), VG(b), VQ(a), VQ(b), digit(a), digit(b)] for the step
+// from a to its neighbour b in direction `code`. The first two cells decide
+// whether the snake actually steps a -> b, and the two overlays must agree on
+// that (a points at b exactly when b points back at a); when it does not, the
+// rest is unconstrained. When it does, b is in the same cage using the same
+// digit string as a, and b's digit is the one that follows a's digit in that
+// string -- which also forbids a's digit from being the string's last.
+const edgeRule = (code, opp) => NFA.encodeSpec({
+  startState: 'a',
+  transition: (state, value) => {
+    if (state === 'a') return 'b' + (value === code ? 1 : 0);
+    if (state === 'b1') return value === opp ? 'ga' : undefined;
+    if (state === 'b0') return value === opp ? undefined : 'skip';
+    if (state === 'skip') return 'skip';
+    if (state === 'ga') {
+      const k = value - 2;
+      return (k >= 0 && k < CLUES.length) ? 'gb:' + k : undefined;
+    }
+    if (state.startsWith('gb:')) {
+      const k = +state.slice(3);
+      return value === k + 2 ? 'qa:' + k : undefined;
+    }
+    if (state.startsWith('qa:')) {
+      const seq = CAGE_SEQS[+state.slice(3)][value - 2];
+      return seq ? 'qb:' + value + ':' + seq.join('') : undefined;
+    }
+    if (state.startsWith('qb:')) {
+      const parts = state.split(':');
+      return value === +parts[1] ? 'da:' + parts[2] : undefined;
+    }
+    if (state.startsWith('da:')) {
+      const seq = state.slice(3).split('').map(Number);
+      const i = seq.indexOf(value);
+      return (i >= 0 && i < seq.length - 1) ? 'db:' + seq[i + 1] : undefined;
+    }
+    if (state.startsWith('db:')) {
+      return value === +state.slice(3) ? 'done' : undefined;
+    }
+    return undefined;
+  },
+  accept: (state) => state === 'done' || state === 'skip',
+  maxDepth: 8,
+}, shape);
+const EDGE_RULE = DIRS.map(d => edgeRule(d.code, d.opp));
+
+// Where each snake step may go: only to a neighbour that shares a cage with
+// this cell, so a cell no cage can reach is never entered or left.
+const linkable = (a, b) => cagesAt.get(a).some(k => cagesAt.get(b).includes(k));
+const stepsFrom = (cell) => DIRS.map((d, i) => {
+  const to = graph.step(cell, d.dr, d.dc);
+  return (to && linkable(cell, to)) ? { dir: d, to, ruleIndex: i } : null;
+}).filter(Boolean);
+
+const domains = gridCells.flatMap(cell => {
+  const ks = cagesAt.get(cell);
+  const dirCodes = stepsFrom(cell).map(s => s.dir.code);
+  const maxVariants = Math.max(0, ...ks.map(k => CAGE_SEQS[k].length));
+  const variants = [];
+  for (let i = 1; i <= maxVariants; i++) variants.push(i + 1);
+  return [
+    new Given(pred.at(cell), NONE, ...dirCodes),
+    new Given(succ.at(cell), NONE, ...dirCodes),
+    new Given(cage.at(cell), NO_CAGE, ...ks.map(k => k + 2)),
+    new Given(variant.at(cell), NO_CAGE, ...variants),
+  ];
 });
 
-// --- Edge Vars: is this grid edge a used (consecutive) path step? --------
-const RIGHT = [0, 1], DOWN = [1, 0];
-const edgeList = gridCells.flatMap(cell => [RIGHT, DOWN]
-  .map(([dr, dc]) => graph.step(cell, dr, dc))
-  .filter(nb => nb)
-  .map(nb => ({ a: cell, b: nb })));
-const edgeVar = new Var('E', 'snake-edge', edgeList.length);
-const edgeCells = edgeVar.cells();
+const cellRules = gridCells
+  .filter(cell => cagesAt.get(cell).length > 0)
+  .map(cell => new NFA(
+    CELL_RULE[clueIndex.has(cell) ? 1 : 0], 'cell',
+    pred.at(cell), succ.at(cell), cage.at(cell), variant.at(cell), cell));
 
-// incidence: grid cell id -> list of its incident edge Var cell ids
-const incident = new Map(gridCells.map(c => [c, []]));
-edgeList.forEach(({ a, b }, i) => {
-  incident.get(a).push(edgeCells[i]);
-  incident.get(b).push(edgeCells[i]);
-});
+const edgeRules = gridCells.flatMap(cell => stepsFrom(cell).map(({ to, ruleIndex }) =>
+  new NFA(EDGE_RULE[ruleIndex], 'step',
+    succ.at(cell), pred.at(to), cage.at(cell), cage.at(to),
+    variant.at(cell), variant.at(to), cell, to)));
 
-const sameNonzeroKey = Pair.fnToKey((a, b) => a === b && a !== 0, shape);
-const whisperKey = Pair.fnToKey((a, b) => Math.abs(a - b) >= 5, shape);
-
-const edgeConstraints = edgeList.map(({ a, b }, i) => {
-  const e = edgeCells[i];
-  return new Or([
-    new Given(e, 0),
-    new And([
-      new Given(e, 1),
-      new Pair(sameNonzeroKey, 'cage-edge', cage.at(a), cage.at(b)),
-      new Pair(whisperKey, 'whisper-edge', a, b),
-    ]),
-  ]);
-});
-
-// --- Degree: <=2 everywhere (no branching), exactly 1 at each total cell --
-// Slack turns "at most 2 of these edges are used" into an equality: edges
-// sum + slack = 2, slack in [0, 2] (edges sum can itself be 0-2 once this
-// holds, so 2 is the slack's own max regardless of how many edges are
-// incident).
-const slackGridCells = gridCells
-  .filter(cell => !anchorByCell.has(cell) && incident.get(cell).length > 2);
-const slack = graph.makeOverlay('VSL', slackGridCells);
-const slackVar = slack.toVar('snake-degree-slack');
-const slackDomain = slack.makeReplicate(new Given(slack.cells()[0], 0, 1, 2));
-const degreeCapConstraints = slackGridCells.map(
-  cell => new Sum(2, ...incident.get(cell), slack.at(cell)));
-const anchorDegreeConstraints = TOTALS.map(
-  t => new Sum(1, ...incident.get(t.cell)));
-
-// --- Connectivity: each cage label is one connected region ----------------
-const connectivityConstraints = TOTALS.map(
-  (_, idx) => new ConnectedValues('VCAGE', idx + 1));
-
-// --- Cage total and no-repeat, scanned over the whole grid -----------------
-// Fixed scan order; the sum is order-independent so any fixed order works.
-const scan = gridCells.flatMap(cell => [cell, cage.at(cell)]);
-
-const cageValueConstraints = TOTALS.flatMap((t, idx) => {
-  const k = idx + 1;
-  const target = t.total;
-  const sumSpec = {
-    startState: { sum: 0, pending: null },
-    transition: (state, value) => {
-      if (state.pending === null) {
-        // Just read a digit cell; remember it until we see its cage label.
-        return { sum: state.sum, pending: value };
-      }
-      // Just read a cage-label cell for the digit remembered above.
-      const add = value === k ? state.pending : 0;
-      const newSum = state.sum + add;
-      if (newSum > target) return undefined;
-      return { sum: newSum, pending: null };
-    },
-    accept: (state) => state.pending === null && state.sum === target,
-  };
-  const sumNFA = NFA.encodeSpec(sumSpec, shape);
-
-  const noRepeatNFAs = Array.from({ length: 9 }, (_, i) => {
-    const d = i + 1;
-    const noRepeatSpec = {
-      startState: { pendingIsD: null, count: 0 },
-      transition: (state, value) => {
-        if (state.pendingIsD === null) {
-          return { pendingIsD: value === d, count: state.count };
-        }
-        const hit = state.pendingIsD && value === k;
-        const newCount = hit ? state.count + 1 : state.count;
-        if (newCount > 1) return undefined;
-        return { pendingIsD: null, count: newCount };
-      },
-      accept: (state) => state.pendingIsD === null,
-    };
-    return new NFA(
-      NFA.encodeSpec(noRepeatSpec, shape), `cage-${k}-digit-${d}-once`, ...scan);
-  });
-
-  return [new NFA(sumNFA, `cage-${k}-total`, ...scan), ...noRepeatNFAs];
-});
+// Each total cell is the start of its own cage's snake.
+const clueGivens = CLUES.flatMap(([cell], k) => [
+  new Given(cage.at(cell), k + 2),
+  new Given(pred.at(cell), NONE),
+]);
 
 return [
   shape,
-  digitRestriction,
-  cageVar,
-  ...cageDomainGivens,
-  edgeVar,
-  ...edgeConstraints,
-  slackVar,
-  slackDomain,
-  ...degreeCapConstraints,
-  ...anchorDegreeConstraints,
-  ...connectivityConstraints,
-  ...cageValueConstraints,
+  // The widened alphabet is for the overlays only; the board holds 1-9.
+  graph.makeReplicate(new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)),
+  pred.toVar('pred'),
+  succ.toVar('succ'),
+  cage.toVar('cage'),
+  variant.toVar('digits'),
+  ...domains,
+  ...clueGivens,
+  ...cellRules,
+  ...edgeRules,
 ];

@@ -2,148 +2,113 @@
 // Author: Lisztes
 // Video: https://www.youtube.com/watch?v=ILs2MPv41Yo
 // Source: https://app.crackingthecryptic.com/sudoku/NgrqfFtmGB
-//
-// Normal sudoku, standard 3x3 boxes.
-//
-// White dots: consecutive digits. "Not all dots are given" forbids the
-// negative reading, so only the five drawn edges are constrained.
-//
-// Diagonal "?" clues: from each "?" mark there are two candidate 45-degree
-// diagonals (drawn as two short off-grid direction arrows). Digits along the
-// real diagonal may repeat and sum to a two-digit number that is written,
-// digit by digit (left-to-right or top-to-bottom), into one of the seven
-// unlabelled killer cages. "One killer cage belongs to exactly one diagonal
-// clue and vice versa" -- a bijection between the 7 markers and the 7 cages
-// -- and "each diagonal clue is only valid in ONE of the two possible ways".
-// Neither which cage pairs with which marker, nor which of the two
-// directions is real, is drawn or stated anywhere else (no line is drawn
-// across the grid interior; the arrows are direction stubs only), so both
-// correspondences are genuinely open and are encoded as disjunctions.
-//
-// Each candidate diagonal below is the cell list actually crossed by that
-// arrow's drawn 45-degree direction, walked from the board edge to the
-// opposite side. Note the two rays from one "?" mark do not always share a
-// start cell: e.g. the "Left R3" marker's up-right ray starts at R3C1, but
-// its down-right ray starts one row down, at R4C1 (a consequence of the
-// mark sitting at the row's centre outside the grid, so its two 45-degree
-// rays cross the board edge at two different edge points).
-//
-// The killer-cage part of each cage needs no separate constraint: every one
-// of the 7 cages has its two cells sharing a row or a column, so base sudoku
-// already forces them distinct.
-//
-// Markers and their candidate diagonal rays:
-//   M1 "Left R3":  up-right R3C1-R2C2-R1C3
-//                  down-right R4C1-R5C2-R6C3-R7C4-R8C5-R9C6
-//   M2 "Left R5":  up-right R5C1-R4C2-R3C3-R2C4-R1C5
-//                  down-right R6C1-R7C2-R8C3-R9C4
-//   M3 "Left R6":  up-right R6C1-R5C2-R4C3-R3C4-R2C5-R1C6
-//                  down-right R7C1-R8C2-R9C3
-//   M4 "Left R7":  up-right R7C1-R6C2-R5C3-R4C4-R3C5-R2C6-R1C7
-//                  down-right R8C1-R9C2
-//   M5 "Right R3": up-left R2C9-R1C8
-//                  down-left R5C9-R6C8-R7C7-R8C6-R9C5
-//   M6 "Right R5": up-left R4C9-R3C8-R2C7-R1C6
-//                  down-left R7C9-R8C8-R9C7
-//   M7 "Right R7": up-left R6C9-R5C8-R4C7-R3C6-R2C5-R1C4
-//                  down-left R9C9 (single cell -- dropped, see below)
-//
-// M7's down-left ray is only the corner cell R9C9. A single grid digit is at
-// most 9, but the cage-encoded total is 10*tens+ones with tens,ones both in
-// 1-9, so it is at least 11: this branch can never balance for *any* digit
-// assignment, not just the puzzle's answer, so it is omitted outright rather
-// than encoded as a dead Or branch.
-//
-// Cages (each cage's first cell is the top/left one, matching "read left to
-// right or downwards"):
-//   G1 R2C5,R3C5   G2 R4C5,R5C5   G3 R6C5,R7C5   G4 R8C5,R9C5
-//   G5 R4C3,R4C4   G6 R4C7,R5C7   G7 R5C8,R6C8
-//
-// The unknown marker<->cage bijection is reified with one Var per marker
-// (holding one of the seven cage indices 1-7), forced all-different (7
-// distinct values from a 7-value domain is automatically a full bijection,
-// giving both halves of "exactly one cage per clue and vice versa"). Each
-// marker's Or ranges over every (direction, cage) pair: the branch pins that
-// marker's Var to the candidate cage index and asserts the arithmetic
-// equation for that direction against that cage's two cells. No branch ever
-// assigns a Var outside 1-7, so no extra top-level range restriction is
-// needed on the Vars themselves.
 
-const diagonals = {
-  M1: {
-    up: ['R3C1', 'R2C2', 'R1C3'],
+// Rules encoded here:
+//  - Normal sudoku.
+//  - Seven "?" clues sit outside the grid, each with two arrows drawn from it
+//    into the grid. One of the two indicated diagonals is the clue's real
+//    diagonal; the digits along it (repeats allowed) sum to a two-digit
+//    number, and that number is the pair of digits held by one killer cage,
+//    read left to right for a horizontal cage and downwards for a vertical one.
+//  - One killer cage belongs to exactly one diagonal clue and vice versa
+//    (a bijection between the seven "?" clues and the seven cages).
+//  - White dots mark consecutive neighbours; not all dots are given, so there
+//    is no negative dot constraint.
+//
+// Omitted: "Each diagonal clue is only valid in ONE of the two possible ways."
+// The encoding requires at least one of a clue's two diagonals to match its
+// cage; it does not forbid the other diagonal from also matching.
+//
+// The killer cages carry no totals. Each cage's two cells share a row or a
+// column, so sudoku already forbids a repeat inside it; no extra cage
+// constraint is added.
+
+// Each "?" sits in the margin cell beside a row; its two arrows point into the
+// grid along the two diagonals that start from the grid corner just above and
+// just below that margin cell. Transcribed from the drawn arrow directions.
+const diagonalClues = [
+  {  // "?" left of R3
+    name: 'left R3',
+    up: ['R2C1', 'R1C2'],
     down: ['R4C1', 'R5C2', 'R6C3', 'R7C4', 'R8C5', 'R9C6'],
   },
-  M2: {
-    up: ['R5C1', 'R4C2', 'R3C3', 'R2C4', 'R1C5'],
+  {  // "?" left of R5
+    name: 'left R5',
+    up: ['R4C1', 'R3C2', 'R2C3', 'R1C4'],
     down: ['R6C1', 'R7C2', 'R8C3', 'R9C4'],
   },
-  M3: {
-    up: ['R6C1', 'R5C2', 'R4C3', 'R3C4', 'R2C5', 'R1C6'],
+  {  // "?" left of R6
+    name: 'left R6',
+    up: ['R5C1', 'R4C2', 'R3C3', 'R2C4', 'R1C5'],
     down: ['R7C1', 'R8C2', 'R9C3'],
   },
-  M4: {
-    up: ['R7C1', 'R6C2', 'R5C3', 'R4C4', 'R3C5', 'R2C6', 'R1C7'],
+  {  // "?" left of R7
+    name: 'left R7',
+    up: ['R6C1', 'R5C2', 'R4C3', 'R3C4', 'R2C5', 'R1C6'],
     down: ['R8C1', 'R9C2'],
   },
-  M5: {
+  {  // "?" right of R3
+    name: 'right R3',
     up: ['R2C9', 'R1C8'],
-    down: ['R5C9', 'R6C8', 'R7C7', 'R8C6', 'R9C5'],
+    down: ['R4C9', 'R5C8', 'R6C7', 'R7C6', 'R8C5', 'R9C4'],
   },
-  M6: {
+  {  // "?" right of R5
+    name: 'right R5',
     up: ['R4C9', 'R3C8', 'R2C7', 'R1C6'],
-    down: ['R7C9', 'R8C8', 'R9C7'],
+    down: ['R6C9', 'R7C8', 'R8C7', 'R9C6'],
   },
-  M7: {
+  {  // "?" right of R7
+    name: 'right R7',
     up: ['R6C9', 'R5C8', 'R4C7', 'R3C6', 'R2C5', 'R1C4'],
-    // down: ['R9C9'] omitted -- see comment above, always unsatisfiable.
+    down: ['R8C9', 'R9C8'],
   },
-};
+];
 
-const cages = {
-  1: ['R2C5', 'R3C5'],
-  2: ['R4C5', 'R5C5'],
-  3: ['R6C5', 'R7C5'],
-  4: ['R8C5', 'R9C5'],
-  5: ['R4C3', 'R4C4'],
-  6: ['R4C7', 'R5C7'],
-  7: ['R5C8', 'R6C8'],
-};
+// The seven drawn killer cages, each listed in its reading order: downwards for
+// the six vertical cages, left to right for the one horizontal cage (R4C3-R4C4).
+// The first cell is the tens digit of the cage's two-digit number.
+const cages = [
+  ['R2C5', 'R3C5'],
+  ['R4C5', 'R5C5'],
+  ['R6C5', 'R7C5'],
+  ['R8C5', 'R9C5'],
+  ['R4C3', 'R4C4'],
+  ['R4C7', 'R5C7'],
+  ['R5C8', 'R6C8'],
+];
 
-const markerNames = ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7'];
+// The drawn white dots.
+const whiteDots = [
+  ['R2C6', 'R2C7'],
+  ['R5C7', 'R5C8'],
+  ['R7C7', 'R8C7'],
+  ['R6C4', 'R6C5'],
+  ['R3C3', 'R4C3'],
+];
 
-const cageIndexVar = new Var('K', 'cage index chosen by each diagonal marker', 7);
-const cageIndexCells = cageIndexVar.cells();
+// One Var per "?" clue holding the index (1..7) of the cage it is paired with.
+// AllDifferent over the seven Vars is the one-cage-per-clue bijection: without
+// it the per-clue Or would let two clues claim the same cage.
+const pairing = new Var('P', 'Cage paired with each diagonal clue', cages.length);
 
-const diagonalCageOrs = markerNames.map((m, i) => {
-  const varCell = cageIndexCells[i];
-  const branches = [];
-  for (const dir of Object.keys(diagonals[m])) {
-    const cells = diagonals[m][dir];
-    for (const k of Object.keys(cages)) {
-      const [tens, ones] = cages[k];
-      branches.push(new And([
-        new Given(varCell, +k),
-        new Sum(0, ...cells, [tens, -10], [ones, -1]),
-      ]));
-    }
-  }
-  return new Or(branches);
-});
+// sum(diagonal) = 10 * tens + ones, as one linear equation. A cell appearing on
+// both sides (a diagonal that crosses its own cage) just combines coefficients.
+const diagonalEqualsCage = (diagonal, [tens, ones]) =>
+  new Sum(0, ...diagonal, [tens, -10], [ones, -1]);
 
 return [
   new Shape('9x9'),
 
-  // White dots: consecutive digits.
-  new WhiteDot('R2C6', 'R2C7'),
-  new WhiteDot('R5C7', 'R5C8'),
-  new WhiteDot('R7C7', 'R8C7'),
-  new WhiteDot('R6C4', 'R6C5'),
-  new WhiteDot('R3C3', 'R4C3'),
+  pairing,
+  ...pairing.cells().map(cell => new Given(cell, 1, 2, 3, 4, 5, 6, 7)),
+  new AllDifferent(...pairing.cells()),
 
-  // Auxiliary Vars: which cage (1-7) each of the 7 diagonal markers uses.
-  cageIndexVar,
-  new AllDifferent(...cageIndexCells),
+  ...whiteDots.map(([a, b]) => new WhiteDot(a, b)),
 
-  ...diagonalCageOrs,
+  ...diagonalClues.map((clue, i) => new Or(
+    cages.flatMap((cage, j) =>
+      [clue.up, clue.down].map(diagonal => new And([
+        diagonalEqualsCage(diagonal, cage),
+        new Given(pairing.cell(i + 1), j + 1),
+      ]))))),
 ];

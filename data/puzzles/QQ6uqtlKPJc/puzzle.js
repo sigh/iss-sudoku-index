@@ -2,101 +2,92 @@
 // Author: Shintaro Fushida-Hardy
 // Video: https://www.youtube.com/watch?v=QQ6uqtlKPJc
 // Source: https://sudokupad.app/94v9ipg7hq
-//
-// Standard sudoku, no givens. Two global rules apply to every row and column:
-//
-// 1. "No empty sandwich": no 3 orthogonally-adjacent cells hold only digits
-//    from {7, 8, 9} (encoded for all 9 rows and all 9 columns).
-// 2. An outside clue is |sum strictly between the 7 and the 8, minus sum
-//    strictly between the 8 and the 9| along that clue's row/column. Eight
-//    badges (left of R1, R3, R6, R8; above C1, C2, C3, C6) give this
-//    difference as 0. The ninth badge (above C5) reads "?" -- per the rules
-//    text ("'?' represents a digit (0~9) to be determined by the solver")
-//    its value is not drawn and is left to be inferred only after the grid
-//    is solved, so no numeric constraint is encoded for column 5.
 
-const graph = cellGraph('9x9');
+// Rules encoded here:
+//  - Standard sudoku on a 9x9 grid with the standard boxes. No givens.
+//  - Each outside clue is |(sum of the digits strictly between the 7 and the 8
+//    of that row/column) - (sum of the digits strictly between the 8 and the
+//    9)|. Eight clues read 0; the clue above column 5 reads '?', which the
+//    rules define as a digit 0~9, so that column's difference is at most 9.
+//  - "All sandwiches have at least one filling, i.e. there are no runs of three
+//    adjacent cells in any row or column containing only the digits 7, 8, and
+//    9." The rules define the rule with their own "i.e.", and that definition
+//    is what is encoded: no three consecutive cells of a row or column all hold
+//    digits from {7, 8, 9}.
+// Nothing is omitted.
 
-// Rule 1: no 3-in-a-row/column drawn only from {7, 8, 9}. State tracks
-// membership-in-{7,8,9} for the previous two cells; a third one completing the
-// run is rejected outright.
-const noEmptySandwichSpec = NFA.encodeSpec({
-  startState: { a: false, b: false },
-  transition: ({ a, b }, value) => {
-    const cur = value === 7 || value === 8 || value === 9;
-    if (a && b && cur) return undefined;
-    return { a: b, b: cur };
+const shape = new Shape('9x9');
+
+// Outside clue positions, read from the nine boxed labels in the margin: four
+// to the left of rows 1, 3, 6, 8 and five above columns 1, 2, 3, 5, 6. All read
+// "0" except the one above column 5, which reads "?".
+const ZERO_CLUE_ROWS = [1, 3, 6, 8];
+const ZERO_CLUE_COLS = [1, 2, 3, 6];
+const UNKNOWN_CLUE_COLS = [5];
+
+const indices = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const rowCells = (r) => indices.map((c) => makeCellId(r, c));
+const colCells = (c) => indices.map((r) => makeCellId(r, c));
+
+// One machine per clued line, scanning the line end to end.
+//
+// `seen` is a bitmask of the crusts already passed (7 -> 1, 8 -> 2, 9 -> 4).
+// That is enough to place the current cell: it lies strictly between the 7 and
+// the 8 exactly when one of those two has been seen and the other has not, and
+// likewise for the 8 and the 9. `d` is the running difference (7-8 sandwich
+// sum) - (8-9 sandwich sum); a cell inside both sandwiches is added to both
+// sums and so cancels in `d`. A crust bounds its own sandwiches and is never a
+// filling of them, but the 9 counts as a filling of the 7-8 sandwich when it
+// falls inside it, and the 7 as a filling of the 8-9 sandwich.
+//
+// The clue is an absolute difference, so the scan direction does not matter:
+// both sandwiches are the same cell sets read either way.
+//
+// `accept` reads the final difference; `seen === 7` records that all three
+// crusts were met, which a sudoku line always does.
+const clubSandwichSpec = (acceptDifference) => NFA.encodeSpec({
+  startState: { seen: 0, d: 0 },
+  transition: ({ seen, d }, v) => {
+    const between78 = ((seen & 1) !== 0) !== ((seen & 2) !== 0);
+    const between89 = ((seen & 2) !== 0) !== ((seen & 4) !== 0);
+    if (v === 7) return { seen: seen | 1, d: d - (between89 ? 7 : 0) };
+    if (v === 8) return { seen: seen | 2, d: d };
+    if (v === 9) return { seen: seen | 4, d: d + (between78 ? 9 : 0) };
+    return {
+      seen,
+      d: d + (between78 ? v : 0) - (between89 ? v : 0),
+    };
+  },
+  accept: ({ seen, d }) => seen === 7 && acceptDifference(d),
+  // `d` is otherwise an unbounded running total; one symbol per cell bounds it.
+  maxDepth: 9,
+}, shape);
+
+const zeroClueSpec = clubSandwichSpec((d) => d === 0);
+const unknownClueSpec = clubSandwichSpec((d) => Math.abs(d) <= 9);
+
+// `run` counts the cells since the last digit below 7; a third in a row is the
+// forbidden run of three, so that branch is dropped and nothing reaches accept.
+const noCrustRunSpec = NFA.encodeSpec({
+  startState: { run: 0 },
+  transition: ({ run }, v) => {
+    const next = v >= 7 ? run + 1 : 0;
+    return next >= 3 ? undefined : { run: next };
   },
   accept: () => true,
-}, 9);
-const allLines = [...graph.rows(), ...graph.columns()];
-
-// Rule 2 (the 8 "0" clues): sum-between(7,8) == sum-between(8,9) in that line.
-// Sudoku digits are non-negative, so equality is only reachable when 8 sits
-// between 7 and 9 (the other two orderings would force one side's sum
-// negative) -- e.g. with 7 then 9 then 8 in that order, sum-between(7,8) is
-// necessarily sum-between(7,9) + 9 + sum-between(9,8), which can only equal
-// sum-between(9,8) if the rest is 0, impossible with 9 in it. So the machine
-// only ever has to watch the *one* pending side:
-//   'S0'                          -- before 7, 8, or 9
-//   {phase:'first', mark, sum}    -- saw 7 or 9 (`mark` = which); `sum` is the
-//                                     running total of plain digits (1-6)
-//                                     seen since it
-//   {phase:'after8', mark, diff}  -- 8 has appeared; `mark` is the digit (7 or
-//                                     9) still to come; `diff` counts down
-//                                     from the pre-8 sum as the post-8 side
-//                                     accumulates
-//   'done'                        -- both sides matched; absorbs the rest of
-//                                     the line
-// 8 arriving before either 7 or 9, or the non-`mark` digit arriving before 8,
-// both hit one of the impossible orderings above and reject immediately.
-//
-// The compiler explores the transition graph in the abstract (any of the 9
-// values at any step, not just a single row's actual digits), so `sum` is
-// clamped to SUM_CAP -- above the true max of 21 (the six non-7/8/9 digits) --
-// to keep the compiled state count finite; real rows never reach the clamp.
-const OTHER = { 7: 9, 9: 7 };
-const SUM_CAP = 30;
-const zeroDiffSpec = NFA.encodeSpec({
-  startState: 'S0',
-
-  transition: (state, value) => {
-    if (state === 'done') return 'done';
-
-    if (state === 'S0') {
-      if (value === 8) return undefined; // 8 can't be first
-      if (value === 7 || value === 9) return { phase: 'first', mark: value, sum: 0 };
-      return 'S0';
-    }
-
-    if (state.phase === 'first') {
-      const { mark, sum } = state;
-      if (value === OTHER[mark]) return undefined; // 8 would be last, not the midpoint
-      if (value === 8) return { phase: 'after8', mark: OTHER[mark], diff: sum };
-      return { phase: 'first', mark, sum: Math.min(sum + value, SUM_CAP) };
-    }
-
-    // state.phase === 'after8'
-    const { mark, diff } = state;
-    if (value === mark) return diff === 0 ? 'done' : undefined;
-    const nextDiff = diff - value;
-    if (nextDiff < 0) return undefined; // this side already exceeds the other
-    return { phase: 'after8', mark, diff: nextDiff };
-  },
-
-  accept: (state) => state === 'done',
-}, 9);
-
-// Provenance: left badges on R1, R3, R6, R8; top badges on C1, C2, C3, C6;
-// all eight drawn as "0". C5's top badge is the omitted "?".
-const zeroDiffLines = [
-  graph.row(1), graph.row(3), graph.row(6), graph.row(8),
-  graph.column(1), graph.column(2), graph.column(3), graph.column(6),
-];
+}, shape);
 
 return [
-  new Shape('9x9'),
-
-  ...allLines.map((cells) => new NFA(noEmptySandwichSpec, 'no-empty-sandwich', ...cells)),
-  ...zeroDiffLines.map((cells) => new NFA(zeroDiffSpec, 'sandwich-diff-0', ...cells)),
+  shape,
+  ...ZERO_CLUE_ROWS.map(
+    (r) => new NFA(zeroClueSpec, `club sandwich 0 R${r}`, ...rowCells(r))),
+  ...ZERO_CLUE_COLS.map(
+    (c) => new NFA(zeroClueSpec, `club sandwich 0 C${c}`, ...colCells(c))),
+  ...UNKNOWN_CLUE_COLS.map(
+    (c) => new NFA(unknownClueSpec, `club sandwich ? C${c}`, ...colCells(c))),
+  // The no-three-in-a-row rule is global, so every row and column carries it.
+  ...indices.map(
+    (r) => new NFA(noCrustRunSpec, `no crust run R${r}`, ...rowCells(r))),
+  ...indices.map(
+    (c) => new NFA(noCrustRunSpec, `no crust run C${c}`, ...colCells(c))),
 ];

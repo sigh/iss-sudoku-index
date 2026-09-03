@@ -2,12 +2,27 @@
 // Author: Blobz
 // Video: https://www.youtube.com/watch?v=EQ7OyVHemlw
 // Source: https://sudokupad.app/blobz/the-continental
+//
+// Normal sudoku (9x9, standard boxes, no given digits).
+//
+// Digits in cages do not repeat, and sum to the total, if given: cages with a
+// printed total use Cage, the totalless ones AllDifferent.
+//
+// Digits orthogonally adjacent to a cage may NOT be included in that cage.
+// Read against the cage as a whole -- "included in that cage" names the cage,
+// whose digits are all different, so a cage has a well-defined digit set and a
+// neighbour's digit must lie outside it. Cages touch one another here, so a
+// cell in one cage is often a neighbour of another and is constrained in that
+// role too.
+//
+// Fog is solving UI: it lifts as correct digits go in (R6C4 is a foglight) and
+// places no condition on the finished grid, so it is not encoded.
 
-// Normal Sudoku. Each listed cage has distinct digits and, where shown, its
-// displayed total. A digit in a cell orthogonally outside a cage cannot occur
-// in that cage. Fog and its foglight marker are presentation-only and omitted.
-// Cage cells are transcribed from the dashed cages in the source payload.
-const numberedCages = [
+const graph = cellGraph('9x9');
+
+// Drawn killer cages. Totals are the values printed in each cage's top-left
+// cell; the second list is the cages drawn without a total.
+const cagesWithTotal = [
   [1, ['R6C4']],
   [9, ['R6C3', 'R7C3', 'R7C4']],
   [10, ['R5C5', 'R6C5', 'R7C5']],
@@ -15,7 +30,7 @@ const numberedCages = [
   [16, ['R7C6', 'R8C4', 'R8C5', 'R8C6']],
   [21, ['R8C7', 'R9C6', 'R9C7']],
 ];
-const unnumberedCages = [
+const cagesNoTotal = [
   ['R8C2', 'R8C3', 'R9C3', 'R9C4'],
   ['R5C1', 'R6C1', 'R7C1', 'R7C2'],
   ['R6C6', 'R6C7', 'R7C7'],
@@ -24,40 +39,30 @@ const unnumberedCages = [
   ['R3C4', 'R3C5', 'R3C6', 'R3C7'],
   ['R1C7', 'R1C8', 'R1C9', 'R2C9', 'R3C9'],
 ];
-const cageCells = numberedCages.map(([, cells]) => cells).concat(unnumberedCages);
 
-// Derive each cage boundary from its drawn cells; only external orthogonal
-// neighbours participate, so cells inside the same cage are not paired here.
-const cageBoundarySegments = cageCells.flatMap(cells => {
-  const inside = new Set(cells);
-  return cells.flatMap(cell => {
-    const {row, col} = parseCellId(cell);
-    return [[row - 1, col], [row + 1, col], [row, col - 1], [row, col + 1]]
-      .filter(([r, c]) => r >= 1 && r <= 9 && c >= 1 && c <= 9)
-      .map(([r, c]) => makeCellId(r, c))
-      .filter(neighbour => !inside.has(neighbour))
-      .map(neighbour => [cell, neighbour]);
-  });
+const cageCellLists = [
+  ...cagesWithTotal.map(([, cells]) => cells),
+  ...cagesNoTotal,
+];
+const cages = [
+  ...cagesWithTotal.map(([total, cells]) => new Cage(total, ...cells)),
+  ...cagesNoTotal.map(cells => new AllDifferent(...cells)),
+];
+
+// One constraint per (cage, neighbouring cell outside it), the neighbours
+// derived from the drawn cage cells. Adding the neighbour to the cage's own
+// all-different group says exactly "this digit is not one of the cage's
+// digits": the cage members were already required to be distinct, so the only
+// new content is neighbour != every cage cell.
+const cageNeighbourExclusions = cageCellLists.flatMap(cells => {
+  const inCage = new Set(cells);
+  const neighbours = [...new Set(cells.flatMap(cell => graph.neighbours(cell)))]
+    .filter(cell => !inCage.has(cell));
+  return neighbours.map(cell => new AllDifferent(...cells, cell));
 });
-
-// Each two-cell segment is one cage cell followed by a neighbouring external
-// cell. The machine stores the cage digit, rejects an equal neighbour, and
-// resets at every segment break.
-const cageBoundaryRule = NFA.encodeSpec({
-  startState: {cageDigit: null, complete: false},
-  transition: ({cageDigit, complete}, value) => {
-    if (value === SEGMENT_BREAK) {
-      return complete ? {cageDigit: null, complete: false} : undefined;
-    }
-    if (cageDigit === null) return {cageDigit: value, complete: false};
-    return cageDigit === value ? undefined : {cageDigit: null, complete: true};
-  },
-  accept: ({complete}) => complete,
-}, 9, {multiSegment: true});
 
 return [
   new Shape('9x9'),
-  ...numberedCages.map(([sum, cells]) => new Cage(sum, ...cells)),
-  ...unnumberedCages.map(cells => new AllDifferent(...cells)),
-  new NFA(cageBoundaryRule, 'cage boundary', ...cageBoundarySegments),
+  ...cages,
+  ...cageNeighbourExclusions,
 ];

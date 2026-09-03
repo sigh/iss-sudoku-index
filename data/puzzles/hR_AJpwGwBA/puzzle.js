@@ -1,42 +1,40 @@
-// Title: Sandwich Sudoku (With Extra Ants!)
+// Title: unknown
 // Author: Unknown
 // Video: https://www.youtube.com/watch?v=hR_AJpwGwBA
 // Source: https://cracking-the-cryptic.web.app/sudoku/mbpTBgtRmj
 
-// Normal Sudoku plus a Sandwich clue for every row and column (the digits
-// between the 1 and the 9 sum to the printed value). The ant path from the
-// green cell (R1C9) to the red cell (R2C9) is not represented here.
-const geometry = cellGeometry('9x9');
+// Rules encoded here:
+//  - Normal sudoku on the 9x9 grid (rows, columns and the standard 3x3 boxes,
+//    which are the regions the source draws).
+//  - Sandwich: a number outside a row or column is the sum of the digits
+//    strictly between the 1 and the 9 in that row or column.
+//
+// Rule NOT encoded:
+//  - The ant path. Ants travel from the green cell (R1C9) to the red cell
+//    (R2C9): from the cell they are on they move that cell's digit in a
+//    straight line, turn 90 degrees, move the new cell's digit, and so on;
+//    the traced path may not cross itself. Nothing in this script constrains
+//    that path, so the encoding is a relaxation of the published puzzle.
 
-// Row cells, left to right; column cells, top to bottom -- the printed
-// clue direction, per the payload's outside-clue overlays.
-const row = (r) => [1, 2, 3, 4, 5, 6, 7, 8, 9].map(c => makeCellId(r, c));
-const col = (c) => [1, 2, 3, 4, 5, 6, 7, 8, 9].map(r => makeCellId(r, c));
+// Givens: the two cells carrying a printed digit in the source grid.
+const givens = [
+  new Given('R1C9', 2),
+  new Given('R6C5', 6),
+];
+
+// Sandwich clues, transcribed from the numbers printed in the margin left of
+// each row and above each column.
+const rowSandwiches = [7, 5, 7, 22, 5, 30, 35, 0, 14];
+const colSandwiches = [0, 18, 7, 13, 31, 3, 31, 2, 23];
+
+const graph = cellGraph('9x9');
+const geometry = cellGeometry('9x9');
 
 return [
   new Shape('9x9'),
-  new Given('R1C9', 2),
-  new Given('R6C5', 6),
-
-  // Row sandwich clues, top to bottom.
-  Sandwich.fromCells(7, row(1), geometry),
-  Sandwich.fromCells(5, row(2), geometry),
-  Sandwich.fromCells(7, row(3), geometry),
-  Sandwich.fromCells(22, row(4), geometry),
-  Sandwich.fromCells(5, row(5), geometry),
-  Sandwich.fromCells(30, row(6), geometry),
-  Sandwich.fromCells(35, row(7), geometry),
-  Sandwich.fromCells(0, row(8), geometry),
-  Sandwich.fromCells(14, row(9), geometry),
-
-  // Column sandwich clues, left to right.
-  Sandwich.fromCells(0, col(1), geometry),
-  Sandwich.fromCells(18, col(2), geometry),
-  Sandwich.fromCells(7, col(3), geometry),
-  Sandwich.fromCells(13, col(4), geometry),
-  Sandwich.fromCells(31, col(5), geometry),
-  Sandwich.fromCells(3, col(6), geometry),
-  Sandwich.fromCells(31, col(7), geometry),
-  Sandwich.fromCells(2, col(8), geometry),
-  Sandwich.fromCells(23, col(9), geometry),
+  ...givens,
+  ...rowSandwiches.map(
+    (v, i) => Sandwich.fromCells(v, graph.row(i + 1), geometry)),
+  ...colSandwiches.map(
+    (v, i) => Sandwich.fromCells(v, graph.column(i + 1), geometry)),
 ];

@@ -3,243 +3,200 @@
 // Video: https://www.youtube.com/watch?v=UZY2TNxBWxQ
 // Source: https://sudokupad.app/9ecadg11io
 
-// Normal sudoku. Grid is entirely under fog (no givens shown), which is
-// solving UI only and is not encoded.
-//
-// Odd: R7C6 must be odd.
-//
-// V: two marked pairs sum to 5 (not all V's are marked, so only the marked
-// pairs are enforced; no negative constraint is added elsewhere).
-//
-// Ratio dots: four colours (yellow/green/blue/red) each mark an unknown
-// fixed ratio from 1:2 .. 1:9, shared by every dot of that colour, chosen by
-// the solver. Encoded as one Or (over the 8 candidate ratios) per colour,
-// applied to every dot of that colour at once so the same ratio governs all
-// of them.
-//
-// Pink lines: each line is independently either a Renban line or a German
-// Whisper line, encoded as an Or per line.
-//
-// Japanese Sums colouring: within R3-9,C3-9, some cells are shaded, forming
-// (per clued row/column) one or more maximal shaded runs. A pink clue cell
-// with a written cage total pins its run's digit-sum; a pink clue cell with
-// no total only asserts that a run exists there, of unspecified length and
-// sum. A row/column with no pink clue cell at all has no shading. A cage
-// total is a compound number: the cage's own small corner digit (its
-// displayed value) times 10, plus the digit the solver places in that very
-// clue cell (the "little 1 and a 4 placed in it makes the clue 14" rule) --
-// i.e. the total is read off the clue cell itself, not a separate written
-// number. This is modelled with a shading Var overlay ('VS') over the 49
-// cells, restricted to SHADED/UNSHADED, and one scanning NFA per clued
-// row/column, run against every reachable assignment of its clue cell(s)'
-// own digits, tracking run boundaries and the running sum of shaded digits.
+// Rules encoded below:
+//  1. Normal sudoku.
+//  2. Japanese sums inside the red region R3C3-R9C9. Cells there are shaded or
+//     not; the pink clue cells in columns 1-2 give their row's shaded-run sums
+//     in order from the outside in, the pink clue cells in row 1 do the same
+//     for their column, the number of pink clue cells equals the number of
+//     runs, and consecutive runs are separated by at least one unshaded cell.
+//  3. A line with no pink clue cell has no shading; columns 3 and 9 are the
+//     only unclued lines of the region.
+//  4. A clue's value is (small corner digit of the cage drawn on the clue
+//     cell) * 10 + (digit placed in the clue cell). A pink clue cell with no
+//     cage marks a run whose sum is unknown.
+//  5. Cells joined by a V sum to 5 (2 drawn).
+//  6. Each of the four dot colours stands for one ratio out of 1:2 .. 1:9, the
+//     same ratio for all dots of that colour.
+//  7. Each pink line is independently a renban or a German whisper (>= 5).
+//  8. A circled cell is odd.
+// Omitted: the rules say "not all V's are given", and the unmarked V pairs are
+// not drawn anywhere, so only the two drawn V's are asserted and no negative
+// V constraint is added.
+// Not encoded because they are not final-grid rules: the fog of war, and the
+// red region outline itself (a region marker with no total, not a killer cage).
 
-const graph = cellGraph('9x9');
+const shape = new Shape('9x9');
+const graph = cellGraph(shape);
 
-const SHADED = 1;
-const UNSHADED = 2;
+// Japanese sums shading overlay: one Var per cell of the red region, holding
+// UNSHADED or SHADED. The row and column scans below both read this overlay,
+// which is what keeps a row's runs and a column's runs on the same shading.
+const UNSHADED = 1;
+const SHADED = 2;
+const regionCells = graph.block('R3C3', 7, 7);
+const regionSet = new Set(regionCells);
+const shade = graph.makeOverlay('VS', regionCells);
 
-// ---- Ratio dots ----
+// Clue tables, transcribed from the pink cell colouring and the single-cell
+// cages drawn on those cells. The number is the cage's small corner digit;
+// `null` means no cage is drawn there, so that run's sum is unknown. The two
+// cages drawn without a corner digit (R6C1, R7C1) are corner digit 0 by rule 4:
+// no tens contribution, so the run sums to the clue cell's own digit.
+const NO_CAGE = null;
+const ROW_CLUES = [
+  [3, [['R3C1', 1], ['R3C2', 1]]],
+  [4, [['R4C1', 1], ['R4C2', 1]]],
+  [5, [['R5C1', NO_CAGE], ['R5C2', NO_CAGE]]],
+  [6, [['R6C1', 0]]],
+  [7, [['R7C1', 0]]],
+  [8, [['R8C1', 1]]],
+  [9, [['R9C1', NO_CAGE]]],
+];
+const COL_CLUES = [
+  [4, [['R1C4', 1]]],
+  [5, [['R1C5', 3]]],
+  [6, [['R1C6', 1]]],
+  [7, [['R1C7', 2]]],
+  [8, [['R1C8', 1]]],
+];
+const UNCLUED_COLUMNS = [3, 9];
 
-const ratioDotsByColor = {
-  yellow: [['R1C9', 'R2C9']],
-  green: [['R5C2', 'R4C2'], ['R2C6', 'R2C7']],
-  blue: [
-    ['R4C2', 'R3C2'], ['R3C3', 'R3C2'], ['R2C3', 'R3C3'], ['R1C3', 'R2C3'],
-    ['R1C2', 'R1C1'], ['R5C2', 'R5C1'], ['R1C3', 'R1C4'], ['R1C4', 'R1C5'],
-    ['R3C9', 'R3C8'], ['R6C5', 'R6C6'], ['R6C6', 'R6C7'],
-  ],
-  red: [['R3C3', 'R3C4'], ['R2C5', 'R2C4'], ['R3C5', 'R2C5'], ['R2C8', 'R2C7']],
-};
+// One state machine per clued line. It reads the line's cageed clue cells
+// first, turning each into a target sum, and then walks the line as
+// [shade flag, digit, shade flag, digit, ...].
+//
+// State fields:
+//   phase     'clue' while the clue cells are still being read, else 'scan'.
+//   runIndex  which run's clue cell is being read (clue phase only).
+//   targets   the run sums still to be matched, in order; an entry is null for
+//             a run whose clue cell carries no cage (sum unknown).
+//   awaitFlag true when the next cell read is a shade flag, false when it is
+//             the digit belonging to the flag just read.
+//   shaded    what that flag said, so the digit knows whether it counts.
+//   inRun     whether the previous cell was shaded, i.e. a run is open.
+//   rem       the open run's target minus the digits taken so far, or null
+//             when the open run has no known target. Counting down rather than
+//             up keeps the field bounded by the target.
+const clueState = (runIndex, targets) => ({ phase: 'clue', runIndex, targets });
+const scanState = (awaitFlag, shaded, inRun, rem, targets) =>
+  ({ phase: 'scan', awaitFlag, shaded, inRun, rem, targets });
 
-function ratioGroupConstraint(pairs) {
-  const options = [];
-  for (let r = 2; r <= 9; r++) {
-    // Ratio 1:2 is exactly the native BlackDot relation.
-    options.push(r === 2
-      ? new And(pairs.map(([a, b]) => new BlackDot(a, b)))
-      : new And(pairs.map(([a, b]) => new Pair(
-        Pair.fnToKey((x, y) => x === y * r || y === x * r, 9), `ratio-1-${r}`, a, b))));
-  }
-  return new Or(options);
+function japaneseSumsSpec(tensDigits) {
+  // Runs with no cage read no clue cell, so skip past them when deciding which
+  // clue cell the next symbol belongs to.
+  const skipUnclued = (runIndex, targets) => {
+    while (runIndex < tensDigits.length && tensDigits[runIndex] === NO_CAGE) {
+      targets = targets.concat([null]);
+      runIndex++;
+    }
+    return runIndex === tensDigits.length
+      ? scanState(true, false, false, null, targets)
+      : clueState(runIndex, targets);
+  };
+
+  return NFA.encodeSpec({
+    startState: skipUnclued(0, []),
+    transition: (state, value) => {
+      if (state.phase === 'clue') {
+        const target = tensDigits[state.runIndex] * 10 + value;
+        return skipUnclued(
+          state.runIndex + 1, state.targets.concat([target]));
+      }
+      if (state.awaitFlag) {
+        if (value !== UNSHADED && value !== SHADED) return undefined;
+        if (value === SHADED) {
+          if (state.inRun) {
+            return scanState(false, true, true, state.rem, state.targets);
+          }
+          // A new run opens: it must be the next unmatched clue.
+          if (state.targets.length === 0) return undefined;
+          return scanState(
+            false, true, true, state.targets[0], state.targets.slice(1));
+        }
+        // An unshaded cell closes any open run, which must be exactly on target.
+        if (state.inRun && state.rem !== null && state.rem !== 0) return undefined;
+        return scanState(false, false, false, null, state.targets);
+      }
+      if (!state.shaded) return scanState(true, false, false, null, state.targets);
+      if (state.rem === null) return scanState(true, false, true, null, state.targets);
+      if (value > state.rem) return undefined;
+      return scanState(true, false, true, state.rem - value, state.targets);
+    },
+    // Every clue must have been used, and a run still open at the line's end
+    // must also be exactly on target.
+    accept: (state) => state.phase === 'scan' && state.awaitFlag
+      && state.targets.length === 0
+      && (!state.inRun || state.rem === null || state.rem === 0),
+  }, shape);
 }
 
-const ratioConstraints = Object.values(ratioDotsByColor)
-  .map(pairs => ratioGroupConstraint(pairs));
+function japaneseSumsLine(name, clues, lineCells) {
+  const spec = japaneseSumsSpec(clues.map(([, tens]) => tens));
+  const clueCells = clues.filter(([, tens]) => tens !== NO_CAGE).map(([cell]) => cell);
+  const scanCells = lineCells.flatMap(cell => [shade.at(cell), cell]);
+  return new NFA(spec, name, ...clueCells, ...scanCells);
+}
 
-// ---- Pink lines: Renban or German Whisper, each independently ----
+// Ratio dots, transcribed from the coloured edge circles.
+const DOTS_BY_COLOUR = [
+  ['yellow', [['R1C9', 'R2C9']]],
+  ['green', [['R5C2', 'R4C2'], ['R2C6', 'R2C7']]],
+  ['blue', [
+    ['R4C2', 'R3C2'], ['R3C3', 'R3C2'], ['R2C3', 'R3C3'], ['R1C3', 'R2C3'],
+    ['R1C2', 'R1C1'], ['R5C2', 'R5C1'], ['R1C3', 'R1C4'], ['R1C4', 'R1C5'],
+    ['R3C9', 'R3C8'], ['R6C5', 'R6C6'], ['R6C6', 'R6C7']]],
+  ['red', [
+    ['R3C3', 'R3C4'], ['R2C5', 'R2C4'], ['R3C5', 'R2C5'], ['R2C8', 'R2C7']]],
+];
+const RATIOS = [2, 3, 4, 5, 6, 7, 8, 9];
+// "1:n" means one cell is n times the other, in either direction.
+const ratioKey = (ratio) =>
+  Pair.fnToKey((a, b) => a === ratio * b || b === ratio * a, shape);
 
-const pinkLines = [
+// Pink lines, as the strokes are drawn: two of them take a diagonal step, so
+// the cell order here is the order along the stroke rather than an L bend.
+const PINK_LINES = [
   ['R7C4', 'R7C5', 'R6C4'],
   ['R6C8', 'R7C7', 'R7C8'],
   ['R6C3', 'R6C2', 'R6C1'],
 ];
 
-const lineConstraints = pinkLines.map(cells => new Or([
-  new Renban(...cells),
-  new Whisper(5, ...cells),
-]));
-
-// ---- V pairs (sum to 5); not all V's are marked ----
-
-const vPairs = [['R2C4', 'R1C4'], ['R1C5', 'R2C5']];
-const vConstraints = vPairs.map(([a, b]) => new V(a, b));
-
-// ---- Japanese Sums colouring ----
-
-const subCells = graph.block('R3C3', 7, 7);
-const shade = graph.makeOverlay('VS', subCells);
-
-const rowRunCells = r => graph.row(r).slice(2, 9); // C3..C9
-const colRunCells = c => graph.column(c).slice(2, 9); // R3..R9
-
-// NFA for a clued row/column with one or two known-sum runs, given fixed
-// (compile-time literal) numeric targets -- not read from the grid, so the
-// state carries only a bounded running sum, never the targets themselves.
-// Scans the line's cells as interleaved (shade, digit) pairs, tracking run
-// boundaries and each run's sum.
-const knownRunNFACache = new Map();
-function knownRunNFA(targets) {
-  const cacheKey = targets.join(',');
-  if (knownRunNFACache.has(cacheKey)) return knownRunNFACache.get(cacheKey);
-  const numTargets = targets.length;
-  const spec = NFA.encodeSpec({
-    startState: { stage: 'S', runIndex: 0, inRun: false, sum: 0 },
-    transition: (state, value) => {
-      if (state.stage === 'S') {
-        const shaded = value === SHADED;
-        let { runIndex, inRun, sum } = state;
-        if (shaded && !inRun) {
-          runIndex += 1;
-          if (runIndex > numTargets) return undefined; // too many runs
-          inRun = true;
-        } else if (!shaded && inRun) {
-          // Run closes here: its accumulated sum must match its target.
-          if (sum !== targets[runIndex - 1]) return undefined;
-          inRun = false;
-          sum = 0;
-        }
-        return { stage: 'D', runIndex, inRun, sum, shaded };
-      }
-      // stage === 'D': add this cell's digit to the running sum if shaded.
-      const { runIndex, inRun, sum, shaded } = state;
-      let newSum = sum;
-      if (shaded) {
-        const target = targets[runIndex - 1];
-        newSum = Math.min(sum + value, target + 1); // clamp at the sink
-      }
-      return { stage: 'S', runIndex, inRun, sum: newSum };
-    },
-    accept: (state) => {
-      if (state.stage !== 'S' || state.runIndex !== numTargets) return false;
-      // A run still open at the line's end closes at the boundary.
-      if (state.inRun) return state.sum === targets[state.runIndex - 1];
-      return true;
-    },
-  }, 9);
-  knownRunNFACache.set(cacheKey, spec);
-  return spec;
-}
-
-// A clue cell's total is corner*10 + the digit the solver places in that
-// cell. The corner is a compile-time literal; the digit is not, so branch
-// over its 9 possibilities (an Or of fixed-target NFAs) rather than reading
-// it as NFA state -- that keeps every individual NFA's state small instead
-// of multiplying it by every reachable combination of clue-cell digits.
-function targetBranches(targetSources) {
-  if (targetSources.length === 0) return [[]];
-  const [{ cell, corner }, ...rest] = targetSources;
-  const branches = [];
-  for (let d = 1; d <= 9; d++) {
-    for (const tail of targetBranches(rest)) {
-      branches.push([{ cell, value: d, target: corner * 10 + d }, ...tail]);
-    }
-  }
-  return branches;
-}
-
-// NFA for a clued row/column with `count` pink positions that carry no
-// written total (a drawn cage with no value, or plain pink with no cage at
-// all): exactly `count` maximal shaded runs of unspecified length and sum.
-const unknownRunNFACache = new Map();
-function unknownRunNFA(count) {
-  if (unknownRunNFACache.has(count)) return unknownRunNFACache.get(count);
-  const spec = NFA.encodeSpec({
-    startState: { runCount: 0, inRun: false },
-    transition: (state, value) => {
-      const shaded = value === SHADED;
-      let { runCount, inRun } = state;
-      if (shaded && !inRun) {
-        runCount += 1;
-        if (runCount > count) return undefined; // too many runs
-        inRun = true;
-      } else if (!shaded && inRun) {
-        inRun = false;
-      }
-      return { runCount, inRun };
-    },
-    accept: (state) => state.runCount === count,
-  }, 9);
-  unknownRunNFACache.set(count, spec);
-  return spec;
-}
-
-function knownRunConstraint(cells, targetSources) {
-  const runSeq = cells.flatMap(cell => [shade.at(cell), cell]);
-  const branches = targetBranches(targetSources).map(assignment => new And([
-    ...assignment.map(({ cell, value }) => new Given(cell, value)),
-    new NFA(knownRunNFA(assignment.map(a => a.target)), 'jss-run', ...runSeq),
-  ]));
-  return new Or(branches);
-}
-
-function unknownRunConstraint(cells, count) {
-  return new NFA(unknownRunNFA(count), 'jss-run-unknown',
-    ...shade.at(cells));
-}
-
-// Every row 3-9 is pink in C1, so every row has at least one run; rows 3-5
-// are also pink in C2, giving those a second run. C1/C2 have a written cage
-// total only for rows 3, 4 (both slots) and 8 (C1 only) -- the rest (row 5's
-// two slots, and row 6/7/9's C1 slot) are pink with no total.
-const rowRunConstraints = [
-  knownRunConstraint(rowRunCells(3),
-    [{ cell: 'R3C1', corner: 1 }, { cell: 'R3C2', corner: 1 }]),
-  knownRunConstraint(rowRunCells(4),
-    [{ cell: 'R4C1', corner: 1 }, { cell: 'R4C2', corner: 1 }]),
-  unknownRunConstraint(rowRunCells(5), 2),
-  unknownRunConstraint(rowRunCells(6), 1),
-  unknownRunConstraint(rowRunCells(7), 1),
-  knownRunConstraint(rowRunCells(8), [{ cell: 'R8C1', corner: 1 }]),
-  unknownRunConstraint(rowRunCells(9), 1),
-];
-
-// Only C4-C8 are pink in R1/R2 (all with a written total); C3 and C9 have no
-// pink cell at all, so per the rules they carry no shading.
-const colRunConstraints = [
-  knownRunConstraint(colRunCells(4), [{ cell: 'R1C4', corner: 1 }]),
-  knownRunConstraint(colRunCells(5), [{ cell: 'R1C5', corner: 3 }]),
-  knownRunConstraint(colRunCells(6), [{ cell: 'R1C6', corner: 1 }]),
-  knownRunConstraint(colRunCells(7), [{ cell: 'R1C7', corner: 2 }]),
-  knownRunConstraint(colRunCells(8), [{ cell: 'R1C8', corner: 1 }]),
-];
-const uncluedCols = [3, 9];
-
-const forcedUnshaded = new Set();
-for (const c of uncluedCols) for (const cell of colRunCells(c)) forcedUnshaded.add(cell);
-
-const shadeDomainGivens = subCells.map(cell => forcedUnshaded.has(cell)
-  ? new Given(shade.at(cell), UNSHADED)
-  : new Given(shade.at(cell), SHADED, UNSHADED));
-
 return [
-  new Shape('9x9'),
+  shape,
+
+  // 8. Circled cell is odd.
   new Given('R7C6', 1, 3, 5, 7, 9),
-  ...vConstraints,
-  ...ratioConstraints,
-  ...lineConstraints,
-  shade.toVar('JSS shading'),
-  ...shadeDomainGivens,
-  ...rowRunConstraints,
-  ...colRunConstraints,
+
+  // 5. The two drawn V's.
+  new V('R1C4', 'R2C4'),
+  new V('R1C5', 'R2C5'),
+
+  // 6. One ratio per colour, shared by every dot of that colour.
+  ...DOTS_BY_COLOUR.map(([colour, dots]) => new Or(
+    RATIOS.map(ratio => new And(dots.map(
+      ([a, b]) => new Pair(ratioKey(ratio), `${colour} 1:${ratio}`, a, b)))))),
+
+  // 7. Each pink line is a renban or a whisper, decided independently.
+  ...PINK_LINES.map(cells => new Or([
+    new Renban(...cells),
+    new Whisper(5, ...cells),
+  ])),
+
+  // 2. The shading overlay and its domain.
+  shade.toVar('japanese sums shading'),
+  shade.makeReplicate(new Given(shade.cells()[0], UNSHADED, SHADED)),
+
+  // 3. Unclued lines of the region carry no shading.
+  ...UNCLUED_COLUMNS.flatMap(col => graph.column(col)
+    .filter(cell => regionSet.has(cell))
+    .map(cell => new Given(shade.at(cell), UNSHADED))),
+
+  // 2/4. The run scans.
+  ...ROW_CLUES.map(([row, clues]) => japaneseSumsLine(
+    `JSS row ${row}`, clues,
+    graph.row(row).filter(cell => regionSet.has(cell)))),
+  ...COL_CLUES.map(([col, clues]) => japaneseSumsLine(
+    `JSS column ${col}`, clues,
+    graph.column(col).filter(cell => regionSet.has(cell)))),
 ];

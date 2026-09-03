@@ -5,16 +5,19 @@
 
 // Rules encoded:
 //   Normal sudoku -- 1-9 once per row, column and 3x3 box (the engine
-//   baseline; the nine regions drawn on the board are the standard boxes).
+//   baseline; the nine regions the source draws are the standard boxes).
 //
-// Omitted: eight small text overlays ("L" x3, "C" x5) sit on cell-to-cell
-// borders, styled white-on-white against the white grid background, so they
-// render invisible. No rules text exists anywhere in local evidence (the
-// payload carries no metadata/rules field, and the video description only
-// names the author) to say what the letters mean or that they constrain
-// anything, so no constraint is placed on them here.
+// Omitted: eight letter markers ("L" x3, "C" x5), each centred on the border
+// between two orthogonally adjacent cells -- R1C2/R1C3, R6C2/R6C3, R5C6/R5C7
+// ("L"); R3C2/R3C3, R4C2/R4C3, R6C6/R6C7, R7C2/R7C3, R7C5/R8C5 ("C"). What
+// they assert about the pair they separate is stated nowhere in the source or
+// in the text that links it. The X/V reading of a letter in this position --
+// the Roman numeral is the pair's sum -- is arithmetically impossible here
+// (L = 50, C = 100, while two cells sharing a row or column hold distinct
+// digits summing to at most 17), and nothing drawn picks out a replacement,
+// so no constraint is placed on the marked pairs.
 
-// Drawn givens, nine in all.
+// The nine drawn givens.
 const givens = [
   ['R1C7', 1],
   ['R1C9', 2],

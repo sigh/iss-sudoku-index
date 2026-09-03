@@ -1,23 +1,25 @@
-// Title: The Hardest Sudoku... And How To Solve It
-// Author: Unknown
+// Title: Hidden Clone
+// Author: Sam Cappleman-Lynes
 // Video: https://www.youtube.com/watch?v=8s7LPmQyWHA
 // Source: https://cracking-the-cryptic.web.app/sudoku/3Btgb7QLLp
 
-// The published puzzle data carries no rules text, so the encoding below is
-// what the drawn board states on its own:
+// Normal sudoku rules apply: each row, column and 3x3 box contains 1-9 once
+// each. The nine boxes are the ordinary ones, listed explicitly by the source.
 //
-//   - Normal sudoku rules: each row, column and 3x3 box holds 1-9 once each.
-//   - 14 givens.
-//
-// The payload also draws 8 cells of uniform grey underlay shading (two
-// 4-cell diagonal runs flanking the grid's centre) with no per-cell
-// distinguishing marks and no rules text naming them, so they are decoration
-// and are not encoded. Nothing else is drawn: no lines, arrows, cages or
-// outside clues. Any further rule the setter stated with the puzzle is not
-// present in the published data and is therefore not encoded; 14 givens are
-// provably too few to pin a classic 9x9 grid uniquely (17 is the proven
-// minimum), so this encoding is far from unique.
+// Omitted rule: the source carries no rules text of any kind (no metadata
+// object, no rules field), and the only feature besides the givens is eight
+// uniform light-grey (#CFCFCF) shaded cells forming two congruent four-cell
+// diagonal runs, R3C4/R4C5/R5C6/R6C7 and R4C3/R5C4/R6C5/R7C6. The video
+// description names the puzzle "Hidden Clone", which points at a clone
+// mechanic, but nothing drawn says whether the two runs clone each other under
+// the translation that maps one onto the other, under the 180-degree rotation
+// that also maps one onto the other (the two pair the cells up differently), or
+// whether the hidden clone is an undrawn copy to be found elsewhere in the
+// grid. With no legend, second colour or rules sentence to choose between
+// those, the shading is left unencoded.
 
+// Transcribed from the source's filled cells; the 14 givens form two
+// staircases, R1C6-R4C9 and R6C1-R9C4.
 const givens = [
   new Given('R1C6', 1),
   new Given('R1C7', 2),

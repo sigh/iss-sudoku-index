@@ -3,87 +3,167 @@
 // Video: https://www.youtube.com/watch?v=URampwmtEkk
 // Source: https://sudokupad.app/dxgxcqoyeg
 
-// Standard Sudoku; a single orthogonal, non-self-touching loop; adjacent loop
-// digits differ by at least 5. Loopwich sums are omitted (see notes).
-const ON = 1;
+// Rules encoded below:
+//   1. Normal Sudoku rules apply.
+//   2. Draw a one-cell-wide loop of orthogonally connected cells. The loop may
+//      not touch itself, not even diagonally.
+//   3. The loop acts as a German Whisper line: all adjacent digits along the
+//      line differ by at least 5.
+//   4. Clues outside the grid are Loopwiches: the clue is the sum of the digits
+//      between the first and last loop cell of its row or column. Both loop and
+//      non-loop cells between the two crust cells are summed; the crusts are not.
+// Nothing is omitted.
+
+const ON = 1;                     // loop-membership codes held in the Var cells
 const OFF = 2;
+
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
-const loop = graph.makeOverlay('VL');
 const gridCells = graph.cells();
 
-const membership = [loop.makeReplicate(new Given(loop.cells()[0], ON, OFF))];
+// One membership Var cell per grid cell (VL1..VL81, in grid order).
+const loop = graph.makeOverlay('VL');
 
-// An on cell has exactly two orthogonally adjacent on cells; off cells are free.
+// --- Loop membership: every cell is on (1) or off (2). ---
+const membership = loop.makeReplicate(new Given(loop.cells()[0], ON, OFF));
+
+// --- Degree 2: each on-loop cell has exactly two on-loop orthogonal
+// neighbours. Reads the cell's own membership, then each neighbour's; off-loop
+// cells are unconstrained.
 const degreeMachine = NFA.encodeSpec({
   startState: { phase: 'start' },
-  transition: ({ phase, onNeighbours }, value) => {
-    if (phase === 'start') return value === ON ? { phase: 'on', onNeighbours: 0 } : { phase: 'off' };
+  transition: ({ phase, onNeighbours }, membership) => {
+    if (phase === 'start') {
+      return membership === ON ? { phase: 'on', onNeighbours: 0 } : { phase: 'off' };
+    }
     if (phase === 'off') return { phase: 'off' };
-    const next = onNeighbours + (value === ON ? 1 : 0);
-    return next > 2 ? undefined : { phase: 'on', onNeighbours: next };
+    const count = onNeighbours + (membership === ON ? 1 : 0);
+    return count > 2 ? undefined : { phase: 'on', onNeighbours: count };
   },
   accept: ({ phase, onNeighbours }) => phase === 'off' || onNeighbours === 2,
 }, geometry.numValues);
-const replicate = (constraint, origin, targets) => new Replicate(
-  [constraint], Replicate.encodeTargetCells(targets, origin, loop), origin);
-const degreeAt = cell => new NFA(degreeMachine, 'degree',
-  ...loop.at([cell, ...graph.neighbours(cell)]));
-const degrees = [
-  replicate(degreeAt('R2C2'), 'VL11', loop.at(gridCells.filter(cell => {
-    const { row, col } = parseCellId(cell);
-    return row >= 2 && row <= 8 && col >= 2 && col <= 8;
-  }))),
-  replicate(degreeAt('R1C2'), 'VL2', loop.at(gridCells.filter(cell => parseCellId(cell).row === 1 && parseCellId(cell).col >= 2 && parseCellId(cell).col <= 8))),
-  replicate(degreeAt('R9C2'), 'VL74', loop.at(gridCells.filter(cell => parseCellId(cell).row === 9 && parseCellId(cell).col >= 2 && parseCellId(cell).col <= 8))),
-  replicate(degreeAt('R2C1'), 'VL10', loop.at(gridCells.filter(cell => parseCellId(cell).col === 1 && parseCellId(cell).row >= 2 && parseCellId(cell).row <= 8))),
-  replicate(degreeAt('R2C9'), 'VL18', loop.at(gridCells.filter(cell => parseCellId(cell).col === 9 && parseCellId(cell).row >= 2 && parseCellId(cell).row <= 8))),
-  ...['R1C1', 'R1C9', 'R9C1', 'R9C9'].map(degreeAt),
-];
+const degrees = gridCells.map(cell => new NFA(degreeMachine, 'degree',
+  ...loop.at([cell, ...graph.neighbours(cell)])));
 
-// A 2x2 block cannot have exactly its two diagonal cells on the loop.
-const noTouchMachine = NFA.encodeSpec({
+// --- No self-touch and one-cell-wide, both read off each 2x2 block. ---
+// A diagonal-only 2x2 is two loop cells touching diagonally with no shared
+// loop cell between them, i.e. a diagonal self-touch. A fully-on 2x2 is a loop
+// two cells wide (and its diagonals touch as well), so it is excluded too.
+// Reads the four membership cells of the block, left-to-right, top-to-bottom.
+const blockMachine = NFA.encodeSpec({
+  // `block` accumulates the 2x2's membership flags, and becomes null once the
+  // block has passed the check (all further symbols are absorbed).
   startState: { block: [] },
-  transition: ({ block }, value) => {
+  transition: ({ block }, membership) => {
     if (block === null) return { block: null };
-    const next = [...block, value === ON];
+    const next = [...block, membership === ON];
     if (next.length < 4) return { block: next };
-    const [a, b, c, d] = next;
-    return (a && d && !b && !c) || (b && c && !a && !d) ? undefined : { block: null };
+    const [topLeft, topRight, bottomLeft, bottomRight] = next;
+    const diagonalOnly =
+      (topLeft && bottomRight && !topRight && !bottomLeft) ||
+      (topRight && bottomLeft && !topLeft && !bottomRight);
+    const solid = topLeft && topRight && bottomLeft && bottomRight;
+    return diagonalOnly || solid ? undefined : { block: null };
   },
   accept: ({ block }) => block === null,
 }, geometry.numValues);
-const noTouches = [replicate(
-  new NFA(noTouchMachine, 'no-touch', ...loop.at(graph.block('R1C1', 2, 2))),
-  'VL1', loop.at(gridCells.filter(cell => {
-    const { row, col } = parseCellId(cell);
-    return row <= 8 && col <= 8;
-  }))
-)];
+// One template on the top-left block, stamped onto every cell that starts a
+// 2x2; cells on the bottom/right edge start none.
+const blocks = loop.makeReplicate(
+  new NFA(blockMachine, 'no-touch', ...loop.at(graph.block(gridCells[0], 2, 2))),
+  loop.at(gridCells.filter(cell => graph.block(cell, 2, 2))));
 
-// Each orthogonally adjacent pair differs by at least 5 when both cells are on.
+// --- German Whisper along the loop. Degree 2 plus the no-touch rule make two
+// orthogonally adjacent on-loop cells consecutive along the loop, so the rule is
+// exactly: adjacent cells both on the loop differ by at least 5. Reads
+// (membership, digit) for each of the two cells; if either is off the loop the
+// pair is unconstrained and the remaining symbols are absorbed by a countdown.
 const whisperMachine = NFA.encodeSpec({
-  startState: { phase: 'aMembership' },
+  startState: { phase: 'aOn' },
   transition: (state, value) => {
-    if (state.phase === 'aMembership') return value === ON ? { phase: 'aDigit' } : { phase: 'skip', left: 3 };
-    if (state.phase === 'aDigit') return { phase: 'bMembership', a: value };
-    if (state.phase === 'bMembership') return value === ON ? { phase: 'bDigit', a: state.a } : { phase: 'skip', left: 1 };
-    if (state.phase === 'bDigit') return Math.abs(state.a - value) >= 5 ? { phase: 'done' } : undefined;
-    return state.left > 1 ? { phase: 'skip', left: state.left - 1 } : { phase: 'done' };
+    switch (state.phase) {
+      case 'aOn':
+        return value === ON ? { phase: 'aDigit' } : { phase: 'skip', left: 3 };
+      case 'aDigit':
+        return { phase: 'bOn', aDigit: value };
+      case 'bOn':
+        return value === ON
+          ? { phase: 'bDigit', aDigit: state.aDigit }
+          : { phase: 'skip', left: 1 };
+      case 'bDigit':
+        return Math.abs(state.aDigit - value) >= 5 ? { phase: 'done' } : undefined;
+      case 'skip':
+        return state.left > 1 ? { phase: 'skip', left: state.left - 1 } : { phase: 'done' };
+    }
   },
   accept: ({ phase }) => phase === 'done',
 }, geometry.numValues);
+// Right/down steps only, so each orthogonal pair is covered exactly once.
 const whispers = gridCells.flatMap(cell => [[0, 1], [1, 0]]
-  .map(([dR, dC]) => graph.step(cell, dR, dC)).filter(Boolean)
-  .map(other => new NFA(whisperMachine, 'whisper', loop.at(cell), cell, loop.at(other), other)));
+  .map(([dR, dC]) => graph.step(cell, dR, dC))
+  .filter(Boolean)
+  .map(other => new NFA(whisperMachine, 'whisper',
+    loop.at(cell), cell, loop.at(other), other)));
+
+// --- Loopwich. Scans the line as (membership, digit) per cell and accumulates
+// `sum`, the digits seen since the first loop cell. At each later loop cell the
+// running `sum` is the loopwich total for that cell as final crust, so the line
+// is satisfied exactly when some loop cell is reached with `sum === target` and
+// no loop cell follows it. Because every digit is at least 1 the running sum is
+// strictly increasing, so at most one loop cell can be reached at `sum ===
+// target`, and once `sum` passes `target` no later loop cell can be the crust:
+// both cases are dead ends rather than choices.
+const loopwichMachine = target => NFA.encodeSpec({
+  startState: { phase: 'preFlag' },
+  transition: (state, value) => {
+    switch (state.phase) {
+      case 'preFlag':      // membership, before the first crust
+        return value === ON ? { phase: 'firstDigit' } : { phase: 'preDigit' };
+      case 'preDigit':     // digit before the first crust: not summed
+        return { phase: 'preFlag' };
+      case 'firstDigit':   // the first crust's own digit: not summed
+        return { phase: 'flag', sum: 0 };
+      case 'flag':         // membership, after the first crust
+        return value === ON && state.sum === target
+          ? { phase: 'closedDigit' }              // this is the final crust
+          : { phase: 'digit', sum: state.sum };
+      case 'digit': {      // digit strictly between the crusts: always summed
+        const sum = state.sum + value;
+        return sum > target ? undefined : { phase: 'flag', sum };
+      }
+      case 'closedDigit':  // the final crust's own digit, or any digit past it
+        return { phase: 'closed' };
+      case 'closed':       // a further loop cell would move the final crust
+        return value === ON ? undefined : { phase: 'closedDigit' };
+    }
+  },
+  accept: ({ phase }) => phase === 'closed',
+}, geometry.numValues);
+
+// Clue values and lines, transcribed from the six black labels in the margin:
+// three above columns 1, 6 and 8, and three to the left of rows 2, 7 and 9.
+const loopwichClues = [
+  [17, graph.column(1)],
+  [30, graph.column(6)],
+  [22, graph.column(8)],
+  [40, graph.row(2)],
+  [35, graph.row(7)],
+  [13, graph.row(9)],
+];
+const loopwiches = loopwichClues.map(([target, cells]) => new NFA(
+  loopwichMachine(target), 'loopwich-' + target,
+  ...cells.flatMap(cell => [loop.at(cell), cell])));
 
 return [
   new Shape('9x9'),
   new Given('R7C7', 5),
   loop.toVar('loop'),
-  ...membership,
+  membership,
+  // Single loop: the on-loop cells form one orthogonally-connected region, and
+  // with degree 2 that region is one simple cycle.
   new ConnectedValues('VL', ON),
   ...degrees,
-  ...noTouches,
+  blocks,
   ...whispers,
+  ...loopwiches,
 ];

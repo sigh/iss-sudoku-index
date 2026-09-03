@@ -2,164 +2,184 @@
 // Author: Jakhob and wooferzfg
 // Video: https://www.youtube.com/watch?v=WDWRT9W1cXc
 // Source: https://app.crackingthecryptic.com/sudoku/LjtD6LjLRF
-//
-// Rules: fill some cells with digits 1-9, no digit repeats in a row or
-// column, and some cells are left empty; all empty cells are orthogonally
-// connected; every digit belongs to a region, an orthogonally connected
-// 9-cell group with no repeated digit; regions may not touch each other
-// orthogonally; an outside clue sums the digits from its side up to (not
-// including) the first empty cell; a circled cell must hold a digit equal
-// to how many of its up-to-8 neighbours are empty; not all possible circles
-// are given (so absence of a circle implies nothing).
-//
-// The region rule (discover N orthogonally-connected 9-cell regions,
-// no-repeat within a region, regions don't touch) is NOT encoded: it is a
-// solver-deduced partial-coverage jigsaw -- 100 grid cells with 9-cell
-// regions plus solver-placed excluded (empty) cells -- and no ISS
-// primitive covers that. ChaosConstruction is the only discovered-region
-// class and it requires one region cell for every grid cell and grid-cell-
-// count divisible by region size (100 % 9 != 0 here), so it cannot leave
-// any cells unassigned. There is also no composable way to build "digits
-// in cells sharing an unknown region label are all-different" by hand.
-//
-// What remains is encoded faithfully, entirely from the row/column and
-// empty-cell layer (none of it needs the region rule):
-//
-// Grid modelled as Shape('10x10', '0-9', 'Raw'): 0 stands for "empty", 1-9
-// for a placed digit. Raw (no implicit row/column groups) because the rule
-// only forbids repeated digits -- it does not require every row/column to
-// use all 9 digits -- so plain AllDifferent over the widened range would
-// wrongly force exactly one empty cell per row/column. Instead each
-// row/column gets a custom NFA: track a 9-bit "seen digit" mask, reject on
-// a repeated nonzero value, let 0 pass through freely.
 
-const SHAPE = new Shape('10x10', '0-9', 'Raw');
-const N = 10;
-const graph = cellGraph(SHAPE);
+// Rules, on a 10x10 board whose cells each hold a digit 1-9 or are left empty:
+//  - no digit repeats in a row or column;
+//  - all empty cells are orthogonally connected;
+//  - every digit belongs to a region of nine orthogonally connected cells,
+//    digits do not repeat in a region, and regions do not touch each other
+//    orthogonally;
+//  - a clue outside the grid is the sum of the digits before the first empty
+//    cell seen from that direction;
+//  - a digit in a circle is how many of the cells surrounding it are empty, and
+//    a circled cell holds a digit. Circles are not exhaustive, so an uncircled
+//    cell carries no counting rule.
+//
+// The board is a Raw grid over 0-9 with 0 meaning "empty": rows and columns
+// repeat 0 freely, so every rule below - rows and columns included - is stated
+// explicitly.
+//
+// Regions may not touch, so two orthogonally adjacent filled cells are always
+// in the same region and the regions are exactly the orthogonally connected
+// groups of filled cells. The three region clauses are therefore encoded as:
+// every filled cell carries a region label, adjacent filled cells carry the
+// same label, each label occupies exactly nine connected cells, and no label
+// holds any digit twice.
 
-const cell = (r, c) => makeCellId(r, c);
+const EMPTY = 0;
+const REGION_SIZE = 9;
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const rowCells = (r, fromLeft) => {
-  const cols = [];
-  for (let c = 1; c <= N; c++) cols.push(c);
-  if (!fromLeft) cols.reverse();
-  return cols.map(c => cell(r, c));
-};
-const colCells = (c, fromTop) => {
-  const rows = [];
-  for (let r = 1; r <= N; r++) rows.push(r);
-  if (!fromTop) rows.reverse();
-  return rows.map(r => cell(r, c));
-};
+const shape = new Shape('10x10', '0-9', 'Raw');
+const graph = cellGraph(shape);
+const gridCells = graph.cells();
 
-// No-repeat-except-0 NFA, shared (same rule) across every row and column.
-const noRepeatSpec = {
-  startState: 0,
-  transition: (mask, value) => {
-    if (value === 0) return mask;
-    const bit = 1 << (value - 1);
-    if (mask & bit) return undefined;
-    return mask | bit;
+// At most nine regions, so nine labels suffice. Each of the ten rows holds at
+// most nine digits, so every row and every column contains an empty cell. With
+// e empty cells and at least one in each of the ten rows, at most e - 10 pairs
+// of empty cells are side by side in a row, and likewise at most e - 10 in a
+// column; connecting e cells needs e - 1 such pairs, so e >= 19 and at most 81
+// cells are filled.
+const LABELS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+
+// The label layer. Rows 1-10 shadow the board. Row 11 is a permanent gap, and
+// rows 12-20 give each label nine parking cells of its own: ConnectedValues
+// asserts a non-empty region for every value it is given, while the rules leave
+// the number of regions open, so a label with no region on the board takes its
+// parking row instead. The gap row keeps a label from spanning board and
+// parking, so each label is either nine board cells or nine parking cells.
+const labels = new Var('L', 'Region labels', '20x10');
+const GAP_ROW = 11;
+const parkingRow = (label) => GAP_ROW + label;
+// The first 100 cells of the layer are its board shadow, so a grid-shaped
+// overlay addresses them and supplies the locator the shifted copies below use.
+const labelOverlay = graph.makeOverlay('VL');
+const boardLabels = labelOverlay.cells();
+
+// A digit may appear once per line; EMPTY is not a digit and may repeat.
+const distinctDigits = PairX.fnToKey(
+  (a, b) => a === EMPTY || b === EMPTY || a !== b, shape);
+// A board cell is empty exactly when its label cell carries no label.
+const labelledIffFilled = Pair.fnToKey(
+  (digit, label) => (digit === EMPTY) === (label === EMPTY), shape);
+// Adjacent filled cells share a region; either being empty says nothing.
+const sameRegion = Pair.fnToKey(
+  (a, b) => a === EMPTY || b === EMPTY || a === b, shape);
+
+const outsideClue = (total, cells, name) => new NFA(NFA.encodeSpec({
+  // Count the clue down over the leading run of digits; `done` is the sink
+  // entered at the first empty cell, after which the line is unconstrained.
+  startState: { left: total, done: false },
+  transition: ({ left, done }, value) => {
+    if (done) return { left: 0, done: true };
+    if (value === EMPTY) return left === 0 ? { left: 0, done: true } : undefined;
+    return value > left ? undefined : { left: left - value, done: false };
   },
-  accept: () => true,
-};
-const noRepeatEncoded = NFA.encodeSpec(noRepeatSpec, SHAPE);
-const rowNoRepeat = [];
-const colNoRepeat = [];
-for (let r = 1; r <= N; r++) {
-  rowNoRepeat.push(new NFA(noRepeatEncoded, `row ${r} no repeat`, ...rowCells(r, true)));
-}
-for (let c = 1; c <= N; c++) {
-  colNoRepeat.push(new NFA(noRepeatEncoded, `col ${c} no repeat`, ...colCells(c, true)));
-}
+  accept: ({ left }) => left === 0,
+}, shape), name, cells);
 
-// Givens.
-const givens = [
-  new Given(cell(1, 7), 6),
-  new Given(cell(6, 6), 2),
-];
+const circleClue = (cell) => new NFA(NFA.encodeSpec({
+  // The first cell is the circle: its digit sets the number of empty cells to
+  // be found among the surrounding cells that follow, counted down to zero.
+  startState: { left: null },
+  transition: ({ left }, value) => {
+    if (left === null) return value === EMPTY ? undefined : { left: value };
+    if (value !== EMPTY) return { left };
+    return left === 0 ? undefined : { left: left - 1 };
+  },
+  accept: ({ left }) => left === 0,
+}, shape), `circle ${cell}`, [cell, ...graph.kingNeighbours(cell)]);
 
-// All empty (0) cells form a single orthogonally-connected region.
-const emptyConnectivity = new ConnectedValues('', 0);
+// The board read as (label, digit) pairs. `phase` says whether the next cell is
+// a label or a digit, and for a digit whether its label was the one counted.
+const labelDigitScan = gridCells.flatMap(cell => [labelOverlay.at(cell), cell]);
+const regionDigitOnce = (label, digit) => new NFA(NFA.encodeSpec({
+  startState: { phase: 'label', seen: 0 },
+  transition: ({ phase, seen }, value) => {
+    if (phase === 'label') {
+      return { phase: value === label ? 'countThis' : 'skipThis', seen };
+    }
+    if (phase === 'skipThis' || value !== digit) return { phase: 'label', seen };
+    return seen ? undefined : { phase: 'label', seen: 1 };
+  },
+  accept: ({ phase }) => phase === 'label',
+}, shape), `region ${label} digit ${digit}`, labelDigitScan);
 
-// Outside sum clues: sum digits from the clue's side until the first empty
-// (0) cell, not including it. Cell order/side/target read from the drawn
-// outside-clue text overlays (left/right/top/bottom badges).
-const OUTSIDE_CLUES = [
-  [rowCells(1, true), 18],    // left of R1
-  [rowCells(4, true), 15],    // left of R4
-  [rowCells(8, true), 8],     // left of R8
-  [rowCells(10, true), 13],   // left of R10
-  [rowCells(1, false), 8],    // right of R1
-  [colCells(3, true), 10],    // top of C3
-  [colCells(5, true), 8],     // top of C5
-  [colCells(6, true), 17],    // top of C6
-  [colCells(10, true), 8],    // top of C10
-  [colCells(5, false), 5],    // bottom of C5
-  [colCells(6, false), 8],    // bottom of C6
-  [colCells(8, false), 14],   // bottom of C8
-  [colCells(10, false), 20],  // bottom of C10
-];
-
-// One NFA per clue: running sum of digits seen so far (a branch that has
-// already overshot the target dies immediately, so the sum state stays
-// bounded by the target); require the sum to equal the target exactly when
-// the empty (0) cell is read, then ignore every cell after it -- this stops
-// at the FIRST 0 regardless of how many further empty cells follow, since
-// once `stopped` is true later symbols are ignored.
-const outsideClueNFAs = OUTSIDE_CLUES.map(([cells, target]) => {
-  const spec = {
-    startState: { sum: 0, stopped: false },
-    transition: (state, value) => {
-      if (state.stopped) return state;
-      if (value === 0) {
-        return state.sum === target ? { sum: state.sum, stopped: true } : undefined;
-      }
-      const sum = state.sum + value;
-      return sum <= target ? { sum, stopped: false } : undefined;
-    },
-    accept: (state) => state.stopped,
-  };
-  const encoded = NFA.encodeSpec(spec, SHAPE);
-  return new NFA(encoded, `outside sum ${target}`, ...cells);
-});
-
-// Circled cells: must hold a digit (not 0), and that digit equals the count
-// of empty (0) cells among its up-to-8 orthogonal/diagonal neighbours.
-// Cell list from the drawn (rounded, border-only, blank-text) circle
-// overlays.
-const CIRCLE_CELLS = [
+// Clue tables transcribed from the drawn grid: the two filled cells, the ten
+// black-bordered circles, and the thirteen numbers printed outside the frame.
+const GIVENS = [[1, 7, 6], [6, 6, 2]];
+const CIRCLES = [
   [2, 1], [2, 2], [2, 6], [2, 9], [3, 9],
   [5, 8], [6, 2], [8, 4], [9, 7], [9, 10],
 ];
-
-// One NFA per circle: the first cell read (the circle itself) sets the
-// target; each king-move neighbour after it (graph.kingNeighbours already
-// drops off-grid cells, so edge/corner circles get their true 5-neighbour
-// set) adds 1 to the count when it is empty (0); accept requires the
-// target to be a real digit (>=1, i.e. "must contain a digit") and the
-// final count to equal it exactly.
-const circleNFAs = CIRCLE_CELLS.map(([r, c]) => {
-  const spec = {
-    startState: { target: null, count: 0 },
-    transition: ({ target, count }, value) => {
-      if (target === null) return { target: value, count: 0 };
-      const hit = value === 0 ? 1 : 0;
-      return { target, count: Math.min(count + hit, target + 1) };
-    },
-    accept: ({ target, count }) => target !== null && target !== 0 && count === target,
-  };
-  const encoded = NFA.encodeSpec(spec, SHAPE);
-  const origin = cell(r, c);
-  return new NFA(encoded, `circle count R${r}C${c}`, origin, ...graph.kingNeighbours(origin));
-});
+const OUTSIDE_CLUES = [
+  [18, graph.row(1), 'left R1'],
+  [15, graph.row(4), 'left R4'],
+  [8, graph.row(8), 'left R8'],
+  [13, graph.row(10), 'left R10'],
+  [8, [...graph.row(1)].reverse(), 'right R1'],
+  [10, graph.column(3), 'top C3'],
+  [8, graph.column(5), 'top C5'],
+  [17, graph.column(6), 'top C6'],
+  [8, graph.column(10), 'top C10'],
+  [5, [...graph.column(5)].reverse(), 'bottom C5'],
+  [8, [...graph.column(6)].reverse(), 'bottom C6'],
+  [14, [...graph.column(8)].reverse(), 'bottom C8'],
+  [20, [...graph.column(10)].reverse(), 'bottom C10'],
+];
 
 return [
-  SHAPE,
-  ...givens,
-  ...rowNoRepeat,
-  ...colNoRepeat,
-  emptyConnectivity,
-  ...outsideClueNFAs,
-  ...circleNFAs,
+  shape,
+  labels,
+  ...GIVENS.map(([row, col, digit]) => new Given(makeCellId(row, col), digit)),
+
+  // Rows and columns.
+  ...graph.rows().map(
+    (cells, i) => new PairX(distinctDigits, `row ${i + 1}`, ...cells)),
+  ...graph.columns().map(
+    (cells, i) => new PairX(distinctDigits, `column ${i + 1}`, ...cells)),
+
+  // The empty cells are one orthogonally connected group.
+  new ConnectedValues('', EMPTY),
+
+  // Label layer geometry: the gap row, and each label's parking row, whose
+  // cells may hold only that label.
+  ...Array.from({ length: 10 },
+    (_, i) => new Given(labels.cell(GAP_ROW, i + 1), EMPTY)),
+  ...LABELS.flatMap(label => [
+    ...Array.from({ length: REGION_SIZE },
+      (_, i) => new Given(labels.cell(parkingRow(label), i + 1), EMPTY, label)),
+    new Given(labels.cell(parkingRow(label), 10), EMPTY),
+  ]),
+
+  // Every digit belongs to a region and no empty cell does.
+  ...gridCells.map(
+    cell => new Pair(labelledIffFilled, 'labelled', cell, labelOverlay.at(cell))),
+
+  // Regions do not touch: orthogonally adjacent digits share a region. One
+  // shifted copy per board cell that has a right (resp. lower) neighbour.
+  ...[[0, 1], [1, 0]].map(([dRow, dCol]) => labelOverlay.makeReplicate(
+    new Pair(sameRegion, 'no touching regions',
+      labelOverlay.at(gridCells[0]),
+      labelOverlay.at(graph.step(gridCells[0], dRow, dCol))),
+    labelOverlay.at(
+      gridCells.filter(cell => graph.step(cell, dRow, dCol) !== null)))),
+
+  // A region is nine orthogonally connected cells.
+  ...LABELS.map(label => new ConnectedValues('VL', label, REGION_SIZE)),
+
+  // Digits do not repeat in a region.
+  ...LABELS.flatMap(label => DIGITS.map(digit => regionDigitOnce(label, digit))),
+
+  // Labels are interchangeable, so pin one representative: reading the board in
+  // row-major order, a label may first appear only after every smaller one has.
+  new NFA(NFA.encodeSpec({
+    startState: 0,
+    transition: (maxSeen, label) => label === EMPTY ? maxSeen
+      : label > maxSeen + 1 ? undefined : Math.max(maxSeen, label),
+    accept: () => true,
+  }, shape), 'canonical labels', boardLabels),
+
+  ...OUTSIDE_CLUES.map(([total, cells, name]) => outsideClue(total, cells, name)),
+  ...CIRCLES.map(([row, col]) => circleClue(makeCellId(row, col))),
 ];

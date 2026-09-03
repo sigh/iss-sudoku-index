@@ -3,99 +3,105 @@
 // Video: https://www.youtube.com/watch?v=M0A_UHesrMU
 // Source: https://sudokupad.app/xmr3yscqzn?setting-digitoutlines=0
 
-// 6x6 grid, standard 2x3 boxes (rows0-1/2-3/4-5 x cols0-2/3-5, per the
-// payload's own `regions`, which match ISS's default 6x6 box tiling).
-// Rules text: "Place a digit from 1-9 ... every digit appears once in every
-// row, column, and box" -- a widened 1-9 value range in 6-cell rows/columns/
-// boxes, so read as "no repeats" (a row/column/box cannot hold all 9 values
-// anyway).
+// Rules encoded here, in full:
+//   Place a digit from 1-9 in each cell so that every digit appears once in
+//   every row, column and box. (There are 6 rows, 6 columns and 54 cells: one
+//   cell in each row -- also one in each column and one in each box -- is
+//   divided by drawn lines into four quarter-cells, so every row, column and
+//   box holds nine cells.)
+//   THERMO - digits increase along thermometer lines, starting from the bulb.
+//   KILLER - digits may not repeat in the cage.
+//   SILENT LITTLE KILLER - each cell with an arrow contains the sum of the
+//   digits on the diagonal pointed to by the arrow.
+// Nothing is omitted.
 //
-// DREAM CELLS: R1C1, R2C4, R3C2, R4C5, R5C3, R6C6 each carry a light-grey
-// circle with a "Z" stroke confined to that single cell (a "ZZZ" dream-bubble
-// motif, matching the title "Strange Dream" / video title "'Dreams' Of Being
-// 9x9"; three of the six additionally have a short diagonal highlight
-// coinciding with that cell's Little Killer diagonal). These six cells are
-// exactly one per row, one per column, and one per box (a transversal), and
-// the setter's own solution leaves precisely these six cells blank -- while
-// three of them are pinned by a Little Killer sum below to a value that
-// repeats elsewhere in their row/column, which a normal 1-9 all-different
-// would forbid. Read together, these are "dream" cells exempt from the row/
-// column/box all-different that the rules-text paragraph states for the
-// other 30 cells -- the digit "shown" there does not have to be distinct
-// from its row/column/box mates.
-//
-// ISS always enforces row/column all-different on every main-grid cell
-// (there is no `NoBoxes` equivalent for rows/columns), so a dream cell
-// cannot sit in the main grid as a real 1-9 digit without wrongly
-// forbidding it from repeating. Instead:
-// each dream cell is pinned to a shared sentinel value (10, via a widened
-// Shape) that cannot equal any real 1-9 digit, so it trivially satisfies
-// every row/column/box all-different it belongs to; no two dream cells ever
-// share a row, column or box (they are a transversal), so one shared
-// sentinel is safe for all six. Where a dream cell's actual digit matters to
-// another rule (the cage, or a Little Killer sum), that digit instead lives
-// in a same-named `Var` with the true 1-9 domain, used in place of the main
-// grid cell in that rule.
+// Board layout: a 6x9 Raw grid. Board row r holds puzzle row r's nine cells in
+// drawing order, left to right, the divided cell contributing its four quarters
+// in reading order (top-left, top-right, bottom-left, bottom-right). Raw carries
+// no implicit rules, so the row, column and box rules are stated explicitly
+// below; board columns are not puzzle columns and carry no rule of their own.
 
-const SENTINEL = 10;
-const DREAM_CELLS = ['R1C1', 'R2C4', 'R3C2', 'R4C5', 'R5C3', 'R6C6'];
+const shape = new Shape('6x9', '', 'Raw');
 
-const allCells = [];
-for (let r = 1; r <= 6; r++) for (let c = 1; c <= 6; c++) allCells.push(makeCellId(r, c));
+// Drawn data: the cell-splitting lines divide exactly one cell per row into four
+// quarters. SPLIT_COL[r] is the column of the divided cell in puzzle row r.
+const SPLIT_COL = { 1: 1, 2: 4, 3: 2, 4: 5, 5: 3, 6: 6 };
+const QUADS = ['TL', 'TR', 'BL', 'BR'];
 
-// Pin every dream cell to the sentinel, and every other cell to a real digit
-// (excluding the sentinel), so the widened value range only ever matters at
-// the six dream cells.
-const cellRangeGivens = allCells.map(cell => DREAM_CELLS.includes(cell)
-  ? new Given(cell, SENTINEL)
-  : new Given(cell, 1, 2, 3, 4, 5, 6, 7, 8, 9));
+// A puzzle cell is (row, col) when undivided, and (row, col, quadrant) when it
+// is one quarter of a divided cell. Board column: walk the puzzle row from the
+// left, a divided cell taking four board columns instead of one.
+const cell = (r, c, q) => {
+  let col = 1;
+  for (let cc = 1; cc < c; cc++) col += cc === SPLIT_COL[r] ? 4 : 1;
+  if (c === SPLIT_COL[r]) col += QUADS.indexOf(q);
+  return makeCellId(r, col);
+};
 
-// The dream cells' real digits, used only where another rule needs them.
-// D1=R1C1, D2=R2C4, D3=R3C2, D4=R4C5 (R5C3 and R6C6 are not referenced by any
-// other rule, so they need no stand-in).
-const dream = new Var('D', 'dream digit', 4);
-const dreamDigitGivens = dream.cells().map(cell => new Given(cell, 1, 2, 3, 4, 5, 6, 7, 8, 9));
-const [D1, D2, D3, D4] = dream.cells();
+// The cells of a rectangular block of puzzle cells, quarters expanded.
+const block = (rows, cols) => rows.flatMap(
+  r => cols.flatMap(
+    c => c === SPLIT_COL[r] ? QUADS.map(q => cell(r, c, q)) : [cell(r, c)]));
 
-// KILLER: one no-total cage, digits may not repeat within it. The cage has
-// no drawn `cages` entry (the payload's single `cages[0]` is an empty
-// metadata stub); its shape was instead recovered from ~86 small hand-drawn
-// dash overlays that trace a dashed border around R2C3,R2C4,R3C3,R3C4. The
-// border wiggles slightly near R2C4 and R3C2 to route around the dream-cell
-// marks described above; those wiggles do not reach a full extra cell width,
-// so they are read as visual routing, not additional cage cells. R2C4 is a
-// dream cell, so its stand-in D2 is used in its place.
-const cage = new AllDifferent('R2C3', D2, 'R3C3', 'R3C4');
+const ALL = [1, 2, 3, 4, 5, 6];
+const rows = ALL.map(r => block([r], ALL));
+const columns = ALL.map(c => block(ALL, [c]));
+// Boxes are the drawn 2-row by 3-column boxes; each holds one divided cell.
+const boxes = [[1, 2], [3, 4], [5, 6]].flatMap(
+  rs => [[1, 2, 3], [4, 5, 6]].map(cs => block(rs, cs)));
 
-// SILENT LITTLE KILLER: a cell with a diagonal arrow contains the sum of the
-// digits strictly beyond it, in the direction the arrow points, out to the
-// grid edge (the arrow cell's own value is not part of its own sum -- the
-// classic outside-the-grid Little Killer ray, just anchored inside the grid
-// instead of at a corner). Encoded with `Arrow(cell, ...armCellsInDirection)`.
-// Three arrow cells (R2C4, R3C2, R4C5) are dream cells; their stand-ins
-// (D2, D3, D4) are used as the Arrow's control cell. One arm cell (R1C1) is
-// also a dream cell; its stand-in D1 is used there.
-const littleKillers = [
-  new Arrow(D2, 'R1C3'),
-  new Arrow('R2C2', D1),
-  new Arrow('R3C1', 'R2C2', 'R1C3'),
-  new Arrow(D3, 'R2C1'),
-  new Arrow('R3C4', 'R2C5', 'R1C6'),
-  new Arrow(D4, 'R3C6'),
-  new Arrow('R6C4', 'R5C5', 'R4C6'),
+const units = [...rows, ...columns, ...boxes].map(g => new AllDifferent(...g));
+
+// Each divided cell carries one thermometer running through its four quarters:
+// bulb in the top-left quarter, then top-right, bottom-left, bottom-right.
+const thermos = ALL.map(
+  r => new Thermo(...QUADS.map(q => cell(r, SPLIT_COL[r], q))));
+
+// The one dashed cage, transcribed from the drawn dashed border. Sum 0 means the
+// cage has no total, so only the no-repeat rule applies.
+const cage = new Cage(
+  0, cell(2, 3), cell(2, 4, 'TL'), cell(2, 4, 'TR'), cell(3, 2, 'TR'),
+  cell(3, 3));
+
+// Silent little killers, as drawn: the cell the arrow sits in, and the arrow's
+// direction in the picture as [rows, columns] (up is negative).
+const ARROWS = [
+  [[2, 2], [-1, -1]],
+  [[3, 1], [-1, 1]],
+  [[3, 4], [-1, 1]],
+  [[6, 4], [-1, 1]],
+  [[2, 4, 'BR'], [-1, -1]],
+  [[3, 2, 'BR'], [-1, -1]],
+  [[4, 5, 'BL'], [-1, 1]],
 ];
 
-// THERMO: omitted. The rules text names a THERMO rule, but the only
-// candidate geometry is the six dream-cell marks described above -- each is
-// confined entirely to its own single cell (verified by plotting; no stroke
-// reaches an adjacent cell), so there is no recoverable multi-cell
-// thermometer path.
+// The diagonals are read off the drawing on a 12x12 lattice of half-cells: an
+// undivided cell spans a 2x2 block of them, a quarter-cell is exactly one, so a
+// 45-degree ray steps one half-cell at a time. Half-cell (i, j) belongs to
+// puzzle cell (ceil(i/2), ceil(j/2)), and its parities name the quarter.
+const halfCell = (i, j) => {
+  const r = Math.ceil(i / 2);
+  const c = Math.ceil(j / 2);
+  if (c !== SPLIT_COL[r]) return cell(r, c);
+  return cell(r, c, (i % 2 ? 'T' : 'B') + (j % 2 ? 'L' : 'R'));
+};
 
-return [
-  new Shape('6x6', SENTINEL),
-  ...cellRangeGivens,
-  dream,
-  ...dreamDigitGivens,
-  cage,
-  ...littleKillers,
-];
+// The ray leaves the centre of the arrow's cell, so it starts in the half-cell
+// on the side the arrow points at, then runs to the edge of the drawing. Repeats
+// (a cell entered through two consecutive half-cells) and the arrow's own cell
+// are dropped: the arrow holds the total, it is not part of the diagonal.
+const diagonal = ([r, c, q], [dr, dc]) => {
+  let i = 2 * r - (q ? (q[0] === 'T' ? 1 : 0) : (dr < 0 ? 1 : 0));
+  let j = 2 * c - (q ? (q[1] === 'L' ? 1 : 0) : (dc < 0 ? 1 : 0));
+  const path = [cell(r, c, q)];
+  for (i += dr, j += dc; i >= 1 && i <= 12 && j >= 1 && j <= 12; i += dr, j += dc) {
+    const id = halfCell(i, j);
+    if (id !== path[path.length - 1]) path.push(id);
+  }
+  return path.slice(1);
+};
+
+const littleKillers = ARROWS.map(
+  ([a, d]) => new Arrow(cell(...a), ...diagonal(a, d)));
+
+return [shape, ...units, ...thermos, cage, ...littleKillers];

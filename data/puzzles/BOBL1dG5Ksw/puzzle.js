@@ -3,142 +3,200 @@
 // Video: https://www.youtube.com/watch?v=BOBL1dG5Ksw
 // Source: https://sudokupad.app/vr35ejkt5p
 
-// Normal sudoku. Two givens: R8C2=5, R9C3=4.
-//
-// Radar cells: hidden in the grid are 9 solver-placed "radar" cells, one per
-// row/column/box. A radar cell looks toward each grid edge along its own row
-// and column; it may scan the cell it reaches at each edge, except an edge it
-// is already sitting on (it never scans itself). Its own digit is the count
-// of edge cells it scans; its "value" is the sum of the digits in the cells
-// actually scanned. The rules give only the count, never which of the
-// available edge cells are chosen, so a radar cell's value is modelled below
-// as an existential choice: any selection of that size is legal as long as
-// some selection makes the clue that reads it hold.
-//
-// Killer cages are stated in terms of cell "value" for their total (but
-// "digit" for the no-repeats part); an ordinary (non-radar) cell's value
-// defaults to its digit, since the rules never give "value" independent
-// meaning outside the radar definition above. Dynamic fog is a solving aid
-// (which cells are hidden until revealed) with no effect on the final grid,
-// so it is not encoded.
-//
-// Omitted: the green German Whisper lines, the pink Renban lines, and the
-// black/white Kropki dots are all stated in "value" terms too, but a
-// radar's value can range up to 34 (see radarTargets below), while ISS caps
-// any single cell/Var's domain at 16 -- so, unlike a cage total (a known
-// constant that a radar's scanned cells can be summed into directly, with no
-// intermediate cell ever needing to hold a value above 9), these clues would
-// need a radar's value compared *inequationally* (difference, ratio,
-// set-membership) against another cell, which has no bounded-cell
-// representation here.
+// Rules encoded below:
+//   Normal sudoku (rows, columns, boxes hold 1-9).
+//   Radar cells: nine hidden cells, one in each row, column and 3x3 box. A radar
+//     cell at RrCc looks at the grid-edge cell in each orthogonal direction --
+//     R1Cc, R9Cc, RrC1, RrC9 -- omitting any of those that is the radar cell
+//     itself ("a radar cell never scans itself"), and scans some subset of them.
+//     Its DIGIT is how many of those cells it scans; its VALUE is the total of
+//     the digits in the scanned cells. Every other cell's VALUE is its digit.
+//   German whispers (green lines): adjacent VALUES differ by at least 5.
+//   Decrypted German whispers (brown line): adjacent DIGITS differ by at least 5.
+//   Renban (pink lines): the VALUES are a set of non-repeating consecutive numbers.
+//   Killer cages: DIGITS in a cage do not repeat; the VALUES sum to the clue.
+//   Kropki: a black dot means the two VALUES are in a 2:1 ratio, a white dot that
+//     they are consecutive. "Not all dots are necessarily given", so unmarked
+//     edges carry no negative constraint.
+//   The fog covering the grid is a presentation rule and restricts no digit.
 
-const graph = cellGraph('9x9');
-
-// --- Radar placement: one flag per grid cell, true iff it is the hidden
-// radar of its row/column/box. Flags use 1=not-radar, 2=radar so that
-// "exactly one flag is 2 among a house's 9 flags" is just "the 9 flags sum to
-// 10" (8 ones and a two) -- no separate boolean semantics needed.
-const radarOverlay = graph.makeOverlay('VA');
-const radarFlags = radarOverlay.at(graph.cells());
-// One shifted copy of "this flag is 1 (not radar) or 2 (radar)" per cell.
-const radarFlagGivens = [radarOverlay.makeReplicate(
-  new Given(radarFlags[0], 1, 2))];
-const oneRadarPerHouse = (cells) => new Sum(10, ...radarOverlay.at(cells));
-const radarPlacement = [
-  ...graph.rows().map(oneRadarPerHouse),
-  ...graph.columns().map(oneRadarPerHouse),
-  ...graph.boxes().map(oneRadarPerHouse),
+// Drawn clue data, transcribed from the puzzle's cages, lines and edge dots.
+const CAGES = [
+  { sum: 10, cells: ['R8C1', 'R9C1', 'R9C2', 'R9C3'] },
+  { sum: 6, cells: ['R1C2', 'R2C1', 'R2C2'] },
+  { sum: 48, cells: ['R4C5', 'R5C5', 'R5C6'] },
+  { sum: 29, cells: ['R8C5', 'R9C5'] },
+  { sum: 16, cells: ['R7C3', 'R7C4'] },
+  { sum: 26, cells: ['R2C4', 'R3C4'] },
 ];
+// Green (#67f067) whisper lines; the payload draws the R2C7-R2C8 stroke twice.
+const GREEN_LINES = [['R2C7', 'R2C8'], ['R7C9', 'R8C9', 'R9C9']];
+// Pink (#f067f0) renban lines.
+const PINK_LINES = [['R4C1', 'R5C1', 'R6C1'], ['R5C7', 'R5C8', 'R6C8']];
+// Brown (#a37644) decrypted-whisper line.
+const BROWN_LINE = ['R4C4', 'R4C5', 'R4C6'];
+// Black and white edge dots.
+const BLACK_DOTS = [
+  ['R9C1', 'R9C2'], ['R6C2', 'R6C3'], ['R3C2', 'R3C3'], ['R7C8', 'R7C9'],
+];
+const WHITE_DOTS = [['R7C7', 'R7C8'], ['R8C7', 'R9C7']];
+const GIVENS = [['R8C2', 5], ['R9C3', 4]];
 
-// The cells a radar at `cell` could scan: the edge cell of its row/column in
-// each orthogonal direction, omitting any direction whose edge cell is itself
-// (a corner cell has 2 candidates, a non-corner edge cell 3, an interior
-// cell 4).
-function radarTargets(cell) {
+// Value 0 is reserved for the auxiliary layers (an unset radar flag, the tens
+// digit of a value below 10); the grid cells are restricted back to 1-9 below.
+const shape = new Shape('9x9', '0-9');
+const graph = cellGraph(shape);
+
+// The edge cells a radar at `cell` may scan: the grid-edge cell in each
+// orthogonal direction, dropping the direction whose edge cell is `cell` itself.
+const scanTargets = (cell) => {
   const { row, col } = parseCellId(cell);
-  const targets = [];
-  if (row !== 1) targets.push(makeCellId(1, col));
-  if (row !== 9) targets.push(makeCellId(9, col));
-  if (col !== 1) targets.push(makeCellId(row, 1));
-  if (col !== 9) targets.push(makeCellId(row, 9));
-  return targets;
-}
+  return [
+    row !== 1 ? makeCellId(1, col) : null,
+    row !== 9 ? makeCellId(9, col) : null,
+    col !== 1 ? makeCellId(row, 1) : null,
+    col !== 9 ? makeCellId(row, 9) : null,
+  ].filter(target => target !== null);
+};
 
-function nonEmptySubsets(items) {
-  const subsets = [];
-  for (let mask = 1; mask < (1 << items.length); mask++) {
-    subsets.push(items.filter((_, i) => mask & (1 << i)));
-  }
-  return subsets;
-}
-
-// For a cell no clue below reads as a "value": it still needs to be a
-// *legal* radar if chosen (its digit can't exceed how many cells it could
-// scan).
-function radarValidity(cell) {
-  const cap = radarTargets(cell).length;
-  const validDigits = Array.from({ length: cap }, (_, i) => i + 1);
-  return new Or([
-    new Given(radarOverlay.at(cell), 1),
-    new Given(cell, ...validDigits),
-  ]);
-}
-
-// A killer cage's total is a known constant, so a radar member's value can
-// be substituted straight into the Sum as its scanned cells -- no
-// intermediate "value" cell is needed (contrast the omitted line/dot clues
-// above). Exactly one member may be the radar (cage members always share a
-// row, column or box here, and a house has only one radar), or none are.
-function cageTotal(cells, total) {
-  const noneAreRadar = new And([
-    ...cells.map(c => new Given(radarOverlay.at(c), 1)),
-    new Sum(total, ...cells),
-  ]);
-  const oneIsRadar = cells.flatMap((radarCell, i) => {
-    const others = cells.filter((_, j) => j !== i);
-    return nonEmptySubsets(radarTargets(radarCell)).map(subset => new And([
-      new Given(radarOverlay.at(radarCell), 2),
-      ...others.map(c => new Given(radarOverlay.at(c), 1)),
-      new Given(radarCell, subset.length),
-      new Sum(total, ...others, ...subset),
-    ]));
-  });
-  return new Or([noneAreRadar, ...oneIsRadar]);
-}
-
-// --- Puzzle clues (drawn geometry) ---
-
-const cages = [
-  { cells: ['R8C1', 'R9C1', 'R9C2', 'R9C3'], total: 10 }, // cage #0
-  { cells: ['R1C2', 'R2C1', 'R2C2'], total: 6 },          // cage #1
-  { cells: ['R4C5', 'R5C5', 'R5C6'], total: 48 },         // cage #2
-  { cells: ['R8C5', 'R9C5'], total: 29 },                 // cage #3
-  { cells: ['R7C3', 'R7C4'], total: 16 },                 // cage #4
-  { cells: ['R2C4', 'R3C4'], total: 26 },                 // cage #5
-];
-const decryptedWhisperLine = ['R4C4', 'R4C5', 'R4C6']; // line #5, brown
-
-const cageConstraints = cages.flatMap(({ cells, total }) => [
-  new AllDifferent(...cells),
-  cageTotal(cells, total),
+// Cells whose VALUE (rather than digit) is read by some clue; every other cell
+// contributes only its digit, so it needs no value layer.
+const clueValueCells = new Set([
+  ...CAGES.flatMap(cage => cage.cells),
+  ...GREEN_LINES.flat(), ...PINK_LINES.flat(),
+  ...BLACK_DOTS.flat(), ...WHITE_DOTS.flat(),
 ]);
-const decryptedWhisper = new Whisper(5, ...decryptedWhisperLine);
+const valueCells = graph.cells().filter(cell => clueValueCells.has(cell));
 
-const cageCells = new Set(cages.flatMap(({ cells }) => cells));
-const otherRadarValidity = graph.cells()
-  .filter(c => !cageCells.has(c))
-  .map(radarValidity);
+const radar = graph.makeOverlay('VR');              // 0 = ordinary, 1 = radar
+// A cell's value can reach 34 (four scanned edge digits, two per line, so at
+// most 9+8+9+8), which is past the grid's value range, so it is held as
+// 10*tens + units across two layers over the value-carrying cells only.
+const tens = graph.makeOverlay('VT', valueCells);
+const units = graph.makeOverlay('VU', valueCells);
+
+// The value of `cell` as [cell, coefficient] terms for a Sum, scaled by `k`.
+const valueTerms = (cell, k = 1) => [[tens.at(cell), 10 * k], [units.at(cell), k]];
+
+// One machine per value-carrying cell, over
+//   [radar flag, own digit, value tens, value units, ...scan targets].
+// It reads the flag and the claimed value, then walks the target cells,
+// branching at each into "scanned" and "not scanned"; a run is accepted when
+// exactly `digit` targets were taken and their digits account for the whole
+// value. An ordinary cell instead just requires value === digit, and leaves its
+// targets free. `need`/`rem` are the targets and value total still outstanding;
+// branches that can no longer be completed by 1-9 digits are dropped so the
+// state count stays bounded.
+const scanSpec = (numTargets) => NFA.encodeSpec({
+  startState: { p: 'flag' },
+  transition: (state, value) => {
+    switch (state.p) {
+      case 'flag':
+        if (value > 1) return undefined;
+        return { p: 'digit', radar: value };
+      case 'digit':
+        if (value === 0) return undefined;
+        return { p: 'tens', radar: state.radar, d: value };
+      case 'tens':
+        return { p: 'units', radar: state.radar, d: state.d, t: value };
+      case 'units': {
+        const total = state.t * 10 + value;
+        // An ordinary cell's value is its digit.
+        if (!state.radar) return total === state.d ? { p: 'free' } : undefined;
+        // A radar cell scans `d` of its targets, so d targets must exist and
+        // their digits (each 1-9) must be able to total exactly `total`.
+        if (state.d > numTargets) return undefined;
+        if (total < state.d || total > 9 * state.d) return undefined;
+        return { p: 'scan', need: state.d, rem: total };
+      }
+      case 'free':
+        return { p: 'free' };
+      case 'scan': {
+        const taken = { p: 'scan', need: state.need - 1, rem: state.rem - value };
+        const canTake = state.need > 0
+          && taken.rem >= taken.need && taken.rem <= 9 * taken.need;
+        return canTake ? [state, taken] : [state];
+      }
+    }
+  },
+  accept: (state) => (
+    state.p === 'free'
+    || (state.p === 'scan' && state.need === 0 && state.rem === 0)),
+}, shape);
+const scanSpecs = new Map([2, 3, 4].map(n => [n, scanSpec(n)]));
+
+// For a cell whose value is never read, all that survives of the radar rule is
+// the bound on its digit: it cannot scan more cells than it has targets.
+const degreeKeys = new Map([2, 3, 4].map(n => [n, Pair.fnToKey(
+  (flag, digit) => flag !== 1 || digit <= n, shape)]));
+
+// value(a) - value(b) = 1, written over the two value layers.
+const oneMore = (a, b) => new Sum(1, ...valueTerms(a), ...valueTerms(b, -1));
+
+// Whisper slack: |value difference| = 5 + slack, and slack <= 33 - 5 = 28
+// because a value lies in 1..34, so its tens digit is at most 2.
+const slackTens = new Var('S', 'whisper slack tens', 3);
+const slackUnits = new Var('W', 'whisper slack units', 3);
+const greenEdges = GREEN_LINES.flatMap(
+  line => line.slice(1).map((cell, i) => [line[i], cell]));
 
 return [
-  new Shape('9x9'),
-  new Given('R8C2', 5),
-  new Given('R9C3', 4),
+  shape,
+  graph.makeReplicate(new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)),
+  ...GIVENS.map(([cell, digit]) => new Given(cell, digit)),
 
-  radarOverlay.toVar('radar cell flags'),
-  ...radarFlagGivens,
-  ...radarPlacement,
-  ...otherRadarValidity,
+  // --- radar placement ---
+  radar.toVar('radar cells'),
+  radar.makeReplicate(new Given(radar.at('R1C1'), 0, 1)),
+  ...graph.rowsColumnsBoxes().map(
+    cells => new ContainExact('1', ...radar.at(cells))),
 
-  ...cageConstraints,
-  decryptedWhisper,
+  // --- radar digits and values ---
+  tens.toVar('value tens'),
+  units.toVar('value units'),
+  ...valueCells.map((cell) => {
+    const targets = scanTargets(cell);
+    return new NFA(
+      scanSpecs.get(targets.length), 'radar scan',
+      radar.at(cell), cell, tens.at(cell), units.at(cell), ...targets);
+  }),
+  ...graph.cells().filter(cell => !clueValueCells.has(cell)).map(
+    cell => new Pair(
+      degreeKeys.get(scanTargets(cell).length), 'radar degree',
+      radar.at(cell), cell)),
+
+  // --- killer cages: distinct digits, and the values sum to the clue.
+  // The printed total is a total of VALUES, so it cannot be a Cage total over
+  // the cage's own cells; the digits-do-not-repeat half is the AllDifferent and
+  // the total is the Sum over the value layers below. ---
+  ...CAGES.map(cage => new AllDifferent(...cage.cells)),
+  ...CAGES.map(cage => new Sum(
+    cage.sum, ...cage.cells.flatMap(cell => valueTerms(cell)))),
+
+  // --- green german whispers on values ---
+  ...greenEdges.map(([a, b], i) => new Or([
+    new Sum(5, ...valueTerms(a), ...valueTerms(b, -1),
+      [slackTens.cell(i + 1), -10], [slackUnits.cell(i + 1), -1]),
+    new Sum(5, ...valueTerms(b), ...valueTerms(a, -1),
+      [slackTens.cell(i + 1), -10], [slackUnits.cell(i + 1), -1])])),
+  slackTens,
+  slackUnits,
+  ...slackTens.cells().map(cell => new Given(cell, 0, 1, 2)),
+
+  // --- brown decrypted german whisper on digits ---
+  new Whisper(5, ...BROWN_LINE),
+
+  // --- pink renban on values: the three values are k, k+1, k+2 in some order,
+  // so disjoin over which cell holds which of the three ---
+  ...PINK_LINES.map(line => new Or(
+    [[0, 1, 2], [0, 2, 1], [1, 0, 2], [1, 2, 0], [2, 0, 1], [2, 1, 0]].map(
+      ([lo, mid, hi]) => new And([
+        oneMore(line[mid], line[lo]),
+        oneMore(line[hi], line[mid])])))),
+
+  // --- kropki on values ---
+  ...BLACK_DOTS.map(([a, b]) => new Or([
+    new Sum(0, ...valueTerms(a), ...valueTerms(b, -2)),
+    new Sum(0, ...valueTerms(b), ...valueTerms(a, -2))])),
+  ...WHITE_DOTS.map(([a, b]) => new Or([oneMore(a, b), oneMore(b, a)])),
 ];

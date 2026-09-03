@@ -3,172 +3,178 @@
 // Video: https://www.youtube.com/watch?v=2-Gpt4KaCZw
 // Source: https://app.crackingthecryptic.com/sudoku/FB378fm267
 
-// Normal sudoku rules apply on a plain 9x9 grid (default row/col/box groups).
+// Normal Sudoku rules apply, with no given digits.
 //
-// Every cell is shaded grey (a wall) or green (the cave); the shading is not
-// given anywhere and is entirely a solver discovery. Two shading rules are
-// encoded:
-//   - "all other (green) cells form an orthogonally connected area (the
-//     cave)" -> the green cells are one ConnectedValues region.
-//   - "Grey cells may not form 2x2 blocks" -> every 2x2 window contains at
-//     least one green cell.
-// "A cell with a clue must be part of the cave" -> each of the 14 clue cells'
-// shade is given as green.
+// Every cell is either grey (a wall) or green (the cave).
+//   - Every orthogonally connected group of grey cells reaches the edge of the
+//     grid.
+//   - The green cells form a single orthogonally connected area.
+//   - No 2x2 block of the grid is entirely grey.
+//   - A number printed in a cell's top-left corner is the sum of the digits
+//     seen from that cell looking north, south, east and west. Sight passes
+//     over green cells and stops at the first grey cell or at the grid edge;
+//     the clued cell counts its own digit once. A clued cell is green. Digits
+//     may not repeat within one clue's field of vision.
 //
-// OMITTED: "all grey cells (the walls) are orthogonally connected to the
-// edge" allows several separate wall components (the rules go on to speak of
-// "each wall (ie group of connected grey squares)" in the plural), each of
-// which must independently reach the border. ISS's ConnectedValues only
-// asserts a single region per value, so it cannot express border-reachability
-// for an unbounded number of components.
-//
-// OMITTED: "grey walls act as Region Sum lines: each wall (ie group of
+// Omitted: "grey walls act as Region Sum lines: each wall (ie group of
 // connected grey squares) must visit at least two boxes and the sum of the
-// digits in each box must be equal." The walls are an unanchored (no clue
-// pins which cells are which wall) and unbounded (no cap on wall count)
-// partition of the grey cells, each needing its own per-box-visited equal-sum
-// predicate, which has no known ISS encoding.
-//
-// The visibility-sum clues ARE encoded in full:
-//   - "A number in the top left corner of a cell indicates the sum of the
-//     digits that are seen from this cell looking to the north, south, east,
-//     and west. The cell with the clue counts once in this sum. Walls
-//     obstruct the view." For each clue, one NFA scans outward in all four
-//     directions over an interleaved [shade, digit, shade, digit, ...]
-//     sequence per direction (multi-segment, one segment per direction plus
-//     one for the clue's own cell), carrying a running "still visible" flag
-//     and a clamped running sum; the automaton accepts only when the final
-//     sum matches the clue. Three clues ("<15", ">30", ">35" in the source)
-//     are drawn as inequalities rather than exact totals, so their NFAs use
-//     "<"/">" accept conditions instead of "=".
-//   - Three of the fourteen clue texts are literally the inequality strings
-//     "<15", ">30", ">35" (all in column 1); the rules prose never explains
-//     the "<"/">" prefix, but no other reading of that drawn text is
-//     available, so it is taken at face value as a bound on the same
-//     visibility sum rather than an exact total.
-//
-// OMITTED: "Within the field of vision of a clue, digits may not repeat."
-// Digits seen to the north/south share the clue's column, and digits seen to
-// the east/west share its row, so within either half the rule is already
-// forced by ordinary sudoku column/row all-different. The only residual case
-// is a digit seen vertically equalling a digit seen horizontally (excluding
-// the shared clue cell) -- a much narrower, genuinely extra constraint that
-// is not encoded here.
+// digits in each box must be equal." Neither half of that sentence is encoded.
 
-const GREEN = 1;
-const GREY = 2;
+const GREY = 1;    // wall
+const GREEN = 2;   // cave
 
-const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const shade = graph.makeOverlay('VS');
-const gridCells = graph.cells();
+const grid = cellGraph('9x9');
 
-// Every shade Var is either green or grey.
-const shadeDomain = shade.makeReplicate(
-  new Given(shade.cells()[0], GREEN, GREY));
+// The shading lives on an 11x11 overlay: the 9x9 grid inset in a one-cell
+// frame whose cells are pinned to GREY. "Every grey group is orthogonally
+// connected to the edge" is then exactly "the grey cells plus the frame form a
+// single orthogonally connected region", which ConnectedValues states directly;
+// over the bare 9x9 it would instead force a single grey group.
+const framedGrid = cellGraph('11x11');
+const shade = framedGrid.makeOverlay('VS');
+const innerShade = shade.at(framedGrid.block('R2C2', 9, 9));
+const shadeOf = new Map(grid.cells().map((cell, i) => [cell, innerShade[i]]));
+const insetCells = new Set(innerShade);
+const frameCells = shade.cells().filter(cell => !insetCells.has(cell));
 
-// No 2x2 block of shade cells may be all-grey: replicate one "green is
-// present in this 2x2" Quad to every block origin.
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noGreyBlock = shade.makeReplicate(
-  new Quad(shade.at(gridCells[0]), GREEN),
-  shade.at(blockOrigins));
-
-// The cave (green cells) is a single orthogonally connected region.
-const caveConnected = new ConnectedValues('VS', GREEN);
-
-// Visibility-sum clues: cell, comparator ('eq'/'lt'/'gt'), target value.
-// Cell ids and clue text transcribed from the drawn corner-text badges, one
-// per clue cell.
+// Drawn data: the fourteen corner numbers, as [cell, clue text]. Three are
+// drawn as inequalities rather than as an exact total, and are read at face
+// value: the field-of-vision sum is strictly below / above the number.
 const CLUES = [
-  { cell: 'R3C1', cmp: 'lt', value: 15 },
-  { cell: 'R7C1', cmp: 'gt', value: 30 },
-  { cell: 'R9C1', cmp: 'gt', value: 35 },
-  { cell: 'R9C9', cmp: 'eq', value: 20 },
-  { cell: 'R7C9', cmp: 'eq', value: 11 },
-  { cell: 'R7C7', cmp: 'eq', value: 26 },
-  { cell: 'R5C6', cmp: 'eq', value: 36 },
-  { cell: 'R5C4', cmp: 'eq', value: 34 },
-  { cell: 'R5C2', cmp: 'eq', value: 33 },
-  { cell: 'R6C3', cmp: 'eq', value: 10 },
-  { cell: 'R4C3', cmp: 'eq', value: 9 },
-  { cell: 'R2C3', cmp: 'eq', value: 26 },
-  { cell: 'R3C8', cmp: 'eq', value: 32 },
-  { cell: 'R4C7', cmp: 'eq', value: 27 },
+  ['R2C3', '26'],
+  ['R3C1', '<15'],
+  ['R3C8', '32'],
+  ['R4C3', '9'],
+  ['R4C7', '27'],
+  ['R5C2', '33'],
+  ['R5C4', '34'],
+  ['R5C6', '36'],
+  ['R6C3', '10'],
+  ['R7C1', '>30'],
+  ['R7C7', '26'],
+  ['R7C9', '11'],
+  ['R9C1', '>35'],
+  ['R9C9', '20'],
 ];
 
-// Every clue cell must be part of the cave (green).
-const clueInCave = CLUES.map(c => new Given(shade.at(c.cell), GREEN));
+const RAY_DIRECTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
-// Clamp the running sum where further growth can no longer change the
-// accept verdict: one past the exact target, or at the inequality bound
-// itself (which becomes a single "at least/at most here" sink state).
-function capFor(cmp, value) {
-  if (cmp === 'eq') return value + 1;
-  if (cmp === 'lt') return value;
-  return value + 1; // 'gt'
-}
+// Nine distinct digits is the most a field of vision can hold, so 45 is the
+// largest total any clue can reach.
+const MAX_TOTAL = 45;
 
-function acceptFnFor(cmp, value) {
-  if (cmp === 'eq') return sum => sum === value;
-  if (cmp === 'lt') return sum => sum < value;
-  return sum => sum > value; // 'gt'
-}
+// A clue text becomes a test on the total plus the largest total still worth
+// tracking; sight only ever adds digits, so a partial sum already past the
+// ceiling is a dead branch.
+const readClue = (text) => {
+  if (text.startsWith('<')) {
+    const limit = Number(text.slice(1));
+    return { test: (total) => total < limit, ceiling: limit - 1 };
+  }
+  if (text.startsWith('>')) {
+    const limit = Number(text.slice(1));
+    return { test: (total) => total > limit, ceiling: MAX_TOTAL };
+  }
+  const target = Number(text);
+  return { test: (total) => total === target, ceiling: target };
+};
 
-// One interleaved-segment scan per direction: [shade_1, digit_1, shade_2,
-// digit_2, ...] nearest cell first, skipping directions with no cells (a
-// clue on the grid edge). ray() includes the origin cell, so slice(1) drops
-// it -- the clue's own cell is handled as its own one-pair segment below.
-function directionSegments(cell) {
-  const dirs = [[-1, 0], [1, 0], [0, -1], [0, 1]]; // N, S, W, E
-  return dirs
-    .map(([dr, dc]) => graph.ray(cell, dr, dc).slice(1))
-    .filter(cells => cells.length > 0)
-    .map(cells => cells.flatMap(c => [shade.at(c), c]));
-}
+const maskTotal = (mask) => {
+  let total = 0;
+  for (let digit = 1; digit <= 9; digit++) {
+    if (mask & (1 << (digit - 1))) total += digit;
+  }
+  return total;
+};
 
-// The automaton reads a [shade, digit] pair at a time. Reading a shade value
-// narrows "still visible" (open) to false forever once a grey cell is hit;
-// reading a digit adds it to the running sum only while still open. A
-// SEGMENT_BREAK (between the clue's own segment and each direction, and
-// between directions) resets "open" to true -- each direction is judged
-// independently from the clue cell -- but the sum keeps accumulating across
-// the whole clue. `accept` runs once, on the final state.
-function visibilityConstraint(clue) {
-  const cap = capFor(clue.cmp, clue.value);
-  const accept = acceptFnFor(clue.cmp, clue.value);
-  const spec = NFA.encodeSpec({
-    startState: { open: true, sum: 0, phase: 'shade' },
-    transition: (state, value) => {
-      if (value === SEGMENT_BREAK) {
-        return { open: true, sum: state.sum, phase: 'shade' };
-      }
-      if (state.phase === 'shade') {
-        return {
-          open: state.open && value === GREEN,
-          sum: state.sum,
-          phase: 'digit',
-        };
-      }
-      const sum = state.open ? Math.min(state.sum + value, cap) : state.sum;
-      return { open: state.open, sum, phase: 'shade' };
-    },
-    accept: state => accept(state.sum),
-  }, geometry.numValues, { multiSegment: true });
+// One machine per clue. Segment 1 is the clued cell's own digit; each later
+// segment is one ray, read as its cells' shade and digit alternately, nearest
+// cell first. `mask` is the set of digits already in the field of vision,
+// `blocked` records that the current ray has run into a wall so nothing
+// further along it is seen, and `expect` says whether the next value is a
+// shade or a digit. Repeating a digit is rejected as it happens ("within the
+// field of vision of a clue, digits may not repeat"), which makes `mask` a
+// faithful record of the seen digits and its digit total the clue's sum.
+const makeSightSpec = (clue, maxDepth) => NFA.encodeSpec({
+  startState: { mask: 0, blocked: false, expect: 'clue' },
+  transition: (state, value) => {
+    if (value === SEGMENT_BREAK) {
+      return { mask: state.mask, blocked: false, expect: 'shade' };
+    }
+    if (state.expect === 'clue') {
+      return { mask: 1 << (value - 1), blocked: false, expect: 'shade' };
+    }
+    if (state.expect === 'shade') {
+      if (value !== GREY && value !== GREEN) return undefined;
+      return {
+        mask: state.mask,
+        blocked: state.blocked || value === GREY,
+        expect: 'digit',
+      };
+    }
+    if (state.blocked) {
+      return { mask: state.mask, blocked: true, expect: 'shade' };
+    }
+    const bit = 1 << (value - 1);
+    if (state.mask & bit) return undefined;
+    const mask = state.mask | bit;
+    if (maskTotal(mask) > clue.ceiling) return undefined;
+    return { mask: mask, blocked: false, expect: 'shade' };
+  },
+  accept: (state) => state.expect !== 'clue' && clue.test(maskTotal(state.mask)),
+  maxDepth: maxDepth,
+}, 9, { multiSegment: true });
 
-  const ownSegment = [shade.at(clue.cell), clue.cell];
-  return new NFA(spec, `sight-${clue.cell}`,
-    ownSegment, ...directionSegments(clue.cell));
-}
+const sightCounts = CLUES.map(([cell, text]) => {
+  const rays = RAY_DIRECTIONS
+    .map(([dRow, dCol]) => grid.ray(cell, dRow, dCol).slice(1))
+    .filter(ray => ray.length)
+    .map(ray => ray.flatMap(rayCell => [shadeOf.get(rayCell), rayCell]));
+  // Consumed symbols: the clued digit, one break before each ray, and two
+  // values (shade then digit) per ray cell.
+  const maxDepth = 1 + rays.length + rays.reduce((n, ray) => n + ray.length, 0);
+  return new NFA(makeSightSpec(readClue(text), maxDepth), 'sight', [cell], ...rays);
+});
 
-const visibilityClues = CLUES.map(visibilityConstraint);
+// One machine per 2x2 block of the grid, over its four shade cells in reading
+// order, rejecting an all-grey block. It is stamped by Replicate from the
+// block at the overlay's first cell. The frame's own 2x2 blocks are
+// deliberately not targets: the frame is all grey, so stamping the rule there
+// would reject every shading.
+const noGreySquareSpec = NFA.encodeSpec({
+  startState: { greyCount: 0, seen: 0 },
+  transition: (state, value) => {
+    if (value !== GREY && value !== GREEN) return undefined;
+    const greyCount = state.greyCount + (value === GREY ? 1 : 0);
+    if (greyCount === 4) return undefined;
+    return { greyCount: greyCount, seen: state.seen + 1 };
+  },
+  accept: (state) => state.seen === 4,
+  maxDepth: 4,
+}, 9);
+
+const noGreySquares = shade.makeReplicate(
+  new NFA(noGreySquareSpec, 'no-grey-2x2', ...shade.block(shade.cells()[0], 2, 2)),
+  grid.cells()
+    .filter(cell => grid.block(cell, 2, 2))
+    .map(cell => shadeOf.get(cell)));
 
 return [
   new Shape('9x9'),
+
   shade.toVar('shade'),
-  shadeDomain,
-  noGreyBlock,
-  caveConnected,
-  ...clueInCave,
-  ...visibilityClues,
+  // The grey/green domain is stamped over the whole layer, frame included, so
+  // the frame pins and the clue pins narrow it rather than replace it.
+  shade.makeReplicate(new Given(shade.cells()[0], GREY, GREEN)),
+  shade.makeReplicate(new Given(shade.cells()[0], GREY), frameCells),
+
+  new ConnectedValues('VS', GREY),
+  new ConnectedValues('VS', GREEN),
+
+  noGreySquares,
+
+  // "A cell with a clue must be part of the cave."
+  ...CLUES.map(([cell]) => new Given(shadeOf.get(cell), GREEN)),
+
+  ...sightCounts,
 ];

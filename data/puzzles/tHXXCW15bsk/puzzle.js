@@ -1,19 +1,21 @@
-// Title: Anti Knight Sudoku
+// Title: unknown
 // Author: Unknown
 // Video: https://www.youtube.com/watch?v=tHXXCW15bsk
 // Source: https://cracking-the-cryptic.web.app/sudoku/9TDrQ7MTFQ
 
-// The source payload carries no rules text (empty/absent, as this ctc-app
-// source is known to do) and draws no geometry beyond the 20 givens and the
-// standard nine 3x3 boxes: no lines, cages, arrows, or overlays. Only normal
-// Sudoku (each row, column and 3x3 box holds 1-9 once each) is encoded here.
-// The video's own title names an "Anti Knight" variant, but a title is not a
-// rules source, so that constraint is omitted rather than guessed.
+// Normal Sudoku rules apply. Anti-knight: cells a chess knight's move apart
+// must not contain the same digit.
+//
+// The source payload carries no rules text and draws no lines, cages, arrows
+// or overlays -- only 20 givens and the standard nine 3x3 boxes. The ruleset
+// comes from the video title carried inside the payload itself, "US Sudoku
+// Championship 2019 - Anti Knight Sudoku", which names a published genre with
+// a fixed ruleset: normal Sudoku plus the anti-knight negative constraint.
 
 return [
   new Shape('9x9'),
 
-  // Givens, transcribed from the source payload's cell array.
+  // Givens, from the payload's cell values.
   new Given('R1C1', 6),
   new Given('R1C8', 8),
   new Given('R1C9', 9),
@@ -35,7 +37,5 @@ return [
   new Given('R9C8', 4),
   new Given('R9C9', 5),
 
-  // The drawn regions are the default nine 3x3 boxes (just listed in a
-  // different order), so no explicit region constraint is needed -- ISS
-  // applies row/column/box all-different by default.
+  new AntiKnight(),
 ];

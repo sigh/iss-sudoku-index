@@ -3,17 +3,25 @@
 // Video: https://www.youtube.com/watch?v=h4tpMbROJJY
 // Source: https://cracking-the-cryptic.web.app/sudoku/3MB4bh3GMH
 
-// Standard 9x9 sudoku (default rows/cols/boxes). A caption printed in a lane
-// below the grid, read left to right, spells the puzzle's only rule:
-// "Z = 1,2,3; T = 4,5,6; P = 7,8,9." -- cells shaded purple/yellow-green/
-// sky-blue (labelled Z/T/P) are restricted to the matching digit band. Each
-// restriction below is encoded as a multi-value Given (candidate restriction,
-// per iss-constraints catalog "Givens And Variables").
+// Standard 9x9 sudoku; the source's nine regions are the ordinary 3x3 boxes.
+//
+// A caption printed in the lane below the grid, one fragment under each column
+// and read left to right, is the puzzle's only written rule:
+//   "Z = 1,2,3;  T = 4,5,6;  P = 7,8,9."
+// Each letter is printed on the colour of one of the three groups of shaded
+// cells (Z purple, T yellow-green, P sky-blue), so the caption is the legend
+// for the shading: a shaded cell holds one of the three digits its colour
+// names. Encoded below as a multi-value Given per shaded cell.
+//
+// Omitted: the video description states the rules are given in the video, and
+// the caption above is the only rule the source writes down. Any further
+// spoken rule is not present in the source and is not encoded, so this
+// encoding does not pin the grid down.
 
 return [
   new Shape('9x9'),
 
-  // Givens
+  // Printed givens, read off the grid.
   new Given('R1C1', 8),
   new Given('R1C7', 2),
   new Given('R2C5', 7),
@@ -31,21 +39,20 @@ return [
   new Given('R9C4', 9),
   new Given('R9C9', 7),
 
-  // Z cells (purple): restricted to 1, 2 or 3.
+  // Shaded cells, read off the coloured background squares.
+  // Z, purple:
   new Given('R2C6', 1, 2, 3),
   new Given('R6C1', 1, 2, 3),
   new Given('R7C2', 1, 2, 3),
   new Given('R8C9', 1, 2, 3),
-
-  // T cells (yellow-green): restricted to 4, 5 or 6.
+  // T, yellow-green:
   new Given('R1C3', 4, 5, 6),
   new Given('R4C6', 4, 5, 6),
   new Given('R5C2', 4, 5, 6),
   new Given('R5C5', 4, 5, 6),
   new Given('R6C8', 4, 5, 6),
   new Given('R7C6', 4, 5, 6),
-
-  // P cells (sky-blue): restricted to 7, 8 or 9.
+  // P, sky-blue:
   new Given('R1C8', 7, 8, 9),
   new Given('R5C6', 7, 8, 9),
   new Given('R7C1', 7, 8, 9),

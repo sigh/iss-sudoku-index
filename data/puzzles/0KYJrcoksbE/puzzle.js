@@ -3,119 +3,121 @@
 // Video: https://www.youtube.com/watch?v=0KYJrcoksbE
 // Source: https://sudokupad.app/h8znpkd7qs
 
-// Coral: odd digits are "coral", even digits are "water" -- shading is a
-// direct function of parity, not a separate state. Coral cells form a single
-// orthogonally-connected region (ConnectedValues). No 2x2 block is
-// monochrome (all-coral or all-water). Water may be several separate bodies
-// each touching the grid edge; that per-component "reaches the edge, no
-// enclosed lake" clause has no ISS primitive for a multi-component class
-// (ConnectedValues only proves exactly one region) and is omitted.
-//
-// Coral clues (outside marks): each clued row/column lists every coral/water
-// run in that line, outer edge to inner. A number is one run's exact length;
-// `*` is "one or more runs of unspecified length" filling that stretch. Only
-// adjacent explicit runs must differ in parity (automatic from run
-// maximality) -- encoded per line below as a 2-branch Regex, one branch per
-// possible starting parity, since a `*` stretch's own run count is free and
-// does not pin the parity of an explicit run across it.
-//
-// Sandwich: the same clue numbers (the run lengths, `*` excluded), read in
-// the same outer-to-inner order and concatenated into one multi-digit
-// number, are the sum of the digits strictly between the 1 and the 9 of that
-// line -- ISS's native Sandwich class.
-//
-// Little killer: the R1C1-R9C9 diagonal sums to 43.
+// Rules encoded here:
+//  - Normal sudoku.
+//  - Coral: every odd digit is coral, every even digit is water. All coral
+//    cells are orthogonally connected. Water may form several bodies, and
+//    every body is orthogonally connected to the edge of the grid. No 2x2
+//    area is entirely coral or entirely water.
+//  - Coral clues: the clues outside a row/column give the lengths of its
+//    continuous runs of coral/water in reading order (left to right for a
+//    row, top to bottom for a column); '*' stands for any positive number of
+//    runs. Where a row/column is clued, all of its clues are shown; unclued
+//    rows/columns are unrestricted.
+//  - Sandwich: the same printed clue digits, concatenated in that same
+//    reading order into an n-digit number, give the sum of the digits between
+//    the 1 and the 9 of that row/column.
+//  - Little killer: the digits on the marked main diagonal sum to 43, and may
+//    repeat.
+// Nothing is omitted.
 
-const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
+const CORAL = 1;
+const WATER = 2;
 
-const ODD = '[13579]';   // coral
-const EVEN = '[2468]';   // water
+const shape = new Shape('9x9');
+const geometry = cellGeometry(shape);
+const graph = cellGraph(geometry);
 
-// One Regex per clued line: two alternatives, for which parity the first
-// explicit run takes (the puzzle does not pin this; it's forced only where
-// two explicit runs are directly adjacent, which the fixed class order
-// below already captures).
-const coralLine = (cells, patternOdd, patternEven) =>
-  new Regex(`(${patternOdd})|(${patternEven})`, ...cells);
+// The coral/water shading lives on a layer one cell larger than the grid on
+// every side; grid cell RrCc is shading cell (r+1, c+1). The ring is pinned to
+// water and is connected all the way around, so asserting a single connected
+// water region on this layer says exactly "every body of water reaches the
+// edge of the grid" rather than "there is only one body". Coral occupies only
+// interior cells, so a single connected coral region on the same layer is the
+// coral rule unchanged. No clue below reads a ring cell.
+const shade = new Var('S', 'coral/water shading', '11x11');
+const shadeAt = cell => {
+  const { row, col } = parseCellId(cell);
+  return shade.cell(row + 1, col + 1);
+};
+const layerLine = Array.from({ length: 11 }, (_, i) => i + 1);
+const ringPins = layerLine.flatMap(
+  row => layerLine
+    .filter(col => row === 1 || row === 11 || col === 1 || col === 11)
+    .map(col => new Given(shade.cell(row, col), WATER)));
 
-// R#C# provenance: overlay/underlay `center` positions in the source payload,
-// matched to the nearest row/column and ordered outer-to-inner (ascending row
-// for columns, ascending col for rows).
-const coralClues = [
-  // Column 1: *, 1, 3, *
-  coralLine(graph.column(1),
-    `.*${EVEN}${ODD}${EVEN}{3}${ODD}.*`,
-    `.*${ODD}${EVEN}${ODD}{3}${EVEN}.*`),
-  // Column 4: *, 3
-  coralLine(graph.column(4),
-    `.*${EVEN}${ODD}{3}`,
-    `.*${ODD}${EVEN}{3}`),
-  // Column 7: *, 1, 2
-  coralLine(graph.column(7),
-    `.*${EVEN}${ODD}${EVEN}{2}`,
-    `.*${ODD}${EVEN}${ODD}{2}`),
-  // Column 9: *, 5
-  coralLine(graph.column(9),
-    `.*${EVEN}${ODD}{5}`,
-    `.*${ODD}${EVEN}{5}`),
-  // Row 3: *, 2, 1
-  coralLine(graph.row(3),
-    `.*${EVEN}${ODD}{2}${EVEN}`,
-    `.*${ODD}${EVEN}{2}${ODD}`),
-  // Row 5: *, 2, 3
-  coralLine(graph.row(5),
-    `.*${EVEN}${ODD}{2}${EVEN}{3}`,
-    `.*${ODD}${EVEN}{2}${ODD}{3}`),
-  // Row 7: *, 1, 1
-  coralLine(graph.row(7),
-    `.*${EVEN}${ODD}${EVEN}`,
-    `.*${ODD}${EVEN}${ODD}`),
-  // Row 9: *, 2
-  coralLine(graph.row(9),
-    `.*${EVEN}${ODD}{2}`,
-    `.*${ODD}${EVEN}{2}`),
+// Odd digit <-> coral, even digit <-> water. The key also confines the
+// shading cells to the two shading values, which the connectivity sets need.
+const parityKey = Pair.fnToKey(
+  (digit, shading) =>
+    (shading === CORAL || shading === WATER) &&
+    ((digit % 2 === 1) === (shading === CORAL)),
+  shape);
+const shadeLinks = graph.cells().map(
+  cell => new Pair(parityKey, 'shading', cell, shadeAt(cell)));
+
+// No 2x2 area is entirely coral or entirely water: each 2x2 block of the grid
+// holds at least one cell of each shade.
+const noMono2x2 = graph.cells()
+  .map(cell => graph.block(cell, 2, 2))
+  .filter(block => block !== null)
+  .map(block => new ContainAtLeast(
+    `${CORAL}_${WATER}`, ...block.map(shadeAt)));
+
+// Outside clues, transcribed from the text drawn beside each row/column in
+// printed reading order (left to right beside a row, top to bottom above a
+// column). `runs` is that printed sequence; `sandwich` is the same digits
+// concatenated as an n-digit number.
+const laneClues = [
+  { cells: graph.row(3), runs: ['*', 2, 1], sandwich: 21 },
+  { cells: graph.row(5), runs: ['*', 2, 3], sandwich: 23 },
+  { cells: graph.row(7), runs: ['*', 1, 1], sandwich: 11 },
+  { cells: graph.row(9), runs: ['*', 2], sandwich: 2 },
+  { cells: graph.column(1), runs: ['*', 1, 3, '*'], sandwich: 13 },
+  { cells: graph.column(4), runs: ['*', 3], sandwich: 3 },
+  { cells: graph.column(7), runs: ['*', 1, 2], sandwich: 12 },
+  { cells: graph.column(9), runs: ['*', 5], sandwich: 5 },
 ];
 
-// Sandwich sums: the same clue numbers, concatenated outer-to-inner.
-const sandwiches = [
-  Sandwich.fromCells(13, graph.column(1), geometry),
-  Sandwich.fromCells(3, graph.column(4), geometry),
-  Sandwich.fromCells(12, graph.column(7), geometry),
-  Sandwich.fromCells(5, graph.column(9), geometry),
-  Sandwich.fromCells(21, graph.row(3), geometry),
-  Sandwich.fromCells(23, graph.row(5), geometry),
-  Sandwich.fromCells(11, graph.row(7), geometry),
-  Sandwich.fromCells(2, graph.row(9), geometry),
-];
+const ODD = '[13579]';
+const EVEN = '[2468]';
 
-// No 2x2 block is monochrome (all-coral or all-water): scan each block for
-// an adjacent pair of differing parity, which every non-monochrome 4-cell
-// set must contain somewhere. One NFA on the canonical top-left block,
-// replicated to every valid block origin.
-const gridCells = graph.cells();
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done === true) return { done: true };
-    const parity = value % 2;
-    const next = [...seen, parity];
-    if (next.length < 4) return { seen: next };
-    const allSame = next.every(p => p === next[0]);
-    return allSame ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMono2x2 = graph.makeReplicate(
-  new NFA(noMono2x2Machine, 'no-mono-2x2', ...graph.block(gridCells[0], 2, 2)),
-  blockOrigins);
+// One alternative of a run-length clue, given the parity of its first
+// numbered run; consecutive runs alternate parity from there. A numbered run
+// is made maximal by naming the single opposite-parity cell on each side of
+// the numbered block that is not a lane end: that cell is the last (or first)
+// cell of the neighbouring '*' runs, whose remaining cells are free. The
+// drawn clues only ever carry '*' at the ends.
+const laneAlternative = (runs, firstIsOdd) => {
+  const cls = isOdd => (isOdd ? ODD : EVEN);
+  const numbers = runs.filter(run => run !== '*');
+  let isOdd = firstIsOdd;
+  const head = runs[0] === '*' ? '.*' + cls(!isOdd) : '';
+  const body = numbers.map(length => {
+    const segment = cls(isOdd) + (length > 1 ? `{${length}}` : '');
+    isOdd = !isOdd;
+    return segment;
+  }).join('');
+  const tail = runs[runs.length - 1] === '*' ? cls(isOdd) + '.*' : '';
+  return head + body + tail;
+};
+
+const coralClues = laneClues.map(({ cells, runs }) => new Regex(
+  `(${laneAlternative(runs, true)}|${laneAlternative(runs, false)})`, ...cells));
+
+const sandwiches = laneClues.map(
+  ({ cells, sandwich }) => Sandwich.fromCells(sandwich, cells, geometry));
 
 return [
-  new Shape('9x9'),
-  new ConnectedValues('', [1, 3, 5, 7, 9]),
-  noMono2x2,
+  shape,
+  shade,
+  ...ringPins,
+  ...shadeLinks,
+  new ConnectedValues('VS', CORAL),
+  new ConnectedValues('VS', WATER),
+  ...noMono2x2,
   ...coralClues,
   ...sandwiches,
+  // The circled 43 sits outside R1C1 on the drawn down-right diagonal.
   LittleKiller.fromCells(43, graph.ray('R1C1', 1, 1), geometry),
 ];

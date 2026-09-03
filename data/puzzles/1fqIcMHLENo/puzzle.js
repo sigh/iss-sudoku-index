@@ -1,25 +1,24 @@
-// Title: Can You Place One Digit In This Puzzle?
-// Author: Phistomefel
+// Title: unknown
+// Author: Unknown
 // Video: https://www.youtube.com/watch?v=1fqIcMHLENo
 // Source: https://cracking-the-cryptic.web.app/sudoku/pGd4fnH6hR
 
-// Rules encoded:
-//  - Normal sudoku: 1-9 once per row, column and 3x3 box. The drawn regions
-//    are the nine ordinary boxes, so the default 9x9 Shape covers this.
-//  - Killer cages: digits inside a cage do not repeat, and where a total is
-//    printed the cage's digits sum to it.
-//  - Four cages are drawn with no printed total (all-different only) and are
-//    shaded grey; a printed outside clue reads "Sum Of Grey cages = 93" --
-//    the digits across all four grey cages together sum to 93.
-// The source publishes no rules text; the above is read entirely from the
-// drawn cage geometry, the standard killer-cage convention, and the printed
-// "Sum Of Grey cages = 93" clue text.
+// The source page carries no rules text. Every rule below is read off the drawn
+// art, and all of it is encoded; nothing is omitted.
 //
-// Omitted: two deepskyblue lines are drawn corner-to-corner across both main
-// diagonals (R1C1-R9C9 and R1C9-R9C1). No bulb, label or legend anywhere in
-// the payload states what they mean, so no rule is encoded for them.
+//  - Normal Sudoku rules apply over the standard 3x3 boxes. There are no given
+//    digits.
+//  - Digits in a dashed cage sum to the small total printed in the cage's
+//    top-left corner, and may not repeat within the cage. Eleven cages carry a
+//    printed total.
+//  - Four further dashed cages are shaded grey and carry no printed total. The
+//    text printed under the grid, "Sum Of Grey cages = 93", gives their combined
+//    total.
+//  - Two thin light-blue strokes are drawn corner to corner across both main
+//    diagonals. Digits may not repeat along either main diagonal.
 
-// Cages with a printed total, from the board (total, then cells).
+// The eleven cages that carry a printed total: [total, ...cells], transcribed
+// from the dashed cage outlines and the total drawn in each cage's corner.
 const totalledCages = [
   [20, 'R1C1', 'R1C2', 'R2C1'],
   [21, 'R1C8', 'R1C9', 'R2C9'],
@@ -34,18 +33,29 @@ const totalledCages = [
   [17, 'R8C1', 'R9C1', 'R9C2'],
 ];
 
-// The four grey, no-total cages -- exact cell-for-cell match with the
-// payload's grey (#cfcfcf) underlays.
+// The four grey-shaded cages, transcribed from the dashed outlines drawn around
+// the grey cells. Each runs along one edge of the grid.
 const greyCages = [
   ['R1C3', 'R1C4', 'R1C5', 'R1C6', 'R1C7'],
-  ['R3C1', 'R4C1', 'R5C1', 'R6C1', 'R7C1'],
   ['R3C9', 'R4C9', 'R5C9', 'R6C9', 'R7C9'],
   ['R9C3', 'R9C4', 'R9C5', 'R9C6', 'R9C7'],
+  ['R3C1', 'R4C1', 'R5C1', 'R6C1', 'R7C1'],
 ];
 
 return [
   new Shape('9x9'),
+
   ...totalledCages.map(([total, ...cells]) => new Cage(total, ...cells)),
-  ...greyCages.map((cells) => new AllDifferent(...cells)),
+
+  // A cage with no printed total keeps only the no-repeat half of the cage
+  // rule, which `Cage` emits for a total of 0.
+  ...greyCages.map((cells) => new Cage(0, ...cells)),
+
+  // "Sum Of Grey cages = 93" over the twenty cells of the four grey cages.
   new Sum(93, ...greyCages.flat()),
+
+  // The two corner-to-corner strokes: 1 is the R9C1-R1C9 diagonal, -1 the
+  // R1C1-R9C9 diagonal.
+  new Diagonal(1),
+  new Diagonal(-1),
 ];

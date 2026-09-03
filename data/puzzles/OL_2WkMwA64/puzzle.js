@@ -3,143 +3,187 @@
 // Video: https://www.youtube.com/watch?v=OL_2WkMwA64
 // Source: https://sudokupad.app/blobz/galactic-map
 
-// Rules encoded here: normal Sudoku; a complete partition into the 19 marked,
-// orthogonally connected, 180-degree-symmetric galaxies; no repeated digit in
-// a galaxy; grey galaxies are Renban and have at least two cells; white
-// galaxies are singleton or non-Renban. The diamond-minimum and large-circle-
-// maximum rules are omitted.
+// Normal sudoku rules apply.
+//
+// Divide the grid into galaxies: orthogonally connected groups of cells with
+// 180-degree rotational symmetry about their centres, each centre marked by a
+// small dot. Every cell belongs to a galaxy and no two galaxies overlap, so the
+// nineteen dots give nineteen galaxies. Digits may not repeat within a galaxy.
+//
+// A grey dot marks a galaxy of two or more cells whose digits form an unbroken
+// consecutive sequence in any order. A white dot marks a galaxy that is either a
+// single cell, or one whose digits do not form such a sequence.
+//
+// Every galaxy of at least two cells marks its smallest digit with a diamond
+// icon, and every galaxy of at least six cells marks its largest digit with a
+// circle icon. Those are the only diamonds and circles drawn, so a galaxy
+// carries a diamond exactly when it holds two or more cells and a circle
+// exactly when it holds six or more.
+//
+// One given digit: R9C1 = 7.
 
-const GRID = '9x9';
-const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-const gridCells = cellGraph(GRID).cells();
-const gridCellSet = new Set(gridCells);
+const shape = new Shape('9x9');
+const graph = cellGraph(shape);
 
-// Transcribed from the 19 small dots. Coordinates are in half-cell units; a
-// cell centre RrCc is (2r-1, 2c-1). `renban` is the #888888 grey fill.
-const GALAXIES = [
-  { r: 4, c: 3, renban: false }, { r: 12, c: 1, renban: false },
-  { r: 17, c: 1, renban: false }, { r: 17, c: 9, renban: false },
-  { r: 15, c: 9, renban: false }, { r: 17, c: 15, renban: false },
-  { r: 14, c: 17, renban: false }, { r: 13, c: 12, renban: false },
-  { r: 3, c: 17, renban: false }, { r: 1, c: 4, renban: true },
-  { r: 1, c: 13, renban: true }, { r: 4, c: 15, renban: true },
-  { r: 5, c: 11, renban: true }, { r: 5, c: 1, renban: true },
-  { r: 7, c: 4, renban: true }, { r: 10, c: 10, renban: true },
-  { r: 11, c: 5, renban: true }, { r: 15, c: 6, renban: true },
-  { r: 12, c: 15, renban: false },
+// Drawn data: the nineteen small dots, by colour. Each dot is listed by the
+// cells it is drawn on -- one cell for a dot at a cell centre, two for a dot on
+// a shared edge, four for a dot on a shared corner.
+const greyDotCells = [
+  ['R1C2', 'R1C3'], ['R1C7'], ['R2C8', 'R3C8'], ['R3C6'], ['R3C1'],
+  ['R4C2', 'R4C3'], ['R5C5', 'R5C6', 'R6C5', 'R6C6'], ['R6C3'],
+  ['R8C3', 'R8C4'],
+];
+const whiteDotCells = [
+  ['R2C2', 'R3C2'], ['R6C1', 'R7C1'], ['R9C1'], ['R9C5'], ['R8C5'], ['R9C8'],
+  ['R7C9', 'R8C9'], ['R7C6', 'R7C7'], ['R2C9'], ['R6C8', 'R7C8'],
+];
+// Drawn data: the fifteen diamond icons and the six circle icons.
+const diamondCells = [
+  'R1C4', 'R1C6', 'R3C1', 'R3C2', 'R3C8', 'R4C2', 'R4C7', 'R5C3', 'R7C1',
+  'R7C6', 'R6C5', 'R8C8', 'R8C9', 'R9C2', 'R9C4',
+];
+const circleCells = ['R3C5', 'R4C4', 'R5C1', 'R5C7', 'R6C8', 'R9C3'];
+
+const dots = [
+  ...greyDotCells.map(cells => ({ cells, grey: true })),
+  ...whiteDotCells.map(cells => ({ cells, grey: false })),
 ];
 
-const halfCoords = (cell) => {
-  const { row, col } = parseCellId(cell);
-  return { r: 2 * row - 1, c: 2 * col - 1 };
-};
-const rotate = (cell, galaxy) => {
-  const { r, c } = halfCoords(cell);
-  const image = makeCellId(
-    (2 * galaxy.r - r + 1) / 2, (2 * galaxy.c - c + 1) / 2);
-  return gridCellSet.has(image) ? image : null;
-};
+// Digits do not repeat within a galaxy and there are nine of them.
+const MAX_GALAXY_CELLS = 9;
 
-// Distinct digits cap a galaxy at nine cells. A symmetric connected galaxy
-// containing a cell at half-Manhattan distance d has at least d+1 cells.
-const zoneOf = (galaxy) => gridCells.filter(cell => {
-  const { r, c } = halfCoords(cell);
-  return Math.abs(r - galaxy.r) + Math.abs(c - galaxy.c) <= 8 && rotate(cell, galaxy);
-});
-const zones = GALAXIES.map(zoneOf);
+// Membership flag values for the per-galaxy overlays below.
+const OUT = 1;
+const IN = 2;
 
-// A Var alphabet holds at most 16 values. VG labels galaxies 1-15; cells of
-// galaxies 16-19 carry the VG escape value 16 and their VH value 1-4 instead.
-// VH is 5 everywhere in the first fifteen galaxies.
-const shape = new Shape(GRID, 16);
-const graph = cellGraph(shape);
-const geometry = graph.gridGeometry();
-const vg = graph.makeOverlay('VG');
-const vh = graph.makeOverlay('VH');
-const cellOrder = new Map(gridCells.map((cell, i) => [cell, i]));
-const digitDomain = graph.makeReplicate(new Given(gridCells[0], ...DIGITS));
-
-const codeOf = (index) => index < 15
-  ? { layer: vg, value: index + 1 }
-  : { layer: vh, value: index - 14 };
-// The two overlays encode exactly one of the nineteen labels at every cell.
-const codeKey = Pair.fnToKey((a, b) =>
-  (a >= 1 && a <= 15 && b === 5) || (a === 16 && b >= 1 && b <= 4), geometry);
-const codeDomains = gridCells.map(cell => new Pair(
-  codeKey, 'galaxy-label-code', vg.at(cell), vh.at(cell)));
-
-// A label is allowed only where its rotational image is on-grid and within the
-// nine-cell connected-galaxy distance bound derived above.
-const labelDomains = gridCells.map(cell => {
-  const allowed = GALAXIES.flatMap((_, index) => zones[index].includes(cell)
-    ? [codeOf(index)] : []);
-  const vgValues = allowed.filter(x => x.layer === vg).map(x => x.value);
-  const vhValues = allowed.filter(x => x.layer === vh).map(x => x.value);
+// A dot's centre of rotation, in doubled row/column coordinates so that a dot
+// on a shared edge or corner still lands on integers.
+const dotCentre = (cells) => {
+  const pos = cells.map(parseCellId);
   return [
-    new Given(vg.at(cell), ...vgValues, ...(vhValues.length ? [16] : [])),
-    new Given(vh.at(cell), ...vhValues, ...(vgValues.length ? [5] : [])),
+    pos.reduce((a, p) => a + 2 * p.row, 0) / pos.length,
+    pos.reduce((a, p) => a + 2 * p.col, 0) / pos.length,
   ];
-}).flat();
+};
 
-// 180-degree symmetry: membership of each label is equal at rotational pairs.
-const symmetry = GALAXIES.flatMap((galaxy, index) => {
-  const code = codeOf(index);
-  const key = Pair.fnToKey((a, b) => (a === code.value) === (b === code.value), geometry);
-  return zones[index].flatMap(cell => {
-    const image = rotate(cell, galaxy);
-    if (cellOrder.get(image) <= cellOrder.get(cell)) return [];
-    return [new Pair(key, `galaxy-${index + 1}-symmetry`, ...code.layer.at([cell, image]))];
-  });
+// The 180-degree image of `cell` about `centre`, or null when it is off-grid.
+const opposite = ([centreRow, centreCol], cell) => {
+  const { row, col } = parseCellId(cell);
+  const r = centreRow - row;
+  const c = centreCol - col;
+  const inGrid = r >= 1 && r <= 9 && c >= 1 && c <= 9;
+  return inGrid ? makeCellId(r, c) : null;
+};
+
+// Every galaxy contains the cell(s) its own dot is drawn on. A connected
+// symmetric group that left them out would have to enclose them, and the
+// smallest enclosing ring is 8 cells around a single cell, 10 around a domino
+// and 12 around a 2x2 block; 10 and 12 exceed the nine-cell bound, and the
+// 8-ring leaves its enclosed cell needing a galaxy centred on the very dot that
+// drew the ring. So the dot cells are forced, and by the no-overlap rule no
+// galaxy may use a cell another dot is drawn on.
+const dotOwnedCells = new Set(dots.flatMap(dot => dot.cells));
+
+const countDrawn = (cells, marks) => cells.filter(c => marks.includes(c)).length;
+
+// The icon rules read as a size test on a candidate shape.
+const iconsMatch = (dot, cells) =>
+  (!dot.grey || cells.length >= 2)
+  && countDrawn(cells, diamondCells) === (cells.length >= 2 ? 1 : 0)
+  && countDrawn(cells, circleCells) === (cells.length >= 6 ? 1 : 0);
+
+// Every galaxy this dot could be the centre of: grow the forced dot cells by
+// symmetric pairs, keep the connected results within the size bound, and drop
+// those whose icons contradict their size.
+const galaxyShapes = (dot) => {
+  const centre = dotCentre(dot.cells);
+  const forced = new Set(dot.cells);
+  const pairs = [];
+  const seen = new Set();
+  for (const cell of graph.cells()) {
+    if (seen.has(cell) || forced.has(cell)) continue;
+    const other = opposite(centre, cell);
+    if (other === null) continue;
+    seen.add(cell);
+    seen.add(other);
+    if (dotOwnedCells.has(cell) || dotOwnedCells.has(other)) continue;
+    pairs.push(cell === other ? [cell] : [cell, other]);
+  }
+
+  const shapes = [];
+  const grow = (next, cells) => {
+    if (graph.connected(cells)) shapes.push(cells);
+    for (let i = next; i < pairs.length; i++) {
+      if (cells.length + pairs[i].length > MAX_GALAXY_CELLS) continue;
+      grow(i + 1, cells.concat(pairs[i]));
+    }
+  };
+  grow(0, [...forced]);
+  return shapes.filter(cells => iconsMatch(dot, cells));
+};
+
+const PREFIXES = 'ABCDEFGHIJKLMNOPQRS';
+const galaxies = dots.map((dot, i) => {
+  const shapes = galaxyShapes(dot);
+  const cells = graph.cells().filter(c => shapes.some(s => s.includes(c)));
+  return { dot, shapes, cells, flags: graph.makeOverlay('V' + PREFIXES[i], cells) };
 });
 
-// Each labelled set is one non-empty orthogonally connected galaxy.
-const connectivity = GALAXIES.map((_, index) => {
-  const code = codeOf(index);
-  return new ConnectedValues(code.layer === vg ? 'VG' : 'VH', code.value);
-});
+// a < b.
+const lessThanKey = Pair.fnToKey((a, b) => a < b, 9);
+// The two digits are at least `k` apart.
+const spreadKey = (k) => Pair.fnToKey((a, b) => Math.abs(a - b) >= k, 9);
 
-// One NFA per galaxy scans its owning label and digit over its fixed candidate
-// zone. Its mask implements the no-repeat and Renban/non-Renban predicates.
-const digitsOfMask = (mask) => DIGITS.filter(digit => mask & (1 << (digit - 1)));
-const galaxyContents = GALAXIES.flatMap((galaxy, index) => {
-  // Galaxy 3's zone is only R9C1, so its white singleton rule and distinctness
-  // are already forced by its label domain and need no two-cell state machine.
-  if (zones[index].length === 1) return [];
-  const code = codeOf(index);
-  const machine = NFA.encodeSpec({
-    startState: { mask: 0, reading: false, inGalaxy: false },
-    transition: (state, value) => {
-      if (!state.reading) {
-        return { mask: state.mask, reading: true, inGalaxy: value === code.value };
-      }
-      if (!state.inGalaxy) return { mask: state.mask, reading: false, inGalaxy: false };
-      if (value > 9) return undefined;
-      const bit = 1 << (value - 1);
-      if (state.mask & bit) return undefined;
-      return { mask: state.mask | bit, reading: false, inGalaxy: false };
-    },
-    accept: (state) => {
-      if (state.reading) return false;
-      const digits = digitsOfMask(state.mask);
-      const consecutive = digits.length > 0 &&
-        digits[digits.length - 1] - digits[0] + 1 === digits.length;
-      return galaxy.renban ? digits.length >= 2 && consecutive
-        : digits.length === 1 || !consecutive;
-    },
-  }, geometry);
-  return [new NFA(machine, `galaxy-${index + 1}-contents`,
-    ...zones[index].flatMap(cell => [code.layer.at(cell), cell]))];
+const unorderedPairs = (cells) => cells.flatMap(
+  (a, i) => cells.slice(i + 1).map(b => [a, b]));
+
+// The digit rules a galaxy of exactly these cells carries. Its icons are
+// already known to match its size, so the diamond and circle lookups below
+// always find the cell the rules name.
+const shapeDigitRules = (dot, cells) => {
+  if (cells.length < 2) return [];
+  const smallest = cells.find(c => diamondCells.includes(c));
+  const largest = cells.find(c => circleCells.includes(c));
+  const others = (cell) => cells.filter(c => c !== cell);
+  return [
+    new AllDifferent(...cells),
+    ...(dot.grey ? [new Renban(...cells)] : [
+      // Not an unbroken sequence. The digits are distinct, so a set of k of them
+      // is consecutive exactly when its range is k - 1; some two of them at
+      // least k apart is the negation of that.
+      new Or(unorderedPairs(cells).map(([a, b]) => new Pair(
+        spreadKey(cells.length), 'spread', a, b))),
+    ]),
+    ...others(smallest).map(c => new Pair(lessThanKey, 'smallest', smallest, c)),
+    ...(largest === undefined ? [] :
+      others(largest).map(c => new Pair(lessThanKey, 'largest', c, largest))),
+  ];
+};
+
+// One galaxy per dot: the cells it holds are one of its candidate shapes, and
+// that choice sets every membership flag of its overlay.
+const galaxyChoices = galaxies.map(galaxy => new Or(galaxy.shapes.map(cells => {
+  const inShape = new Set(cells);
+  return new And([
+    ...galaxy.cells.map(c => new Given(
+      galaxy.flags.at(c), inShape.has(c) ? IN : OUT)),
+    ...shapeDigitRules(galaxy.dot, cells),
+  ]);
+})));
+
+// Every cell is in exactly one galaxy: across the galaxies that could hold it,
+// one flag is IN and the rest are OUT.
+const galaxyCover = graph.cells().map(cell => {
+  const flags = galaxies.filter(g => g.cells.includes(cell)).map(g => g.flags.at(cell));
+  return new Sum(flags.length - 1 + IN, ...flags);
 });
 
 return [
   shape,
-  vg.toVar('galaxy labels 1-15'),
-  vh.toVar('galaxy labels 16-19'),
   new Given('R9C1', 7),
-  digitDomain,
-  ...codeDomains,
-  ...labelDomains,
-  ...symmetry,
-  ...connectivity,
-  ...galaxyContents,
+  ...galaxies.map((galaxy, i) => galaxy.flags.toVar(`galaxy ${i + 1}`)),
+  ...galaxies.flatMap(
+    galaxy => galaxy.cells.map(c => new Given(galaxy.flags.at(c), OUT, IN))),
+  ...galaxyChoices,
+  ...galaxyCover,
 ];

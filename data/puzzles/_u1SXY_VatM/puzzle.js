@@ -2,86 +2,105 @@
 // Author: Nicolas Duhail
 // Video: https://www.youtube.com/watch?v=_u1SXY_VatM
 // Source: https://sudokupad.app/b3wa450x40
-//
-// Normal sudoku rules apply (standard boxes, no givens).
-//
-// Yin-Yang shading uses the native YinYang constraint's YY cell group (two
-// shades, one connected region each, no monochrome 2x2).
-//
-// Line + shading interaction: there is one closed loop (55 of the 81 cells).
-// Walking the loop, every maximal run of consecutively-visited cells that
-// share the same shade is a "segment". All segments must have equal sums, and
-// digits may not repeat within a segment. Segment boundaries are therefore
-// determined dynamically by where the shade changes along the loop, and the
-// loop is cyclic (there is no fixed start/end).
-//
-// "Digits may not repeat within a segment" IS encoded below, via one small
-// NFA per digit scanning the loop's interleaved (shade, digit) sequence
-// twice around (a double lap): a single lap can't validate the segment that
-// straddles the arbitrary scan start point, because its true extent may wrap
-// around through the end of the loop, not yet read on lap one. A second lap
-// re-visits that same segment with the correct history already carried in
-// the NFA state, so every repeat check is grounded in the real cyclic
-// adjacency by the time it matters.
-//
-// "All segments have equal sums" is NOT encoded. A faithful version needs an
-// NFA state carrying the running in-segment sum (0..45) together with the
-// not-yet-known common target sum (also 0..45, discovered from the first
-// real segment), which is an inherently quadratic ~45*45 reachable-state
-// core (verified by attempting it: it compiles to well over the engine's
-// fixed 4096-state NFA cap, `1 << 12` in js/nfa_builder.js, even after
-// tightening every other state field to its minimum). Capping the sum
-// range tighter to fit would tighten the rule itself (silently forbidding
-// segments above the cap), which is not a faithful encoding even if it
-// happens to accept the known solution.
+
+// Rules:
+//   Normal sudoku rules apply.
+//   Shade some cells so that all shaded cells are orthogonally connected, and
+//   all unshaded cells are orthogonally connected. No 2x2 area may be
+//   completely shaded or unshaded.
+//   The shading splits the line into segments with equal sums. Digits may not
+//   repeat within a segment.
+// The grid has no given digits. Nothing is omitted.
+
+// The line is drawn as a single closed loop, so its segments are the maximal
+// runs of equally shaded cells around the cycle, with no first or last segment
+// to treat specially.
 
 const shape = new Shape('9x9');
 const graph = cellGraph(shape);
-const shade = graph.makeOverlay('YY');
-const shadeAt = cell => shade.at(cell);
 
-// The closed loop, in path order (55 cells).
-const loopCells = [
-  'R6C5', 'R6C6', 'R7C6', 'R8C6', 'R9C6', 'R9C7', 'R9C8', 'R9C9', 'R8C9',
-  'R7C8', 'R6C7', 'R5C8', 'R5C9', 'R4C9', 'R3C8', 'R3C9', 'R2C8', 'R1C7',
-  'R1C6', 'R2C5', 'R1C4', 'R1C3', 'R2C2', 'R3C1', 'R3C2', 'R2C3', 'R2C4',
-  'R3C5', 'R3C6', 'R4C6', 'R5C6', 'R5C5', 'R6C4', 'R5C4', 'R4C5', 'R3C4',
-  'R3C3', 'R4C3', 'R5C3', 'R5C2', 'R4C1', 'R5C1', 'R6C2', 'R6C3', 'R7C3',
-  'R7C2', 'R7C1', 'R8C1', 'R9C1', 'R9C2', 'R8C2', 'R8C3', 'R9C3', 'R8C4',
-  'R7C4',
+// Corners of the drawn light-blue loop, in drawing order and closing back onto
+// the first; consecutive corners are joined by a straight run of cells, which
+// may be orthogonal or diagonal.
+const loopCorners = [
+  'R6C5', 'R6C6', 'R9C6', 'R9C9', 'R8C9', 'R6C7', 'R5C8', 'R5C9', 'R4C9',
+  'R3C8', 'R3C9', 'R1C7', 'R1C6', 'R2C5', 'R1C4', 'R1C3', 'R3C1', 'R3C2',
+  'R2C3', 'R2C4', 'R3C5', 'R3C6', 'R5C6', 'R5C5', 'R6C4', 'R5C4', 'R4C5',
+  'R3C4', 'R3C3', 'R5C3', 'R5C2', 'R4C1', 'R5C1', 'R6C2', 'R6C3', 'R7C3',
+  'R7C1', 'R9C1', 'R9C2', 'R8C2', 'R8C3', 'R9C3', 'R8C4', 'R7C4',
 ];
 
-// Interleave shade and digit reads: [shade1, digit1, shade2, digit2, ...],
-// twice around, plus a trailing re-read of the first cell's shade to force a
-// final closure once we're safely past the bootstrap.
-const lap = loopCells.flatMap(cell => [shadeAt(cell), cell]);
-const scanCells = [...lap, ...lap];
+// The cells of one corner-to-corner run, from `from` up to but excluding `to`.
+const runFrom = (from, to) => {
+  const a = parseCellId(from);
+  const b = parseCellId(to);
+  const length = Math.max(Math.abs(b.row - a.row), Math.abs(b.col - a.col));
+  const dR = (b.row - a.row) / length;
+  const dC = (b.col - a.col) / length;
+  return Array.from(
+    { length }, (_, i) => makeCellId(a.row + dR * i, a.col + dC * i));
+};
+
+// The loop's 55 cells in traversal order; loop[i] is followed by loop[i + 1],
+// and loop[54] by loop[0].
+const loop = loopCorners.flatMap(
+  (corner, i) => runFrom(corner, loopCorners[(i + 1) % loopCorners.length]));
+
+const shade = graph.makeOverlay('YY');
+
+// Position of a loop cell within its own segment, counting from 1 at the cell
+// that follows a shading change. A segment holds distinct digits, so it spans
+// at most 9 cells and the count never has to leave the 1-9 range.
+const SEGMENT_CELL_LIMIT = 9;
+const segPos = graph.makeOverlay('VP', loop);
+const nextPosition = Pair.fnToKey((a, b) => b === a + 1, shape);
+
+// The sum every segment shares. It ranges over 1-45, more than the 9 values a
+// cell can hold, so it is carried base 9 across two cells as
+// 9 * (VT1 - 1) + (VT2 - 1); VT1 stops at 6 because 9 distinct digits sum to at
+// most 45. Each segment's Sum below reads it as those two coefficient terms.
+const total = new Var('T', 'total', 2);
+const totalTerms = [[total.cell(1), -9], [total.cell(2), -1]];
+
+// One rule per loop cell, covering the two mutually exclusive cases: the
+// segment runs on into the next loop cell, or it ends at this cell. Ending at
+// position L identifies the segment as the L cells up to and including this
+// one, since the position count only reaches L by incrementing from 1 there.
+// Together these also force at least one shading change: the positions cannot
+// increment the whole way around the cycle.
+const segmentRules = loop.map((cell, i) => {
+  const next = loop[(i + 1) % loop.length];
+  return new Or([
+    new And([
+      new SameValues(2, shade.at(cell), shade.at(next)),
+      new Pair(nextPosition, 'nextPosition', segPos.at(cell), segPos.at(next)),
+    ]),
+    ...Array.from({ length: SEGMENT_CELL_LIMIT }, (_, k) => {
+      const length = k + 1;
+      const segment = Array.from(
+        { length },
+        (_, j) => loop[(i + 1 - length + j + loop.length) % loop.length]);
+      return new And([
+        // Two shades, so "differs from" is all-different.
+        new AllDifferent(shade.at(cell), shade.at(next)),
+        new Given(segPos.at(cell), length),
+        new Given(segPos.at(next), 1),
+        ...(length > 1 ? [new AllDifferent(...segment)] : []),
+        new Sum(-10, ...segment, ...totalTerms),
+      ]);
+    }),
+  ]);
+});
 
 return [
   shape,
   new YinYang(),
-  // No digit repeats within a segment: one small NFA per digit value.
-  ...Array.from({ length: 9 }, (_, d) => {
-    const repeatSpec = NFA.encodeSpec({
-      startState: { seenD: false, prevShade: null, awaitingDigit: false },
-      transition: (state, value) => {
-        const { seenD, prevShade, awaitingDigit } = state;
-        if (!awaitingDigit) {
-          // Shade read; the shade Var only ever holds 1 or 2.
-          const s = value;
-          if (s !== 1 && s !== 2) return [];
-          const broke = prevShade !== null && s !== prevShade;
-          return [{ seenD: broke ? false : seenD, prevShade: s, awaitingDigit: true }];
-        }
-        const digit = value;
-        if (digit === d + 1) {
-          if (seenD) return [];
-          return [{ seenD: true, prevShade, awaitingDigit: false }];
-        }
-        return [{ seenD, prevShade, awaitingDigit: false }];
-      },
-      accept: () => true,
-    }, 9);
-    return new NFA(repeatSpec, `no repeat ${d + 1}`, ...scanCells);
-  }),
+  segPos.toVar('segpos'),
+  total,
+  new Given(total.cell(1), 1, 2, 3, 4, 5, 6),
+  // No rule tells the two shades apart -- every clue above reads them only as
+  // "same" or "different" -- so solutions come in swapped pairs. Pin the first
+  // cell in reading order to one shade to keep a single representative.
+  new Given(shade.at('R1C1'), 1),
+  ...segmentRules,
 ];

@@ -3,201 +3,256 @@
 // Video: https://www.youtube.com/watch?v=wZps_EnRcNE
 // Source: https://sudokupad.app/9o9qq364b1
 
-// Mid Loop: draw a single 1-cell-wide loop of orthogonally connected cells
-// that does not branch or enter any cell more than once. The loop must pass
-// through every given (grey) dot, and each dot must sit in the middle of a
-// straight loop segment: the distance from the dot to the next turn along
-// the loop must be identical in both directions.
-//
-// Ambiguous Kropki: digits separated by a grey dot are consecutive or one is
-// double the other. Adjacent digits on the loop not separated by a dot must
-// NOT be consecutive and must NOT be in a double relationship.
-//
-// Each cell has a "shape" Var recording which of its four edges the loop
-// uses: off, a straight (horizontal/vertical), or one of four corners
-// (turns) -- same representation as data/scripts/wendezaune.js. Edge
-// agreement between neighbours joins the shapes into loops. Dots force their
-// edge into the loop. Because a straight loop segment can never leave the
-// row/column it started in (leaving requires a turn), each dot's "equal
-// distance to the next turn in both directions" rule is fully local to that
-// dot's own row (horizontal dot) or column (vertical dot), so it is encoded
-// as one NFA scanning that row/column's nine shape cells.
+// Rules encoded here, in full:
+//  - Normal sudoku: 1 to 9 once each in every row, column and 3x3 box.
+//  - Mid Loop: a single 1-cell-wide loop of orthogonally connected cells that
+//    does not branch and enters no cell more than once. It must pass through
+//    every grey dot -- a dot sits on the border between two cells, so the loop
+//    steps across that border -- and every dot must lie in the middle of a
+//    straight loop segment: the distance from the dot to the next turn along the
+//    loop is the same in both directions.
+//  - Ambiguous Kropki: two digits either side of a grey dot are consecutive or
+//    one is double the other; two digits in cells consecutive along the loop
+//    whose shared border carries no dot are neither.
+// Nothing is omitted. "1-cell-wide" describes the loop as a single chain of
+// cells and adds nothing beyond "does not branch or enter any cell more than
+// once": read instead as "no 2x2 block of the grid lies wholly on the loop" it
+// leaves the Mid Loop dots with no loop at all in this grid, so the loop is free
+// to run alongside itself.
 
-const OFF = 1, HORIZ = 2, VERT = 3, UL = 4, UR = 5, DL = 6, DR = 7;
-const usesUp = s => s === VERT || s === UL || s === UR;
-const usesDown = s => s === VERT || s === DL || s === DR;
-const usesLeft = s => s === HORIZ || s === UL || s === DL;
-const usesRight = s => s === HORIZ || s === UR || s === DR;
+// The alphabet is widened so the position counters below fit; the 81 grid cells
+// are pinned back to 1-9 with the domains.
+const NV = 11;
 
-const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const shape = graph.makeOverlay('VS');
-const shapeVar = shape.toVar('shape');
-const gridCells = graph.cells();
+// Coprime moduli for the two position counters: a cycle of steps beside the loop
+// would need a length divisible by both, i.e. by 90, and the grid holds 81 cells.
+const MOD_A = 10, MOD_B = 9;
+const OFF = 1;      // counter value of a cell the loop misses
+const FIRST = 2;    // counter value of the seam cell
 
-// --- Givens ---
-const givens = {
-  R1C5: 2, R2C2: 1, R2C8: 9, R3C8: 3, R4C3: 4, R4C6: 7, R5C9: 5,
-  R7C2: 8, R7C8: 6,
-};
+// Step values. A step is stored once, on the (a, b) pair built below, where a is
+// always the left or upper cell; FWD means the loop runs a->b and BWD b->a.
+const UNUSED = 1, FWD = 2, BWD = 3;
 
-// --- Grey dots: each is the edge between two named cells. ---
-const dots = [
-  ['R1C1', 'R2C1'], ['R6C1', 'R7C1'], ['R3C1', 'R3C2'], ['R3C2', 'R4C2'],
-  ['R2C3', 'R2C4'], ['R1C8', 'R1C9'], ['R4C4', 'R4C5'], ['R4C7', 'R4C8'],
-  ['R3C9', 'R4C9'], ['R5C7', 'R5C8'], ['R7C3', 'R7C4'], ['R7C7', 'R8C7'],
-  ['R9C3', 'R9C4'], ['R9C7', 'R9C8'],
+// The fourteen drawn grey dots, each named by the two cells whose shared border
+// carries it (payload overlay circles, fill #dadada, centred on a cell border).
+const ROW_DOTS = [                    // on a vertical border, within one row
+  ['R1C8', 'R1C9'], ['R2C3', 'R2C4'], ['R3C1', 'R3C2'], ['R4C4', 'R4C5'],
+  ['R4C7', 'R4C8'], ['R5C7', 'R5C8'], ['R7C3', 'R7C4'], ['R9C3', 'R9C4'],
+  ['R9C7', 'R9C8'],
 ];
-const dotEdgeKey = (a, b) => `${a}|${b}`;
-const dotEdges = new Set(dots.map(([a, b]) => dotEdgeKey(a, b)));
+const COL_DOTS = [                    // on a horizontal border, within one column
+  ['R1C1', 'R2C1'], ['R3C2', 'R4C2'], ['R3C9', 'R4C9'], ['R6C1', 'R7C1'],
+  ['R7C7', 'R8C7'],
+];
 
-// --- Shape domains: a cell may use an edge only if the neighbour exists
-// (border restriction), further intersected with any direction a dot on one
-// of its edges forces it to use.
-const ALL_SHAPES = [OFF, HORIZ, VERT, UL, UR, DL, DR];
-const requiredDirs = {}; // cell -> {up,down,left,right} booleans forced by a dot
-for (const [a, b] of dots) {
-  const { row: ra, col: ca } = parseCellId(a);
-  const { row: rb, col: cb } = parseCellId(b);
-  requiredDirs[a] = requiredDirs[a] || {};
-  requiredDirs[b] = requiredDirs[b] || {};
-  if (ra === rb) { // horizontal edge: a is left of b
-    requiredDirs[a].right = true;
-    requiredDirs[b].left = true;
-  } else { // vertical edge: a is above b
-    requiredDirs[a].down = true;
-    requiredDirs[b].up = true;
+// The nine given digits.
+const GIVENS = [['R1C5', 2], ['R2C2', 1], ['R2C8', 9], ['R3C8', 3],
+['R4C3', 4], ['R4C6', 7], ['R5C9', 5], ['R7C2', 8], ['R7C8', 6]];
+
+const shape = new Shape('9x9', NV);
+const graph = cellGraph(shape);
+const gridCells = graph.cells();
+const posA = graph.makeOverlay('VA');     // loop position mod MOD_A
+const posB = graph.makeOverlay('VB');     // loop position mod MOD_B
+
+// --- Step variables -------------------------------------------------------
+// One Var per orthogonal grid border, recording whether the loop uses it and in
+// which direction. There is no separate membership layer: a cell is on the loop
+// exactly when its counters are not OFF.
+const steps = [];
+const stepsAt = new Map(gridCells.map(cell => [cell, []]));
+const stepIndex = new Map();
+for (const cell of gridCells) {
+  for (const [dRow, dCol] of [[0, 1], [1, 0]]) {
+    const other = graph.step(cell, dRow, dCol);
+    if (!other) continue;
+    const id = 'VS' + (steps.length + 1);
+    steps.push({ id, a: cell, b: other });
+    stepIndex.set(cell + '|' + other, id);
+    stepsAt.get(cell).push({ id, out: FWD, in: BWD });
+    stepsAt.get(other).push({ id, out: BWD, in: FWD });
   }
 }
+const rowSteps = r => Array.from({ length: 8 },
+  (_, n) => stepIndex.get(makeCellId(r, n + 1) + '|' + makeCellId(r, n + 2)));
+const colSteps = c => Array.from({ length: 8 },
+  (_, n) => stepIndex.get(makeCellId(n + 1, c) + '|' + makeCellId(n + 2, c)));
 
-// --- Edge agreement: neighbours must agree on the shared edge. This is a
-// plain binary relation between two shape cells (a Pair), and every
-// instance is the same template shifted by a uniform offset (+1 column for
-// edge-h, +1 row for edge-v) over shape cells only -- both entirely within
-// the VS overlay subgraph -- so each direction is one Replicate.
-const edgeAgreeKey = (toB, toA) => Pair.fnToKey((a, b) => toB(a) === toA(b), geometry.numValues);
-const edgeRightKey = edgeAgreeKey(usesRight, usesLeft);
-const edgeDownKey = edgeAgreeKey(usesDown, usesUp);
-const rightBases = gridCells.filter(cell => graph.step(cell, 0, 1));
-const downBases = gridCells.filter(cell => graph.step(cell, 1, 0));
+// The dot on the R3C1/R3C2 border puts R3C1 on the loop whatever the loop turns
+// out to be, so it can carry the counter seam: numbering starts there, and runs
+// out of it eastward along the border the dot forces onto the loop. Pinning that
+// direction leaves only one of the two numberings of the same loop.
+const SEAM = 'R3C1';
+const SEAM_OUT = stepIndex.get('R3C1|R3C2');
 
-// --- Ambiguous-Kropki digit rule along loop edges: reads [shapeA, digitA,
-// digitB]; `toB` says whether A uses the edge to B (edge agreement
-// guarantees B agrees). When joined, the dot/no-dot relation must hold;
-// unjoined pairs are unconstrained.
-const relHolds = (a, b) => Math.abs(a - b) === 1 || a === 2 * b || b === 2 * a;
-const relEdge = (toB, requireRel) => NFA.encodeSpec({
-  startState: { phase: 'shape' },
-  transition: (state, value) => {
-    if (state.phase === 'shape') return { phase: 'digitA', joined: toB(value) };
-    if (state.phase === 'digitA') return { phase: 'digitB', joined: state.joined, digitA: value };
-    if (!state.joined) return { done: true };
-    return relHolds(state.digitA, value) === requireRel ? { done: true } : undefined;
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const dotRight = relEdge(usesRight, true), dotDown = relEdge(usesDown, true);
-const noDotRight = relEdge(usesRight, false), noDotDown = relEdge(usesDown, false);
+const memo = new Map();
+const cached = (key, build) => {
+  if (!memo.has(key)) memo.set(key, build());
+  return memo.get(key);
+};
+const isStepValue = v => v === UNUSED || v === FWD || v === BWD;
 
-// --- Mid-loop symmetry: for each dot, the run of consecutive straight
-// (HORIZ, for a horizontal dot; VERT, for a vertical dot) cells extending
-// from the dot's edge must be equally long on both sides. Scans the full
-// row (horizontal dot) or column (vertical dot) of nine shape cells, in
-// order, tracking the left-side run ending at the dot's first cell and the
-// right-side run starting at the dot's second cell (frozen once a non-
-// straight cell is hit, or at the far end of the row/column).
-const memo = (fn) => { const m = new Map(); return k => (m.has(k) ? m : m.set(k, fn(k))).get(k); };
-const straightSymmetryMachine = memo((key) => {
-  const [p, straightCode, n] = key.split(':').map(Number);
-  return NFA.encodeSpec({
-    startState: { idx: 1, leftRun: 0, leftDist: null, rightRun: 0, rightDist: null },
-    transition: (state, value) => {
-      let { idx, leftRun, leftDist, rightRun, rightDist } = state;
-      // Freeze once the whole row/column has been read: the accept check
-      // only depends on leftDist/rightDist, so absorb any further symbols
-      // (the compiler explores paths past the true 9-symbol input; without
-      // this the idx/run counters would grow without bound).
-      if (idx > n) return state;
-      const straight = value === straightCode;
-      if (idx <= p) {
-        leftRun = straight ? leftRun + 1 : 0;
-        if (idx === p) leftDist = leftRun;
-      } else if (idx === p + 1) {
-        rightRun = straight ? 1 : 0;
-        if (!straight) rightDist = 0;
-      } else if (rightDist === null) {
-        if (straight) rightRun = rightRun + 1;
-        else rightDist = rightRun;
+// --- Loop shape -----------------------------------------------------------
+// Per-cell machine: reads the cell's two counters, then every step it is an end
+// of. A cell off the loop takes OFF in both layers and uses no step; every other
+// cell is entered exactly once and left exactly once, which is degree two with
+// no branching and no revisiting. The step values a cell sees depend on whether
+// it is that step's a or b end, so the machine is keyed on that pattern.
+function cellNFA(incident) {
+  const sig = 'cell|' + incident.map(s => s.out).join(',');
+  return cached(sig, () => NFA.encodeSpec({
+    startState: { k: 0 },
+    transition: (s, value) => {
+      if (s.k === 0) return { k: 1, vis: value !== OFF, ins: 0, outs: 0 };
+      if (s.k === 1) {
+        if ((value !== OFF) !== s.vis) return undefined;
+        return { k: 2, vis: s.vis, ins: 0, outs: 0 };
       }
-      return { idx: idx + 1, leftRun, leftDist, rightRun, rightDist };
+      const n = s.k - 2;
+      if (n >= incident.length) return undefined;
+      const next = { k: s.k + 1, vis: s.vis, ins: s.ins, outs: s.outs };
+      if (value === incident[n].in) next.ins++;
+      else if (value === incident[n].out) next.outs++;
+      else if (value !== UNUSED) return undefined;
+      if (next.ins > 1 || next.outs > 1) return undefined;
+      return next;
     },
-    accept: (state) => {
-      const finalRight = state.rightDist === null ? state.rightRun : state.rightDist;
-      return state.leftDist === finalRight;
-    },
-  }, geometry.numValues);
+    accept: s => s.k === 2 + incident.length &&
+      (s.vis ? (s.ins === 1 && s.outs === 1) : (s.ins === 0 && s.outs === 0)),
+  }, NV));
+}
+const loopShape = gridCells.map(cell => {
+  const incident = stepsAt.get(cell);
+  return new NFA(cellNFA(incident), 'loop-cell',
+    posA.at(cell), posB.at(cell), ...incident.map(s => s.id));
 });
 
+// Position counters. Reads a step and then the two counters it joins: a used
+// step makes the arriving cell's counter one more than the leaving cell's,
+// modulo MOD. `skipFwd` / `skipBwd` are the seam exemption -- the single step
+// that arrives back at the seam is left free in whichever direction that is, so
+// the real loop can be numbered 1, 2, 3, ... around from the seam. The degree
+// rules above otherwise admit a disjoint union of cycles; a second cycle misses
+// the seam, so every one of its steps is constrained and its length would have
+// to be divisible by MOD_A and MOD_B alike.
+const nextPos = (v, mod) => FIRST + ((v - FIRST + 1) % mod);
+const counterNFA = (mod, skipFwd, skipBwd) => cached(
+  `counter|${mod}|${skipFwd}|${skipBwd}`, () => NFA.encodeSpec({
+    startState: { k: 0 },
+    transition: (s, value) => {
+      if (s.k === 0) return isStepValue(value) ? { k: 1, dir: value } : undefined;
+      if (s.k === 1) return { k: 2, dir: s.dir, a: value };
+      if (s.k !== 2) return undefined;
+      if (s.dir === UNUSED) return { done: true };
+      if (s.a === OFF || value === OFF) return undefined;
+      if (s.dir === FWD) {
+        return (skipFwd || value === nextPos(s.a, mod)) ? { done: true } : undefined;
+      }
+      return (skipBwd || s.a === nextPos(value, mod)) ? { done: true } : undefined;
+    },
+    accept: s => s.done === true,
+  }, NV));
+const counters = steps.flatMap(s => [
+  [posA, MOD_A], [posB, MOD_B],
+].map(([layer, mod]) => new NFA(
+  counterNFA(mod, s.b === SEAM, s.a === SEAM), 'loop-order',
+  s.id, layer.at(s.a), layer.at(s.b))));
+
+// "of orthogonally connected cells": the loop's cells are one orthogonally
+// connected group. It says less than the counters above -- two strands running
+// side by side are cell-connected without sharing a used border, so this alone
+// would not make them one loop -- but it is the sentence's own words.
+const connected = new ConnectedValues('VA', Array.from(
+  { length: NV - 1 }, (_, n) => n + 2));   // every value but OFF: on the loop
+
+// --- Mid Loop: a dot sits at the middle of its straight segment ------------
+// Scans the eight borders of one row (or column) in order. Before the dotted
+// border it carries the run of consecutively used borders ending at the current
+// one; the dotted border itself must be used, which is how the loop is made to
+// pass through the dot; after it, exactly that many further borders must be used
+// and then one unused (or the grid edge), which is where the loop turns. So the
+// straight run reaches the same distance either side of the dot.
+const midNFA = (pos) => cached(`mid|${pos}`, () => NFA.encodeSpec({
+  startState: { i: 0, phase: 'pre', run: 0, need: 0 },
+  transition: (s, value) => {
+    if (!isStepValue(value)) return undefined;
+    const used = value !== UNUSED;
+    const i = s.i + 1;
+    if (s.phase === 'done') return { i, phase: 'done', run: 0, need: 0 };
+    if (s.phase === 'post') {
+      if (s.need > 0) {
+        return used ? { i, phase: 'post', run: 0, need: s.need - 1 } : undefined;
+      }
+      return used ? undefined : { i, phase: 'done', run: 0, need: 0 };
+    }
+    if (i < pos) {
+      return { i, phase: 'pre', run: used ? s.run + 1 : 0, need: 0 };
+    }
+    if (!used) return undefined;
+    return { i, phase: 'post', run: 0, need: s.run };
+  },
+  accept: s => s.i === 8 &&
+    (s.phase === 'done' || (s.phase === 'post' && s.need === 0)),
+  maxDepth: 8,   // the eight borders of one row or column
+}, NV));
+const midLoop = [
+  ...ROW_DOTS.map(([left, right]) => {
+    const { row, col } = parseCellId(left);
+    return new NFA(midNFA(col), 'mid-loop', ...rowSteps(row));
+  }),
+  ...COL_DOTS.map(([above]) => {
+    const { row, col } = parseCellId(above);
+    return new NFA(midNFA(row), 'mid-loop', ...colSteps(col));
+  }),
+];
+
+// --- Ambiguous Kropki -----------------------------------------------------
+// The two relations the grey dots assert, and the negative rule denies.
+const kropki = (x, y) => Math.abs(x - y) === 1 || x === 2 * y || y === 2 * x;
+const dotKey = Pair.fnToKey(kropki, NV);
+const greyDots = [...ROW_DOTS, ...COL_DOTS].map(
+  ([x, y]) => new Pair(dotKey, 'grey-dot', x, y));
+
+// Reads a step then the two digits it joins; an unused step says nothing, so the
+// negative rule bites only on cells consecutive along the loop.
+const negativeNFA = cached('negative', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) {
+      return isStepValue(value) ? { k: 1, used: value !== UNUSED } : undefined;
+    }
+    if (s.k === 1) return { k: 2, used: s.used, a: value };
+    if (s.k !== 2) return undefined;
+    if (!s.used) return { done: true };
+    return kropki(s.a, value) ? undefined : { done: true };
+  },
+  accept: s => s.done === true,
+}, NV));
+const dotted = new Set([...ROW_DOTS, ...COL_DOTS].map(([x, y]) => x + '|' + y));
+const negativeKropki = steps.filter(s => !dotted.has(s.a + '|' + s.b)).map(
+  s => new NFA(negativeNFA, 'no-dot', s.id, s.a, s.b));
+
+// --- Variables and domains ------------------------------------------------
+const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, n) => lo + n);
 return [
-  new Shape('9x9'),
-  shapeVar,
-  // --- Global connectivity: the non-OFF (on-loop) cells must form one
-  // connected cell region. Sound to add (a genuine single loop is always
-  // cell-connected) but only cell connectivity, not loop-edge connectivity --
-  // see the "Deliberate omission" note below for why this narrows, but does not
-  // close, the single-loop gap for this shape-Var + edge-agreement encoding.
-  new ConnectedValues('VS', [HORIZ, VERT, UL, UR, DL, DR]),
-  // --- Givens ---
-  ...Object.entries(givens).map(([cell, d]) => new Given(cell, d)),
-  // --- Shape domains
-  ...gridCells.map(cell => {
-    const { row, col } = parseCellId(cell);
-    let allowed = ALL_SHAPES.filter(s =>
-      !(row === 1 && usesUp(s)) && !(row === geometry.numRows && usesDown(s)) &&
-      !(col === 1 && usesLeft(s)) && !(col === geometry.numCols && usesRight(s)));
-    const req = requiredDirs[cell];
-    if (req) {
-      if (req.up) allowed = allowed.filter(usesUp);
-      if (req.down) allowed = allowed.filter(usesDown);
-      if (req.left) allowed = allowed.filter(usesLeft);
-      if (req.right) allowed = allowed.filter(usesRight);
-    }
-    return new Given(shape.at(cell), ...allowed);
-  }),
-  // --- Edge agreement
-  shape.makeReplicate(
-    new Pair(edgeRightKey, 'edge-h', shape.at('R1C1'), shape.at('R1C2')),
-    shape.at(rightBases)),
-  shape.makeReplicate(
-    new Pair(edgeDownKey, 'edge-v', shape.at('R1C1'), shape.at('R2C1')),
-    shape.at(downBases)),
-  // --- Ambiguous-Kropki digit rule
-  ...gridCells.flatMap(cell => {
-    const right = graph.step(cell, 0, 1);
-    const down = graph.step(cell, 1, 0);
-    const result = [];
-    if (right) {
-      const machine = dotEdges.has(dotEdgeKey(cell, right)) ? dotRight : noDotRight;
-      result.push(new NFA(machine, 'kropki-h', shape.at(cell), cell, right));
-    }
-    if (down) {
-      const machine = dotEdges.has(dotEdgeKey(cell, down)) ? dotDown : noDotDown;
-      result.push(new NFA(machine, 'kropki-v', shape.at(cell), cell, down));
-    }
-    return result;
-  }),
-  // --- Mid-loop symmetry
-  ...dots.flatMap(([a, b]) => {
-    const { row: ra, col: ca } = parseCellId(a);
-    const { row: rb, col: cb } = parseCellId(b);
-    if (ra === rb) { // horizontal dot: scan row ra, columns 1..9
-      const rowCells = [];
-      for (let c = 1; c <= geometry.numCols; c++) rowCells.push(shapeVar.cell(ra, c));
-      return new NFA(straightSymmetryMachine(`${ca}:${HORIZ}:${geometry.numCols}`), 'dot-mid-h', ...rowCells);
-    } else { // vertical dot: scan column ca, rows 1..9
-      const colCells = [];
-      for (let r = 1; r <= geometry.numRows; r++) colCells.push(shapeVar.cell(r, ca));
-      return new NFA(straightSymmetryMachine(`${ra}:${VERT}:${geometry.numRows}`), 'dot-mid-v', ...colCells);
-    }
-  }),
+  shape,
+  posA.toVar('loop position mod ' + MOD_A),
+  posB.toVar('loop position mod ' + MOD_B),
+  new Var('S', 'loop steps', steps.length),
+  graph.makeReplicate(new Given(gridCells[0], ...range(1, 9))),
+  // VA needs no domain of its own: the OFF sentinel plus the MOD_A residues is
+  // exactly the widened alphabet. The step Vars need none either -- the loop-cell
+  // machines accept nothing on them but unused / in / out.
+  posB.makeReplicate(new Given(posB.at(gridCells[0]), ...range(1, MOD_B + 1))),
+  new Given(posA.at(SEAM), FIRST),
+  new Given(posB.at(SEAM), FIRST),
+  new Given(SEAM_OUT, FWD),
+  ...GIVENS.map(([cell, value]) => new Given(cell, value)),
+  ...loopShape,
+  connected,
+  ...counters,
+  ...midLoop,
+  ...greyDots,
+  ...negativeKropki,
 ];

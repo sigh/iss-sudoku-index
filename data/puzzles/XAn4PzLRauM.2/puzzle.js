@@ -2,66 +2,94 @@
 // Author: shye
 // Video: https://www.youtube.com/watch?v=XAn4PzLRauM
 // Source: https://tinyurl.com/dawcxs85
-//
-// Shade some cells so every row, column, and outlined region has exactly 2
-// shaded cells. Cell value 1 means shaded, 0 means unshaded; there are no
-// digits, so the grid uses the Raw type with an explicit rule for every row,
-// column and region -- Raw carries no implicit row/column all-different, and
-// there are no default boxes to lean on either.
-//
-// The puzzle also requires every shaded cell to be reachable from every other
-// through a chain of shaded cells that may touch orthogonally OR diagonally
-// (a "king move" network). That clause is not encoded: ISS's only global
-// connectivity primitive hardcodes orthogonal-only adjacency, so applying it
-// here would reject valid answers whose shaded region is connected only
-// through a diagonal touch -- a tightening, not a faithful encoding.
-//
-// Region layout (10 outlined regions, transcribed from the drawn region
-// borders):
-//   A A A A A A A B B B
-//   C C C C C C C B C B
-//   D D D D D D C C C D
-//   E E E E E D D D D D
-//   E E E E E E E E F F
-//   G G G G G E E E F F
-//   H I I J G E E E E F
-//   H I I J G E E E E F
-//   H J J J G E E E E F
-//   H H H E E E E E E F
 
-const regionCoords = {
-  A: [[1,1],[1,2],[1,3],[1,4],[1,5],[1,6],[1,7]],
-  B: [[1,8],[1,9],[1,10],[2,8],[2,10]],
-  C: [[2,1],[2,2],[2,3],[2,4],[2,5],[2,6],[2,7],[2,9],[3,7],[3,8],[3,9]],
-  D: [[3,1],[3,2],[3,3],[3,4],[3,5],[3,6],[3,10],[4,6],[4,7],[4,8],[4,9],[4,10]],
-  E: [
-    [4,1],[4,2],[4,3],[4,4],[4,5],
-    [5,1],[5,2],[5,3],[5,4],[5,5],[5,6],[5,7],[5,8],
-    [6,6],[6,7],[6,8],
-    [7,6],[7,7],[7,8],[7,9],
-    [8,6],[8,7],[8,8],[8,9],
-    [9,6],[9,7],[9,8],[9,9],
-    [10,4],[10,5],[10,6],[10,7],[10,8],[10,9],
-  ],
-  F: [[5,9],[5,10],[6,9],[6,10],[7,10],[8,10],[9,10],[10,10]],
-  G: [[6,1],[6,2],[6,3],[6,4],[6,5],[7,5],[8,5],[9,5]],
-  H: [[7,1],[8,1],[9,1],[10,1],[10,2],[10,3]],
-  I: [[7,2],[7,3],[8,2],[8,3]],
-  J: [[7,4],[8,4],[9,2],[9,3],[9,4]],
-};
+// Rules: shade some cells so that every row, every column and every outlined
+// region contains exactly 2 shaded cells, and all shaded cells in the grid
+// form one connected network, orthogonally or diagonally (i.e. king moves).
+// Nothing else is drawn on the board: no givens, no digits.
+//
+// The board holds the shading itself, on a Raw grid so that no Sudoku
+// row/column/box rules are added: 1 = unshaded, 2 = shaded.
 
-const shape = new Shape('10x10', '0-1', 'Raw');
+const UNSHADED = 1;
+const SHADED = 2;
+
+const shape = new Shape('10x10', 2, 'Raw');
 const graph = cellGraph(shape);
-const cellAt = ([row, col]) => makeCellId(row, col);
+const rows = graph.rows();
 
-const rowSums = graph.rows().map(row => new Sum(2, ...row));
-const colSums = graph.columns().map(col => new Sum(2, ...col));
-const regionSums = Object.values(regionCoords)
-  .map(coords => new Sum(2, ...coords.map(cellAt)));
+// Region layout transcribed from the drawn region outlines: one letter per
+// cell, row-major, one string per board row.
+const REGION_MAP = [
+  'AAAAAAABBB',
+  'CCCCCCCBCB',
+  'DDDDDDCCCD',
+  'EEEEEDDDDD',
+  'EEEEEEEEFF',
+  'GGGGGEEEFF',
+  'HIIJGEEEEF',
+  'HIIJGEEEEF',
+  'HJJJGEEEEF',
+  'HHHEEEEEEF',
+];
+
+const regions = new Map();
+REGION_MAP.forEach((rowLabels, r) => {
+  [...rowLabels].forEach((label, c) => {
+    if (!regions.has(label)) regions.set(label, []);
+    regions.get(label).push(rows[r][c]);
+  });
+});
+
+const exactlyTwoShaded = (cells) =>
+  new ContainExact(`${SHADED}_${SHADED}`, ...cells);
+
+const counts = [
+  ...rows.map(exactlyTwoShaded),
+  ...graph.columns().map(exactlyTwoShaded),
+  ...[...regions.values()].map(exactlyTwoShaded),
+];
+
+// Connectivity layer. ConnectedValues tests orthogonal adjacency only, so the
+// king-move network is carried on a 19x10 copy of the board: layer row 2i-1
+// holds board row i, and the bridge row 2i between them holds, in column j,
+// "board RiCj or R(i+1)Cj is shaded".
+//
+// The layer's adjacencies: a bridge cell touches the two board cells directly
+// above and below it, and the bridge cells to its left and right. So two
+// shaded board cells in the same row touch each other directly; two in the
+// same column meet at the bridge cell between them; two on a diagonal meet at
+// the two adjacent bridge cells between their rows. In the other direction, a
+// shaded bridge cell is shaded because of the board cell above or below it,
+// and each of its shaded bridge neighbours because of the board cell above or
+// below that one, and any two such board cells are king-adjacent.
+const layer = new Var(
+  'S', 'connectivity', `${2 * rows.length - 1}x${rows[0].length}`);
+
+// The layer's rows, top to bottom: board row 1, the bridge below it, board
+// row 2, and so on -- board row i is layerRows[2i-2], and the bridge under it
+// is layerRows[2i-1].
+const layerRows = Array.from(
+  { length: 2 * rows.length - 1 },
+  (_, r) => rows[0].map((__, c) => layer.cell(r + 1, c + 1)));
+
+// The layer's board rows repeat the board.
+const layerLinks = rows.flatMap((row, i) => row.map(
+  (cell, j) => new SameValues(2, cell, layerRows[2 * i][j])));
+
+// A bridge cell is shaded exactly when a board cell above or below it is
+// shaded: read down a layer column, the triple (board, bridge, board) spells
+// one of 111, 122, 221, 222 in the UNSHADED/SHADED values above.
+const bridges = rows.slice(1).flatMap((_, i) => rows[0].map(
+  (__, j) => new Regex(
+    '111|122|221|222',
+    layerRows[2 * i][j], layerRows[2 * i + 1][j], layerRows[2 * i + 2][j])));
 
 return [
   shape,
-  ...rowSums,
-  ...colSums,
-  ...regionSums,
+  ...counts,
+  layer,
+  ...layerLinks,
+  ...bridges,
+  new ConnectedValues('VS', SHADED),
 ];

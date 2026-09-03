@@ -3,167 +3,266 @@
 // Video: https://www.youtube.com/watch?v=vk3R95TYTuE
 // Source: https://app.crackingthecryptic.com/sudoku/FrQ76Q9jmD
 
-// Normal sudoku rules apply. The main grid holds each cell's *displayed*
-// digit (1-9), which is what row/column/box all-different (the sudoku
-// uniqueness rule) is stated over.
+// Normal sudoku rules apply. Once in each row, column, and box, the Thing
+// assimilates a number, thereby negating it (if the Thing is in R5C7 and the
+// cell appears to contain a 3, its actual value is -3). Values on the blue line
+// have the same sum in each 3x3 box the line is in. Values along a thermo
+// increase from the bulb end. Adjacent values on a green line differ by 5 or
+// more. Numbers in a circle appear once in the four surrounding cells; they may
+// be genuine (positive) or they may be the Thing (negative). To successfully
+// escape, you must travel from the now destroyed Outpost #31 (R2C2) to the
+// helicopter (R8C8). Your path is one cell wide and may not go outside of
+// Antarctica's boundary (blue line). The path which travels orthogonally may
+// not contain nor be orthogonally adjacent to any of the Thing's cells.
+// Adjacent values on the escape route differ by 5 or more.
 //
-// "The Thing" mechanic: once in each row, column and box, one cell's
-// displayed digit is negated -- its *actual value* (what every other rule
-// below reads) is -digit instead of +digit. A parallel VT overlay records
-// which cell that is per unit (1 = genuine/positive, 2 = Thing/negative);
-// Sum(10, ...) over each unit's flags is 8*1 + 1*2 = 10, which holds iff
-// exactly one flag in the unit is 2 -- i.e. exactly one Thing per unit.
+// The puzzle has no given digits.
 //
-// Every constraint below that the rules state in terms of "values" (green
-// line, thermo, blue line) reads the actual (possibly negative) value, not
-// the displayed digit, and is therefore built as a custom NFA scanning
-// [digit, flag] pairs and computing the signed value in-state -- ISS has no
-// built-in class that reads a signed derived value. The circle clues are
-// stated in terms of "numbers", which the rules confirm elsewhere means the
-// displayed digit (Thing-negated cells still show their digit), so those
-// stay on the raw grid cells.
-//
-// Omitted: the escape-route rule (a one-cell-wide orthogonal path from
-// R2C2 to R8C8, confined to the interior of the closed blue loop, that may
-// not contain or be orthogonally adjacent to any Thing cell, with adjacent
-// path values differing by >=5).
+// Two quantities per cell: the sudoku digit, held by the grid cell, and the
+// value, which is the digit except in the nine assimilated cells where it is
+// the digit negated.
 
-const graph = cellGraph('9x9');
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-// Thing flag overlay: one per grid cell, 1 = genuine (positive), 2 = Thing
-// (negative).
-const GENUINE = 1;
-const THING = 2;
-const flag = graph.makeOverlay('VT');
-const flagDomain = flag.makeReplicate(new Given(flag.cells()[0], GENUINE, THING));
+// VT marks assimilation: 0 for an untouched cell (value = digit), otherwise the
+// cell's own digit, marking it assimilated (value = -digit). Value 0 is what
+// forces the widened 0-9 alphabet; the grid cells are restricted back to 1-9.
+const UNTOUCHED = 0;
 
-// Exactly one Thing per row/column/box: sum of that unit's 9 flags is 10
-// only when eight cells are GENUINE(1) and one is THING(2).
+// VP marks escape-route membership.
+const OFF = 0;
+const ON = 1;
+
+const shape = new Shape('9x9', '0-9');
+const graph = cellGraph(shape);
+const gridCells = graph.cells();
+
+const thing = graph.makeOverlay('VT');
+const route = graph.makeOverlay('VP');
+
+const domains = [
+  graph.makeReplicate(new Given(gridCells[0], ...DIGITS)),
+  route.makeReplicate(new Given(route.cells()[0], OFF, ON)),
+];
+
+// --- The Thing: which cell of each unit is assimilated. ---
+
+// Pairs each grid cell with its VT mark: untouched, or the cell's own digit.
+const assimilationKey = Pair.fnToKey(
+  (digit, mark) => mark === UNTOUCHED || mark === digit, shape);
+const assimilationMarks = gridCells.map(
+  cell => new Pair(assimilationKey, 'assimilated', cell, thing.at(cell)));
+
+// Exactly one assimilated cell per row, column and box: eight of the nine marks
+// in each unit are UNTOUCHED, so the ninth is not.
+const eightUntouched = Array(8).fill(UNTOUCHED).join('_');
 const oneThingPerUnit = graph.rowsColumnsBoxes().map(
-  cells => new Sum(9 * GENUINE + (THING - GENUINE), ...flag.at(cells)));
+  unit => new ContainExact(eightUntouched, ...thing.at(unit)));
 
-// Interleave a cell list into [digit, flag, digit, flag, ...] for the NFAs
-// below, which compute each cell's signed value from that pair in-state.
-const withFlags = cells => cells.flatMap(cell => [cell, flag.at(cell)]);
-const signedValue = (digit, flagValue) => (flagValue === THING ? -digit : digit);
+// Signed value of a cell from its (digit, mark) reading; undefined for a mark
+// the pairing above already excludes.
+const signedValue = (digit, mark) => {
+  if (mark === UNTOUCHED) return digit;
+  return mark === digit ? -digit : undefined;
+};
 
-// --- Green star: R4C5 differs by >=5 (signed) from each of its 8 neighbours.
-const CENTER = 'R4C5';
-const STAR_NEIGHBOURS = [
-  'R3C4', 'R3C5', 'R3C6', 'R4C4', 'R4C6', 'R5C4', 'R5C5', 'R5C6',
-];
-
-// Scans [digitA, flagA, digitB, flagB]; accepts iff |signed(A) - signed(B)| >= 5.
-const diffAtLeast5Spec = NFA.encodeSpec({
-  startState: { i: 0 },
-  transition: (state, value) => {
-    if (state.i === 0) return { i: 1, digitA: value };
-    if (state.i === 1) return { i: 2, effA: signedValue(state.digitA, value) };
-    if (state.i === 2) return { i: 3, effA: state.effA, digitB: value };
-    if (state.i === 3) {
-      return { i: 4, diff: Math.abs(state.effA - signedValue(state.digitB, value)) };
+// Reads (digit, mark, digit, mark) for two cells and requires `relation` to
+// hold between their two signed values.
+const valueRelation = (relation) => NFA.encodeSpec({
+  startState: { phase: 'digitA' },
+  transition: (state, cellValue) => {
+    switch (state.phase) {
+      case 'digitA':
+        return cellValue === 0 ? undefined
+          : { phase: 'markA', digitA: cellValue };
+      case 'markA': {
+        const valueA = signedValue(state.digitA, cellValue);
+        return valueA === undefined ? undefined : { phase: 'digitB', valueA };
+      }
+      case 'digitB':
+        return cellValue === 0 ? undefined
+          : { phase: 'markB', valueA: state.valueA, digitB: cellValue };
+      case 'markB': {
+        const valueB = signedValue(state.digitB, cellValue);
+        if (valueB === undefined) return undefined;
+        return relation(state.valueA, valueB) ? { phase: 'done' } : undefined;
+      }
+      default:
+        return undefined;
     }
-    return undefined;
   },
-  accept: (state) => state.i === 4 && state.diff >= 5,
-}, 9);
+  accept: ({ phase }) => phase === 'done',
+}, shape);
 
-const greenStar = STAR_NEIGHBOURS.map(cell => new NFA(
-  diffAtLeast5Spec, 'green line diff>=5 (signed)',
-  ...withFlags([CENTER, cell])));
+const valuePair = (machine, name) => (a, b) =>
+  new NFA(machine, name, a, thing.at(a), b, thing.at(b));
 
-// --- Grey thermo: strictly increasing signed values, bulb-first.
-const THERMO = ['R4C5', 'R3C6', 'R2C7', 'R1C8', 'R1C9'];
-
-// Scans [digit, flag]*N in order; accepts iff each cell's signed value is
-// strictly greater than the previous cell's.
-function signedIncreasingSpec(n) {
-  const total = 2 * n;
-  return NFA.encodeSpec({
-    startState: { i: 0, prev: null },
-    transition: (state, value) => {
-      if (state.i >= total) return undefined;  // bound state growth: stop consuming symbols once the segment ends
-      if (state.i % 2 === 0) return { i: state.i + 1, prev: state.prev, digit: value };
-      const eff = signedValue(state.digit, value);
-      if (state.prev !== null && !(eff > state.prev)) return undefined;
-      return { i: state.i + 1, prev: eff };
-    },
-    accept: (state) => state.i === total,
-    maxDepth: total,
-  }, 9);
-}
-
-const thermo = new NFA(
-  signedIncreasingSpec(THERMO.length), 'thermo increasing (signed)',
-  ...withFlags(THERMO));
-
-// --- Blue line: equal signed sum in every per-box segment the closed loop
-// passes through (it re-enters box R1-3/C1-3 twice, contributing two
-// separate segments there). Box R7-9/C1-3 contributes a single cell,
-// R7C3, so every other segment's signed sum is compared against it
-// directly -- a spanning tree of 8 pairwise equalities is equivalent to
-// all 9 segments being mutually equal.
-const BLUE_ANCHOR = ['R7C3'];
-const BLUE_SEGMENTS = [
-  ['R1C1', 'R2C1', 'R3C2'],
-  ['R3C3', 'R2C2', 'R1C1'],
-  ['R4C2', 'R5C2', 'R6C3'],
-  ['R7C4', 'R8C5', 'R9C5', 'R9C6'],
-  ['R8C7', 'R8C8', 'R7C9'],
-  ['R6C9', 'R5C8', 'R4C8'],
-  ['R3C8', 'R2C7'],
-  ['R2C6', 'R2C5', 'R3C4'],
+// --- Blue line: the drawn closed boundary, read as its cell cycle. ---
+const BLUE_LINE = [
+  'R1C1', 'R2C1', 'R3C2', 'R4C2', 'R5C2', 'R6C3', 'R7C3', 'R7C4',
+  'R8C5', 'R9C5', 'R9C6', 'R8C7', 'R8C8', 'R7C9', 'R6C9', 'R5C8',
+  'R4C8', 'R3C8', 'R2C7', 'R2C6', 'R2C5', 'R3C4', 'R3C3', 'R2C2',
 ];
 
-// Scans segment A's [digit, flag]*lenA then segment B's [digit, flag]*lenB;
-// accepts iff the two segments' signed sums are equal. Tracks a single
-// running (sumA - sumB) difference rather than the two sums separately, so
-// the compiled state stays one bounded dimension instead of their product.
-function signedSumEqualSpec(lenA, lenB) {
-  const cellCount = lenA + lenB;
-  const total = 2 * cellCount;
-  return NFA.encodeSpec({
-    startState: { i: 0, diff: 0 },
-    transition: (state, value) => {
-      if (state.i >= total) return undefined;  // bound state growth: stop consuming symbols once the segment ends
-      if (state.i % 2 === 0) return { i: state.i + 1, diff: state.diff, digit: value };
-      const eff = signedValue(state.digit, value);
-      const cellIndex = (state.i - 1) / 2;
-      const sign = cellIndex < lenA ? 1 : -1;
-      return { i: state.i + 1, diff: state.diff + sign * eff };
-    },
-    accept: (state) => state.i === total && state.diff === 0,
-    maxDepth: total,
-  }, 9);
-}
+// Box 7 holds the single blue cell R7C3, so its box total is that cell's value;
+// every other visited box is equated to it. Box 5 holds no blue cell and so is
+// not a box "the line is in". Each cell contributes digit - 2*mark, which is
+// +digit when untouched and -digit when assimilated.
+const BLUE_REFERENCE = 'R7C3';
+const blueLineSums = graph.boxes()
+  .map(box => BLUE_LINE.filter(cell => box.includes(cell)))
+  .filter(cells => cells.length > 0 && !cells.includes(BLUE_REFERENCE))
+  .map(cells => new Sum(
+    0,
+    ...cells.map(cell => [cell, 1]),
+    ...cells.map(cell => [thing.at(cell), -2]),
+    [BLUE_REFERENCE, -1],
+    [thing.at(BLUE_REFERENCE), 2]));
 
-const blueLineEqualSums = BLUE_SEGMENTS.map(segment => new NFA(
-  signedSumEqualSpec(segment.length, BLUE_ANCHOR.length),
-  'blue line equal signed sum',
-  ...withFlags(segment), ...withFlags(BLUE_ANCHOR)));
+// --- Thermo: grey line, bulb at the crash site, waypoints R4C5-R1C8-R1C9. ---
+const CRASH_SITE = 'R4C5';
+const THERMO = [CRASH_SITE, 'R3C6', 'R2C7', 'R1C8', 'R1C9'];
+const increasingValues = valuePair(valueRelation((a, b) => a < b), 'thermo');
+const thermo = THERMO.slice(1).map(
+  (cell, i) => increasingValues(THERMO[i], cell));
 
-// --- Quadruple circles: SudokuPad exports stacked quadruple digits as one
-// concatenated overlay string (e.g. "14" = the digits 1 and 4 stacked, not
-// the number fourteen); the rules' "numbers in a circle appear once" is
-// each of those single digits appearing exactly once among the four cells
-// (as a genuine or Thing-negated cell -- either way its displayed digit is
-// unchanged, so this reads the raw grid digit, not the signed value).
-const QUADS = [
-  { cells: ['R2C2', 'R2C3', 'R3C2', 'R3C3'], digits: '1_4' },
-  { cells: ['R5C1', 'R5C2', 'R6C1', 'R6C2'], digits: '2_3' },
-  { cells: ['R8C5', 'R8C6', 'R9C5', 'R9C6'], digits: '7' },
-  { cells: ['R2C8', 'R2C9', 'R3C8', 'R3C9'], digits: '1_7' },
+// --- Green lines: eight two-cell segments from the crash site to each of its
+// king neighbours (the payload draws the R4C5-R3C6 segment twice). ---
+const whisperValues = valuePair(
+  valueRelation((a, b) => Math.abs(a - b) >= 5), 'green');
+const greenLines = graph.kingNeighbours(CRASH_SITE).map(
+  cell => whisperValues(CRASH_SITE, cell));
+
+// --- Circles: each 2x2 lies wholly within one box, so its four digits are
+// already distinct and "appears once" is Quad's "appears". ---
+const circles = [
+  new Quad('R2C2', 1, 4),
+  new Quad('R5C1', 2, 3),
+  new Quad('R8C5', 7),
+  new Quad('R2C8', 1, 7),
 ];
-const quadCircles = QUADS.map(
-  ({ cells, digits }) => new ContainExact(digits, ...cells));
+
+// --- Escape route. ---
+const START = 'R2C2';
+const FINISH = 'R8C8';
+
+// Antarctica's interior, derived from the drawn boundary: flood the grid from
+// its border through cells the blue line does not occupy. Every diagonal step
+// of the boundary has its two off-line corner cells diagonal to each other, so
+// an orthogonal flood cannot leak across one.
+const outsideAntarctica = new Set();
+const frontier = gridCells.filter(cell => {
+  const { row, col } = parseCellId(cell);
+  return row === 1 || row === 9 || col === 1 || col === 9;
+}).filter(cell => !BLUE_LINE.includes(cell));
+frontier.forEach(cell => outsideAntarctica.add(cell));
+for (let i = 0; i < frontier.length; i++) {
+  for (const next of graph.neighbours(frontier[i])) {
+    if (BLUE_LINE.includes(next) || outsideAntarctica.has(next)) continue;
+    outsideAntarctica.add(next);
+    frontier.push(next);
+  }
+}
+const antarctica = gridCells.filter(cell => !outsideAntarctica.has(cell));
+
+const routePlacement = [
+  ...[...outsideAntarctica].map(cell => new Given(route.at(cell), OFF)),
+  new Given(route.at(START), ON),
+  new Given(route.at(FINISH), ON),
+];
+
+// One cell wide, orthogonal, and running end to end: the two named endpoints
+// have one route neighbour, every other route cell has two, and the route cells
+// form a single connected region. Reads the cell's own membership, then each
+// orthogonal neighbour's; a cell off the route is unconstrained.
+const degreeMachine = (degree) => NFA.encodeSpec({
+  startState: { phase: 'start' },
+  transition: (state, membership) => {
+    if (state.phase === 'start') {
+      return membership === ON ? { phase: 'on', count: 0 } : { phase: 'off' };
+    }
+    if (state.phase === 'off') return { phase: 'off' };
+    const count = state.count + (membership === ON ? 1 : 0);
+    return count > degree ? undefined : { phase: 'on', count };
+  },
+  accept: (state) => state.phase === 'off' || state.count === degree,
+}, shape);
+const endpointDegree = degreeMachine(1);
+const interiorDegree = degreeMachine(2);
+const routeDegrees = antarctica.map(cell => new NFA(
+  cell === START || cell === FINISH ? endpointDegree : interiorDegree,
+  'route-degree',
+  ...route.at([cell, ...graph.neighbours(cell)])));
+
+// A route cell is not assimilated, and neither is any of its orthogonal
+// neighbours. Reads the cell's membership, then its own mark and its
+// neighbours' marks.
+const clearOfTheThing = NFA.encodeSpec({
+  startState: { phase: 'start' },
+  transition: (state, cellValue) => {
+    if (state.phase === 'start') {
+      return cellValue === ON ? { phase: 'on' } : { phase: 'off' };
+    }
+    if (state.phase === 'off') return { phase: 'off' };
+    return cellValue === UNTOUCHED ? { phase: 'on' } : undefined;
+  },
+  accept: () => true,
+}, shape);
+const routeAvoidsTheThing = antarctica.map(cell => new NFA(
+  clearOfTheThing, 'route-clear',
+  route.at(cell), ...thing.at([cell, ...graph.neighbours(cell)])));
+
+// Adjacent values on the route differ by 5 or more. No route cell is
+// assimilated (previous constraint), so a route cell's value is its digit.
+// Reads both memberships then both digits; if either cell is off the route the
+// remaining symbols are absorbed. The route is one cell wide, so two
+// orthogonally adjacent route cells are always consecutive along it.
+const routeWhisperMachine = NFA.encodeSpec({
+  startState: { phase: 'membershipA' },
+  transition: (state, cellValue) => {
+    switch (state.phase) {
+      case 'membershipA':
+        return cellValue === ON ? { phase: 'membershipB' }
+          : { phase: 'skip', left: 3 };
+      case 'membershipB':
+        return cellValue === ON ? { phase: 'digitA' }
+          : { phase: 'skip', left: 2 };
+      case 'digitA':
+        return { phase: 'digitB', digitA: cellValue };
+      case 'digitB':
+        return Math.abs(state.digitA - cellValue) >= 5
+          ? { phase: 'done' } : undefined;
+      case 'skip':
+        return state.left > 1
+          ? { phase: 'skip', left: state.left - 1 } : { phase: 'done' };
+      default:
+        return undefined;
+    }
+  },
+  accept: ({ phase }) => phase === 'done',
+}, shape);
+// Right and down steps only, so each orthogonal pair is covered once.
+const routeWhispers = antarctica.flatMap(
+  cell => [[0, 1], [1, 0]]
+    .map(([dRow, dCol]) => graph.step(cell, dRow, dCol))
+    .filter(other => other !== null && !outsideAntarctica.has(other))
+    .map(other => new NFA(routeWhisperMachine, 'route-whisper',
+      route.at(cell), route.at(other), cell, other)));
 
 return [
-  new Shape('9x9'),
-  flag.toVar('Thing flag (1=genuine, 2=Thing)'),
-  flagDomain,
+  shape,
+  thing.toVar('assimilated'),
+  route.toVar('escape route'),
+  ...domains,
+  ...assimilationMarks,
   ...oneThingPerUnit,
-  ...greenStar,
-  thermo,
-  ...blueLineEqualSums,
-  ...quadCircles,
+  ...blueLineSums,
+  ...thermo,
+  ...greenLines,
+  ...circles,
+  ...routePlacement,
+  ...routeDegrees,
+  new ConnectedValues('VP', ON),
+  ...routeAvoidsTheThing,
+  ...routeWhispers,
 ];

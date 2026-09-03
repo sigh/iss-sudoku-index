@@ -3,23 +3,21 @@
 // Video: https://www.youtube.com/watch?v=IYgmGdvqgsw
 // Source: https://app.crackingthecryptic.com/sudoku/q6pR9DQghg
 
-// Normal sudoku rules apply (default row/column/box all-different from
-// Shape). No given digits.
-//
-// Digits cannot repeat in cages: every drawn cage has no printed total, so
-// each is AllDifferent over its own cells only -- no cross-cage restriction.
-// Any group of three adjacent cages must sum to 45: two cages are "adjacent"
-// when they share a cell-to-cell orthogonal border. Walking every cage
-// border gives one and only one triple of pairwise adjacent cages in the
-// whole grid -- cages 5, 6 and 7 -- so that is the one "group of three
-// adjacent cages" the rule constrains; no other cage triple is pairwise
-// adjacent.
-// Cells with identical colours contain identical digits: two colour pairs
-// are drawn as underlay dots (blue at R4C1/R1C4, gold at R4C7/R7C4).
+// Rules encoded here:
+//   Normal sudoku rules apply.
+//   Digits cannot repeat in cages.
+//   Any group of three adjacent cages must sum to 45.
+//   Cells with identical colours contain identical digits.
+// The grid has no given digits, and 28 of the 81 cells lie in no cage.
 
-// Cage cell lists, transcribed from the payload's `cages` array (id order).
+const graph = cellGraph('9x9');
+
+// The 16 drawn cage outlines, in the order the source lists them. None carries
+// a printed total. Cages 0-7 form one chain of cages down the left/centre of
+// the grid, 8-11 a chain across the top right, 12-15 a chain in the bottom
+// left.
 const cages = [
-  ['R8C9', 'R8C8', 'R9C8', 'R9C9'],
+  ['R8C8', 'R8C9', 'R9C8', 'R9C9'],
   ['R8C6', 'R8C7', 'R7C7', 'R7C8', 'R6C8'],
   ['R7C6', 'R6C6', 'R6C7'],
   ['R6C5', 'R5C5', 'R5C6'],
@@ -37,25 +35,58 @@ const cages = [
   ['R5C2', 'R6C2'],
 ];
 
-// A no-total cage is all-different only.
-const cageConstraints = cages.map((cells) => new AllDifferent(...cells));
+// "Digits cannot repeat in cages": a cage with sum 0 emits all-different only.
+const cageConstraints = cages.map((cells) => new Cage(0, ...cells));
 
-// The one mutually-adjacent triple of cages (5, 6, 7; see comment above)
-// sums to 45 over its combined 12 cells. Repeats are allowed across the
-// cage boundary (each cage's own AllDifferent above still applies within
-// itself), so this is a plain Sum, not a Cage.
-const polyamorousTriple = new Sum(45, ...cages[5], ...cages[6], ...cages[7]);
+// "Any group of three adjacent cages": two cages are adjacent when a cell of
+// one shares an edge with a cell of the other, and a group of three is three
+// cages that hang together under that adjacency. Derived from the cage
+// outlines above rather than hand-listed.
+//
+// Two readings of "adjacent" were weighed. Counting cages that meet only at a
+// corner makes the rule self-contradictory before any digit is placed: cages 5,
+// 6, 7 are then a group and so are 5, 7, 8 (R2C5 meets R3C4 and R1C4 corner to
+// corner), so the two totals give sum(cage 6) = sum(cage 8), yet cage 6 holds
+// five distinct digits (at least 15) and cage 8 is one cell (at most 9).
+// Sharing an edge is the reading kept.
+//
+// "Group of three" is read as three cages joined into one contiguous group, not
+// as three cages each touching the other two. The art rules the stricter
+// reading out: only cages 5, 6, 7 touch each other pairwise, which would leave
+// the single-cell cage 8 -- whose all-different says nothing on its own -- with
+// no role in the puzzle at all.
+const cellSets = cages.map((cells) => new Set(cells));
+const cagesAdjacent = (i, j) => cages[i].some(
+  (cell) => graph.neighbours(cell).some((n) => cellSets[j].has(n)));
 
-// Colour-linked cell pairs (underlay circles): each pair holds one shared
-// digit.
-const colourGroups = [
-  new SameValues(2, 'R4C1', 'R1C4'), // blue
-  new SameValues(2, 'R4C7', 'R7C4'), // gold
+const adjacentTriples = [];
+for (let i = 0; i < cages.length; i++) {
+  for (let j = i + 1; j < cages.length; j++) {
+    for (let k = j + 1; k < cages.length; k++) {
+      // Connected as a group of three: at least two of the three cage pairs
+      // touch, which on three nodes is exactly connectedness.
+      const edges = [[i, j], [i, k], [j, k]].filter(([a, b]) => cagesAdjacent(a, b));
+      if (edges.length >= 2) adjacentTriples.push([i, j, k]);
+    }
+  }
+}
+
+// "must sum to 45": a plain Sum, since digits may repeat across the three
+// cages even though each cage is internally all-different.
+const tripleSums = adjacentTriples.map(
+  (triple) => new Sum(45, ...triple.flatMap((i) => cages[i])));
+
+// "Cells with identical colours contain identical digits": two blue circles at
+// R1C4/R4C1 and two yellow circles at R4C7/R7C4. SameValues(2, ...) reads its
+// cells as 2 sets of equal size, here one cell each.
+const colourPairs = [
+  new SameValues(2, 'R1C4', 'R4C1'),
+  new SameValues(2, 'R4C7', 'R7C4'),
 ];
 
 return [
   new Shape('9x9'),
   ...cageConstraints,
-  polyamorousTriple,
-  ...colourGroups,
+  ...tripleSums,
+  ...colourPairs,
 ];

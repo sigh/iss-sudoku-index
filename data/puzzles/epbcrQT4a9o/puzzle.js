@@ -3,60 +3,60 @@
 // Video: https://www.youtube.com/watch?v=epbcrQT4a9o
 // Source: https://sudokupad.app/pdywima58n
 
-// Standard sudoku: digits 1-9 once per row, column, and 3x3 box.
+// Encoded rules:
+//  - Normal 9x9 sudoku. The drawn regions are the ordinary 3x3 boxes, so the
+//    default Shape boxes are used. The puzzle has no given digits.
+//  - "Digits separated by a brown, leafy twig sum to 5."
+//  - "Digits separated by a large, green leaf have a difference of at least 5."
+//  - "Digits separated by a round frog egg have a 1:2 ratio (one is double the
+//    other)."
+//  - "Not all possible twigs / leaves / frog eggs have been given", so an
+//    unmarked cell border carries no restriction: no negative constraint
+//    accompanies any of the three mark types.
+//  - "No water lily may contain the same digit": the nine drawn water lilies
+//    hold nine different digits.
 //
-// Croakz the frog draws a self-avoiding path from his start cell, through
-// all nine water lilies (in an order the solver must determine), while
-// never crossing a rock wall and only cutting diagonally through an open
-// 2x2 space (never through either rounded rock corner). Segments of that
-// path between consecutively-visited lilies must sum to the two-digit
-// number formed by the two lilies' digits (either digit order), and the
-// opening segment (start cell to the first lily) must sum to just that
-// lily's digit. None of this has an ISS primitive: solver-discovered
-// connectivity (ConnectedValues) is orthogonal-only, while this path also
-// needs king-move diagonals, wall-aware adjacency, and an along-path digit
-// order/sum -- all outside the catalog. The whole path/lily-order/segment-
-// sum mechanic is omitted.
-//
-// The three edge marks below sit directly on fixed grid cells and hold
-// independently of the (unencoded) path, so they are kept. Per the rules,
-// each mark type is only partially given ("not all possible ... have been
-// given"), so no negative/exhaustive claim is made anywhere.
-//
-// TWIGS -- brown leafy twig: the two digits sum to 5 (native V dot).
-// LEAVES -- large green leaf: the two digits differ by at least 5 (no
-// native class for a minimum-difference pair; custom Pair over the fixed
-// edge).
-// FROG EGG -- round egg: one digit is double the other (native BlackDot).
-//
-// The nine water lilies themselves are a fixed, path-independent set of
-// cells, and no two may share a digit; that half of the lily rule is kept
-// as a plain AllDifferent even though which lily the path visits first
-// (and thus the Trials-and-Trails sums) is omitted above.
+// Omitted rules (each is stated in the rules text and is not encoded here):
+//  - Croakz' path itself: a single self-avoiding, non-self-crossing route
+//    starting on the frog's cell R7C2, stepping orthogonally or diagonally
+//    (a diagonal step needing an open 2x2 space), blocked by the sharp-rock
+//    walls and by the two rounded rocks on cell corners, and passing through
+//    all nine water lilies in an order the solver chooses.
+//  - The "split pea" segment sums: a segment of path cells between two water
+//    lilies sums to a two-digit number formed by those two lilies' digits in
+//    either order, and the opening segment from R7C2 up to the first lily
+//    (including R7C2's own digit) sums to that lily's digit.
+
+// Each mark is drawn straddling one cell border; the pairs below are the two
+// cells the mark sits between.
+const twigs = [
+  ['R3C3', 'R3C4'],
+  ['R8C1', 'R8C2'],
+];
+const leaves = [
+  ['R5C3', 'R5C4'],
+  ['R9C3', 'R9C4'],
+];
+const frogEggs = [
+  ['R6C4', 'R6C5'],
+];
+
+// The nine cells carrying a water lily.
+const waterLilies = [
+  'R2C5', 'R3C9', 'R4C6', 'R5C3', 'R5C6',
+  'R6C1', 'R6C9', 'R9C6', 'R9C9',
+];
 
 return [
   new Shape('9x9'),
 
-  // Water lilies: no repeated digit among them. Provenance: nine drawn
-  // lily glyphs at R2C5, R3C9, R4C6, R5C3, R5C6, R6C1, R6C9, R9C6, R9C9.
-  new AllDifferent(
-    'R2C5', 'R3C9', 'R4C6', 'R5C3', 'R5C6', 'R6C1', 'R6C9', 'R9C6', 'R9C9'),
+  // V is the XV "sum to 5" relation.
+  ...twigs.map((pair) => new V(...pair)),
+  // Whisper's first argument is the minimum difference between adjacent cells;
+  // on a two-cell line that is exactly "differ by at least 5".
+  ...leaves.map((pair) => new Whisper(5, ...pair)),
+  // BlackDot is the Kropki 1:2 relation.
+  ...frogEggs.map((pair) => new BlackDot(...pair)),
 
-  // Twigs: sum = 5. Provenance: drawn V-shaped twig glyph between
-  // R3C3/R3C4 and between R8C1/R8C2.
-  new V('R3C3', 'R3C4'),
-  new V('R8C1', 'R8C2'),
-
-  // Leaves: |a-b| >= 5. Provenance: drawn leaf glyph between R9C3/R9C4 and
-  // between R5C3/R5C4.
-  new Pair(
-    Pair.fnToKey((a, b) => Math.abs(a - b) >= 5, 9),
-    'Leaf (diff >= 5)', 'R9C3', 'R9C4'),
-  new Pair(
-    Pair.fnToKey((a, b) => Math.abs(a - b) >= 5, 9),
-    'Leaf (diff >= 5)', 'R5C3', 'R5C4'),
-
-  // Frog egg: one digit double the other. Provenance: drawn round egg
-  // between R6C4/R6C5.
-  new BlackDot('R6C4', 'R6C5'),
+  new AllDifferent(...waterLilies),
 ];

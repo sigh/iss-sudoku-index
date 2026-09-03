@@ -3,349 +3,341 @@
 // Video: https://www.youtube.com/watch?v=qJ_ENK7bPUc
 // Source: https://app.crackingthecryptic.com/sudoku/J3mq7L7GrN
 
-// Normal sudoku. Digits in each 2-cell cage sum to its total.
-// Two cars, blue and green, each draw a simple (non-repeating, non-branching)
-// king-move path from some cell in box 1 to a fixed finish cell in box 2 (R1C5
-// for blue, R2C5 for green -- the checkered-flag cage). Neither path may enter
-// a grey cell or an oil-slick (given-digit) cell, and the two paths never share
-// a cell. Five more 2-cell cages mark checkpoints; the rules state that at each
-// one, one named cell is passed by the green car and the other by the blue car
-// (read off the fill colour drawn on each cage's two cells -- yellowgreen is
-// green, deepskyblue is blue). Adjacent cells along the green car's path differ
-// by at least 5. The two paths cross exactly 3 times.
+// Normal sudoku. Digits in cages sum to the clue in the top left corner. Two
+// race cars, blue and green, start in box 1 and race around the track to the
+// chequered flag line in box 2 (the 16 cage); each car's path is a line drawn
+// through cell centres, stepping to an orthogonal or diagonal neighbour. Each
+// checkpoint (cage) carries one blue and one green marker showing the cell that
+// car passes through. The cars may not enter grey shaded cells and must avoid
+// all oil slicks (the given digits). The paths cross exactly 3 times and do not
+// share cells. Digits along the blue path have an equal sum N within each 3x3
+// box that path passes through. Adjacent digits along the green path differ by
+// at least 5.
 //
-// Movement is read as king-move (orthogonal or diagonal), not stated in so many
-// words but forced by the drawn geometry: checkpoint cell R5C9 is orthogonally
-// reachable only via R6C9 (its other neighbours are R4C9, an oil slick, and
-// R5C8, the other car's cell), which would make it an unreachable interior
-// waypoint under orthogonal-only movement. Diagonal movement also gives "the
-// paths cross" its only available reading: two cars' diagonals crossing inside
-// one 2x2 block, counted below.
-//
-// Omitted: "digits along the blue path have an equal sum N within each box it
-// passes through" -- the shared target N can reach the sum of up to six
-// distinct digits (as high as 39), which exceeds ISS's 16-value Shape alphabet
-// cap; expressing it needs a multi-layer base-N decomposition beyond this
-// encoding's scope.
-// Also not stated anywhere: that the two paths together must cover every
-// track cell. This encoding does not require that (the relaxed, safe
-// direction), so a car's path may be shorter than the full track.
+// Nothing is omitted. Three readings the prose leaves open are settled where
+// they are encoded: where each car starts, what a diagonal step may pass, and
+// what "cross" counts.
 
-// The alphabet is widened to 10 so the path Var layers can carry: cell
-// membership (off-track / blue / green), a directed step code per king-move
-// edge, an is-this-cell-the-start flag (box 1 candidates only), a crossing
-// flag per grid corner, and two coprime position counters used only for
-// subtour elimination (mod 5 and mod 9; their lcm 45 exceeds the 41-cell
-// track, the safe bound on either path's length). The 81 grid cells are
-// pinned back to 1-9 below.
-const NV = 10;
-const MOD_A = 5, MOD_B = 9;
-const OFF_POS = 1;                 // counter value for a cell off that layer's path
-const START_POS = 2;               // counter value of a path's first numbered cell
+const NV = 10;                       // one spare value above 9 for the Var layers
+const MOD_A = 6, MOD_B = 7;          // lcm 42 > the 41 open cells (see counters)
+const OFF = 1;                       // position value for a cell a path misses
+const START_POS = 2;                 // position value of a car's starting cell
+const UNUSED = 1;                    // step values: unused, then blue/green a->b, b->a
+const B_FWD = 2, B_BWD = 3, G_FWD = 4, G_BWD = 5;
+const NO_CROSS = 1, CROSS = 2;       // crossing-marker values
+const CROSSINGS = 3;                 // "the paths cross exactly 3 times"
 
-const OFF = 1, BLUE = 2, GREEN = 3;               // membership values
-const UNUSED = 1, BLUE_FWD = 2, BLUE_BWD = 3, GREEN_FWD = 4, GREEN_BWD = 5; // step values
-const NOT_START = 1, IS_START = 2;                // isStart flag values
-const NOT_CROSS = 1, IS_CROSS = 2;                // crossing flag values
-
-// --- Drawn geometry ---------------------------------------------------------
-// Grey (impassable) cells -- provenance: 34 underlay tiles, fill #cfcfcf.
-const GREY = [
-  'R1C1', 'R1C2', 'R1C7', 'R1C8', 'R1C9', 'R2C1', 'R2C8', 'R2C9', 'R3C4', 'R3C5',
-  'R3C9', 'R4C3', 'R4C4', 'R4C5', 'R4C6', 'R5C3', 'R5C4', 'R5C5', 'R5C6', 'R5C7',
-  'R6C3', 'R6C4', 'R6C6', 'R6C7', 'R8C1', 'R8C9', 'R9C1', 'R9C2', 'R9C4', 'R9C5',
-  'R9C6', 'R9C7', 'R9C8', 'R9C9',
+// --- The drawn board ------------------------------------------------------
+// Transcribed from the grey cell shading and from the given digits (each drawn
+// with an oil-slick marker, except R9C1 and R9C9 which sit on grey cells).
+// A car may enter neither, so the two maps together give the open track.
+const SHADING = [
+  '##....###',
+  '#......##',
+  '...##...#',
+  '..####...',
+  '..#####..',
+  '..##.##..',
+  '.........',
+  '#.......#',
+  '##.######',
 ];
-// Oil-slick (given-digit) cells not already grey -- provenance: 6 rounded-rect
-// grey-fill/green-border overlay marks, matching these six given cells exactly.
-const OIL = ['R1C4', 'R3C3', 'R3C7', 'R4C9', 'R7C3', 'R8C5'];
-// All given digits -- provenance: `cells[].value`.
-const GIVENS = {
-  R1C4: 6, R3C3: 4, R3C7: 8, R4C9: 7, R7C3: 5, R8C5: 3, R9C1: 4, R9C9: 3,
+const GIVENS = [
+  '...6.....',
+  '.........',
+  '..4...8..',
+  '........7',
+  '.........',
+  '.........',
+  '..5......',
+  '....3....',
+  '4.......3',
+];
+// Cage totals and cells, read from the six two-cell cages.
+const CAGES = [
+  [12, 'R1C3', 'R2C3'], [16, 'R1C5', 'R2C5'], [7, 'R5C8', 'R5C9'],
+  [5, 'R7C7', 'R8C7'], [3, 'R8C3', 'R9C3'], [12, 'R5C1', 'R5C2'],
+];
+// The checkpoint markers, read off their fill colours: deepskyblue cells belong
+// to the blue car, yellowgreen cells to the green car, one of each per cage.
+// The pair in the 12 cage of box 1 is drawn as two upright car-shaped rectangles
+// rather than the round checkpoint markers used everywhere else, and sits on the
+// red start line; those are the cars on the starting grid, so they are the two
+// paths' first cells. The chequered flag sits on the 16-cage line, so the
+// matching marker in that cage is each path's last cell.
+const BLUE = {
+  start: 'R2C3', end: 'R1C5',
+  checkpoints: ['R2C3', 'R5C2', 'R9C3', 'R7C7', 'R5C9', 'R1C5'],
 };
+const GREEN = {
+  start: 'R1C3', end: 'R2C5',
+  checkpoints: ['R1C3', 'R5C1', 'R8C3', 'R8C7', 'R5C8', 'R2C5'],
+};
+// The blue path is forced through these boxes by its checkpoints, so each of
+// them is a box "the path passes through"; the other three are conditional.
+const BLUE_BOXES = [1, 2, 4, 6, 7, 9];
+const OTHER_BOXES = [3, 5, 8];
 
-// Checkpoint cages -- provenance: `cages` totals plus each cage cell's fill
-// colour (yellowgreen = green car, deepskyblue = blue car).
-const CHECKPOINTS = [
-  { green: 'R1C3', blue: 'R2C3', total: 12 },
-  { green: 'R5C1', blue: 'R5C2', total: 12 },
-  { green: 'R5C8', blue: 'R5C9', total: 7 },
-  { green: 'R8C3', blue: 'R9C3', total: 3 },
-  { green: 'R8C7', blue: 'R7C7', total: 5 },
-];
-// Finish cage -- provenance: cage total 16 plus the chequered-flag edge mark
-// on R1C5-R2C5, with R1C5 filled deepskyblue (blue) and R2C5 yellowgreen (green).
-const FINISH = { blue: 'R1C5', green: 'R2C5', total: 16 };
-// Box-1 cells open to the "start in box 1" rule: every box-1 cell that is
-// neither grey nor an oil slick. The rules do not name a single start cell, so
-// this is encoded as a disjunction over all of them.
-const BOX1_CANDIDATES = ['R1C3', 'R2C2', 'R2C3', 'R3C1', 'R3C2'];
-
-// --- Shape and overlays ------------------------------------------------------
 const shape = new Shape('9x9', NV);
 const graph = cellGraph(shape);
 const gridCells = graph.cells();
+const at = (map, cell) => {
+  const { row, col } = parseCellId(cell);
+  return map[row - 1][col - 1];
+};
+const givenAt = cell => at(GIVENS, cell) === '.' ? null : +at(GIVENS, cell);
+// A car may not enter a grey cell or an oil slick, so the path layers below are
+// built over the open cells only: a blocked cell has no path variable at all.
+const isOpen = cell => at(SHADING, cell) === '.' && givenAt(cell) === null;
+const track = gridCells.filter(isOpen);
 
-const mem = graph.makeOverlay('VM');                          // per-cell membership
-const posA = graph.makeOverlay('VA');                          // position mod MOD_A
-const posB = graph.makeOverlay('VB');                          // position mod MOD_B
-const isStartBlue = graph.makeOverlay('VSB', BOX1_CANDIDATES); // box-1 cells only
-const isStartGreen = graph.makeOverlay('VSG', BOX1_CANDIDATES);
+// --- Path layers ----------------------------------------------------------
+// Each car gets two position layers and shares one step layer. A step Var per
+// open king-move adjacency records whether a path uses it, whose it is, and
+// which way that car travels along it.
+const bposA = graph.makeOverlay('VBA', track);
+const bposB = graph.makeOverlay('VBB', track);
+const gposA = graph.makeOverlay('VGA', track);
+const gposB = graph.makeOverlay('VGB', track);
+// The contribution layer covers the whole grid so that every box offers the
+// same nine cells to the sums below; a blocked cell is pinned off-path.
+const blueDigit = graph.makeOverlay('VBD');
 
-// --- Step variables: one per king-move grid edge -----------------------------
-// Records whether, and by which car and direction, the edge is used. `outX`/
-// `inX` are the codes each endpoint reads for a step it exits/enters.
+// The rule bars a car from entering a blocked cell, and a diagonal step enters
+// neither of the two cells flanking the corner it passes through, so a step
+// between two open cells is available whatever sits either side of it.
+const STEP_OFFSETS = [[0, 1], [1, 0], [1, 1], [1, -1]];
 const steps = [];
-const stepsAt = new Map(gridCells.map(cell => [cell, []]));
-const stepIndex = new Map();
-for (const cell of gridCells) {
-  for (const [dR, dC] of [[0, 1], [1, 0], [1, 1], [1, -1]]) {
+const stepsAt = new Map(track.map(cell => [cell, []]));
+for (const cell of track) {
+  for (const [dR, dC] of STEP_OFFSETS) {
     const other = graph.step(cell, dR, dC);
-    if (!other) continue;
+    if (!other || !isOpen(other)) continue;
     const id = 'VS' + (steps.length + 1);
     steps.push({ id, a: cell, b: other });
-    stepIndex.set(cell + '|' + other, id);
-    stepIndex.set(other + '|' + cell, id);
-    stepsAt.get(cell).push({
-      id, outBlue: BLUE_FWD, inBlue: BLUE_BWD, outGreen: GREEN_FWD, inGreen: GREEN_BWD,
-    });
-    stepsAt.get(other).push({
-      id, outBlue: BLUE_BWD, inBlue: BLUE_FWD, outGreen: GREEN_BWD, inGreen: GREEN_FWD,
-    });
+    stepsAt.get(cell).push({ id, bOut: B_FWD, bIn: B_BWD, gOut: G_FWD, gIn: G_BWD });
+    stepsAt.get(other).push({ id, bOut: B_BWD, bIn: B_FWD, gOut: G_BWD, gIn: G_FWD });
+  }
+}
+const stepIndex = new Map(steps.map(s => [s.a + '|' + s.b, s]));
+const stepBetween = (p, q) => stepIndex.get(p + '|' + q) || stepIndex.get(q + '|' + p);
+
+// Two paths drawn through cell centres meet only where their strokes pass
+// through the same lattice corner, and only a diagonal step does that: so a
+// crossing is one 2x2 square whose two diagonals are used by different cars.
+// One marker Var per square that has both diagonals available.
+const crossings = [];
+for (let i = 2; i <= 9; i++) {
+  for (let j = 2; j <= 9; j++) {
+    const d1 = stepBetween(makeCellId(i - 1, j - 1), makeCellId(i, j));
+    const d2 = stepBetween(makeCellId(i - 1, j), makeCellId(i, j - 1));
+    if (d1 && d2) {
+      crossings.push({ id: 'VX' + (crossings.length + 1), d1: d1.id, d2: d2.id });
+    }
   }
 }
 
-// --- Custom NFAs --------------------------------------------------------------
+// --- State machines -------------------------------------------------------
 const memo = new Map();
 const cached = (key, build) => {
   if (!memo.has(key)) memo.set(key, build());
   return memo.get(key);
 };
+const positionValues = mod => Array.from({ length: mod + 1 }, (_, n) => n + 1);
+const nextPos = (v, mod) => START_POS + ((v - START_POS + 1) % mod);
+const usesBlue = v => v === B_FWD || v === B_BWD;
+const usesGreen = v => v === G_FWD || v === G_BWD;
 
-// Per-cell shape machine. `role` is 'box1' (reads the two start flags first),
-// 'finish' (membership fixed by a Given elsewhere; always the path's end,
-// degree 1), or 'normal' (interior only: degree 2 if a member, else degree 0).
-// After membership, reads the two position counters, then every incident step.
-// A cell's counters must be off exactly when it is off-track; each incident
-// step must be UNUSED or match this cell's own membership colour -- a step
-// coded for the other colour is rejected here, which is what keeps the two
-// cars' cells disjoint. Degree is the count of matching in/out codes seen.
-function cellRoleNFA(incident, role) {
-  const sig = 'cell|' + role + '|' +
-    incident.map(s => [s.outBlue, s.inBlue, s.outGreen, s.inGreen].join('/')).join(',');
-  return cached(sig, () => {
-    const headLen = role === 'box1' ? 3 : 1; // flags(0/1/2) + membership
-    return NFA.encodeSpec({
-      startState: { k: 0 },
-      transition: (s, value) => {
-        if (role === 'box1') {
-          if (s.k === 0) return { k: 1, sb: value === IS_START };
-          if (s.k === 1) return { k: 2, sb: s.sb, sg: value === IS_START };
-        }
-        if (s.k === headLen - 1) {
-          // value = membership
-          if (value === OFF) {
-            if (role === 'box1' && (s.sb || s.sg)) return undefined;
-            return { k: headLen, color: OFF, wantDeg1: false };
-          }
-          if (value === BLUE) {
-            if (role === 'box1' && s.sg) return undefined;
-            return {
-              k: headLen, color: BLUE,
-              wantDeg1: role === 'finish' || (role === 'box1' && s.sb),
-            };
-          }
-          if (value === GREEN) {
-            if (role === 'box1' && s.sb) return undefined;
-            return {
-              k: headLen, color: GREEN,
-              wantDeg1: role === 'finish' || (role === 'box1' && s.sg),
-            };
-          }
-          return undefined;
-        }
-        if (s.k === headLen) {
-          // value = posA
-          if (s.color === OFF) return value === OFF_POS ? { ...s, k: s.k + 1 } : undefined;
-          return value !== OFF_POS ? { ...s, k: s.k + 1 } : undefined;
-        }
-        if (s.k === headLen + 1) {
-          // value = posB
-          if (s.color === OFF) {
-            return value === OFF_POS ? { ...s, k: s.k + 1, in: 0, out: 0 } : undefined;
-          }
-          return value !== OFF_POS ? { ...s, k: s.k + 1, in: 0, out: 0 } : undefined;
-        }
-        const stepIdx = s.k - headLen - 2;
-        if (stepIdx < 0 || stepIdx >= incident.length) return undefined;
-        const codes = incident[stepIdx];
-        let { in: nIn, out: nOut } = s;
-        if (s.color === OFF) {
-          if (value !== UNUSED) return undefined;
-        } else if (s.color === BLUE) {
-          if (value === codes.outBlue) nOut++;
-          else if (value === codes.inBlue) nIn++;
-          else if (value !== UNUSED) return undefined;
-        } else {
-          if (value === codes.outGreen) nOut++;
-          else if (value === codes.inGreen) nIn++;
-          else if (value !== UNUSED) return undefined;
-        }
-        if (nIn > 1 || nOut > 1) return undefined;
-        return { ...s, k: s.k + 1, in: nIn, out: nOut };
-      },
-      accept: (s) => {
-        if (s.k !== headLen + 2 + incident.length) return false;
-        if (s.color === OFF) return s.in === 0 && s.out === 0;
-        const deg = s.in + s.out;
-        if (s.wantDeg1) return deg === 1;
-        return s.in === 1 && s.out === 1;
-      },
-    }, NV);
-  });
-}
+// A car's start cell is left but never entered, its finish cell entered but
+// never left, and every other cell it visits is entered once and left once.
+const degreeOk = (role, visited, into, outOf) => {
+  if (role === 'start') return visited && into === 0 && outOf === 1;
+  if (role === 'finish') return visited && into === 1 && outOf === 0;
+  return visited ? (into === 1 && outOf === 1) : (into === 0 && outOf === 0);
+};
 
-const nextPos = (v, mod) => 2 + ((v - 2 + 1) % mod);
+// Per-cell machine: reads the cell's four position values, then every step it is
+// an endpoint of. It ties "on this path" (a position other than OFF, agreeing
+// across that car's two layers) to that car's step degrees, and rejects a cell
+// both cars visit -- the paths do not share cells.
+const cellNFA = (incident, blueRole, greenRole) => cached(
+  'cell|' + blueRole + '|' + greenRole + '|' + incident.map(s => s.bOut).join(','),
+  () => NFA.encodeSpec({
+    startState: { k: 0 },
+    transition: (s, value) => {
+      if (s.k === 0) return { k: 1, bv: value !== OFF };
+      if (s.k === 1) {
+        return (value !== OFF) === s.bv ? { k: 2, bv: s.bv } : undefined;
+      }
+      if (s.k === 2) {
+        const gv = value !== OFF;
+        if (gv && s.bv) return undefined;
+        return { k: 3, bv: s.bv, gv };
+      }
+      if (s.k === 3) {
+        if ((value !== OFF) !== s.gv) return undefined;
+        return { k: 4, bv: s.bv, gv: s.gv, bi: 0, bo: 0, gi: 0, go: 0 };
+      }
+      const n = s.k - 4;
+      if (n >= incident.length) return undefined;
+      const step = incident[n];
+      let { bi, bo, gi, go } = s;
+      if (value === step.bIn) bi++;
+      else if (value === step.bOut) bo++;
+      else if (value === step.gIn) gi++;
+      else if (value === step.gOut) go++;
+      else if (value !== UNUSED) return undefined;
+      if (bi > 1 || bo > 1 || gi > 1 || go > 1) return undefined;
+      return { k: s.k + 1, bv: s.bv, gv: s.gv, bi, bo, gi, go };
+    },
+    accept: s => s.k === 4 + incident.length &&
+      degreeOk(blueRole, s.bv, s.bi, s.bo) &&
+      degreeOk(greenRole, s.gv, s.gi, s.go),
+  }, NV));
 
-// Position counter, shared by both cars: an in-use step advances the
-// destination's counter by one past the source's, along its direction of
-// travel; a genuine cycle (of either colour) would need its length to be 0
-// mod both MOD_A and MOD_B, impossible once their lcm exceeds the track size.
-const counterNFA = mod => cached('cnt' + mod, () => NFA.encodeSpec({
+// Position counter over one step: a used step advances that car's counter by one
+// in the direction of travel. Degree alone would also admit a closed loop of
+// steps sitting beside a path; a loop of length L must have L = 0 mod 6 and
+// mod 7, so the shortest one that could be numbered is 42 cells long, and only
+// 41 cells are open.
+const counterNFA = (fwd, bwd, mod) => cached('count|' + fwd + '|' + mod,
+  () => NFA.encodeSpec({
+    startState: { k: 0 },
+    transition: (s, value) => {
+      if (s.k === 0) return { k: 1, dir: value };
+      if (s.k === 1) return { k: 2, dir: s.dir, a: value };
+      if (s.k !== 2) return undefined;
+      if (s.dir !== fwd && s.dir !== bwd) return { done: true };
+      if (s.a === OFF || value === OFF) return undefined;
+      if (s.dir === fwd) return value === nextPos(s.a, mod) ? { done: true } : undefined;
+      return s.a === nextPos(value, mod) ? { done: true } : undefined;
+    },
+    accept: s => s.done === true,
+  }, NV));
+
+// Digits joined by a green step differ by at least 5.
+const greenDiffNFA = () => cached('greendiff', () => NFA.encodeSpec({
   startState: { k: 0 },
   transition: (s, value) => {
-    if (s.k === 0) return { k: 1, dir: value };
-    if (s.k === 1) return { k: 2, dir: s.dir, a: value };
+    if (s.k === 0) return { k: 1, on: usesGreen(value) };
+    if (s.k === 1) return { k: 2, on: s.on, a: value };
     if (s.k !== 2) return undefined;
-    if (s.dir === UNUSED) return { done: true };
-    if (s.a === OFF_POS || value === OFF_POS) return undefined;
-    const isFwd = s.dir === BLUE_FWD || s.dir === GREEN_FWD;
-    if (isFwd) return value === nextPos(s.a, mod) ? { done: true } : undefined;
-    return s.a === nextPos(value, mod) ? { done: true } : undefined;
-  },
-  accept: s => s.done === true,
-}, NV));
-
-// Adjacent digits along the green car's path differ by at least 5; a step
-// unused, or used by blue, carries no constraint.
-const diffNFA = cached('diff', () => NFA.encodeSpec({
-  startState: { k: 0 },
-  transition: (s, value) => {
-    if (s.k === 0) return { k: 1, isGreen: value === GREEN_FWD || value === GREEN_BWD };
-    if (s.k === 1) return { k: 2, isGreen: s.isGreen, a: value };
-    if (s.k !== 2) return undefined;
-    if (!s.isGreen) return { done: true };
+    if (!s.on) return { done: true };
     return Math.abs(s.a - value) >= 5 ? { done: true } : undefined;
   },
   accept: s => s.done === true,
 }, NV));
 
-// A crossing is one car's diagonal step through a grid corner together with
-// the other car's diagonal step through that same corner (an X inside one
-// 2x2 block). Reads the block's two diagonal steps, then the crossing flag.
-const crossNFA = cached('cross', () => NFA.encodeSpec({
+// Reads a 2x2 square's two diagonal steps and sets its marker: CROSS exactly
+// when one diagonal is blue and the other green. A square whose two diagonals
+// belong to the same car is that car's path crossing itself, which the rules
+// neither forbid nor count.
+const crossNFA = () => cached('cross', () => NFA.encodeSpec({
   startState: { k: 0 },
   transition: (s, value) => {
-    if (s.k === 0) return { k: 1, d1: value };
-    if (s.k === 1) {
-      const blue1 = s.d1 === BLUE_FWD || s.d1 === BLUE_BWD;
-      const green1 = s.d1 === GREEN_FWD || s.d1 === GREEN_BWD;
-      const blue2 = value === BLUE_FWD || value === BLUE_BWD;
-      const green2 = value === GREEN_FWD || value === GREEN_BWD;
-      const crossing = (blue1 && green2) || (green1 && blue2);
-      return { k: 2, crossing };
-    }
+    if (s.k === 0) return { k: 1, v1: value };
+    if (s.k === 1) return { k: 2, v1: s.v1, v2: value };
     if (s.k !== 2) return undefined;
-    return value === (s.crossing ? IS_CROSS : NOT_CROSS) ? { done: true } : undefined;
+    const crossed = (usesBlue(s.v1) && usesGreen(s.v2)) ||
+      (usesGreen(s.v1) && usesBlue(s.v2));
+    return value === (crossed ? CROSS : NO_CROSS) ? { done: true } : undefined;
   },
   accept: s => s.done === true,
 }, NV));
 
-// --- Assemble ------------------------------------------------------------
-const box1Set = new Set(BOX1_CANDIDATES);
-const finishCells = new Set([FINISH.blue, FINISH.green]);
+// Reads a cell's blue position and digit and sets its blue-sum contribution to
+// digit + 1 when the blue path visits it and to 1 when it does not. The offset
+// keeps the value inside the 1..10 alphabet; every box compared below holds the
+// same nine cells, so the offsets cancel and the comparison is unaffected.
+const contributionNFA = () => cached('contribution', () => NFA.encodeSpec({
+  startState: { k: 0 },
+  transition: (s, value) => {
+    if (s.k === 0) return { k: 1, on: value !== OFF };
+    if (s.k === 1) return { k: 2, on: s.on, d: value };
+    if (s.k !== 2) return undefined;
+    return value === (s.on ? s.d + 1 : 1) ? { done: true } : undefined;
+  },
+  accept: s => s.done === true,
+}, NV));
 
-// Every inner grid corner (i,j), i,j in 2..9: the two diagonal steps of the
-// 2x2 block it sits in the middle of.
-const crossCorners = [];
-for (let i = 2; i <= 9; i++) {
-  for (let j = 2; j <= 9; j++) {
-    const d1 = stepIndex.get(makeCellId(i - 1, j - 1) + '|' + makeCellId(i, j));
-    const d2 = stepIndex.get(makeCellId(i - 1, j) + '|' + makeCellId(i, j - 1));
-    crossCorners.push({ d1, d2, flag: 'VX' + (crossCorners.length + 1) });
-  }
-}
-
+// --- Constraints ----------------------------------------------------------
 const layers = [
-  mem.toVar('car membership: off-track / blue / green'),
-  posA.toVar('path position mod ' + MOD_A),
-  posB.toVar('path position mod ' + MOD_B),
-  isStartBlue.toVar('is this box-1 cell the blue start'),
-  isStartGreen.toVar('is this box-1 cell the green start'),
-  new Var('S', 'king-move steps', steps.length),
-  new Var('X', 'crossing flags', crossCorners.length),
+  bposA.toVar('blue position mod ' + MOD_A),
+  bposB.toVar('blue position mod ' + MOD_B),
+  gposA.toVar('green position mod ' + MOD_A),
+  gposB.toVar('green position mod ' + MOD_B),
+  blueDigit.toVar('blue path digit contribution'),
+  new Var('S', 'path steps', steps.length),
+  new Var('X', 'path crossings', crossings.length),
 ];
 const domains = [
   graph.makeReplicate(new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-  mem.makeReplicate(new Given(mem.at(gridCells[0]), OFF, BLUE, GREEN)),
-  posA.makeReplicate(new Given(posA.at(gridCells[0]),
-    ...Array.from({ length: MOD_A + 1 }, (_, n) => n + 1))),
-  posB.makeReplicate(new Given(posB.at(gridCells[0]),
-    ...Array.from({ length: MOD_B + 1 }, (_, n) => n + 1))),
-  isStartBlue.makeReplicate(new Given(isStartBlue.at(BOX1_CANDIDATES[0]), NOT_START, IS_START)),
-  isStartGreen.makeReplicate(new Given(isStartGreen.at(BOX1_CANDIDATES[0]), NOT_START, IS_START)),
-  // Step and crossing-flag Vars take no explicit domain constraint: the
-  // per-cell and crossing machines below only ever accept the codes each one
-  // defines.
+  ...track.flatMap(cell => [
+    new Given(bposA.at(cell), ...positionValues(MOD_A)),
+    new Given(bposB.at(cell), ...positionValues(MOD_B)),
+    new Given(gposA.at(cell), ...positionValues(MOD_A)),
+    new Given(gposB.at(cell), ...positionValues(MOD_B)),
+  ]),
 ];
+// The step and crossing Vars need no domain of their own: the per-cell and
+// crossing machines accept no other value on them.
 
-// Sudoku givens.
-const givens = Object.entries(GIVENS).map(([cell, v]) => new Given(cell, v));
+const givens = gridCells.filter(cell => givenAt(cell) !== null)
+  .map(cell => new Given(cell, givenAt(cell)));
+// The rules give the cages a total but no no-repeat clause, so Sum, not Cage.
+const cages = CAGES.map(([total, ...cells]) => new Sum(total, ...cells));
 
-// Checkpoint cages: the sum is a plain 2-cell cage regardless of path colour.
-const cages = [...CHECKPOINTS, FINISH].map(cp => new Cage(cp.total, cp.green, cp.blue));
-
-// Grey and oil-slick cells: off both cars' paths.
-const blockedCells = [...new Set([...GREY, ...OIL])];
-const trackBans = blockedCells.map(cell => new Given(mem.at(cell), OFF));
-
-// Checkpoint / finish colour pins: the named cell is on the named car's path.
-const checkpointPins = [
-  ...CHECKPOINTS.flatMap(cp => [new Given(mem.at(cp.green), GREEN), new Given(mem.at(cp.blue), BLUE)]),
-  new Given(mem.at(FINISH.blue), BLUE),
-  new Given(mem.at(FINISH.green), GREEN),
-];
-
-// Exactly one box-1 candidate is each car's start (Sum(6,...): five cells each
-// NOT_START(1) or IS_START(2); the unique way to reach 6 is one IS_START).
-const startCounts = [
-  new Sum(6, ...isStartBlue.at(BOX1_CANDIDATES)),
-  new Sum(6, ...isStartGreen.at(BOX1_CANDIDATES)),
-];
-
-// Per-cell path shape.
-const pathShape = gridCells.map(cell => {
-  const role = finishCells.has(cell) ? 'finish' : (box1Set.has(cell) ? 'box1' : 'normal');
+const roleOf = (car, cell) =>
+  cell === car.start ? 'start' : cell === car.end ? 'finish' : 'through';
+const pathShape = track.map(cell => {
   const incident = stepsAt.get(cell);
-  const nfa = cellRoleNFA(incident, role);
-  const cells = role === 'box1'
-    ? [isStartBlue.at(cell), isStartGreen.at(cell), mem.at(cell), posA.at(cell), posB.at(cell),
-      ...incident.map(s => s.id)]
-    : [mem.at(cell), posA.at(cell), posB.at(cell), ...incident.map(s => s.id)];
-  return new NFA(nfa, 'path-cell', ...cells);
+  return new NFA(
+    cellNFA(incident, roleOf(BLUE, cell), roleOf(GREEN, cell)), 'path-cell',
+    bposA.at(cell), bposB.at(cell), gposA.at(cell), gposB.at(cell),
+    ...incident.map(s => s.id));
 });
-
+// Pinning each car's first cell to the first position stops the whole numbering
+// sliding round; it carries no rule of its own.
+const seams = [
+  new Given(bposA.at(BLUE.start), START_POS),
+  new Given(bposB.at(BLUE.start), START_POS),
+  new Given(gposA.at(GREEN.start), START_POS),
+  new Given(gposB.at(GREEN.start), START_POS),
+];
+// A checkpoint's marked cell is on that car's path: any position but OFF.
+const onPath = (layer, mod, cell) =>
+  new Given(layer.at(cell), ...positionValues(mod).filter(v => v !== OFF));
+const checkpoints = [
+  ...BLUE.checkpoints.map(cell => onPath(bposA, MOD_A, cell)),
+  ...GREEN.checkpoints.map(cell => onPath(gposA, MOD_A, cell)),
+];
 const counters = steps.flatMap(s => [
-  new NFA(counterNFA(MOD_A), 'path-order', s.id, posA.at(s.a), posA.at(s.b)),
-  new NFA(counterNFA(MOD_B), 'path-order', s.id, posB.at(s.a), posB.at(s.b)),
+  new NFA(counterNFA(B_FWD, B_BWD, MOD_A), 'path-order', s.id, bposA.at(s.a), bposA.at(s.b)),
+  new NFA(counterNFA(B_FWD, B_BWD, MOD_B), 'path-order', s.id, bposB.at(s.a), bposB.at(s.b)),
+  new NFA(counterNFA(G_FWD, G_BWD, MOD_A), 'path-order', s.id, gposA.at(s.a), gposA.at(s.b)),
+  new NFA(counterNFA(G_FWD, G_BWD, MOD_B), 'path-order', s.id, gposB.at(s.a), gposB.at(s.b)),
 ]);
+const crossingRule = [
+  ...crossings.map(x => new NFA(crossNFA(), 'crossing', x.d1, x.d2, x.id)),
+  new Sum(crossings.length * NO_CROSS + CROSSINGS * (CROSS - NO_CROSS),
+    ...crossings.map(x => x.id)),
+];
+const greenWhisper = steps.map(
+  s => new NFA(greenDiffNFA(), 'green-whisper', s.id, s.a, s.b));
 
-const differences = steps.map(s => new NFA(diffNFA, 'green-difference', s.id, s.a, s.b));
-
-const crossings = crossCorners.map(c => new NFA(crossNFA, 'crossing', c.d1, c.d2, c.flag));
-// Exactly 3 crossing flags are set: n cells each NOT_CROSS(1) or IS_CROSS(2)
-// sum to n + (number set), so target n+3 forces exactly 3.
-const crossingCount = new Sum(crossCorners.length + 3, ...crossCorners.map(c => c.flag));
+const contributions = gridCells.map(cell => isOpen(cell)
+  ? new NFA(contributionNFA(), 'blue-contribution',
+    bposA.at(cell), cell, blueDigit.at(cell))
+  : new Given(blueDigit.at(cell), 1));
+const boxCells = n => blueDigit.at(graph.box(n));
+// A box with no blue cell in it has every contribution at 1, and the rule then
+// says nothing about it.
+const emptyBox = n => new Sum(boxCells(n).length, ...boxCells(n));
+const blueBoxSums = [
+  new EqualSum(...BLUE_BOXES.map(boxCells)),
+  ...OTHER_BOXES.map(n => new Or([
+    emptyBox(n), new EqualSum(boxCells(n), boxCells(BLUE_BOXES[0]))])),
+];
 
 return [
   shape,
@@ -353,12 +345,12 @@ return [
   ...domains,
   ...givens,
   ...cages,
-  ...trackBans,
-  ...checkpointPins,
-  ...startCounts,
   ...pathShape,
+  ...seams,
+  ...checkpoints,
   ...counters,
-  ...differences,
-  ...crossings,
-  crossingCount,
+  ...crossingRule,
+  ...greenWhisper,
+  ...contributions,
+  ...blueBoxSums,
 ];

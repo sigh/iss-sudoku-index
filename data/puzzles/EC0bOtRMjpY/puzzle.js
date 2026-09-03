@@ -3,106 +3,75 @@
 // Video: https://www.youtube.com/watch?v=EC0bOtRMjpY
 // Source: https://sudokupad.app/hva096ojxs
 
-// Standard sudoku (rows/cols/boxes) plus:
-// - Cage: digits sum to the shown total, all cage digits distinct.
-// - Green line (Whisper(5)): adjacent digits differ by at least 5.
-// - Grey line: adjacent digits share one constant (signed) difference
-//   along the whole line -- an arithmetic-progression line, encoded below
-//   with a small NFA since ISS has no named class for it.
-// - Arrow: arm digits sum to the circled digit.
-// - X: adjacent digits sum to 10.
-// - White dot: adjacent digits are consecutive.
-// - Black dot: adjacent digits are in a 1:2 ratio.
-// - Inequality: the pointed-to cell holds the lower digit.
-// - Red line: the rules text withholds its rule ("clearing the fog reveals
-//   how to complete it"). A caption embedded in the grid data at R6C4 --
-//   invisible to a player until fog near it clears, but present in the
-//   payload -- reads "region sum line / lowest possible / value". Read as
-//   RegionSumLine: each 3x3-box segment of the path sums to the same total
-//   (the path crosses 4 boxes, once each, with 3/2/3/3 cells per segment).
-//   "Lowest possible value" is taken as a solving hint about that total,
-//   not an extra rule.
-// Fog/reveal state itself is solving UI, not encoded (foglight cage
-// markers in the source payload are the same UI and are skipped).
+// Normal 9x9 sudoku. Digits in a cage sum to the value shown in the cage's
+// left-topmost cell. Adjacent digits on a green line differ by at least 5. On a
+// grey line, any two neighbouring digits have the same difference. Digits on an
+// arrow sum to the digit in that arrow's circle. Cells joined by an X sum to 10,
+// by a white dot are consecutive, by a black dot are in a 1:2 ratio. Inequality
+// signs point to the lower digit. The red line's rule is printed under the fog
+// across R6C4: "region sum line / lowest possible value"; the minimality half
+// of that caption is not encoded (see the red line below).
 //
-// Nothing else is omitted.
+// Fog (cells revealed as correct digits are placed) is presentation only and is
+// not encoded. Dots, Xs and inequality signs are not declared exhaustive, so no
+// negative constraint applies to unmarked edges.
 
-const givens = [
+return [
+  new Shape('9x9'),
+
   new Given('R5C5', 1),
-];
 
-const cages = [
+  // Killer cages; each carries the payload's all-different flag.
   new Cage(18, 'R1C2', 'R2C2', 'R3C2'),
   new Cage(18, 'R1C8', 'R2C8', 'R3C8'),
   new Cage(9, 'R7C2', 'R8C2'),
   new Cage(9, 'R7C8', 'R8C8'),
   new Cage(8, 'R9C5', 'R9C6'),
-];
 
-const greenLines = [
-  ['R6C8', 'R7C8', 'R8C8'],
-  ['R6C2', 'R7C2', 'R8C2', 'R8C3', 'R9C3'],
-  ['R4C2', 'R3C2', 'R3C3'],
-  ['R3C7', 'R3C8', 'R4C8'],
-  ['R1C4', 'R1C3', 'R2C3'],
-].map(cells => new Whisper(5, ...cells));
+  // Green lines.
+  new Whisper(5, 'R6C8', 'R7C8', 'R8C8'),
+  new Whisper(5, 'R6C2', 'R7C2', 'R8C2', 'R8C3', 'R9C3'),
+  new Whisper(5, 'R4C2', 'R3C2', 'R3C3'),
+  new Whisper(5, 'R3C7', 'R3C8', 'R4C8'),
+  new Whisper(5, 'R1C4', 'R1C3', 'R2C3'),
 
-// Arithmetic-progression NFA: every consecutive pair on the line shares one
-// signed difference (the value fixed by the first pair, then held for the
-// rest of the line). Matches ISS's own "AP" sandbox example.
-const apSpec = NFA.encodeSpec({
-  startState: { lastVal: null, diff: null },
-  transition: ({ lastVal, diff }, value) => {
-    if (lastVal === null) return { lastVal: value, diff };
-    const newDiff = value - lastVal;
-    if (diff === null || diff === newDiff) {
-      return { lastVal: value, diff: newDiff };
-    }
-  },
-  accept: () => true,
-}, /* numValues= */ 9);
-const greyLine = new NFA(apSpec, 'AP', 'R5C6', 'R6C6', 'R7C6');
+  // Grey line R5C6-R6C6-R7C6: |R5C6 - R6C6| = |R6C6 - R7C6|. The two ends share
+  // column 6 and so cannot be equal, which leaves only the signed reading
+  // R5C6 - R6C6 = R6C6 - R7C6, written here as R5C6 - 2*R6C6 + R7C6 = 0.
+  new Sum(0, ['R5C6', 1], ['R6C6', -2], ['R7C6', 1]),
 
-const arrow = new Arrow('R6C6', 'R7C7');
+  // Arrow: circle R6C6, single shaft cell R7C7.
+  new Arrow('R6C6', 'R7C7'),
 
-const xPairs = [
-  ['R5C3', 'R5C4'],
-  ['R1C9', 'R2C9'],
-].map(cells => new X(...cells));
+  new X('R5C3', 'R5C4'),
+  new X('R1C9', 'R2C9'),
 
-const whiteDots = [
-  ['R9C4', 'R9C5'],
-  ['R2C5', 'R3C5'],
-].map(cells => new WhiteDot(...cells));
+  new WhiteDot('R9C4', 'R9C5'),
+  new WhiteDot('R2C5', 'R3C5'),
 
-const blackDots = [
-  ['R4C4', 'R4C5'],
-  ['R4C5', 'R4C6'],
-  ['R2C2', 'R3C2'],
-  ['R2C8', 'R3C8'],
-].map(cells => new BlackDot(...cells));
+  new BlackDot('R4C4', 'R4C5'),
+  new BlackDot('R4C5', 'R4C6'),
+  new BlackDot('R2C2', 'R3C2'),
+  new BlackDot('R2C8', 'R3C8'),
 
-// Each GreaterThan lists the larger cell first, then its adjacent smaller
-// neighbours, one call per cluster of chevrons pointing at the same cell.
-const inequalities = [
-  new GreaterThan('R1C2', 'R1C1', 'R1C3', 'R2C2'),
-  new GreaterThan('R1C8', 'R1C7', 'R1C9', 'R2C8'),
-];
+  // Inequality signs: one constraint per drawn sign, the larger cell first.
+  new GreaterThan('R1C2', 'R1C1'),
+  new GreaterThan('R1C2', 'R1C3'),
+  new GreaterThan('R1C2', 'R2C2'),
+  new GreaterThan('R1C8', 'R1C7'),
+  new GreaterThan('R1C8', 'R1C9'),
+  new GreaterThan('R1C8', 'R2C8'),
 
-const redLine = new RegionSumLine(
-  'R8C1', 'R8C2', 'R7C3', 'R7C4', 'R7C5', 'R6C5', 'R5C5', 'R4C4', 'R3C4',
-  'R2C5', 'R1C6');
-
-return [
-  new Shape('9x9'),
-  ...givens,
-  ...cages,
-  ...greenLines,
-  greyLine,
-  arrow,
-  ...xPairs,
-  ...whiteDots,
-  ...blackDots,
-  ...inequalities,
-  redLine,
+  // Red line: a region sum line, so its four box segments
+  //   box 7: R8C1,R8C2,R7C3   box 8: R7C4,R7C5
+  //   box 5: R6C5,R5C5,R4C4   box 2: R3C4,R2C5,R1C6
+  // share a common total N.
+  //
+  // Omitted: the caption's second half, "lowest possible value" -- that N is
+  // the smallest value for which the rest of the puzzle still has a solution.
+  // That is a property of the whole puzzle's solution set, not of the line, so
+  // no value of N is ruled out here.
+  new RegionSumLine(
+    'R8C1', 'R8C2', 'R7C3', 'R7C4', 'R7C5', 'R6C5', 'R5C5', 'R4C4',
+    'R3C4', 'R2C5', 'R1C6'),
 ];

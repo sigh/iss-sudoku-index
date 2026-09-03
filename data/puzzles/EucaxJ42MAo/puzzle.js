@@ -2,204 +2,217 @@
 // Author: PjotrV
 // Video: https://www.youtube.com/watch?v=EucaxJ42MAo
 // Source: https://app.crackingthecryptic.com/sudoku/jRhnH89mNm
+
+// Normal sudoku rules apply. Two snakes (A and B) live in the grid; one is an
+// Equal Sum Line, the other a German Whisper Line, and the solver must work out
+// which is which. Each snake is an orthogonally connected set of cells whose two
+// ends are the marked cells; each snake visits every 3x3 box; a snake never
+// touches itself, not even diagonally; the snakes may touch each other but do
+// not cross. The clue outside a row/column is the sum of that line's non-snake
+// digits. The digit in a squared cell counts the non-snake cells of its box. On
+// the Equal Sum Line the digits in each box the line visits share one total; on
+// the German Whisper Line consecutive digits differ by at least 5.
 //
-// Standard sudoku plus two undrawn snakes, A and B: orthogonally-connected
-// cell sets, each visiting every 3x3 box, neither touching itself even
-// diagonally (they may touch each other, but never occupy the same cell).
-// One snake is a German Whisper Line (adjacent snake digits differ by >= 5);
-// the other is an Equal Sum Line (digits sum to a common N within each box
-// the line passes through). Which snake is which is not stated, so the
-// Whisper rule is applied disjunctively to whichever snake satisfies it.
-// Outside clues give the sum of non-snake cells in that row/column; the
-// marked cell in each box holds the count of non-snake cells in that box.
-//
-// Omission: the Equal Sum Line's box-total arithmetic is not encoded -- only
-// the shared topology (both-visit-every-box, no self touch, connectivity)
-// and the disjunctive Whisper rule are enforced.
-//
-// Membership: one Var per grid cell (prefix 'VM'), value OFF/A/B. A cell
-// orthogonally adjacent to a same-value cell is *always* a path edge here,
-// because each on-snake cell's same-value orthogonal-neighbour count is
-// pinned to exactly 1 (its two global endpoints) or 2 (every other on-snake
-// cell) by the degree NFAs below -- so no same-snake pair can be adjacent
-// without being a path edge. That licenses reading the Whisper rule directly
-// off grid adjacency, with no separate path-order representation needed.
+// Every rule above is encoded. The A/B labels are never used as such: the two
+// snakes are stored directly as "the whisper snake" and "the equal-sum snake",
+// and the only thing the unknown assignment costs is a two-branch Or over the
+// four marked cells (each marked pair belongs to one snake, but which is open).
 
-const OFF = 1, A = 2, B = 3;
+const NONE = 1;       // VS codes: this cell is on neither snake,
+const WHISPER = 2;    // on the German Whisper snake,
+const EQSUM = 3;      // or on the Equal Sum snake.
 
-const ENDPOINTS_A = ['R1C3', 'R4C4'];
-const ENDPOINTS_B = ['R6C4', 'R8C9'];
-const ENDPOINTS = new Set([...ENDPOINTS_A, ...ENDPOINTS_B]);
-
-// Index-for-index with graph.boxes() (reading order: TL, TM, TR, ML, MM, MR,
-// BL, BM, BR), the box's marker cell -- the underlay square drawn in the
-// source, converted from its cell-center coordinates.
-const BOX_MARKERS = ['R1C1', 'R2C6', 'R2C8', 'R4C1', 'R6C5', 'R4C7', 'R9C3', 'R8C5', 'R8C7'];
-
-// Outside clues: [row, target] / [col, target] sums of non-snake cells,
-// transcribed from the six off-grid text overlays.
-const OUTSIDE_ROW_CLUES = [[6, 4], [8, 7], [9, 45]];
-const OUTSIDE_COL_CLUES = [[1, 45], [2, 23], [3, 5]];
-
-const graph = cellGraph('9x9');
+// The alphabet is widened to 0-9 so the two masked digit overlays can carry 0
+// for "this cell is not on my snake"; the grid cells are pinned back to 1-9.
+const shape = new Shape('9x9', '0-9');
+const graph = cellGraph(shape);
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
-const boxes = graph.boxes();
 
-const membership = graph.makeOverlay('VM');
-const originCell = membership.cells()[0];
+const snake = graph.makeOverlay('VS');        // membership: NONE / WHISPER / EQSUM
+const whisperDigit = graph.makeOverlay('VW'); // digit if on the whisper snake, else 0
+const sumDigit = graph.makeOverlay('VE');     // digit if on the equal-sum snake, else 0
 
-// --- Membership domain and fixed endpoints. ---
-const setup = [
-  membership.makeReplicate(new Given(originCell, OFF, A, B)),
-  ...ENDPOINTS_A.map(cell => new Given(membership.at(cell), A)),
-  ...ENDPOINTS_B.map(cell => new Given(membership.at(cell), B)),
+// Drawn clues, transcribed from the source artwork.
+// The four lettered cells: pencil-mark 'A' in R1C3 and R4C4, 'B' in R6C4 and R8C9.
+const markedA = ['R1C3', 'R4C4'];
+const markedB = ['R6C4', 'R8C9'];
+const markedCells = new Set([...markedA, ...markedB]);
+// The nine white squares, one per box; the box's non-snake count is read from
+// the digit that goes in the squared cell.
+const squares = [
+  'R1C1', 'R2C6', 'R2C8', 'R4C1', 'R6C5', 'R4C7', 'R9C3', 'R8C5', 'R8C7'];
+// Outside clues: three above columns 1-3, three left of rows 6, 8 and 9.
+const columnClues = { 1: 45, 2: 23, 3: 5 };
+const rowClues = { 6: 4, 8: 7, 9: 45 };
+
+// --- Playable digits and membership domains. ---
+const domains = [
+  graph.makeReplicate(new Given(gridCells[0], 1, 2, 3, 4, 5, 6, 7, 8, 9)),
+  snake.makeReplicate(new Given(snake.cells()[0], NONE, WHISPER, EQSUM)),
 ];
 
-// --- Degree: an on-snake cell has exactly 1 (endpoint) or 2 (otherwise)
-// same-value orthogonal neighbours; off cells are unconstrained. Reads own
-// membership, then each neighbour's. Two machines (by expected degree),
-// reused across all cells and both snake values.
-const degreeMachine = (expectedDegree) => NFA.encodeSpec({
-  startState: { phase: 'start' },
-  transition: ({ phase, own, count }, v) => {
-    if (phase === 'start') {
-      return v === OFF ? { phase: 'off' } : { phase: 'on', own: v, count: 0 };
-    }
-    if (phase === 'off') return { phase: 'off' };
-    const next = count + (v === own ? 1 : 0);
-    return next > 2 ? undefined : { phase: 'on', own, count: next };
-  },
-  accept: ({ phase, count }) => phase === 'off' || count === expectedDegree,
-}, geometry.numValues);
-const degree1 = degreeMachine(1);
-const degree2 = degreeMachine(2);
-const degrees = gridCells.map(cell => new NFA(
-  ENDPOINTS.has(cell) ? degree1 : degree2, 'degree',
-  ...membership.at([cell, ...graph.neighbours(cell)])));
-
-// --- No diagonal self-touch, per snake value: forbid a 2x2 block whose only
-// cells equal to X are the two diagonal ones. Reads the block's four
-// memberships, top-left to bottom-right.
-const noTouchMachine = (X) => NFA.encodeSpec({
-  startState: { block: [] },
-  transition: ({ block }, v) => {
-    if (block === null) return { block: null };
-    const next = [...block, v === X];
-    if (next.length < 4) return { block: next };
-    const [tl, tr, bl, br] = next;
-    const diagonalOnly = (tl && br && !tr && !bl) || (tr && bl && !tl && !br);
-    return diagonalOnly ? undefined : { block: null };
-  },
-  accept: ({ block }) => block === null,
-}, geometry.numValues);
-// One template per snake, anchored at the overlay's own origin cell (VM1,
-// i.e. R1C1's 2x2 block), replicated onto every other valid 2x2 top-left --
-// all 64 are the same shape, just shifted.
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noTouchTemplate = (X) => new NFA(noTouchMachine(X), 'no-touch',
-  ...membership.at(graph.block(blockOrigins[0], 2, 2)));
-const noDiagonalTouches = [
-  membership.makeReplicate(noTouchTemplate(A), membership.at(blockOrigins)),
-  membership.makeReplicate(noTouchTemplate(B), membership.at(blockOrigins)),
-];
-
-// --- Connectivity: each snake's cells form one connected region. ---
-const connectivity = [
-  new ConnectedValues('VM', A),
-  new ConnectedValues('VM', B),
-];
-
-// --- Visits every box: each snake has at least one cell in every box. ---
-const visitsEveryBox = boxes.flatMap(box => [
-  new ContainAtLeast(String(A), ...membership.at(box)),
-  new ContainAtLeast(String(B), ...membership.at(box)),
-]);
-
-// --- German Whisper Line, applied to whichever snake turns out to hold it:
-// for every grid-adjacent pair, if both cells are on the target snake their
-// digits differ by >= 5 (see the module comment for why grid adjacency is
-// exactly path adjacency here). Reads membership/digit for one cell, then
-// the other; off-target cells are skipped without constraining their digit.
-const whisperMachine = (X) => NFA.encodeSpec({
-  startState: { phase: 'm1' },
-  transition: (state, v) => {
+// --- The two masked digit overlays. ---
+// Reads [membership, digit, whisperDigit, sumDigit] for one cell and forces each
+// overlay to hold the digit when the cell is on that overlay's snake, else 0.
+// So a cell's digit lands in exactly one of {non-snake, VW, VE}, which is what
+// lets the sum clues below be plain Sums.
+const maskMachine = NFA.encodeSpec({
+  startState: { phase: 'membership' },
+  transition: (state, value) => {
     switch (state.phase) {
-      case 'm1': return v === X ? { phase: 'd1' } : { phase: 'skip', left: 3 };
-      case 'd1': return { phase: 'm2', d1: v };
-      case 'm2': return v === X
-        ? { phase: 'd2', d1: state.d1 }
-        : { phase: 'skip', left: 1 };
-      case 'd2':
-        return Math.abs(state.d1 - v) >= 5 ? { phase: 'done' } : undefined;
-      case 'skip':
-        return state.left > 1 ? { phase: 'skip', left: state.left - 1 } : { phase: 'done' };
+      case 'membership':
+        return value === NONE || value === WHISPER || value === EQSUM
+          ? { phase: 'digit', membership: value } : undefined;
+      case 'digit':
+        return { phase: 'whisper', membership: state.membership, digit: value };
+      case 'whisper':
+        return value === (state.membership === WHISPER ? state.digit : 0)
+          ? { phase: 'sum', membership: state.membership, digit: state.digit }
+          : undefined;
+      case 'sum':
+        return value === (state.membership === EQSUM ? state.digit : 0)
+          ? { phase: 'done' } : undefined;
     }
   },
   accept: ({ phase }) => phase === 'done',
-}, geometry.numValues);
-const whisperA = whisperMachine(A);
-const whisperB = whisperMachine(B);
-// Each undirected orthogonal edge once (right and down steps from each cell).
-const edges = gridCells.flatMap(cell => [[0, 1], [1, 0]]
-  .map(([dR, dC]) => graph.step(cell, dR, dC))
-  .filter(Boolean)
-  .map(other => [cell, other]));
-const whisperEdges = (machine) => edges.map(([a, b]) => new NFA(
-  machine, 'whisper', membership.at(a), a, membership.at(b), b));
-const whichIsWhisper = new Or([
-  new And(whisperEdges(whisperA)),
-  new And(whisperEdges(whisperB)),
-]);
+}, geometry);
+const masks = gridCells.map(cell => new NFA(maskMachine, 'mask',
+  snake.at(cell), cell, whisperDigit.at(cell), sumDigit.at(cell)));
 
-// --- Outside clues: sum of non-snake digits in a row/column equals target.
-// Reads (membership, digit) pairs down the line; only OFF cells contribute.
-const outsideSumMachine = (target) => NFA.encodeSpec({
-  startState: { sum: 0, mem: null },
-  transition: ({ sum, mem }, v) => {
-    if (mem === null) return { sum, mem: v };
-    const next = sum + (mem === OFF ? v : 0);
-    return next > target ? undefined : { sum: next, mem: null };
+// --- Which snake is which. ---
+// The two 'A' cells are the ends of one snake and the two 'B' cells the ends of
+// the other; the rules leave open which of them whispers, so both assignments
+// are disjoined. Nothing else in the encoding depends on the A/B labels.
+const roleAssignment = new Or([WHISPER, EQSUM].map(aRole => new And([
+  ...snake.at(markedA).map(cell => new Given(cell, aRole)),
+  ...snake.at(markedB).map(
+    cell => new Given(cell, aRole === WHISPER ? EQSUM : WHISPER)),
+])));
+
+// --- Each snake is a path between its two marked ends. ---
+// A marked cell has one same-snake orthogonal neighbour, any other snake cell
+// has two. With ConnectedValues below (one connected region per snake), exactly
+// two degree-1 cells and degree 2 elsewhere is a single simple path.
+// Reads the cell's own membership, then each orthogonal neighbour's.
+const memo = (fn) => { const m = new Map(); return k => (m.has(k) ? m : m.set(k, fn(k))).get(k); };
+const degreeMachine = memo(target => NFA.encodeSpec({
+  startState: { phase: 'start' },
+  transition: (state, value) => {
+    if (state.phase === 'start') {
+      return value === NONE
+        ? { phase: 'off' }
+        : { phase: 'on', own: value, count: 0 };
+    }
+    if (state.phase === 'off') return { phase: 'off' };
+    const count = state.count + (value === state.own ? 1 : 0);
+    return count > target
+      ? undefined : { phase: 'on', own: state.own, count: count };
   },
-  accept: ({ sum, mem }) => mem === null && sum === target,
-}, geometry.numValues);
-const outsideClues = [
-  ...OUTSIDE_ROW_CLUES.map(([row, target]) => {
-    const cells = graph.row(row);
-    return new NFA(outsideSumMachine(target), 'outside-row',
-      ...cells.flatMap(c => [membership.at(c), c]));
-  }),
-  ...OUTSIDE_COL_CLUES.map(([col, target]) => {
-    const cells = graph.column(col);
-    return new NFA(outsideSumMachine(target), 'outside-col',
-      ...cells.flatMap(c => [membership.at(c), c]));
-  }),
-];
+  accept: (state) => state.phase === 'off' || state.count === target,
+}, geometry));
+const degrees = gridCells.map(cell => new NFA(
+  degreeMachine(markedCells.has(cell) ? 1 : 2), 'degree',
+  ...snake.at([cell, ...graph.neighbours(cell)])));
 
-// --- Box markers: the marked cell's own digit equals the count of non-snake
-// cells in its box. Reads the marked cell's digit first, then the box's nine
-// memberships.
+// --- A snake never touches itself, not even diagonally. ---
+// Reading the rule together with the path structure: two cells of one snake that
+// are orthogonally adjacent must be consecutive (the degree rule already forces
+// that), and two that are diagonally adjacent must be the two ends of a turn, so
+// the turn cell -- one of the other two cells of their 2x2 -- is on the snake
+// too. What is left to forbid is a 2x2 whose cells of one snake are exactly a
+// diagonal pair. That also rules out the two snakes crossing: an X through a 2x2
+// would put each snake on a bare diagonal.
+// Reads the four membership cells of a 2x2 block, left to right, top to bottom.
+const noTouchMachine = NFA.encodeSpec({
+  // `block` collects the four memberships (anything but a snake code counts as
+  // absent), and becomes null once the block has been checked.
+  startState: { block: [] },
+  transition: ({ block }, value) => {
+    if (block === null) return { block: null };
+    const next = [...block, value === WHISPER || value === EQSUM ? value : 0];
+    if (next.length < 4) return { block: next };
+    const [topLeft, topRight, bottomLeft, bottomRight] = next;
+    const bareDiagonal = [WHISPER, EQSUM].some(v =>
+      (topLeft === v && bottomRight === v && topRight !== v && bottomLeft !== v) ||
+      (topRight === v && bottomLeft === v && topLeft !== v && bottomRight !== v));
+    return bareDiagonal ? undefined : { block: null };
+  },
+  accept: ({ block }) => block === null,
+}, geometry);
+// Cells on the bottom or right edge start no 2x2 block.
+const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
+const noTouches = snake.makeReplicate(
+  new NFA(noTouchMachine, 'no-touch',
+    ...snake.at(graph.block(gridCells[0], 2, 2))),
+  snake.at(blockOrigins));
+
+// --- Each snake is connected, and visits every box. ---
+const connectivity = [
+  new ConnectedValues('VS', WHISPER),
+  new ConnectedValues('VS', EQSUM),
+];
+const boxVisits = snake.boxes().map(
+  box => new ContainAtLeast(`${WHISPER}_${EQSUM}`, ...box));
+
+// --- Squared cells: the digit counts the box's non-snake cells. ---
+// Reads the squared cell's digit as the target, then the box's nine membership
+// cells, counting NONE.
 const boxCountMachine = NFA.encodeSpec({
   startState: { target: null, count: 0 },
-  transition: ({ target, count }, v) => {
-    if (target === null) return { target: v, count: 0 };
-    const next = count + (v === OFF ? 1 : 0);
+  transition: ({ target, count }, value) => {
+    if (target === null) return { target: value, count: 0 };
+    const next = count + (value === NONE ? 1 : 0);
     return next > target ? undefined : { target, count: next };
   },
   accept: ({ target, count }) => target !== null && count === target,
-}, geometry.numValues);
-const boxCounts = boxes.map((box, i) => new NFA(boxCountMachine, 'box-off-count',
-  BOX_MARKERS[i], ...membership.at(box)));
+}, geometry);
+const gridBoxes = graph.boxes();
+const boxCounts = squares.map(square => new NFA(boxCountMachine, 'box-count',
+  square, ...snake.boxes()[gridBoxes.findIndex(box => box.includes(square))]));
+
+// --- Outside clues: the non-snake digits of a row/column sum to the clue. ---
+// Each digit of a line lands in exactly one of the three buckets, so the
+// non-snake total is 45 (a full row or column) minus the two snake overlays.
+const outsideClues = [
+  ...Object.entries(columnClues).map(([col, clue]) => new Sum(45 - clue,
+    ...whisperDigit.column(Number(col)), ...sumDigit.column(Number(col)))),
+  ...Object.entries(rowClues).map(([row, clue]) => new Sum(45 - clue,
+    ...whisperDigit.row(Number(row)), ...sumDigit.row(Number(row)))),
+];
+
+// --- German whispers along the whisper snake. ---
+// Two orthogonally adjacent cells that are both on the snake are consecutive
+// along it (the degree rule leaves no other way for them to be adjacent), so the
+// rule is a plain relation on the masked overlay: a 0 means "not on this snake".
+const whisperKey = Pair.fnToKey(
+  (a, b) => a === 0 || b === 0 || Math.abs(a - b) >= 5, geometry);
+// Right and down steps only, so each orthogonal pair is covered once; the step
+// falls off the grid at the last column/row, which those cells' targets drop.
+const whispers = [[0, 1], [1, 0]].map(([dRow, dCol]) => whisperDigit.makeReplicate(
+  new Pair(whisperKey, 'whisper',
+    ...whisperDigit.at([gridCells[0], graph.step(gridCells[0], dRow, dCol)])),
+  whisperDigit.at(gridCells.filter(cell => graph.step(cell, dRow, dCol)))));
+
+// --- The equal sum snake: one total per box. ---
+// The snake visits every box, so every box carries a segment of it and all nine
+// box totals of the masked overlay are the line's per-box total N.
+const equalSums = new EqualSum(...sumDigit.boxes());
 
 return [
-  new Shape('9x9'),
-  membership.toVar('M'),
-  ...setup,
+  shape,
+  snake.toVar('snake'),
+  whisperDigit.toVar('whisper digits'),
+  sumDigit.toVar('equal sum digits'),
+  ...domains,
+  ...masks,
+  roleAssignment,
   ...degrees,
-  ...noDiagonalTouches,
+  noTouches,
   ...connectivity,
-  ...visitsEveryBox,
-  whichIsWhisper,
-  ...outsideClues,
+  ...boxVisits,
   ...boxCounts,
+  ...outsideClues,
+  ...whispers,
+  equalSums,
 ];

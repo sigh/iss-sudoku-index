@@ -3,85 +3,136 @@
 // Video: https://www.youtube.com/watch?v=u9XWZfwWGUs
 // Source: https://cracking-the-cryptic.web.app/sudoku/H9Jr7gQHtm
 
-// Normal sudoku rules apply (standard rows/columns/3x3 boxes, supplied by
-// Shape('9x9')). Every cell is coloured water or land. The water cells form a
-// single orthogonally-connected region, and no 2x2 block is entirely water.
-// A cell carrying an arrow (33 of the 81 -- not every cell has one) has a
-// digit equal to how many cells, going from the next cell out in the arrow's
-// direction to the grid edge, share that arrow cell's own colour (the arrow
-// cell itself is not counted).
+// Partial encoding. The grid has no given digits at all; every clue is one of
+// the 33 drawn arrows, read against a water/land colouring the solver must find.
+// The colouring lives in the VS overlay, WATER = 1 and LAND = 2.
 //
-// Islands (orthogonally-connected land groups of >= 3 cells, each internally
-// all-different, every land cell in one) are NOT encoded: the land partition
-// is unanchored (no drawn per-island clue) and unbounded (unknown island
-// count and sizes).
+// Encoded here:
+//  - Normal sudoku (the solver's own row/column/box rules).
+//  - Each cell is water or land.
+//  - An arrow cell's digit counts the cells of the arrow cell's own colour
+//    along the ray running from the arrow to the grid edge in the arrow's
+//    direction, excluding the arrow cell itself; those cells need not be
+//    contiguous. Arrows are not exhaustive, so an unmarked cell has no
+//    counting rule.
+//  - The water cells form a single orthogonally connected region.
+//  - No 2x2 area is entirely water.
+//  - Every land cell belongs to an island: an orthogonally connected group of
+//    at least three land cells. Diagonal contact does not join two islands.
+//
+// Omitted: "land cells forming any island must contain different digits" is
+// encoded only for the land groups of at most three cells, which is where it
+// bites locally. Two land cells in one island that are joined only through a
+// longer land path are left unconstrained.
 
 const WATER = 1;
 const LAND = 2;
 
-const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-// One water/land Var per grid cell (VW1..VW81, in grid order).
-const colour = graph.makeOverlay('VW');
+const shape = new Shape('9x9');
+const graph = cellGraph(shape);
+const shade = graph.makeOverlay('VS');
 
-const DIRS = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
+const STEP = { U: [-1, 0], D: [1, 0], L: [0, -1], R: [0, 1] };
 
-// Arrow cell + direction, transcribed from the puzzle's drawn arrows (33
-// one-cell direction stubs -- direction only, no path length beyond the
-// bulb cell).
+// The 33 drawn arrows: the cell each one sits in, and the neighbour its half-cell
+// stroke points at.
 const arrows = [
-  ['R1C1', 'down'], ['R1C2', 'right'], ['R2C1', 'right'], ['R2C2', 'down'],
-  ['R1C4', 'down'], ['R1C6', 'down'], ['R3C6', 'right'], ['R1C8', 'down'],
-  ['R2C8', 'down'], ['R1C9', 'down'], ['R2C9', 'left'], ['R4C1', 'down'],
-  ['R4C2', 'down'], ['R6C1', 'right'], ['R6C2', 'right'], ['R4C5', 'up'],
-  ['R6C5', 'down'], ['R5C6', 'left'], ['R4C8', 'down'], ['R4C9', 'up'],
-  ['R6C8', 'left'], ['R6C9', 'left'], ['R8C1', 'right'], ['R9C1', 'up'],
-  ['R9C2', 'up'], ['R7C4', 'up'], ['R7C6', 'right'], ['R9C4', 'up'],
-  ['R9C6', 'up'], ['R8C7', 'up'], ['R8C9', 'left'], ['R9C8', 'left'],
-  ['R9C9', 'up'],
+  ['R1C1', 'D'], ['R1C2', 'R'], ['R1C4', 'D'], ['R1C6', 'D'], ['R1C8', 'D'],
+  ['R1C9', 'D'], ['R2C1', 'R'], ['R2C2', 'D'], ['R2C8', 'D'], ['R2C9', 'L'],
+  ['R3C6', 'R'], ['R4C1', 'D'], ['R4C2', 'D'], ['R4C5', 'U'], ['R4C8', 'D'],
+  ['R4C9', 'U'], ['R5C6', 'L'], ['R6C1', 'R'], ['R6C2', 'R'], ['R6C5', 'D'],
+  ['R6C8', 'L'], ['R6C9', 'L'], ['R7C4', 'U'], ['R7C6', 'R'], ['R8C1', 'R'],
+  ['R8C7', 'U'], ['R8C9', 'L'], ['R9C1', 'U'], ['R9C2', 'U'], ['R9C4', 'U'],
+  ['R9C6', 'U'], ['R9C8', 'L'], ['R9C9', 'U'],
 ];
 
-// "This cell's digit = the count of ray cells sharing this cell's own
-// colour." Two segments: the origin (digit, then the origin's own colour),
-// then the ray (colours only, nearest cell first -- order doesn't matter to a
-// running count). SEGMENT_BREAK between them is a pass-through: it only ever
-// falls once, between the two segments, so no branch below may consume it.
-const arrowCountSpec = NFA.encodeSpec({
-  startState: { target: null, myColour: null, count: 0 },
-  transition: ({ target, myColour, count }, value) => {
-    if (value === SEGMENT_BREAK) return { target, myColour, count };
-    if (target === null) return { target: value, myColour: null, count: 0 };
-    if (myColour === null) return { target, myColour: value, count: 0 };
-    const hit = value === myColour ? 1 : 0;
-    // Clamp: target + 1 is a sink meaning "already too many".
-    return { target, myColour, count: Math.min(count + hit, target + 1) };
+// The colouring is a free two-valued choice on every cell.
+const colouring = [
+  shade.toVar('shade'),
+  shade.makeReplicate(new Given(shade.cells()[0], WATER, LAND)),
+];
+
+// One machine per arrow, reading [digit, arrow cell's colour, ray colours...].
+// The first symbol fixes the count the ray must produce, the second fixes which
+// colour is being counted, and the rest count matches, dying as soon as the
+// count passes the target so the state stays bounded. Only colour values reach
+// the machine after the first symbol, so anything else is a dead branch.
+const arrowSpec = NFA.encodeSpec({
+  startState: { target: null, colour: null, count: 0 },
+  transition: ({ target, colour, count }, value) => {
+    if (target === null) return { target: value, colour: null, count: 0 };
+    if (value !== WATER && value !== LAND) return undefined;
+    if (colour === null) return { target, colour: value, count: 0 };
+    const next = count + (value === colour ? 1 : 0);
+    return next > target ? undefined : { target, colour, count: next };
   },
-  accept: ({ target, myColour, count }) => target !== null && count === target,
-}, geometry.numValues, { multiSegment: true });
+  accept: ({ count, target }) => count === target,
+  maxDepth: 10,   // digit + own colour + at most 8 ray cells
+}, shape);
 
 const arrowCounts = arrows.map(([cell, dir]) => {
-  const [dRow, dCol] = DIRS[dir];
-  const ray = graph.ray(cell, dRow, dCol).slice(1);   // exclude the arrow cell
-  return new NFA(
-    arrowCountSpec, 'arrow-count', [cell, colour.at(cell)], colour.at(ray));
+  const [dRow, dCol] = STEP[dir];
+  const ray = graph.ray(cell, dRow, dCol).slice(1);   // drop the arrow cell
+  return new NFA(arrowSpec, `count ${dir}`, cell, shade.at(cell), ...shade.at(ray));
 });
 
-// No 2x2 block is entirely water: at least one of its four cells is land.
-const noWaterBlocks = graph.cells()
-  .map(cell => graph.block(cell, 2, 2))
-  .filter(Boolean)
-  .map(block => new Or(colour.at(block).map(c => new Given(c, LAND))));
+const waterIsOneRegion = new ConnectedValues('VS', WATER);
 
-const colourOrigin = colour.cells()[0];
+const noWater2x2 = graph.cells()
+  .map(cell => graph.block(cell, 2, 2))
+  .filter(block => block)
+  .map(block => new ContainAtLeast(String(LAND), ...shade.at(block)));
+
+// A land cell with no land neighbour is an island of one.
+const noLoneLand = graph.cells().map(cell => new Or([
+  new Given(shade.at(cell), WATER),
+  new ContainAtLeast(String(LAND), ...shade.at(graph.neighbours(cell))),
+]));
+
+// Two adjacent land cells are an island of two exactly when neither has any
+// other land neighbour, so at least one of them must have one.
+const adjacentPairs = graph.cells().flatMap(
+  cell => [graph.step(cell, 0, 1), graph.step(cell, 1, 0)]
+    .filter(other => other).map(other => [cell, other]));
+
+const noLandDomino = adjacentPairs.map(([a, b]) => new Or([
+  new Given(shade.at(a), WATER),
+  new Given(shade.at(b), WATER),
+  new ContainAtLeast(
+    String(LAND), ...shade.at(graph.neighbours(a).filter(c => c !== b))),
+  new ContainAtLeast(
+    String(LAND), ...shade.at(graph.neighbours(b).filter(c => c !== a))),
+]));
+
+// The island digit rule, for islands of at most three cells. Orthogonally
+// adjacent cells and cells three apart in a line already share a row or a
+// column, so the sudoku rules cover every land group of two or three except
+// the bent one: a diagonal pair joined through one of its two elbow cells.
+// Those pairs matter only across a box boundary; inside a box the box rule
+// already separates them.
+const boxOf = new Map(graph.boxes().flatMap(
+  (box, index) => box.map(cell => [cell, index])));
+
+const bentTriples = graph.cells().flatMap(a => [1, -1].flatMap(dCol => {
+  const b = graph.step(a, 1, dCol);
+  if (!b || boxOf.get(a) === boxOf.get(b)) return [];
+  return [graph.step(a, 0, dCol), graph.step(a, 1, 0)].map(elbow => [a, elbow, b]);
+}));
+
+const smallIslandDigits = bentTriples.map(([a, elbow, b]) => new Or([
+  new Given(shade.at(a), WATER),
+  new Given(shade.at(elbow), WATER),
+  new Given(shade.at(b), WATER),
+  new AllDifferent(a, b),
+]));
 
 return [
-  new Shape('9x9'),
-  colour.toVar('colour'),
-  // Restrict every colour cell's domain to WATER/LAND.
-  colour.makeReplicate(new Given(colourOrigin, WATER, LAND)),
-  // Water: exactly one connected region. Land is intentionally not asserted
-  // connected -- it is meant to split into several islands.
-  new ConnectedValues('VW', WATER),
-  ...noWaterBlocks,
+  shape,
+  ...colouring,
   ...arrowCounts,
+  waterIsOneRegion,
+  ...noWater2x2,
+  ...noLoneLand,
+  ...noLandDomino,
+  ...smallIslandDigits,
 ];

@@ -3,142 +3,119 @@
 // Video: https://www.youtube.com/watch?v=iXSHQDLj5OI
 // Source: https://app.crackingthecryptic.com/sudoku/hnMJTRhdrT
 
-// Normal sudoku rules apply (default 9x9 boxes -- the source's own regions are the
-// nine standard 3x3 blocks). Two givens: R1C5=8, R9C9=7.
+// Rules
+//   Normal sudoku rules apply.
+//   All digits in the colored cells are part of at least one (summer) Olympic
+//   year. The years are depicted in orthogonally adjacent consecutive digits.
+//   All (summer) Olympic years are present, except Olympic years with double
+//   digits (e.g. 1912) or with zeros (e.g. 1904). Not all possible combinations
+//   within the colored area are depicting Olympic years.
+//   Digits joined by a black dot have a ratio of 1:2. All possible black dots
+//   are given.
+//   (The Olympics began in 1896 and have occurred every four years since,
+//   excluding 1916, 1940 and 1944.)
 //
-// Black dots (2:1 ratio) sit on the 16 drawn edges. "All possible black dots are
-// given" is exhaustive for black dots specifically (the rules never mention white
-// dots at all), so every other orthogonally-adjacent pair in the grid is
-// constrained to NOT be a 2:1 ratio -- not full StrictKropki, which would also
-// forbid unmarked consecutive pairs the rules never restrict.
-//
-// Colored-area Olympic-year rule. The qualifying years are derived straight from
-// the rules' own formula (every 4 years from 1896, skipping the cancelled
-// 1916/1940/1944 Games -- stated in the video description), keeping only years
-// with no zero digit and no repeated digit: the rules' own two exclusions, worked
-// as 1904 (a zero) and 1912 (a repeated 1) respectively. That leaves 13 years.
-// "The years are depicted in orthogonally adjacent consecutive digits" and the
-// rules never fix which end of that run is read first, so both traversal
-// directions of every colored-cell path are candidates (Or over the reading).
-// "All years are present" becomes: for each year, some directed length-4 path of
-// colored cells holds its digits in order. "All digits in the colored cells are
-// part of at least one Olympic year" becomes: for each colored cell, some such
-// matching path passes through it. "Not all possible combinations ... are
-// depicting Olympic years" licenses no extra constraint -- it only says a
-// leftover adjacent run need not avoid coincidentally matching, so nothing beyond
-// presence + coverage encodes that sentence.
+// Nothing is encoded for "Not all possible combinations within the colored
+// area are depicting Olympic years": read as a constraint it asks only that
+// some four-cell run in the colored area is not an Olympic year, and every
+// qualifying year reversed (6981, 4291, ... 4891) is not itself a qualifying
+// year, so each run and its reverse cannot both be years and the clause holds
+// for any grid.
 
 const graph = cellGraph('9x9');
 
-// Drawn chocolate/brown underlay cells (35 cells).
-const coloredCells = [
+// The 35 orange-shaded cells (underlays, fill #EB7532).
+const colored = [
   'R1C2', 'R1C3', 'R1C4', 'R1C5',
   'R2C2', 'R2C3', 'R2C4', 'R2C5', 'R2C6', 'R2C7',
   'R3C6', 'R3C7', 'R3C8', 'R3C9',
   'R4C4', 'R4C5', 'R4C6', 'R4C7', 'R4C8',
   'R5C1', 'R5C2',
   'R6C1', 'R6C2', 'R6C3', 'R6C4',
-  'R7C1', 'R7C2', 'R7C3', 'R7C4', 'R7C5',
-  'R7C8', 'R7C9',
+  'R7C1', 'R7C2', 'R7C3', 'R7C4', 'R7C5', 'R7C8', 'R7C9',
   'R8C3', 'R8C8', 'R8C9',
 ];
-const coloredSet = new Set(coloredCells);
 
-// Drawn black-dot overlay edges (16 edge-centered marks).
-const dotEdges = [
-  ['R2C2', 'R2C3'], ['R1C4', 'R2C4'], ['R2C6', 'R3C6'], ['R3C8', 'R4C8'],
-  ['R3C9', 'R4C9'], ['R4C8', 'R4C9'], ['R7C8', 'R8C8'], ['R8C7', 'R9C7'],
-  ['R9C6', 'R9C7'], ['R8C4', 'R8C5'], ['R6C6', 'R7C6'], ['R5C6', 'R6C6'],
-  ['R5C4', 'R6C4'], ['R5C1', 'R5C2'], ['R8C2', 'R8C3'], ['R8C3', 'R9C3'],
+// The 16 drawn black dots, as the cell pair each one straddles.
+const blackDotEdges = [
+  ['R1C4', 'R2C4'], ['R2C2', 'R2C3'], ['R2C6', 'R3C6'], ['R3C8', 'R4C8'],
+  ['R3C9', 'R4C9'], ['R4C8', 'R4C9'], ['R5C1', 'R5C2'], ['R5C4', 'R6C4'],
+  ['R5C6', 'R6C6'], ['R6C6', 'R7C6'], ['R7C8', 'R8C8'], ['R8C2', 'R8C3'],
+  ['R8C3', 'R9C3'], ['R8C4', 'R8C5'], ['R8C7', 'R9C7'], ['R9C6', 'R9C7'],
 ];
-const dotEdgeKey = (a, b) => [a, b].sort().join('_');
-const dotEdgeSet = new Set(dotEdges.map(([a, b]) => dotEdgeKey(a, b)));
 
-// Every grid-adjacent edge, derived from the graph rather than hand-listed, so
-// the "all other edges" negation below is computed, not transcribed. Kept as
-// two offset groups (rightward, downward) so the negation can be one
-// `Replicate` per group instead of 128 separate `Pair`s.
-const rightEdges = [];
-const downEdges = [];
-for (const cell of graph.cells()) {
-  const right = graph.step(cell, 0, 1);
-  if (right) rightEdges.push([cell, right]);
-  const down = graph.step(cell, 1, 0);
-  if (down) downEdges.push([cell, down]);
-}
-const undrawnRightStarts = rightEdges
-  .filter(([a, b]) => !dotEdgeSet.has(dotEdgeKey(a, b))).map(([a]) => a);
-const undrawnDownStarts = downEdges
-  .filter(([a, b]) => !dotEdgeSet.has(dotEdgeKey(a, b))).map(([a]) => a);
-
-const notBlackDotKey = Pair.fnToKey((a, b) => a !== b * 2 && b !== a * 2, 9);
-
-// One Replicate per offset: the template pair at the group's first (row-major
-// earliest) cell, shifted onto every other undrawn edge of that direction.
-const notBlackDotReplicates = [
-  [undrawnRightStarts, [0, 1]],
-  [undrawnDownStarts, [1, 0]],
-].map(([starts, [dRow, dCol]]) => {
-  const origin = starts[0];
-  return new Replicate(
-    [new Pair(
-      notBlackDotKey, 'not black dot', origin, graph.step(origin, dRow, dCol))],
-    Replicate.encodeTargetCells(starts, origin, graph),
-    origin,
-  );
-});
-
-// Qualifying Olympic years: computed from the rules' own formula, see header.
-const cancelledGames = new Set([1916, 1940, 1944]);
-const olympicYearDigits = [];
-for (let y = 1896; y <= 2020; y += 4) {
-  if (cancelledGames.has(y)) continue;
-  const digits = String(y).split('').map(Number);
-  if (digits.includes(0)) continue;
+// Summer Olympic years, then the rules' two exclusions: a repeated digit
+// ("double digits", e.g. 1912) and a zero (e.g. 1904). Every year from 2000 on
+// contains a zero, so the surviving list does not depend on where the sequence
+// is stopped. 13 years survive: 1896, 1924, 1928, 1932, 1936, 1948, 1952,
+// 1956, 1964, 1968, 1972, 1976, 1984.
+const cancelled = new Set([1916, 1940, 1944]);
+const years = [];
+for (let year = 1896; year <= 2020; year += 4) {
+  const digits = String(year);
+  if (cancelled.has(year)) continue;
+  if (digits.includes('0')) continue;
   if (new Set(digits).size !== digits.length) continue;
-  olympicYearDigits.push(digits);
+  years.push(digits);
 }
 
-// Every directed simple path of exactly 4 orthogonally-adjacent colored cells,
-// within the colored area only (both directions, per the header note).
-const neighboursInArea = new Map(coloredCells.map(
-  cell => [cell, graph.neighbours(cell).filter(n => coloredSet.has(n))]));
-const colorPaths = [];
-for (const start of coloredCells) {
-  const extend = (path) => {
-    if (path.length === 4) {
-      colorPaths.push(path);
-      return;
-    }
-    for (const next of neighboursInArea.get(path[path.length - 1])) {
-      if (!path.includes(next)) extend([...path, next]);
-    }
-  };
-  extend([start]);
-}
-
-// Every (path, year) pair whose 4 cells could hold that year's digits in order.
-const yearMatches = [];
-for (const path of colorPaths) {
-  for (const digits of olympicYearDigits) {
-    yearMatches.push({ path, digits });
+// Every way a four-digit year could be written in the colored area: the
+// directed four-cell paths of orthogonally adjacent colored cells. A path
+// never revisits a cell because no surviving year repeats a digit. The paths
+// stay inside the colored area because the rules place the candidate
+// depictions there ("combinations within the colored area").
+const coloredSet = new Set(colored);
+const paths = [];
+const extendPath = (path) => {
+  if (path.length === 4) {
+    paths.push(path);
+    return;
   }
-}
-const matchConstraint = (m) =>
-  new And(m.path.map((cell, i) => new Given(cell, m.digits[i])));
+  for (const next of graph.neighbours(path[path.length - 1])) {
+    if (coloredSet.has(next) && !path.includes(next)) {
+      extendPath([...path, next]);
+    }
+  }
+};
+for (const cell of colored) extendPath([cell]);
 
-const yearPresenceConstraints = olympicYearDigits.map(digits => new Or(
-  yearMatches.filter(m => m.digits === digits).map(matchConstraint)));
+// Each year is written somewhere in the colored area.
+const yearsPresent = years.map(
+  year => new Or(paths.map(path => new Regex(year, ...path))));
 
-const cellCoverageConstraints = coloredCells.map(cell => new Or(
-  yearMatches.filter(m => m.path.includes(cell)).map(matchConstraint)));
+// Each colored digit belongs to at least one written year: some path through
+// that cell spells one of the years.
+const anyYear = years.join('|');
+const digitsInAYear = colored.map(
+  cell => new Or(
+    paths.filter(path => path.includes(cell)).map(
+      path => new Regex(anyYear, ...path))));
+
+// "All possible black dots are given": no undotted orthogonally adjacent pair
+// may be in 1:2 ratio. One Replicate per edge direction stamps that negative
+// onto every undotted pair; the right-neighbour and down-neighbour templates
+// are the two offsets an orthogonal pair can have.
+const notDouble = Pair.fnToKey((a, b) => a !== 2 * b && b !== 2 * a, 9);
+const dottedEdges = new Set(blackDotEdges.map(edge => edge.join()));
+const noUndottedDouble = [[0, 1], [1, 0]].map(([dR, dC]) => {
+  const targets = graph.cells().filter(cell => {
+    const other = graph.step(cell, dR, dC);
+    return other !== null && !dottedEdges.has([cell, other].join());
+  });
+  const template = new Pair(
+    notDouble, 'not 1:2', 'R1C1', makeCellId({ row: 1 + dR, col: 1 + dC }));
+  return graph.makeReplicate(template, targets);
+});
 
 return [
   new Shape('9x9'),
+
   new Given('R1C5', 8),
   new Given('R9C9', 7),
-  ...dotEdges.map(([a, b]) => new BlackDot(a, b)),
-  ...notBlackDotReplicates,
-  ...yearPresenceConstraints,
-  ...cellCoverageConstraints,
+
+  ...yearsPresent,
+  ...digitsInAYear,
+
+  ...blackDotEdges.map(edge => new BlackDot(...edge)),
+  ...noUndottedDouble,
 ];

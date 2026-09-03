@@ -3,124 +3,90 @@
 // Video: https://www.youtube.com/watch?v=r4rHEPUhCTs
 // Source: https://sudokupad.app/dfjxdryzuo
 
-// Normal sudoku, plus:
-// - Anti-cage: a cage's digit sum must NOT satisfy the inequality printed in
-//   its top-left corner (">N" forbids sum>N, so the allowed sums are <=N;
-//   "<N" forbids sum<N, so the allowed sums are >=N). Cages do not impose
-//   their own all-different requirement (digits may repeat, per the rules
-//   text), so each is a plain `Sum`, not a `Cage`.
-// - Anti-arrow: the digits on an arrow's arm must NOT sum to the digit in
-//   its attached (bulb) cell.
+// Rules encoded:
+//   Normal sudoku rules apply.
+//   Digits in a cage must NOT sum to a total that satisfies the inequality in
+//   the top left corner of the cage.  Digits MAY repeat in cages if allowed by
+//   other rules (so no cage all-different).
+//   Digits on an arrow must NOT sum to the number in the attached circle.
+// Nothing is omitted.
 
-function* range(lo, hi) {
-  for (let v = lo; v <= hi; v++) yield v;
-}
-
-// Cage cells and printed inequality (cell set = the outlined region, value =
-// the printed "<N"/">N" label in its top-left corner).
+// Cage cells and the inequality printed in each cage's top-left corner,
+// transcribed from the 14 drawn cages.
 const cages = [
-  ['<23', 'R6C7', 'R7C6', 'R7C7'],
-  ['>9', 'R8C3', 'R8C4', 'R9C3', 'R9C4'],
-  ['>7', 'R3C3', 'R3C4', 'R4C3'],
-  ['<14', 'R4C7', 'R4C8'],
-  ['>6', 'R6C2', 'R6C3'],
-  ['<14', 'R4C4', 'R5C4'],
-  ['>6', 'R5C6', 'R6C6'],
-  ['>9', 'R6C1', 'R7C1'],
-  ['<11', 'R3C9', 'R4C9'],
-  ['>7', 'R8C6', 'R9C6'],
-  ['>7', 'R1C1', 'R1C2'],
-  ['<10', 'R7C9', 'R8C9'],
-  ['<31', 'R1C6', 'R1C7', 'R2C6', 'R2C7'],
-  ['<13', 'R1C4', 'R2C4'],
+  [['R1C1', 'R1C2'], '>7'],
+  [['R1C4', 'R2C4'], '<13'],
+  [['R1C6', 'R1C7', 'R2C6', 'R2C7'], '<31'],
+  [['R3C3', 'R3C4', 'R4C3'], '>7'],
+  [['R3C9', 'R4C9'], '<11'],
+  [['R4C4', 'R5C4'], '<14'],
+  [['R4C7', 'R4C8'], '<14'],
+  [['R5C6', 'R6C6'], '>6'],
+  [['R6C1', 'R7C1'], '>9'],
+  [['R6C2', 'R6C3'], '>6'],
+  [['R6C7', 'R7C6', 'R7C7'], '<23'],
+  [['R7C9', 'R8C9'], '<10'],
+  [['R8C3', 'R8C4', 'R9C3', 'R9C4'], '>9'],
+  [['R8C6', 'R9C6'], '>7'],
 ];
 
-// A cage's forbidden sums are one open-ended side of its printed inequality;
-// the allowed sums are the other side, clipped to the cage's naive
-// [cellCount, 9*cellCount] range. Enumerating the allowed totals as an
-// `Or` of `Sum`s is direct: no built-in class expresses an inequality bound
-// on a cage total, and the term count here stays small (<=9 per cage).
-function antiCage(label, ...cells) {
-  const m = /^([<>])(\d+)$/.exec(label);
-  if (!m) throw new Error(`Unrecognised cage label: ${label}`);
-  const [, op, nStr] = m;
-  const n = +nStr;
-  const lo = cells.length * 1;
-  const hi = cells.length * 9;
-  const [rangeLo, rangeHi] = op === '>' ? [lo, n] : [n, hi];
-  return new Or([...range(rangeLo, rangeHi)].map(s => new Sum(s, ...cells)));
-}
+// Negating the printed inequality leaves a one-sided bound on the cage total:
+// ">K" forbids totals above K, so the total is at most K; "<K" forbids totals
+// below K, so the total is at least K.  A bound becomes an equality Sum once the
+// shortfall is a cell, so each cage gets one slack variable: total + slack
+// equals the fixed target below, with the slack ranging over 1..slackMax.  The
+// endpoints of that slack range are the trivial per-cell bounds (every cell is
+// 1..9), so the pair reproduces the bound exactly and nothing more.
+const slack = new Var('S', 'Cage slack', cages.length);
 
-// Arrow bulb + arm cells (bulb = the line-path cell carrying a circle
-// overlay; arm = the rest of that drawn path). R7C7 carries two separate
-// drawn paths (one 3-cell arm, one 1-cell arm) rather than one path with a
-// bend, so each is kept as its own clue against the shared bulb rather than
-// merged into a single arm.
-const arrows = [
-  { bulb: 'R7C3', arm: ['R8C3', 'R9C4', 'R9C3'] },
-  { bulb: 'R7C7', arm: ['R8C7', 'R7C8', 'R7C9'] },
-  { bulb: 'R7C7', arm: ['R6C8'] },
-  { bulb: 'R4C8', arm: ['R3C7'] },
-  { bulb: 'R3C8', arm: ['R3C7', 'R3C6'] },
-  { bulb: 'R2C2', arm: ['R1C1', 'R1C2'] },
-  { bulb: 'R7C5', arm: ['R6C6', 'R5C7'] },
-];
-// One Var prefix per arrow, used only when its arm has >1 cell (see below).
-const arrowVarPrefixes = ['AA', 'AB', 'AC', 'AD', 'AE', 'AF', 'AG'];
-// A value grid cells never take, standing in for "the arm sum is >= 10 (so
-// it cannot equal any bulb digit)" once clamped -- see antiArrow.
-const CLAMP_SENTINEL = 10;
+const cageBound = (cells, ineq) => {
+  const k = Number(ineq.slice(1));
+  // ">K": total <= K, target K+1, slack up to K+1-cells (min total = cells).
+  // "<K": total >= K, target 9*cells+1, slack up to that minus K.
+  return ineq[0] === '>'
+    ? { target: k + 1, slackMax: k + 1 - cells.length }
+    : { target: 9 * cells.length + 1, slackMax: 9 * cells.length + 1 - k };
+};
 
-// "Arm sum != bulb digit" compares a derived total against a single cell,
-// which isn't a fixed target so antiCage's Or-of-Sum doesn't apply, and a
-// raw total Var would need a range up to 9*armLength -- above the solver's
-// per-puzzle value-count ceiling for a 2+ cell arm. Since the only fact that
-// matters is whether the arm sum lands in 1-9 (and if so, which digit), tie
-// a small clamp Var to it: equal to the arm sum when that is a single digit,
-// or CLAMP_SENTINEL when the arm sum is 10 or more. Then the arm sum can
-// equal the bulb only when the clamp does, so `AllDifferent` on the clamp
-// and bulb is exactly the rule. A single-cell arm needs none of this: its
-// "sum" is just its own value, so the rule is `AllDifferent(bulb, cell)`.
-function antiArrow(bulb, arm, prefix) {
-  if (arm.length === 1) {
-    return [new AllDifferent(bulb, arm[0])];
-  }
-
-  const lo = arm.length * 1;
-  const hi = arm.length * 9;
-  const clamp = new Var(prefix, `${bulb} clamped arm sum`, 1);
-  const clampCell = clamp.cell(1);
-
-  const branches = [...range(lo, Math.min(hi, 9))].map(
-    s => new And([new Sum(s, ...arm), new Given(clampCell, s)]));
-  if (hi >= 10) {
-    branches.push(new And([
-      new Or([...range(Math.max(lo, 10), hi)].map(s => new Sum(s, ...arm))),
-      new Given(clampCell, CLAMP_SENTINEL),
-    ]));
-  }
-
+const cageConstraints = cages.flatMap(([cells, ineq], i) => {
+  const { target, slackMax } = cageBound(cells, ineq);
+  const slackCell = slack.cell(i + 1);
   return [
-    clamp,
-    new Or(branches),
-    new AllDifferent(bulb, clampCell),
+    new Given(slackCell, ...Array.from({ length: slackMax }, (_, j) => j + 1)),
+    new Sum(target, ...cells, slackCell),
   ];
-}
+});
 
-const grid = cellGraph('9x9');
-// Every grid cell gets the same "real digit" restriction, so replicate one
-// template Given across the whole grid instead of repeating it per cell.
-const gridDigits = grid.makeReplicate(
-  new Given(grid.cells()[0], ...range(1, 9)));
+// Arrows: bulb (circle) first, then the arm cells in drawn order.  Each drawn
+// stroke runs from a circle to a ">"/"<" arrowhead glyph; two strokes leave the
+// circle at R7C7, and the stroke from the circle at R4C8 joins the R3C8 stroke at
+// R3C7 and shares its arrowhead at R3C6, so R3C7,R3C6 is that arrow's arm.
+const arrows = [
+  ['R2C2', 'R1C1', 'R1C2'],
+  ['R3C8', 'R3C7', 'R3C6'],
+  ['R4C8', 'R3C7', 'R3C6'],
+  ['R7C3', 'R8C3', 'R9C4', 'R9C3'],
+  ['R7C5', 'R6C6', 'R5C7'],
+  ['R7C7', 'R8C7', 'R7C8', 'R7C9'],
+  ['R7C7', 'R6C8'],
+];
+
+// One machine per arrow, reading the bulb first and then the arm.  State holds
+// the bulb digit and the running arm total, saturated at 10 because an arm total
+// that has passed 9 can never come back down to a single-digit bulb; `accept`
+// then rejects exactly the totals that equal the bulb.
+const antiArrowSpec = NFA.encodeSpec({
+  startState: { bulb: null, sum: 0 },
+  transition: ({ bulb, sum }, value) =>
+    bulb === null
+      ? { bulb: value, sum: 0 }
+      : { bulb, sum: Math.min(sum + value, 10) },
+  accept: ({ bulb, sum }) => bulb !== null && sum !== bulb,
+}, 9);
 
 return [
-  // Widened only enough for the clamp Vars' sentinel value (see antiArrow);
-  // grid cells are restricted back to real digits immediately below.
-  new Shape('9x9', CLAMP_SENTINEL),
-  gridDigits,
-
-  ...cages.map(([label, ...cells]) => antiCage(label, ...cells)),
-
-  ...arrows.flatMap(
-    ({ bulb, arm }, i) => antiArrow(bulb, arm, arrowVarPrefixes[i])),
+  new Shape('9x9'),
+  slack,
+  ...cageConstraints,
+  ...arrows.map(cells => new NFA(antiArrowSpec, 'Anti-arrow', ...cells)),
 ];

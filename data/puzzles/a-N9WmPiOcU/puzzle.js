@@ -2,17 +2,23 @@
 // Author: Thomas Snyder
 // Video: https://www.youtube.com/watch?v=a-N9WmPiOcU
 // Source: https://cracking-the-cryptic.web.app/sudoku/FFj73GGJQh
-//
-// Normal sudoku rules apply: standard 9x9 grid, nine 3x3 box regions, rows,
-// columns and boxes each contain 1-9 once.
-//
-// The payload draws 22 small grey circles, each straddling the shared edge of
-// two orthogonally adjacent cells (a Kropki-dot-style pairwise mark), but
-// carries no rules text stating what a grey dot means -- grey is neither of
-// the conventional Kropki colours (white=consecutive, black=ratio). The dot
-// rule is therefore omitted entirely from this encoding.
 
-const givens = [
+// Normal sudoku rules apply: each row, column and 3x3 box holds 1-9 once. The
+// source's own nine regions are exactly the nine standard boxes, so no jigsaw
+// regions are needed.
+//
+// The source also draws 22 identical small grey circles, each on the shared
+// edge of an orthogonally adjacent cell pair -- a Kropki-style pairwise mark.
+// It states no rules at all, so what relation such a circle asserts between
+// its two digits is unknown: consecutive, a 1:2 ratio, a fixed sum and others
+// are all live readings, nothing drawn tells them apart, and no circle touches
+// a given cell. The circle rule is therefore omitted here in full, and only
+// the givens and standard sudoku are encoded.
+
+return [
+  new Shape('9x9'),
+
+  // The 12 printed digits.
   new Given('R1C5', 1),
   new Given('R1C9', 9),
   new Given('R2C6', 9),
@@ -25,9 +31,4 @@ const givens = [
   new Given('R8C4', 3),
   new Given('R9C1', 3),
   new Given('R9C5', 6),
-];
-
-return [
-  new Shape('9x9'),
-  ...givens,
 ];

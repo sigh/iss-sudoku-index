@@ -1,63 +1,73 @@
-// Title: Untitled
-// Author: Unknown
+// Title: Monty Python And The Ghostly Trail: The Sudoku!
+// Author: Peter C Hayward
 // Video: https://www.youtube.com/watch?v=k1a2Yl45s5k
 // Source: https://cracking-the-cryptic.web.app/sudoku/tLmqnGRNPL
 
-// Normal sudoku rules apply. A "python" is a single 1-cell-wide path of
-// unknown length, starting at the purple-marked cell (R8C1), that never
-// touches itself orthogonally or diagonally. Every blue-marked cell's own
-// digit equals the number of its (up to 8) king-move neighbours that lie on
-// the python, and a blue cell is never itself on the python. "All possible
-// blue squares ARE given" makes this exhaustive: every OTHER (non-blue)
-// off-python cell must NOT have digit === king-neighbour-python-count.
+// Normal Sudoku rules apply. The final grid contains a 1-cell-wide python,
+// which begins at the purple 1 (R8C1). The python may not touch itself
+// orthogonally or diagonally. Numbers in blue squares show how many of their 8
+// surrounding squares are python. Blue squares cannot be python. All possible
+// blue squares are given: every cell that is not on the python and whose digit
+// equals its own minesweeper total is drawn blue. The final grid also contains
+// a "ghost", an identical copy of the python (shape, digits, orientation),
+// which begins and ends on the original python and may overlap it elsewhere;
+// blue squares ignore the ghost.
 //
-// Omission: the puzzle also has a "ghost" -- a translated (same-orientation)
-// copy of the python's whole cell/digit sequence whose own two end cells
-// must land on cells of the original python. That rule is not encoded here.
+// OMITTED: the ghost. Nothing below constrains it, so the python is only
+// shaped by the minesweeper clues and the sudoku.
+//
+// Python membership is a Var cell per grid cell (1 = on the python, 2 = off).
+// "May not touch itself, not even diagonally" is the standard snake reading:
+// non-consecutive python cells are never orthogonally adjacent, and the only
+// diagonal contact allowed is the one a 90-degree turn forces between the
+// cells either side of the turn. Under that reading the shape rules are the
+// same degree and 2x2 machines the other snake/loop scripts use.
 
-const ON = 1;   // python-membership values, stored in the Var overlay
+const ON = 1;                  // python-membership values, held in the Var cells
 const OFF = 2;
 
 const graph = cellGraph('9x9');
 const geometry = graph.gridGeometry();
 
-// The python-membership Var cell paired with each grid cell (VP1..VP81).
+// The membership Var cell paired with each grid cell (VP1..VP81, in grid order).
 const python = graph.makeOverlay('VP');
+
 const gridCells = graph.cells();
 
-const START = 'R8C1';   // purple circle underlay, center (7.5, 0.5)
-
-// Blue-square underlays (deepskyblue, #34BBE6): the 10 drawn underlay cells.
-const BLUE = [
-  'R6C2', 'R8C2', 'R9C2', 'R7C7', 'R9C7', 'R9C9', 'R3C4', 'R3C5', 'R4C6', 'R5C5',
+// Drawn data, transcribed from the source grid.
+const givens = {
+  R2C5: 8, R3C8: 7, R6C2: 4, R6C4: 1, R8C1: 1, R8C5: 5,
+};
+// The ten solid blue cell fills.
+const blueCells = [
+  'R3C4', 'R3C5', 'R4C6', 'R5C5', 'R6C2',
+  'R7C7', 'R8C2', 'R9C2', 'R9C7', 'R9C9',
 ];
-const NOT_BLUE = gridCells.filter(cell => !BLUE.includes(cell));
+// The single solid purple cell fill: the python's first cell.
+const pythonStart = 'R8C1';
 
-// --- Normal sudoku givens ---
-const givens = [
-  new Given('R2C5', 8),
-  new Given('R3C8', 7),
-  new Given('R6C2', 4),
-  new Given('R6C4', 1),
-  new Given('R8C1', 1),
-  new Given('R8C5', 5),
-];
+const plainCells = gridCells.filter(cell => !blueCells.includes(cell));
 
-// --- Python membership: every cell is on (1) or off (2); blue cells off,
-// start cell on. ---
+// --- Membership: every cell is on (1) or off (2); blue cells off, purple on.
 const originCell = python.cells()[0];
 const membership = [
   python.makeReplicate(new Given(originCell, ON, OFF)),
-  ...python.at(BLUE).map(cell => new Given(cell, OFF)),
-  new Given(python.at(START), ON),
+  ...python.at(blueCells).map(cell => new Given(cell, OFF)),
+  new Given(python.at(pythonStart), ON),
 ];
 
-// --- Degree: an on-python cell touches 1 or 2 on-python orthogonal
-// neighbours (a simple path admits both endpoints and interior cells); an
-// off cell is free. Applied to every cell except START, whose stricter
-// version below forces it to be an endpoint. Reads this cell's own
-// membership, then each orthogonal neighbour's.
-const pathDegreeMachine = NFA.encodeSpec({
+// --- Shape: a single simple path with R8C1 as one of its two ends. ---
+// Reads the membership of a cell, then of each orthogonal neighbour, and bounds
+// the number of on-python neighbours. Off cells are free.
+// Connected (below) + every python cell of degree at most 2 + the start cell of
+// degree at most 1 is a simple path with R8C1 as an end: a connected graph of
+// maximum degree 2 is a path or a cycle, and a cycle has no cell of degree
+// below 2. Nothing here sets a minimum length, so a python consisting of R8C1
+// alone would pass this group; the blue clues rule it out, since a blue square
+// with no python neighbour would need the digit 0.
+// Non-consecutive python cells are then never orthogonally adjacent, which is
+// the orthogonal half of "may not touch itself".
+const degreeMachine = (maxDegree) => NFA.encodeSpec({
   startState: { phase: 'start' },
   transition: ({ phase, onNeighbours }, membership) => {
     if (phase === 'start') {
@@ -65,33 +75,24 @@ const pathDegreeMachine = NFA.encodeSpec({
     }
     if (phase === 'off') return { phase: 'off' };
     const count = onNeighbours + (membership === ON ? 1 : 0);
-    return count > 2 ? undefined : { phase: 'on', onNeighbours: count };
+    return count > maxDegree ? undefined : { phase: 'on', onNeighbours: count };
   },
-  accept: ({ phase, onNeighbours }) => phase === 'off' || onNeighbours === 1 || onNeighbours === 2,
+  accept: ({ phase }) => phase === 'off' || phase === 'on',
 }, geometry.numValues);
-const degrees = gridCells
-  .filter(cell => cell !== START)
-  .map(cell => new NFA(pathDegreeMachine, 'degree',
-    ...python.at([cell, ...graph.neighbours(cell)])));
+const bodyMachine = degreeMachine(2);
+const endMachine = degreeMachine(1);
+const degrees = gridCells.map(cell => new NFA(
+  cell === pythonStart ? endMachine : bodyMachine, 'degree',
+  ...python.at([cell, ...graph.neighbours(cell)])));
 
-// --- START is the python's stated start, so it must be an endpoint: exactly
-// one on-python orthogonal neighbour (START's own membership is already
-// pinned ON above). Reads each orthogonal neighbour's membership. ---
-const startDegreeMachine = NFA.encodeSpec({
-  startState: { onNeighbours: 0 },
-  transition: ({ onNeighbours }, membership) => {
-    const count = onNeighbours + (membership === ON ? 1 : 0);
-    return count > 1 ? undefined : { onNeighbours: count };
-  },
-  accept: ({ onNeighbours }) => onNeighbours === 1,
-}, geometry.numValues);
-const startDegree = new NFA(startDegreeMachine, 'start-degree',
-  ...python.at(graph.neighbours(START)));
-
-// --- No diagonal self-touch: forbid a 2x2 block whose only on-python cells
-// are a diagonal pair. Reads the four membership cells of each 2x2 block,
-// left-to-right, top-to-bottom. ---
+// --- No diagonal self-touch: forbid a 2x2 whose only on cells are a diagonal.
+// Two diagonally adjacent python cells with neither shared orthogonal neighbour
+// on the python are non-consecutive, so this is the diagonal half of the rule;
+// a turn keeps three cells of its 2x2 on the python and is unaffected.
+// Reads the four membership cells of a 2x2 block, left-to-right, top-to-bottom.
 const noDiagonalTouchMachine = NFA.encodeSpec({
+  // `block` accumulates the 2x2's membership flags, and becomes null once the
+  // block has passed the check (all further symbols are absorbed).
   startState: { block: [] },
   transition: ({ block }, membership) => {
     if (block === null) return { block: null };
@@ -105,76 +106,65 @@ const noDiagonalTouchMachine = NFA.encodeSpec({
   },
   accept: ({ block }) => block === null,
 }, geometry.numValues);
-// All 64 top-left anchors (rows/cols 1-8) give an identical-shape 2x2 block
-// within the single VP overlay group, so one Replicate stamps every copy
-// instead of 64 hand-written NFAs.
-const blockAnchors = [];
-for (let r = 1; r <= 8; r++) {
-  for (let c = 1; c <= 8; c++) blockAnchors.push(makeCellId(r, c));
-}
-const noDiagonalTemplate = new NFA(noDiagonalTouchMachine, 'no-touch',
-  ...python.block(python.at('R1C1'), 2, 2));
+// Cells on the bottom/right edge start no 2x2 block, so the template at R1C1 is
+// stamped onto the 64 cells that do start one.
+const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
 const noDiagonalTouches = python.makeReplicate(
-  noDiagonalTemplate, python.at(blockAnchors));
+  new NFA(noDiagonalTouchMachine, 'no-touch',
+    ...python.at(graph.block(gridCells[0], 2, 2))),
+  python.at(blockOrigins));
 
-// --- Blue-square counts: each blue cell's own digit equals the number of
-// its king neighbours on the python (blue cells are already pinned OFF
-// above). Reads the digit, then each king neighbour's membership. ---
-const equalCountMachine = NFA.encodeSpec({
+// --- Blue squares: the digit equals the number of king neighbours on the
+// python. Reads the digit, then each neighbour's membership.
+const countMachine = NFA.encodeSpec({
   startState: { target: null, count: 0 },
   transition: ({ target, count }, value) => {
-    if (target === null) return { target: value, count: 0 };
+    if (target === null) return { target: value, count: 0 };   // the blue digit
     const next = count + (value === ON ? 1 : 0);
     return next > target ? undefined : { target, count: next };
   },
   accept: ({ target, count }) => target !== null && count === target,
 }, geometry.numValues);
-const blueCounts = BLUE.map(cell => new NFA(equalCountMachine, 'blue-count',
+const blueCounts = blueCells.map(cell => new NFA(countMachine, 'blue-count',
   cell, ...python.at(graph.kingNeighbours(cell))));
 
-// --- Exhaustiveness ("all possible blue squares ARE given"): for every
-// non-blue cell, if it is off the python its digit must NOT equal its
-// king-neighbour python-count (an on-python cell is exempt outright, since
-// the rule only speaks of non-python cells). Reads this cell's own
-// membership, then its digit, then each king neighbour's membership. ---
-// Clamp count at target+1 (a sink meaning "already more than target", still
-// correctly `!== target`); without the clamp the compiler's state search
-// treats `count` as unbounded and blows the 4096-state cap. maxDepth bounds
-// this NFA's own symbol count: own membership + own digit + up to 8 king
-// neighbours = 10.
-const notBlueCountMachine = NFA.encodeSpec({
-  startState: { phase: 'read-membership' },
+// --- All possible blue squares are given: a cell with no blue fill that is off
+// the python must NOT have the correct minesweeper total. Reads the cell's own
+// membership, then its digit, then each king neighbour's membership.
+const notBlueMachine = NFA.encodeSpec({
+  startState: { phase: 'membership' },
   transition: (state, value) => {
     switch (state.phase) {
-      case 'read-membership':
-        return value === ON ? { phase: 'free' } : { phase: 'read-digit' };
-      case 'read-digit':
+      case 'membership':
+        // The clause speaks only of cells that are not on the python.
+        return value === ON ? { phase: 'exempt' } : { phase: 'digit' };
+      case 'exempt':
+        return { phase: 'exempt' };
+      case 'digit':
         return { phase: 'count', target: value, count: 0 };
-      case 'count':
-        return {
-          phase: 'count',
-          target: state.target,
-          count: Math.min(state.count + (value === ON ? 1 : 0), state.target + 1),
-        };
-      case 'free':
-        return { phase: 'free' };
+      case 'count': {
+        const count = state.count + (value === ON ? 1 : 0);
+        // The count only grows, so once past the digit it can never match it.
+        return count > state.target
+          ? { phase: 'exempt' }
+          : { phase: 'count', target: state.target, count };
+      }
     }
   },
-  accept: state => state.phase === 'free' || state.count !== state.target,
-  maxDepth: 10,
+  accept: (state) => state.phase === 'exempt'
+    || (state.phase === 'count' && state.count !== state.target),
 }, geometry.numValues);
-const notBlueCounts = NOT_BLUE.map(cell => new NFA(notBlueCountMachine, 'not-blue-count',
+const notBlueCounts = plainCells.map(cell => new NFA(notBlueMachine, 'not-blue',
   python.at(cell), cell, ...python.at(graph.kingNeighbours(cell))));
 
 return [
   new Shape('9x9'),
   python.toVar('python'),
-  ...givens,
+  ...Object.entries(givens).map(([cell, value]) => new Given(cell, value)),
   ...membership,
-  // Single python: the on-python cells form one orthogonally-connected region.
+  // One python: the on-python cells form a single orthogonally-connected region.
   new ConnectedValues('VP', ON),
   ...degrees,
-  startDegree,
   noDiagonalTouches,
   ...blueCounts,
   ...notBlueCounts,

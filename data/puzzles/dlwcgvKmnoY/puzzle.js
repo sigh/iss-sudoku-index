@@ -3,135 +3,163 @@
 // Video: https://www.youtube.com/watch?v=dlwcgvKmnoY
 // Source: https://sudokupad.app/rmac5anfcn
 
-// Normal sudoku rules apply. Ten lines are drawn (each rendered as a white
-// outline stroke plus a matching lightsteelblue stroke on top -- one drawn
-// line, not two). Each line is divided at unknown 'split points' -- on
-// interior cell-to-cell edges of the line -- into segments; every segment on
-// a given line sums to the same total (a total that can differ line to
-// line), and digits may repeat within a segment wherever sudoku otherwise
-// allows it. The sudoku digit placed in the green-circled cell on a line
-// gives that line's number of split points; every circled cell is itself one
-// of that line's own cells (drawn art).
+// Rules, in full:
+//   Normal sudoku rules apply.
+//   Each line is divided into segments at 'split points', to be discovered on
+//   certain cell edges crossed by the line. Each segment along a line has the
+//   same sum, but this sum can be different for different lines. Digits MAY
+//   repeat along a segment, if allowed by sudoku. The digit in a green circle
+//   indicates the number of split points on that line.
+// There are no givens, and nothing is omitted below.
 //
-// Encoding: one boolean-valued Var per interior line edge marks whether a
-// split falls there (1 = no split, 2 = split). A Sum ties the count of
-// splits on a line to its marker cell's digit, and an NFA scanning the line
-// interleaved with its edge flags checks that every maximal no-split run
-// (i.e. every segment) sums to the same total.
+// The ten lines are drawn twice each, as a white outline under a lightsteelblue
+// fill over the same cells; that is one line each, listed once here.
+//
+// A split point may sit between any two consecutive cells of a drawn path. Seven
+// steps of these paths run corner to corner rather than edge to edge (R4C3-R5C4,
+// R7C3-R6C4, R4C7-R5C8, R6C8-R5C7, R8C8-R7C7, R8C7-R9C6, R8C5-R9C4). The rules
+// say only that the split points are "to be discovered", singling out no step of
+// any line, so barring those seven would be a restriction the rules do not state.
 
-// Each entry: [markerCell, lineCells...], cell order/geometry from the drawn
-// wayPoints (direction is arbitrary; only the path and the marker matter).
-// The marker cell is always one of lineCells.
+// Drawn geometry: the ten line paths in drawn order, each with the cell holding
+// its green circle. Together they cover all 81 cells exactly once.
 const LINES = [
-  ['R1C1', ['R3C1', 'R2C1', 'R1C1']],
-  ['R1C2', ['R1C2', 'R1C3', 'R1C4', 'R1C5', 'R1C6', 'R1C7', 'R1C8', 'R1C9']],
-  ['R3C3', ['R3C3', 'R4C3', 'R5C4', 'R5C5']],
-  ['R2C4', ['R2C4', 'R3C4', 'R3C5', 'R2C5', 'R2C6', 'R3C6']],
-  ['R2C2', ['R2C3', 'R2C2', 'R3C2', 'R4C2', 'R5C2', 'R6C2', 'R6C3', 'R5C3']],
-  ['R8C1', ['R4C1', 'R5C1', 'R6C1', 'R7C1', 'R8C1', 'R9C1', 'R9C2']],
-  ['R8C2', ['R9C3', 'R8C3', 'R8C2', 'R7C2', 'R7C3', 'R6C4', 'R6C5']],
-  ['R6C6', ['R4C4', 'R4C5', 'R4C6', 'R4C7', 'R5C8', 'R4C8', 'R4C9', 'R5C9',
-    'R6C9', 'R6C8', 'R5C7', 'R5C6', 'R6C6', 'R6C7']],
-  ['R2C9', ['R2C9', 'R3C9', 'R3C8', 'R2C8', 'R2C7', 'R3C7']],
-  ['R8C8', ['R8C8', 'R7C7', 'R7C8', 'R7C9', 'R8C9', 'R9C9', 'R9C8', 'R9C7',
-    'R8C7', 'R9C6', 'R9C5', 'R8C5', 'R9C4', 'R8C4', 'R7C4', 'R7C5', 'R7C6',
-    'R8C6']],
+  { cells: ['R3C1', 'R2C1', 'R1C1'], circle: 'R1C1' },
+  { cells: ['R1C2', 'R1C3', 'R1C4', 'R1C5', 'R1C6', 'R1C7', 'R1C8', 'R1C9'],
+    circle: 'R1C2' },
+  { cells: ['R3C3', 'R4C3', 'R5C4', 'R5C5'], circle: 'R3C3' },
+  { cells: ['R2C4', 'R3C4', 'R3C5', 'R2C5', 'R2C6', 'R3C6'], circle: 'R2C4' },
+  { cells: ['R2C3', 'R2C2', 'R3C2', 'R4C2', 'R5C2', 'R6C2', 'R6C3', 'R5C3'],
+    circle: 'R2C2' },
+  { cells: ['R4C1', 'R5C1', 'R6C1', 'R7C1', 'R8C1', 'R9C1', 'R9C2'],
+    circle: 'R8C1' },
+  { cells: ['R9C3', 'R8C3', 'R8C2', 'R7C2', 'R7C3', 'R6C4', 'R6C5'],
+    circle: 'R8C2' },
+  { cells: ['R4C4', 'R4C5', 'R4C6', 'R4C7', 'R5C8', 'R4C8', 'R4C9', 'R5C9',
+            'R6C9', 'R6C8', 'R5C7', 'R5C6', 'R6C6', 'R6C7'], circle: 'R6C6' },
+  { cells: ['R2C9', 'R3C9', 'R3C8', 'R2C8', 'R2C7', 'R3C7'], circle: 'R2C9' },
+  { cells: ['R8C8', 'R7C7', 'R7C8', 'R7C9', 'R8C9', 'R9C9', 'R9C8', 'R9C7',
+            'R8C7', 'R9C6', 'R9C5', 'R8C5', 'R9C4', 'R8C4', 'R7C4', 'R7C5',
+            'R7C6', 'R8C6'], circle: 'R8C8' },
 ];
 
+// One Var cell per step of a line carries that step's split flag.
 const NO_SPLIT = 1;
 const SPLIT = 2;
+const VAR_PREFIXES = 'ABCDEFGHIJ';
 
-const graph = cellGraph('9x9');
-const totalEdges = LINES.reduce((n, [, cells]) => n + cells.length - 1, 0);
-// The overlay's grid-cell pairing is arbitrary (any 71 of the 81 grid cells) --
-// it only supplies the ordering makeReplicate needs to derive VS1..VS71.
-const flagsOverlay = graph.makeOverlay('VS', graph.cells().slice(0, totalEdges));
-const splitFlags = flagsOverlay.toVar('split flags');
-const flagCells = flagsOverlay.cells();
-
-let cursor = 0;
-const lineFlags = LINES.map(([, cells]) => {
-  const flags = [];
-  for (let i = 0; i < cells.length - 1; i++) flags.push(flagCells[cursor++]);
-  return flags;
-});
-
-// State: {phase, segSum, prevSum}. `phase` alternates cell/flag because the
-// scan always interleaves [cell, flag, cell, flag, ..., cell]. `segSum` is
-// the running sum since the last split (or line start); `prevSum` is the
-// fixed total established by the first completed segment (null until then).
-// Once prevSum is set, segSum is pruned as soon as it would exceed it, so
-// only the (unsplit) first segment's sum is otherwise unbounded -- it is
-// capped at firstSegmentCap(n), the largest sum a length-n line's first
-// segment can legitimately reach: at least one split is required (marker
-// digits are 1-9), so the first segment spans at most n-1 cells of digits
-// 1-9. Building one spec per line (rather than a single shared spec, and
-// with maxDepth matched exactly to that line's scan length) keeps the
-// compiled state count within the NFA's 4096-state cap for every line up to
-// 8 cells; the two longest lines (14 and 18 cells) still exceed it even with
-// a tight per-line cap -- see the omission below.
-const firstSegmentCap = n => 9 * (n - 1);
-function makeEqualSegmentsSpec(n) {
-  return NFA.encodeSpec({
-    startState: { phase: 'cell', segSum: 0, prevSum: null },
-    transition: ({ phase, segSum, prevSum }, value) => {
-      if (phase === 'cell') {
-        const newSegSum = segSum + value;
-        const cap = prevSum !== null ? prevSum : firstSegmentCap(n);
-        if (newSegSum > cap) return undefined;
-        return { phase: 'flag', segSum: newSegSum, prevSum };
+// Sudoku bounds on a line's digit total. Cells sharing a row, a column or a box
+// are all different, so each of those three groupings bounds the total (a group
+// of n cells holds at least 1+..+n and at most 9+..+(10-n)); the tightest of the
+// three is returned.
+const totalBounds = (cells) => {
+  const groupings = [
+    (c) => parseCellId(c).row,
+    (c) => parseCellId(c).col,
+    (c) => 3 * Math.floor((parseCellId(c).row - 1) / 3)
+      + Math.floor((parseCellId(c).col - 1) / 3),
+  ];
+  let min = cells.length;
+  let max = 9 * cells.length;
+  for (const key of groupings) {
+    const sizes = new Map();
+    for (const cell of cells) {
+      sizes.set(key(cell), (sizes.get(key(cell)) || 0) + 1);
+    }
+    let low = 0;
+    let high = 0;
+    for (const n of sizes.values()) {
+      for (let i = 1; i <= n; i++) {
+        low += i;
+        high += 10 - i;
       }
-      // phase === 'flag'
-      if (value === NO_SPLIT) return { phase: 'cell', segSum, prevSum };
-      if (value === SPLIT) {
-        if (prevSum === null) return { phase: 'cell', segSum: 0, prevSum: segSum };
-        if (segSum !== prevSum) return undefined;
-        return { phase: 'cell', segSum: 0, prevSum };
+    }
+    min = Math.max(min, low);
+    max = Math.min(max, high);
+  }
+  return { min, max };
+};
+
+// The values the common segment sum of a line could take. The line's segments
+// all sum to S and there are (circle digit + 1) of them, so S * segments equals
+// the line total: segments runs 2..10 because a circle holds a digit 1-9, and no
+// further than one per step of the path. Values of S with no (segments, total)
+// pair behind them are impossible, and rejecting them on sight is what keeps the
+// scan below inside the NFA state limit.
+const candidateSums = (cells) => {
+  const { min, max } = totalBounds(cells);
+  const maxSegments = Math.min(10, cells.length);
+  const sums = [];
+  for (let s = 1; s * 2 <= max; s++) {
+    for (let segments = 2; segments <= maxSegments; segments++) {
+      if (s * segments >= min && s * segments <= max) {
+        sums.push(s);
+        break;
       }
-      return undefined; // flags are restricted to {1, 2} by Given below.
+    }
+  }
+  return sums;
+};
+
+// Equal segment sums, scanned over the line's cells with each step's split flag
+// interleaved: cell, flag, cell, flag, ..., cell. The flag carries the segment
+// boundary that a label-comparing scan would have to hold in state.
+//   target: the common segment sum, 0 until the first split fixes it
+//   run:    running total of the segment being read
+//   atFlag: the next symbol is a split flag rather than a line cell
+const equalSegmentSums = (cells, sums, name, scan) => {
+  const maxTarget = sums[sums.length - 1];
+  const allowed = new Set(sums);
+  const spec = NFA.encodeSpec({
+    startState: { target: 0, run: 0, atFlag: false },
+    transition: ({ target, run, atFlag }, value) => {
+      if (!atFlag) {
+        const next = run + value;
+        // No segment can exceed the common sum, and the common sum is at most
+        // maxTarget, so both overruns are dead branches.
+        if (next > maxTarget) return undefined;
+        if (target > 0 && next > target) return undefined;
+        return { target, run: next, atFlag: true };
+      }
+      if (value === NO_SPLIT) return { target, run, atFlag: false };
+      if (value !== SPLIT) return undefined;
+      // A split ends a segment: the first one fixes the common sum, the rest
+      // must match it.
+      if (target === 0) {
+        return allowed.has(run) ? { target: run, run: 0, atFlag: false } : undefined;
+      }
+      return run === target ? { target, run: 0, atFlag: false } : undefined;
     },
-    // If no split ever occurred, the whole line is one segment: trivially
-    // equal to itself. Otherwise the final (still-open) segment must also
-    // match the established total.
-    accept: ({ prevSum, segSum }) => prevSum === null || segSum === prevSum,
-    // Exact symbol count of this line's interleaved scan (cell, flag, cell,
-    // ..., cell). A looser bound reaches more (unneeded) states and burns
-    // into the 4096 cap faster; it must not be tighter than 2n-1 or it would
-    // silently reject valid grids instead of erroring.
-    maxDepth: 2 * n - 1,
+    // Circle digits are 1-9, so every line splits at least once and target is
+    // fixed by the end of the scan; the final segment must match it too.
+    accept: ({ target, run }) => target > 0 && run === target,
+    maxDepth: scan.length,
   }, 9);
-}
+  return new NFA(spec, name, ...scan);
+};
 
-function interleave(cells, flags) {
-  const out = [cells[0]];
-  for (let i = 0; i < flags.length; i++) out.push(flags[i], cells[i + 1]);
-  return out;
-}
-
-// OMISSION: the equal-segment-sum rule is not enforced on the two longest
-// lines (14 and 18 cells, LINES indices 7 and 9) -- even a per-line NFA
-// tailored to the tightest sound cap for just that one line exceeds ISS's
-// 4096-state NFA compile limit (verified empirically). The split-count-only
-// Sum constraint below still applies to every line, including these two.
-const SKIP_EQUAL_SUM = new Set([7, 9]);
-const equalSegmentConstraints = LINES.flatMap(([, cells], i) => {
-  if (SKIP_EQUAL_SUM.has(i)) return [];
-  const spec = makeEqualSegmentsSpec(cells.length);
-  return [new NFA(spec, 'equal segments', interleave(cells, lineFlags[i]))];
-});
-
-// Count of splits on a line (= number of SPLIT(2) flags among its edgeCount
-// flags) equals the marker cell's digit: sum(flag - 1 for each flag) =
-// marker, i.e. sum(flags) - edgeCount = marker.
-const splitCountConstraints = LINES.map(([marker, cells], i) => {
-  const flags = lineFlags[i];
-  return new Sum(flags.length, ...flags, [marker, -1]);
+const lines = LINES.map((line, i) => {
+  const steps = line.cells.length - 1;
+  const flagVars = new Var(VAR_PREFIXES[i], `line ${i + 1} split flags`, steps);
+  const flags = flagVars.cells();
+  const scan = line.cells.flatMap((cell, j) => j ? [flags[j - 1], cell] : [cell]);
+  return {
+    flagVars,
+    // A flag is SPLIT where the line is split at that step, NO_SPLIT where not.
+    flagDomains: flags.map((flag) => new Given(flag, NO_SPLIT, SPLIT)),
+    // sum(flags) - circle digit = number of steps, so the number of flags set to
+    // SPLIT (= NO_SPLIT + 1) is exactly the circle digit.
+    splitCount: new Sum(steps, ...flags, [line.circle, -1]),
+    equalSums: equalSegmentSums(
+      line.cells, candidateSums(line.cells),
+      `line ${i + 1} equal segment sums`, scan),
+  };
 });
 
 return [
   new Shape('9x9'),
-  splitFlags,
-  flagsOverlay.makeReplicate(new Given(flagCells[0], NO_SPLIT, SPLIT)),
-  ...equalSegmentConstraints,
-  ...splitCountConstraints,
+  ...lines.map((line) => line.flagVars),
+  ...lines.flatMap((line) => line.flagDomains),
+  ...lines.map((line) => line.splitCount),
+  ...lines.map((line) => line.equalSums),
 ];

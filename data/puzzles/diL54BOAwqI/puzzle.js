@@ -1,87 +1,65 @@
-// Title: When One Thought Generates Another Puzzle
+// Title: unknown
 // Author: Unknown
 // Video: https://www.youtube.com/watch?v=diL54BOAwqI
 // Source: https://cracking-the-cryptic.web.app/sudoku/npnPp8NgGL
+
+// Rules: normal sudoku rules apply, and cages sum to different squares.
+// Different 3-digit squares appear on the arrows, and 9-digit squares appear
+// in the green cells.
 //
-// 9x9 sudoku, standard boxes. Rules (from the video description):
-// "Normal sudoku rules apply, and cages sum to different squares. Different
-// 3-digit squares appear on the arrows, and 9-digit squares appear in the
-// green cells."
-//
-// - Cages: none of the 7 drawn cages shows a printed total, so each cage's
-//   total is left entirely to the "sum to different squares" rule; the 7
-//   totals must be pairwise-distinct perfect squares. The two 9-cell cages
-//   are not forced all-different by any row/column/box (each only covers 3
-//   cells of any row or column it touches), and reading them as ordinary
-//   all-different killer cages is unsatisfiable here: 9 distinct digits
-//   1-9 always sum to 45, which is not a perfect square, so no cage in this
-//   puzzle carries an implicit no-repeat rule -- each is a plain sum region.
-//   Where a cage's cells do happen to share a row (the 2-cell and 4-cell
-//   cages below), the row rule already forces those cells distinct.
-// - Arrows: each arrow's three cells, read bulb-to-tip (the same order
-//   ISS's own Arrow class reads a bulb first), form a 3-digit perfect
-//   square, and the 7 arrows' numbers are pairwise distinct.
-// - Green cells (33 cells forming a cross of column 1, column 5, column 9
-//   and row 5): each of the 4 straight 9-cell strips is a 9-digit perfect
-//   square. This is NOT encoded -- see the omission note at the bottom of
-//   this file.
+// Readings this encoding commits to, and the drawn feature or arithmetic that
+// forces each:
+//   - "Square" means perfect square. Board digits are 1-9, so no number read
+//     off the board can contain a 0 digit.
+//   - The cages are sum-only, with repeats allowed, not killer cages. Two of
+//     the seven cages cover nine cells each; nine cells with no repeats would
+//     hold 1-9 and total 45, which is not a perfect square, so a no-repeats
+//     reading leaves the puzzle with no solution at all.
+//   - Each arrow covers exactly three cells and is read from its tail towards
+//     its arrowhead. Three of the seven arrows bend, so they have no
+//     left-to-right or top-to-bottom reading, and the head is the only mark
+//     separating the two ends of a stroke; the arrows also do not all point
+//     the same way (R5C6-R5C4 runs leftwards where R1C1-R3C1 runs downwards),
+//     so the drawn direction is a deliberate choice rather than stroke order.
+//     The board settles it too: the givens R1C5=9, R4C5=1 and R9C5=6 leave
+//     923187456 as the only pandigital square fitting column 5, so R1C5=9 and
+//     R2C5=2; read tail-to-head the R2C6-R2C5-R1C5 arrow is R2C6-2-9, which
+//     529 and 729 both complete, while head-to-tail it would be 9-2-R2C6 and
+//     no 3-digit square begins 92.
+//   - The green cells are exactly columns 1, 5 and 9 and row 5, four complete
+//     nine-cell runs (33 cells, the three crossing points shared), so they
+//     spell four 9-digit numbers, each read top-to-bottom or left-to-right.
+//   - "Different" scopes within a clue type: the seven cage totals differ from
+//     each other, and the seven arrow numbers differ from each other.
 
-// Perfect squares of 1-9 with digits 1-9 only (a Sudoku grid never carries a
-// 0), used both as literal cage totals and, via the index below, as an
-// AllDifferent-able stand-in for "which square" a cage uses.
-const masterSquares = [1, 4, 9, 16, 25, 36, 49, 64, 81];
+// Perfect-square tables, computed here rather than transcribed.
 
-// Perfect squares of 10-31 (3-digit, no zero digit): the full candidate set
-// for "a 3-digit square appears on the arrow".
-const threeDigitSquares = [
-  121, 144, 169, 196, 225, 256, 289, 324, 361, 441,
-  484, 529, 576, 625, 676, 729, 784, 841, 961,
-];
+// The 3-digit perfect squares with no 0 digit: 19 values.
+const arrowSquares = [];
+for (let n = 10; n <= 31; n++) {
+  const s = String(n * n);
+  if (!s.includes('0')) arrowSquares.push(s);
+}
 
-const givens = [
-  ['R1C5', 9], ['R1C7', 4], ['R2C1', 6], ['R4C5', 1],
-  ['R6C1', 4], ['R6C4', 6], ['R7C8', 9], ['R7C9', 6],
-  ['R8C2', 4], ['R8C4', 1], ['R8C6', 9], ['R9C5', 6],
-  ['R9C8', 1], ['R9C9', 4],
-].map(([cell, value]) => new Given(cell, value));
+// The 9-digit perfect squares that use each of 1-9 exactly once: 30 values.
+// 11112^2 is the first 9-digit square and 31622^2 the last. Restricting to
+// pandigital values loses nothing here: every green run is a whole sudoku
+// column or row, so its nine digits are already 1-9 in some order, and over
+// such a run this list is exactly the set of 9-digit perfect squares.
+const greenSquares = [];
+for (let n = 11112; n <= 31622; n++) {
+  const s = String(n * n);
+  if ([...s].sort().join('') === '123456789') greenSquares.push(s);
+}
 
-// Cages (cell sets transcribed from the drawn cage outlines). `indices`
-// names which entries of masterSquares that cage's total could possibly
-// be, from its cell count and (for the row-aligned cages) the
-// forced-distinct row range.
-const cages = [
-  // 9 cells, rows 6-8 x cols 6-8: a 3x3 block offset from the boxes,
-  // spanning parts of 4 different boxes. Repeats allowed (see header note),
-  // so the total ranges 9-81: every master square from 9 up.
-  { cells: ['R6C6', 'R6C7', 'R6C8', 'R7C6', 'R7C7', 'R7C8', 'R8C6', 'R8C7', 'R8C8'], indices: [3, 4, 5, 6, 7, 8, 9] },
-  // 9 cells, rows 6-8 x cols 2-4: same shape, same reasoning.
-  { cells: ['R6C2', 'R6C3', 'R6C4', 'R7C2', 'R7C3', 'R7C4', 'R8C2', 'R8C3', 'R8C4'], indices: [3, 4, 5, 6, 7, 8, 9] },
-  // 2 cells, both in row 9: forced distinct by the row, so total ranges
-  // 1+2=3 .. 8+9=17.
-  { cells: ['R9C1', 'R9C2'], indices: [2, 3, 4] },
-  // Single cell: total is just the digit, 1-9.
-  { cells: ['R3C1'], indices: [1, 2, 3] },
-  { cells: ['R2C2'], indices: [1, 2, 3] },
-  // 4 cells, all in row 1: forced distinct by the row, so total ranges
-  // 1+2+3+4=10 .. 6+7+8+9=30.
-  { cells: ['R1C3', 'R1C4', 'R1C5', 'R1C6'], indices: [4, 5] },
-  { cells: ['R3C4'], indices: [1, 2, 3] },
-];
+const column = (c) => Array.from({ length: 9 }, (_, i) => makeCellId(i + 1, c));
+const row = (r) => Array.from({ length: 9 }, (_, i) => makeCellId(r, i + 1));
 
-// One Var per cage holding the master-square index it uses. AllDifferent
-// over these Vars is exactly "different squares", because the index-to-value
-// map (masterSquares) is the same fixed bijection for every cage.
-const cageSquare = new Var('CS', 'CageSquareIndex', cages.length);
+// The four green runs, in reading order.
+const greenRuns = [column(1), column(5), column(9), row(5)];
 
-const cageConstraints = cages.map((cage, i) => new Or(
-  cage.indices.map(idx => new And([
-    new Given(cageSquare.cell(i + 1), idx),
-    new Sum(masterSquares[idx - 1], ...cage.cells),
-  ]))
-));
-
-// Arrows: bulb first, then the rest of the path in drawn order (see header
-// note on reading direction).
+// The seven arrows, each transcribed from its drawn polyline, tail first and
+// arrowhead last.
 const arrows = [
   ['R1C1', 'R2C1', 'R3C1'],
   ['R7C1', 'R8C1', 'R9C1'],
@@ -92,44 +70,59 @@ const arrows = [
   ['R5C9', 'R6C9', 'R7C9'],
 ];
 
-// Each arrow's 3 cells, read bulb-to-tip, must spell one of the candidate
-// 3-digit squares.
-const arrowSquareConstraints = arrows.map(cells => new Or(
-  threeDigitSquares.map(sq => {
-    const digits = String(sq).split('').map(Number);
-    return new And(cells.map((cell, i) => new Given(cell, digits[i])));
-  })
-));
+// The seven drawn cage outlines. None carries a printed total.
+const cages = [
+  ['R1C3', 'R1C4', 'R1C5', 'R1C6'],
+  ['R2C2'],
+  ['R3C1'],
+  ['R3C4'],
+  ['R6C2', 'R6C3', 'R6C4', 'R7C2', 'R7C3', 'R7C4', 'R8C2', 'R8C3', 'R8C4'],
+  ['R6C6', 'R6C7', 'R6C8', 'R7C6', 'R7C7', 'R7C8', 'R8C6', 'R8C7', 'R8C8'],
+  ['R9C1', 'R9C2'],
+];
 
-// "Different squares appear on the arrows": for every pair of arrows, they
-// must not spell the same 3-digit number, i.e. they differ in at least one
-// of the 3 corresponding positions.
-const neqKey = Pair.fnToKey((a, b) => a !== b, 9);
-const arrowDistinctConstraints = [];
-for (let i = 0; i < arrows.length; i++) {
-  for (let j = i + 1; j < arrows.length; j++) {
-    arrowDistinctConstraints.push(new Or(
-      arrows[i].map((cell, k) => new Pair(neqKey, '', cell, arrows[j][k]))
-    ));
-  }
-}
+// One Var per cage holds the root of that cage's square total, so a single
+// AllDifferent over the roots carries the "different squares" half of the
+// rule. A cage covers at most nine cells, so its total is at most 81 and its
+// root is a digit 1-9; the Var group inherits that range from the grid.
+const cageRoots = new Var('S', 'cage square root', cages.length);
+
+// Two 3-digit numbers are equal exactly when all three digit positions agree,
+// so "different" between a pair of arrows is: some position differs.
+const notEqual = Pair.fnToKey((a, b) => a !== b, 9);
+const arrowPairs = arrows.flatMap(
+  (a, i) => arrows.slice(i + 1).map((b) => [a, b]));
 
 return [
   new Shape('9x9'),
-  ...givens,
-  cageSquare,
-  new AllDifferent(...cageSquare.cells()),
-  ...cageConstraints,
-  ...arrowSquareConstraints,
-  ...arrowDistinctConstraints,
-];
 
-// Omission: the four 9-cell green strips (column 1, column 5, column 9, row
-// 5) each being a 9-digit perfect square is not encoded. There are 8431
-// nine-digit squares with no zero digit; checking membership in that set
-// needs a finite-state scan (iss-constraints' NFA/Regex), but the minimal
-// automaton for this specific 9-character language measured 6164 states at
-// its narrowest useful cut, over the 4096-state compiled-NFA cap, and a
-// flat digit-literal Or has 8431 branches per strip -- ISS has no
-// arithmetic primitive (e.g. multiplication) that could check "is this
-// 9-digit number a perfect square" any other way.
+  // Givens, from the payload's cell values.
+  new Given('R1C5', 9),
+  new Given('R1C7', 4),
+  new Given('R2C1', 6),
+  new Given('R4C5', 1),
+  new Given('R6C1', 4),
+  new Given('R6C4', 6),
+  new Given('R7C8', 9),
+  new Given('R7C9', 6),
+  new Given('R8C2', 4),
+  new Given('R8C4', 1),
+  new Given('R8C6', 9),
+  new Given('R9C5', 6),
+  new Given('R9C8', 1),
+  new Given('R9C9', 4),
+
+  cageRoots,
+  new AllDifferent(...cageRoots.cells()),
+  ...cages.map((cells, i) => new Or(
+    Array.from({ length: 9 }, (_, k) => new And([
+      new Given(cageRoots.cell(i + 1), k + 1),
+      new Sum((k + 1) * (k + 1), ...cells),
+    ])))),
+
+  ...arrows.map((cells) => new Regex(arrowSquares.join('|'), ...cells)),
+  ...arrowPairs.map(([a, b]) => new Or(
+    a.map((cell, k) => new Pair(notEqual, 'different', cell, b[k])))),
+
+  ...greenRuns.map((cells) => new Regex(greenSquares.join('|'), ...cells)),
+];

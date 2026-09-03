@@ -3,90 +3,69 @@
 // Video: https://www.youtube.com/watch?v=GvWt9W2iYMU
 // Source: https://app.crackingthecryptic.com/sudoku/LNqP9d8tdj
 
-// Normal sudoku rules apply (standard rows/cols/3x3 boxes from the payload's
-// own regions array).
+// Normal sudoku rules apply, with no given digits.
 //
-// Grey circle (R1C7) = odd; grey square (R9C5) = even -- encoded as
-// candidate-restricting Givens (no native Odd/Even class). The thermometer's
-// own bulb marker at R6C4 is drawn as a circle in the identical grey used by
-// its own thermometer line (a self-coloured bulb, not an independently
-// grey-coloured marker like R1C7's, which has no line of its own) -- treated
-// as the thermometer's default bulb rendering, not a second "grey circle"
-// clue instance. Reading it as a second odd clue makes the full stated
-// ruleset unsatisfiable; every other clue's geometry was independently
-// re-verified against the raw waypoints and still holds, and dropping this
-// one reading restores a unique solution.
+// Rules encoded below, in the order they are stated:
+//   - The grey circle is odd and the grey square is even.
+//   - Digits along the blue line must be between the values at each end of
+//     that line.
+//   - Digits along an arrow sum to the value in the associated circle. The
+//     two-digit pill is read as a two-digit number from left to right.
+//   - Digits in a cage do not repeat; if a value is given for the cage, the
+//     digits sum to that value.
+//   - Digits along a thermometer must increase from the bulb end.
+//   - The orange cell is greater than the four digits orthogonally adjacent
+//     to it.
+//   - Two cells separated by a black dot must have a 1:2 ratio.
+//   - Digits along the marked brown diagonal may not repeat.
 //
-// Blue snake line R3C7..R5C5 (17 cells): digits strictly between the values
-// at its two endpoints.
-//
-// Two black arrows share one circle at R4C6 (bulb doubles as the sum target
-// for both arms): arm R3C7,R2C8 and arm R5C5,R6C4.
-// Purple arrow: circle R4C4, arm R3C3,R2C2,R1C1.
-// Red arrow: 2-digit pill R1C5,R1C6 (left-to-right), arm R2C5,R3C5,R4C5,
-// R5C6,R6C5,R7C4,R8C5.
-//
-// Two totalled killer cages (R8C1 block =15, R8C9 block =11): distinct + sum.
-// One untotalled cage (R2C4,R3C4,R3C3,R4C3,R4C2): "digits in a cage do not
-// repeat" still applies with no stated sum, so AllDifferent only (catalog:
-// a killer cage with no total is simply AllDifferent).
-//
-// Grey thermometer bulb R6C4, increasing through R7C3, R8C2.
-//
-// Black dot between R3C1/R3C2: Kropki ratio 1:2 (BlackDot).
-//
-// Orange cell R6C8 greater than its four orthogonal neighbours: GreaterThan
-// with R6C8 listed first -- none of the four neighbours are adjacent to each
-// other, so a single constraint captures all four inequalities at once.
-//
-// Marked brown diagonal R1C9..R9C1 (the anti-diagonal): digits may not
-// repeat -- native Diagonal(1) ('/' direction, matches this corner-to-corner
-// line).
-//
-// A stub cage entry with no cells and every no-geometry line/arrow entry
-// (styling-only duplicates of the real coloured lines/arrows) render nothing
-// and are omitted.
-// The four short black stub arrows around R6C8 (length ~0.2) are UI
-// direction indicators for the "greater than" cell, not sum-arrow clues, and
-// are omitted.
+// Nothing is omitted. The four small arrows drawn pointing out of the orange
+// cell restate the orthogonal-neighbour rule and add nothing to it.
 
 return [
   new Shape('9x9'),
 
-  // Parity clues (grey circle = odd, grey square = even).
+  // Parity marks. R6C4 also carries a grey circle, but that circle is the bulb
+  // of the grey thermometer stroke R6C4-R7C3-R8C2, so R1C7 is the lone
+  // unattached grey circle the singular rule names.
   new Given('R1C7', 1, 3, 5, 7, 9),
   new Given('R9C5', 2, 4, 6, 8),
 
-  // Blue between-line, endpoints R3C7 and R5C5.
+  // Blue line, ends at R3C7 and R5C5; the interior digits lie between them.
   new Between(
-    'R3C7', 'R3C6', 'R3C5', 'R3C4', 'R3C3', 'R4C3', 'R5C3', 'R6C3',
-    'R7C3', 'R7C4', 'R7C5', 'R7C6', 'R7C7', 'R6C7', 'R5C7', 'R5C6', 'R5C5'),
+    'R3C7', 'R3C6', 'R3C5', 'R3C4', 'R3C3',
+    'R4C3', 'R5C3', 'R6C3', 'R7C3',
+    'R7C4', 'R7C5', 'R7C6', 'R7C7',
+    'R6C7', 'R5C7', 'R5C6', 'R5C5'),
 
-  // Arrows sharing the R4C6 circle.
+  // Arrows: circle cell first, then that arm. The black circle R4C6 has two
+  // arms drawn out of it, so each arm sums to R4C6 independently.
+  new Arrow('R4C4', 'R3C3', 'R2C2', 'R1C1'),
   new Arrow('R4C6', 'R3C7', 'R2C8'),
   new Arrow('R4C6', 'R5C5', 'R6C4'),
-
-  // Purple arrow to circle R4C4.
-  new Arrow('R4C4', 'R3C3', 'R2C2', 'R1C1'),
-
-  // Red arrow with a 2-digit pill R1C5/R1C6.
-  new PillArrow(2, 'R1C5', 'R1C6',
+  // Pill R1C5,R1C6 (2 cells, read left to right), then the arm.
+  new PillArrow(2,
+    'R1C5', 'R1C6',
     'R2C5', 'R3C5', 'R4C5', 'R5C6', 'R6C5', 'R7C4', 'R8C5'),
 
-  // Killer cages.
+  // Cages, as drawn. The third carries no printed total; sum 0 means "no
+  // total", leaving only the no-repeat half of the rule.
   new Cage(15, 'R8C1', 'R9C1', 'R9C2', 'R8C2'),
   new Cage(11, 'R8C9', 'R9C9', 'R9C8'),
-  new AllDifferent('R2C4', 'R3C4', 'R3C3', 'R4C3', 'R4C2'),
+  new Cage(0, 'R2C4', 'R3C4', 'R3C3', 'R4C3', 'R4C2'),
 
-  // Thermometer, bulb R6C4.
+  // Thermometer, bulb first.
   new Thermo('R6C4', 'R7C3', 'R8C2'),
 
-  // Kropki black dot (1:2 ratio).
+  // Orange cell R6C8 against its four orthogonal neighbours. GreaterThan
+  // relates each cell to the adjacent cells later in the list; the four
+  // neighbours are pairwise non-adjacent, so this is exactly the four
+  // comparisons R6C8 > neighbour.
+  new GreaterThan('R6C8', 'R5C8', 'R6C7', 'R6C9', 'R7C8'),
+
+  // Black dot on the R3C1/R3C2 edge.
   new BlackDot('R3C1', 'R3C2'),
 
-  // Orange cell greater than its four orthogonal neighbours.
-  new GreaterThan('R6C8', 'R5C8', 'R7C8', 'R6C7', 'R6C9'),
-
-  // Marked brown anti-diagonal, no repeats.
+  // Brown diagonal R1C9-R9C1; direction 1 is the anti-diagonal.
   new Diagonal(1),
 ];

@@ -11,6 +11,14 @@
 .XSum~C9~27~
 .End
 .Or
+.XSum~R1~8~
+.XSum~R1~27~
+.End
+.Or
+.XSum~R9~8~
+.XSum~R9~27~
+.End
+.Or
 .XSum~R5~~8
 .XSum~R5~~27
 .End
@@ -42,11 +50,4 @@
 .XSum~C5~~8
 .XSum~C5~~27
 .End
-.Or
-.XSum~R1~8~
-.XSum~R1~27~
-.End
-.Or
-.XSum~R9~8~
-.XSum~R9~27~
-.End
+.~R1C3_8~R3C9_8~R9C7_8

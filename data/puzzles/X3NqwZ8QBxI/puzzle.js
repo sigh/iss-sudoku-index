@@ -1,46 +1,39 @@
-// Title: The Magic Puzzle That Grades YOU!
+// Title: unknown
 // Author: Unknown
 // Video: https://www.youtube.com/watch?v=X3NqwZ8QBxI
 // Source: https://cracking-the-cryptic.web.app/sudoku/nn468RjnbB
 
-// Normal sudoku rules apply (1-9 in each row, column and 3x3 box). Standard
-// 3x3 box regions -- Shape('9x9') supplies rows/columns/boxes, matching the
-// 9 whole-box regions in the payload. The payload carries no rules text; the
-// video description's only rule sentence ("put a digit in the grey cell: 1
-// if you are capable, 2 if you are advanced, 3 if you are expert. Honestly!")
-// tells the solver how to interpret whichever digit lands in R5C5 -- it does
-// not relate that cell to any other cell, so it adds no grid constraint and
-// is omitted. The puzzle is fully determined by its 27 givens below.
+// Normal Sudoku rules apply: 1-9 in every row, column and 3x3 box (the nine
+// drawn regions are the default boxes, so the engine's baseline covers them).
+//
+// Grey cell: "put a digit in the grey cell: 1 if you are capable, 2 if you are
+// advanced, 3 if you are expert." The shaded cell is R5C5. Which of 1, 2 or 3
+// belongs there is a claim the solver makes about the solver, so only its
+// range is encodable: it is written as a multi-value Given, and the choice
+// among the three is left unencoded.
+//
+// The source payload carries no rules text; the rules above are the video
+// description's, which links this exact source URL.
 
-// Givens, as drawn on the board (cell ids below are 1-indexed R#C#).
+// Givens as drawn in the grid, row by row ('.' is an empty cell).
+const givenRows = [
+  '2.1.7.8..',
+  '.4.....3.',
+  '8..2....5',
+  '47..65.93',
+  '6.5......',
+  '.........',
+  '...34.6..',
+  '..47...1.',
+  '79..5...8',
+];
+
+const givens = givenRows.flatMap((row, r) => [...row].flatMap(
+  (ch, c) => ch === '.' ? [] : [new Given(makeCellId(r + 1, c + 1), +ch)]));
+
 return [
   new Shape('9x9'),
-
-  new Given('R1C1', 2),
-  new Given('R1C3', 1),
-  new Given('R1C5', 7),
-  new Given('R1C7', 8),
-  new Given('R2C2', 4),
-  new Given('R2C8', 3),
-  new Given('R3C1', 8),
-  new Given('R3C4', 2),
-  new Given('R3C9', 5),
-  new Given('R4C1', 4),
-  new Given('R4C2', 7),
-  new Given('R4C5', 6),
-  new Given('R4C6', 5),
-  new Given('R4C8', 9),
-  new Given('R4C9', 3),
-  new Given('R5C1', 6),
-  new Given('R5C3', 5),
-  new Given('R7C4', 3),
-  new Given('R7C5', 4),
-  new Given('R7C7', 6),
-  new Given('R8C3', 4),
-  new Given('R8C4', 7),
-  new Given('R8C8', 1),
-  new Given('R9C1', 7),
-  new Given('R9C2', 9),
-  new Given('R9C5', 5),
-  new Given('R9C9', 8),
+  ...givens,
+  // The grey cell holds one of the three grades.
+  new Given('R5C5', 1, 2, 3),
 ];

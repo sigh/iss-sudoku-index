@@ -3,47 +3,57 @@
 // Video: https://www.youtube.com/watch?v=lvvY996jIsE
 // Source: https://app.crackingthecryptic.com/sudoku/gtTmd2Qgd3
 
-// Normal sudoku rules apply on the 9x9 grid (standard 3x3 boxes, no givens).
+// Rules encoded here:
+//   Normal sudoku rules apply. The grid has no given digits.
+//   X and V join two cells adding up to 10 (X) or 5 (V). Not all Xs and Vs are
+//     shown, so undrawn edges carry no information: X/V, not StrictXV.
+//   Orange cells are all different and sum to the 2-digit total given in the
+//     orange-centred pill in the top row; the same is true for purple and green.
 //
-// X markers: the two adjacent cells sum to 10 (ISS `X`).
-// V markers: the two adjacent cells sum to 5 (ISS `V`).
-// Rules state "Not all Xs and Vs are shown", so no negative constraint is
-// placed on unmarked adjacent pairs.
-//
-// Orange/purple/green cells: each colour's cells are all different
-// (`AllDifferent`). The rules also require each colour group to sum to a
-// 2-digit total shown in that colour's pill in row 1, but every pill overlay
-// in the payload has empty text -- the totals are not present anywhere in
-// the source -- so only the all-different half of each colour rule is
-// encoded; the sum is an omitted rule.
+// The three pills are empty rounded outlines, each drawn around one pair of
+// top-row cells with a small orange / green / purple square at its centre
+// naming the colour it reports. No number is printed in any pill, so the
+// "2-digit total" it gives is the number read from the two cells it encloses --
+// a PillArrow whose pill is that cell pair and whose arm is the colour's cells.
+// R1C7 is both a purple cell and the tens digit of the purple total.
 
-const xPairs = [
-  ['R6C1', 'R7C1'],
-  ['R9C3', 'R9C4'],
+// Shaded cells, read from the grid art, one list per colour.
+const orange = ['R2C9', 'R3C4', 'R4C6', 'R7C1', 'R8C5', 'R9C3', 'R9C5'];
+const green = ['R3C3', 'R3C6', 'R4C7', 'R5C4', 'R6C1', 'R7C3', 'R9C6'];
+const purple = ['R1C7', 'R4C1', 'R4C4', 'R5C7', 'R6C2', 'R7C9', 'R8C1', 'R9C4'];
+
+// Pill cell pairs in the top row, keyed by the colour of the square at the
+// pill's centre. Tens digit first.
+const pills = {
+  orange: ['R1C1', 'R1C2'],
+  green: ['R1C4', 'R1C5'],
+  purple: ['R1C7', 'R1C8'],
+};
+
+// Edges carrying an X (sum 10) and a V (sum 5).
+const xEdges = [
+  ['R2C8', 'R3C8'], ['R3C4', 'R4C4'], ['R3C6', 'R4C6'], ['R4C2', 'R5C2'],
+  ['R4C7', 'R5C7'], ['R6C1', 'R7C1'], ['R6C5', 'R6C6'], ['R9C3', 'R9C4'],
   ['R9C5', 'R9C6'],
-  ['R6C5', 'R6C6'],
-  ['R4C7', 'R5C7'],
-  ['R3C6', 'R4C6'],
-  ['R2C8', 'R3C8'],
-  ['R3C4', 'R4C4'],
-  ['R4C2', 'R5C2'],
+];
+const vEdges = [
+  ['R6C1', 'R6C2'], ['R8C5', 'R9C5'],
 ];
 
-const vPairs = [
-  ['R8C5', 'R9C5'],
-  ['R6C1', 'R6C2'],
+const colourSets = [
+  [orange, pills.orange],
+  [green, pills.green],
+  [purple, pills.purple],
 ];
-
-// Colour groups, transcribed from the 1x1 coloured underlays.
-const orangeCells = ['R2C9', 'R4C6', 'R3C4', 'R7C1', 'R9C3', 'R9C5', 'R8C5'];
-const purpleCells = ['R8C1', 'R4C1', 'R4C4', 'R9C4', 'R5C7', 'R7C9', 'R1C7', 'R6C2'];
-const greenCells = ['R3C6', 'R3C3', 'R4C7', 'R9C6', 'R7C3', 'R6C1', 'R5C4'];
 
 return [
   new Shape('9x9'),
-  ...xPairs.map(([a, b]) => new X(a, b)),
-  ...vPairs.map(([a, b]) => new V(a, b)),
-  new AllDifferent(...orangeCells),
-  new AllDifferent(...purpleCells),
-  new AllDifferent(...greenCells),
+
+  ...colourSets.map(([cells]) => new AllDifferent(...cells)),
+  // PillArrow(2, ...) reads the two pill cells as a 2-digit number and equates
+  // it with the sum of the remaining cells.
+  ...colourSets.map(([cells, pill]) => new PillArrow(2, ...pill, ...cells)),
+
+  ...xEdges.map((edge) => new X(...edge)),
+  ...vEdges.map((edge) => new V(...edge)),
 ];

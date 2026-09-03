@@ -4,136 +4,133 @@
 // Source: https://sudokupad.app/dyg2otjpgb
 
 // Rules:
-// Normal sudoku rules apply. V/X pairs sum to 5/10. A green line is a German
-// whisper (adjacent cells differ by >= 5). A purple line is a renban
-// (consecutive digits, any order). A thermometer strictly increases from its
-// bulb. An arrow sums to the digit in its connected circle. A black dot is a
-// 1:2 (kropki) ratio. A quadruple circle marked "9" means one of its four
-// cells contains a 9.
+//   Normal sudoku rules apply. Cells separated by a V sum to 5, cells separated
+//   by an X sum to 10. Cells along a green German whisper line are at least 5
+//   apart. Cells along a purple renban line are consecutive digits in some
+//   order. On a thermometer, digits increase from the bulb. Cells along an arrow
+//   sum to the digit in the connected circle. Cells separated by a black kropki
+//   dot are in ratio 1:2. The quadruple circle containing a 9 means one of the
+//   four surrounding cells contains a 9.
 //
-// In addition, every digit 1-9 has a unique favorite color (from: red,
-// orange, yellow, green, blue, purple, pink, brown, silver) and a unique
-// favorite shape (from: circle, triangle, square, star, diamond, heart,
-// crescent, cross, pentagon). A digit may only occupy a cell decorated with
-// its favorite color and/or shape. Six clues (encoded below as constraints
-// on the favorite-color/-shape assignment) and the decorated cells shown in
-// the grid pin the assignment down together with the grid itself:
-//   1. Digit 1's favorite shape is not a heart.
-//   2. Four digits have a value equal to the letter-count of their favorite
-//      color. Only digits 3-6 can ever match this (color letter-counts run
-//      3..6: red=3, blue/pink=4, green/brown=5, orange/yellow/purple/silver=6)
-//      so "four digits match" forces all of digits 3,4,5,6 to match.
-//   3. The digit whose favorite color is yellow has the star shape.
-//   4. The pentagon shape belongs to an even digit.
-//   5. The digit whose favorite color is silver is greater than six.
-//   6. (Omitted: the purple digit is never orthogonally adjacent to two
-//      equal neighbors at once.)
+//   In addition, every digit has a unique favourite colour and a unique
+//   favourite shape. Colours are red, orange, yellow, green, blue, purple, pink,
+//   brown and silver. Shapes are circle, triangle, square, star, diamond, heart,
+//   crescent, cross and pentagon. A digit will only share a cell with its
+//   favourite colour and/or shape. Six further clues:
+//     1. The digit one's favourite shape is not a heart.
+//     2. There are four digits whose value equals the number of letters in their
+//        favourite colour.
+//     3. The digit whose favourite colour is yellow has the star as its
+//        favourite shape.
+//     4. The pentagon is the favourite shape of an even digit.
+//     5. The digit whose favourite colour is silver is greater than six.
+//     6. The digit whose favourite colour is purple is never orthogonally
+//        adjacent to two of the same number at once.
+//   For clarity, R9C2 is a pink cell; the circles in the thermometer and arrow
+//   are not shapes; a true circle is displayed in R4C5.
+//
+//   Nothing is omitted. There are no given digits.
 
-const COLOR_INDEX = {
-  red: 1, orange: 2, yellow: 3, green: 4, blue: 5,
-  purple: 6, pink: 7, brown: 8, silver: 9,
-};
-const SHAPE_INDEX = {
-  circle: 1, triangle: 2, square: 3, star: 4, diamond: 5,
-  heart: 6, crescent: 7, cross: 8, pentagon: 9,
-};
+const graph = cellGraph('9x9');
 
-// --- Favorite color / favorite shape assignment ---
-// VC1..VC9: the color index (see COLOR_INDEX) of digit d's favorite color.
-// VS1..VS9: the shape index (see SHAPE_INDEX) of digit d's favorite shape.
-// Both are bijections (every color/shape belongs to exactly one digit).
-const colorVar = new Var('C', 'FavoriteColor', 9);
-const shapeVar = new Var('S', 'FavoriteShape', 9);
+const COLOURS = [
+  'red', 'orange', 'yellow', 'green', 'blue', 'purple', 'pink', 'brown',
+  'silver',
+];
+const SHAPES = [
+  'circle', 'triangle', 'square', 'star', 'diamond', 'heart', 'crescent',
+  'cross', 'pentagon',
+];
 
-// Link a decorated grid cell to the favorite-color/-shape arrays: whichever
-// digit ends up in `cell`, that digit's color/shape var must equal `target`.
-// Modeled as a state machine reading [cell, array[1]..array[9]]: cell's own
-// value selects the position to check against `target`.
-function linkCellToArray(cell, arrayVar, target, label) {
-  const spec = NFA.encodeSpec({
-    startState: null,
-    transition: (state, value) => {
-      if (state === null) return { target: value, i: 0, ok: true };
-      // Once we're past every possible target position (1-9), nothing
-      // further can change `ok`: freeze the state so the compiler's state
-      // space stays finite regardless of how many cells this gets applied to.
-      if (state.i >= 9) return state;
-      const i = state.i + 1;
-      const ok = state.ok && (i !== state.target || value === target);
-      return { target: state.target, i, ok };
-    },
-    accept: (state) => state !== null && state.ok,
-  }, 9);
-  return new NFA(spec, label, cell, ...arrayVar.cells());
-}
+// Inverted mapping: one Var per colour / per shape, holding the digit that owns
+// it. Drawn clues then read as a plain equality between a grid cell and a Var,
+// and "unique favourite" is one AllDifferent over each group.
+const colourOwner = new Var('VC', 'digit owning each colour', COLOURS.length);
+const shapeOwner = new Var('VS', 'digit owning each shape', SHAPES.length);
+const ownerOf = (list, group) => name => group.cell(list.indexOf(name) + 1);
+const colour = ownerOf(COLOURS, colourOwner);
+const shape = ownerOf(SHAPES, shapeOwner);
 
-const colorGivenCells = [
-  ['R1C1', 'red'], ['R7C9', 'red'],
-  ['R1C5', 'blue'], ['R6C1', 'blue'],
+// Drawn full-cell background fills, read off the payload's underlays.
+const COLOURED_CELLS = [
+  ['R1C1', 'red'],
+  ['R1C5', 'blue'],
   ['R2C7', 'green'],
   ['R2C8', 'orange'],
   ['R3C6', 'brown'],
-  ['R9C2', 'pink'],
+  ['R6C1', 'blue'],
+  ['R7C9', 'red'],
+  ['R9C2', 'pink'],   // named as pink by the rules text
 ];
 
-const shapeGivenCells = [
-  ['R1C4', 'crescent'], ['R4C1', 'crescent'],
+// Drawn cell-centred shape glyphs. The thermometer bulb (R5C8), the arrow bulb
+// (R6C5) and the quadruple circle are excluded by the rules text; the remaining
+// two circle glyphs, R4C5 and R9C6, are drawn identically to each other.
+const SHAPE_CELLS = [
+  ['R1C4', 'crescent'],
+  ['R3C7', 'pentagon'],
+  ['R4C1', 'crescent'],
+  ['R4C5', 'circle'],
   ['R4C9', 'star'],
+  ['R5C1', 'cross'],
   ['R5C9', 'diamond'],
   ['R6C9', 'heart'],
-  ['R9C9', 'triangle'],
   ['R9C5', 'square'],
-  ['R9C6', 'circle'], ['R4C5', 'circle'],
-  ['R5C1', 'cross'],
-  ['R3C7', 'pentagon'],
+  ['R9C6', 'circle'],
+  ['R9C9', 'triangle'],
 ];
 
-// Clue 3: whichever digit's color is yellow has the star shape.
-const yellowImpliesStarKey = Pair.fnToKey(
-  (color, shape) => color !== COLOR_INDEX.yellow || shape === SHAPE_INDEX.star, 9);
+// Clue 2: exactly four colours whose owning digit equals the colour's letter
+// count. The machine reads the colour Vars in COLOURS order, so the state's
+// `pos` names which colour's letter count the next value is compared against;
+// `count` is clamped by rejecting a fifth match outright.
+const LETTER_COUNTS = COLOURS.map(name => name.length);
+const fourLetterCountMatches = NFA.encodeSpec({
+  startState: { pos: 0, count: 0 },
+  transition: ({ pos, count }, value) => {
+    const next = count + (value === LETTER_COUNTS[pos] ? 1 : 0);
+    return next > 4 ? undefined : { pos: pos + 1, count: next };
+  },
+  accept: ({ pos, count }) => pos === COLOURS.length && count === 4,
+  maxDepth: COLOURS.length,
+}, 9);
+
+// Clue 6, stated per cell: whenever a cell holds the purple digit, no two of its
+// orthogonal neighbours may be equal.
+const notPurple = Pair.fnToKey((cellValue, purpleDigit) =>
+  cellValue !== purpleDigit, 9);
+const purpleNeighbourRule = cell => new Or([
+  new Pair(notPurple, 'not the purple digit', cell, colour('purple')),
+  new AllDifferent(...graph.neighbours(cell)),
+]);
 
 return [
   new Shape('9x9'),
 
+  // --- sudoku layer ---
   new V('R2C1', 'R2C2'),
   new X('R1C4', 'R1C5'),
   new BlackDot('R8C2', 'R9C2'),
   new Quad('R8C5', 9),
   new Whisper(5, 'R2C8', 'R2C7', 'R3C7'),
   new Renban('R4C1', 'R5C1', 'R6C1', 'R7C1'),
-  new Thermo('R5C8', 'R4C8'),
-  new Arrow('R6C5', 'R5C5', 'R5C6'),
+  new Thermo('R5C8', 'R4C8'),        // bulb first; drawn tip-first in the source
+  new Arrow('R6C5', 'R5C5', 'R5C6'), // bulb first, then the shaft
 
-  colorVar,
-  shapeVar,
-  new AllDifferent(...colorVar.cells()),
-  new AllDifferent(...shapeVar.cells()),
+  // --- Einstein layer ---
+  colourOwner,
+  shapeOwner,
+  new AllDifferent(...COLOURS.map(colour)),
+  new AllDifferent(...SHAPES.map(shape)),
 
-  // Clue 1: digit 1's shape isn't heart(6).
-  new Given(shapeVar.cell(1), 1, 2, 3, 4, 5, 7, 8, 9),
+  ...COLOURED_CELLS.map(([cell, name]) => new SameValues(2, cell, colour(name))),
+  ...SHAPE_CELLS.map(([cell, name]) => new SameValues(2, cell, shape(name))),
 
-  // Clue 2 (derived, see header comment): forced color for digits 3-6.
-  new Given(colorVar.cell(3), COLOR_INDEX.red),
-  new Given(colorVar.cell(4), COLOR_INDEX.blue, COLOR_INDEX.pink),
-  new Given(colorVar.cell(5), COLOR_INDEX.green, COLOR_INDEX.brown),
-  new Given(colorVar.cell(6),
-    COLOR_INDEX.orange, COLOR_INDEX.yellow, COLOR_INDEX.purple, COLOR_INDEX.silver),
-
-  ...Array.from({ length: 9 }, (_, i) => i + 1).map(d =>
-    new Pair(
-      yellowImpliesStarKey, 'YellowIsStar', colorVar.cell(d), shapeVar.cell(d))),
-
-  // Clue 4: pentagon shape belongs to an even digit -- odd digits can't have it.
-  ...[1, 3, 5, 7, 9].map(d =>
-    new Given(shapeVar.cell(d), 1, 2, 3, 4, 5, 6, 7, 8)),
-
-  // Clue 5: silver digit is greater than six -- digits 1-6 can't be silver.
-  ...Array.from({ length: 6 }, (_, i) => i + 1).map(d =>
-    new Given(colorVar.cell(d), 1, 2, 3, 4, 5, 6, 7, 8)),
-
-  ...colorGivenCells.map(([cell, color]) =>
-    linkCellToArray(cell, colorVar, COLOR_INDEX[color], `Color_${color}`)),
-
-  ...shapeGivenCells.map(([cell, shape]) =>
-    linkCellToArray(cell, shapeVar, SHAPE_INDEX[shape], `Shape_${shape}`)),
+  new Given(shape('heart'), 2, 3, 4, 5, 6, 7, 8, 9),          // clue 1
+  new NFA(fourLetterCountMatches, 'four letter-count matches', // clue 2
+    ...COLOURS.map(colour)),
+  new SameValues(2, colour('yellow'), shape('star')),          // clue 3
+  new Given(shape('pentagon'), 2, 4, 6, 8),                    // clue 4
+  new Given(colour('silver'), 7, 8, 9),                        // clue 5
+  ...graph.cells().map(purpleNeighbourRule),                   // clue 6
 ];

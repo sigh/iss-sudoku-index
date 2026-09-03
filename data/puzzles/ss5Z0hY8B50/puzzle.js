@@ -2,61 +2,138 @@
 // Author: Michael Lefkowitz
 // Video: https://www.youtube.com/watch?v=ss5Z0hY8B50
 // Source: https://sudokupad.app/dx2flehouq
-//
-// Draw seven 6-cell orthogonally-connected regions in the grid (some region
-// boundaries are drawn); place 1-6 in every row, column, and region; cells
-// outside every region are left empty. Each outside clue sums the cells in
-// its row/column from the clue's side, stopping before the first empty
-// cell.
-//
-// The region-drawing rule is not encoded (no ISS primitive covers
-// solver-deduced jigsaw regions over part of the grid, with a
-// solver-placed hole per row/column). What remains is encoded faithfully:
-//
-// Modelled with value range 0-6: "empty" is plain value 0, so the default
-// row/column all-different (7 distinct values across 7 cells) forces exactly
-// one empty cell per row and per column on its own -- this follows from
-// "place 1-6 in every row [and] column" (six digits in seven cells leaves
-// exactly one cell with no digit, wherever it falls).
 
-const shape = new Shape('7x7', '0-6');
+// Rules encoded here, in full; no clause is omitted:
+//  - Draw seven 6-cell regions in the grid (some region boundaries are given),
+//    and place the digits 1-6 in every row, column, and region. Regions consist
+//    of 6 orthogonally connected cells.
+//  - Cells not in regions should be left empty.
+//  - Each clue outside the grid gives the sum of the cells in the row or column
+//    from the direction of the clue until reaching an empty cell.
 
-// Outside clues: sum the cells from the clue's side until the first empty
-// (0) cell, not including it. Cell order and side read from the drawn
-// outside-clue text underlays (west/east of a row, north of a column).
-const OUTSIDE_CLUES = [
-  [['R5C7', 'R5C6', 'R5C5', 'R5C4', 'R5C3', 'R5C2', 'R5C1'], 9],   // east of R5
-  [['R2C1', 'R2C2', 'R2C3', 'R2C4', 'R2C5', 'R2C6', 'R2C7'], 6],   // west of R2
-  [['R4C1', 'R4C2', 'R4C3', 'R4C4', 'R4C5', 'R4C6', 'R4C7'], 15],  // west of R4
-  [['R6C1', 'R6C2', 'R6C3', 'R6C4', 'R6C5', 'R6C6', 'R6C7'], 14],  // west of R6
-  [['R7C7', 'R7C6', 'R7C5', 'R7C4', 'R7C3', 'R7C2', 'R7C1'], 12],  // east of R7
-  [['R1C5', 'R2C5', 'R3C5', 'R4C5', 'R5C5', 'R6C5', 'R7C5'], 13],  // north of C5
-];
+// Board value 0 means "this cell is empty"; 1-6 are the digits. The alphabet is
+// widened to 0-7 only so the region-label overlay below has eight states, so
+// board cells are restricted back to 0-6. Seven cells per line drawn from the
+// seven board values makes the built-in row/column all-different say exactly
+// "the digits 1-6 in every row and column", with the seventh cell empty.
+const shape = new Shape('7x7', '0-7');
+const graph = cellGraph(shape);
 
-// One NFA per clue: track the running sum of digits seen so far (a branch
-// that has already overshot the target dies immediately, so the sum state is
-// bounded by the target); require the sum to equal the target at the moment
-// the empty (0) cell is read, then ignore every cell after it -- the
-// row/column all-different above guarantees exactly one 0 per line, so
-// "stop at the first empty cell" and "stop at the only empty cell" coincide.
-const outsideClueNFAs = OUTSIDE_CLUES.map(([cells, target]) => {
-  const spec = {
-    startState: { sum: 0, stopped: false },
-    transition: (state, value) => {
-      if (state.stopped) return state;
-      if (value === 0) {
-        return state.sum === target ? { sum: state.sum, stopped: true } : undefined;
-      }
-      const sum = state.sum + value;
-      return sum <= target ? { sum, stopped: false } : undefined;
-    },
-    accept: (state) => state.stopped,
-  };
-  const encoded = NFA.encodeSpec(spec, shape);
-  return new NFA(encoded, `outside sum ${target}`, ...cells);
+const EMPTY = 0;
+const DIGITS = [1, 2, 3, 4, 5, 6];
+const ALL_DIGITS_SEEN = 0b111111;
+const REGIONS = [1, 2, 3, 4, 5, 6, 7];
+const REGION_SIZE = 6;
+const UNREGIONED = 0;
+
+// VR<n> holds the region label of the nth board cell: 1-7 for the seven regions
+// the solver draws, 0 for a cell in no region.
+const region = graph.makeOverlay('VR');
+
+const boardValues = graph.makeReplicate(
+  new Given(graph.cells()[0], EMPTY, ...DIGITS));
+
+// "Cells not in regions should be left empty", with its converse: a cell that
+// is in a region holds a digit.
+const emptyIffUnregioned = Pair.fnToKey(
+  (value, label) => (value === EMPTY) === (label === UNREGIONED), shape);
+const membership = graph.cells().map(
+  cell => new Pair(emptyIffUnregioned, 'empty cells are the unregioned ones',
+    cell, region.at(cell)));
+
+// Each region is 6 orthogonally connected cells.
+const regionShapes = REGIONS.map(
+  label => new ConnectedValues('VR', label, REGION_SIZE));
+
+// "Place the digits 1-6 in ... every region": walk the board in row-major order
+// as [label, value, label, value, ...] and collect the values of the cells
+// carrying this region's label. `seen` is the bitmask of digits collected so
+// far; `active` is null while the next symbol is a label, and otherwise says
+// whether the label just read was this region's, since the value it governs
+// arrives on the following symbol. A repeated digit, or an empty cell inside
+// the region, dead-ends; accepting only on the full mask also fixes the region
+// at six cells, one per digit.
+const regionDigitsSpec = (label) => ({
+  startState: { seen: 0, active: null },
+  transition: ({ seen, active }, value) => {
+    if (active === null) return { seen, active: value === label };
+    if (!active) return { seen, active: null };
+    const bit = 1 << (value - 1);
+    if (value === EMPTY || (seen & bit)) return undefined;
+    return { seen: seen | bit, active: null };
+  },
+  accept: ({ seen, active }) => active === null && seen === ALL_DIGITS_SEEN,
 });
+const regionDigits = REGIONS.map(label => new NFA(
+  NFA.encodeSpec(regionDigitsSpec(label), shape),
+  `region ${label} holds 1-6`,
+  ...graph.cells().flatMap(cell => [region.at(cell), cell])));
+
+// The labels are an artifact of this encoding and the rules never name them, so
+// pin one representative labelling: reading the board in row-major order, label
+// k + 1 first appears after label k.
+const canonicalLabels = new NFA(NFA.encodeSpec({
+  startState: 0,
+  transition: (introduced, label) => {
+    if (label === UNREGIONED || label <= introduced) return introduced;
+    return label === introduced + 1 ? introduced + 1 : undefined;
+  },
+  accept: (introduced) => introduced === REGIONS.length,
+}, shape), 'canonical region labels', ...region.cells());
+
+// The given region boundaries: the four thick segments drawn along cell borders
+// in the source, transcribed as the cell pair each one separates. A boundary
+// has a region on at least one side and the other side is outside that region,
+// so the two cells cannot share a label -- and cannot both be unregioned, which
+// requiring different labels already covers.
+const DRAWN_WALLS = [
+  ['R1C3', 'R1C4'],
+  ['R2C5', 'R2C6'],
+  ['R2C7', 'R3C7'],
+  ['R6C2', 'R7C2'],
+];
+const walls = DRAWN_WALLS.map(pair => new AllDifferent(...region.at(pair)));
+
+// The six clue numbers printed outside the grid, transcribed with the side each
+// one sits on: the sum is read inwards from that side.
+const OUTSIDE_CLUES = [
+  { side: 'left', line: 2, total: 6 },
+  { side: 'left', line: 4, total: 15 },
+  { side: 'left', line: 6, total: 14 },
+  { side: 'right', line: 5, total: 9 },
+  { side: 'right', line: 7, total: 12 },
+  { side: 'top', line: 5, total: 13 },
+];
+// Once the empty cell is read the rest of the line no longer matters, so the
+// machine collapses into a single `done` state instead of carrying the tail.
+const outsideSumSpec = (total) => ({
+  startState: { sum: 0, done: false },
+  transition: ({ sum, done }, value) => {
+    if (done) return { sum: 0, done: true };
+    if (value === EMPTY) return sum === total ? { sum: 0, done: true } : undefined;
+    if (!DIGITS.includes(value)) return undefined;
+    return sum + value <= total ? { sum: sum + value, done: false } : undefined;
+  },
+  accept: ({ done }) => done,
+});
+const clueCells = ({ side, line }) => {
+  if (side === 'left') return graph.row(line);
+  if (side === 'right') return graph.row(line).reverse();
+  return graph.column(line);
+};
+const outsideSums = OUTSIDE_CLUES.map(clue => new NFA(
+  NFA.encodeSpec(outsideSumSpec(clue.total), shape),
+  `${clue.side} ${clue.line}: ${clue.total}`,
+  ...clueCells(clue)));
 
 return [
   shape,
-  ...outsideClueNFAs,
+  region.toVar('region'),
+  boardValues,
+  ...membership,
+  ...regionShapes,
+  ...regionDigits,
+  canonicalLabels,
+  ...walls,
+  ...outsideSums,
 ];

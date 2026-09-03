@@ -9,7 +9,7 @@
 .Whisper~5~R4C2~R3C2~R3C3
 .Whisper~5~R3C7~R3C8~R4C8
 .Whisper~5~R1C4~R1C3~R2C3
-.NFA~VgGv_wQgxBRhyCf-UWYaceeef_z0EUkzzzz_-eoqsuceef_zz2GWkzzz_-eeo246cef_zzz3n4ITz_-eeepFHIcf_zzzz3pZpz_-eeeepRTVWASgIiEFyAfADwAAkAQsIE0AeATwIqEGiAcAlAQyIHQIwEHCBCAjwQ2IIEAcBFAg-QJAQ8II0BOBDwhEQJoBWA~_AP~R5C6~R6C6~R7C6
+.Sum~0_=_1_-2_1~R5C6~R6C6~R7C6
 .Arrow~R6C6~R7C7
 .X~R5C3~R5C4
 .X~R1C9~R2C9
@@ -19,6 +19,10 @@
 .BlackDot~R4C5~R4C6
 .BlackDot~R2C2~R3C2
 .BlackDot~R2C8~R3C8
-.GreaterThan~R1C2~R1C1~R1C3~R2C2
-.GreaterThan~R1C8~R1C7~R1C9~R2C8
+.GreaterThan~R1C2~R1C1
+.GreaterThan~R1C2~R1C3
+.GreaterThan~R1C2~R2C2
+.GreaterThan~R1C8~R1C7
+.GreaterThan~R1C8~R1C9
+.GreaterThan~R1C8~R2C8
 .RegionSumLine~R8C1~R8C2~R7C3~R7C4~R7C5~R6C5~R5C5~R4C4~R3C4~R2C5~R1C6

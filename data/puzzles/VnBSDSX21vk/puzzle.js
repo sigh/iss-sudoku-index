@@ -3,287 +3,226 @@
 // Video: https://www.youtube.com/watch?v=VnBSDSX21vk
 // Source: https://app.crackingthecryptic.com/sudoku/PFr2r23jL3
 
-// Rules encoded here, in full except the one omission noted below:
-//  * Normal sudoku: 1-9 once per row, column and 3x3 box.
-//  * R4C5, R5C5 and R6C5 are shaded grey in the source and are not "white
-//    cells": they take no part in the hexomino system below, only ordinary
-//    row/column/box rules.
-//  * The other 78 cells split into 13 hexominoes (six orthogonally
-//    connected cells each); a hexomino's own six digits are all different.
-//    Omitted: "each hexomino must be different" -- shape congruence between
-//    solver-discovered regions has no known encoding: it is not a set/sum,
-//    a two-cell relation, a regular-language scan, a disjunction, or an
-//    expressible per-cell/per-target construction.
-//  * Small white dots (edge-drawn): the two cells are in separate
-//    hexominoes and their digits are consecutive.
-//  * Small black dots (edge-drawn): the two cells are in the same hexomino
-//    and one digit is double the other.
-//  * Large black dots (drawn at a 2x2 vertex): all four surrounding cells
-//    are in the same hexomino.
-//  * Large white dots (drawn at a 2x2 vertex): exactly three of the four
-//    surrounding cells are in the same hexomino.
-//  * A large white dot carrying numbers is also a quadruple clue: those
-//    digits must appear among its four surrounding cells (source rule:
-//    "these numbers must be in the cells immediately surrounding them").
-//    Three of the sixteen large white dots carry numbers; one of them
-//    (corner R5C7/R5C8/R6C7/R6C8) is drawn as two overlapping circles
-//    ("1 4" and "6") at the same vertex -- read together as one quadruple
-//    {1, 4, 6}.
+// Rules encoded here:
+//  * Normal sudoku.
+//  * The 78 white cells -- every cell except the three grey ones, R4C5, R5C5
+//    and R6C5 -- are divided into 13 hexominoes: orthogonally connected groups
+//    of six cells. Digits do not repeat within a hexomino.
+//  * A small white dot: its two cells are in different hexominoes, and their
+//    digits differ by 1.
+//  * A small black dot: its two cells are in the same hexomino, and one digit
+//    is double the other.
+//  * A large white dot: exactly three of the four cells around it are in one
+//    hexomino. Where such a dot carries numbers, those numbers appear among
+//    its four cells.
+//  * A large black dot: all four cells around it are in one hexomino.
 //
-// Region model: every grid cell gets a VH label overlay, 1-13 naming its
-// hexomino, or 14 ("excluded") for the three grey cells -- ConnectedValues
-// needs a whole-grid layer, not a subset. Each label's cells must form one
-// orthogonally-connected region (ConnectedValues, one call per label) of
-// exactly six cells (countRules, one small counting NFA per label). Two
-// cells share a hexomino exactly when their VH values are equal; the dot
-// clues below and distinctRules (all-different digits within a hexomino)
-// all reduce to that comparison. Label values are otherwise interchangeable
-// (the rules never number the hexominoes), so canonicalRule pins one
-// representative labelling by requiring label k to first appear, in
-// row-major order, before label k+1 -- a symmetry break on the encoding,
-// not a puzzle rule.
-//
-// distinctRules only needs to check pairs of cells that could actually lie
-// in one connected six-cell region together: PAIR_OFFSETS, computed below
-// by growing every fixed hexomino shape, is every relative offset that
-// occurs between two cells of some six-cell polyomino.
+// Omitted: "each hexomino must be different", i.e. the 13 hexominoes are 13
+// distinct shapes (up to rotation and reflection). That is a distinctness
+// test between whole regions the solver is still discovering; nothing here
+// compares one region's shape against another's, so a solution may repeat a
+// hexomino.
 
-const EXCLUDED_CELLS = ['R4C5', 'R5C5', 'R6C5']; // grey cells shaded in the source
-const NUM_LABELS = 13;
-const EXCLUDED_LABEL = NUM_LABELS + 1;
+const GREY_CELLS = ['R4C5', 'R5C5', 'R6C5'];
+const NUM_HEXOMINOES = 13;
+const HEXOMINO_SIZE = 6;
+// Hexomino labels are 1..13; the grey cells belong to no hexomino and carry
+// the one extra label, which no rule below mentions.
+const NO_HEXOMINO = NUM_HEXOMINOES + 1;
 
-const shape = new Shape('9x9', EXCLUDED_LABEL);
+const shape = new Shape('9x9', NO_HEXOMINO);
 const graph = cellGraph(shape);
+const numValues = graph.gridGeometry().numValues;
+const hex = graph.makeOverlay('VH');
+
 const gridCells = graph.cells();
-const numValues = graph.gridGeometry().numValues; // 14 (widened)
-const whiteCells = gridCells.filter(c => !EXCLUDED_CELLS.includes(c));
+const whiteCells = gridCells.filter(cell => !GREY_CELLS.includes(cell));
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+const LABELS = Array.from({ length: NUM_HEXOMINOES }, (_, i) => i + 1);
 
-// Treat an excluded (grey) or off-grid cell as absent for hexomino purposes.
-const step = (cell, dRow, dCol) => {
-  const target = graph.step(cell, dRow, dCol);
-  return (target && !EXCLUDED_CELLS.includes(target)) ? target : null;
-};
+// --- Domains ------------------------------------------------------------
+// The alphabet is widened to 14 to hold the hexomino labels, so the grid
+// itself has to be put back to 1-9.
+const digitDomain = graph.makeReplicate(new Given(gridCells[0], ...DIGITS));
+const hexDomain = hex.makeReplicate(
+  new Given(hex.at(whiteCells[0]), ...LABELS), hex.at(whiteCells));
+const greyLabels = GREY_CELLS.map(
+  cell => new Given(hex.at(cell), NO_HEXOMINO));
 
-// --- Every relative offset between two cells of some fixed hexomino ------
-// Grown from a single cell up to six connected cells; PAIR_OFFSETS is every
-// displacement (direction-normalised: dRow > 0, or dRow === 0 and dCol > 0,
-// so each unordered pair gets one entry) that can occur between two cells
-// of one such shape.
-const key = (cells) => JSON.stringify(cells);
-const sortCells = (cells) => cells.slice().sort((a, b) => a[0] - b[0] || a[1] - b[1]);
-const normalise = (cells) => {
-  const [r0, c0] = sortCells(cells)[0];
-  return sortCells(cells.map(([r, c]) => [r - r0, c - c0]));
-};
-const DIRS4 = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+// --- The hexomino partition ---------------------------------------------
+// Each label is one orthogonally connected group of exactly six cells, and
+// 13 x 6 is the 78 white cells, so the labels partition them into hexominoes.
+const partition = LABELS.map(
+  label => new ConnectedValues('VH', label, HEXOMINO_SIZE));
 
-const fixedHexominoes = (() => {
-  let layer = [normalise([[0, 0]])];
-  for (let size = 2; size <= 6; size++) {
-    const next = new Map();
-    for (const cells of layer) {
-      for (const [r, c] of cells) {
-        for (const [dr, dc] of DIRS4) {
-          const grown = [r + dr, c + dc];
-          if (cells.some(([a, b]) => a === grown[0] && b === grown[1])) continue;
-          const norm = normalise([...cells, grown]);
-          next.set(key(norm), norm);
-        }
-      }
-    }
-    layer = [...next.values()];
-  }
-  return layer; // 216 fixed hexominoes, each 6 [dRow, dCol] offsets
-})();
-
-const PAIR_OFFSETS = (() => {
-  const seen = new Map();
-  for (const offsets of fixedHexominoes) {
-    for (const a of offsets) for (const b of offsets) {
-      const dRow = b[0] - a[0], dCol = b[1] - a[1];
-      if (dRow === 0 && dCol === 0) continue;
-      if (dRow < 0 || (dRow === 0 && dCol < 0)) continue;
-      seen.set(key([dRow, dCol]), [dRow, dCol]);
-    }
-  }
-  return [...seen.values()];
-})();
-
-const memo = (fn) => {
-  const cache = new Map();
-  return (...args) => {
-    const k = key(args);
-    if (!cache.has(k)) cache.set(k, fn(...args));
-    return cache.get(k);
-  };
-};
-
-const cc = graph.makeOverlay('VH');
-
-// --- Domain: 14 for the three grey cells; white cells stay unrestricted --
-// (1-14). countRules already forces every white cell away from 14: it scans
-// only the 78 white cells and requires the 13 labels to account for all of
-// them (13 * 6 = 78), so a white cell holding 14 would leave only 77 cells
-// for those labels -- one short. A per-white-cell restricting Given is
-// therefore redundant with countRules, not an independent rule.
-const labelDomainRules = EXCLUDED_CELLS.map(c => new Given(cc.at(c), EXCLUDED_LABEL));
-
-// --- Each label is one connected region of exactly six cells -------------
-const connectivityRules = Array.from(
-  { length: NUM_LABELS }, (_, i) => new ConnectedValues('VH', i + 1));
-
-const countNFA = memo((label) => NFA.encodeSpec({
-  startState: { n: 0 },
-  transition: (state, value) => {
-    if (value !== label) return { n: state.n };
-    if (state.n >= 6) return undefined; // more than six cells of this label
-    return { n: state.n + 1 };
+// Labels are interchangeable, which would multiply every answer by 13!.
+// Scanning the whole layer in reading order, a label may be one more than the
+// highest seen so far but no more, so each partition has exactly one labelling.
+const labelOrderNFA = NFA.encodeSpec({
+  startState: { used: 0 },
+  transition: ({ used }, value) => {
+    if (value === NO_HEXOMINO) return { used };
+    if (value > used + 1) return undefined;
+    return { used: value > used ? value : used };
   },
-  accept: (state) => state.n === 6,
-}, numValues));
-
-const countRules = Array.from({ length: NUM_LABELS }, (_, i) => new NFA(
-  countNFA(i + 1), 'hexomino-size-6', ...cc.at(whiteCells)));
-
-// --- Break the label-permutation symmetry (13! equivalent labellings) ----
-// A label's first row-major occurrence must be one more than the highest
-// label already seen.
-const canonicalNFA = NFA.encodeSpec({
-  startState: { max: 0 },
-  transition: (state, value) => {
-    if (value === EXCLUDED_LABEL || value <= state.max) return { max: state.max };
-    return value === state.max + 1 ? { max: value } : undefined;
-  },
-  accept: () => true,
+  accept: ({ used }) => used === NUM_HEXOMINOES,
 }, numValues);
-const canonicalRule = new NFA(canonicalNFA, 'canonical-label-order', ...cc.at(gridCells));
+const labelOrder = new NFA(
+  labelOrderNFA, 'label-order', ...hex.at(gridCells));
 
-// --- Same/different hexomino between two named cells ----------------------
-const sameHexomino = (a, b) => new SameValues(2, cc.at(a), cc.at(b));
-const differentHexomino = (a, b) => new AllDifferent(cc.at(a), cc.at(b));
-
-// --- All-different digits within a hexomino -------------------------------
-const distinctIfSameNFA = NFA.encodeSpec({
-  startState: { phase: 'c1' },
+// --- Digits do not repeat within a hexomino -----------------------------
+// Read as [label(a), label(b), digit(a), digit(b)]: cells sharing a label
+// must differ. Cells more than five steps apart cannot share a hexomino.
+const sameHexDistinctNFA = NFA.encodeSpec({
+  startState: { phase: 'labelA' },
   transition: (state, value) => {
-    if (state.phase === 'c1') return { phase: 'c2', c: value };
-    if (state.phase === 'c2') return { phase: 'd1', same: state.c === value };
-    if (state.phase === 'd1') return { phase: 'd2', same: state.same, d: value };
-    if (state.phase === 'd2') return { phase: 'done', ok: !state.same || state.d !== value };
-    return state; // sink: already decided, ignore the rest
+    switch (state.phase) {
+      case 'labelA':
+        return { phase: 'labelB', label: value };
+      case 'labelB':
+        // Different hexominoes: the digits are unrelated, so accept the rest.
+        return value === state.label ? { phase: 'digitA' } : { phase: 'other' };
+      case 'other':
+        return { phase: 'other' };
+      case 'digitA':
+        return { phase: 'digitB', digit: value };
+      default:
+        return value === state.digit ? undefined : { phase: 'done' };
+    }
   },
-  accept: (state) => state.phase === 'done' && state.ok === true,
+  accept: ({ phase }) => phase === 'other' || phase === 'done',
 }, numValues);
 
-const distinctRules = [];
-for (const cellA of whiteCells) {
-  for (const [dRow, dCol] of PAIR_OFFSETS) {
-    const cellB = step(cellA, dRow, dCol);
-    if (!cellB) continue;
-    distinctRules.push(new NFA(distinctIfSameNFA, 'hexomino-all-different',
-      cc.at(cellA), cc.at(cellB), cellA, cellB));
-  }
-}
-
-// --- Exactly 3 of the 4 cells around a large white dot share a hexomino --
-const largeWhiteNFA = NFA.encodeSpec({
-  startState: { phase: 'a', vals: [] },
-  transition: (state, value) => {
-    if (state.phase !== 'a') return state; // sink: already decided, ignore the rest
-    const vals = [...state.vals, value];
-    if (vals.length < 4) return { phase: 'a', vals };
-    let oddCells = 0;
-    for (let i = 0; i < 4; i++) {
-      let matches = 0;
-      for (let j = 0; j < 4; j++) if (i !== j && vals[i] === vals[j]) matches++;
-      if (matches === 0) oddCells++;
+// Cells at white-cell distance six or more can never be in one hexomino, and a
+// shared row, column or box already forbids a repeat, so neither needs a
+// machine.
+const whiteSet = new Set(whiteCells);
+const boxOf = new Map(graph.boxes().flatMap(
+  (box, i) => box.map(cell => [cell, i])));
+const withinHexomino = (from) => {
+  const dist = new Map([[from, 0]]);
+  const queue = [from];
+  for (const cell of queue) {
+    if (dist.get(cell) === HEXOMINO_SIZE - 1) continue;
+    for (const next of graph.neighbours(cell)) {
+      if (!whiteSet.has(next) || dist.has(next)) continue;
+      dist.set(next, dist.get(cell) + 1);
+      queue.push(next);
     }
-    // Exactly one cell matching neither of the others means the remaining
-    // three are pairwise equal (value equality is transitive), i.e. a clean
-    // 3-1 split.
-    return { phase: 'done', ok: oddCells === 1 };
-  },
-  accept: (state) => state.phase === 'done' && state.ok === true,
-}, numValues);
+  }
+  return [...dist.keys()];
+};
+const noRepeatPairs = whiteCells.flatMap((a, i) => withinHexomino(a)
+  .filter(b => whiteCells.indexOf(b) > i)
+  .filter(b => parseCellId(a).row !== parseCellId(b).row)
+  .filter(b => parseCellId(a).col !== parseCellId(b).col)
+  .filter(b => boxOf.get(a) !== boxOf.get(b))
+  .map(b => [a, b]));
+const noRepeats = noRepeatPairs.map(([a, b]) => new NFA(
+  sameHexDistinctNFA, 'no-repeat', hex.at(a), hex.at(b), a, b));
 
-const largeWhiteDot = (tl, tr, bl, br) => new NFA(
-  largeWhiteNFA, 'large-white-dot', cc.at(tl), cc.at(tr), cc.at(bl), cc.at(br));
-
-// --- Clue geometry ---------------------------------------------------------
-
-// Small white dots (edge-drawn, white fill): separate hexominoes, digits
-// consecutive.
+// --- Dots ---------------------------------------------------------------
+// Every dot drawn on the board, by the edge or corner it sits on. Large dots
+// are named by the top-left cell of the 2x2 they sit in the middle of; a large
+// white dot's `values` are the numbers printed inside it.
 const SMALL_WHITE_DOTS = [
   ['R2C1', 'R2C2'], ['R1C7', 'R2C7'], ['R4C1', 'R5C1'], ['R5C4', 'R6C4'],
   ['R6C3', 'R6C4'], ['R7C7', 'R8C7'], ['R3C4', 'R4C4'],
 ];
-// Small black dots (edge-drawn, black fill): same hexomino, ratio 2.
 const SMALL_BLACK_DOTS = [
   ['R7C7', 'R7C8'], ['R1C8', 'R1C9'], ['R1C6', 'R1C7'], ['R1C4', 'R1C5'],
 ];
-// Large black dots (2x2 vertex, black fill): all four cells one hexomino.
-// [topLeft, topRight, bottomLeft, bottomRight]
 const LARGE_BLACK_DOTS = [
-  ['R1C2', 'R1C3', 'R2C2', 'R2C3'],
-  ['R2C2', 'R2C3', 'R3C2', 'R3C3'],
-  ['R3C6', 'R3C7', 'R4C6', 'R4C7'],
-  ['R3C8', 'R3C9', 'R4C8', 'R4C9'],
-  ['R8C8', 'R8C9', 'R9C8', 'R9C9'],
-  ['R8C5', 'R8C6', 'R9C5', 'R9C6'],
+  'R1C2', 'R2C2', 'R3C6', 'R3C8', 'R8C8', 'R8C5',
 ];
-// Large white dots (2x2 vertex, white fill): exactly three of four cells one
-// hexomino. A few also carry a quadruple clue (digits present among the
-// four cells); the R5C7/R5C8/R6C7/R6C8 dot is drawn as two stacked circles
-// ("1 4" and "6") read together as one quadruple.
 const LARGE_WHITE_DOTS = [
-  { cells: ['R4C3', 'R4C4', 'R5C3', 'R5C4'], quad: [8, 8] },
-  { cells: ['R5C3', 'R5C4', 'R6C3', 'R6C4'], quad: [7, 7] },
-  { cells: ['R5C2', 'R5C3', 'R6C2', 'R6C3'] },
-  { cells: ['R5C1', 'R5C2', 'R6C1', 'R6C2'] },
-  { cells: ['R6C2', 'R6C3', 'R7C2', 'R7C3'] },
-  { cells: ['R7C1', 'R7C2', 'R8C1', 'R8C2'] },
-  { cells: ['R8C2', 'R8C3', 'R9C2', 'R9C3'] },
-  { cells: ['R8C3', 'R8C4', 'R9C3', 'R9C4'] },
-  { cells: ['R7C3', 'R7C4', 'R8C3', 'R8C4'] },
-  { cells: ['R6C6', 'R6C7', 'R7C6', 'R7C7'] },
-  { cells: ['R6C7', 'R6C8', 'R7C7', 'R7C8'] },
-  { cells: ['R6C8', 'R6C9', 'R7C8', 'R7C9'] },
-  { cells: ['R5C8', 'R5C9', 'R6C8', 'R6C9'] },
-  { cells: ['R5C7', 'R5C8', 'R6C7', 'R6C8'], quad: [1, 4, 6] },
-  { cells: ['R2C8', 'R2C9', 'R3C8', 'R3C9'], quad: [7] },
-  { cells: ['R2C4', 'R2C5', 'R3C4', 'R3C5'] },
+  { corner: 'R4C3', values: [8, 8] },
+  { corner: 'R5C3', values: [7, 7] },
+  { corner: 'R5C2', values: [] },
+  { corner: 'R5C1', values: [] },
+  { corner: 'R6C2', values: [] },
+  { corner: 'R7C1', values: [] },
+  { corner: 'R8C2', values: [] },
+  { corner: 'R8C3', values: [] },
+  { corner: 'R7C3', values: [] },
+  { corner: 'R6C6', values: [] },
+  { corner: 'R6C7', values: [] },
+  { corner: 'R6C8', values: [] },
+  { corner: 'R5C8', values: [] },
+  { corner: 'R5C7', values: [1, 4, 6] },
+  { corner: 'R2C8', values: [7] },
+  { corner: 'R2C4', values: [] },
 ];
 
-const smallWhiteRules = SMALL_WHITE_DOTS.flatMap(([a, b]) =>
-  [new WhiteDot(a, b), differentHexomino(a, b)]);
-const smallBlackRules = SMALL_BLACK_DOTS.flatMap(([a, b]) =>
-  [new BlackDot(a, b), sameHexomino(a, b)]);
-const largeBlackRules = LARGE_BLACK_DOTS.flatMap(([tl, tr, bl, br]) => [
-  sameHexomino(tl, tr), sameHexomino(tl, bl), sameHexomino(tl, br),
+const smallWhite = SMALL_WHITE_DOTS.flatMap(([a, b]) => [
+  new WhiteDot(a, b),
+  new AllDifferent(...hex.at([a, b])),
 ]);
-const largeWhiteRules = LARGE_WHITE_DOTS.flatMap(({ cells: [tl, tr, bl, br], quad }) => [
-  largeWhiteDot(tl, tr, bl, br),
-  ...(quad ? [new Quad(tl, ...quad)] : []),
+const smallBlack = SMALL_BLACK_DOTS.flatMap(([a, b]) => [
+  new BlackDot(a, b),
+  new SameValues(2, ...hex.at([a, b])),
 ]);
+const largeBlack = LARGE_BLACK_DOTS.map(
+  corner => new SameValues(4, ...hex.at(graph.block(corner, 2, 2))));
 
-// --- Givens ----------------------------------------------------------------
-const GIVENS = [
-  ['R2C6', 4], ['R3C7', 9], ['R5C5', 3], ['R6C8', 3], ['R8C3', 1], ['R9C4', 4],
-];
+// Read as the four labels around a large white dot: exactly one value occurs
+// three times, so the remaining cell is in a different hexomino. After two
+// cells the state holds the labels seen; after three it holds what the last
+// cell must be (`same`) or must not be (`differ`).
+const threeOfFourNFA = NFA.encodeSpec({
+  startState: { phase: 'first' },
+  transition: (state, value) => {
+    switch (state.phase) {
+      case 'first':
+        return { phase: 'second', a: value };
+      case 'second':
+        return value === state.a
+          ? { phase: 'third', a: state.a, b: null }
+          : { phase: 'third', a: state.a, b: value };
+      case 'third':
+        // A third distinct label leaves no room for three of a kind.
+        if (state.b === null) {
+          return value === state.a
+            ? { phase: 'last', differ: state.a }
+            : { phase: 'last', same: state.a };
+        }
+        if (value === state.a) return { phase: 'last', same: state.a };
+        if (value === state.b) return { phase: 'last', same: state.b };
+        return undefined;
+      default:
+        if (state.same !== undefined) {
+          return value === state.same ? { phase: 'done' } : undefined;
+        }
+        return value === state.differ ? undefined : { phase: 'done' };
+    }
+  },
+  accept: ({ phase }) => phase === 'done',
+}, numValues);
+const largeWhite = LARGE_WHITE_DOTS.flatMap(({ corner, values }) => {
+  const cells = graph.block(corner, 2, 2);
+  return [
+    new NFA(threeOfFourNFA, 'three-of-four', ...hex.at(cells)),
+    ...(values.length ? [new Quad(corner, ...values)] : []),
+  ];
+});
 
 return [
   shape,
-  // Widening is only for the hexomino label overlay; puzzle digits stay 1-9.
-  graph.makeReplicate(new Given('R1C1', 1, 2, 3, 4, 5, 6, 7, 8, 9)),
-  ...GIVENS.map(([cell, value]) => new Given(cell, value)),
-  cc.toVar('hexomino label (1-13), or 14 for a cell in no hexomino'),
-  ...labelDomainRules,
-  canonicalRule,
-  ...connectivityRules,
-  ...countRules,
-  ...distinctRules,
-  ...smallWhiteRules,
-  ...smallBlackRules,
-  ...largeBlackRules,
-  ...largeWhiteRules,
+  hex.toVar('hexomino'),
+  digitDomain,
+  hexDomain,
+  ...greyLabels,
+  new Given('R2C6', 4),
+  new Given('R3C7', 9),
+  new Given('R5C5', 3),
+  new Given('R6C8', 3),
+  new Given('R8C3', 1),
+  new Given('R9C4', 4),
+  ...partition,
+  labelOrder,
+  ...noRepeats,
+  ...smallWhite,
+  ...smallBlack,
+  ...largeBlack,
+  ...largeWhite,
 ];

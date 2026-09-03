@@ -3,220 +3,435 @@
 // Video: https://www.youtube.com/watch?v=dr7Hh2Xxg_k
 // Source: https://sudokupad.app/esjz6meusc
 
-// Normal sudoku, no given digits. Two variant systems apply:
+// Rules encoded here:
+//   * Normal 9x9 sudoku. The grid has no givens.
+//   * A path is drawn from R1C9 to R9C1. It moves orthogonally from cell to
+//     cell and visits every 3x3 box.
+//   * Digits in consecutive cells of the path differ by at least 4.
+//   * Every cell is either island or water. R1C9 and R9C1 are the only island
+//     cells on the path, so every other cell the path visits is water.
+//   * Each of the nine lavender cells is an island cell, and the digit in it is
+//     the number of cells in its island.
+//   * A lavender island holds exactly one lavender cell; its digits do not
+//     repeat and sum to the total printed on its lavender cell where one is
+//     printed. R6C8's island total is a prime number.
+//   * R1C9 (Canada) and R9C1 (Japan) are island cells carrying no lavender
+//     cell, and the digits of their two islands have the same product.
+//   * The digits on the flags carry no clue of their own -- unlike a lavender
+//     cell, a flag cell's digit says nothing about its island -- so that
+//     sentence adds no constraint.
+//   * Different islands do not touch orthogonally.
+//   * The water cells form one orthogonally connected region, and no 2x2 block
+//     of the grid is entirely water.
+// Nothing is omitted.
 //
-// (1) Path: draw an orthogonal path from R1C9 to R9C1 that visits every
-//     3x3 box; adjacent digits along the path differ by >=4.
-// (2) Terrain: every cell is "island" or "water". Nine lavender cells are
-//     island anchors (the digit placed there is that island's cell count);
-//     R1C9 and R9C1 are two more (non-lavender) islands and the only island
-//     cells the path may touch; different islands may not touch each other
-//     orthogonally; water is one connected region with no all-water 2x2
-//     block; four lavender islands also carry a killer-style digit-sum
-//     total (r6c8's total, while not printed, is stated to be prime); the
-//     two flag islands' digit products must be equal.
+// Two readings the encoding commits to, both settled on the rules text:
+//   * Every island is one of the eleven named above. "r1c9 (Canada) and r9c1
+//     (Japan) are non-lavender island cells" is the sentence that carries this:
+//     that they hold island cells is already given by "r1c9 and r9c1 are the
+//     only island cells on the path", so the sentence does work only as the
+//     exception to "an island holds one lavender cell", and only then does
+//     "Both islands' digits ..." name a definite pair.
+//   * The product runs over every cell of each of the two islands, the flag
+//     cell included: the rules make R1C9 and R9C1 island cells, so their digits
+//     are among "both islands' digits". "The digits on the flags are
+//     inconsequential" says those digits are not themselves clues, the way a
+//     lavender cell's digit is; it does not take them out of their island.
 //
-// What's encoded: the path's shape/degree/box-visit/difference rules, and
-// the terrain partition's local rules (anchors, water connectivity, no
-// mono-water 2x2, "only the two flag cells are island-on-path"). What's
-// omitted: every rule that is a predicate over an unknown island's
-// *discovered* cell membership -- size-equals-clue-digit, killer
-// sum/primality, the two islands' product equality, and "different islands
-// don't touch" (island identity itself is never labelled, only the binary
-// island/water split). These are unknown-partition component predicates
-// with no ISS primitive today.
+// Model: four Var overlays. VL names, per cell, the island that owns it or
+// water; VD holds the direction of the path's next step out of the cell; VA and
+// VB hold the path position modulo 8 and modulo 11.
 
-const CANADA = 'R1C9';   // path endpoint, non-lavender island
-const JAPAN = 'R9C1';    // path endpoint, non-lavender island
-const LAVENDER = ['R3C1', 'R2C2', 'R7C9', 'R8C8', 'R4C2', 'R6C8', 'R4C6', 'R7C5', 'R2C6'];
+// --- Value layout. The alphabet is widened to 12 so the overlays fit; grid
+// cells are restricted back to 1-9 below.
+const DIGITS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
-const graph = cellGraph('9x9');
+// VL: nine lavender islands, the two flag islands, and water.
+const CANADA = 10, JAPAN = 11, WATER = 12;
+
+// VD: the direction of the step leaving this cell along the path. END is the
+// path's final cell, which is on the path but has no outgoing step.
+const OFF = 1, NORTH = 2, EAST = 3, SOUTH = 4, WEST = 5, END = 6;
+const STEPS = [[NORTH, -1, 0], [EAST, 0, 1], [SOUTH, 1, 0], [WEST, 0, -1]];
+const OPPOSITE = { [NORTH]: SOUTH, [EAST]: WEST, [SOUTH]: NORTH, [WEST]: EAST };
+const ON_PATH = [NORTH, EAST, SOUTH, WEST, END];
+
+// VA/VB: position along the path modulo MOD, plus a sentinel for off-path
+// cells. Coprime moduli whose lcm (88) exceeds the 81 cells of the grid.
+const COUNTERS = [
+  { prefix: 'VA', mod: 8 },
+  { prefix: 'VB', mod: 11 },
+];
+
+const PATH_START = 'R1C9', PATH_END = 'R9C1';
+const MIN_DIFFERENCE = 4;   // "a difference of at least 4"
+
+// The nine lavender cells, in payload order, with the total printed on each.
+// `PRIME` is the cell whose printed value reads "Prime".
+const PRIME = 'prime';
+const LAVENDER = [
+  { cell: 'R3C1', total: null },
+  { cell: 'R2C2', total: null },
+  { cell: 'R7C9', total: null },
+  { cell: 'R8C8', total: null },
+  { cell: 'R4C2', total: 40 },
+  { cell: 'R6C8', total: PRIME },
+  { cell: 'R4C6', total: 11 },
+  { cell: 'R7C5', total: 28 },
+  { cell: 'R2C6', total: null },
+];
+
+const shape = new Shape('9x9', WATER);
+const graph = cellGraph(shape);
 const geometry = graph.gridGeometry();
 const gridCells = graph.cells();
+const label = graph.makeOverlay('VL');
+const step = graph.makeOverlay('VD');
+const counters = COUNTERS.map(c => ({ ...c, overlay: graph.makeOverlay(c.prefix) }));
 
-// --- Path-shape overlay: what edges each cell uses. -----------------------
-// Regular cells (everything but the two named endpoints) use one of 7 codes;
-// OFF/HORIZ/VERT/turns give degree 0 or 2 by construction, so no separate
-// degree count is needed for them. The two endpoints get their own 2-value
-// domain (END_A/END_B) meaning "use this one of my two available edges" --
-// each is a grid corner with exactly two neighbours, so 2 codes suffice and
-// there is no need to widen Shape past 9 values.
-const OFF = 1, HORIZ = 2, VERT = 3, UL = 4, UR = 5, DL = 6, DR = 7;
-const END_A = 8, END_B = 9;
-const usesUp = s => s === VERT || s === UL || s === UR;
-const usesDown = s => s === VERT || s === DL || s === DR;
-const usesLeft = s => s === HORIZ || s === UL || s === DL;
-const usesRight = s => s === HORIZ || s === UR || s === DR;
+const isPrime = (n) => {
+  if (n < 2) return false;
+  for (let d = 2; d * d <= n; d++) if (n % d === 0) return false;
+  return true;
+};
+const sumOf = (values) => values.reduce((a, b) => a + b, 0);
+// Every subset of 1-9, as the digit list it holds.
+const DIGIT_SETS = [...Array(1 << DIGITS.length).keys()].map(
+  mask => DIGITS.filter(d => mask & (1 << (d - 1))));
 
-const path = graph.makeOverlay('VP');
-const pathCell = cell => path.at(cell);
-const isEndpoint = cell => cell === CANADA || cell === JAPAN;
-const regularCells = gridCells.filter(cell => !isEndpoint(cell));
+// How many cells a lavender island can hold. Its digits are distinct and drawn
+// from 1-9, one of them is the cell count itself, and where a total is printed
+// they sum to it -- so a size is possible exactly when some digit set witnesses
+// all three at once.
+const sizesFor = (total) => DIGITS.filter(size => DIGIT_SETS.some(set =>
+  set.length === size && set.includes(size) &&
+  (total === null ||
+   (total === PRIME ? isPrime(sumOf(set)) : sumOf(set) === total))));
 
-// Regular-cell domains: exclude codes that would point off the grid.
-const ALL_SHAPES = [OFF, HORIZ, VERT, UL, UR, DL, DR];
-const shapeDomains = regularCells.map(cell => {
-  const { row, col } = parseCellId(cell);
-  const allowed = ALL_SHAPES.filter(s =>
-    !(row === 1 && usesUp(s)) && !(row === geometry.numRows && usesDown(s)) &&
-    !(col === 1 && usesLeft(s)) && !(col === geometry.numCols && usesRight(s)));
-  return new Given(pathCell(cell), ...allowed);
-});
-// Lavender cells are islands, never on the path.
-const lavenderOffPath = LAVENDER.map(cell => new Given(pathCell(cell), OFF));
-// Endpoints: R1C9's two neighbours are down (R2C9) and left (R1C8);
-// R9C1's are up (R8C1) and right (R9C2). END_A/END_B mean different things
-// at each endpoint -- only ever compared against that endpoint's own edge
-// checks below, never against each other.
-const endpointDomains = [
-  new Given(pathCell(CANADA), END_A, END_B),
-  new Given(pathCell(JAPAN), END_A, END_B),
-];
+const distance = (a, b) => {
+  const p = parseCellId(a), q = parseCellId(b);
+  return Math.abs(p.row - q.row) + Math.abs(p.col - q.col);
+};
 
-// --- Edge agreement, regular <-> regular pairs. ---------------------------
-// A row/column of shape codes is exactly a chain of horizontal/vertical
-// neighbour pairs, so one Pair per whole row (or column) covers every edge
-// in it -- dropping the one endpoint cell a row/column may contain is safe
-// here because both endpoints sit at a row/column end (R1C9 is the last
-// cell of row 1 and of column 9; R9C1 the last of column 1, first of row 9),
-// never in the interior, so removing it never joins two cells that were not
-// really adjacent.
-const edgeRightKey = Pair.fnToKey((a, b) => usesRight(a) === usesLeft(b), geometry.numValues);
-const edgeDownKey = Pair.fnToKey((a, b) => usesDown(a) === usesUp(b), geometry.numValues);
-const edgeAgreements = [
-  ...graph.rows().map(row =>
-    new Pair(edgeRightKey, 'edge-h', ...path.at(row.filter(c => !isEndpoint(c))))),
-  ...graph.columns().map(col =>
-    new Pair(edgeDownKey, 'edge-v', ...path.at(col.filter(c => !isEndpoint(c))))),
-];
-
-// --- Digit difference along a used regular <-> regular edge. -------------
-// Reads [shapeA, digitA, digitB]; `toB` says whether A uses the edge to B
-// (edge agreement above guarantees B agrees), so only joined pairs are
-// constrained. Kept as one NFA per edge (not a chain Pair): the relation
-// needs the two digit cells together with the shape cell, not the shape
-// codes alone.
-const diffEdge = (toB) => NFA.encodeSpec({
-  startState: { phase: 'shape' },
-  transition: (state, value) => {
-    if (state.phase === 'shape') return { phase: 'digitA', joined: toB(value) };
-    if (state.phase === 'digitA') return { phase: 'digitB', joined: state.joined, digitA: value };
-    if (!state.joined) return { done: true };
-    return Math.abs(state.digitA - value) >= 4 ? { done: true } : undefined;
-  },
-  accept: ({ done }) => done === true,
-}, geometry.numValues);
-const diffRight = diffEdge(usesRight), diffDown = diffEdge(usesDown);
-const diffRules = regularCells.flatMap(cell => {
-  const right = graph.step(cell, 0, 1);
-  const down = graph.step(cell, 1, 0);
-  return [
-    ...(right && !isEndpoint(right) ? [new NFA(diffRight, 'diff-h', pathCell(cell), cell, right)] : []),
-    ...(down && !isEndpoint(down) ? [new NFA(diffDown, 'diff-v', pathCell(cell), cell, down)] : []),
-  ];
+// Which cells a lavender island could reach: it is orthogonally connected and
+// holds its lavender cell, so a cell at distance d from it drags d+1 cells into
+// the island and needs the island to be at least that big.
+const islands = LAVENDER.map(({ cell, total }, i) => {
+  const sizes = sizesFor(total);
+  const reach = Math.max(...sizes) - 1;
+  return {
+    id: i + 1,
+    anchor: cell,
+    total,
+    sizes,
+    zone: gridCells.filter(c => distance(c, cell) <= reach),
+  };
 });
 
-// --- Edge agreement + digit difference, the 4 endpoint <-> neighbour pairs.
-// Each endpoint always uses exactly one of its two edges; `epTarget` is the
-// code meaning "use the edge to this particular neighbour", and
-// `neighbourUses` reads the ordinary neighbour's own shape code for its
-// matching edge back.
-function endpointEdge(epCell, epTarget, neighbourCell, neighbourUses) {
-  const agreeKey = Pair.fnToKey(
-    (epVal, neighbourVal) => (epVal === epTarget) === neighbourUses(neighbourVal),
-    geometry.numValues);
-  const diff = NFA.encodeSpec({
-    startState: { phase: 'ep' },
-    transition: (state, value) => {
-      if (state.phase === 'ep') return { phase: 'digitEp', used: value === epTarget };
-      if (state.phase === 'digitEp') return { phase: 'digitOther', used: state.used, digitEp: value };
-      if (!state.used) return { done: true };
-      return Math.abs(state.digitEp - value) >= 4 ? { done: true } : undefined;
+// --- Sudoku digits. The widened value range exists only for the overlays.
+const digitDomain = graph.makeReplicate(new Given(gridCells[0], ...DIGITS));
+
+// --- Islands and water -------------------------------------------------------
+
+// Each cell holds the label of the island that owns it, or water. A lavender
+// island's label is confined to that island's own zone; the flag islands have
+// no size clue, so theirs are not confined.
+const anchored = new Map([
+  ...islands.map(island => [island.anchor, island.id]),
+  [PATH_START, CANADA], [PATH_END, JAPAN],
+]);
+const labelDomain = gridCells.map(cell => new Given(label.at(cell),
+  ...(anchored.has(cell)
+    ? [anchored.get(cell)]
+    : [WATER, CANADA, JAPAN,
+       ...islands.filter(i => i.zone.includes(cell)).map(i => i.id)])));
+
+// One connected region per island, and one for the water.
+const regions = [
+  ...islands.map(island => new ConnectedValues('VL', island.id)),
+  new ConnectedValues('VL', CANADA),
+  new ConnectedValues('VL', JAPAN),
+  new ConnectedValues('VL', WATER),
+];
+
+// Two orthogonal neighbours may not carry different island labels. With one
+// connected region per label, this is what makes the eleven labelled regions
+// the grid's islands rather than pieces of larger ones.
+const noTouching = (() => {
+  const key = Pair.fnToKey(
+    (a, b) => a === WATER || b === WATER || a === b, geometry);
+  const origin = gridCells[0];
+  return [[0, 1], [1, 0]].map(([dR, dC]) => label.makeReplicate(
+    new Pair(key, 'islands-apart',
+      ...label.at([origin, graph.step(origin, dR, dC)])),
+    label.at(gridCells.filter(cell => graph.step(cell, dR, dC)))));
+})();
+
+// No 2x2 block of water: reads the four labels of a block and rejects the
+// block that never leaves water.
+const noWaterSquare = (() => {
+  const machine = NFA.encodeSpec({
+    startState: { waters: 0 },
+    transition: ({ waters }, value) => {
+      const next = waters + (value === WATER ? 1 : 0);
+      return next === 4 ? undefined : { waters: next };
     },
-    accept: ({ done }) => done === true,
-  }, geometry.numValues);
-  return [
-    new Pair(agreeKey, 'edge-ep', pathCell(epCell), pathCell(neighbourCell)),
-    new NFA(diff, 'diff-ep', pathCell(epCell), epCell, neighbourCell),
-  ];
-}
-const endpointRules = [
-  ...endpointEdge(CANADA, END_A, 'R2C9', usesUp),    // down edge
-  ...endpointEdge(CANADA, END_B, 'R1C8', usesRight), // left edge
-  ...endpointEdge(JAPAN, END_A, 'R8C1', usesDown),    // up edge
-  ...endpointEdge(JAPAN, END_B, 'R9C2', usesLeft),    // right edge
-];
+    accept: () => true,
+  }, geometry);
+  return label.makeReplicate(
+    new NFA(machine, 'no-2x2-water', ...label.at(graph.block(gridCells[0], 2, 2))),
+    label.at(gridCells.filter(cell => graph.block(cell, 2, 2))));
+})();
 
-// --- Path must visit every 3x3 box: at least one non-OFF code per box. ----
-const existsOnPathMachine = NFA.encodeSpec({
-  startState: { found: false },
-  transition: ({ found }, value) => ({ found: found || value !== OFF }),
-  accept: ({ found }) => found,
-}, geometry.numValues);
-const boxesVisited = graph.boxes()
-  .map(box => new NFA(existsOnPathMachine, 'box-visited', ...path.at(box)));
+// --- Lavender island contents ------------------------------------------------
 
-// --- Terrain overlay: ISLAND or WATER per cell. ---------------------------
-const ISLAND = 1, WATER = 2;
-const terrain = graph.makeOverlay('VT');
-const terrainCell = cell => terrain.at(cell);
-const firstTerrain = terrain.cells()[0];
-// Every terrain Var is island or water; all 81 cells share one template.
-const terrainDomain = terrain.makeReplicate(
-  new Given(firstTerrain, ISLAND, WATER));
-const islandAnchors = [...LAVENDER, CANADA, JAPAN]
-  .map(cell => new Given(terrainCell(cell), ISLAND));
+// The lavender cell's digit is the island's cell count. The scan reads that
+// digit first, then the label of every other cell of the zone, counting the
+// ones the island claims; the lavender cell itself is the count's first cell.
+const islandSizes = islands.map(island => {
+  const machine = NFA.encodeSpec({
+    startState: { target: null, count: 0 },
+    transition: ({ target, count }, value) => {
+      if (target === null) {
+        // The lavender cell holds a digit; the wider alphabet is the overlays'.
+        return value > DIGITS.length ? undefined : { target: value, count: 1 };
+      }
+      const next = count + (value === island.id ? 1 : 0);
+      return next > target ? undefined : { target, count: next };
+    },
+    accept: ({ target, count }) => target !== null && count === target,
+  }, geometry);
+  const rest = island.zone.filter(cell => cell !== island.anchor);
+  return new NFA(machine, `island-${island.id}-size`,
+    island.anchor, ...label.at(rest));
+});
 
-// Only R1C9/R9C1 may be island cells that are also on the path: every other
-// on-path cell must be water. (Endpoints are excluded -- they are always
-// on-path and always island, by the givens above.)
-const terrainLinkKey = Pair.fnToKey(
-  (code, terr) => !(code !== OFF && terr === ISLAND), geometry.numValues);
-const terrainLinks = regularCells.map(cell =>
-  new Pair(terrainLinkKey, 'terrain-link', pathCell(cell), terrainCell(cell)));
+// The island's digits do not repeat, and where a total is printed they sum to
+// it. The scan reads the zone as (label, digit) pairs and collects the island's
+// digits as a 9-bit mask, which carries both the repeat check and the sum.
+const islandDigits = islands.map(island => {
+  const maxSize = Math.max(...island.sizes);
+  const machine = NFA.encodeSpec({
+    startState: { mask: 0, phase: 'label' },
+    transition: ({ mask, phase }, value) => {
+      if (phase === 'label') {
+        return { mask, phase: value === island.id ? 'mine' : 'other' };
+      }
+      if (phase === 'other') return { mask, phase: 'label' };
+      // Only a grid cell reaches this phase, and grid cells hold 1-9; the wider
+      // alphabet belongs to the overlays.
+      if (value > DIGITS.length) return undefined;
+      const bit = 1 << (value - 1);
+      if (mask & bit) return undefined;
+      const next = mask | bit;
+      if (DIGIT_SETS[next].length > maxSize) return undefined;
+      return { mask: next, phase: 'label' };
+    },
+    accept: ({ mask, phase }) => {
+      if (phase !== 'label') return false;
+      if (island.total === null) return true;
+      const total = sumOf(DIGIT_SETS[mask]);
+      return island.total === PRIME ? isPrime(total) : total === island.total;
+    },
+  }, geometry);
+  return new NFA(machine, `island-${island.id}-digits`,
+    ...island.zone.flatMap(cell => [label.at(cell), cell]));
+});
 
-// No 2x2 block of all-water cells: one NFA on the top-left block, replicated
-// to every block origin (same idiom as xin_yang_v2.js's noMono2x2).
-const noMonoWaterMachine = NFA.encodeSpec({
-  startState: { block: [] },
-  transition: ({ block }, value) => {
-    if (block === null) return { block: null };
-    const next = [...block, value];
-    if (next.length < 4) return { block: next };
-    return next.every(v => v === WATER) ? undefined : { block: null };
-  },
-  accept: ({ block }) => block === null,
-}, geometry.numValues);
-const blockOrigins = gridCells.filter(cell => graph.block(cell, 2, 2));
-const noMonoWaterBlocks = terrain.makeReplicate(
-  new NFA(noMonoWaterMachine, 'no-mono-water',
-    ...terrain.at(graph.block(gridCells[0], 2, 2))),
-  terrain.at(blockOrigins));
+// The lavender digit is the island's size, so only a size the island can
+// actually have is available to it.
+const islandSizeDomain = islands.map(
+  island => new Given(island.anchor, ...island.sizes));
+
+// --- Equal products ----------------------------------------------------------
+
+// Digits 1-9 factor over 2, 3, 5 and 7 alone, so two products are equal exactly
+// when they agree in the exponent of each of those four primes. One machine per
+// prime scans the grid as (label, digit) pairs and carries the running
+// difference between the two islands' exponent totals, which must come back to
+// zero.
+const exponent = (prime, digit) => {
+  let count = 0;
+  while (digit % prime === 0) { digit /= prime; count++; }
+  return count;
+};
+const productCells = gridCells;
+const equalProducts = [2, 3, 5, 7].map(prime => {
+  const machine = NFA.encodeSpec({
+    startState: { diff: 0, phase: 'label' },
+    transition: ({ diff, phase }, value) => {
+      if (phase === 'label') {
+        if (value === CANADA) return { diff, phase: 'canada' };
+        if (value === JAPAN) return { diff, phase: 'japan' };
+        return { diff, phase: 'other' };
+      }
+      if (phase === 'other') return { diff, phase: 'label' };
+      if (value > DIGITS.length) return undefined;
+      const delta = exponent(prime, value) * (phase === 'canada' ? 1 : -1);
+      return { diff: diff + delta, phase: 'label' };
+    },
+    accept: ({ diff, phase }) => phase === 'label' && diff === 0,
+    // Bounds the running difference, which is otherwise unbounded state.
+    maxDepth: 2 * productCells.length,
+  }, geometry);
+  return new NFA(machine, `equal-product-${prime}`,
+    ...productCells.flatMap(cell => [label.at(cell), cell]));
+});
+
+// --- The path ----------------------------------------------------------------
+
+// Each cell records the direction of the path's next step out of it, so the
+// route is a set of directed edges. A cell the route passes twice is not
+// representable, which is the "path" of the rules: it is drawn once from R1C9
+// to R9C1.
+const stepDomain = gridCells.map(cell => {
+  const available = STEPS
+    .filter(([, dR, dC]) => graph.step(cell, dR, dC))
+    .map(([direction]) => direction);
+  if (cell === PATH_START) return new Given(step.at(cell), ...available);
+  if (cell === PATH_END) return new Given(step.at(cell), END);
+  return new Given(step.at(cell), OFF, ...available);
+});
+
+// The neighbours of a cell in a fixed direction order, so that a machine
+// scanning them knows which direction each one lies in.
+const orderedNeighbours = (cell) => STEPS
+  .map(([direction, dR, dC]) => ({ direction, cell: graph.step(cell, dR, dC) }))
+  .filter(entry => entry.cell);
+
+// Every cell of the route is stepped into exactly once, except R1C9 where the
+// route starts; cells off the route are stepped into not at all. The scan reads
+// the cell's own direction, then each neighbour's: a neighbour lying to the
+// north steps into this cell when its own direction is south.
+const inDegrees = gridCells.map(cell => {
+  const neighbours = orderedNeighbours(cell);
+  const wanted = neighbours.map(entry => OPPOSITE[entry.direction]);
+  const machine = NFA.encodeSpec({
+    startState: { want: null, index: 0, count: 0 },
+    transition: ({ want, index, count }, value) => {
+      if (want === null) {
+        return { want: cell === PATH_START || value === OFF ? 0 : 1, index: 0, count: 0 };
+      }
+      const next = count + (value === wanted[index] ? 1 : 0);
+      return next > want ? undefined : { want, index: index + 1, count: next };
+    },
+    accept: ({ want, count }) => want !== null && count === want,
+    maxDepth: 1 + neighbours.length,   // bounds the neighbour index
+  }, geometry);
+  return new NFA(machine, 'path-in-degree',
+    ...step.at([cell, ...neighbours.map(entry => entry.cell)]));
+});
+
+// The route reaches every 3x3 box.
+const boxVisits = (() => {
+  const machine = NFA.encodeSpec({
+    startState: { seen: false },
+    transition: ({ seen }, value) => ({ seen: seen || value !== OFF }),
+    accept: ({ seen }) => seen,
+  }, geometry);
+  return graph.boxes().map(
+    (box, i) => new NFA(machine, `path-visits-box-${i + 1}`, ...step.at(box)));
+})();
+
+// Consecutive digits along the route differ by at least 4. The scan reads the
+// cell's direction and digit, then its neighbours' digits in the same order, so
+// only the neighbour the route steps into is compared.
+const pathDifferences = gridCells.map(cell => {
+  const neighbours = orderedNeighbours(cell);
+  const directions = neighbours.map(entry => entry.direction);
+  const machine = NFA.encodeSpec({
+    startState: { phase: 'direction' },
+    transition: (state, value) => {
+      if (state.phase === 'direction') {
+        return { phase: 'digit', direction: value };
+      }
+      if (state.phase === 'digit') {
+        return { phase: 'neighbours', direction: state.direction, digit: value, index: 0 };
+      }
+      const stepped = state.direction === directions[state.index];
+      if (stepped && Math.abs(state.digit - value) < MIN_DIFFERENCE) return undefined;
+      return { ...state, index: state.index + 1 };
+    },
+    accept: ({ phase }) => phase === 'neighbours',
+    maxDepth: 2 + neighbours.length,   // bounds the neighbour index
+  }, geometry);
+  return new NFA(machine, 'path-difference',
+    step.at(cell), cell, ...neighbours.map(entry => entry.cell));
+});
+
+// A cell the route visits is water, except the two flag cells, which the rules
+// put on the route as its only island cells.
+const pathIsWater = (() => {
+  const key = Pair.fnToKey((s, l) => s === OFF || l === WATER, geometry);
+  return gridCells
+    .filter(cell => cell !== PATH_START && cell !== PATH_END)
+    .map(cell => new Pair(key, 'path-is-water', step.at(cell), label.at(cell)));
+})();
+
+// The route's cells form one orthogonally connected region.
+const pathConnected = new ConnectedValues('VD', ON_PATH);
+
+// Position along the route, modulo 8 and modulo 11. Stepping from one cell to
+// the next advances the position by one in both, so a closed circuit of route
+// cells would have to have a length divisible by both moduli; 88 exceeds the
+// grid, so no such circuit exists and the route is the single path the rules
+// draw. The two rules above -- one step out of each route cell, one step in --
+// leave exactly that possibility open.
+const positions = counters.flatMap(({ prefix, mod, overlay }) => {
+  const sentinel = mod + 1;
+  const domain = overlay.makeReplicate(
+    new Given(overlay.cells()[0], ...[...Array(mod).keys()].map(i => i + 1), sentinel));
+  const offKey = Pair.fnToKey(
+    (s, position) => (s === OFF) === (position === sentinel), geometry);
+  const offPath = gridCells.map(cell => new Pair(offKey, `${prefix}-off-path`,
+    step.at(cell), overlay.at(cell)));
+  const advances = gridCells.map(cell => {
+    const neighbours = orderedNeighbours(cell);
+    const directions = neighbours.map(entry => entry.direction);
+    const machine = NFA.encodeSpec({
+      startState: { phase: 'direction' },
+      transition: (state, value) => {
+        if (state.phase === 'direction') {
+          return { phase: 'position', direction: value };
+        }
+        if (state.phase === 'position') {
+          return { phase: 'neighbours', direction: state.direction, position: value, index: 0 };
+        }
+        const stepped = state.direction === directions[state.index];
+        if (stepped && value !== (state.position % mod) + 1) return undefined;
+        return { ...state, index: state.index + 1 };
+      },
+      accept: ({ phase }) => phase === 'neighbours',
+      maxDepth: 2 + neighbours.length,   // bounds the neighbour index
+    }, geometry);
+    return new NFA(machine, `${prefix}-advance`, step.at(cell),
+      ...overlay.at([cell, ...neighbours.map(entry => entry.cell)]));
+  });
+  // The route is numbered from its first cell; without this seam every rotation
+  // of the numbering is a separate solution.
+  const seam = new Given(overlay.at(PATH_START), 1);
+  return [domain, seam, ...offPath, ...advances];
+});
 
 return [
-  new Shape('9x9'),
-  path.toVar('path shape'),
-  terrain.toVar('terrain'),
-  ...shapeDomains,
-  ...lavenderOffPath,
-  ...endpointDomains,
-  ...edgeAgreements,
-  ...diffRules,
-  ...endpointRules,
-  ...boxesVisited,
-  terrainDomain,
-  ...islandAnchors,
-  ...terrainLinks,
-  noMonoWaterBlocks,
-  // All water cells form one connected region. Not used for the island
-  // class: islands are several disjoint components, and ConnectedValues
-  // forces exactly one region (unsound if applied there).
-  new ConnectedValues('VT', WATER),
-  // The on-path cells (every code but OFF, across both overlays) form one
-  // connected region: rules out a wholly separate extra loop/path fragment
-  // elsewhere. It does NOT prove a single route on its own -- a second
-  // path-shaped structure could sit cell-adjacent to the real one without
-  // sharing a used edge and still read as "connected" (same caveat as
-  // wendezaune.js); that residual is recorded as an omission.
-  new ConnectedValues('VP', [HORIZ, VERT, UL, UR, DL, DR, END_A, END_B]),
+  shape,
+  label.toVar('island'),
+  step.toVar('path step'),
+  ...counters.map(({ overlay, mod }) => overlay.toVar(`path position mod ${mod}`)),
+  digitDomain,
+  ...labelDomain,
+  ...regions,
+  ...noTouching,
+  noWaterSquare,
+  ...islandSizeDomain,
+  ...islandSizes,
+  ...islandDigits,
+  ...equalProducts,
+  ...stepDomain,
+  ...inDegrees,
+  ...boxVisits,
+  ...pathDifferences,
+  ...pathIsWater,
+  pathConnected,
+  ...positions,
 ];

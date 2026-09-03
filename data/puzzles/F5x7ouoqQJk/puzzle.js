@@ -1,18 +1,25 @@
 // Title: Sandwich Sudoku
-// Author: Unknown
+// Author: Marijn ten Velde
 // Video: https://www.youtube.com/watch?v=F5x7ouoqQJk
 // Source: https://cracking-the-cryptic.web.app/sudoku/fRjmFrGdjR
 
-// Normal Sudoku rules apply (rows, columns and boxes). Every outside clue is
-// a Sandwich sum: the sum of the digits sandwiched between the 1 and the 9
-// in that row or column. The raw payload carries no rules text; the video
-// title ("The Key To Sandwich Sudoku") plus the outside overlays being
-// restricted to only the top and left of the grid -- exactly the class's own
-// placement rule -- identify the puzzle type. The scattered grey cell
-// shading in the payload is decorative (no rule text or other geometry gives
-// it meaning) and is not encoded.
-const graph = cellGraph('9x9');
-const geometry = cellGeometry('9x9');
+// Normal Sudoku rules apply: each row, column and 3x3 box holds 1-9 once.
+// Every clue printed outside the grid is a Sandwich sum -- the digits lying
+// strictly between the 1 and the 9 of that row or column add to the clue.
+// The source publishes no rules text, so the clue type rests on two things:
+// the video names the Sandwich genre, and all seven clues sit above a column
+// or left of a row, which is the only placement a Sandwich clue allows.
+//
+// Deliberately not encoded: 28 cells carry a flat grey background whose
+// outline draws two keys (each a toothed blade running along one row into a
+// ring-shaped bow, the bow enclosing a single unshaded cell -- R4C7 for the
+// upper key, R7C2 for the lower). No rule anywhere in the source says what
+// those cells or those two enclosed cells do, so nothing is written for them
+// and this encoding is incomplete by exactly that much.
+
+const shape = new Shape('9x9');
+const graph = cellGraph(shape);
+const geometry = cellGeometry(shape);
 
 const givens = [
   new Given('R1C8', 9),
@@ -24,19 +31,23 @@ const givens = [
   new Given('R9C7', 6),
 ];
 
-// Sandwich clues, from the outside-clue overlays (row/column, printed sum).
-const sandwiches = [
+// Clue values as printed in the margin: left of rows 4, 6, 7 and 9, and above
+// columns 1, 4 and 5.
+const rowSandwiches = [
   Sandwich.fromCells(28, graph.row(4), geometry),
   Sandwich.fromCells(0, graph.row(6), geometry),
   Sandwich.fromCells(0, graph.row(7), geometry),
   Sandwich.fromCells(10, graph.row(9), geometry),
+];
+const columnSandwiches = [
   Sandwich.fromCells(16, graph.column(1), geometry),
   Sandwich.fromCells(27, graph.column(4), geometry),
   Sandwich.fromCells(7, graph.column(5), geometry),
 ];
 
 return [
-  new Shape('9x9'),
+  shape,
   ...givens,
-  ...sandwiches,
+  ...rowSandwiches,
+  ...columnSandwiches,
 ];

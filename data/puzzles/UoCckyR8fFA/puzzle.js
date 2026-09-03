@@ -3,35 +3,35 @@
 // Video: https://www.youtube.com/watch?v=UoCckyR8fFA
 // Source: https://tinyurl.com/y4uxa62s
 
-// 10x10 grid. No Sudoku layer: the grid is Raw, so rows, columns and boxes
-// carry no rule and values repeat freely.
+// 10x10 board, no Sudoku layer: the grid is Raw, so rows, columns and boxes
+// carry no rule and numbers repeat freely.
 //
 // Rules encoded:
 //  * Standard Fillomino. Divide the grid into orthogonally connected regions;
-//    a cell's value is the size of the region it belongs to; no two regions
-//    of equal size share an edge. Those two clauses collapse to one
-//    statement about the filled grid: the orthogonally connected run of
-//    equal values containing a cell has exactly that many cells.
-//  * Cave (hybrid): some cells are shaded gray ("walls"); every wall cell is
-//    orthogonally connected to the grid's edge through other wall cells
-//    (several separate wall regions are allowed, each reaching the edge);
-//    all remaining cells together form exactly one orthogonally connected
-//    area (the "cave").
-//  * Every circled cell is inside the cave, and its own digit equals the
-//    number of cave cells visible from it by an orthogonal line of sight
-//    (the cell itself included), where wall cells block the view.
-//  * The top-right cell (R1C10) is a wall from the start.
-//  * The 18 given numbers.
+//    a cell's number is the size of its region; no two regions of equal size
+//    share an edge. Those two clauses are one statement about the filled grid:
+//    the orthogonally connected run of equal numbers containing a cell has
+//    exactly that many cells.
+//  * Cave. Some cells are shaded gray (walls); every gray cell is orthogonally
+//    connected to the edge of the grid through gray cells (several separate
+//    wall regions are allowed, each reaching the edge); all remaining cells
+//    together form exactly one orthogonally connected area (the cave).
+//  * Every circled cell is inside the cave, and its own number is the count of
+//    cave cells it sees along the four orthogonal rays, itself included, with
+//    walls and the grid edge blocking the view.
+//  * The top right cell (R1C10) is a wall from the start, and still holds a
+//    number.
+//  * The 18 printed numbers.
 //
 // Omitted:
-//  * Polyominoes of area 17 or more. A Fillomino value has to name its own
-//    region's area, and the value alphabet stops at CellGeometry.MAX_SIZE =
-//    16, so a region that size or larger cannot be written down. Areas
-//    1..16 are encoded exactly.
-//  * "Within one orthogonally-connected group of wall cells, no digit
-//    repeats." No practical ISS construction is known for a per-component
-//    AllDifferent over an unanchored, unbounded-count partition. Every other
-//    clause is encoded.
+//  * "Within one orthogonally connected area of gray cells, no numbers may
+//    repeat." Only its two-cell consequence is encoded below (orthogonally
+//    adjacent gray cells are in one gray area, so their numbers differ);
+//    distinctness across a whole gray area, whose shape and count the solver
+//    discovers, is left out.
+//  * Regions of area 17 or more. A Fillomino cell's number has to name its own
+//    region's area, and the value alphabet stops at 16, so a larger region
+//    cannot be written down. Areas 1-16 are encoded exactly.
 
 const MAX_AREA = 16;
 const SIDE = 10;
@@ -42,19 +42,41 @@ const shape = new Shape(`${SIDE}x${SIDE}`, '1-' + MAX_AREA, 'Raw');
 const graph = cellGraph(shape);
 const cells = graph.cells();
 
+// --- Drawn data ------------------------------------------------------------
+// The 18 printed numbers, as [row, col, number].
+const GIVENS = [
+  [1, 4, 6], [1, 6, 1], [1, 8, 10],
+  [2, 1, 3], [2, 2, 1], [2, 5, 2],
+  [4, 4, 1], [4, 6, 2],
+  [5, 5, 3], [5, 6, 3],
+  [6, 4, 2], [6, 6, 1], [6, 9, 6],
+  [7, 1, 2],
+  [9, 1, 3],
+  [10, 2, 11], [10, 4, 8], [10, 10, 12],
+];
+
+// The 12 large circles, as [row, col].
+const CIRCLES = [
+  [1, 4], [2, 5], [3, 4], [4, 1], [4, 2], [4, 5],
+  [5, 5], [5, 6], [6, 3], [6, 8], [7, 1], [10, 10],
+];
+
+// The single cell shaded gray in the source, the board's top-right corner.
+const GIVEN_WALL = makeCellId(1, SIDE);
+
 // --- Fillomino: a rooted tree per region -----------------------------------
-// Each region is modelled as a rooted tree over its own cells, carried by
-// five whole-grid overlays (bookkeeping, not puzzle content):
+// Five whole-grid overlays carry a rooted tree per region. They are
+// bookkeeping, not puzzle content:
 //   parent  - ROOT, or the direction of the cell one step nearer the root;
 //   subtree - how many cells hang below this one, itself included;
 //   rootRow
 //   rootCol - which cell is the root of this cell's region;
 //   depth   - steps from the root, counting the root as 1.
-// A root's subtree is its whole region and equals the value written there; a
-// non-root hangs off a neighbour holding the same value; two neighbours
-// holding the same value must name the same root, so two equal-area regions
-// cannot end up sharing an edge; and subtree counts strictly grow towards a
-// root, so the pointers cannot cycle and every cell reaches its root.
+// A root's subtree is its whole region and equals the number written there; a
+// non-root hangs off a neighbour holding the same number; two neighbours
+// holding the same number must name the same root, so two equal-area regions
+// cannot share an edge; and subtree counts strictly grow towards a root, so
+// the pointers cannot cycle and every cell reaches its root.
 const ROOT = 1;
 const DIRS = [
   // `back` is the pointer value a neighbour in this direction uses to point
@@ -65,7 +87,7 @@ const DIRS = [
   { code: 5, back: 4, dRow: 0, dCol: 1 },
 ];
 const parent = graph.makeOverlay('VP');
-const subtree = graph.makeOverlay('VS');
+const subtree = graph.makeOverlay('VT');
 const rootRow = graph.makeOverlay('VR');
 const rootCol = graph.makeOverlay('VC');
 const depth = graph.makeOverlay('VD');
@@ -109,8 +131,8 @@ const subtreeSums = cells.map(cell => {
       ({ other }) => [parent.at(other), subtree.at(other)]));
 });
 
-// Reads [value(a), value(b), label(a), label(b)] for one orthogonal edge:
-// neighbours holding the same value are in the same region and so must name
+// Reads [number(a), number(b), label(a), label(b)] for one orthogonal edge:
+// neighbours holding the same number are in the same region and so must name
 // the same root. Used once for the root's row and once for its column.
 const rootEdgeSpec = NFA.encodeSpec({
   startState: { phase: 0 },
@@ -126,7 +148,7 @@ const rootEdgeSpec = NFA.encodeSpec({
   accept: state => state.phase === 4,
 }, shape);
 
-// Reads [value(a), value(b), depth(a), depth(b)]: within a region no step may
+// Reads [number(a), number(b), depth(a), depth(b)]: within a region no step may
 // change the distance to the root by more than one, which is what makes
 // `depth` the true distance rather than any descending chain.
 const depthEdgeSpec = NFA.encodeSpec({
@@ -160,7 +182,7 @@ const regionEdges = edges.flatMap(({ cell, other }) => [
     cell, other, depth.at(cell), depth.at(other)),
 ]);
 
-// Reads [value(cell), value(other), depth(cell), depth(other)] and rejects
+// Reads [number(cell), number(other), depth(cell), depth(other)] and rejects
 // the case where `other` could have served as the parent. Placed on the
 // earlier directions of each branch, it makes the parent the first eligible
 // neighbour in DIRS order, so the tree is fixed by the region rather than
@@ -179,6 +201,7 @@ const notParentSpec = NFA.encodeSpec({
   accept: state => state.phase === 4,
 }, shape);
 
+// True when the second cell's depth is one less than the first's.
 const depthStep = Pair.fnToKey((mine, other) => other === mine - 1, shape);
 
 const parentChoice = cells.map(cell => {
@@ -232,156 +255,107 @@ const rootDomains = [
   }),
 ];
 
-// --- Cave / walls ------------------------------------------------------
-// Rule: every wall cell reaches the grid's edge through other wall cells
-// (several separate wall regions are allowed); all non-wall cells together
-// form exactly one connected area. Widen the shading layer by one cell on
-// every side and pin that ring to WALL, so ConnectedValues(WALL) reads as
-// "every wall region touches the ring" (several allowed, merged into one
-// component through the ring itself) rather than forcing one single wall
-// mass. The cave then just needs a plain ConnectedValues(CAVE) on the same
-// layer, since the rule wants exactly one connected cave and the ring never
-// holds CAVE.
-// Validated on a small 4x4 fixture: a wall not touching the border is
-// rejected, two separate border-touching wall regions are accepted, and a
-// wall barrier that splits the cave into two islands is rejected.
-const shadeLayer = cellGraph(`${SIDE + 2}x${SIDE + 2}`).makeOverlay('VG');
-const shadeVar = shadeLayer.toVar('wall or cave');
-const shadeAt = (cell) => {
-  const { row, col } = parseCellId(cell);
-  return shadeVar.cell(row + 1, col + 1);
-};
-const gridShadeCells = new Set(cells.map(shadeAt));
-const ringShadeCells = shadeLayer.cells().filter(cell => !gridShadeCells.has(cell));
-
-// Drawn: the grid's top-right cell (row 1, column SIDE) starts shaded as a
-// wall.
-const WALL_GIVEN_CELL = makeCellId(1, SIDE);
-
-// Drawn: every large-circled cell is stated to be inside the cave.
-const CIRCLES = [
-  [1, 4], [2, 5], [3, 4], [4, 1], [4, 2], [4, 5],
-  [5, 5], [5, 6], [6, 3], [6, 8], [7, 1], [10, 10],
-];
+// --- Cave: walls and the cave ---------------------------------------------
+// The shading lives on a 12x12 overlay: the 10x10 board inset in a one-cell
+// frame whose cells are pinned to WALL. "Every gray region is orthogonally
+// connected to the edge of the grid" is then exactly "the walls plus the frame
+// form a single orthogonally connected region", which ConnectedValues states
+// directly while still allowing any number of separate wall regions on the
+// board itself. The cave is a plain ConnectedValues on the same layer; the
+// frame never holds CAVE, so that reads only the board.
+const framedGrid = cellGraph(`${SIDE + 2}x${SIDE + 2}`);
+const shade = framedGrid.makeOverlay('VG');
+const innerShade = shade.at(framedGrid.block('R2C2', SIDE, SIDE));
+const shadeOf = new Map(cells.map((cell, i) => [cell, innerShade[i]]));
+const insetCells = new Set(innerShade);
+const frameCells = shade.cells().filter(cell => !insetCells.has(cell));
 
 const shading = [
-  shadeVar,
-  shadeLayer.makeReplicate(new Given(shadeVar.cell(1), WALL, CAVE)),
-  ...ringShadeCells.map(cell => new Given(cell, WALL)),
-  new Given(shadeAt(WALL_GIVEN_CELL), WALL),
-  ...CIRCLES.map(([row, col]) => new Given(shadeAt(makeCellId(row, col)), CAVE)),
+  shade.toVar('wall or cave'),
+  shade.makeReplicate(new Given(shade.cells()[0], WALL, CAVE)),
+  shade.makeReplicate(new Given(shade.cells()[0], WALL), frameCells),
+  new Given(shadeOf.get(GIVEN_WALL), WALL),
+  ...CIRCLES.map(([row, col]) => new Given(shadeOf.get(makeCellId(row, col)), CAVE)),
   new ConnectedValues('VG', WALL),
   new ConnectedValues('VG', CAVE),
 ];
 
-// --- Cave visibility ---------------------------------------------------
-// A circled cell's own digit is the number of cave cells visible from it by
-// an orthogonal ray, itself included, stopped by the first wall or the grid
-// edge. Four directional "run length" overlays carry this per cell, along
-// the recurrence (validated on a 10-case accept/reject fixture):
-//   run(c) = 1                    if c is a wall (dummy, never read further)
-//   run(c) = 1                    if c is cave and the next cell that way is
-//                                  a wall, or c is the last cell before the
-//                                  grid edge
-//   run(c) = 1 + run(next cell)   if c is cave and the next cell that way is
-//                                  also cave
-// A circled cell's digit then equals the sum of its four runs minus 3 (the
-// cell itself is counted once in each of the four directions).
-// Each overlay only needs to be built out to the farthest circled cell in
-// its row/column, not the whole grid, to stay inside the search-cell budget.
-const runSpec = NFA.encodeSpec({
+// Two orthogonally adjacent gray cells are in the same gray area, so their
+// numbers differ. Reads [number(a), number(b), shading(a), shading(b)] for one
+// orthogonal edge. This is the part of "no numbers may repeat within a gray
+// area" the encoding carries; the whole-area clause is omitted (see header).
+const wallEdgeSpec = NFA.encodeSpec({
   startState: { phase: 0 },
   transition: (state, value) => {
-    // Reject an out-of-{WALL,CAVE} shade value immediately -- otherwise the
-    // compiler carries all 16 grid values through myShade/neighShade and
-    // blows the 4096-state limit (myShade x neighShade x neighRun).
-    if (state.phase === 0) {
-      return (value === WALL || value === CAVE) ? { phase: 1, myShade: value } : undefined;
-    }
-    if (state.phase === 1) {
-      return (value === WALL || value === CAVE)
-        ? { phase: 2, myShade: state.myShade, neighShade: value } : undefined;
-    }
+    if (state.phase === 0) return { phase: 1, mine: value };
+    if (state.phase === 1) return { phase: 2, same: value === state.mine };
     if (state.phase === 2) {
-      return {
-        phase: 3, myShade: state.myShade, neighShade: state.neighShade,
-        neighRun: value,
-      };
+      return { phase: 3, same: state.same, wall: value === WALL };
     }
     if (state.phase === 3) {
-      const expected = (state.myShade === CAVE && state.neighShade === CAVE)
-        ? 1 + state.neighRun : 1;
-      return value === expected ? { phase: 4 } : undefined;
+      return (state.same && state.wall && value === WALL) ? undefined : { phase: 4 };
     }
     return undefined;
   },
   accept: state => state.phase === 4,
 }, shape);
 
-const rowRange = new Map();  // row -> { minCol, maxCol } over circled cells
-const colRange = new Map();  // col -> { minRow, maxRow } over circled cells
-for (const [row, col] of CIRCLES) {
-  const r = rowRange.get(row) || { minCol: col, maxCol: col };
-  r.minCol = Math.min(r.minCol, col);
-  r.maxCol = Math.max(r.maxCol, col);
-  rowRange.set(row, r);
-  const c = colRange.get(col) || { minRow: row, maxRow: row };
-  c.minRow = Math.min(c.minRow, row);
-  c.maxRow = Math.max(c.maxRow, row);
-  colRange.set(col, c);
-}
+const wallEdges = edges.map(({ cell, other }) => new NFA(
+  wallEdgeSpec, 'adjacent walls differ',
+  cell, other, shadeOf.get(cell), shadeOf.get(other)));
 
-// Builds one directional run-length overlay over exactly the cells needed:
-// `neededCells` walked from the grid edge inward, `dRow`/`dCol` pointing from
-// a cell to its "outward" (edge-ward) neighbour, `isBoundary` marking the
-// edge cell in that direction.
-const buildRun = (prefix, neededCells, dRow, dCol, isBoundary) => {
-  const overlay = graph.makeOverlay(prefix, neededCells);
-  const constraints = neededCells.map(cell => {
-    if (isBoundary(cell)) return new Given(overlay.at(cell), 1);
-    const neighbour = graph.step(cell, dRow, dCol);
-    return new NFA(runSpec, 'visible run',
-      shadeAt(cell), shadeAt(neighbour), overlay.at(neighbour), overlay.at(cell));
-  });
-  return { overlay, constraints };
+// --- Cave sightlines -------------------------------------------------------
+// One machine per circled cell, reading the circled cell's own number followed
+// by its four rays over the shading overlay, nearest cell first. `rem` is how
+// many further cave cells the number still demands, `blocked` records that the
+// current ray has already run into a wall so nothing beyond it is visible, and
+// `i` counts the ray cells read so far -- the positions at which a new ray
+// starts are baked into the spec, and are where sight is restored. The circled
+// cell is in the cave and counts itself, so `rem` starts one below its number
+// and must reach exactly zero. (SEGMENT_BREAK would carry the ray boundaries
+// for free, but the break needs a 17th symbol and the alphabet is already the
+// full 16, so the boundaries are positions in the state instead.)
+const sightSpecs = new Map();
+const sightSpec = (rayLengths) => {
+  const key = rayLengths.join('_');
+  if (!sightSpecs.has(key)) {
+    const total = rayLengths.reduce((sum, len) => sum + len, 0);
+    const rayStarts = new Set();
+    let at = 1;
+    for (const len of rayLengths) {
+      rayStarts.add(at);
+      at += len;
+    }
+    sightSpecs.set(key, NFA.encodeSpec({
+      startState: { i: 0, rem: null, blocked: false },
+      transition: (state, value) => {
+        if (state.i === 0) return { i: 1, rem: value - 1, blocked: false };
+        if (state.i > total) return undefined;
+        const blocked = rayStarts.has(state.i) ? false : state.blocked;
+        if (blocked || value !== CAVE) {
+          return { i: state.i + 1, rem: state.rem, blocked: true };
+        }
+        const rem = state.rem - 1;
+        if (rem < 0) return undefined;
+        return { i: state.i + 1, rem, blocked: false };
+      },
+      accept: state => state.i === total + 1 && state.rem === 0,
+      maxDepth: total + 1,
+    }, shape));
+  }
+  return sightSpecs.get(key);
 };
 
-const eastCells = [...rowRange.entries()].flatMap(([row, { minCol }]) =>
-  Array.from({ length: SIDE - minCol + 1 }, (_, i) => makeCellId(row, minCol + i)));
-const westCells = [...rowRange.entries()].flatMap(([row, { maxCol }]) =>
-  Array.from({ length: maxCol }, (_, i) => makeCellId(row, i + 1)));
-const northCells = [...colRange.entries()].flatMap(([col, { maxRow }]) =>
-  Array.from({ length: maxRow }, (_, i) => makeCellId(i + 1, col)));
-const southCells = [...colRange.entries()].flatMap(([col, { minRow }]) =>
-  Array.from({ length: SIDE - minRow + 1 }, (_, i) => makeCellId(minRow + i, col)));
+const RAY_DIRECTIONS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
-const runEast = buildRun('VRE', eastCells, 0, 1, cell => parseCellId(cell).col === SIDE);
-const runWest = buildRun('VRW', westCells, 0, -1, cell => parseCellId(cell).col === 1);
-const runNorth = buildRun('VRN', northCells, -1, 0, cell => parseCellId(cell).row === 1);
-const runSouth = buildRun('VRS', southCells, 1, 0, cell => parseCellId(cell).row === SIDE);
-
-// digit = runEast + runWest + runNorth + runSouth - 3 (verified sign/offset
-// on a 4-case fixture).
-const visibility = CIRCLES.map(([row, col]) => {
+const sightCounts = CIRCLES.map(([row, col]) => {
   const cell = makeCellId(row, col);
-  return new Sum(3,
-    [runEast.overlay.at(cell), 1], [runWest.overlay.at(cell), 1],
-    [runNorth.overlay.at(cell), 1], [runSouth.overlay.at(cell), 1],
-    [cell, -1]);
+  const rays = RAY_DIRECTIONS
+    .map(([dRow, dCol]) => graph.ray(cell, dRow, dCol).slice(1)
+      .map(rayCell => shadeOf.get(rayCell)));
+  return new NFA(sightSpec(rays.map(ray => ray.length)), 'cave sightline',
+    cell, ...rays.flat());
 });
-
-// --- Givens --------------------------------------------------------------
-// Transcribed from the 18 numbers printed in the grid: [row, col, value].
-const GIVENS = [
-  [1, 4, 6], [1, 6, 1], [1, 8, 10],
-  [2, 1, 3], [2, 2, 1], [2, 5, 2],
-  [4, 4, 1], [4, 6, 2],
-  [5, 5, 3], [5, 6, 3],
-  [6, 4, 2], [6, 6, 1], [6, 9, 6],
-  [7, 1, 2],
-  [9, 1, 3],
-  [10, 2, 11], [10, 4, 8], [10, 10, 12],
-];
 
 return [
   shape,
@@ -390,19 +364,12 @@ return [
   rootRow.toVar('root row'),
   rootCol.toVar('root column'),
   depth.toVar('depth from root'),
-  runEast.overlay.toVar('cave run east'),
-  runWest.overlay.toVar('cave run west'),
-  runNorth.overlay.toVar('cave run north'),
-  runSouth.overlay.toVar('cave run south'),
   ...GIVENS.map(([row, col, value]) => new Given(makeCellId(row, col), value)),
   ...rootDomains,
   ...parentChoice,
   ...subtreeSums,
   ...regionEdges,
   ...shading,
-  ...runEast.constraints,
-  ...runWest.constraints,
-  ...runNorth.constraints,
-  ...runSouth.constraints,
-  ...visibility,
+  ...wallEdges,
+  ...sightCounts,
 ];

@@ -3,139 +3,221 @@
 // Video: https://www.youtube.com/watch?v=1VVhnG_Hk8A
 // Source: https://app.crackingthecryptic.com/sudoku/tnHfB78T98
 
-// Normal sudoku. 3 snakes are hidden in the grid: a snake is a set of cells
-// connected in a simple chain, each cell sharing an edge or a corner with the
-// next (the rules' own words, and a drawn grey segment R1C6-R2C7 is diagonal,
-// so a corner join is a real path step, not just a "touching" definition). A
-// snake cannot branch and cannot touch itself or another snake, orthogonally
-// or diagonally, except at the shared edge/corner that joins two consecutive
-// cells of the same snake. Each snake's digits multiply to exactly 500, and no
-// snake may start or end on a 1. Parts of some snakes are drawn as grey lines.
+// Normal sudoku. Three snakes are hidden in the grid. A snake is a chain of
+// cells in which consecutive cells share an edge or a corner; a snake cannot
+// branch, cannot touch itself orthogonally or diagonally, and cannot touch
+// another snake orthogonally or diagonally. Each snake's digits multiply to
+// exactly 500. Three grey two-cell segments show parts of "some or all" of the
+// snakes. No snake starts or ends on the digit 1.
 //
-// Omitted: whole-path connectivity for each snake (equivalently: a snake label
-// could in principle cover the real path plus a small disjoint same-label
-// cycle elsewhere that also satisfies the local checks below). No available
-// primitive gives connectivity over a king-move-adjacent, solver-chosen cell
-// set (the usual orthogonal-only connectivity check would reject the real,
-// partly-diagonal solution here). Closing it needs per-snake directed step
-// variables, in/out-degree checks and two coprime modular position counters
-// seeded at a non-endpoint anchor (no snake cell is otherwise known) -- that
-// construction has only ever been built for a single anchored path, and
-// tripling it for three mutually-exclusive, fully unknown snakes is well
-// beyond that precedent. This is a relaxation, not a tightening: it cannot
-// reject the real solution, only (in principle) admit an unintended extra
-// one. Everything else the rules state is encoded below.
+// Read together, the branching and touching clauses say: over the set S of all
+// snake cells, the king-move graph induced on S is exactly three disjoint
+// simple paths -- every snake cell is king-adjacent only to its own neighbours
+// along its own snake. The rules' worked example is this reading: R2C4 cannot
+// be a snake cell because the snake cell R3C3 touches it diagonally, which
+// holds whether R2C4 would join R3C3's snake or a different one.
+//
+// 500 = 2^2 * 5^3 and cells hold digits 1-9, so a snake's digits come from
+// {1, 2, 4, 5} with exactly three 5s and a total power of two of exactly 2
+// (one 4, or two 2s), plus any number of 1s.
+//
+// Two overlays carry the discovered structure.
+//   VS  per cell: OFF, or (which snake, end-or-interior).
+//   VP  per cell: NO_RANK off-snake, else 1 + the distance along the snake to
+//       its nearer end.
+// Both are artifacts of this encoding, so both are pinned to a single
+// representative: VS's snake numbers are forced into reading order, and VP is
+// forced to that one distance function.
 
-const NONE = 1, S1 = 2, S2 = 3, S3 = 4;   // snake-label values (1-indexed, ISS convention)
+const OFF = 1;              // VS: cell is on no snake
+const MID = [2, 4, 6];      // VS: interior cell of snake 1 / 2 / 3
+const END = [3, 5, 7];      // VS: end cell of snake 1 / 2 / 3
+const NO_RANK = 9;          // VP: cell is on no snake
+const MAX_RANK = NO_RANK - 1;
 
-const shape = new Shape('9x9');
-const graph = cellGraph(shape);
+const isOn = s => s >= MID[0] && s <= END[2];
+const isEnd = s => s === END[0] || s === END[1] || s === END[2];
+const snakeOf = s => s >> 1;   // 2,3 -> 1;  4,5 -> 2;  6,7 -> 3
+const SNAKE_DIGITS = [1, 2, 4, 5];
+
+const graph = cellGraph('9x9');
 const gridCells = graph.cells();
 const numValues = graph.gridGeometry().numValues;
+const snake = graph.makeOverlay('VS');
+const rank = graph.makeOverlay('VP');
 
-// One label per grid cell: which of the 3 snakes (if any) that cell belongs to.
-const label = graph.makeOverlay('VS');
-const domain = label.makeReplicate(new Given(label.cells()[0], NONE, S1, S2, S3));
+// Transcribed from the payload's 24 given digits.
+const givenDigits = {
+  R3C1: 3, R3C2: 4, R3C4: 6,
+  R4C1: 6, R4C3: 4, R4C5: 7, R4C8: 3,
+  R5C1: 5, R5C2: 8, R5C3: 7, R5C5: 6, R5C7: 9, R5C9: 1,
+  R6C2: 9, R6C3: 3, R6C5: 2, R6C7: 7, R6C9: 4,
+  R7C1: 4, R7C2: 7, R7C4: 3, R7C7: 1, R7C9: 8,
+  R8C8: 9,
+};
 
-// --- Per-cell shape check -------------------------------------------------
-// Reads a cell's own label and digit, then its up-to-8 king neighbours'
-// labels. An off-snake cell (NONE) is unconstrained. An on-snake cell must
-// not king-touch a different label at all, and may king-touch its own label
-// 1 or 2 times (never 0 -- a lone cell can't multiply to 500 -- never 3+,
-// which would be a branch); exactly 1 same-label king-neighbour makes it a
-// path endpoint, which the rule forbids holding a 1.
-const snakeCellMachine = NFA.encodeSpec({
-  startState: { phase: 'label' },
-  transition: (s, value) => {
-    if (s.phase === 'label') return { phase: 'digit', ownLabel: value };
-    if (s.phase === 'digit') return { phase: 'nbr', ownLabel: s.ownLabel, ownDigit: value, count: 0 };
-    // phase 'nbr': value is one king-neighbour's label
-    if (s.ownLabel === NONE) return s;
-    if (value === NONE) return s;
-    if (value !== s.ownLabel) return undefined;      // touches a different snake
-    const count = s.count + 1;
-    return count > 2 ? undefined : { ...s, count };  // branch guard
-  },
-  accept: (s) => {
-    if (s.phase !== 'nbr') return false;
-    if (s.ownLabel === NONE) return true;
-    if (s.count === 0) return false;                 // isolated on-snake cell
-    if (s.count === 1 && s.ownDigit === 1) return false; // endpoint can't be 1
-    return true;
-  },
+// The three drawn grey strokes, each joining two cell centres. Only their cells
+// carry information: which snake each belongs to is not shown, and the drawn
+// pair is automatically consecutive once both cells are on a snake, because
+// king-adjacent snake cells are always snake-neighbours here.
+const greySegmentCells = ['R3C3', 'R2C3', 'R1C6', 'R2C7', 'R8C2', 'R9C3'];
+
+// --- Overlay domains, and the grey segments forced on-snake. VP needs no
+// domain constraint: NO_RANK is the top of the grid's own value range.
+const snakeDomain = snake.makeReplicate(
+  new Given(snake.at('R1C1'), OFF, ...MID, ...END));
+const greySegments = greySegmentCells.map(
+  cell => new Given(snake.at(cell), ...MID, ...END));
+
+// --- VS and VP agree per cell: off-snake together, ends rank 1, interiors 2+.
+const stateRankKey = Pair.fnToKey((s, p) => {
+  if (s === OFF) return p === NO_RANK;
+  if (!isOn(s)) return false;
+  if (isEnd(s)) return p === 1;
+  return p >= 2 && p <= MAX_RANK;
 }, numValues);
 
-const snakeCells = gridCells.map(cell => new NFA(
-  snakeCellMachine, 'snake-cell',
-  label.at(cell), cell, ...label.at(graph.kingNeighbours(cell)),
-));
-
-// --- Per-snake product = 500 ----------------------------------------------
-// 500 = 2^2 x 5^3. Scans the whole grid (label, digit) pairs in any fixed
-// order -- the product doesn't care about path order -- tracking the
-// exponents of 2 and 5 contributed by cells carrying this snake's label.
-// A digit outside {1,2,4,5} (or an 8, which alone already exceeds 2^2)
-// cannot appear in any factorisation of 500, so it dead-ends the branch.
-const FACTORS = { 1: [0, 0], 2: [1, 0], 4: [2, 0], 5: [0, 1] };
-const productMachine = (snake) => NFA.encodeSpec({
-  startState: { phase: 'label', a: 0, b: 0 },
-  transition: (s, value) => {
-    if (s.phase === 'label') return { phase: 'digit', a: s.a, b: s.b, isThis: value === snake };
-    if (!s.isThis) return { phase: 'label', a: s.a, b: s.b };
-    const f = FACTORS[value];
-    if (!f) return undefined;
-    const a = s.a + f[0], b = s.b + f[1];
-    return (a > 2 || b > 3) ? undefined : { phase: 'label', a, b };
-  },
-  accept: (s) => s.phase === 'label' && s.a === 2 && s.b === 3,
+// --- Digits on a snake are the divisors of 500 among 1-9, and an end is not 1.
+const digitStateKey = Pair.fnToKey((d, s) => {
+  if (s === OFF) return true;
+  if (!isOn(s)) return false;
+  return SNAKE_DIGITS.includes(d) && !(isEnd(s) && d === 1);
 }, numValues);
-const productReads = gridCells.flatMap(cell => [label.at(cell), cell]);
-const products = [S1, S2, S3].map(snake =>
-  new NFA(productMachine(snake), 'snake-product', ...productReads));
 
-// --- Canonical snake numbering ---------------------------------------------
-// The 3 snakes are otherwise interchangeable, so without this the same grid
-// would count as up to 3! distinct "solutions" over the label layer alone.
-// Break the symmetry: scanning row-major, a new label may only ever be one
-// more than the highest label already used, and label S3 must appear (there
-// really are 3 snakes, not fewer).
-const orderMachine = NFA.encodeSpec({
-  startState: { maxSeen: 0 },
-  transition: (s, value) => {
-    const idx = value - NONE;
-    if (idx === 0) return s;
-    return idx > s.maxSeen + 1 ? undefined : { maxSeen: Math.max(s.maxSeen, idx) };
+const perCellPairs = gridCells.flatMap(cell => [
+  new Pair(stateRankKey, 'state-rank', snake.at(cell), rank.at(cell)),
+  new Pair(digitStateKey, 'snake-digit', cell, snake.at(cell)),
+]);
+
+// --- Every king-adjacent pair of cells, as lines of consecutive cells: the two
+// axes and the two diagonal directions. Pair binds consecutive list entries, so
+// one call per line covers exactly that line's adjacent pairs.
+const diagonalLines = (dCol) => [
+  ...graph.row(1), ...graph.column(dCol > 0 ? 1 : 9).slice(1),
+].map(cell => graph.ray(cell, 1, dCol)).filter(line => line.length >= 2);
+const adjacencyLines = [
+  ...graph.rows(), ...graph.columns(), ...diagonalLines(1), ...diagonalLines(-1),
+];
+
+// Snakes may not touch each other, so king-adjacent snake cells are on the same
+// snake.
+const sameSnakeKey = Pair.fnToKey(
+  (a, b) => !isOn(a) || !isOn(b) || snakeOf(a) === snakeOf(b), numValues);
+
+// Ranks of king-adjacent snake cells differ by at most 1. With the predecessor
+// rule below this pins VP to exactly "1 + distance to the nearer end": the step
+// bound gives rank <= 1 + distance to either end, the predecessor rule gives
+// rank >= 1 + distance to the nearer end.
+const rankStepKey = Pair.fnToKey(
+  (a, b) => a === NO_RANK || b === NO_RANK || Math.abs(a - b) <= 1, numValues);
+
+const adjacencyPairs = adjacencyLines.flatMap(line => [
+  new Pair(sameSnakeKey, 'no-touch', ...snake.at(line)),
+  new Pair(rankStepKey, 'rank-step', ...rank.at(line)),
+]);
+
+// --- Degree. Reads [own VS, VS of each king neighbour]: an end has exactly one
+// snake neighbour, an interior cell exactly two, an off cell is unconstrained.
+// This is the whole "no branching, no self-touching, no touching another snake"
+// geometry: counting all king neighbours (not just consecutive ones) is what
+// forbids a snake running alongside itself.
+const degreeSpec = NFA.encodeSpec({
+  startState: { need: null, count: 0 },
+  transition: (state, value) => {
+    if (state.need === null) {
+      if (value === OFF) return { need: 0, count: 0 };
+      if (!isOn(value)) return undefined;
+      return { need: isEnd(value) ? 1 : 2, count: 0 };
+    }
+    if (state.need === 0) return state;
+    const count = state.count + (isOn(value) ? 1 : 0);
+    return count > state.need ? undefined : { need: state.need, count };
   },
-  accept: (s) => s.maxSeen === 3,
+  accept: state => state.need === 0 || state.count === state.need,
 }, numValues);
-const canonicalOrder = new NFA(orderMachine, 'canonical-snake-order', ...label.at(gridCells));
 
-// --- Drawn partial reveals --------------------------------------------------
-// Grey line segments drawn in the grid: each joins two cells shown as
-// consecutive on some snake, so they share one (unknown) label.
-const sameSnakeKey = Pair.fnToKey((a, b) => a === b && a !== NONE, numValues);
-const REVEALED_SEGMENTS = [['R2C3', 'R3C3'], ['R1C6', 'R2C7'], ['R8C2', 'R9C3']];
-const revealed = REVEALED_SEGMENTS.map(([x, y]) =>
-  new Pair(sameSnakeKey, 'revealed-snake-segment', label.at(x), label.at(y)));
+// --- Predecessor. Reads [own VP, VP of each king neighbour]: a cell of rank r
+// >= 2 has a neighbour of rank r - 1. Chaining down from any snake cell reaches
+// a rank-1 cell, i.e. an end, so no component of the snake set can be a closed
+// loop and every component holds at least one end.
+const predecessorSpec = NFA.encodeSpec({
+  startState: { self: null },
+  transition: (state, value) => {
+    if (state.self === null) {
+      return (value === NO_RANK || value === 1) ? { self: 0 }
+        : { self: value, found: false };
+    }
+    if (state.self === 0) return state;
+    return { self: state.self, found: state.found || value === state.self - 1 };
+  },
+  accept: state => state.self === 0 || state.found === true,
+}, numValues);
 
-// --- Givens ------------------------------------------------------------
-// Transcribed from the drawn grid.
-const givens = [
-  ['R3C1', 3], ['R3C2', 4], ['R3C4', 6],
-  ['R4C1', 6], ['R4C3', 4], ['R4C5', 7], ['R4C8', 3],
-  ['R5C1', 5], ['R5C2', 8], ['R5C3', 7], ['R5C5', 6], ['R5C7', 9], ['R5C9', 1],
-  ['R6C2', 9], ['R6C3', 3], ['R6C5', 2], ['R6C7', 7], ['R6C9', 4],
-  ['R7C1', 4], ['R7C2', 7], ['R7C4', 3], ['R7C7', 1], ['R7C9', 8],
-  ['R8C8', 9],
-].map(([cell, value]) => new Given(cell, value));
+const perCellNfas = gridCells.flatMap(cell => {
+  const neighbours = graph.kingNeighbours(cell);
+  return [
+    new NFA(degreeSpec, 'degree', ...snake.at([cell, ...neighbours])),
+    new NFA(predecessorSpec, 'predecessor', ...rank.at([cell, ...neighbours])),
+  ];
+});
+
+// --- Exactly two ends per snake. With max degree two and every component
+// holding an end, each component is a simple path with exactly two ends, so six
+// ends split into exactly three snakes, one per label.
+const endCounts = new ContainExact(
+  END.map(v => `${v}_${v}`).join('_'), ...snake.at(gridCells));
+
+// --- Product 500 per snake, as counts over the whole grid: the cells labelled
+// with a given snake hold exactly three 5s, and their powers of two total
+// exactly 2 (a 4 contributes 2, a 2 contributes 1). Reads the grid interleaved
+// with VS, so each digit is scored against its own cell's label.
+const productSpec = (label) => NFA.encodeSpec({
+  startState: { fives: 0, twos: 0, digit: null },
+  transition: (state, value) => {
+    if (state.digit === null) return { ...state, digit: value };
+    const mine = isOn(value) && snakeOf(value) === label;
+    let { fives, twos } = state;
+    if (mine) {
+      if (state.digit === 5) fives += 1;
+      else if (state.digit === 2) twos += 1;
+      else if (state.digit === 4) twos += 2;
+    }
+    if (fives > 3 || twos > 2) return undefined;
+    return { fives, twos, digit: null };
+  },
+  accept: ({ fives, twos, digit }) =>
+    digit === null && fives === 3 && twos === 2,
+}, numValues);
+
+const interleaved = gridCells.flatMap(cell => [cell, snake.at(cell)]);
+const productRules = [1, 2, 3].map(
+  label => new NFA(productSpec(label), 'product-500', ...interleaved));
+
+// --- Snake numbering is this encoding's own artifact, so it is pinned to one
+// representative: reading the grid in row-major order, snake 1's first cell
+// comes before snake 2's, which comes before snake 3's.
+const labelOrder = new NFA(NFA.encodeSpec({
+  startState: { seen: 0 },
+  transition: ({ seen }, value) => {
+    if (!isOn(value)) return { seen };
+    const label = snakeOf(value);
+    if (label <= seen) return { seen };
+    return label === seen + 1 ? { seen: label } : undefined;
+  },
+  accept: ({ seen }) => seen === 3,
+}, numValues), 'snake-order', ...snake.at(gridCells));
 
 return [
-  shape,
-  ...givens,
-  label.toVar('snake label'),
-  domain,
-  ...snakeCells,
-  ...products,
-  canonicalOrder,
-  ...revealed,
+  new Shape('9x9'),
+  snake.toVar('snake'),
+  rank.toVar('rank'),
+  ...Object.entries(givenDigits).map(([cell, digit]) => new Given(cell, digit)),
+  snakeDomain,
+  ...greySegments,
+  ...perCellPairs,
+  ...adjacencyPairs,
+  ...perCellNfas,
+  endCounts,
+  ...productRules,
+  labelOrder,
 ];

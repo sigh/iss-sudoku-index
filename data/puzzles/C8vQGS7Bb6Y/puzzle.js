@@ -3,94 +3,109 @@
 // Video: https://www.youtube.com/watch?v=C8vQGS7Bb6Y
 // Source: https://cracking-the-cryptic.web.app/sudoku/d4jdjr9g8f
 
-// Normal sudoku rules apply: each row, column and 3x3 box holds 1-9 once
-// each. No digits are given.
+// Rules encoded (the puzzle ships no prose; every clue below is read off the
+// drawn board):
 //
-// Letters: eighteen letter glyphs are drawn in grid cells. A letter is the
-// digit of the cell it is drawn in; the same letter is the same digit,
-// different letters are different digits. Exactly nine distinct letters are
-// drawn -- one per grid digit.
+// 1. Normal sudoku: 1-9 once each per row, column and 3x3 box.
+// 2. Eighteen cells hold a letter in place of a digit. Nine distinct letters
+//    appear -- A G H I N O S T V -- and each stands for one of the digits 1-9:
+//    the same letter is the same digit, different letters are different
+//    digits. (The margin right of the grid lists exactly those nine letters
+//    against nine blank cells, a key table for the correspondence; with nine
+//    letters and nine digits it is one-to-one.)
+// 3. Every killer cage total is written as a letter word read as an ordinary
+//    decimal numeral: "VN" is 10*V + N, the one-letter total "A" is A.
+// 4. Four equations below the grid, each a colour swatch, an "=" and a letter
+//    word, give the total of all cells shaded in that colour.
 //
-// Cages: seven cages hold distinct digits. Five print a total spelled with
-// the same letter alphabet, read as an ordinary decimal number (first
-// letter = tens digit, second = units digit; a lone letter is the units
-// digit with no tens digit printed). Two cages print no total.
-//
-// The source publishes no rules text (empty ctc-app payload). The decimal
-// reading is forced over a plain letter-plus-letter sum by range: the 8-cell
-// VN cage can only total 36-44 and the 6-cell GO cage only 21-39, but the
-// largest possible sum of two distinct single digits is 17. Five outside
-// margin letters, four "=" marks and four coloured cell clusters have no
-// recoverable rule (no rules text, no arrowhead/marker to settle a reading)
-// and are omitted.
+// Nothing is omitted. The blank key column beside the grid is somewhere to
+// write the letter/digit correspondence and carries no further rule; the short
+// bars joining same-coloured cells sit on cell borders and cover no cells.
 
-// One representative cell per distinct letter, taken from its first
-// occurrence in reading order (source pencilMarks).
-const letterCell = {
-  V: 'R1C3', I: 'R1C4', N: 'R1C5',
-  A: 'R4C5', G: 'R5C8', H: 'R5C9',
-  O: 'R6C7', S: 'R8C2', T: 'R8C3',
+const LETTERS = 'AGHINOSTV';
+
+// Transcribed from the letters drawn in the grid: cell list per letter, in
+// reading order. R1C3-R1C5 "VIN", R4C4-R4C6 "VAN", R6C6-R6C7 + R5C8-R5C9
+// "GOGH", R8C2-R8C4 "STA", R9C1-R9C5 "NIGHT".
+const LETTER_CELLS = {
+  A: ['R8C4', 'R4C5'],
+  G: ['R5C8', 'R6C6', 'R9C3'],
+  H: ['R5C9', 'R9C4'],
+  I: ['R1C4', 'R9C2'],
+  N: ['R1C5', 'R4C6', 'R9C1'],
+  O: ['R6C7'],
+  S: ['R8C2'],
+  T: ['R8C3', 'R9C5'],
+  V: ['R1C3', 'R4C4'],
 };
 
-// Every other occurrence of a letter is pinned equal to its representative
-// cell, chaining through repeats (N and G each occur three times).
-const sameLetter = [
-  new SameValues(2, letterCell.V, 'R4C4'),
-  new SameValues(2, letterCell.I, 'R9C2'),
-  new SameValues(2, letterCell.N, 'R4C6'),
-  new SameValues(2, 'R4C6', 'R9C1'),
-  new SameValues(2, letterCell.A, 'R8C4'),
-  new SameValues(2, letterCell.G, 'R6C6'),
-  new SameValues(2, 'R6C6', 'R9C3'),
-  new SameValues(2, letterCell.H, 'R9C4'),
-  new SameValues(2, letterCell.T, 'R9C5'),
+// Every letter occupies at least one grid cell, so its first cell can carry
+// that letter's digit for the rest of the script.
+const letterCell = (letter) => LETTER_CELLS[letter][0];
+
+// sum(cells) = the decimal numeral spelled by `word`. Emitted as the single
+// linear equation sum(cells) - sum over places of placeValue * letterDigit = 0,
+// with one coefficient per distinct cell so that a cell which is both shaded
+// and carrying a letter of the word contributes its two terms once.
+const wordSum = (word, cells) => {
+  const coeffs = new Map(cells.map((cell) => [cell, 1]));
+  [...word].forEach((letter, i) => {
+    const place = 10 ** (word.length - 1 - i);
+    const cell = letterCell(letter);
+    coeffs.set(cell, (coeffs.get(cell) || 0) - place);
+  });
+  const terms = [...coeffs].filter(([, c]) => c !== 0);
+  // A one-letter word leaves every coefficient +1 or -1: the equation is then
+  // just two cell sets of equal sum, which EqualSum states directly.
+  const side = (sign) => terms.filter(([, c]) => c === sign).map(([cell]) => cell);
+  if (terms.every(([, c]) => c === 1 || c === -1)) {
+    return new EqualSum(side(1), side(-1));
+  }
+  return new Sum(0, ...terms.map(([cell, c]) => (c === 1 ? cell : [cell, c])));
+};
+
+// Drawn cages, each with the letter word printed on it. The NH word is printed
+// in the corner of R9C9 rather than of the cage's leftmost cell R9C5, whose
+// corner already holds the letter T.
+const CAGES = [
+  ['VN', ['R2C2', 'R3C2', 'R4C2', 'R5C2', 'R6C2', 'R7C2', 'R8C2', 'R9C2']],
+  ['GO', ['R6C3', 'R7C3', 'R8C3', 'R9C3', 'R8C4', 'R9C4']],
+  ['NH', ['R9C5', 'R9C6', 'R9C7', 'R9C8', 'R9C9']],
+  ['OV', ['R8C7', 'R8C8', 'R8C9']],
+  ['OO', ['R7C8', 'R7C9']],
+  ['OO', ['R2C8', 'R2C9', 'R3C8', 'R3C9']],
+  ['A', ['R7C6', 'R8C6']],
 ];
 
-// Different letters are different digits: one AllDifferent over the nine
-// representative cells is the other half of the letter rule.
-const distinctLetters = new AllDifferent(...Object.values(letterCell));
-
-// Cages: killer-style distinctness (Cage with total 0 emits AllDifferent
-// only), plus a Sum tying the cage total to its letter total's decimal
-// digits where one is printed. `Sum(0, ...cells, [tens, -10], [ones, -1])`
-// is `sum(cells) - 10*tens - ones = 0`, i.e. sum(cells) == 10*tens + ones.
-const cages = [
-  // R2C2-R9C2, total VN.
-  new Cage(0, 'R2C2', 'R3C2', 'R4C2', 'R5C2', 'R6C2', 'R7C2', 'R8C2', 'R9C2'),
-  new Sum(0, 'R2C2', 'R3C2', 'R4C2', 'R5C2', 'R6C2', 'R7C2', 'R8C2', 'R9C2',
-    [letterCell.V, -10], [letterCell.N, -1]),
-
-  // R6C3,R7C3,R8C3,R9C3,R8C4,R9C4, total GO.
-  new Cage(0, 'R6C3', 'R7C3', 'R8C3', 'R9C3', 'R8C4', 'R9C4'),
-  new Sum(0, 'R6C3', 'R7C3', 'R8C3', 'R9C3', 'R8C4', 'R9C4',
-    [letterCell.G, -10], [letterCell.O, -1]),
-
-  // R9C5-R9C9, no total printed: distinct-only.
-  new Cage(0, 'R9C5', 'R9C6', 'R9C7', 'R9C8', 'R9C9'),
-
-  // R8C7,R8C8,R8C9, total OV.
-  new Cage(0, 'R8C7', 'R8C8', 'R8C9'),
-  new Sum(0, 'R8C7', 'R8C8', 'R8C9', [letterCell.O, -10], [letterCell.V, -1]),
-
-  // R7C8,R7C9, total OO (= 11 * O's digit; both letter positions are the
-  // same letter, so one coefficient of -11 on O's cell covers both places).
-  new Cage(0, 'R7C8', 'R7C9'),
-  new Sum(0, 'R7C8', 'R7C9', [letterCell.O, -11]),
-
-  // R2C8,R3C8,R3C9,R2C9, total OO.
-  new Cage(0, 'R2C8', 'R3C8', 'R3C9', 'R2C9'),
-  new Sum(0, 'R2C8', 'R3C8', 'R3C9', 'R2C9', [letterCell.O, -11]),
-
-  // R7C6,R8C6, total A (single letter, no tens digit): the cage sum equals
-  // A's own digit, i.e. the two-cell segment and the one-cell segment share
-  // a sum.
-  new Cage(0, 'R7C6', 'R8C6'),
-  new EqualSum(['R7C6', 'R8C6'], [letterCell.A]),
+// The four shaded sets, each with the letter word its swatch is equated to
+// below the grid. Cells transcribed from the drawn squares.
+const COLOUR_SUMS = [
+  // grey
+  ['SG', ['R2C2', 'R3C2', 'R4C2', 'R5C2', 'R6C2', 'R7C2', 'R8C2', 'R9C2',
+          'R6C3', 'R7C3', 'R8C3', 'R9C3', 'R8C4', 'R9C4']],
+  // yellow-green
+  ['GO', ['R5C8', 'R5C9', 'R6C6', 'R6C7', 'R7C1', 'R7C4', 'R7C5']],
+  // gold
+  ['OG', ['R2C8', 'R2C9', 'R3C8', 'R3C9', 'R5C3']],
+  // sky blue
+  ['HA', ['R2C4', 'R2C5', 'R2C6', 'R3C1', 'R3C3', 'R3C5', 'R4C5', 'R4C6',
+          'R4C7', 'R5C6', 'R5C7']],
 ];
 
 return [
   new Shape('9x9'),
-  ...sameLetter,
-  distinctLetters,
-  ...cages,
+
+  // Rule 2: same letter, same digit.
+  ...Object.values(LETTER_CELLS)
+    .filter((cells) => cells.length > 1)
+    .map((cells) => new SameValues(cells.length, ...cells)),
+  // Rule 2: different letters, different digits.
+  new AllDifferent(...[...LETTERS].map(letterCell)),
+
+  // Rule 3: cage cells are distinct, and total the cage's letter word.
+  ...CAGES.map(([, cells]) => new Cage(0, ...cells)),
+  ...CAGES.map(([word, cells]) => wordSum(word, cells)),
+
+  // Rule 4.
+  ...COLOUR_SUMS.map(([word, cells]) => wordSum(word, cells)),
 ];

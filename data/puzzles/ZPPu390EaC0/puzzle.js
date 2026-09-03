@@ -3,116 +3,177 @@
 // Video: https://www.youtube.com/watch?v=ZPPu390EaC0
 // Source: https://sudokupad.app/eb90s76a4e
 
-// Rules encoded: 6x6 Sudoku, two-colour shading with no monochrome toroidal
-// 2x2, and all six outside diagonal clues. The required toroidal same-colour
-// connectivity is deliberately omitted: ConnectedValues only follows ordinary
-// non-wrapping grid adjacency, so it cannot express connectivity that crosses
-// the wraparound edges this puzzle allows.
+// Rules:
+//  1. Normal 6x6 sudoku: 1-6 once each per row, column and 2x3 box.
+//  2. Shade every cell one of two colours such that each colour forms a single
+//     orthogonally connected area and no 2x2 area is entirely one colour.
+//  3. Clues outside the grid show the sum of the digits in the first continuous
+//     run of same-coloured cells along marked diagonals.
+//  4. The grid is toroidal: each edge of the grid is adjacent/orthogonal to its
+//     opposite edge.
 //
-// Each outside clue's raw waypoints sit inside the frame cell that carries its
-// badge, offset toward one corner of that cell (e.g. the 22 clue's waypoints
-// are at row 0.745-0.922, col 5.745-5.922 of an 8-wide canvas: both close to
-// the row1/col6 boundary). The arrow's own drawn direction (down-right etc.)
-// then names a single one of the four cells touching that corner as the run's
-// first cell -- the one lying in that direction from the corner. The rules
-// text's worked example confirms this reading for the 22 clue (its second
-// cell, after wrapping, is stated to be R2C1), and every other clue is read
-// the same way from its own raw waypoints.
+// Rule 1 is the default 6x6 shape and its 2x3 boxes. Rule 4 is not a separate
+// constraint: it is the adjacency and the diagonal stepping that rules 2 and 3
+// are built on, so every step below wraps modulo 6.
 
-const SHADED = 1;
-const UNSHADED = 2;
-const graph = cellGraph('6x6');
-const shade = graph.makeOverlay('VS');
+const N = 6;
+const shape = new Shape('6x6');
+const graph = cellGraph(shape);
 const cells = graph.cells();
-const firstShade = shade.cells()[0];
 
-// A four-cell scan accepts every shade pattern except all shaded or all
-// unshaded. It is applied to all 36 toroidal 2x2 blocks below.
-const noMono2x2Machine = NFA.encodeSpec({
-  startState: { seen: [] },
-  transition: ({ seen, done }, value) => {
-    if (done) return { done: true };
-    const next = [...seen, value];
-    if (next.length < 4) return { seen: next };
-    return next.every(v => v === next[0]) ? undefined : { done: true };
-  },
-  accept: ({ done }) => done === true,
-}, 6);
+const shade = graph.makeOverlay('VS');    // the two colours
+const phase = graph.makeOverlay('VR');    // reading-order run phase (below)
+const rankHi = graph.makeOverlay('VH');   // rank, high digit (below)
+const rankLo = graph.makeOverlay('VL');   // rank, low digit
 
-function cell(row, col) {
-  return makeCellId(((row - 1 + 6) % 6) + 1, ((col - 1 + 6) % 6) + 1);
-}
+// Toroidal step. cellGraph's own step/neighbours stop at the grid edge, so the
+// wrap is done here on the row/column numbers.
+const torusStep = (cell, dR, dC) => {
+  const { row, col } = parseCellId(cell);
+  return makeCellId((row - 1 + dR + N) % N + 1, (col - 1 + dC + N) % N + 1);
+};
+// The four orthogonal steps; wrapped, every cell has all four neighbours.
+const ADJACENT_STEPS = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
-const toroidalBlocks = cells.map(id => {
-  const { row, col } = parseCellId(id);
-  return [
-    cell(row, col), cell(row, col + 1), cell(row + 1, col), cell(row + 1, col + 1),
-  ];
-});
+// With two colours, "the same colour" is SameValues with one cell per set and
+// "a different colour" is AllDifferent over the pair.
+const COLOURS = [1, 2];
+const shadeDomain = cells.map(cell => new Given(shade.at(cell), ...COLOURS));
 
-// A finite outside clue takes the run beginning at path[0]. Enumerate its
-// possible lengths: every run cell has the start shade, followed by the other
-// shade, and its digit sum is the printed total.
-function firstRunSum(total, path) {
-  return new Or(Array.from({ length: path.length - 1 }, (_, lengthIndex) => {
-    const length = lengthIndex + 1;
-    const run = path.slice(0, length);
-    const after = path[length];
-    return new And([
-      new Sum(total, ...run),
-      ...shade.at(run).map(value => new Given(value, SHADED)),
-      new Given(shade.at(after), UNSHADED),
+// The rules name no colour, so the two labels are interchangeable and every
+// shading would otherwise be found twice. Pin R1C1's label to break that.
+const colourPin = new Given(shade.at(cells[0]), COLOURS[0]);
+
+// Rule 2, second half: no 2x2 area, wrapped, is entirely one colour -- at least
+// one of the other three cells of the block differs from its top-left cell.
+const noMonochrome2x2 = cells.map(cell => new Or(
+  [[0, 1], [1, 0], [1, 1]].map(([dR, dC]) => new AllDifferent(
+    shade.at(cell), shade.at(torusStep(cell, dR, dC))))));
+
+// Rule 2, first half: each colour is a single toroidally-connected area.
+//
+// ConnectedValues works on the grid adjacency of a Var layer, which cannot
+// wrap, so connectivity is certified here instead. Each cell carries a rank,
+// held as two digits (rank = N*(rankHi - 1) + rankLo, so 1..36 covers any
+// component), and the constraints below make rank exactly one more than the
+// cell's distance to its colour's root, measured through same-coloured cells:
+//
+//   * every non-root cell has a same-coloured neighbour ranked one lower, so
+//     following that chain reaches a root of its own colour -- which is what
+//     connectedness means, given one root per colour;
+//   * same-coloured neighbours differ in rank by at most one, which pins the
+//     rank down to the distance rather than leaving any longer labelling free.
+//
+// The root of each colour has to be named without reading the shading, or the
+// choice of root would multiply solutions. It is the first cell of that colour
+// in reading order, which the phase overlay tracks as the grid is scanned:
+const FIRST_ROOT = 1;     // R1C1, root of its own colour
+const IN_FIRST_RUN = 2;   // every cell so far has R1C1's colour
+const SECOND_ROOT = 3;    // the first cell that does not: root of the other
+const AFTER = 4;          // past that cell
+const phaseDomain = cells.map(
+  cell => new Given(phase.at(cell), FIRST_ROOT, IN_FIRST_RUN, SECOND_ROOT, AFTER));
+
+const firstColour = shade.at(cells[0]);
+const phaseChain = [
+  new Given(phase.at(cells[0]), FIRST_ROOT),
+  ...cells.slice(1).map((cell, i) => {
+    const prev = phase.at(cells[i]);
+    const cur = phase.at(cell);
+    return new Or([
+      new And([
+        new Given(prev, FIRST_ROOT, IN_FIRST_RUN),
+        new SameValues(2, shade.at(cell), firstColour),
+        new Given(cur, IN_FIRST_RUN)]),
+      new And([
+        new Given(prev, FIRST_ROOT, IN_FIRST_RUN),
+        new AllDifferent(shade.at(cell), firstColour),
+        new Given(cur, SECOND_ROOT)]),
+      new And([
+        new Given(prev, SECOND_ROOT, AFTER),
+        new Given(cur, AFTER)]),
     ]);
-  }).concat(Array.from({ length: path.length - 1 }, (_, lengthIndex) => {
-    const length = lengthIndex + 1;
-    const run = path.slice(0, length);
-    const after = path[length];
-    return new And([
-      new Sum(total, ...run),
-      ...shade.at(run).map(value => new Given(value, UNSHADED)),
-      new Given(shade.at(after), SHADED),
-    ]);
-  })));
-}
-
-// A run that never meets the opposite shade (the infinity clue) means every
-// cell on that diagonal shares one shade: two branches, all-shaded or
-// all-unshaded.
-function infiniteRun(path) {
-  return new Or([SHADED, UNSHADED].map(value =>
-    new And(shade.at(path).map(v => new Given(v, value)))));
-}
-
-const clues = [
-  // Badge cell R1C6, arrow down-right (raw waypoints row 0.745-0.922,
-  // col 5.745-5.922): enters at R1C6; confirmed by the rules text's own
-  // worked example (2nd cell R2C1).
-  [22, ['R1C6', 'R2C1', 'R3C2', 'R4C3', 'R5C4', 'R6C5']],
-  // Badge cell R1C3, arrow down-right (row 0.745-0.922, col 2.745-2.922):
-  // enters at R1C3.
-  [24, ['R1C3', 'R2C4', 'R3C5', 'R4C6', 'R5C1', 'R6C2']],
-  // Badge cell R8C7, arrow up-left (row 7.078-7.255, col 6.078-6.255):
-  // enters at R6C5 -- the same toroidal diagonal as the 22 clue, read from
-  // the opposite end and direction.
-  [5, ['R6C5', 'R5C4', 'R4C3', 'R3C2', 'R2C1', 'R1C6']],
-  // Badge cell R8C2, arrow up-right (row 7.078-7.255, col 1.745-1.922):
-  // enters at R6C2.
-  [5, ['R6C2', 'R5C3', 'R4C4', 'R3C5', 'R2C6', 'R1C1']],
-  // Badge cell R6C1, arrow up-right (row 5.078-5.255, col 0.745-0.922):
-  // enters at R4C1.
-  [10, ['R4C1', 'R3C2', 'R2C3', 'R1C4', 'R6C5', 'R5C6']],
+  }),
 ];
 
-// Badge cell R1C5, arrow down-right (row 0.745-0.922, col 4.745-4.922):
-// enters at R1C5.
-const infinitePath = ['R1C5', 'R2C6', 'R3C1', 'R4C2', 'R5C3', 'R6C4'];
+// rank(a) - rank(b) = difference, over the two-digit rank.
+const rankDiff = (a, b, difference) => new Sum(
+  difference,
+  [rankHi.at(a), N], [rankLo.at(a), 1],
+  [rankHi.at(b), -N], [rankLo.at(b), -1]);
+
+const rankSteps = cells.map(cell => new Or([
+  new And([
+    new Given(phase.at(cell), FIRST_ROOT, SECOND_ROOT),
+    new Given(rankHi.at(cell), 1),
+    new Given(rankLo.at(cell), 1)]),
+  ...ADJACENT_STEPS.map(([dR, dC]) => torusStep(cell, dR, dC)).map(
+    neighbour => new And([
+      new Given(phase.at(cell), IN_FIRST_RUN, AFTER),
+      new SameValues(2, shade.at(cell), shade.at(neighbour)),
+      rankDiff(neighbour, cell, -1)])),
+]));
+
+const torusEdges = cells.flatMap(
+  cell => [[0, 1], [1, 0]].map(([dR, dC]) => [cell, torusStep(cell, dR, dC)]));
+const rankSmooth = torusEdges.map(([a, b]) => new Or([
+  new AllDifferent(shade.at(a), shade.at(b)),
+  rankDiff(b, a, -1), rankDiff(b, a, 0), rankDiff(b, a, 1),
+]));
+
+// Rule 3. Transcribed from the six drawn badges: each sits in the frame outside
+// the grid with a short arrow pointing diagonally into it, which gives the cell
+// the run starts at and the direction it travels. The rules text's own worked
+// example fixes this reading -- it states that the second cell of the 22
+// diagonal is R2C1, which is R1C6 stepped down-right with the wrap.
+const diagonals = [
+  { clue: 'inf', start: 'R1C5', dR: 1, dC: 1 },   // badge above column 4
+  { clue: 24, start: 'R1C3', dR: 1, dC: 1 },      // badge above column 2
+  { clue: 22, start: 'R1C6', dR: 1, dC: 1 },      // badge above column 5
+  { clue: 5, start: 'R6C5', dR: -1, dC: -1 },     // badge below column 6
+  { clue: 5, start: 'R6C2', dR: -1, dC: 1 },      // badge below column 1
+  { clue: 10, start: 'R4C1', dR: -1, dC: 1 },     // badge left of row 5
+];
+
+// A wrapped diagonal closes on itself after N cells.
+const diagonalCells = ({ start, dR, dC }) => {
+  const list = [start];
+  while (list.length < N) list.push(torusStep(list[list.length - 1], dR, dC));
+  return list;
+};
+
+// A finite clue's run ends at the first cell of the other colour, so on a closed
+// N-cell diagonal it covers 1..N-1 cells: the clue is the disjunction over those
+// lengths. A run covering all N cells never ends, which is the infinity clue.
+const runClue = (total, list) => new Or(
+  list.slice(0, N - 1).map((_, index) => {
+    const len = index + 1;
+    return new And([
+      ...(len > 1 ? [new SameValues(len, ...shade.at(list.slice(0, len)))] : []),
+      new AllDifferent(shade.at(list[len - 1]), shade.at(list[len])),
+      new Sum(total, ...list.slice(0, len)),
+    ]);
+  }));
+
+const diagonalClues = diagonals.map(diagonal => {
+  const list = diagonalCells(diagonal);
+  return diagonal.clue === 'inf'
+    ? new SameValues(N, ...shade.at(list))
+    : runClue(diagonal.clue, list);
+});
 
 return [
-  new Shape('6x6'),
+  shape,
   shade.toVar('shade'),
-  shade.makeReplicate(new Given(firstShade, SHADED, UNSHADED)),
-  ...toroidalBlocks.map(block =>
-    new NFA(noMono2x2Machine, 'no-mono-toroidal-2x2', ...shade.at(block))),
-  ...clues.map(([total, path]) => firstRunSum(total, path)),
-  infiniteRun(infinitePath),
+  phase.toVar('run phase'),
+  rankHi.toVar('rank high'),
+  rankLo.toVar('rank low'),
+  ...shadeDomain,
+  colourPin,
+  ...phaseDomain,
+  ...noMonochrome2x2,
+  ...phaseChain,
+  ...rankSteps,
+  ...rankSmooth,
+  ...diagonalClues,
 ];
