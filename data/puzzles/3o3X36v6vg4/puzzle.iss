@@ -1,0 +1,9 @@
+.Shape~8x8
+.NoBoxes
+.AntiKnight
+.WhiteDot~R6C7~R6C8
+.WhiteDot~R8C4~R8C5
+.BlackDot~R4C1~R5C1
+.BlackDot~R4C5~R5C5
+.BlackDot~R1C4~R1C5
+.BlackDot~R1C7~R1C8

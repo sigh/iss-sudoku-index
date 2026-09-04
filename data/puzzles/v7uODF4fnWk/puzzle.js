@@ -1,22 +1,18 @@
-// Title: This Puzzle Will Self-Destruct In 5 Minutes
+// Title: Killer And Clone
 // Author: David McNeill
 // Video: https://www.youtube.com/watch?v=v7uODF4fnWk
 // Source: https://cracking-the-cryptic.web.app/sudoku/BDnqQjb3GN
 
-// Rules encoded here:
-//   - Normal sudoku: each row, column and 3x3 box contains 1-9 once each.
-//   - Killer cages: the digits in a dashed cage sum to its small clue and do
-//     not repeat within the cage.
-// There are no given digits.
-//
-// Not encoded: the 24 light-grey shaded cells. The shading marks exactly the
-// set of cells that lie in no cage (its complement is the union of the 14
-// cages, cell for cell), and no accompanying text assigns it any further
-// meaning, so it is read as decoration.
+// Normal sudoku. 14 killer cages (sum + no repeat). Three congruent 8-cell
+// grey-shaded groups (each a 3x3 block minus one corner, all in the same
+// orientation) must hold the same digit at each corresponding relative
+// position across the three groups; digits may repeat within one group.
+// Rules text transcribed from the video's rules-panel frame
+// (external-video-frame-358s.jpg): the archived payload carries no
+// metadata rules string.
 
-// Cage totals and cell lists transcribed from the 14 dashed cages drawn on the
-// board, in the order they are drawn (a spiral running inwards from R1C1).
-const cages = [
+// Cages: sum, then cells. Transcribed from the payload's `cages` array.
+const CAGES = [
   [20, 'R1C1', 'R1C2', 'R2C1', 'R2C2'],
   [7, 'R1C3', 'R1C4'],
   [28, 'R1C5', 'R1C6', 'R2C5', 'R2C6', 'R2C7'],
@@ -33,7 +29,26 @@ const cages = [
   [7, 'R3C1', 'R4C1'],
 ];
 
-return [
-  new Shape('9x9'),
-  ...cages.map(([sum, ...cells]) => new Cage(sum, ...cells)),
+// The three grey-shaded clone groups, each cell listed in the same relative
+// order within its 3x3-minus-corner shape (row-major, skipping the missing
+// corner), so index i names corresponding cells across the three groups.
+// Derived from the payload's 24 underlay cells: they are exactly the
+// complement of the caged 57 cells, and split by contiguous shape into these
+// three 8-cell groups, all in the same orientation (pure translation, no
+// rotation/reflection needed to match them up).
+const CLONE_GROUPS = [
+  ['R2C3', 'R2C4', 'R3C2', 'R3C3', 'R3C4', 'R4C2', 'R4C3', 'R4C4'],
+  ['R3C8', 'R3C9', 'R4C7', 'R4C8', 'R4C9', 'R5C7', 'R5C8', 'R5C9'],
+  ['R7C4', 'R7C5', 'R8C3', 'R8C4', 'R8C5', 'R9C3', 'R9C4', 'R9C5'],
 ];
+
+const cages = CAGES.map(([sum, ...cells]) => new Cage(sum, ...cells));
+// Cell-wise clone: one SameValues(3, ...) per shape position, each over the
+// three cells at that position (one from each group) -- not one call over
+// all 24 cells, which would ask only for equal multisets rather than
+// equal digits at corresponding positions.
+const clones = CLONE_GROUPS[0].map((_, i) =>
+  new SameValues(3, ...CLONE_GROUPS.map((group) => group[i]))
+);
+
+return [new Shape('9x9'), ...cages, ...clones];

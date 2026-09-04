@@ -1,0 +1,3 @@
+.AntiConsecutive
+.AntiKnight
+.~R3C4_4~R3C6_7~R4C3_6~R4C7_5~R6C3_4~R6C7_3~R7C4_2~R7C6_5

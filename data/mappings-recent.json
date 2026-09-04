@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-04T00:47:24.349085+00:00",
+  "generated_at": "2026-09-06T11:53:13.744417+00:00",
   "rows": [
     {
       "puzzle_id": "xxfHKmrfsE4",
@@ -2632,17 +2632,29 @@
         "https://sudokupad.app/bq3bqqtcix"
       ],
       "date": "2026-07-11",
-      "status": "unsupported",
-      "constraint_types": [],
-      "search_completed": null,
-      "hit_cap": null,
+      "status": "too-slow",
+      "constraint_types": [
+        "1-16",
+        "Var",
+        "Replicate",
+        "Quad",
+        "Pair: snake-cell",
+        "Pair: pebble",
+        "NFA: one-snake",
+        "NFA: snake-cell",
+        "NFA: segment-sum",
+        "NFA: segment-total",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
       "unique_solution": null,
-      "solutions_found": null,
-      "guesses": null,
-      "solve_ms": null,
-      "iss_size": null,
-      "iss_url_length": null,
-      "script_size": null
+      "solutions_found": 0,
+      "guesses": 9292,
+      "solve_ms": 8609.1,
+      "iss_size": 21972,
+      "iss_url_length": 22015,
+      "script_size": 13881
     },
     {
       "puzzle_id": "00lxcgSGLBg",
@@ -4715,6 +4727,27 @@
       "script_size": 992
     },
     {
+      "puzzle_id": "i28jeABUr_g",
+      "puzzle_title": "RAT RUN 40: The Big One",
+      "video_title": "Our Longest Ever Video...!! Rat Run 40: The Big One (S3:E20)",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/nfqumwpslw"
+      ],
+      "date": "2026-06-11",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
+    },
+    {
       "puzzle_id": "Z30hHxCO7cA",
       "puzzle_title": "Mistyped",
       "video_title": "When Errors are Acceptable in Sudoku",
@@ -6133,44 +6166,6 @@
       "iss_size": 566,
       "iss_url_length": 594,
       "script_size": 1783
-    },
-    {
-      "puzzle_id": "_jkTguG0XnU",
-      "puzzle_title": "Balance lines",
-      "video_title": "A Simple Sudoku Rule With Gorgeous Consequences",
-      "author": "Jonesy",
-      "sources": [
-        "https://sudokupad.app/1f9u67dq06"
-      ],
-      "date": "2026-05-20",
-      "status": "validated",
-      "constraint_types": [
-        "WhiteDot",
-        "NFA: BAL0",
-        "NFA: BAL1",
-        "NFA: BAL10",
-        "NFA: BAL11",
-        "NFA: BAL12",
-        "NFA: BAL13",
-        "NFA: BAL2",
-        "NFA: BAL3",
-        "NFA: BAL4",
-        "NFA: BAL5",
-        "NFA: BAL6",
-        "NFA: BAL7",
-        "NFA: BAL8",
-        "NFA: BAL9",
-        "Given"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "guesses": 128397,
-      "solve_ms": 13611.1,
-      "iss_size": 2668,
-      "iss_url_length": 2717,
-      "script_size": 2106
     }
   ]
 }

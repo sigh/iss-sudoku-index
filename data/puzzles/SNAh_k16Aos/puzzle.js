@@ -1,128 +1,87 @@
-// Title: unknown
-// Author: Unknown
+// Title: Between Stars
+// Author: Laura Soler
 // Video: https://www.youtube.com/watch?v=SNAh_k16Aos
 // Source: https://cracking-the-cryptic.web.app/sudoku/NHpMRLJHpP
 
-// A star battle laid over a 9x9 sudoku, with outside clues that sandwich
-// between the stars.
+// Rules (transcribed from the video's on-screen rules panel):
+// "Place the numbers 1 to 7 and two stars in each row, column and 3x3 box.
+// Stars cannot touch, even diagonally. Numbers outside the grid give the sum
+// of cells sandwiched between the stars in the relevant row/column."
 //
-// Rules encoded:
-//  - Normal sudoku: each row, column and 3x3 box holds 1-9 once.
-//  - Two given digits, R5C4 = 1 and R5C6 = 2.
-//  - Star battle: exactly two stars in each row, each column and each 3x3
-//    box, and no two stars touch, not even diagonally. A star cell still
-//    holds an ordinary digit.
-//  - The number printed left of a row or above a column is the sum of the
-//    digits strictly between that line's two stars; the starred cells
-//    themselves are not counted.
+// Each of the 9 cells of every row, column and box holds either a digit 1-7
+// (each exactly once) or a star (exactly two per house, no digit value). This
+// is modeled on a Raw grid (no implicit Sudoku rules) with domain 0-7, 0
+// standing for "star": one ContainExact per house pins its 9 cells to the
+// multiset {0, 0, 1, 2, 3, 4, 5, 6, 7} -- digit uniqueness and the star count
+// in one constraint.
 //
-// Stars are not drawn -- the solver places them -- so they live on a Var
-// overlay VS1..VS81, one flag cell per grid cell, with 1 = no star and
-// 2 = star (values chosen inside the 1-9 shape range so no widened Shape is
-// needed). The flag values carry no arithmetic meaning of their own.
+// A row/column clue sums a variable-width run (the cells strictly between the
+// two, as-yet-unplaced, star cells of that house), so it is an Or over every
+// candidate pair of star positions in the house: each branch pins both star
+// cells with Given(0) and sums the cells strictly between them. Branches
+// where the two stars would be adjacent (an empty "between" run) are omitted
+// -- the no-touch rule already forbids that pair, so no candidate is lost.
 
-const graph = cellGraph('9x9');
-const geometry = graph.gridGeometry();
-const gridCells = graph.cells();
+const shape = new Shape('9x9', '0-7', 'Raw');
+const graph = cellGraph(shape);
 
-const NOT_STAR = 1;
-const STAR = 2;
+const STAR = 0;
+const HOUSE_MULTISET = '0_0_1_2_3_4_5_6_7';
 
-const star = graph.makeOverlay('VS');
-const starAt = cell => star.at(cell);
-
-// A star flag is only ever NOT_STAR or STAR; the overlay would otherwise take
-// any digit in the shape range.
-const starDomain = star.makeReplicate(
-  new Given(star.cells()[0], NOT_STAR, STAR));
-
-const starCount = graph.rowsColumnsBoxes().map(
-  house => new ContainExact(`${STAR}_${STAR}`, ...star.at(house)));
-
-// No two stars touch: one relation per unordered king-move adjacency.
-const noTouchKey = Pair.fnToKey((a, b) => !(a === STAR && b === STAR), 9);
-const kingPairs = [];
-const seenPair = new Set();
-for (const cell of gridCells) {
-  for (const nb of graph.kingNeighbours(cell)) {
-    const key = [cell, nb].sort().join('_');
-    if (seenPair.has(key)) continue;
-    seenPair.add(key);
-    kingPairs.push([cell, nb]);
-  }
-}
-// One Replicate per offset. The anti-diagonal template is anchored one cell
-// left of its first flag, because a Replicate's anchor must stay on the board
-// for every stamp and R1C2->R2C1 shifted from R1C1 would leave it.
-const noTouchSpecs = [
-  { offset: [0, 1], template: ['R1C1', 'R1C2'], anchor: ([a]) => a },
-  { offset: [1, -1], template: ['R1C2', 'R2C1'], anchor: ([a]) => graph.step(a, 0, -1) },
-  { offset: [1, 0], template: ['R1C1', 'R2C1'], anchor: ([a]) => a },
-  { offset: [1, 1], template: ['R1C1', 'R2C2'], anchor: ([a]) => a },
-];
-const noTouch = noTouchSpecs.map(({ offset: [dRow, dCol], template, anchor }) => {
-  const pairs = kingPairs.filter(([a, b]) => {
-    const from = parseCellId(a), to = parseCellId(b);
-    return to.row - from.row === dRow && to.col - from.col === dCol;
-  });
-  const [origin, adjacent] = template;
-  const constraint = new Pair(
-    noTouchKey, 'star no-touch', starAt(origin), starAt(adjacent));
-  return star.makeReplicate(constraint, pairs.map(pair => starAt(anchor(pair))));
-});
-
-// Scans a line as interleaved [flag, digit] values. `starsSeen` counts the
-// stars passed so far; a cell is "between" when exactly one star precedes it
-// and the cell is not itself a star, and only a between cell's digit is added
-// to the running sum. The sum saturates at target+1, a sink meaning "already
-// too high", which bounds the compiled state count. maxDepth 18 is the
-// longest line: 9 cells, two scanned values each. Accept requires both stars
-// seen and the sum to equal the clue.
-function betweenStarsMachine(target) {
-  return NFA.encodeSpec({
-    startState: { phase: 'flag', starsSeen: 0, sum: 0, between: false },
-    transition: ({ phase, starsSeen, sum, between }, value) => {
-      if (phase === 'flag') {
-        const isStar = value === STAR;
-        return {
-          phase: 'digit',
-          starsSeen: Math.min(starsSeen + (isStar ? 1 : 0), 2),
-          sum,
-          between: starsSeen === 1 && !isStar,
-        };
-      }
-      return {
-        phase: 'flag',
-        starsSeen,
-        sum: Math.min(sum + (between ? value : 0), target + 1),
-        between: false,
-      };
-    },
-    accept: ({ phase, starsSeen, sum }) => phase === 'flag' && starsSeen === 2 && sum === target,
-    maxDepth: 18,
-  }, geometry.numValues);
-}
-
-// The eighteen bordered numbers printed outside the frame: one to the left of
-// each row, top to bottom, and one above each column, left to right.
+// Outside clues -- provenance: the drawn overlay numbers left of rows 1-9
+// (top to bottom) and above columns 1-9 (left to right).
 const ROW_CLUES = [17, 3, 24, 4, 6, 6, 23, 12, 6];
 const COL_CLUES = [12, 28, 3, 23, 7, 21, 4, 7, 9];
 
-const rowClues = graph.rows().map((line, i) => new NFA(
-  betweenStarsMachine(ROW_CLUES[i]), `between-stars-row-${i + 1}`,
-  ...line.flatMap(cell => [starAt(cell), cell])));
-const colClues = graph.columns().map((line, i) => new NFA(
-  betweenStarsMachine(COL_CLUES[i]), `between-stars-col-${i + 1}`,
-  ...line.flatMap(cell => [starAt(cell), cell])));
+// The Raw grid type has no default box geometry (only the Sudoku grid type
+// does), so the nine 3x3 boxes are built explicitly from their top-left
+// corners.
+const boxTopLefts = [1, 4, 7].flatMap(
+  r => [1, 4, 7].map(c => makeCellId(r, c)));
+const boxes = boxTopLefts.map(tl => graph.block(tl, 3, 3));
+
+const houses = [...graph.rows(), ...graph.columns(), ...boxes];
+
+function betweenStarsClue(total, cells) {
+  const branches = [];
+  for (let i = 0; i < cells.length; i++) {
+    // j starts at i + 2: j = i + 1 would leave an empty "between" run, a
+    // pairing the no-touch rule already excludes.
+    for (let j = i + 2; j < cells.length; j++) {
+      branches.push(new And([
+        new Given(cells[i], STAR),
+        new Given(cells[j], STAR),
+        new Sum(total, ...cells.slice(i + 1, j)),
+      ]));
+    }
+  }
+  return new Or(branches);
+}
+
+// No-touch: no two star (0) cells may be king-move adjacent, anywhere on the
+// board. One Pair template per unordered adjacency offset, replicated onto
+// every cell that has a neighbour there.
+const notBothStar = Pair.fnToKey((a, b) => a !== STAR || b !== STAR, shape);
+const TOUCHING_OFFSETS = [[0, 1], [1, 0], [1, 1], [1, -1]];
+const noTouchPairs = TOUCHING_OFFSETS.map(([dr, dc]) => {
+  const origins = graph.cells().filter(cell => graph.step(cell, dr, dc));
+  const anchor = origins[0];
+  const template = new Pair(
+    notBothStar, 'stars do not touch', anchor, graph.step(anchor, dr, dc));
+  return new Replicate(
+    [template], Replicate.encodeTargetCells(origins, anchor, graph), anchor);
+});
 
 return [
-  new Shape('9x9'),
+  shape,
+  ...houses.map(house => new ContainExact(HOUSE_MULTISET, ...house)),
+
+  // Givens -- provenance: the two drawn digits, R5C4=1 and R5C6=2.
   new Given('R5C4', 1),
   new Given('R5C6', 2),
-  star.toVar('star'),
-  starDomain,
-  ...starCount,
-  ...noTouch,
-  ...rowClues,
-  ...colClues,
+
+  ...noTouchPairs,
+
+  ...ROW_CLUES.map((total, i) => betweenStarsClue(total, graph.row(i + 1))),
+  ...COL_CLUES.map((total, i) => betweenStarsClue(total, graph.column(i + 1))),
 ];

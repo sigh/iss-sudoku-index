@@ -1,10 +1,11 @@
+.AntiKnight
 .Quad~R1C1~1~2~7~8
-.Quad~R1C8~5~6~8~9
-.Quad~R2C4~1~2~7~8
-.Quad~R3C3~2~3~6~7
 .Quad~R4C2~1~2~7~8
+.Quad~R2C4~1~2~7~8
+.Quad~R1C8~5~6~8~9
+.Quad~R8C8~1~3~4~9
 .Quad~R5C7~1~3~4~9
-.Quad~R6C6~4~5~8~9
 .Quad~R7C5~1~3~4~9
 .Quad~R8C1~2~3~5~6
-.Quad~R8C8~1~3~4~9
+.Quad~R6C6~4~5~8~9
+.Quad~R3C3~2~3~6~7

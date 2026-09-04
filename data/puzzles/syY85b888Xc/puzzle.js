@@ -3,17 +3,16 @@
 // Video: https://www.youtube.com/watch?v=syY85b888Xc
 // Source: https://sudokupad.app/LFHbpFpN8r
 
-// Rules: "Normal sudoku rules apply." -- digits 1-9, each appearing once per
-// row, once per column, and once per 3x3 box. ISS enforces all three by default
-// on a 9x9 Shape, and the source's region partition is exactly the standard
-// boxes, so no explicit regions are needed.
-//
-// The source draws no other clue geometry: no cages, lines, arrows, dots,
-// overlays or outside clues. Nothing is omitted from this encoding.
+// Normal sudoku rules apply (standard 3x3 box regions -- Shape('9x9')
+// supplies rows/columns/boxes). No other clue geometry is drawn.
 
-// Givens, transcribed from the drawn grid (26 clues).
+// Given digits, transcribed from the source payload's cell values, plus one
+// externally corroborated given: a YouTube viewer comment on the video
+// reports a 2 in the upper-left cell of box 2 (R1C4) that this SudokuPad
+// recreation is missing; that cell was blank in the payload, and the
+// payload's own embedded solution stub agrees (R1C4=2).
 const givens = [
-  ['R1C3', 5],
+  ['R1C3', 5], ['R1C4', 2],
   ['R2C7', 7], ['R2C9', 1],
   ['R3C1', 9], ['R3C5', 5], ['R3C7', 8], ['R3C9', 3],
   ['R4C1', 1], ['R4C6', 5], ['R4C7', 6], ['R4C8', 9],

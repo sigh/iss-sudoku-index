@@ -1,0 +1,75 @@
+// Title: Unknown
+// Author: Jonas Gleim
+// Video: https://www.youtube.com/watch?v=oUkFRnR2Z-g
+// Source: https://cracking-the-cryptic.web.app/sudoku/M3j8mLbt7n
+
+// Rules encoded, in full (standard Star Battle; the source carries no rules
+// text, and the star count of two was confirmed by the index maintainer --
+// see the puzzle description): "Each row, column and region must contain
+// exactly two stars. Stars cannot touch one another, even diagonally."
+//
+// There are no sudoku digits at all -- the grid carries only star/no-star
+// per cell -- so it is built on a Raw shape with a 2-value alphabet instead
+// of a 1-9 digit grid (the solution is therefore the 100-cell star/no-star
+// grid, not a digit grid).
+//
+// The ten regions are not the default box tiling: they are irregular pieces
+// listed directly by the source's own region partition (see the region
+// layout diagram and per-region cell lists in the puzzle description).
+
+const STAR = 1;
+const NO_STAR = 2;
+
+const shape = new Shape('10x10', 2, 'Raw');
+const graph = cellGraph(shape);
+
+// Region cell lists (row, col pairs), transcribed from the source's own
+// ten drawn regions (0-indexed pairs there, +1 here for makeCellId).
+const regionCoords = [
+  [[1, 1], [1, 2], [1, 3], [2, 1], [3, 1], [4, 1], [5, 1], [6, 1], [7, 1],
+    [4, 2], [4, 3], [3, 3], [3, 4], [4, 4], [7, 2], [7, 3], [8, 3], [9, 3]],
+  [[1, 6], [1, 7], [1, 8], [1, 9], [1, 10], [1, 5], [1, 4], [2, 4], [2, 3],
+    [2, 2], [3, 2]],
+  [[2, 5], [3, 5], [4, 5], [5, 5], [5, 4], [5, 3], [5, 2]],
+  [[2, 6], [3, 6], [4, 6], [5, 6], [5, 7], [5, 8], [5, 9]],
+  [[6, 5], [6, 4], [6, 3], [6, 2], [7, 5], [8, 5], [9, 5]],
+  [[6, 6], [6, 7], [6, 8], [6, 9], [7, 6], [8, 6], [9, 6]],
+  [[8, 1], [9, 1], [10, 1], [10, 2], [9, 2], [8, 2], [10, 3]],
+  [[2, 10], [3, 10], [2, 9], [3, 9], [4, 9], [4, 8], [3, 8], [2, 8], [2, 7],
+    [3, 7], [4, 7]],
+  [[7, 4], [8, 4], [9, 4], [10, 4], [10, 5], [10, 6], [10, 7], [9, 7], [8, 7],
+    [7, 7], [7, 8], [8, 8], [9, 8], [10, 8], [9, 9], [10, 9], [9, 10],
+    [10, 10]],
+  [[7, 9], [8, 9], [8, 10], [7, 10], [6, 10], [5, 10], [4, 10]],
+];
+const regions = regionCoords.map(coords => coords.map(([r, c]) => makeCellId(r, c)));
+
+// Two stars per house: every row, column and region holds exactly two STAR
+// cells (ContainExact names only the STAR count; with a 2-value domain the
+// remaining cells of the house are automatically NO_STAR).
+const twoPerHouse = [...graph.rows(), ...graph.columns(), ...regions]
+  .map(house => new ContainExact(`${STAR}_${STAR}`, ...house));
+
+// No two stars touch, including diagonally: for every king-move edge, not
+// both cells are STAR. One Replicate per offset stamps the relation over
+// every edge at that offset; the anti-diagonal offset needs the explicit
+// target-cell encoding rather than graph.makeReplicate, whose origin anchor
+// would shift a template cell off the board.
+const notBothStars = Pair.fnToKey((a, b) => !(a === STAR && b === STAR), shape);
+const KING_OFFSETS = [[0, 1], [1, 0], [1, 1], [1, -1]];
+const noTouch = KING_OFFSETS.map(([dRow, dCol]) => {
+  const targets = graph.cells().filter(cell => graph.step(cell, dRow, dCol) !== null);
+  const origin = targets[0];
+  const neighbour = graph.step(origin, dRow, dCol);
+  return new Replicate(
+    [new Pair(notBothStars, 'stars do not touch', origin, neighbour)],
+    Replicate.encodeTargetCells(targets, origin, graph),
+    origin,
+  );
+});
+
+return [
+  shape,
+  ...twoPerHouse,
+  ...noTouch,
+];
