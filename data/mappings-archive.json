@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-06T11:53:13.744417+00:00",
+  "generated_at": "2026-09-09T22:13:20.028456+00:00",
   "rows": [
     {
       "puzzle_id": "_jkTguG0XnU",
@@ -12051,7 +12051,7 @@
         "https://sudokupad.app/3sl8zu9gym"
       ],
       "date": "2025-11-24",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "AllDifferent",
         "SameValues",
@@ -12061,8 +12061,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1061958,
-      "solve_ms": 45785.5,
+      "guesses": 74522,
+      "solve_ms": 6266.6,
       "iss_size": 1956,
       "iss_url_length": 2008,
       "script_size": 1440
@@ -63012,7 +63012,7 @@
         "https://app.crackingthecryptic.com/sudoku/hgBgMrm4JG"
       ],
       "date": "2023-09-29",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Regex"
       ],
@@ -63020,8 +63020,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1526726,
-      "solve_ms": 38966.7,
+      "guesses": 195707,
+      "solve_ms": 5850.4,
       "iss_size": 1273,
       "iss_url_length": 1312,
       "script_size": 1098
@@ -63362,7 +63362,7 @@
         "https://app.crackingthecryptic.com/sudoku/Qtghbj7HtM"
       ],
       "date": "2023-09-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-10",
@@ -63386,7 +63386,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1051,
-      "solve_ms": 13343.1,
+      "solve_ms": 15143.4,
       "iss_size": 410401,
       "iss_url_length": 414138,
       "script_size": 19859
@@ -65054,7 +65054,7 @@
         "https://app.crackingthecryptic.com/sudoku/L42nqPggLN"
       ],
       "date": "2023-09-04",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-15",
         "Replicate",
@@ -65070,8 +65070,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 304608,
-      "solve_ms": 159178.8,
+      "guesses": 41428,
+      "solve_ms": 26405.3,
       "iss_size": 271086,
       "iss_url_length": 269248,
       "script_size": 6752
@@ -65801,7 +65801,7 @@
         "https://app.crackingthecryptic.com/sudoku/QgtR8b9Mr2"
       ],
       "date": "2023-08-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -65816,8 +65816,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 4714,
-      "solve_ms": 82656.0,
+      "guesses": 1009,
+      "solve_ms": 13060.0,
       "iss_size": 336770,
       "iss_url_length": 323681,
       "script_size": 6432
@@ -65960,7 +65960,7 @@
         "https://app.crackingthecryptic.com/sudoku/JqgBdhMBbn"
       ],
       "date": "2023-08-23",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -65977,8 +65977,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 275181,
-      "solve_ms": 26021.5,
+      "guesses": 39982,
+      "solve_ms": 4212.5,
       "iss_size": 28487,
       "iss_url_length": 28538,
       "script_size": 12893
@@ -71399,7 +71399,7 @@
         "https://app.crackingthecryptic.com/sudoku/QtRQHrf8R9"
       ],
       "date": "2023-06-21",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -71423,8 +71423,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1024,
-      "solve_ms": 14907.9,
+      "guesses": 1049,
+      "solve_ms": 10227.9,
       "iss_size": 697814,
       "iss_url_length": 703483,
       "script_size": 14769
@@ -71548,7 +71548,7 @@
         "https://app.crackingthecryptic.com/sudoku/tpjLQ6BhQ7"
       ],
       "date": "2023-06-19",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "AntiKnight",
@@ -71563,8 +71563,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 296605,
-      "solve_ms": 54809.6,
+      "guesses": 40230,
+      "solve_ms": 6806.7,
       "iss_size": 113338,
       "iss_url_length": 110131,
       "script_size": 4290
@@ -72334,7 +72334,7 @@
         "https://app.crackingthecryptic.com/sudoku/frjRNFMDjB"
       ],
       "date": "2023-06-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "8x8",
         "NoBoxes",
@@ -72351,8 +72351,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 710071,
-      "solve_ms": 31515.3,
+      "guesses": 99610,
+      "solve_ms": 3943.7,
       "iss_size": 11932,
       "iss_url_length": 11684,
       "script_size": 5727
@@ -72925,7 +72925,7 @@
         "https://app.crackingthecryptic.com/sudoku/r3LL9t2PLB"
       ],
       "date": "2023-06-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "AllDifferent",
         "Or",
@@ -72936,8 +72936,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 47699,
-      "solve_ms": 69092.9,
+      "guesses": 6735,
+      "solve_ms": 12551.0,
       "iss_size": 153820,
       "iss_url_length": 156677,
       "script_size": 4601
@@ -73002,7 +73002,7 @@
         "https://app.crackingthecryptic.com/sudoku/F8NB27tqQ7"
       ],
       "date": "2023-06-01",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-9",
@@ -73020,11 +73020,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 12602,
-      "solve_ms": 9444.4,
-      "iss_size": 13868,
-      "iss_url_length": 13915,
-      "script_size": 6428
+      "guesses": 28467,
+      "solve_ms": 6390.3,
+      "iss_size": 13838,
+      "iss_url_length": 13885,
+      "script_size": 6690
     },
     {
       "puzzle_id": "kEH-puCDZ_M",
@@ -75399,7 +75399,7 @@
         "https://app.crackingthecryptic.com/sudoku/NQQHttHLHd"
       ],
       "date": "2023-05-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 7x7",
         "0-9",
@@ -75422,8 +75422,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 29319,
-      "solve_ms": 4250.0,
+      "guesses": 24609,
+      "solve_ms": 4176.4,
       "iss_size": 125362,
       "iss_url_length": 127689,
       "script_size": 17322
@@ -76696,7 +76696,7 @@
         "https://app.crackingthecryptic.com/sudoku/BntmPfnd4L"
       ],
       "date": "2023-04-17",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 14x14",
         "1-13",
@@ -76705,7 +76705,7 @@
         "Pair: offset",
         "NFA: piece-shape",
         "NFA: type-used-once",
-        "NFA: sees-pentomino",
+        "NFA: nearest-pentomino",
         "NFA: anchor-type-tie",
         "NFA: no-touch",
         "Given"
@@ -76714,11 +76714,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 36301,
-      "solve_ms": 8175.8,
-      "iss_size": 427366,
-      "iss_url_length": 427314,
-      "script_size": 17061
+      "guesses": 19841,
+      "solve_ms": 11352.2,
+      "iss_size": 428749,
+      "iss_url_length": 428690,
+      "script_size": 17881
     },
     {
       "puzzle_id": "lBwi5xckpGE",
@@ -77109,27 +77109,25 @@
         "https://app.crackingthecryptic.com/sudoku/9dR9Gtj6R8"
       ],
       "date": "2023-04-11",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "1-12",
-        "Replicate",
         "Var",
         "Pair: offset",
         "NFA: piece-shape",
         "NFA: border-count",
-        "NFA: piece-type",
-        "Given"
+        "NFA: piece-type"
       ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 8255,
-      "solve_ms": 9656.0,
-      "iss_size": 353612,
-      "iss_url_length": 353576,
-      "script_size": 11693
+      "guesses": 8850,
+      "solve_ms": 10801.5,
+      "iss_size": 353583,
+      "iss_url_length": 353551,
+      "script_size": 11588
     },
     {
       "puzzle_id": "cL-6F9Fy8eI",
@@ -77998,7 +77996,7 @@
         "https://app.crackingthecryptic.com/sudoku/rbBB4tF8HL"
       ],
       "date": "2023-03-31",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-11",
         "Replicate",
@@ -78016,8 +78014,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 47410,
-      "solve_ms": 45790.2,
+      "guesses": 5589,
+      "solve_ms": 5858.9,
       "iss_size": 180722,
       "iss_url_length": 181142,
       "script_size": 11407
@@ -78590,7 +78588,7 @@
         "https://app.crackingthecryptic.com/sudoku/m7Grm47T9H"
       ],
       "date": "2023-03-24",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Var",
@@ -78706,8 +78704,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3252,
-      "solve_ms": 63380.1,
+      "guesses": 1020,
+      "solve_ms": 23531.0,
       "iss_size": 607405,
       "iss_url_length": 607328,
       "script_size": 10986
@@ -78800,7 +78798,7 @@
         "https://app.crackingthecryptic.com/sudoku/bTpPDqJbG9"
       ],
       "date": "2023-03-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Var",
@@ -78819,8 +78817,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 481576,
-      "solve_ms": 24470.3,
+      "guesses": 64444,
+      "solve_ms": 8090.3,
       "iss_size": 7007,
       "iss_url_length": 7037,
       "script_size": 7598
@@ -81725,7 +81723,7 @@
         "https://app.crackingthecryptic.com/sudoku/tGqm6F2nPN"
       ],
       "date": "2023-02-15",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 11x11",
         "0-9",
@@ -81746,8 +81744,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 89992,
-      "solve_ms": 56228.7,
+      "guesses": 14513,
+      "solve_ms": 9363.9,
       "iss_size": 35987,
       "iss_url_length": 35482,
       "script_size": 5226
@@ -82690,7 +82688,7 @@
         "https://app.crackingthecryptic.com/sudoku/3RJ64FJmQD"
       ],
       "date": "2023-02-05",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -82711,8 +82709,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 59561,
-      "solve_ms": 56498.6,
+      "guesses": 10233,
+      "solve_ms": 10739.3,
       "iss_size": 40643,
       "iss_url_length": 40652,
       "script_size": 10973
@@ -83063,7 +83061,7 @@
         "https://app.crackingthecryptic.com/sudoku/RjG3t8B9dp"
       ],
       "date": "2023-01-31",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "ChaosConstruction",
         "NoBoxes",
@@ -83078,8 +83076,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 553540,
-      "solve_ms": 28749.5,
+      "guesses": 74541,
+      "solve_ms": 4956.5,
       "iss_size": 10537,
       "iss_url_length": 10119,
       "script_size": 3942
@@ -83272,7 +83270,7 @@
         "https://app.crackingthecryptic.com/sudoku/nh43mpHn8M"
       ],
       "date": "2023-01-29",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Var",
@@ -83288,7 +83286,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1034,
-      "solve_ms": 74780.0,
+      "solve_ms": 70956.7,
       "iss_size": 762508,
       "iss_url_length": 762651,
       "script_size": 11973
@@ -83948,7 +83946,7 @@
         "https://app.crackingthecryptic.com/sudoku/Pf67tg7FnN"
       ],
       "date": "2023-01-23",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1x1",
         "1-6",
@@ -83962,8 +83960,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 877201,
-      "solve_ms": 53997.6,
+      "guesses": 126277,
+      "solve_ms": 7251.2,
       "iss_size": 11374,
       "iss_url_length": 11315,
       "script_size": 8509
@@ -84448,7 +84446,7 @@
         "https://app.crackingthecryptic.com/sudoku/DG84dt9Q3M"
       ],
       "date": "2023-01-16",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -84470,8 +84468,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1155,
-      "solve_ms": 12364.2,
+      "guesses": 1202,
+      "solve_ms": 9792.9,
       "iss_size": 599117,
       "iss_url_length": 603899,
       "script_size": 13775
@@ -84953,7 +84951,7 @@
         "https://app.crackingthecryptic.com/sudoku/Hf9QqQMD7J"
       ],
       "date": "2023-01-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -84967,8 +84965,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 250564,
-      "solve_ms": 44937.7,
+      "guesses": 36556,
+      "solve_ms": 7335.9,
       "iss_size": 11200,
       "iss_url_length": 11246,
       "script_size": 6649
@@ -85390,7 +85388,7 @@
         "https://app.crackingthecryptic.com/sudoku/b6tTH63QF9"
       ],
       "date": "2023-01-03",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -85411,8 +85409,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 254034,
-      "solve_ms": 34176.3,
+      "guesses": 39088,
+      "solve_ms": 6975.2,
       "iss_size": 27191,
       "iss_url_length": 27149,
       "script_size": 13306
@@ -85731,7 +85729,7 @@
         "https://app.crackingthecryptic.com/sudoku/99JFmbth6r"
       ],
       "date": "2022-12-30",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -85745,8 +85743,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 356732,
-      "solve_ms": 70870.7,
+      "guesses": 51562,
+      "solve_ms": 11467.6,
       "iss_size": 6977,
       "iss_url_length": 7001,
       "script_size": 3726
@@ -85888,7 +85886,7 @@
         "https://app.crackingthecryptic.com/sudoku/GjDNNTdp4r"
       ],
       "date": "2022-12-27",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -85902,8 +85900,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 853510,
-      "solve_ms": 47995.4,
+      "guesses": 114442,
+      "solve_ms": 8279.7,
       "iss_size": 5574,
       "iss_url_length": 5615,
       "script_size": 5545
@@ -86204,7 +86202,7 @@
         "https://app.crackingthecryptic.com/sudoku/h7GLR6J69b"
       ],
       "date": "2022-12-24",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-15",
         "Replicate",
@@ -86246,8 +86244,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 5846,
-      "solve_ms": 60884.3,
+      "guesses": 1014,
+      "solve_ms": 10591.5,
       "iss_size": 60325,
       "iss_url_length": 60198,
       "script_size": 7630
@@ -87555,7 +87553,7 @@
         "https://app.crackingthecryptic.com/sudoku/BLHT4RmMFF"
       ],
       "date": "2022-12-07",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -87570,8 +87568,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 925966,
-      "solve_ms": 17113.1,
+      "guesses": 111038,
+      "solve_ms": 6973.7,
       "iss_size": 9007,
       "iss_url_length": 9039,
       "script_size": 7914
@@ -87831,7 +87829,7 @@
         "https://app.crackingthecryptic.com/sudoku/4h9fBmbbFr"
       ],
       "date": "2022-12-04",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-16",
         "Var",
@@ -87863,8 +87861,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 4935,
-      "solve_ms": 10795.3,
+      "guesses": 5040,
+      "solve_ms": 9122.0,
       "iss_size": 300392,
       "iss_url_length": 284880,
       "script_size": 11496
@@ -87906,7 +87904,7 @@
         "https://app.crackingthecryptic.com/sudoku/4H7pBQQbdH"
       ],
       "date": "2022-12-03",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 6x13",
         "0-15",
@@ -87928,8 +87926,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1110,
-      "solve_ms": 10675.4,
+      "guesses": 1349,
+      "solve_ms": 11464.2,
       "iss_size": 369211,
       "iss_url_length": 372893,
       "script_size": 13865
@@ -88505,7 +88503,7 @@
         "https://app.crackingthecryptic.com/sudoku/t9R8FpbtRJ"
       ],
       "date": "2022-11-27",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -88552,8 +88550,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 99896,
-      "solve_ms": 49473.2,
+      "guesses": 13964,
+      "solve_ms": 8603.5,
       "iss_size": 108725,
       "iss_url_length": 108656,
       "script_size": 4159
@@ -88631,7 +88629,7 @@
         "https://app.crackingthecryptic.com/sudoku/97Lq8qnJmj"
       ],
       "date": "2022-11-25",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "RegionSumLine",
         "NFA: white dot R2C6-R2C7",
@@ -88646,8 +88644,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 913252,
-      "solve_ms": 56665.0,
+      "guesses": 142254,
+      "solve_ms": 9068.4,
       "iss_size": 4804,
       "iss_url_length": 4873,
       "script_size": 2816
@@ -88661,7 +88659,7 @@
         "https://app.crackingthecryptic.com/sudoku/tgLhMqqHrm"
       ],
       "date": "2022-11-25",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -88675,8 +88673,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 283565,
-      "solve_ms": 63046.9,
+      "guesses": 42525,
+      "solve_ms": 9046.8,
       "iss_size": 20798,
       "iss_url_length": 20869,
       "script_size": 7130
@@ -89994,7 +89992,7 @@
         "https://app.crackingthecryptic.com/sudoku/7QN6Nr4tLq"
       ],
       "date": "2022-11-08",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 9x9",
         "1-5",
@@ -90026,8 +90024,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 32571,
-      "solve_ms": 5886.2,
+      "guesses": 30331,
+      "solve_ms": 7968.1,
       "iss_size": 212403,
       "iss_url_length": 210637,
       "script_size": 4667
@@ -90174,7 +90172,7 @@
         "https://app.crackingthecryptic.com/sudoku/mGtft8fRN9"
       ],
       "date": "2022-11-07",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -90200,8 +90198,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 99737,
-      "solve_ms": 15132.3,
+      "guesses": 15798,
+      "solve_ms": 3761.8,
       "iss_size": 184846,
       "iss_url_length": 188103,
       "script_size": 15712
@@ -91073,7 +91071,7 @@
         "https://app.crackingthecryptic.com/sudoku/9PQtqQj3r7"
       ],
       "date": "2022-10-27",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Replicate",
@@ -91115,8 +91113,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3611,
-      "solve_ms": 35555.3,
+      "guesses": 1014,
+      "solve_ms": 20277.5,
       "iss_size": 532081,
       "iss_url_length": 532104,
       "script_size": 7623
@@ -91576,7 +91574,7 @@
         "https://app.crackingthecryptic.com/sudoku/ThQmPfrLmT"
       ],
       "date": "2022-10-20",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Replicate",
@@ -91613,8 +91611,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 101090,
-      "solve_ms": 77146.5,
+      "guesses": 14455,
+      "solve_ms": 8202.4,
       "iss_size": 30489,
       "iss_url_length": 30509,
       "script_size": 7015
@@ -91653,7 +91651,7 @@
         "https://app.crackingthecryptic.com/sudoku/HrhMg7tphm"
       ],
       "date": "2022-10-19",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -91675,8 +91673,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1877,
-      "solve_ms": 7251.8,
+      "guesses": 2107,
+      "solve_ms": 6529.2,
       "iss_size": 591074,
       "iss_url_length": 595942,
       "script_size": 14507
@@ -92595,7 +92593,7 @@
         "https://app.crackingthecryptic.com/sudoku/7bh4Mb8Mtf"
       ],
       "date": "2022-10-08",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Var",
@@ -92618,8 +92616,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 142201,
-      "solve_ms": 36069.2,
+      "guesses": 18678,
+      "solve_ms": 7471.0,
       "iss_size": 10975,
       "iss_url_length": 11062,
       "script_size": 6241
@@ -93272,7 +93270,7 @@
         "https://app.crackingthecryptic.com/sudoku/944Mg3fnJH"
       ],
       "date": "2022-09-28",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "CountDistinct",
@@ -93304,8 +93302,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 480010,
-      "solve_ms": 49722.0,
+      "guesses": 40864,
+      "solve_ms": 4952.9,
       "iss_size": 8508,
       "iss_url_length": 8521,
       "script_size": 10590
@@ -93662,7 +93660,7 @@
         "https://app.crackingthecryptic.com/sudoku/qbGThhnqM9"
       ],
       "date": "2022-09-24",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -93691,8 +93689,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 240689,
-      "solve_ms": 89757.4,
+      "guesses": 32721,
+      "solve_ms": 10071.1,
       "iss_size": 63535,
       "iss_url_length": 63602,
       "script_size": 3679
@@ -94370,7 +94368,7 @@
         "https://app.crackingthecryptic.com/sudoku/tTm73r746q"
       ],
       "date": "2022-09-16",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -94401,8 +94399,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 96481,
-      "solve_ms": 47334.7,
+      "guesses": 13456,
+      "solve_ms": 8277.3,
       "iss_size": 33931,
       "iss_url_length": 33940,
       "script_size": 5186
@@ -94831,7 +94829,7 @@
         "https://app.crackingthecryptic.com/sudoku/6j3GrPqpDb"
       ],
       "date": "2022-09-11",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -94845,8 +94843,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 343465,
-      "solve_ms": 39225.7,
+      "guesses": 59445,
+      "solve_ms": 5374.7,
       "iss_size": 6376,
       "iss_url_length": 6421,
       "script_size": 5296
@@ -95741,7 +95739,7 @@
         "https://app.crackingthecryptic.com/sudoku/tbdnBm9fJp"
       ],
       "date": "2022-08-30",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-13",
         "Var",
@@ -95784,8 +95782,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 34202,
-      "solve_ms": 36437.6,
+      "guesses": 5967,
+      "solve_ms": 7413.5,
       "iss_size": 161093,
       "iss_url_length": 151658,
       "script_size": 7281
@@ -96463,7 +96461,7 @@
         "https://app.crackingthecryptic.com/sudoku/JnpBMH8t2h"
       ],
       "date": "2022-08-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Sum"
       ],
@@ -96471,8 +96469,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3468216,
-      "solve_ms": 17858.3,
+      "guesses": 518143,
+      "solve_ms": 3033.6,
       "iss_size": 346,
       "iss_url_length": 400,
       "script_size": 1973
@@ -96586,7 +96584,7 @@
         "https://app.crackingthecryptic.com/sudoku/tGf29NLMRT"
       ],
       "date": "2022-08-19",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -96604,8 +96602,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 558696,
-      "solve_ms": 46615.8,
+      "guesses": 76585,
+      "solve_ms": 7082.4,
       "iss_size": 6344,
       "iss_url_length": 6377,
       "script_size": 9672
@@ -97591,7 +97589,7 @@
         "https://app.crackingthecryptic.com/sudoku/4TPGDbgjHd"
       ],
       "date": "2022-08-06",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -97622,8 +97620,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 300673,
-      "solve_ms": 52522.4,
+      "guesses": 41446,
+      "solve_ms": 8819.7,
       "iss_size": 90066,
       "iss_url_length": 90877,
       "script_size": 7484
@@ -97712,7 +97710,7 @@
         "https://app.crackingthecryptic.com/sudoku/RpBBf44hrH"
       ],
       "date": "2022-08-04",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -97742,8 +97740,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 164652,
-      "solve_ms": 3501.4,
+      "guesses": 16959,
+      "solve_ms": 1341.9,
       "iss_size": 81922,
       "iss_url_length": 82142,
       "script_size": 17796
@@ -98111,7 +98109,7 @@
         "https://app.crackingthecryptic.com/sudoku/bHjLRDRG48"
       ],
       "date": "2022-07-30",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "ChaosConstruction",
         "NoBoxes",
@@ -98127,8 +98125,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 457696,
-      "solve_ms": 41259.3,
+      "guesses": 25347,
+      "solve_ms": 3880.5,
       "iss_size": 5421,
       "iss_url_length": 5164,
       "script_size": 3729
@@ -98769,7 +98767,7 @@
         "https://app.crackingthecryptic.com/sudoku/Br6j7NpNJm"
       ],
       "date": "2022-07-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 15x11",
         "0-15",
@@ -98818,7 +98816,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1189,
-      "solve_ms": 73767.5,
+      "solve_ms": 63364.1,
       "iss_size": 1500158,
       "iss_url_length": 1508126,
       "script_size": 14104
@@ -99006,7 +99004,7 @@
         "https://tinyurl.com/bdect8rt"
       ],
       "date": "2022-07-20",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-16",
         "Replicate",
@@ -99024,8 +99022,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 346480,
-      "solve_ms": 14186.4,
+      "guesses": 49298,
+      "solve_ms": 2561.5,
       "iss_size": 170771,
       "iss_url_length": 168282,
       "script_size": 9338
@@ -99321,7 +99319,7 @@
         "https://app.crackingthecryptic.com/sudoku/d8Qpr2r36t"
       ],
       "date": "2022-07-16",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "ChaosConstruction",
         "NoBoxes",
@@ -99337,8 +99335,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 808651,
-      "solve_ms": 30412.8,
+      "guesses": 65650,
+      "solve_ms": 8217.7,
       "iss_size": 8501,
       "iss_url_length": 8552,
       "script_size": 3210
@@ -99534,7 +99532,7 @@
         "https://app.crackingthecryptic.com/sudoku/GPDqrrQDG7"
       ],
       "date": "2022-07-12",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -99554,8 +99552,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 8347,
-      "solve_ms": 51829.5,
+      "guesses": 1065,
+      "solve_ms": 12931.6,
       "iss_size": 533341,
       "iss_url_length": 533191,
       "script_size": 18159
@@ -101369,7 +101367,7 @@
         "https://app.crackingthecryptic.com/sudoku/HJfhP4DRpF"
       ],
       "date": "2022-06-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -101394,7 +101392,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1020,
-      "solve_ms": 10586.3,
+      "solve_ms": 13251.6,
       "iss_size": 697241,
       "iss_url_length": 702918,
       "script_size": 15466
@@ -101933,7 +101931,7 @@
         "https://tinyurl.com/2p85dfpe"
       ],
       "date": "2022-06-14",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-10",
         "Var",
@@ -101959,8 +101957,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 5980,
-      "solve_ms": 24819.7,
+      "guesses": 1041,
+      "solve_ms": 13755.9,
       "iss_size": 165406,
       "iss_url_length": 155493,
       "script_size": 13149
@@ -102904,7 +102902,7 @@
         "https://app.crackingthecryptic.com/sudoku/9T86Nq6r4b"
       ],
       "date": "2022-06-03",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-15",
         "Replicate",
@@ -102920,8 +102918,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1880919,
-      "solve_ms": 8698.6,
+      "guesses": 228353,
+      "solve_ms": 1638.9,
       "iss_size": 9073,
       "iss_url_length": 8616,
       "script_size": 4605
@@ -103438,7 +103436,7 @@
         "https://app.crackingthecryptic.com/sudoku/T9F27jJnqf"
       ],
       "date": "2022-05-27",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -103452,8 +103450,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 757594,
-      "solve_ms": 34304.8,
+      "guesses": 93119,
+      "solve_ms": 5450.4,
       "iss_size": 5114,
       "iss_url_length": 4822,
       "script_size": 2358
@@ -104131,7 +104129,7 @@
         "https://app.crackingthecryptic.com/sudoku/Hdpt6h9nBt"
       ],
       "date": "2022-05-18",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-15",
         "Var",
@@ -104147,8 +104145,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 800036,
-      "solve_ms": 21985.2,
+      "guesses": 82450,
+      "solve_ms": 5126.3,
       "iss_size": 17944,
       "iss_url_length": 17156,
       "script_size": 5839
@@ -104263,7 +104261,7 @@
         "https://app.crackingthecryptic.com/sudoku/L64LJ4LQ4t"
       ],
       "date": "2022-05-16",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 14x14",
         "0-7",
@@ -104279,8 +104277,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3030378,
-      "solve_ms": 7635.4,
+      "guesses": 442552,
+      "solve_ms": 1171.9,
       "iss_size": 17295,
       "iss_url_length": 16952,
       "script_size": 7221
@@ -104294,7 +104292,7 @@
         "https://app.crackingthecryptic.com/sudoku/mJL2Hn6MBL"
       ],
       "date": "2022-05-15",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Replicate",
@@ -104313,8 +104311,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 528684,
-      "solve_ms": 55607.2,
+      "guesses": 34673,
+      "solve_ms": 5642.0,
       "iss_size": 16314,
       "iss_url_length": 16464,
       "script_size": 10003
@@ -104482,7 +104480,7 @@
         "https://app.crackingthecryptic.com/sudoku/g2NBLTF6h8"
       ],
       "date": "2022-05-12",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-14",
         "Var",
@@ -104651,8 +104649,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 25599,
-      "solve_ms": 48550.4,
+      "guesses": 3186,
+      "solve_ms": 7900.2,
       "iss_size": 100039,
       "iss_url_length": 100059,
       "script_size": 7442
@@ -104666,7 +104664,7 @@
         "https://app.crackingthecryptic.com/sudoku/jMr37pJ23R"
       ],
       "date": "2022-05-11",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-13",
         "Replicate",
@@ -104809,8 +104807,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 10813,
-      "solve_ms": 62940.6,
+      "guesses": 1246,
+      "solve_ms": 8657.1,
       "iss_size": 159903,
       "iss_url_length": 162241,
       "script_size": 15921
@@ -105591,7 +105589,7 @@
         "https://app.crackingthecryptic.com/sudoku/bbR78tRnfd"
       ],
       "date": "2022-05-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -105692,8 +105690,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 182827,
-      "solve_ms": 92345.7,
+      "guesses": 25328,
+      "solve_ms": 10843.2,
       "iss_size": 31695,
       "iss_url_length": 31618,
       "script_size": 10183
@@ -106105,7 +106103,7 @@
         "https://tinyurl.com/progressivedivisors"
       ],
       "date": "2022-04-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Var",
@@ -106212,8 +106210,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 903726,
-      "solve_ms": 5433.0,
+      "guesses": 136733,
+      "solve_ms": 1026.2,
       "iss_size": 14350,
       "iss_url_length": 14421,
       "script_size": 5831
@@ -106560,7 +106558,7 @@
         "https://app.crackingthecryptic.com/sudoku/q43qr34LLd"
       ],
       "date": "2022-04-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -106573,8 +106571,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 84344,
-      "solve_ms": 53582.0,
+      "guesses": 12103,
+      "solve_ms": 10685.9,
       "iss_size": 23754,
       "iss_url_length": 23805,
       "script_size": 5400
@@ -107375,7 +107373,7 @@
         "https://app.crackingthecryptic.com/sudoku/ML8NMNhdGH"
       ],
       "date": "2022-04-11",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "ChaosConstruction",
         "NoBoxes",
@@ -107395,8 +107393,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 345000,
-      "solve_ms": 43688.4,
+      "guesses": 31540,
+      "solve_ms": 16771.8,
       "iss_size": 46604,
       "iss_url_length": 46701,
       "script_size": 14309
@@ -108652,7 +108650,7 @@
         "https://app.crackingthecryptic.com/sudoku/P44Rj4NGhP"
       ],
       "date": "2022-03-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -108676,8 +108674,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3166,
-      "solve_ms": 5801.4,
+      "guesses": 2158,
+      "solve_ms": 6985.4,
       "iss_size": 586542,
       "iss_url_length": 591355,
       "script_size": 14214
@@ -109574,7 +109572,7 @@
         "https://app.crackingthecryptic.com/sudoku/pr8b4tmLpL"
       ],
       "date": "2022-03-17",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -109598,8 +109596,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 311221,
-      "solve_ms": 41053.4,
+      "guesses": 43870,
+      "solve_ms": 7187.0,
       "iss_size": 13404,
       "iss_url_length": 12562,
       "script_size": 5669
@@ -110557,7 +110555,7 @@
         "https://app.crackingthecryptic.com/sudoku/fJnrmHf8QT"
       ],
       "date": "2022-03-06",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "Var",
@@ -110579,8 +110577,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 21168,
-      "solve_ms": 49482.4,
+      "guesses": 2730,
+      "solve_ms": 12705.8,
       "iss_size": 993495,
       "iss_url_length": 993246,
       "script_size": 25490
@@ -110828,7 +110826,7 @@
         "https://tinyurl.com/yxkz85wk"
       ],
       "date": "2022-03-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 15x15",
         "0-15",
@@ -110863,7 +110861,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1025,
-      "solve_ms": 199960.8,
+      "solve_ms": 220228.1,
       "iss_size": 631425,
       "iss_url_length": 631668,
       "script_size": 10024
@@ -110929,7 +110927,7 @@
         "https://app.crackingthecryptic.com/sudoku/8DfMHmLpqP"
       ],
       "date": "2022-03-01",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -110943,8 +110941,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 44408,
-      "solve_ms": 86353.8,
+      "guesses": 6291,
+      "solve_ms": 12978.4,
       "iss_size": 52246,
       "iss_url_length": 52304,
       "script_size": 11567
@@ -111479,7 +111477,7 @@
         "https://app.crackingthecryptic.com/sudoku/QH26FPT6mF"
       ],
       "date": "2022-02-21",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Var",
@@ -111514,8 +111512,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 64493,
-      "solve_ms": 62704.0,
+      "guesses": 10465,
+      "solve_ms": 7021.6,
       "iss_size": 55819,
       "iss_url_length": 55841,
       "script_size": 10255
@@ -114740,7 +114738,7 @@
         "https://app.crackingthecryptic.com/sudoku/B2nt9qTFp9"
       ],
       "date": "2022-01-23",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-15",
         "Replicate",
@@ -114755,11 +114753,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 28903,
-      "solve_ms": 50827.4,
+      "guesses": 4284,
+      "solve_ms": 4679.9,
       "iss_size": 320149,
       "iss_url_length": 322233,
-      "script_size": 8814
+      "script_size": 9164
     },
     {
       "puzzle_id": "dDozFKP2Bpo",
@@ -115895,7 +115893,7 @@
         "https://app.crackingthecryptic.com/sudoku/hJ3qL9nN4Q"
       ],
       "date": "2022-01-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-10",
         "Var",
@@ -116000,8 +115998,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 17836,
-      "solve_ms": 48039.8,
+      "guesses": 2734,
+      "solve_ms": 7811.1,
       "iss_size": 87276,
       "iss_url_length": 87283,
       "script_size": 9266
@@ -116297,7 +116295,7 @@
         "https://app.crackingthecryptic.com/sudoku/3Tbt4Ftqnj"
       ],
       "date": "2022-01-05",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 9x9",
         "ContainExact",
@@ -116560,8 +116558,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1363656,
-      "solve_ms": 37764.7,
+      "guesses": 167240,
+      "solve_ms": 6152.8,
       "iss_size": 15703,
       "iss_url_length": 15722,
       "script_size": 6578
@@ -117460,7 +117458,7 @@
         "https://app.crackingthecryptic.com/sudoku/mqBfrp8gGh"
       ],
       "date": "2021-12-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-13",
         "Var",
@@ -117478,8 +117476,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 523121,
-      "solve_ms": 36093.5,
+      "guesses": 88304,
+      "solve_ms": 6337.1,
       "iss_size": 25700,
       "iss_url_length": 25693,
       "script_size": 14323
@@ -118003,7 +118001,7 @@
         "https://tinyurl.com/pw63xfe3"
       ],
       "date": "2021-12-17",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "Replicate",
@@ -118018,11 +118016,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 83602,
-      "solve_ms": 20422.8,
-      "iss_size": 88462,
-      "iss_url_length": 85615,
-      "script_size": 7100
+      "guesses": 12277,
+      "solve_ms": 4164.0,
+      "iss_size": 88848,
+      "iss_url_length": 86001,
+      "script_size": 7533
     },
     {
       "puzzle_id": "fDBtEMZXfMA",
@@ -119663,7 +119661,7 @@
         "https://app.crackingthecryptic.com/sudoku/RLmT4jmJGM"
       ],
       "date": "2021-11-25",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-16",
         "Replicate",
@@ -119678,8 +119676,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 508510,
-      "solve_ms": 31405.0,
+      "guesses": 64259,
+      "solve_ms": 5268.4,
       "iss_size": 44088,
       "iss_url_length": 42942,
       "script_size": 3462
@@ -119693,7 +119691,7 @@
         "https://app.crackingthecryptic.com/sudoku/MF3rQB3Tgr"
       ],
       "date": "2021-11-25",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Quad",
         "Or",
@@ -119704,8 +119702,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 205206,
-      "solve_ms": 56576.0,
+      "guesses": 28405,
+      "solve_ms": 9580.5,
       "iss_size": 13031,
       "iss_url_length": 12381,
       "script_size": 1763
@@ -120923,7 +120921,7 @@
         "https://app.crackingthecryptic.com/sudoku/gF94jrq8bf"
       ],
       "date": "2021-11-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 9x9",
         "Var",
@@ -120955,8 +120953,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 39772,
-      "solve_ms": 9053.3,
+      "guesses": 33475,
+      "solve_ms": 7967.9,
       "iss_size": 87475,
       "iss_url_length": 87408,
       "script_size": 15810
@@ -121091,7 +121089,7 @@
         "https://app.crackingthecryptic.com/sudoku/B3Rd8LDrdQ"
       ],
       "date": "2021-11-07",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "AllDifferent",
@@ -121115,8 +121113,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 677220,
-      "solve_ms": 40400.5,
+      "guesses": 58057,
+      "solve_ms": 6530.3,
       "iss_size": 5003,
       "iss_url_length": 5082,
       "script_size": 5046
@@ -122668,7 +122666,7 @@
         "https://app.crackingthecryptic.com/sudoku/hTHqF2DP3b"
       ],
       "date": "2021-10-18",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -122710,8 +122708,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 6397,
-      "solve_ms": 55252.4,
+      "guesses": 1031,
+      "solve_ms": 11089.7,
       "iss_size": 57848,
       "iss_url_length": 57837,
       "script_size": 6307
@@ -123054,7 +123052,7 @@
         "https://app.crackingthecryptic.com/sudoku/H3Jt9J2fdg"
       ],
       "date": "2021-10-13",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -123069,8 +123067,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 62555,
-      "solve_ms": 52800.4,
+      "guesses": 8771,
+      "solve_ms": 10411.4,
       "iss_size": 82488,
       "iss_url_length": 82515,
       "script_size": 9532
@@ -123107,7 +123105,7 @@
         "https://app.crackingthecryptic.com/sudoku/qF8D7mDRnF"
       ],
       "date": "2021-10-12",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Var",
@@ -123124,8 +123122,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 36134,
-      "solve_ms": 37098.4,
+      "guesses": 2706,
+      "solve_ms": 6879.1,
       "iss_size": 121028,
       "iss_url_length": 119923,
       "script_size": 10229
@@ -124990,7 +124988,7 @@
         "https://app.crackingthecryptic.com/sudoku/qLJgbhGhFb"
       ],
       "date": "2021-09-16",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-12",
         "Replicate",
@@ -125014,8 +125012,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 363445,
-      "solve_ms": 55387.7,
+      "guesses": 42251,
+      "solve_ms": 8361.2,
       "iss_size": 33240,
       "iss_url_length": 33236,
       "script_size": 8602
@@ -127034,7 +127032,7 @@
         "https://app.crackingthecryptic.com/sudoku/8RprrG92pb"
       ],
       "date": "2021-08-20",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NFA: SweepR3C6=1",
         "NFA: SweepR4C1=1",
@@ -127066,8 +127064,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 383154,
-      "solve_ms": 52861.8,
+      "guesses": 54538,
+      "solve_ms": 8791.4,
       "iss_size": 4735,
       "iss_url_length": 4826,
       "script_size": 3139
@@ -131063,7 +131061,7 @@
         "https://app.crackingthecryptic.com/sudoku/jnb34B883R"
       ],
       "date": "2021-06-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Replicate",
@@ -131515,8 +131513,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 730826,
-      "solve_ms": 80081.5,
+      "guesses": 99909,
+      "solve_ms": 12801.5,
       "iss_size": 26438,
       "iss_url_length": 25629,
       "script_size": 4050
@@ -132170,7 +132168,7 @@
         "https://app.crackingthecryptic.com/sudoku/f4F3rNQBBr"
       ],
       "date": "2021-06-16",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-16",
         "Var",
@@ -132193,8 +132191,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 223149,
-      "solve_ms": 75871.2,
+      "guesses": 26182,
+      "solve_ms": 12975.5,
       "iss_size": 110841,
       "iss_url_length": 110746,
       "script_size": 16642
@@ -133169,7 +133167,7 @@
         "https://app.crackingthecryptic.com/sudoku/PRmP9dLgBM"
       ],
       "date": "2021-06-01",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Var",
@@ -133216,8 +133214,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 8344,
-      "solve_ms": 62628.4,
+      "guesses": 1350,
+      "solve_ms": 9884.7,
       "iss_size": 113389,
       "iss_url_length": 113391,
       "script_size": 8283
@@ -133580,7 +133578,7 @@
         "https://app.crackingthecryptic.com/sudoku/JGPFmGQqMT"
       ],
       "date": "2021-05-25",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Sum",
@@ -133594,8 +133592,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 33681,
-      "solve_ms": 54742.4,
+      "guesses": 4882,
+      "solve_ms": 7490.8,
       "iss_size": 71470,
       "iss_url_length": 68998,
       "script_size": 10031
@@ -133728,7 +133726,7 @@
         "https://app.crackingthecryptic.com/sudoku/btgQm83JD2"
       ],
       "date": "2021-05-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -133743,8 +133741,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 205145,
-      "solve_ms": 53111.6,
+      "guesses": 9271,
+      "solve_ms": 7968.7,
       "iss_size": 15029,
       "iss_url_length": 14993,
       "script_size": 5321
@@ -134148,7 +134146,7 @@
         "https://app.crackingthecryptic.com/sudoku/PB7bNLRffQ"
       ],
       "date": "2021-05-14",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-12",
         "Var",
@@ -134167,8 +134165,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 67419,
-      "solve_ms": 4100.9,
+      "guesses": 45375,
+      "solve_ms": 4920.6,
       "iss_size": 126618,
       "iss_url_length": 120344,
       "script_size": 9737
@@ -135044,7 +135042,7 @@
         "https://app.crackingthecryptic.com/sudoku/Pr2DghHMj9"
       ],
       "date": "2021-04-28",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-11",
         "Replicate",
@@ -135084,8 +135082,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2524,
-      "solve_ms": 55641.3,
+      "guesses": 1010,
+      "solve_ms": 23168.8,
       "iss_size": 358433,
       "iss_url_length": 358738,
       "script_size": 8059
@@ -135816,7 +135814,7 @@
         "https://app.crackingthecryptic.com/sudoku/9DN7gg4mMb"
       ],
       "date": "2021-04-14",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -135827,8 +135825,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 891551,
-      "solve_ms": 24505.5,
+      "guesses": 50447,
+      "solve_ms": 3071.8,
       "iss_size": 367,
       "iss_url_length": 400,
       "script_size": 1978
@@ -136109,7 +136107,7 @@
         "https://app.crackingthecryptic.com/sudoku/jR4nn3qH92"
       ],
       "date": "2021-04-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 15x15",
         "1-12",
@@ -136124,8 +136122,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 7029,
-      "solve_ms": 7797.4,
+      "guesses": 7331,
+      "solve_ms": 8292.4,
       "iss_size": 343747,
       "iss_url_length": 343717,
       "script_size": 11679
@@ -137299,7 +137297,7 @@
         "https://app.crackingthecryptic.com/sudoku/qTGfqrRLdd"
       ],
       "date": "2021-03-18",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-15",
         "Var",
@@ -137314,8 +137312,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2033929,
-      "solve_ms": 36709.1,
+      "guesses": 336730,
+      "solve_ms": 3343.3,
       "iss_size": 21879,
       "iss_url_length": 20633,
       "script_size": 3909
@@ -137820,7 +137818,7 @@
         "https://app.crackingthecryptic.com/sudoku/2f4fTR6t6B"
       ],
       "date": "2021-03-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 12x12",
         "1-13",
@@ -137839,8 +137837,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 6345,
-      "solve_ms": 6206.4,
+      "guesses": 7625,
+      "solve_ms": 6170.6,
       "iss_size": 397310,
       "iss_url_length": 397262,
       "script_size": 16895
@@ -139915,7 +139913,7 @@
         "https://app.crackingthecryptic.com/sudoku/Dgtf7gGM4L"
       ],
       "date": "2021-02-18",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Var",
@@ -139933,8 +139931,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 56811,
-      "solve_ms": 25699.1,
+      "guesses": 8833,
+      "solve_ms": 9153.4,
       "iss_size": 150487,
       "iss_url_length": 146938,
       "script_size": 13344
@@ -140343,7 +140341,7 @@
         "https://app.crackingthecryptic.com/sudoku/RR8mDPLDJJ"
       ],
       "date": "2021-02-10",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -140396,8 +140394,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 18701,
-      "solve_ms": 51028.4,
+      "guesses": 3234,
+      "solve_ms": 12634.1,
       "iss_size": 64021,
       "iss_url_length": 63345,
       "script_size": 13074
@@ -141566,7 +141564,7 @@
         "https://app.crackingthecryptic.com/sudoku/Dqn8J6fnp8"
       ],
       "date": "2021-01-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 1x1",
         "0-1",
@@ -141579,8 +141577,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 386146,
-      "solve_ms": 7222.2,
+      "guesses": 365001,
+      "solve_ms": 6867.5,
       "iss_size": 13373,
       "iss_url_length": 13368,
       "script_size": 7392
@@ -142343,7 +142341,7 @@
         "https://app.crackingthecryptic.com/sudoku/6dP4FN27HB"
       ],
       "date": "2021-01-12",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Or",
         "And",
@@ -142473,8 +142471,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 399745,
-      "solve_ms": 38762.5,
+      "guesses": 65713,
+      "solve_ms": 6362.7,
       "iss_size": 17089,
       "iss_url_length": 16974,
       "script_size": 12326
@@ -143323,7 +143321,7 @@
         "https://tinyurl.com/y79sa9n2"
       ],
       "date": "2020-12-27",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -143346,7 +143344,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1131,
-      "solve_ms": 13935.4,
+      "solve_ms": 13492.6,
       "iss_size": 589337,
       "iss_url_length": 594113,
       "script_size": 12424
@@ -143574,7 +143572,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/jL6nGj2Dr2"
       ],
       "date": "2020-12-23",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 12x12",
         "0-15",
@@ -143596,7 +143594,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1147,
-      "solve_ms": 40278.6,
+      "solve_ms": 39282.8,
       "iss_size": 1164355,
       "iss_url_length": 1171296,
       "script_size": 11944
@@ -143796,7 +143794,7 @@
         "https://app.crackingthecryptic.com/sudoku/GHr3MNpNBd"
       ],
       "date": "2020-12-20",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Replicate",
@@ -143811,8 +143809,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1578964,
-      "solve_ms": 21090.8,
+      "guesses": 212337,
+      "solve_ms": 3899.6,
       "iss_size": 2616,
       "iss_url_length": 2656,
       "script_size": 2503
@@ -144120,7 +144118,7 @@
         "https://app.crackingthecryptic.com/sudoku/tMD6fgrp68"
       ],
       "date": "2020-12-14",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "DisjointSets",
         "LittleKiller"
@@ -144129,8 +144127,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1904774,
-      "solve_ms": 32205.5,
+      "guesses": 219790,
+      "solve_ms": 5054.4,
       "iss_size": 233,
       "iss_url_length": 275,
       "script_size": 1314
@@ -144626,7 +144624,7 @@
         "https://app.crackingthecryptic.com/webapp/bPgHhFJdm4"
       ],
       "date": "2020-12-04",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-15",
         "Var",
@@ -144716,8 +144714,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 31642,
-      "solve_ms": 72203.9,
+      "guesses": 5047,
+      "solve_ms": 11603.4,
       "iss_size": 72129,
       "iss_url_length": 72067,
       "script_size": 10893
@@ -145149,7 +145147,7 @@
         "https://app.crackingthecryptic.com/webapp/JFDJD8j4nf"
       ],
       "date": "2020-11-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -145162,8 +145160,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 392435,
-      "solve_ms": 15220.4,
+      "guesses": 56520,
+      "solve_ms": 2384.9,
       "iss_size": 14286,
       "iss_url_length": 14326,
       "script_size": 6742
@@ -145495,7 +145493,7 @@
         "https://app.crackingthecryptic.com/webapp/GBfd7PptH8"
       ],
       "date": "2020-11-20",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-16",
         "Replicate",
@@ -145511,8 +145509,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 21126,
-      "solve_ms": 29089.6,
+      "guesses": 3654,
+      "solve_ms": 6645.9,
       "iss_size": 65526,
       "iss_url_length": 65636,
       "script_size": 8765
@@ -145662,7 +145660,7 @@
         "https://app.crackingthecryptic.com/webapp/6MfbJmQ66B"
       ],
       "date": "2020-11-17",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Thermo",
@@ -145682,8 +145680,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 831068,
-      "solve_ms": 60251.8,
+      "guesses": 136661,
+      "solve_ms": 6288.8,
       "iss_size": 20162,
       "iss_url_length": 19184,
       "script_size": 4910
@@ -145953,7 +145951,7 @@
         "https://app.crackingthecryptic.com/webapp/rpP7FHfLLD"
       ],
       "date": "2020-11-11",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -146054,8 +146052,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 125243,
-      "solve_ms": 43313.6,
+      "guesses": 17211,
+      "solve_ms": 8711.7,
       "iss_size": 16264,
       "iss_url_length": 16461,
       "script_size": 4678
@@ -146357,7 +146355,7 @@
         "https://app.crackingthecryptic.com/webapp/2p2P7BbPjr"
       ],
       "date": "2020-11-06",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x13",
         "1-12",
@@ -146374,8 +146372,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 11267,
-      "solve_ms": 8616.9,
+      "guesses": 10163,
+      "solve_ms": 8009.4,
       "iss_size": 316157,
       "iss_url_length": 316124,
       "script_size": 14325
@@ -146946,7 +146944,7 @@
         "https://app.crackingthecryptic.com/webapp/mf8tfG3jjP"
       ],
       "date": "2020-10-26",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "AllDifferent",
         "AntiKnight",
@@ -146957,8 +146955,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 26270,
-      "solve_ms": 67072.5,
+      "guesses": 3058,
+      "solve_ms": 9172.0,
       "iss_size": 12615,
       "iss_url_length": 12646,
       "script_size": 5730
@@ -147831,7 +147829,7 @@
         "https://app.crackingthecryptic.com/webapp/mQgPbbGfGr"
       ],
       "date": "2020-10-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -147890,8 +147888,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 11084,
-      "solve_ms": 55168.7,
+      "guesses": 1963,
+      "solve_ms": 9750.5,
       "iss_size": 83573,
       "iss_url_length": 83571,
       "script_size": 12238
@@ -148375,7 +148373,7 @@
         "https://tinyurl.com/y4uxa62s"
       ],
       "date": "2020-10-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -148402,8 +148400,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1387,
-      "solve_ms": 9398.5,
+      "guesses": 1420,
+      "solve_ms": 9436.8,
       "iss_size": 975727,
       "iss_url_length": 982563,
       "script_size": 20247
@@ -148591,7 +148589,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/PbmLMptRLN"
       ],
       "date": "2020-09-28",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "ContainAtLeast",
@@ -148606,8 +148604,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 47057,
-      "solve_ms": 48535.8,
+      "guesses": 8586,
+      "solve_ms": 7882.6,
       "iss_size": 209153,
       "iss_url_length": 209112,
       "script_size": 17604
@@ -149525,7 +149523,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/GHQFrF6Dqq"
       ],
       "date": "2020-09-13",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -149539,8 +149537,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1500021,
-      "solve_ms": 20881.4,
+      "guesses": 204093,
+      "solve_ms": 3233.7,
       "iss_size": 5262,
       "iss_url_length": 4862,
       "script_size": 5498
@@ -149879,7 +149877,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/4RBQDTHFfn"
       ],
       "date": "2020-09-08",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 12x12",
         "1-13",
@@ -149944,8 +149942,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 7778,
-      "solve_ms": 47596.1,
+      "guesses": 1011,
+      "solve_ms": 10107.0,
       "iss_size": 365204,
       "iss_url_length": 345940,
       "script_size": 10502
@@ -149959,7 +149957,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/4RBQDTHFfn"
       ],
       "date": "2020-09-07",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 12x12",
         "0-12",
@@ -150024,8 +150022,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 8236,
-      "solve_ms": 22270.8,
+      "guesses": 1421,
+      "solve_ms": 8902.2,
       "iss_size": 427642,
       "iss_url_length": 408463,
       "script_size": 10722
@@ -150508,7 +150506,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/HQGn6PG27m"
       ],
       "date": "2020-08-31",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 9x9",
         "0-9",
@@ -150532,8 +150530,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 271789,
-      "solve_ms": 20988.0,
+      "guesses": 42598,
+      "solve_ms": 4796.6,
       "iss_size": 144106,
       "iss_url_length": 146548,
       "script_size": 11992
@@ -150865,34 +150863,34 @@
         "https://cracking-the-cryptic.web.app/sudoku/mtbqn9TP4F"
       ],
       "date": "2020-08-24",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 12x12",
         "0-9",
         "NFA: row-7-sums",
         "NFA: col-11-sums",
-        "NFA: row-12-sums",
         "NFA: col-4-sums",
+        "NFA: row-12-sums",
         "NFA: row-9-sums",
-        "NFA: row-4-sums",
-        "NFA: col-8-sums",
         "NFA: col-10-sums",
         "NFA: col-9-sums",
-        "NFA: row-3-sums",
-        "NFA: col-2-sums",
-        "NFA: col-5-sums",
+        "NFA: row-4-sums",
+        "NFA: col-8-sums",
+        "NFA: row-5-sums",
+        "NFA: row-10-sums",
+        "NFA: row-2-sums",
+        "NFA: row-11-sums",
+        "NFA: col-6-sums",
+        "NFA: row-1-sums",
+        "NFA: row-8-sums",
         "NFA: col-1-sums",
         "NFA: col-12-sums",
         "NFA: col-3-sums",
         "NFA: col-7-sums",
         "NFA: row-6-sums",
-        "NFA: col-6-sums",
-        "NFA: row-1-sums",
-        "NFA: row-8-sums",
-        "NFA: row-5-sums",
-        "NFA: row-11-sums",
-        "NFA: row-10-sums",
-        "NFA: row-2-sums",
+        "NFA: col-2-sums",
+        "NFA: col-5-sums",
+        "NFA: row-3-sums",
         "NFA: col-1-unique",
         "NFA: col-10-unique",
         "NFA: col-11-unique",
@@ -150921,12 +150919,12 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 24070,
-      "solve_ms": 46410.0,
-      "iss_size": 12716,
-      "iss_url_length": 12751,
-      "script_size": 4891
+      "solutions_found": 1,
+      "guesses": 3591,
+      "solve_ms": 10381.3,
+      "iss_size": 12706,
+      "iss_url_length": 12741,
+      "script_size": 5422
     },
     {
       "puzzle_id": "eDzWSEgzawI",
@@ -151005,7 +151003,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/MD22p7gMRT"
       ],
       "date": "2020-08-23",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Or",
@@ -151028,8 +151026,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 681060,
-      "solve_ms": 32101.9,
+      "guesses": 52791,
+      "solve_ms": 4772.6,
       "iss_size": 13556,
       "iss_url_length": 12779,
       "script_size": 5638
@@ -151099,7 +151097,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/LmGLhRTHj2"
       ],
       "date": "2020-08-21",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Sum",
         "NFA: CageFight",
@@ -151109,8 +151107,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 114862,
-      "solve_ms": 44243.4,
+      "guesses": 5311,
+      "solve_ms": 7947.1,
       "iss_size": 18421,
       "iss_url_length": 18471,
       "script_size": 3408
@@ -151124,7 +151122,7 @@
         "https://tinyurl.com/y22mojbw"
       ],
       "date": "2020-08-21",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x15",
         "1-14",
@@ -151144,8 +151142,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2687,
-      "solve_ms": 8412.1,
+      "guesses": 3103,
+      "solve_ms": 8085.2,
       "iss_size": 1847232,
       "iss_url_length": 1847044,
       "script_size": 21259
@@ -151233,7 +151231,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/PtjrqnTpPB"
       ],
       "date": "2020-08-19",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Sum",
@@ -151247,8 +151245,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 168832,
-      "solve_ms": 73027.6,
+      "guesses": 9950,
+      "solve_ms": 12722.6,
       "iss_size": 4118,
       "iss_url_length": 4201,
       "script_size": 5923
@@ -151451,63 +151449,17 @@
         "https://cracking-the-cryptic.web.app/sudoku/Jb4tLNM7HN"
       ],
       "date": "2020-08-16",
-      "status": "unverified",
-      "constraint_types": [
-        "0-9",
-        "Replicate",
-        "Var",
-        "AllDifferent",
-        "EqualSum",
-        "Sum",
-        "Or",
-        "And",
-        "SameValues",
-        "NFA: yellowgreenPrime",
-        "NFA: bluePrime",
-        "NFA: grayPrime",
-        "NFA: purplePrime",
-        "NFA: redPrime",
-        "Pair: red-blue h",
-        "Pair: red-blue t",
-        "Pair: red-blue u",
-        "Pair: red-yellowgreen h",
-        "Pair: red-yellowgreen t",
-        "Pair: red-yellowgreen u",
-        "Pair: red-gray h",
-        "Pair: red-gray t",
-        "Pair: red-gray u",
-        "Pair: red-purple h",
-        "Pair: red-purple t",
-        "Pair: red-purple u",
-        "Pair: blue-yellowgreen h",
-        "Pair: blue-yellowgreen t",
-        "Pair: blue-yellowgreen u",
-        "Pair: blue-gray h",
-        "Pair: blue-gray t",
-        "Pair: blue-gray u",
-        "Pair: blue-purple h",
-        "Pair: blue-purple t",
-        "Pair: blue-purple u",
-        "Pair: yellowgreen-gray h",
-        "Pair: yellowgreen-gray t",
-        "Pair: yellowgreen-gray u",
-        "Pair: yellowgreen-purple h",
-        "Pair: yellowgreen-purple t",
-        "Pair: yellowgreen-purple u",
-        "Pair: gray-purple h",
-        "Pair: gray-purple t",
-        "Pair: gray-purple u",
-        "Given"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
+      "status": "decode-failed",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 2419364,
-      "solve_ms": 25450.3,
-      "iss_size": 4832,
-      "iss_url_length": 4823,
-      "script_size": 9226
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
     },
     {
       "puzzle_id": "M7CZmrarl5U",
@@ -151927,38 +151879,6 @@
       "script_size": 1399
     },
     {
-      "puzzle_id": "lG5XPsGoxBU.2",
-      "video_id": "lG5XPsGoxBU",
-      "puzzle_title": "The Magic Behind The Miracle Sudoku",
-      "video_title": "The Magic Behind The Miracle Sudoku",
-      "author": null,
-      "sources": [
-        "https://tinyurl.com/y6uj669k"
-      ],
-      "date": "2020-08-08",
-      "status": "unverified",
-      "constraint_types": [
-        "Raw 6x9",
-        "0-4",
-        "ConnectedValues",
-        "ContainExact",
-        "LookAndSay",
-        "Or",
-        "And",
-        "Pair: joker-symmetry",
-        "Given"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 2158282,
-      "solve_ms": 27496.8,
-      "iss_size": 16896,
-      "iss_url_length": 16770,
-      "script_size": 5325
-    },
-    {
       "puzzle_id": "6rCLaTS8z2o",
       "puzzle_title": "Tumbleweed Sudoku",
       "video_title": "Tumbleweed Sudoku",
@@ -152014,38 +151934,6 @@
       "iss_size": 2559,
       "iss_url_length": 2612,
       "script_size": 3084
-    },
-    {
-      "puzzle_id": "JvEh37dS1xw.2",
-      "video_id": "JvEh37dS1xw",
-      "puzzle_title": "A Sudoku With A 100% Rating",
-      "video_title": "A Sudoku With A 100% Rating",
-      "author": null,
-      "sources": [
-        "https://tinyurl.com/y6uj669k"
-      ],
-      "date": "2020-08-07",
-      "status": "unverified",
-      "constraint_types": [
-        "Raw 6x9",
-        "0-4",
-        "ConnectedValues",
-        "ContainExact",
-        "LookAndSay",
-        "Or",
-        "And",
-        "Pair: joker-symmetry",
-        "Given"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
-      "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 2189790,
-      "solve_ms": 28392.6,
-      "iss_size": 16896,
-      "iss_url_length": 16770,
-      "script_size": 5325
     },
     {
       "puzzle_id": "DKBDO_Qu48c",
@@ -152275,7 +152163,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/hDNMJqPmTh"
       ],
       "date": "2020-08-03",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Replicate",
@@ -152290,8 +152178,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 19853,
-      "solve_ms": 948.6,
+      "guesses": 29799,
+      "solve_ms": 1062.1,
       "iss_size": 462110,
       "iss_url_length": 461976,
       "script_size": 14122
@@ -152328,7 +152216,7 @@
         "https://tinyurl.com/y95cepq5"
       ],
       "date": "2020-08-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-15",
@@ -152355,7 +152243,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1141,
-      "solve_ms": 10668.3,
+      "solve_ms": 12701.4,
       "iss_size": 589006,
       "iss_url_length": 593813,
       "script_size": 17837
@@ -152472,7 +152360,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/pnf623FF7B"
       ],
       "date": "2020-07-31",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Arrow",
         "GreaterThan",
@@ -152489,8 +152377,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1666670,
-      "solve_ms": 32933.2,
+      "guesses": 230422,
+      "solve_ms": 5305.9,
       "iss_size": 1864,
       "iss_url_length": 1949,
       "script_size": 2936
@@ -153400,7 +153288,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/4bn87PGj77"
       ],
       "date": "2020-07-15",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "1-12",
@@ -153414,8 +153302,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 327386,
-      "solve_ms": 30490.9,
+      "guesses": 32685,
+      "solve_ms": 5288.7,
       "iss_size": 74786,
       "iss_url_length": 74732,
       "script_size": 11392
@@ -154277,12 +154165,12 @@
         "https://cracking-the-cryptic.web.app/sudoku/BpGttT8BLr"
       ],
       "date": "2020-06-30",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "1-12",
         "Var",
-        "Or",
+        "AllDifferent",
         "NFA: column 1",
         "NFA: column 10",
         "NFA: column 2",
@@ -154309,11 +154197,11 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 123756,
-      "solve_ms": 39346.1,
-      "iss_size": 9558,
-      "iss_url_length": 9636,
-      "script_size": 8223
+      "guesses": 24005,
+      "solve_ms": 4546.3,
+      "iss_size": 9708,
+      "iss_url_length": 9788,
+      "script_size": 8915
     },
     {
       "puzzle_id": "YsDJO6MHSjU.2",
@@ -154325,7 +154213,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/BH49r9mBng"
       ],
       "date": "2020-06-30",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "1-12",
@@ -154339,8 +154227,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 403554,
-      "solve_ms": 39839.4,
+      "guesses": 30809,
+      "solve_ms": 10590.1,
       "iss_size": 74751,
       "iss_url_length": 74697,
       "script_size": 11907
@@ -154695,7 +154583,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/3hMqHMBMP4"
       ],
       "date": "2020-06-23",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Replicate",
@@ -154710,8 +154598,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 74199,
-      "solve_ms": 96786.4,
+      "guesses": 8992,
+      "solve_ms": 10033.9,
       "iss_size": 293138,
       "iss_url_length": 282312,
       "script_size": 8115
@@ -154754,27 +154642,42 @@
         "https://cracking-the-cryptic.web.app/sudoku/JfFBFHMHqG"
       ],
       "date": "2020-06-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-10",
         "Replicate",
         "Var",
-        "ConnectedValues",
-        "ContainAtLeast",
-        "Pair: galaxy-symmetry",
-        "NFA: galaxy-sum",
-        "NFA: galaxy-degree",
+        "Or",
+        "And",
+        "NFA: galaxy-A-between-sum",
+        "NFA: galaxy-A-distinct",
+        "NFA: galaxy-B-distinct",
+        "NFA: galaxy-B-between-sum",
+        "NFA: galaxy-C-distinct",
+        "NFA: galaxy-C-between-sum",
+        "NFA: galaxy-D-between-sum",
+        "NFA: galaxy-D-distinct",
+        "NFA: galaxy-E-between-sum",
+        "NFA: galaxy-E-distinct",
+        "NFA: galaxy-F-distinct",
+        "NFA: galaxy-F-between-sum",
+        "NFA: galaxy-G-between-sum",
+        "NFA: galaxy-G-distinct",
+        "NFA: galaxy-H-between-sum",
+        "NFA: galaxy-H-distinct",
+        "NFA: galaxy-I-distinct",
+        "NFA: galaxy-I-between-sum",
         "Given"
       ],
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 58601,
-      "solve_ms": 49706.3,
-      "iss_size": 143391,
-      "iss_url_length": 143398,
-      "script_size": 11311
+      "guesses": 5000,
+      "solve_ms": 12321.9,
+      "iss_size": 4645323,
+      "iss_url_length": 4644567,
+      "script_size": 10440
     },
     {
       "puzzle_id": "9a_5dcBJPw4",
@@ -154809,7 +154712,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/njQnT9RpTR"
       ],
       "date": "2020-06-21",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "ChaosConstruction",
@@ -154831,8 +154734,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 26776,
-      "solve_ms": 73212.7,
+      "guesses": 3697,
+      "solve_ms": 11059.0,
       "iss_size": 156497,
       "iss_url_length": 156536,
       "script_size": 3535
@@ -155154,7 +155057,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/NP224HdrF4"
       ],
       "date": "2020-06-15",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Var",
@@ -155168,8 +155071,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2343760,
-      "solve_ms": 28084.0,
+      "guesses": 116163,
+      "solve_ms": 3666.6,
       "iss_size": 1800,
       "iss_url_length": 1818,
       "script_size": 3419
@@ -155322,7 +155225,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/29tgh3PGTm"
       ],
       "date": "2020-06-13",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "NoBoxes",
         "Jigsaw",
@@ -155345,8 +155248,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 12411,
-      "solve_ms": 76892.7,
+      "guesses": 1024,
+      "solve_ms": 14047.6,
       "iss_size": 28790,
       "iss_url_length": 28815,
       "script_size": 7500
@@ -155521,7 +155424,7 @@
         "https://tinyurl.com/ybt66u3b"
       ],
       "date": "2020-06-10",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Var",
         "Or",
@@ -155533,8 +155436,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1111125,
-      "solve_ms": 19954.7,
+      "guesses": 127891,
+      "solve_ms": 3083.4,
       "iss_size": 25565,
       "iss_url_length": 24452,
       "script_size": 3729
@@ -156025,7 +155928,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/bMgDT4PhpT"
       ],
       "date": "2020-06-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "0-9",
@@ -156038,8 +155941,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 60122,
-      "solve_ms": 1133.6,
+      "guesses": 54374,
+      "solve_ms": 1634.8,
       "iss_size": 1225,
       "iss_url_length": 1261,
       "script_size": 4925
@@ -156737,7 +156640,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/M8nf3Q7DJb"
       ],
       "date": "2020-05-19",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Replicate",
@@ -156753,8 +156656,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1898762,
-      "solve_ms": 7215.8,
+      "guesses": 264567,
+      "solve_ms": 4280.1,
       "iss_size": 4635,
       "iss_url_length": 4657,
       "script_size": 4114
@@ -157094,7 +156997,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/Qtd84QLnMr"
       ],
       "date": "2020-05-14",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-16",
         "Var",
@@ -157137,8 +157040,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 28704,
-      "solve_ms": 66060.7,
+      "guesses": 4393,
+      "solve_ms": 10991.9,
       "iss_size": 169364,
       "iss_url_length": 169362,
       "script_size": 9759
@@ -157287,7 +157190,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/bBGfgjB6mf"
       ],
       "date": "2020-05-11",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Var",
@@ -157302,8 +157205,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3773603,
-      "solve_ms": 10175.2,
+      "guesses": 248787,
+      "solve_ms": 4964.8,
       "iss_size": 4262,
       "iss_url_length": 4282,
       "script_size": 3737
@@ -157766,7 +157669,7 @@
         "https://tinyurl.com/ybyl6lv5"
       ],
       "date": "2020-05-02",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "0-9",
         "Var",
@@ -157784,8 +157687,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 109696,
-      "solve_ms": 55700.4,
+      "guesses": 17389,
+      "solve_ms": 10053.2,
       "iss_size": 42328,
       "iss_url_length": 42325,
       "script_size": 7631
@@ -158253,7 +158156,7 @@
         "https://tinyurl.com/ycuhgous"
       ],
       "date": "2020-04-24",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 15x15",
         "0-1",
@@ -158265,8 +158168,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3314978,
-      "solve_ms": 24923.7,
+      "guesses": 549506,
+      "solve_ms": 4313.4,
       "iss_size": 4687,
       "iss_url_length": 4706,
       "script_size": 4290
@@ -158538,29 +158441,17 @@
         "https://tinyurl.com/uayep59"
       ],
       "date": "2020-04-18",
-      "status": "unverified",
-      "constraint_types": [
-        "Raw 10x10",
-        "1-3",
-        "Replicate",
-        "Var",
-        "ConnectedValues",
-        "Sum",
-        "Pair: corner",
-        "NFA: corner",
-        "NFA: column crossing count",
-        "NFA: row crossing count",
-        "Given"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
+      "status": "decode-failed",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 944910,
-      "solve_ms": 45169.6,
-      "iss_size": 5121,
-      "iss_url_length": 5207,
-      "script_size": 6390
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
     },
     {
       "puzzle_id": "A64ktXOXjvc",
@@ -158934,28 +158825,17 @@
         "https://tinyurl.com/uo2wdru"
       ],
       "date": "2020-04-11",
-      "status": "unverified",
-      "constraint_types": [
-        "Raw 10x10",
-        "1-3",
-        "Replicate",
-        "Var",
-        "ConnectedValues",
-        "Sum",
-        "Pair: corner",
-        "NFA: border crossing count",
-        "NFA: corner",
-        "Given"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
+      "status": "decode-failed",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 1785755,
-      "solve_ms": 35617.1,
-      "iss_size": 4442,
-      "iss_url_length": 4503,
-      "script_size": 8138
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
     },
     {
       "puzzle_id": "cfn1gXSf7fg.3",
@@ -158967,29 +158847,17 @@
         "https://tinyurl.com/qlwrvlx"
       ],
       "date": "2020-04-11",
-      "status": "unverified",
-      "constraint_types": [
-        "Raw 13x13",
-        "1-3",
-        "Replicate",
-        "Var",
-        "ConnectedValues",
-        "Sum",
-        "AllDifferent",
-        "Pair: corner",
-        "NFA: crossing count",
-        "NFA: corner",
-        "Given"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
+      "status": "decode-failed",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 1351408,
-      "solve_ms": 42474.8,
-      "iss_size": 7304,
-      "iss_url_length": 7352,
-      "script_size": 7725
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
     },
     {
       "puzzle_id": "cfn1gXSf7fg.4",
@@ -159001,29 +158869,17 @@
         "https://tinyurl.com/uayep59"
       ],
       "date": "2020-04-11",
-      "status": "unverified",
-      "constraint_types": [
-        "Raw 10x10",
-        "1-3",
-        "Replicate",
-        "Var",
-        "ConnectedValues",
-        "Sum",
-        "Pair: corner",
-        "NFA: corner",
-        "NFA: column crossing count",
-        "NFA: row crossing count",
-        "Given"
-      ],
-      "search_completed": false,
-      "hit_cap": true,
+      "status": "decode-failed",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 937528,
-      "solve_ms": 44338.3,
-      "iss_size": 5121,
-      "iss_url_length": 5207,
-      "script_size": 6390
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
     },
     {
       "puzzle_id": "K5qoSr8Kxcc",
@@ -159266,7 +159122,7 @@
         "https://tinyurl.com/sdtjfz4"
       ],
       "date": "2020-04-06",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "Var",
@@ -159295,8 +159151,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2060,
-      "solve_ms": 9394.6,
+      "guesses": 1966,
+      "solve_ms": 10154.8,
       "iss_size": 307542,
       "iss_url_length": 305941,
       "script_size": 12362
@@ -159982,7 +159838,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/F26HHgG7rD"
       ],
       "date": "2020-03-19",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "1-12",
         "Var",
@@ -160029,7 +159885,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1029,
-      "solve_ms": 39571.6,
+      "solve_ms": 32733.6,
       "iss_size": 110166,
       "iss_url_length": 109993,
       "script_size": 9352
@@ -160662,7 +160518,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/Jbf4dnT83n"
       ],
       "date": "2020-02-22",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 13x13",
         "1-2",
@@ -160674,8 +160530,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 775200,
-      "solve_ms": 3552.4,
+      "guesses": 666676,
+      "solve_ms": 3154.7,
       "iss_size": 3610,
       "iss_url_length": 3635,
       "script_size": 5653
@@ -161842,7 +161698,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/pJQdGGb3bb"
       ],
       "date": "2020-01-06",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "1-16",
@@ -161856,8 +161712,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 1162809,
-      "solve_ms": 83600.6,
+      "guesses": 98147,
+      "solve_ms": 4743.6,
       "iss_size": 140006,
       "iss_url_length": 139048,
       "script_size": 3824
@@ -162523,7 +162379,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/QrJQhBfBFD"
       ],
       "date": "2019-12-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 11x11",
         "0-7",
@@ -162560,8 +162416,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 6866,
-      "solve_ms": 10671.8,
+      "guesses": 6435,
+      "solve_ms": 10958.1,
       "iss_size": 38853,
       "iss_url_length": 38849,
       "script_size": 9123
@@ -162576,7 +162432,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/RDLJJ8f9HM"
       ],
       "date": "2019-12-09",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 11x11",
         "0-7",
@@ -162613,8 +162469,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 6848,
-      "solve_ms": 10959.3,
+      "guesses": 5984,
+      "solve_ms": 10353.2,
       "iss_size": 38853,
       "iss_url_length": 38849,
       "script_size": 9024
@@ -162697,7 +162553,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/H348FJq4fD"
       ],
       "date": "2019-12-05",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 11x11",
         "1-12",
@@ -162733,8 +162589,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 943404,
-      "solve_ms": 35566.0,
+      "guesses": 153148,
+      "solve_ms": 6562.4,
       "iss_size": 9297,
       "iss_url_length": 9309,
       "script_size": 5917
@@ -162834,7 +162690,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/6jDFjgn3m4"
       ],
       "date": "2019-12-01",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 7x12",
         "1-13",
@@ -162852,8 +162708,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 278304,
-      "solve_ms": 16071.5,
+      "guesses": 43751,
+      "solve_ms": 3299.7,
       "iss_size": 102311,
       "iss_url_length": 95404,
       "script_size": 10647
@@ -163768,7 +163624,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/BgdnTrNHN8"
       ],
       "date": "2019-10-29",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 10x10",
         "1-11",
@@ -163790,8 +163646,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 467311,
-      "solve_ms": 62506.4,
+      "guesses": 76187,
+      "solve_ms": 9150.4,
       "iss_size": 48537,
       "iss_url_length": 48648,
       "script_size": 16423
@@ -165992,7 +165848,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/BQ2jdQQgT8"
       ],
       "date": "2019-08-17",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 15x15",
         "0-1",
@@ -166004,8 +165860,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 621161,
-      "solve_ms": 4702.3,
+      "guesses": 558706,
+      "solve_ms": 4349.5,
       "iss_size": 4687,
       "iss_url_length": 4706,
       "script_size": 4603
@@ -166894,7 +166750,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/P68BrQPTp7"
       ],
       "date": "2019-07-14",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 9x9",
         "ConnectedValues",
@@ -166905,8 +166761,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 2040829,
-      "solve_ms": 11621.9,
+      "guesses": 234757,
+      "solve_ms": 2063.4,
       "iss_size": 3458,
       "iss_url_length": 3482,
       "script_size": 4337
@@ -167038,7 +166894,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/pqg8LG64Tn"
       ],
       "date": "2019-07-08",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 8x8",
         "1-4",
@@ -167050,8 +166906,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 3157906,
-      "solve_ms": 10037.7,
+      "guesses": 440543,
+      "solve_ms": 1736.8,
       "iss_size": 2357,
       "iss_url_length": 2392,
       "script_size": 3240
@@ -167065,7 +166921,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/hrD6pHTQn4"
       ],
       "date": "2019-07-07",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 9x9",
         "ContainExact",
@@ -167093,9 +166949,9 @@
       "search_completed": false,
       "hit_cap": true,
       "unique_solution": null,
-      "solutions_found": 0,
-      "guesses": 483111,
-      "solve_ms": 1625.0,
+      "solutions_found": 1,
+      "guesses": 518147,
+      "solve_ms": 2004.0,
       "iss_size": 3180,
       "iss_url_length": 3203,
       "script_size": 3508
@@ -167705,7 +167561,7 @@
         "https://cracking-the-cryptic.web.app/sudoku/rpLjjQF383"
       ],
       "date": "2019-06-15",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 7x7",
         "0-15",
@@ -167725,8 +167581,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 33536,
-      "solve_ms": 10437.5,
+      "guesses": 33300,
+      "solve_ms": 10186.3,
       "iss_size": 583271,
       "iss_url_length": 584141,
       "script_size": 15339
@@ -171109,7 +170965,7 @@
       "author": "John Bulten",
       "sources": [],
       "date": "2018-06-25",
-      "status": "unverified",
+      "status": "too-slow",
       "constraint_types": [
         "Raw 1x1",
         "1-15",
@@ -171125,7 +170981,7 @@
       "unique_solution": null,
       "solutions_found": 0,
       "guesses": 1041,
-      "solve_ms": 14508.0,
+      "solve_ms": 15894.1,
       "iss_size": 1325894,
       "iss_url_length": 1337793,
       "script_size": 11012

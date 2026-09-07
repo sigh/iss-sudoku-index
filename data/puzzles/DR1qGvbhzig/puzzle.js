@@ -6,64 +6,30 @@
 // Normal sudoku, no givens. Nine "galaxies", one per drawn circle: each
 // galaxy is an unknown, solver-discovered line of >= 3 grid cells that is
 // (a) point-symmetric (180-degree) about its own circle, (b) one cell wide,
-// connected, and simple -- it may not touch itself and may not close into a
-// loop -- (c) holds no repeated digit, and (d) has a printed sum equal to
-// the total of its digits *excluding* its own smallest and largest digit.
-// Galaxies may not overlap; a cell may belong to no galaxy at all.
+// connected and simple -- it may not touch itself and may not close into a
+// loop -- (c) holds no repeated digit, and (d) whose printed number is the
+// sum of the digits lying BETWEEN its smallest and its largest digit --
+// positionally between, along the line, the way a Sandwich clue sums the
+// cells between the 1 and the 9. Galaxies may not overlap; a cell may belong
+// to no galaxy at all.
+//
+// The line is enumerated rather than described. Because a line's digits are
+// distinct and drawn from 1-9 it is at most 9 cells long, and point symmetry
+// plus the no-self-touch rule leave only 231 candidate lines across all nine
+// circles (14, 2, 14, 65, 56, 35, 21, 3, 21). Listing them is what makes the
+// positional clue expressible at all: "between the smallest and the largest"
+// needs the order of the cells along the line, which membership overlays plus
+// connectivity and degree rules never recover. Enumerating the lines supplies
+// that order directly, and in doing so replaces the symmetry, connectivity,
+// degree/endpoint and no-loop machinery entirely -- every enumerated line
+// already has those properties by construction.
 //
 // Circle positions and sums are transcribed from the payload's overlay list
-// (rounded dot markers paired with their nearest free-floating sum text).
-// Each galaxy has a computed "zone": the cells whose point reflection about
-// its circle also lands on the grid, i.e. the only cells that could ever
-// join that galaxy (a cell whose required mirror partner falls off the
-// board can never be part of a point-symmetric shape centred there).
-//
-// Encoding: one shared 10-value label overlay (VG) holds, per cell, which
-// galaxy (1-9) it belongs to, or OFF (10) for no galaxy -- membership in two
-// galaxies at once is impossible by construction, so "galaxies cannot
-// overlap" needs no separate rule. A second overlay (VE) marks, per cell,
-// which galaxy it is an *endpoint* of (or OFF), used only to rule out a
-// galaxy closing into a loop.
-//
-// Symmetry is a Pair per mirrored cell pair inside a galaxy's zone: cell a
-// holds label k iff its mirror b does. Cells outside a galaxy's zone are
-// never given that galaxy as an allowed label at all (Given per cell), since
-// such a cell's required mirror partner does not exist on the grid.
-//
-// The path shape (one cell wide, self-avoiding, no loop) is the standard
-// "route may not touch itself" case: ON/OFF membership plus a degree rule
-// over grid-adjacency closes it outright. Concretely, one small NFA per cell
-// reads that cell's own label, then each orthogonal neighbour's label, then
-// (Schrodinger-style) the cell's own endpoint marker: if the cell is OFF,
-// its endpoint marker must be OFF and neighbours are unconstrained; if it
-// holds label k, exactly 1 or 2 of its neighbours must also hold k (degree
-// 1 or 2 -- 0 or >=3 is rejected), and the endpoint marker must equal k
-// when the count is 1 (this cell is an endpoint) or OFF when it is 2. A
-// connected graph with every degree in {1,2} is either a single path (some
-// vertex has degree 1) or a single cycle (no vertex does) -- so requiring at
-// least one degree-1 (endpoint) cell per galaxy, together with
-// ConnectedValues, forces a simple path and excludes the loop case; that is
-// what the per-galaxy ContainAtLeast on VE below does.
-//
-// No-repeat and the sum both come from one more NFA per galaxy, scanning
-// only that galaxy's zone as interleaved (label, digit) pairs while tracking
-// a seen-digit bitmask: a repeat digit on this galaxy's own line is a dead
-// transition (no-repeat), and the accept predicate reads the final bitmask
-// to require >= 3 members and (sum of members - min - max) == the printed
-// total, in one step. That accept predicate also enforces "at least 3
-// cells" -- no separate size constraint is needed.
-//
-// "Cannot touch itself" is read as ordinary grid (orthogonal) adjacency,
-// same as the degree rule above already enforces; the rules text has no
-// "not even diagonally" clause (contrast Nordschleife-style loop rules that
-// state that explicitly), so no separate diagonal no-touch machine is added.
+// (rounded dot markers paired with their nearest free-floating sum text), in
+// a system where cell RrCc has its centre at (r - 0.5, c - 0.5).
 
-const OFF = 10; // sentinel label/endpoint value: this cell is in no galaxy
+const OFF = 10; // sentinel label: this cell is in no galaxy
 
-// id: numeric label value (1-9). row/col: the circle's own [row,col],
-// 0-indexed, continuous grid coordinates (an integer sits on a grid line, a
-// half-integer sits on a cell centre) -- copied straight from the payload's
-// overlay `center` field for that circle. sum: the paired printed total.
 const GALAXIES = [
   { id: 1, name: 'A', row: 1, col: 4.5, sum: 20 }, // edge R1C5/R2C5
   { id: 2, name: 'B', row: 1.5, col: 8, sum: 11 }, // edge R2C8/R2C9
@@ -76,10 +42,8 @@ const GALAXIES = [
   { id: 9, name: 'I', row: 6.5, col: 7, sum: 15 }, // edge R7C7/R7C8
 ];
 
-// Reflect grid cell (row0, col0) through galaxy g's circle. Returns
-// [row0, col0] of the mirror cell, or null if the mirror falls off the
-// 9x9 grid (so (row0, col0) can never be part of g: its required point-
-// symmetric partner would not exist).
+const MAX_LINE = 9; // a line's digits are distinct and drawn from 1-9
+
 function reflect(row0, col0, g) {
   const rowP = 2 * g.row - row0 - 1;
   const colP = 2 * g.col - col0 - 1;
@@ -89,15 +53,10 @@ function reflect(row0, col0, g) {
 }
 
 const graph = cellGraph('9x9');
-// NFA.encodeSpec needs the *widened* value count (10: nine galaxy ids plus
-// the OFF sentinel). graph.gridGeometry().numValues still reports the
-// pre-widening 9 at this point in the script, since the Shape constraint
-// below is only applied once the returned array is processed -- so the
-// Shape object itself (which NFA.encodeSpec also accepts in place of a bare
-// count) is what every NFA/Pair key below is built against.
+// NFA.encodeSpec needs the widened value count (10: nine galaxy ids plus OFF),
+// so the Shape object itself is what every machine below is built against.
 const shape = new Shape('9x9', 10);
 const label = graph.makeOverlay('VG');
-const endpoint = graph.makeOverlay('VE');
 
 const allCells = [];
 for (let row0 = 0; row0 < 9; row0++) {
@@ -106,12 +65,10 @@ for (let row0 = 0; row0 < 9; row0++) {
   }
 }
 
-// Main grid stays 1-9 digits under the widened (1-10) Shape below.
+// Main grid stays 1-9 digits under the widened (1-10) Shape.
 const gridDomain = graph.makeReplicate(
   new Given(graph.cells()[0], 1, 2, 3, 4, 5, 6, 7, 8, 9));
 
-// --- Per-cell allowed label/endpoint values: OFF, plus every galaxy whose
-// zone contains this cell. ---
 function allowedGalaxies(row0, col0) {
   const allowed = [OFF];
   for (const g of GALAXIES) {
@@ -119,133 +76,182 @@ function allowedGalaxies(row0, col0) {
   }
   return allowed;
 }
-const domainGivens = allCells.flatMap(({ row0, col0, id }) => {
-  const allowed = allowedGalaxies(row0, col0);
-  return [
-    new Given(label.at(id), ...allowed),
-    new Given(endpoint.at(id), ...allowed),
-  ];
-});
+// Cell ids by their 0-indexed position, so the reflection maths below never
+// re-derives one and the enumeration can carry ids rather than coordinates.
+const idAt = allCells.reduce((acc, { row0, col0, id }) => {
+  (acc[row0] ??= [])[col0] = id;
+  return acc;
+}, []);
 
-// --- Symmetry: for every galaxy, pair each zone cell with its mirror. ---
-const symKeys = new Map(GALAXIES.map(
-  g => [g.id, Pair.fnToKey((a, b) => (a === g.id) === (b === g.id), 10)]));
-const symmetryPairs = [];
-{
-  const seen = new Set();
-  for (const g of GALAXIES) {
-    for (const { row0, col0, id } of allCells) {
-      const m = reflect(row0, col0, g);
-      if (!m) continue;
-      const [rowP, colP] = m;
-      if (rowP === row0 && colP === col0) continue; // fixed point (E, H)
-      const other = makeCellId(rowP + 1, colP + 1);
-      const [a, b] = id < other ? [id, other] : [other, id];
-      const key = `${g.id}:${a}:${b}`;
-      if (seen.has(key)) continue;
-      seen.add(key);
-      symmetryPairs.push(new Pair(symKeys.get(g.id), 'galaxy-symmetry', a, b));
+const domainGivens = allCells.map(({ row0, col0, id }) =>
+  new Given(label.at(id), ...allowedGalaxies(row0, col0)));
+
+// ---- Candidate lines -------------------------------------------------------
+// Grown outward from the circle a symmetric pair at a time, so every path is
+// point-symmetric by construction: appending cell n at the tail appends its
+// mirror at the head. A path is rejected if any two non-consecutive cells are
+// orthogonally adjacent, which is the rules' "cannot touch itself" (and also
+// forbids closing into a loop).
+const DIRS = [[1, 0], [-1, 0], [0, 1], [0, -1]];
+
+function selfTouching(path) {
+  for (let i = 0; i < path.length; i++) {
+    for (let j = i + 2; j < path.length; j++) {
+      if (Math.abs(path[i][0] - path[j][0]) + Math.abs(path[i][1] - path[j][1]) === 1) {
+        return true;
+      }
     }
   }
+  return false;
 }
 
-// --- Connectivity: each galaxy's cells form exactly one connected region. ---
-const connectivity = GALAXIES.map(g => new ConnectedValues('VG', g.id));
+function linesFor(g) {
+  const inZone = (r, c) => r >= 0 && r < 9 && c >= 0 && c < 9 && reflect(r, c, g) !== null;
+  const found = new Map();
+  const record = (path) => {
+    if (path.length < 3) return;
+    const fwd = path.map(([r, c]) => `${r},${c}`).join(' ');
+    const rev = path.slice().reverse().map(([r, c]) => `${r},${c}`).join(' ');
+    const key = fwd < rev ? fwd : rev;
+    if (!found.has(key)) found.set(key, path.slice());
+  };
+  const grow = (path) => {
+    record(path);
+    if (path.length + 2 > MAX_LINE) return;
+    const [tr, tc] = path[path.length - 1];
+    for (const [dr, dc] of DIRS) {
+      const nr = tr + dr;
+      const nc = tc + dc;
+      if (!inZone(nr, nc)) continue;
+      const m = reflect(nr, nc, g);
+      if (m === null) continue;
+      if (m[0] === nr && m[1] === nc) continue;
+      const used = path.some(([r, c]) => (r === nr && c === nc) || (r === m[0] && c === m[1]));
+      if (used) continue;
+      const next = [m, ...path, [nr, nc]];
+      if (selfTouching(next)) continue;
+      grow(next);
+    }
+  };
+  const fixed = allCells
+    .filter(({ row0, col0 }) => {
+      const m = reflect(row0, col0, g);
+      return m !== null && m[0] === row0 && m[1] === col0;
+    });
+  if (fixed.length) {
+    grow([[fixed[0].row0, fixed[0].col0]]);
+  } else {
+    for (const { row0, col0 } of allCells) {
+      const m = reflect(row0, col0, g);
+      if (m === null) continue;
+      if (Math.abs(m[0] - row0) + Math.abs(m[1] - col0) !== 1) continue;
+      if (row0 * 9 + col0 > m[0] * 9 + m[1]) continue;
+      grow([[row0, col0], m]);
+    }
+  }
+  return [...found.values()];
+}
 
-// --- Degree + endpoint marking (path shape, no self-touch, no branching). ---
-// Reads [self, ...neighbours, ownEndpointMarker]. See header comment.
-function buildDegreeMachine(m) {
+// ---- No repeated digit along a line ----------------------------------------
+const distinctSpec = NFA.encodeSpec({
+  startState: { seen: 0 },
+  transition: ({ seen }, value) => {
+    const bit = 1 << (value - 1);
+    if (seen & bit) return undefined;
+    return { seen: seen | bit };
+  },
+  accept: () => true,
+}, shape);
+
+// ---- The printed clue: digits positionally between the min and the max -----
+// Each line's cells are read TWICE. The first pass just collects the line's
+// smallest and largest digit; the second walks the same cells in the same
+// order and adds up the digits lying strictly between the two cells holding
+// them. Two passes rather than one because a single forward scan cannot know
+// which digits are "between" until both extremes are known -- a later extreme
+// retrospectively pulls earlier digits inside -- and carrying enough state to
+// repair that (both extremes, the running inside sum and the tail after it)
+// blows past the 4096-state compile limit.
+function betweenSumSpec(clue, n) {
   return NFA.encodeSpec({
-    startState: { phase: 'self' },
-    transition: (state, value) => {
-      switch (state.phase) {
-        case 'self':
-          return value === OFF
-            ? { phase: 'off', remaining: m }
-            : { phase: 'count', v: value, count: 0, remaining: m };
-        case 'off': {
-          const remaining = state.remaining - 1;
-          return remaining > 0 ? { phase: 'off', remaining } : { phase: 'offEnd' };
-        }
-        case 'count': {
-          const count = state.count + (value === state.v ? 1 : 0);
-          if (count > 2) return undefined; // degree > 2: branching, reject
-          const remaining = state.remaining - 1;
-          return remaining > 0
-            ? { phase: 'count', v: state.v, count, remaining }
-            : { phase: 'countEnd', v: state.v, count };
-        }
-        case 'offEnd':
-          return value === OFF ? { phase: 'done' } : undefined;
-        case 'countEnd':
-          if (state.count === 0) return undefined; // isolated cell: reject
-          if (state.count === 1) {
-            return value === state.v ? { phase: 'done' } : undefined;
-          }
-          // count === 2: not an endpoint.
-          return value === OFF ? { phase: 'done' } : undefined;
+    startState: { phase: 'scan', i: 0, minV: 0, maxV: 0 },
+    transition: (state, d) => {
+      if (state.phase === 'scan') {
+        const minV = state.minV === 0 ? d : Math.min(state.minV, d);
+        const maxV = state.maxV === 0 ? d : Math.max(state.maxV, d);
+        const i = state.i + 1;
+        if (i < n) return { phase: 'scan', i, minV, maxV };
+        if (minV === maxV) return undefined;
+        return { phase: 'before', minV, maxV };
       }
+      const { minV, maxV } = state;
+      const isExtreme = d === minV || d === maxV;
+      if (state.phase === 'before') {
+        return isExtreme
+          ? { phase: 'inside', minV, maxV, S: 0 }
+          : { phase: 'before', minV, maxV };
+      }
+      if (state.phase === 'inside') {
+        if (isExtreme) {
+          return state.S === clue ? { phase: 'after', minV, maxV } : undefined;
+        }
+        const S = state.S + d;
+        if (S > clue) return undefined;
+        return { phase: 'inside', minV, maxV, S };
+      }
+      return isExtreme ? undefined : { phase: 'after', minV, maxV };
     },
-    accept: (state) => state.phase === 'done',
+    accept: (state) => state.phase === 'after',
   }, shape);
 }
-const degreeMachines = { 2: buildDegreeMachine(2), 3: buildDegreeMachine(3), 4: buildDegreeMachine(4) };
-const degreeConstraints = allCells.map(({ id }) => {
-  const neighbours = graph.neighbours(id);
-  return new NFA(degreeMachines[neighbours.length], 'galaxy-degree',
-    label.at(id), ...label.at(neighbours), endpoint.at(id));
-});
-
-// --- No loop: a connected, max-degree-2 component with no degree-1 cell is
-// a cycle, so require >= 1 endpoint-marked cell per galaxy. ---
-const noLoop = GALAXIES.map(g => new ContainAtLeast(String(g.id), ...endpoint.cells()));
-
-// --- No repeats + minimum size + between-sum, scanned per galaxy over its
-// own zone as interleaved (label, digit) pairs. ---
-function buildGalaxySumMachine(targetId, targetSum) {
-  return NFA.encodeSpec({
-    startState: { phase: 'label', bitmask: 0 },
-    transition: (state, value) => {
-      if (state.phase === 'label') {
-        return { phase: 'digit', bitmask: state.bitmask, isTarget: value === targetId };
-      }
-      let bitmask = state.bitmask;
-      if (state.isTarget) {
-        const bit = 1 << (value - 1);
-        if (bitmask & bit) return undefined; // repeated digit on this line
-        bitmask |= bit;
-      }
-      return { phase: 'label', bitmask };
-    },
-    accept: (state) => {
-      if (state.phase !== 'label') return false;
-      const bits = [];
-      for (let d = 1; d <= 9; d++) if (state.bitmask & (1 << (d - 1))) bits.push(d);
-      if (bits.length < 3) return false;
-      const min = bits[0], max = bits[bits.length - 1];
-      const total = bits.reduce((s, d) => s + d, 0);
-      return (total - min - max) === targetSum;
-    },
-  }, shape);
+const betweenSpecs = new Map();
+function betweenSpec(clue, n) {
+  const key = `${clue}:${n}`;
+  if (!betweenSpecs.has(key)) betweenSpecs.set(key, betweenSumSpec(clue, n));
+  return betweenSpecs.get(key);
 }
-const galaxySumConstraints = GALAXIES.map(g => {
-  const zone = allCells
-    .filter(({ row0, col0 }) => reflect(row0, col0, g) !== null)
-    .map(({ id }) => id);
-  const machine = buildGalaxySumMachine(g.id, g.sum);
-  const sequence = zone.flatMap(id => [label.at(id), id]);
-  return new NFA(machine, 'galaxy-sum', ...sequence);
+
+// ---- One Or per galaxy over its candidate lines ----------------------------
+// A zone cell that lies on no candidate line can never carry this galaxy's
+// label, whichever line is chosen, so that exclusion is stated once outside
+// the Or instead of being repeated in every branch. Only the union of the
+// candidate lines varies from option to option, which is what keeps the
+// serialized size in hand (4.5 MB down to a few hundred KB).
+const galaxyExclusions = [];
+const galaxyChoices = GALAXIES.map((g) => {
+  const zone = allCells.filter(({ row0, col0 }) => reflect(row0, col0, g) !== null);
+  const lines = linesFor(g);
+  const reachable = new Set();
+  for (const line of lines) {
+    for (const [r, c] of line) reachable.add(idAt[r][c]);
+  }
+  for (const { row0, col0, id } of zone) {
+    if (reachable.has(id)) continue;
+    galaxyExclusions.push(
+      new Given(label.at(id), ...allowedGalaxies(row0, col0).filter(v => v !== g.id)));
+  }
+  const varying = zone.filter(({ id }) => reachable.has(id));
+  const options = lines.map((line) => {
+    const ids = line.map(([r, c]) => idAt[r][c]);
+    const onLine = new Set(ids);
+    const givens = varying.map(({ row0, col0, id }) => (onLine.has(id)
+      ? new Given(label.at(id), g.id)
+      : new Given(label.at(id), ...allowedGalaxies(row0, col0).filter(v => v !== g.id))));
+    return new And([
+      ...givens,
+      new NFA(distinctSpec, `galaxy-${g.name}-distinct`, ...ids),
+      new NFA(betweenSpec(g.sum, ids.length), `galaxy-${g.name}-between-sum`,
+        ...ids, ...ids),
+    ]);
+  });
+  return new Or(options);
 });
 
 return [
   shape,
   gridDomain,
   label.toVar('galaxy'),
-  endpoint.toVar('galaxyEndpoint'),
   ...domainGivens,
-  ...symmetryPairs,
-  ...connectivity,
-  ...degreeConstraints,
-  ...noLoop,
-  ...galaxySumConstraints,
+  ...galaxyExclusions,
+  ...galaxyChoices,
 ];

@@ -14,8 +14,9 @@
 //
 // The grid carries no digit meaning, so it uses the Raw grid type (no
 // row/column/box rules) and every main-grid cell is pinned to a fixed dummy
-// value. The whole answer lives in five Var overlays over the 81 non-wall
-// cells:
+// value. The whole answer lives in five Var overlays; VPH/VPL span the whole
+// 10x10 canvas (a wall's cell pinned to 1, unused), the other three only the
+// 80 open cells after S:
 //   - VPH/VPL: visit order 1..81 (position = 9*(VPH-1)+VPL). Every cell but
 //     S has an open neighbour exactly one position earlier, chained from S
 //     (position 1) to G (position 81): with both ends pinned this forces a
@@ -52,8 +53,12 @@ const N = 9;              // 81 open cells = 9x9, so position fits two base-9 la
 const MAX_RUN = 9;        // longest possible straight run of steps on a 10-wide/tall grid
 const NONE = MAX_RUN + 1; // VP sentinel: no previous run has closed yet
 
-const posHigh = graph.makeOverlay('VPH', OPEN);
-const posLow = graph.makeOverlay('VPL', OPEN);
+// The visit-order layers are declared over the whole 10x10 canvas so the
+// answer has a declared layout (the stored solution is these two grids in
+// reading order, '.' on a wall); a wall's cell in them is pinned to 1 and
+// referenced by nothing else.
+const posHigh = graph.makeOverlay('VPH');
+const posLow = graph.makeOverlay('VPL');
 const dir = graph.makeOverlay('VD', NONFIRST);
 const runLen = graph.makeOverlay('VR', NONFIRST);
 const prevRun = graph.makeOverlay('VP', NONFIRST);
@@ -157,6 +162,7 @@ return [
     new Given(prevRun.cells()[0], ...range(1, MAX_RUN), NONE)),
 
   ...endpoints,
+  ...WALLS.flatMap(cell => [new Given(posHigh.at(cell), 1), new Given(posLow.at(cell), 1)]),
   ...path,
   ...arrival,
   ...runs,

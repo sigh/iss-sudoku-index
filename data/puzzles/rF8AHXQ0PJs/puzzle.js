@@ -8,11 +8,15 @@
 //    most once) in a 14x14 grid with no other rule of any kind -- no digits,
 //    no rows/columns/boxes.
 //  * No two pentominoes may be edge- or corner-adjacent (king-move no-touch).
-//  * Eight cells carry arrow clues and hold no pentomino cell themselves. Each
-//    arrow's direction is shown exactly when some pentomino cell lies
-//    anywhere along that ray to the grid edge; a direction not drawn asserts
-//    the whole ray is pentomino-free. How many pentominoes are used, and
-//    where, is entirely up to the solver.
+//  * Eight cells carry arrow clues and hold no pentomino cell themselves. The
+//    arrows at a cell mark every direction (up, down, left, right) in which
+//    the NEAREST pentomino cell lies, looking from that cell: take the
+//    closest pentomino cell along each of the four rays to the grid edge, and
+//    the drawn directions are exactly those whose closest cell is at the
+//    minimum of those four distances. A direction not drawn therefore holds
+//    no pentomino cell at that minimum distance or closer (it may hold one
+//    farther out, or none at all). How many pentominoes are used, and where,
+//    is entirely up to the solver.
 //
 // This is the "offset overlay" tiling technique: every cell carries an
 // offset back to its own piece's anchor (its first cell in reading order),
@@ -280,68 +284,84 @@ const CLUE_ARROWS = [
 ];
 const ALL_DIRS = ['up', 'down', 'left', 'right'];
 const DIR_STEP = { up: [-1, 0], down: [1, 0], left: [0, -1], right: [0, 1] };
-const CLUE_CELL_SET = new Set(CLUE_ARROWS.map(({ cell }) => cell));
 
-// Cells strictly beyond the clue cell along a direction, stopping at the
-// grid edge or at the next arrow-clue cell, whichever comes first -- not
-// including that next clue cell itself.
-//
-// Reading a ray unobstructed to the grid edge makes the puzzle provably
-// unsatisfiable: R3C2 (shown left/right/up, so down is not drawn -- no
-// pentomino anywhere in R4C2..R14C2) and R13C2 (shown left/down, so up is
-// not drawn -- no pentomino anywhere in R1C2..R12C2) sit in the same column,
-// two rows apart from each grid edge. Read unobstructed, R13C2's own drawn
-// "down" arrow would need a pentomino cell at R14C2, which R3C2's "down"
-// asserts cannot exist, and symmetrically for R3C2's "up" against R13C2's
-// "up". Every one of the 22 drawn arrows was re-checked computationally:
-// stopping each ray at the next arrow-clue cell instead of the grid edge is
-// the only reading under which this holds for all of them with no
-// exception, so a clue's line of sight ends at the cell it names
-// (guaranteed pentomino-free, since arrows never sit on a piece) rather
-// than reading through it toward the piece the *next* clue is describing.
+// Cells strictly beyond the clue cell along a direction, out to the grid
+// edge, nearest first. A ray reads straight through another clue cell: that
+// cell is always empty (pinned below), so it neither blocks the view nor
+// counts as a pentomino, and "nearest pentomino" is measured past it.
 const rayCells = (cell, dir) => {
   const [dr, dc] = DIR_STEP[dir];
   const out = [];
   let cur = cell;
   for (; ;) {
     cur = graph.step(cur, dr, dc);
-    if (!cur || CLUE_CELL_SET.has(cur)) break;
+    if (!cur) break;
     out.push(cur);
   }
   return out;
 };
 
-// A shown direction means some pentomino cell lies anywhere on that ray: a
-// 2-state existence scan over the ray's VA values (empty is NONE_A, anything
-// else is a real piece cell).
-const seenNFA = NFA.encodeSpec({
-  startState: { seen: false },
-  transition: (state, value) => ({ seen: state.seen || value !== NONE_A }),
-  accept: (state) => state.seen === true,
-}, numValues);
-
-const visibilityRules = [];
-const forcedEmptyCells = new Set(CLUE_ARROWS.map(({ cell }) => cell));
-for (const { cell, shown } of CLUE_ARROWS) {
-  for (const dir of shown) {
-    visibilityRules.push(new NFA(seenNFA, 'sees-pentomino',
-      ...va.at(rayCells(cell, dir))));
+// "The nearest pentominoes" is a strict minimum across all four directions
+// at once, not a per-direction test: an arrow is drawn in a direction
+// exactly when the closest pentomino cell that way is as close as the
+// closest one in any direction. One machine per clue reads the four rays'
+// VA values (occupancy is NONE_A vs anything else) interleaved by distance
+// -- every ray's cell at distance 1, then every ray's cell at distance 2,
+// and so on -- so the first distance at which anything is occupied is the
+// minimum. At that distance the occupied directions must be exactly the
+// drawn ones; a pentomino cell in an undrawn direction before that is a
+// contradiction outright, and once the minimum is settled nothing farther
+// out matters. A drawn direction whose ray runs out (or is still empty)
+// before any piece is found in a drawn direction rejects at the end.
+// Read as [VA of ray cells in the interleaved order described].
+const nearestNFA = memo((shownIdx, lengths) => {
+  const reads = [];
+  for (let k = 1; k <= Math.max(...lengths); k++) {
+    ALL_DIRS.forEach((_, d) => { if (lengths[d] >= k) reads.push({ d }); });
+    reads[reads.length - 1].lastAtDistance = true;
   }
-  // A direction not drawn asserts the whole ray is pentomino-free: forcing
-  // every cell of it empty needs no scan at all.
-  for (const dir of ALL_DIRS.filter(d => !shown.includes(d))) {
-    for (const c of rayCells(cell, dir)) forcedEmptyCells.add(c);
-  }
-}
+  return NFA.encodeSpec({
+    startState: { i: 0, found: 0 },
+    transition: (state, value) => {
+      if (state.done) return state;
+      if (state.i >= reads.length) return undefined;
+      const { d, lastAtDistance } = reads[state.i];
+      let found = state.found;
+      if (value !== NONE_A) {
+        if (!shownIdx.includes(d)) return undefined;
+        found += 1;
+      }
+      if (lastAtDistance && found > 0) {
+        return found === shownIdx.length ? { done: true } : undefined;
+      }
+      return { i: state.i + 1, found };
+    },
+    accept: (state) => state.done === true,
+  }, numValues);
+});
 
-// All 53 forced-empty cells take the same NONE value, so one shifted-copy
-// template each (a Given carries no geometry to shift) covers the set.
-// makeReplicate always shifts from the overlay's own first cell, regardless
-// of which cell the template constraint names.
-const forcedEmptyList = [...forcedEmptyCells];
+const visibilityRules = CLUE_ARROWS.map(({ cell, shown }) => {
+  const rays = ALL_DIRS.map(dir => rayCells(cell, dir));
+  const lengths = rays.map(ray => ray.length);
+  const shownIdx = ALL_DIRS.map((dir, d) => [dir, d])
+    .filter(([dir]) => shown.includes(dir)).map(([, d]) => d);
+  const cells = [];
+  for (let k = 0; k < Math.max(...lengths); k++) {
+    rays.forEach(ray => { if (ray[k]) cells.push(ray[k]); });
+  }
+  return new NFA(nearestNFA(shownIdx, lengths), 'nearest-pentomino',
+    ...va.at(cells));
+});
+
+// A clue cell never holds a pentomino cell: pin its offset to NONE. All
+// eight take the same value, so one shifted-copy template each (a Given
+// carries no geometry to shift) covers the set. makeReplicate always shifts
+// from the overlay's own first cell, regardless of which cell the template
+// constraint names.
+const clueCellList = CLUE_ARROWS.map(({ cell }) => cell);
 const forcedEmptyRules = [
-  va.makeReplicate(new Given(va.cells()[0], NONE_A), va.at(forcedEmptyList)),
-  vb.makeReplicate(new Given(vb.cells()[0], NONE_B), vb.at(forcedEmptyList)),
+  va.makeReplicate(new Given(va.cells()[0], NONE_A), va.at(clueCellList)),
+  vb.makeReplicate(new Given(vb.cells()[0], NONE_B), vb.at(clueCellList)),
 ];
 
 // --- Base grid ---------------------------------------------------------

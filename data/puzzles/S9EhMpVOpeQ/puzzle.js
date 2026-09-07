@@ -17,15 +17,17 @@
 // could not satisfy over 10 cells anyway -- rows and columns are stated
 // explicitly, as a plain Sum(2, ...)).
 //
-// Region count and size: a 2-star Star Battle's regions are, by the genre's
-// own convention, as many as the grid has rows and the same size as a row --
-// 10 regions of 10 cells each here. That convention is what fixes the shape
-// of the search, not any solved layout; the partition itself is still fully
-// free subject to it.
+// Region count: a 2-star Star Battle on an NxN grid has N regions -- 10 here
+// -- which is what "two stars in every row, column and region" needs for the
+// three counts to agree (20 stars). Region SIZE is deliberately left free:
+// the rules say nothing about it, and Star Battle regions are of any sizes.
+// (An earlier revision forced every region to 10 cells, a convention the
+// rules do not state, and that made the encoding reject the video's answer,
+// whose regions run from 3 to 49 cells -- blocker #2100.)
 //
 // Discovering the partition: one region-label overlay (VS, values 0-9) pairs
-// 1:1 with the grid. A label's cells must be a single connected 10-cell
-// region (ConnectedValues), and the ten labels are otherwise interchangeable,
+// 1:1 with the grid. A label's cells must be a single connected region of
+// any size (ConnectedValues), and the ten labels are otherwise interchangeable,
 // which multiplies every real solution by 10! -- broken by a canonical-order
 // NFA requiring label k to first appear (row-major) before label k+1.
 // Each of the few drawn region-border segments forces its two cells to
@@ -43,7 +45,6 @@ const gridCells = graph.cells();
 const STAR = 1;
 const NO_STAR = 0;
 const NUM_REGIONS = 10;
-const REGION_SIZE = 10;
 
 // Every grid cell is a star flag; nothing else is on the base grid.
 const starDomain = graph.makeReplicate(new Given(gridCells[0], NO_STAR, STAR));
@@ -81,11 +82,12 @@ const WALL_PAIRS = [
 const givenBorders = WALL_PAIRS.map(([a, b]) =>
   new AllDifferent(labels.at(a), labels.at(b)));
 
-// Each label is one connected 10-cell region; together the ten labels
-// necessarily partition the whole grid.
+// Each label is one connected region of unconstrained size (no size
+// argument); the canonical-order NFA below makes every label appear, so
+// together the ten labels partition the whole grid into exactly ten regions.
 const connectivity = [];
 for (let k = 0; k < NUM_REGIONS; k++) {
-  connectivity.push(new ConnectedValues('VS', k, REGION_SIZE));
+  connectivity.push(new ConnectedValues('VS', k));
 }
 
 // Canonical label order: label k must first appear (row-major) before label

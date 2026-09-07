@@ -20,11 +20,15 @@
 // contiguous shaded blocks (blocks separated by >=1 unshaded cell). The
 // number of clues for a row/column equals its count of white (non-grey)
 // cells in the band -- read from the payload's grey `underlay` rectangles,
-// which mark every band cell that is NOT a clue position. Clue order here is
-// nearest-to-farthest from the grid = first-to-last shaded block reading into
-// the grid from that edge. That is this encoding's reading, not a settled
-// convention: the genre reads the band as printed, which for a left or top
-// band is farthest-from-grid first.
+// which mark every band cell that is NOT a clue position. Clue slots are
+// indexed nearest-the-grid-first (slot 0 nearest), which is how the arrow
+// relations below name them, but the blocks they describe run the other way:
+// the band is read as printed, so for a left or top band the clue FARTHEST
+// from the grid names the first shaded block reading into the grid. That is
+// the genre's convention, and it is what the video's answer requires --
+// pairing block i with slot i instead rejected the video's grid on row 2's
+// lane alone, before any digit was placed. japaneseSumLine() therefore pairs
+// block i with slots[k-1-i]; slot indices elsewhere are unaffected.
 //
 // No printed value exists anywhere in the payload for any arrow circle or
 // outside clue (every circle overlay has `text: ""`; there is no other
@@ -109,7 +113,7 @@ function runPlacements(k, n) {
 function japaneseSumLine(cells, slots) {
   const placements = runPlacements(slots.length, cells.length);
   const options = placements.map((segs) => new And(segs.map(([s, e], i) => {
-    const { hi, lo } = slots[i];
+    const { hi, lo } = slots[slots.length - 1 - i];
     return new Sum(0, ...cells.slice(s, e + 1), [hi, -16], [lo, -1]);
   })));
   return new Or(options);

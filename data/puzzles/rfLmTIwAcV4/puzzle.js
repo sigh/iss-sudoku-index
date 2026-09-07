@@ -18,8 +18,16 @@
 // >= 1 cell wide) the lane has, not their width or position.
 //
 // Clue text transcribed from the payload's outside overlays (all read "17"
-// or "?"), grouped by lane and ordered nearest-the-grid-first; row/column
+// or "?"), grouped by lane and stored nearest-the-grid-first; row/column
 // indices below are this script's own 1-12 (payload R6-R17/C6-C17).
+//
+// The lane machine reads the grid away from the clue stack, so it wants the
+// clues in the opposite order: the OUTERMOST clue names the first block of
+// shaded cells encountered, and the one nearest the grid names the last.
+// Each list is therefore reversed where it is used. Reading them
+// nearest-first instead refused the video's own answer -- row 1's blocks are
+// 3 / 17 / 6 / 17 against a stored [17, '?', 17, '?'], which rejects on the
+// segmentation alone, before any digit is placed.
 
 const shape = new Shape('12x12', '0-9', 'Raw');
 const graph = cellGraph(shape);
@@ -120,9 +128,9 @@ function laneSumSpec(clues) {
 }
 
 const rowSumRules = rows.map((cells, i) =>
-  new NFA(laneSumSpec(ROW_CLUES[i]), `row-${i + 1}-sums`, ...cells));
+  new NFA(laneSumSpec([...ROW_CLUES[i]].reverse()), `row-${i + 1}-sums`, ...cells));
 const colSumRules = columns.map((cells, i) =>
-  new NFA(laneSumSpec(COL_CLUES[i]), `col-${i + 1}-sums`, ...cells));
+  new NFA(laneSumSpec([...COL_CLUES[i]].reverse()), `col-${i + 1}-sums`, ...cells));
 
 return [
   shape,

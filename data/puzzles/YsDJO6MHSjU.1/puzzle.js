@@ -47,12 +47,22 @@ const LETTER_GIVENS = [
   [6, 10, 'V'], [9, 2, 'W'], [10, 4, 'X'], [10, 7, 'Y'], [10, 10, 'Z'],
 ];
 
-// The two letter clues drawn as strokes, as the top-left cell of the 2x2 block
-// each stroke's bounding box covers: the T spans R4C4-R5C5 and the U spans
-// R6C6-R7C7.
-const STROKE_GIVENS = [
-  ['T', 4, 4],
-  ['U', 6, 6],
+// The two thick strokes drawn on the board are region BORDERS, not letter
+// clues -- they are drawn in the shape of the letters they resemble, but every
+// segment of both lies along an edge between two pentominoes. Expanded from
+// the drawn strokes (a T over R4C4-R5C5 and a U over R6C6-R7C7), these are the
+// ten separated cell pairs. Because a pentomino here is a maximal
+// orthogonally-connected run of one letter, "these two cells are in different
+// pieces" is exactly "these two cells hold different letters".
+const STROKE_BORDERS = [
+  // T: row-line 3 over columns 3-5, then column-line 4 over rows 3-5.
+  [[3, 4], [4, 4]], [[3, 5], [4, 5]],
+  [[4, 4], [4, 5]], [[5, 4], [5, 5]],
+  // U: column-line 5 over rows 5-7, row-line 7 over columns 5-7,
+  // column-line 7 over rows 5-7.
+  [[6, 5], [6, 6]], [[7, 5], [7, 6]],
+  [[7, 6], [8, 6]], [[7, 7], [8, 7]],
+  [[6, 7], [6, 8]], [[7, 7], [7, 8]],
 ];
 
 // Rotations and reflections of a pentomino, normalised so that the first cell
@@ -187,10 +197,10 @@ return [
 
   ...LETTER_GIVENS.map(
     ([row, col, letter]) => new Given(makeCellId(row, col), letterValue(letter))),
-  // Each stroke clue applies to one of the four cells of the block it covers.
-  ...STROKE_GIVENS.map(([letter, row, col]) => new Or(
-    graph.block(makeCellId(row, col), 2, 2).map(
-      cell => new Given(cell, letterValue(letter))))),
+  // Each stroke segment is a border: the two cells it separates lie in
+  // different pentominoes, so they hold different letters.
+  ...STROKE_BORDERS.map(([[r1, c1], [r2, c2]]) => new AllDifferent(
+    makeCellId(r1, c1), makeCellId(r2, c2))),
 
   ...graph.rows().map(
     (row, i) => new NFA(acrossScan, `row ${i + 1}`, ...scanCells(row))),

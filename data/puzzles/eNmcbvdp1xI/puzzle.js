@@ -14,15 +14,15 @@
 //    pentominoes ("odd" gives the parity of that count instead of its
 //    value). Only the ten labelled lines carry a clue; every other row and
 //    column is unconstrained by this rule.
-// There is no digit grid and no other rule: the board carries no givens and
-// the answer is the tiling itself.
+// There is no digit grid in the source and no other rule: the grid's only
+// content is the tiling itself, so the main grid's own value at each cell
+// *is* the answer -- which pentomino type (1-12, below) covers that cell.
 
 const RIGHT = [0, 1], DOWN = [1, 0];
 
-// A widened Raw grid: the real content lives entirely in the VA/VB/VT
-// overlays below, so the 100 grid cells themselves carry no information and
-// are pinned to a single value rather than left free -- unpinned they would
-// each contribute a free 12-way choice.
+// A Raw grid whose 1-12 values are the pentomino type directly: cell value
+// N means this cell belongs to a piece of TYPE_ART[N - 1]. No overlay and no
+// pinned constant carries the answer -- the board is the answer.
 const NUM_VALUES = 12;
 const graph = cellGraph(new Shape('10x10', NUM_VALUES, 'Raw'));
 const geometry = graph.gridGeometry();
@@ -31,7 +31,7 @@ const gridCells = graph.cells();
 
 // --- The twelve free pentomino types -------------------------------------
 // One drawing per type, standard pentomino letters, alphabetical. The array
-// index is one less than the type digit VT stores.
+// index is one less than the type digit the grid cell stores.
 const TYPE_ART = [
   '.XX\nXX.\n.X.',   // 1 = F
   'XXXXX',           // 2 = I
@@ -94,15 +94,15 @@ const DC_MIN = Math.min(...OFFSETS.map(o => o[1]));
 
 // --- Var encodings --------------------------------------------------------
 // VA/VB hold the cell's offset from its pentomino's reference cell, shifted
-// into 1..numValues. VT holds the piece's type digit. Every one of the 100
-// cells belongs to a piece, so no "not tiled" spare code is needed.
+// into 1..numValues -- auxiliary placement bookkeeping, not the answer. The
+// piece's type digit is the grid cell's own value: no separate overlay for
+// it, since the main grid already ranges over 1..NUM_VALUES.
 const encA = (dRow) => dRow - DR_MIN + 1;
 const encB = (dCol) => dCol - DC_MIN + 1;
 const FIRST_A = encA(0), FIRST_B = encB(0);
 
 const va = graph.makeOverlay('VA');
 const vb = graph.makeOverlay('VB');
-const vt = graph.makeOverlay('VT');
 
 // Compiling an NFA spec is expensive and most cells share one: memoise by the
 // spec's parameters so each distinct machine is built once.
@@ -130,10 +130,10 @@ const offsetRules = gridCells.map(cell => new Pair(
 // --- Pentomino shape ---------------------------------------------------
 // One machine per cell, over that cell and every cell that could point at it.
 // If the cell is a pentomino's reference cell, the set of cells pointing at
-// it must be exactly one placement of the type its VT names -- which fixes
-// the piece's membership, size, connectedness and shape at once. If it is
-// not a reference cell, nothing may point at it.
-// Read as [VT, VA, VB of the cell, then VA, VB of each candidate member].
+// it must be exactly one placement of the type its own grid value names --
+// which fixes the piece's membership, size, connectedness and shape at once.
+// If it is not a reference cell, nothing may point at it.
+// Read as [type, VA, VB of the cell, then VA, VB of each candidate member].
 const shapeNFA = memo((window) => {
   const candidates = SHAPES.map((shape, index) => ({ shape, index }))
     .filter(({ shape }) => shape.offsets.every(
@@ -181,15 +181,15 @@ const shapeRules = gridCells.map(cell => {
     return [va.at(member), vb.at(member)];
   });
   return new NFA(shapeNFA(window), 'piece-shape',
-    vt.at(cell), va.at(cell), vb.at(cell), ...members);
+    cell, va.at(cell), vb.at(cell), ...members);
 });
 
 // --- Type spread and the no-touch rule --------------------------------
 // Two orthogonal neighbours share a pentomino exactly when their offsets
 // differ by the step between them. Same piece means the same type; different
 // pieces that touch must be of different types, which is the no-touch rule.
-// So neighbours carry equal VT if and only if they share a piece. Read as
-// [VA cell, VA neighbour, VB cell, VB neighbour, VT cell, VT neighbour].
+// So neighbours carry equal type if and only if they share a piece. Read as
+// [VA cell, VA neighbour, VB cell, VB neighbour, type cell, type neighbour].
 const sharedPieceNFA = memo((dRow, dCol) => NFA.encodeSpec({
   startState: { phase: 'a1' },
   transition: (state, value) => {
@@ -213,17 +213,17 @@ const pieceTypeRules = gridCells.flatMap(cell =>
     if (!other) return [];
     return [new NFA(sharedPieceNFA(dr, dc), 'piece-type',
       va.at(cell), va.at(other), vb.at(cell), vb.at(other),
-      vt.at(cell), vt.at(other))];
+      cell, other)];
   }));
 
 // --- Border-count outside clues -----------------------------------------
 // A border between two pentominoes is an orthogonally-adjacent cell pair in
 // different pieces. Above, pieceTypeRules makes "different piece" and
-// "different VT" the same thing (a touching pair of the same type is
+// "different type" the same thing (a touching pair of the same type is
 // already forbidden), so counting borders along a line is exactly counting
-// VT changes between consecutive cells of that line. A numeric clue wants
+// type changes between consecutive cells of that line. A numeric clue wants
 // that count exactly; "odd" wants only its parity.
-// Read as the line's ten VT cells, in order.
+// Read as the line's ten grid cells, in order.
 const lineCountNFA = memo((target) => NFA.encodeSpec({
   startState: { count: 0, prev: null },
   transition: ({ count, prev }, value) => {
@@ -242,19 +242,15 @@ const COL_CLUES = { 2: 3, 4: 3, 6: 3, 7: 5, 8: 5 };
 
 const borderCountRules = [
   ...Object.entries(ROW_CLUES).map(([row, target]) =>
-    new NFA(lineCountNFA(target), 'border-count', ...vt.row(Number(row)))),
+    new NFA(lineCountNFA(target), 'border-count', ...graph.row(Number(row)))),
   ...Object.entries(COL_CLUES).map(([col, target]) =>
-    new NFA(lineCountNFA(target), 'border-count', ...vt.column(Number(col)))),
+    new NFA(lineCountNFA(target), 'border-count', ...graph.column(Number(col)))),
 ];
 
 return [
   new Shape('10x10', NUM_VALUES, 'Raw'),
-  // The grid carries no digits; pin every cell so its free domain cannot
-  // multiply solutions. One template Given, replicated over the whole grid.
-  graph.makeReplicate(new Given(gridCells[0], 1)),
   va.toVar('offsetRow'),
   vb.toVar('offsetCol'),
-  vt.toVar('pieceType'),
   ...offsetRules,
   ...shapeRules,
   ...pieceTypeRules,
