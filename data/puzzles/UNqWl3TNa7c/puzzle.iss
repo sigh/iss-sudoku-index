@@ -1,0 +1,14 @@
+.~R2C1_2_4_6_8~R8C9_2_4_6_8
+.DoubleArrow~R4C1~R3C2~R2C3
+.DoubleArrow~R2C3~R3C4~R4C5
+.DoubleArrow~R4C5~R3C6~R2C7
+.DoubleArrow~R2C7~R2C8~R2C9
+.DoubleArrow~R2C9~R3C8~R4C7
+.DoubleArrow~R6C1~R5C2~R4C3
+.DoubleArrow~R6C7~R5C8~R4C9
+.DoubleArrow~R6C9~R7C8~R8C7
+.DoubleArrow~R8C7~R7C6~R6C5
+.DoubleArrow~R6C5~R7C4~R8C3
+.DoubleArrow~R8C3~R8C2~R8C1
+.DoubleArrow~R8C1~R7C2~R6C3
+.DoubleArrow~R8C7~R8C6~R7C5~R6C5

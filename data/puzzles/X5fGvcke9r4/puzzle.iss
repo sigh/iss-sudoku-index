@@ -1,0 +1,13 @@
+.BlackDot~R3C6~R3C7
+.BlackDot~R4C9~R5C9
+.BlackDot~R6C1~R7C1
+.BlackDot~R8C9~R9C9
+.BlackDot~R1C8~R2C8
+.BlackDot~R4C7~R4C8
+.GreaterThan~R4C4~R5C4
+.GreaterThan~R3C1~R3C2
+.GreaterThan~R3C5~R3C4
+.GreaterThan~R5C1~R5C2
+.GreaterThan~R1C3~R2C3
+.GreaterThan~R4C1~R4C2
+.GreaterThan~R3C4~R2C4

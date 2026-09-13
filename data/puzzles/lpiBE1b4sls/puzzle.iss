@@ -1,0 +1,17 @@
+.Shape~9x9~1-9~Raw
+.ConnectedValues~~1~9
+.ConnectedValues~~2~9
+.ConnectedValues~~3~9
+.ConnectedValues~~4~9
+.ConnectedValues~~5~9
+.ConnectedValues~~6~9
+.ConnectedValues~~7~9
+.ConnectedValues~~8~9
+.ConnectedValues~~9~9
+.Entropic~R2C5~R2C6~R3C7
+.Entropic~R1C7~R1C8~R1C9
+.Entropic~R6C6~R7C6~R8C7
+.Thermo~R5C6~R4C7
+.Thermo~R6C9~R7C9
+.Thermo~R8C4~R8C3~R8C2~R7C2~R6C2~R5C2~R5C3
+.Thermo~R2C2~R2C1

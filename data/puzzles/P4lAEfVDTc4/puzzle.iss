@@ -1,0 +1,13 @@
+.Diagonal~1
+.Diagonal~-1
+.Arrow~R4C1~R5C2~R5C3
+.Arrow~R6C9~R5C8~R5C7
+.Arrow~R8C1~R8C2~R7C3
+.Arrow~R8C9~R8C8~R7C7
+.Arrow~R2C1~R2C2~R3C3
+.Arrow~R2C9~R2C8~R3C7
+.Arrow~R6C5~R7C5~R8C5
+.BlackDot~R7C6~R7C7
+.WhiteDot~R7C5~R8C5
+.WhiteDot~R7C3~R7C4
+.~R8C2_2_4_6_8~R8C8_2_4_6_8
