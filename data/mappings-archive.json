@@ -1,6 +1,370 @@
 {
-  "generated_at": "2026-09-18T13:39:54.786198+00:00",
+  "generated_at": "2026-09-19T09:18:22.006333+00:00",
   "rows": [
+    {
+      "puzzle_id": "W3hGY3SuOnI.3",
+      "video_id": "W3hGY3SuOnI",
+      "puzzle_title": "Double Entropy",
+      "video_title": "Three Puzzles, under Time Pressure!",
+      "author": "Enchanter73",
+      "sources": [
+        "https://sudokupad.app/edz9ll8csv"
+      ],
+      "date": "2026-06-12",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "Renban",
+        "LittleKiller",
+        "NFA: low",
+        "NFA: high",
+        "NFA: middle"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 8.4,
+      "iss_size": 1787,
+      "iss_url_length": 1830,
+      "script_size": 1538
+    },
+    {
+      "puzzle_id": "sfNjC1cCmwk",
+      "puzzle_title": "Whispering Dominoes",
+      "video_title": "One Of THE Great Sudoku Opening Ideas",
+      "author": "Kaktuslav",
+      "sources": [
+        "https://sudokupad.app/17j9j9bf82"
+      ],
+      "date": "2026-06-12",
+      "status": "too-slow",
+      "constraint_types": [
+        "NFA: adjacent cage totals differ by at least 7",
+        "NFA: cage totals differ"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 135693,
+      "solve_ms": 69887.4,
+      "iss_size": 8720,
+      "iss_url_length": 8789,
+      "script_size": 2199
+    },
+    {
+      "puzzle_id": "BoPjMzjLpZ8",
+      "puzzle_title": "SVS #470 - Harmonious Thermos",
+      "video_title": "470 Great Ideas for a Puzzle ... ?",
+      "author": "Richard",
+      "sources": [
+        "https://sudokupad.app/0wffw5dssm"
+      ],
+      "date": "2026-06-11",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Or",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 6,
+      "solve_ms": 15.8,
+      "iss_size": 2545,
+      "iss_url_length": 2502,
+      "script_size": 992
+    },
+    {
+      "puzzle_id": "i28jeABUr_g",
+      "puzzle_title": "RAT RUN 40: The Big One",
+      "video_title": "Our Longest Ever Video...!! Rat Run 40: The Big One (S3:E20)",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/nfqumwpslw"
+      ],
+      "date": "2026-06-11",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
+    },
+    {
+      "puzzle_id": "Z30hHxCO7cA",
+      "puzzle_title": "Mistyped",
+      "video_title": "When Errors are Acceptable in Sudoku",
+      "author": "Gabriel Kammer",
+      "sources": [
+        "https://sudokupad.app/9mqofo6f7g"
+      ],
+      "date": "2026-06-10",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "ContainExact",
+        "NFA: Clue-B4",
+        "NFA: Clue-L6",
+        "NFA: Clue-R5",
+        "NFA: Clue-T7",
+        "NFA: Clue-B3",
+        "NFA: Clue-L9",
+        "NFA: Clue-B2",
+        "NFA: Clue-T1",
+        "NFA: Clue-R4",
+        "NFA: Clue-T5",
+        "NFA: Clue-L3",
+        "NFA: Clue-R8",
+        "NFA: Clue-B8",
+        "NFA: Clue-L7",
+        "NFA: Clue-R1",
+        "NFA: Clue-B6",
+        "NFA: Clue-L2",
+        "NFA: Clue-T3",
+        "NFA: Clue-T6",
+        "NFA: Clue-B9",
+        "NFA: Clue-R2",
+        "NFA: Clue-B1",
+        "NFA: Clue-T9",
+        "NFA: Clue-D",
+        "NFA: Clue-L1",
+        "NFA: Clue-L4",
+        "NFA: Clue-T2",
+        "NFA: Clue-R9",
+        "NFA: Clue-T8",
+        "NFA: Clue-L8",
+        "NFA: Clue-R3",
+        "NFA: Clue-R6",
+        "NFA: Clue-B7",
+        "NFA: Clue-R7",
+        "NFA: Clue-B5",
+        "NFA: Clue-T4",
+        "NFA: Clue-L5"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 1,
+      "guesses": 246126,
+      "solve_ms": 82944.5,
+      "iss_size": 32580,
+      "iss_url_length": 32578,
+      "script_size": 4362
+    },
+    {
+      "puzzle_id": "bQJp4EhO5Sk",
+      "puzzle_title": "Bullseye!",
+      "video_title": "Does So-called \"Sudoku Expert\" Make A  Mistake??",
+      "author": "Lorena",
+      "sources": [
+        "https://sudokupad.app/rrhrws2x7f"
+      ],
+      "date": "2026-06-10",
+      "status": "validated",
+      "constraint_types": [
+        "0-9",
+        "Replicate",
+        "Jigsaw",
+        "Whisper",
+        "Palindrome",
+        "WhiteDot",
+        "BlackDot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 4.2,
+      "iss_size": 793,
+      "iss_url_length": 821,
+      "script_size": 2938
+    },
+    {
+      "puzzle_id": "_Q1fvtndpsA",
+      "puzzle_title": "Xin Yang v2",
+      "video_title": "Colouring Grids is FUN!",
+      "author": "PuzzleTank",
+      "sources": [
+        "https://sudokupad.app/qc37ejydvj"
+      ],
+      "date": "2026-06-09",
+      "status": "validated",
+      "constraint_types": [
+        "YinYang",
+        "WhiteDot",
+        "AllDifferent",
+        "PillArrow",
+        "Or",
+        "And",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 7.6,
+      "iss_size": 14938,
+      "iss_url_length": 14271,
+      "script_size": 2658
+    },
+    {
+      "puzzle_id": "Yv_RMyYTeRU",
+      "puzzle_title": "36x Even!",
+      "video_title": "A Sudoku With Only 7 Given Digits?",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/8df315rarb"
+      ],
+      "date": "2026-06-09",
+      "status": "validated",
+      "constraint_types": [
+        "Replicate",
+        "NFA: no-3-consecutive",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 13.2,
+      "iss_size": 1548,
+      "iss_url_length": 1588,
+      "script_size": 2877
+    },
+    {
+      "puzzle_id": "qkMGbyeLDaM",
+      "puzzle_title": "Ba-King Ratio Recommender - Confused? Soon many hints... endless.",
+      "video_title": "Happy Birthday Simon!",
+      "author": "olima",
+      "sources": [
+        "https://sudokupad.app/vc62zmuo08"
+      ],
+      "date": "2026-06-08",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKing",
+        "Whisper",
+        "Renban",
+        "BlackDot",
+        "Indexing"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 6.6,
+      "iss_size": 425,
+      "iss_url_length": 465,
+      "script_size": 1390
+    },
+    {
+      "puzzle_id": "HFiQBcazPFU",
+      "puzzle_title": "Lupin\u2019s Loop 3 \u2013 Successorless",
+      "video_title": "An Electric Birthday For This Sudoku Solver",
+      "author": "Rab3aron",
+      "sources": [
+        "https://sudokupad.app/zsmtekox43"
+      ],
+      "date": "2026-06-08",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "WhiteDot",
+        "Pair: loop-d",
+        "Pair: loop-f",
+        "Pair: loop-k",
+        "Pair: loop-j",
+        "NFA: entry",
+        "NFA: step",
+        "NFA: segment",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 336344,
+      "solve_ms": 64704.4,
+      "iss_size": 26408,
+      "iss_url_length": 26418,
+      "script_size": 11258
+    },
+    {
+      "puzzle_id": "Rn_svsVv_FA",
+      "puzzle_title": "Hot or Cold",
+      "video_title": "Are You Hot or Cold about Sudoku?",
+      "author": "James Kopp",
+      "sources": [
+        "https://sudokupad.app/58u9d7sohd"
+      ],
+      "date": "2026-06-07",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "GreaterThan",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 32,
+      "solve_ms": 8.4,
+      "iss_size": 1592,
+      "iss_url_length": 1572,
+      "script_size": 1596
+    },
+    {
+      "puzzle_id": "hvOl5kg76ME",
+      "puzzle_title": "The Neighbours Are Whispering",
+      "video_title": "Only Solved 10 Times Ever... Can He Make It 11?",
+      "author": "Pulsar & FischmitFahrrad",
+      "sources": [
+        "https://sudokupad.app/euq3xbt4hm"
+      ],
+      "date": "2026-06-07",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "NFA: digit 1 doubled once",
+        "NFA: digit 9 doubled once",
+        "NFA: digit 8 doubled once",
+        "NFA: digit 7 doubled once",
+        "NFA: digit 6 doubled once",
+        "NFA: digit 3 doubled once",
+        "NFA: digit 5 doubled once",
+        "NFA: digit 4 doubled once",
+        "NFA: digit 2 doubled once",
+        "NFA: one doubler in row",
+        "NFA: one doubler in column",
+        "Pair: whispering neighbours",
+        "Pair: gated community border"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 25170,
+      "solve_ms": 3958.0,
+      "iss_size": 19571,
+      "iss_url_length": 19828,
+      "script_size": 3405
+    },
     {
       "puzzle_id": "wDJAhLRxVSo",
       "puzzle_title": "Tilted Squares",
@@ -62757,6 +63121,35 @@
       "script_size": 1509
     },
     {
+      "puzzle_id": "kUT-PK4yeVQ",
+      "puzzle_title": "What Sort Of Puzzle Is THIS?!",
+      "video_title": "What Sort Of Puzzle Is THIS?!",
+      "author": null,
+      "sources": [
+        "https://puzz.link/p?akari/10/10/m.j65bga.ja.k.k.gbbd5.k.k.hch.hbg67dh.m"
+      ],
+      "date": "2023-10-25",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 10x10",
+        "1-3",
+        "Replicate",
+        "Or",
+        "NFA: wall-clue",
+        "NFA: no-see",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 12,
+      "solve_ms": 11.4,
+      "iss_size": 5927,
+      "iss_url_length": 5364,
+      "script_size": 6489
+    },
+    {
       "puzzle_id": "2eEArPok23Q",
       "puzzle_title": "Deep Space 9x9",
       "video_title": "Sudoku goes into Deep Space",
@@ -113663,6 +114056,31 @@
       "script_size": 4354
     },
     {
+      "puzzle_id": "e871HiKV3q8",
+      "puzzle_title": "Nonconsecutive Renban",
+      "video_title": "Solving A Sudoku Using a LETTERS Trick",
+      "author": "Phistomefel",
+      "sources": [
+        "https://test.crackingthecryptic.com/sudoku/LfHBPF8BjP"
+      ],
+      "date": "2022-02-22",
+      "status": "validated",
+      "constraint_types": [
+        "AntiConsecutive",
+        "Renban",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 310,
+      "solve_ms": 16.2,
+      "iss_size": 242,
+      "iss_url_length": 284,
+      "script_size": 1018
+    },
+    {
       "puzzle_id": "w10o1ZwoPn0",
       "puzzle_title": "The Serpent's Stone",
       "video_title": "What Sorcery is This Now?",
@@ -114872,6 +115290,31 @@
       "iss_size": 762,
       "iss_url_length": 839,
       "script_size": 3097
+    },
+    {
+      "puzzle_id": "3cH5kQ70b1A",
+      "puzzle_title": "Raswor",
+      "video_title": "The New York Times Revealed Our Secret",
+      "author": "Derektionary",
+      "sources": [
+        "https://test.crackingthecryptic.com/sudoku/2PqTbt7MhQ"
+      ],
+      "date": "2022-02-09",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Renban",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 680,
+      "solve_ms": 25.2,
+      "iss_size": 379,
+      "iss_url_length": 417,
+      "script_size": 1274
     },
     {
       "puzzle_id": "rsTcnyv5ATo",
@@ -131837,6 +132280,27 @@
       "script_size": 941
     },
     {
+      "puzzle_id": "2HBQuxrhDQQ",
+      "puzzle_title": "Airlocks",
+      "video_title": "How to Set a Pencil Puzzle: Airlocks by Gliperal",
+      "author": "Gliperal",
+      "sources": [
+        "https://test.crackingthecryptic.com/sudoku/7tPnB8m9m3"
+      ],
+      "date": "2021-07-19",
+      "status": "unsupported",
+      "constraint_types": [],
+      "search_completed": null,
+      "hit_cap": null,
+      "unique_solution": null,
+      "solutions_found": null,
+      "guesses": null,
+      "solve_ms": null,
+      "iss_size": null,
+      "iss_url_length": null,
+      "script_size": null
+    },
+    {
       "puzzle_id": "3YN_PqKozmQ",
       "puzzle_title": "Happy Birthday!",
       "video_title": "Don't Set your Calendar by Cracking the Cryptic",
@@ -133142,6 +133606,30 @@
       "iss_size": 452,
       "iss_url_length": 486,
       "script_size": 2161
+    },
+    {
+      "puzzle_id": "0S7eC9RLi8U",
+      "puzzle_title": "Renban Arrow Sudoku",
+      "video_title": "I'll Be Your Wingman Anytime!",
+      "author": "udukos",
+      "sources": [
+        "https://test.crackingthecryptic.com/sudoku/QFg6f67Ppd"
+      ],
+      "date": "2021-07-01",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Renban"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 234,
+      "solve_ms": 18.8,
+      "iss_size": 416,
+      "iss_url_length": 452,
+      "script_size": 1259
     },
     {
       "puzzle_id": "EIWX3buriUE.1",
@@ -140013,6 +140501,33 @@
       "script_size": 2424
     },
     {
+      "puzzle_id": "PY2u_PRUFRY",
+      "puzzle_title": "This Problem is not Black and White",
+      "video_title": "This Problem is not Black and White",
+      "author": null,
+      "sources": [
+        "https://test.crackingthecryptic.com/sudoku/694789h9m3"
+      ],
+      "date": "2021-03-15",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Or",
+        "And",
+        "BlackDot",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 46,
+      "solve_ms": 8.4,
+      "iss_size": 726,
+      "iss_url_length": 741,
+      "script_size": 2906
+    },
+    {
       "puzzle_id": "WM-SO_4qzAE",
       "puzzle_title": "Knowledge Bomb: 5 \u2260 6",
       "video_title": "Use Knowledge Bombs To Solve Sudoku!",
@@ -142286,6 +142801,33 @@
       "iss_size": 171,
       "iss_url_length": 218,
       "script_size": 1060
+    },
+    {
+      "puzzle_id": "f95VPWh3aB0",
+      "puzzle_title": "When Kakuro meets Sudoku",
+      "video_title": "When Kakuro meets Sudoku",
+      "author": null,
+      "sources": [
+        "https://test.crackingthecryptic.com/sudoku/PJgrQtBGdg"
+      ],
+      "date": "2021-02-22",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 12x12",
+        "0-9",
+        "AllDifferent",
+        "Sum",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 17,
+      "solve_ms": 8.0,
+      "iss_size": 3892,
+      "iss_url_length": 3857,
+      "script_size": 7040
     },
     {
       "puzzle_id": "BRzHWLLNVPk",
@@ -160349,6 +160891,133 @@
       "script_size": 4242
     },
     {
+      "puzzle_id": "Xg9radRLT8s.1",
+      "video_id": "Xg9radRLT8s",
+      "puzzle_title": "Can You Solve These Epic Puzzles?",
+      "video_title": "Can You Solve These Epic Puzzles?",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?akari/9/9/h.bj.i1.cah.j..hbp1..h.bgbaibam..g"
+      ],
+      "date": "2020-05-03",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 9x9",
+        "1-3",
+        "Replicate",
+        "Or",
+        "NFA: wall-clue",
+        "NFA: no-see",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 22,
+      "solve_ms": 13.8,
+      "iss_size": 5862,
+      "iss_url_length": 5299,
+      "script_size": 6393
+    },
+    {
+      "puzzle_id": "Xg9radRLT8s.2",
+      "video_id": "Xg9radRLT8s",
+      "puzzle_title": "Can You Solve These Epic Puzzles?",
+      "video_title": "Can You Solve These Epic Puzzles?",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?fillomino/9/9/g14h2h1g2j1i31j3j343m2n1k1j12i3i2h2h5h45g"
+      ],
+      "date": "2020-05-03",
+      "status": "too-slow",
+      "constraint_types": [
+        "Raw 9x9",
+        "0-15",
+        "Var",
+        "Replicate",
+        "Or",
+        "And",
+        "SameValues",
+        "Pair: number is positive",
+        "NFA: root is first in reading order",
+        "NFA: region size equals its number",
+        "NFA: distance changes by at most one",
+        "NFA: equal numbers exactly within a region",
+        "Pair: one step nearer the root",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 1131,
+      "solve_ms": 9184.5,
+      "iss_size": 392852,
+      "iss_url_length": 396700,
+      "script_size": 11647
+    },
+    {
+      "puzzle_id": "Xg9radRLT8s.3",
+      "video_id": "Xg9radRLT8s",
+      "puzzle_title": "Can You Solve These Epic Puzzles?",
+      "video_title": "Can You Solve These Epic Puzzles?",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?mashu/12/5/0000479c9220410c0000"
+      ],
+      "date": "2020-05-03",
+      "status": "partial",
+      "constraint_types": [
+        "Raw 5x12",
+        "1-7",
+        "Replicate",
+        "ConnectedValues",
+        "Pair: edge-h",
+        "Pair: edge-v",
+        "NFA: white-turn-side",
+        "NFA: black-straight-sides",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": false,
+      "solutions_found": 80,
+      "guesses": 79,
+      "solve_ms": 9.1,
+      "iss_size": 1347,
+      "iss_url_length": 1385,
+      "script_size": 8128
+    },
+    {
+      "puzzle_id": "Xg9radRLT8s.4",
+      "video_id": "Xg9radRLT8s",
+      "puzzle_title": "Can You Solve These Epic Puzzles?",
+      "video_title": "Can You Solve These Epic Puzzles?",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?starbattle/10/10/2/2296oeioo7ofothn14tgdg5o7ed7s30g0g2b"
+      ],
+      "date": "2020-05-03",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 10x10",
+        "0-1",
+        "Sum",
+        "Replicate",
+        "Pair: no touch"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 629,
+      "solve_ms": 18.3,
+      "iss_size": 1985,
+      "iss_url_length": 2003,
+      "script_size": 3295
+    },
+    {
       "puzzle_id": "eTvW1hcLuc4",
       "puzzle_title": "All our Favourites in One!",
       "video_title": "All our Favourites in One!",
@@ -161987,6 +162656,36 @@
       "script_size": 636
     },
     {
+      "puzzle_id": "NYYCqbcumQ4",
+      "puzzle_title": "Puzzle Of The Year?",
+      "video_title": "Puzzle Of The Year?",
+      "author": null,
+      "sources": [
+        "https://rjrudman.github.io/penpa-edit/?m=solve&p=1ZfJzis1E4b3uYxeol60hx6cLcMKsQB+IRRFiAVi84vDIBZ8n869n+ctu6o74gpQErted3VNg+389cffP//5y5wWfcsxM/Op6bBfPjb9bo+FB3yet8eUpnnK/NL0vL2/fXt/f/vp/nh+nN/+d5Lf3d+nskz3Ok8lTffClPtU+lT7tPZp69Pep6NPzabaOde+uHcpR38hLajQnDpTyp0r1c6WVvFhzjf3d8aEUS3x6DHlfZrTcwbCgUtlwIygx/TZQLLrISM73NAG3DpMi4xB1Hg3pcNebgPm1t9eBi6rsW+ELilEP5pNX9mYbfye2M1vxcYvbFw0Tr9/+P8/v374jbdZ+tpYv8SVnMmPPE2ZhNR0AZmsVay1B8ucVywTvdY5b8RI9MbbGzE2us15H/w7/Ds5M/79pGtBDhky+fBXMmk0cvKQk+FXDtwGwhz8KgfRBfmqCaMxWoVhdEYmITNdvKtom22yZ9i/Y0PQ8O/Dhh05yobR+LhTV0av0EPmjsx92LNJzqArtm1DToG/Dl8KclSfRsOvknU7VcUew2PoPVhXykW3bS6p288M3f1lhu78zNBDTmsnfWBDGzbIr8N9wZ5jxPY45rIMOYvkdL0lrRe6Qvd3kQ3d7ec5dPedGbrLZIbueo1n5It5LmpC0RWZ6kTR1MZJwz9qo6zYoL4zfvxdhw3UBvi0Z9SGxUdtZzzIV/ubXuxRy2TK/Qcr+s97/85NrvAaoM5N9WyAZDQVsQGquKly+5N2AcSIBQcFaRjYgUSThQ42gIsmNk311UXDpiLsoLJvquSFoNZXaE9dPjZp6fUhkRpwEyQoA+5A5aBDssAwfOBpu8BGmWvJET6pAbrlcj182vEpXJeDQ13bFEh/Z0sAd5D2Y+EKPA4bcVDjdIDSbfgCAQjRivfplsVgiBAFVId2iOkv0J4OFQ4jfhZ6d1SUYIR+PwSHs1AK5wmzKTqt4sxj7dVId5o8NU8TxNwOL7KDcKj9O5B1OjFGwpRO1fKAMqeF303MLVxpuJKqM0MBV8891Jzy4sxQgq4ICqjNskNSxOCKoOZkW4JBNTaDK1LPp+KFLUrQFUEJeoCLknOBVJbWAhJg2z+GXjF7eQEJsO2yw2aYWQtI6lgLf8W8uKLEBq21iBXMrAVUJltUQVFjtMhksS7ykj/Eq1tGR5T54fVLu7HggJL1Tuzp99Ygq82TCjE3TykEwJuGfDa3qWHhCbCPBQcoDeNMdFQkpzZD1Eu1eoni4nxhiOJqVlxnSBQwHQ89fhwQDB4SKEEXBSUYsVcqrlCFeaZiITOsBcRI1kIvwbYr2bDZMnN6pB7TpeHqYJQAJwhD1EuH7iCUqinqlI2aIeqUUyAVPwagcOEK7WmUbYfREGxVDK4XSkXtLkDN3CVdEZSgvwsl6O9W7f0nLJzdWgvJ1i7ur05qrQW0dnHmvIrZjyLFRdEIZm4yDKcig+GvNr6qS1W3iusKQ7jArYbBFUEJ+rtQgq4IChhFCCXoVkEJRjS4szFENKokX6D01tCrYmAtoOIcxVDVtawFlORojcplTGvhr4zUhWxAy+C5D+GRXXMH1E4TtZFVDKy9wthZVRs5agMKGLWhe3Kyi0vXq9ooURtQQD8oRAlGAeusKL73QBGNC9TRz1pAlUrUle6EWrtCuxMPKBdik9aF+QWi1y7NwyNCZ/fmrmiVVfqrMKBStkRtLKoNXWo71B/GqnvteKosBNQlUGsBVd66CF4VhRnazXJsFANGjrS52YV4QLVGbG66/TJE6LRBnTBXRTI2KIM5zlUowfOpohEw6ZyxPwMDatuMcybpAGftFcbGqPM8x3me1QtXaE8jKR1G1amPSuyixOUK+Y+JIv39HVCxik7Rfz2GOPzVsPY/bUCVSsB0KBrRdIn/HVp7VWRGcvWuXMA/3m4PXUP/9eHF/9ra8xM="
+      ],
+      "date": "2020-04-05",
+      "status": "too-slow",
+      "constraint_types": [
+        "0-9",
+        "Var",
+        "Replicate",
+        "Sum",
+        "AllDifferent",
+        "Pair: cage",
+        "NFA: sandwich",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 52814,
+      "solve_ms": 8379.3,
+      "iss_size": 4036,
+      "iss_url_length": 4089,
+      "script_size": 7558
+    },
+    {
       "puzzle_id": "Ygb3bIFAJzY",
       "puzzle_title": "How To Sharpen Your Sudoku Skills",
       "video_title": "How To Sharpen Your Sudoku Skills",
@@ -162035,6 +162734,62 @@
       "iss_size": 870,
       "iss_url_length": 901,
       "script_size": 3987
+    },
+    {
+      "puzzle_id": "7kUunNr8GKQ.1",
+      "video_id": "7kUunNr8GKQ",
+      "puzzle_title": "A double bonus: two Star Battle puzzles",
+      "video_title": "A double bonus: two Star Battle puzzles",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?starbattle/9/9/2/iac3l19k6l12k4g0opiajfe66a9gc0"
+      ],
+      "date": "2020-04-03",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 9x9",
+        "0-1",
+        "Sum",
+        "Replicate",
+        "Pair: no touch"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 87,
+      "solve_ms": 7.1,
+      "iss_size": 1665,
+      "iss_url_length": 1686,
+      "script_size": 3089
+    },
+    {
+      "puzzle_id": "7kUunNr8GKQ.2",
+      "video_id": "7kUunNr8GKQ",
+      "puzzle_title": "A double bonus: two Star Battle puzzles",
+      "video_title": "A double bonus: two Star Battle puzzles",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?starbattle/9/9/2/19526c2rib0r8ago0e48h74h65b5l0"
+      ],
+      "date": "2020-04-03",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 9x9",
+        "1-2",
+        "ContainExact",
+        "Replicate",
+        "Pair: star-no-touch"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 358,
+      "solve_ms": 8.8,
+      "iss_size": 1972,
+      "iss_url_length": 1985,
+      "script_size": 2864
     },
     {
       "puzzle_id": "8C-A7xmBLRU",
@@ -162535,6 +163290,117 @@
       "iss_size": 183,
       "iss_url_length": 235,
       "script_size": 757
+    },
+    {
+      "puzzle_id": "I2qTNJoLD1o.1",
+      "video_id": "I2qTNJoLD1o",
+      "puzzle_title": "Fillomino:  The New Sudoku",
+      "video_title": "Fillomino:  The New Sudoku",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?fillomino/10/10/j27j5j2h7k51h553i1h551h3t2h473h6i253h48k1h4j8j18j"
+      ],
+      "date": "2020-03-23",
+      "status": "too-slow",
+      "constraint_types": [
+        "Raw 10x10",
+        "0-15",
+        "Var",
+        "Replicate",
+        "Or",
+        "And",
+        "SameValues",
+        "Pair: number is positive",
+        "NFA: root is first in reading order",
+        "NFA: region size equals its number",
+        "NFA: distance changes by at most one",
+        "NFA: equal numbers exactly within a region",
+        "Pair: one step nearer the root",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 1904,
+      "solve_ms": 7940.7,
+      "iss_size": 582679,
+      "iss_url_length": 587456,
+      "script_size": 11651
+    },
+    {
+      "puzzle_id": "I2qTNJoLD1o.2",
+      "video_id": "I2qTNJoLD1o",
+      "puzzle_title": "Fillomino:  The New Sudoku",
+      "video_title": "Fillomino:  The New Sudoku",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?fillomino/10/10/h2j26j2g1g43g333g4n2g3j333g1g3l4g1g444j4g3n4g444g3bg1g2jb3j2h"
+      ],
+      "date": "2020-03-23",
+      "status": "too-slow",
+      "constraint_types": [
+        "Raw 10x10",
+        "0-15",
+        "Var",
+        "Replicate",
+        "Or",
+        "And",
+        "SameValues",
+        "Pair: number is positive",
+        "NFA: root is first in reading order",
+        "NFA: region size equals its number",
+        "NFA: distance changes by at most one",
+        "NFA: equal numbers exactly within a region",
+        "Pair: one step nearer the root",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 1101,
+      "solve_ms": 15041.4,
+      "iss_size": 582762,
+      "iss_url_length": 587539,
+      "script_size": 11479
+    },
+    {
+      "puzzle_id": "I2qTNJoLD1o.3",
+      "video_id": "I2qTNJoLD1o",
+      "puzzle_title": "Fillomino:  The New Sudoku",
+      "video_title": "Fillomino:  The New Sudoku",
+      "author": null,
+      "sources": [
+        "http://pzv.jp/p.html?fillomino/10/10/43l5543l25h44h27j63h45l56n78l77h75j33h75h47l2544l44"
+      ],
+      "date": "2020-03-23",
+      "status": "too-slow",
+      "constraint_types": [
+        "Raw 10x10",
+        "0-15",
+        "Var",
+        "Replicate",
+        "Or",
+        "And",
+        "SameValues",
+        "Pair: number is positive",
+        "NFA: root is first in reading order",
+        "NFA: region size equals its number",
+        "NFA: distance changes by at most one",
+        "NFA: equal numbers exactly within a region",
+        "Pair: one step nearer the root",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 1104,
+      "solve_ms": 11095.9,
+      "iss_size": 582763,
+      "iss_url_length": 587540,
+      "script_size": 11541
     },
     {
       "puzzle_id": "e4dG5Ja9PXs",
@@ -165079,6 +165945,29 @@
       "iss_size": 2813,
       "iss_url_length": 2667,
       "script_size": 3557
+    },
+    {
+      "puzzle_id": "w4Wp7Cyo27c",
+      "puzzle_title": "Daily Killer Sudoku 19406",
+      "video_title": "The DailyKiller for Christmas Day",
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/19406"
+      ],
+      "date": "2019-12-26",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 5.9,
+      "iss_size": 621,
+      "iss_url_length": 649,
+      "script_size": 1450
     },
     {
       "puzzle_id": "U7eIBuo8v3M",
@@ -169102,6 +169991,29 @@
       "script_size": 1385
     },
     {
+      "puzzle_id": "jB2cyGsascE",
+      "puzzle_title": "Daily Killer Sudoku 18731",
+      "video_title": "Very Tough Killer Sudoku:  By Request!",
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/18731"
+      ],
+      "date": "2019-08-13",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 6.4,
+      "iss_size": 625,
+      "iss_url_length": 653,
+      "script_size": 1880
+    },
+    {
       "puzzle_id": "BmPfBjqzbck",
       "puzzle_title": "Sudoku Theory:  Gurth And More Pincers & Pivots",
       "video_title": "Sudoku Theory:  Gurth And More Pincers & Pivots",
@@ -169725,6 +170637,29 @@
       "script_size": 1750
     },
     {
+      "puzzle_id": "EzSvc32paNQ",
+      "puzzle_title": "Daily Killer Sudoku 18575",
+      "video_title": "Killer Sudoku Tips And Tricks",
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/18575"
+      ],
+      "date": "2019-07-20",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 4.9,
+      "iss_size": 623,
+      "iss_url_length": 651,
+      "script_size": 1750
+    },
+    {
       "puzzle_id": "-24S4mHY73w",
       "puzzle_title": "Master The Basics Of Advanced Sudoku Solving",
       "video_title": "Master The Basics Of Advanced Sudoku Solving",
@@ -170060,6 +170995,29 @@
       "iss_size": 3180,
       "iss_url_length": 3203,
       "script_size": 3508
+    },
+    {
+      "puzzle_id": "sBv2SGpgwg8",
+      "puzzle_title": "Daily Killer Sudoku 18471",
+      "video_title": "A Gorgeous Killer Sudoku Trick",
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/18471"
+      ],
+      "date": "2019-07-06",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 17,
+      "solve_ms": 8.3,
+      "iss_size": 605,
+      "iss_url_length": 635,
+      "script_size": 1464
     },
     {
       "puzzle_id": "IYritxhgM4U.1",
@@ -171197,6 +172155,29 @@
       "iss_size": 155,
       "iss_url_length": 207,
       "script_size": 1107
+    },
+    {
+      "puzzle_id": "fgxg0ceBhEE",
+      "puzzle_title": "Daily Killer Sudoku 18291",
+      "video_title": "Computer Solver Vs Human Solver",
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/18291"
+      ],
+      "date": "2019-05-20",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 6.4,
+      "iss_size": 616,
+      "iss_url_length": 645,
+      "script_size": 1436
     },
     {
       "puzzle_id": "3noaH8mSPco",
@@ -173643,6 +174624,975 @@
       "iss_size": 1087,
       "iss_url_length": 1102,
       "script_size": 5121
+    },
+    {
+      "puzzle_id": "VXHKsJix42E",
+      "puzzle_title": "Try A Puzzle From The Sudoku World Championships!",
+      "video_title": "Try A Puzzle From The Sudoku World Championships!",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-31",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.1,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 1330
+    },
+    {
+      "puzzle_id": "YxdsnstzObM",
+      "puzzle_title": "World Sudoku Championship Booklet: part 1",
+      "video_title": "World Sudoku Championship Booklet: part 1",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-30",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.1,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 1142
+    },
+    {
+      "puzzle_id": "5pIIS33CUCA",
+      "puzzle_title": "Have We Got Better At Sudoku Over The Last 10 Years?",
+      "video_title": "Have We Got Better At Sudoku Over The Last 10 Years?",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-29",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 2.9,
+      "iss_size": 148,
+      "iss_url_length": 200,
+      "script_size": 645
+    },
+    {
+      "puzzle_id": "x5F9AcNgPc8",
+      "puzzle_title": "A logical solve: Daily Killer on the 26th Oct",
+      "video_title": "A logical solve: Daily Killer on the 26th Oct",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-26",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Or",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 49,
+      "solve_ms": 12.1,
+      "iss_size": 4026,
+      "iss_url_length": 4120,
+      "script_size": 5149
+    },
+    {
+      "puzzle_id": "JoFXZ727N_k",
+      "puzzle_title": "More Tips To Help You Solve Hard Sudokus",
+      "video_title": "More Tips To Help You Solve Hard Sudokus",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-25",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.9,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 1370
+    },
+    {
+      "puzzle_id": "FMPQt1VEdtk",
+      "puzzle_title": "Studying The Solving Of A Sudoku Genius",
+      "video_title": "Studying The Solving Of A Sudoku Genius",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-23",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 4,
+      "solve_ms": 3.5,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 1230
+    },
+    {
+      "puzzle_id": "XRfFPaUxTfM",
+      "puzzle_title": "A Sudoku Puzzle That WILL Improve Your Solving!",
+      "video_title": "A Sudoku Puzzle That WILL Improve Your Solving!",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-21",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.8,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 1217
+    },
+    {
+      "puzzle_id": "krLdszh7GUE",
+      "puzzle_title": "Viewer Request: We explain how to solve this one",
+      "video_title": "Viewer Request: We explain how to solve this one",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-20",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 11,
+      "solve_ms": 3.9,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 1281
+    },
+    {
+      "puzzle_id": "x3CVGXkRBjM",
+      "puzzle_title": "NYT Hard Sudoku: one way through it",
+      "video_title": "NYT Hard Sudoku: one way through it",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-19",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.5,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 1238
+    },
+    {
+      "puzzle_id": "eBDVDdC4LKI",
+      "puzzle_title": "The Observer Killer Sudoku:  A Guide",
+      "video_title": "The Observer Killer Sudoku:  A Guide",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-18",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 5.1,
+      "iss_size": 633,
+      "iss_url_length": 660,
+      "script_size": 1766
+    },
+    {
+      "puzzle_id": "uDTxAntmBZk",
+      "puzzle_title": "Two World Class Sudoku Solvers Compared!",
+      "video_title": "Two World Class Sudoku Solvers Compared!",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-17",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.6,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 1489
+    },
+    {
+      "puzzle_id": "BkfVQ9kdTx0",
+      "puzzle_title": "A Sudoku Genius: See what David McNeill's time was for this puzzle!",
+      "video_title": "A Sudoku Genius: See what David McNeill's time was for this puzzle!",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-16",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.9,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 1185
+    },
+    {
+      "puzzle_id": "AeZvtDH7MmU",
+      "puzzle_title": "Greater Than Killer Sudoku:  Another extremely hard puzzle",
+      "video_title": "Greater Than Killer Sudoku:  Another extremely hard puzzle",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-15",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "EqualSum",
+        "Or",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 354,
+      "solve_ms": 28.0,
+      "iss_size": 1752,
+      "iss_url_length": 1791,
+      "script_size": 4483
+    },
+    {
+      "puzzle_id": "rLuF0ZecXaE",
+      "puzzle_title": "Sudoku Mastery: X Wings, Y Wings & XY Chains",
+      "video_title": "Sudoku Mastery: X Wings, Y Wings & XY Chains",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-14",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 2.9,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 1364
+    },
+    {
+      "puzzle_id": "_j3nbFmTSOY",
+      "puzzle_title": "Sudoku Solving For Beginners:  The Basics",
+      "video_title": "Sudoku Solving For Beginners:  The Basics",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-12",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.9,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 1159
+    },
+    {
+      "puzzle_id": "arQb8Ytcawg",
+      "puzzle_title": "Excellent Sudoku Puzzle For Improving Your Solving!",
+      "video_title": "Excellent Sudoku Puzzle For Improving Your Solving!",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-10",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.6,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 1206
+    },
+    {
+      "puzzle_id": "9wjmwvQdVdQ",
+      "puzzle_title": "Mark tackles Rachel Riley's 'sleepless night' problem",
+      "video_title": "Mark tackles Rachel Riley's 'sleepless night' problem",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-09",
+      "status": "validated",
+      "constraint_types": [
+        "1x12",
+        "NoBoxes",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 68,
+      "solve_ms": 5.1,
+      "iss_size": 217,
+      "iss_url_length": 261,
+      "script_size": 2945
+    },
+    {
+      "puzzle_id": "g9RXsG52hKU",
+      "puzzle_title": "Simon Vs World Class Sudoku Solver!",
+      "video_title": "Simon Vs World Class Sudoku Solver!",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-08",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.6,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 1265
+    },
+    {
+      "puzzle_id": "yO3KUV-ZhLg",
+      "puzzle_title": "A Finned X-Wing Or Almost Locked Sets:  You Choose!",
+      "video_title": "A Finned X-Wing Or Almost Locked Sets:  You Choose!",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-06",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.7,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 1139
+    },
+    {
+      "puzzle_id": "QZFw6UkiH7E",
+      "puzzle_title": "Viewer-requested Extreme Killer Sudoku - Not For The Faint-Hearted",
+      "video_title": "Viewer-requested Extreme Killer Sudoku - Not For The Faint-Hearted",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-04",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 6.5,
+      "iss_size": 624,
+      "iss_url_length": 652,
+      "script_size": 1286
+    },
+    {
+      "puzzle_id": "ZC5sPP6umfQ",
+      "puzzle_title": "The 2018 UK Sudoku Championship:  Puzzle 3 Analysis",
+      "video_title": "The 2018 UK Sudoku Championship:  Puzzle 3 Analysis",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-03",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.6,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 1340
+    },
+    {
+      "puzzle_id": "DyLYMmFeyuI",
+      "puzzle_title": "The Times Sudoku Champion explains Puzzle 1",
+      "video_title": "The Times Sudoku Champion explains Puzzle 1",
+      "author": null,
+      "sources": [],
+      "date": "2018-10-01",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.7,
+      "iss_size": 218,
+      "iss_url_length": 270,
+      "script_size": 1381
+    },
+    {
+      "puzzle_id": "wBKtnL74M3A",
+      "puzzle_title": "The 2018 Times Sudoku Championship - Puzzle Analysis",
+      "video_title": "The 2018 Times Sudoku Championship - Puzzle Analysis",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-30",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 6,
+      "solve_ms": 3.1,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 1220
+    },
+    {
+      "puzzle_id": "dPVKdngKmP8",
+      "puzzle_title": "Can You Solve A \"Grand Final\" Sudoku?",
+      "video_title": "Can You Solve A \"Grand Final\" Sudoku?",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-28",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.7,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 1015
+    },
+    {
+      "puzzle_id": "zG093TZKUV0",
+      "puzzle_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 2 of 2)",
+      "video_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 2 of 2)",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-27",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "EqualSum",
+        "Or",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 123,
+      "solve_ms": 28.4,
+      "iss_size": 5582,
+      "iss_url_length": 5672,
+      "script_size": 4525
+    },
+    {
+      "puzzle_id": "LGG1mY-W-HU",
+      "puzzle_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 1 of 2)",
+      "video_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 1 of 2)",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-27",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Or",
+        "Sum",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 123,
+      "solve_ms": 28.6,
+      "iss_size": 5582,
+      "iss_url_length": 5672,
+      "script_size": 5122
+    },
+    {
+      "puzzle_id": "JAa8rbSbm4I",
+      "puzzle_title": "The New York Times \"Hard\" Sudoku:  Another Trick You Need to Know",
+      "video_title": "The New York Times \"Hard\" Sudoku:  Another Trick You Need to Know",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-26",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 16,
+      "solve_ms": 3.6,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 1337
+    },
+    {
+      "puzzle_id": "rM7IUR7eaGM",
+      "puzzle_title": "Advanced Sudoku Solving:  The WXYZ Wing",
+      "video_title": "Advanced Sudoku Solving:  The WXYZ Wing",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-24",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.1,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 705
+    },
+    {
+      "puzzle_id": "HfF6mDllaOs",
+      "puzzle_title": "Sudoku Techniques:  Forcing A Start",
+      "video_title": "Sudoku Techniques:  Forcing A Start",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-23",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Or",
+        "Sum",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 12,
+      "solve_ms": 8.2,
+      "iss_size": 3151,
+      "iss_url_length": 3215,
+      "script_size": 3854
+    },
+    {
+      "puzzle_id": "jfkrQsraAOo",
+      "puzzle_title": "Sudoku Techniques: The Shared Alternative",
+      "video_title": "Sudoku Techniques: The Shared Alternative",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-22",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.2,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 682
+    },
+    {
+      "puzzle_id": "bnPmmAeb-SI",
+      "puzzle_title": "A New Sudoku Technique Unveiled:  The \"Schrodinger Cell\"",
+      "video_title": "A New Sudoku Technique Unveiled:  The \"Schrodinger Cell\"",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-20",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.9,
+      "iss_size": 204,
+      "iss_url_length": 256,
+      "script_size": 727
+    },
+    {
+      "puzzle_id": "K976IB6LkgM",
+      "puzzle_title": "X-Wings And Uniqueness in Sudoku:  A quick primer",
+      "video_title": "X-Wings And Uniqueness in Sudoku:  A quick primer",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-19",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 2.5,
+      "iss_size": 218,
+      "iss_url_length": 270,
+      "script_size": 785
+    },
+    {
+      "puzzle_id": "zCohweFecw0",
+      "puzzle_title": "The New York Times Hard Sudoku: The Power Of Pencil Marks!",
+      "video_title": "The New York Times Hard Sudoku: The Power Of Pencil Marks!",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-19",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 2.8,
+      "iss_size": 176,
+      "iss_url_length": 228,
+      "script_size": 1337
+    },
+    {
+      "puzzle_id": "R4SM57ttA_w",
+      "puzzle_title": "Beyond Pencil-Marks:  Sudoku Mastery",
+      "video_title": "Beyond Pencil-Marks:  Sudoku Mastery",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-16",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 7,
+      "solve_ms": 3.5,
+      "iss_size": 155,
+      "iss_url_length": 207,
+      "script_size": 913
+    },
+    {
+      "puzzle_id": "awn59Aw2bo8",
+      "puzzle_title": "The Beautiful Sudoku Puzzles Of Oku-Yama",
+      "video_title": "The Beautiful Sudoku Puzzles Of Oku-Yama",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-14",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 12,
+      "solve_ms": 4.4,
+      "iss_size": 155,
+      "iss_url_length": 207,
+      "script_size": 651
+    },
+    {
+      "puzzle_id": "5JOeGnH_HhA",
+      "puzzle_title": "Daily Killer Sudoku 17067 (Greater-Than Killer)",
+      "video_title": "Greater-Than Killer: Difficulty 8/10",
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17067"
+      ],
+      "date": "2018-09-13",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "EqualSum",
+        "Or",
+        "Sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 83,
+      "solve_ms": 14.4,
+      "iss_size": 2400,
+      "iss_url_length": 2447,
+      "script_size": 3937
+    },
+    {
+      "puzzle_id": "BV_sfQdgtF4",
+      "puzzle_title": "What Number Did The World Sudoku Champion Place Next?",
+      "video_title": "What Number Did The World Sudoku Champion Place Next?",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-12",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.1,
+      "iss_size": 162,
+      "iss_url_length": 214,
+      "script_size": 1086
+    },
+    {
+      "puzzle_id": "nsqrrHXA8Z4",
+      "puzzle_title": "One Trick That Keeps Coming Up in The NYT Hard Sudoku",
+      "video_title": "One Trick That Keeps Coming Up in The NYT Hard Sudoku",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-11",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 3.6,
+      "iss_size": 155,
+      "iss_url_length": 207,
+      "script_size": 1146
+    },
+    {
+      "puzzle_id": "0zU59XRM258",
+      "puzzle_title": "How To Solve Like The World Sudoku Champion",
+      "video_title": "How To Solve Like The World Sudoku Champion",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-09",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 3.0,
+      "iss_size": 169,
+      "iss_url_length": 221,
+      "script_size": 1184
+    },
+    {
+      "puzzle_id": "BPMNu5-Pv24",
+      "puzzle_title": "Diabolical Sudoku Guide:  Part 3 of 3: Finned Swordfish",
+      "video_title": "Diabolical Sudoku Guide:  Part 3 of 3: Finned Swordfish",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-08",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 2.9,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 694
+    },
+    {
+      "puzzle_id": "2q8pzGU3ZPk",
+      "puzzle_title": "Diabolical Sudoku Guide: Part 2 of 3:  Y Wings and Empty Rectangles",
+      "video_title": "Diabolical Sudoku Guide: Part 2 of 3:  Y Wings and Empty Rectangles",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-08",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.9,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 694
+    },
+    {
+      "puzzle_id": "L-W6Nzki0WA",
+      "puzzle_title": "Diabolical Sudoku Guide:  Part 1 of 3:  The Basics",
+      "video_title": "Diabolical Sudoku Guide:  Part 1 of 3:  The Basics",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-08",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 4.4,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 694
+    },
+    {
+      "puzzle_id": "zNx-CVXOTEc",
+      "puzzle_title": "Killer Sudoku: Logic Test",
+      "video_title": "Killer Sudoku: Logic Test",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-06",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Or",
+        "Sum",
+        "EqualSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 826,
+      "solve_ms": 51.7,
+      "iss_size": 2580,
+      "iss_url_length": 2638,
+      "script_size": 4679
+    },
+    {
+      "puzzle_id": "t8zOu74jaPg",
+      "puzzle_title": "The New York Times \"Hard\" Sudoku:  A Walkthrough",
+      "video_title": "The New York Times \"Hard\" Sudoku:  A Walkthrough",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-04",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 3.2,
+      "iss_size": 183,
+      "iss_url_length": 235,
+      "script_size": 1400
+    },
+    {
+      "puzzle_id": "s9TkT_53c_8",
+      "puzzle_title": "More Y-Wings and Other Chains",
+      "video_title": "More Y-Wings and Other Chains",
+      "author": null,
+      "sources": [],
+      "date": "2018-09-02",
+      "status": "validated",
+      "constraint_types": [
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 3.0,
+      "iss_size": 190,
+      "iss_url_length": 242,
+      "script_size": 1145
     },
     {
       "puzzle_id": "JUyBOk1ZmbE",

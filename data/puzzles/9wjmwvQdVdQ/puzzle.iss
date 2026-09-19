@@ -1,0 +1,9 @@
+.Shape~1x12~12
+.NoBoxes
+.EqualSum~R1C9~R1C2~R1Cc~-~R1C3
+.EqualSum~R1C2~R1Cc~-~R1C4
+.EqualSum~R1C1~R1Cb~-~R1C5
+.EqualSum~R1C9~R1Cc~-~R1C6
+.EqualSum~R1C9~R1Cb~-~R1C7
+.EqualSum~R1C9~R1C2~-~R1C8
+.EqualSum~R1C2~R1C4~-~R1Ca
