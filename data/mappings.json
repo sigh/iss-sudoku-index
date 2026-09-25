@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-24T08:41:48.332041+00:00",
+  "generated_at": "2026-09-25T08:30:23.175286+00:00",
   "rows": [
     {
       "puzzle_id": "NEHtRZBNU28",
@@ -149189,7 +149189,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 7225,
-      "solve_ms": 143.2,
+      "solve_ms": 45.6,
       "iss_size": 18028,
       "iss_url_length": 17446,
       "script_size": 9086
@@ -171350,7 +171350,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 34,
-      "solve_ms": 43.0,
+      "solve_ms": 13.1,
       "iss_size": 17853,
       "iss_url_length": 16014,
       "script_size": 10014
@@ -171380,7 +171380,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 17,
-      "solve_ms": 18.4,
+      "solve_ms": 4.0,
       "iss_size": 8152,
       "iss_url_length": 7599,
       "script_size": 5955
@@ -181347,10 +181347,12 @@
     },
     {
       "puzzle_id": "x5F9AcNgPc8",
-      "puzzle_title": "A logical solve: Daily Killer on the 26th Oct",
+      "puzzle_title": "Daily Killer Sudoku 17283 (Greater-Than Killer)",
       "video_title": "A logical solve: Daily Killer on the 26th Oct",
-      "author": null,
-      "sources": [],
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17283"
+      ],
       "date": "2018-10-26",
       "status": "validated",
       "constraint_types": [
@@ -181363,7 +181365,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 49,
-      "solve_ms": 12.1,
+      "solve_ms": 4.2,
       "iss_size": 4026,
       "iss_url_length": 4120,
       "script_size": 5149
@@ -181538,10 +181540,12 @@
     },
     {
       "puzzle_id": "AeZvtDH7MmU",
-      "puzzle_title": "Greater Than Killer Sudoku:  Another extremely hard puzzle",
+      "puzzle_title": "Daily Killer Sudoku 17203 (Greater-Than Killer)",
       "video_title": "Greater Than Killer Sudoku:  Another extremely hard puzzle",
-      "author": null,
-      "sources": [],
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17203"
+      ],
       "date": "2018-10-15",
       "status": "validated",
       "constraint_types": [
@@ -181555,7 +181559,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 354,
-      "solve_ms": 28.0,
+      "solve_ms": 9.0,
       "iss_size": 1752,
       "iss_url_length": 1791,
       "script_size": 4483
@@ -181690,10 +181694,12 @@
     },
     {
       "puzzle_id": "QZFw6UkiH7E",
-      "puzzle_title": "Viewer-requested Extreme Killer Sudoku - Not For The Faint-Hearted",
+      "puzzle_title": "Daily Killer Sudoku 17146",
       "video_title": "Viewer-requested Extreme Killer Sudoku - Not For The Faint-Hearted",
-      "author": null,
-      "sources": [],
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17146"
+      ],
       "date": "2018-10-04",
       "status": "validated",
       "constraint_types": [
@@ -181704,7 +181710,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 3,
-      "solve_ms": 6.5,
+      "solve_ms": 2.0,
       "iss_size": 624,
       "iss_url_length": 652,
       "script_size": 1286
@@ -181795,10 +181801,12 @@
     },
     {
       "puzzle_id": "zG093TZKUV0",
-      "puzzle_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 2 of 2)",
+      "puzzle_title": "Daily Killer Sudoku 17093 (Greater-Than Killer)",
       "video_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 2 of 2)",
-      "author": null,
-      "sources": [],
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17093"
+      ],
       "date": "2018-09-27",
       "status": "validated",
       "constraint_types": [
@@ -181812,17 +181820,19 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 123,
-      "solve_ms": 28.4,
+      "solve_ms": 11.5,
       "iss_size": 5582,
       "iss_url_length": 5672,
       "script_size": 4525
     },
     {
       "puzzle_id": "LGG1mY-W-HU",
-      "puzzle_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 1 of 2)",
+      "puzzle_title": "Daily Killer Sudoku 17093 (Greater-Than Killer)",
       "video_title": "Live solve of 10/10 Difficulty Killer Sudoku (Part 1 of 2)",
-      "author": null,
-      "sources": [],
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17093"
+      ],
       "date": "2018-09-27",
       "status": "validated",
       "constraint_types": [
@@ -181836,7 +181846,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 123,
-      "solve_ms": 28.6,
+      "solve_ms": 8.1,
       "iss_size": 5582,
       "iss_url_length": 5672,
       "script_size": 5122
@@ -181885,10 +181895,12 @@
     },
     {
       "puzzle_id": "HfF6mDllaOs",
-      "puzzle_title": "Sudoku Techniques:  Forcing A Start",
+      "puzzle_title": "Daily Killer Sudoku 17107 (Greater-Than Killer)",
       "video_title": "Sudoku Techniques:  Forcing A Start",
-      "author": null,
-      "sources": [],
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17107"
+      ],
       "date": "2018-09-23",
       "status": "validated",
       "constraint_types": [
@@ -181902,7 +181914,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 12,
-      "solve_ms": 8.2,
+      "solve_ms": 2.7,
       "iss_size": 3151,
       "iss_url_length": 3215,
       "script_size": 3854
@@ -182187,10 +182199,12 @@
     },
     {
       "puzzle_id": "zNx-CVXOTEc",
-      "puzzle_title": "Killer Sudoku: Logic Test",
+      "puzzle_title": "Daily Killer Sudoku 17032 (Greater-Than Killer)",
       "video_title": "Killer Sudoku: Logic Test",
-      "author": null,
-      "sources": [],
+      "author": "dailykillersudoku.com",
+      "sources": [
+        "https://www.dailykillersudoku.com/puzzle/17032"
+      ],
       "date": "2018-09-06",
       "status": "validated",
       "constraint_types": [
@@ -182204,7 +182218,7 @@
       "unique_solution": true,
       "solutions_found": 1,
       "guesses": 826,
-      "solve_ms": 51.7,
+      "solve_ms": 16.5,
       "iss_size": 2580,
       "iss_url_length": 2638,
       "script_size": 4679
