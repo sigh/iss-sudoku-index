@@ -63,7 +63,7 @@ return [
   ...cages.map(([sum, ...cells]) => new Cage(sum, ...cells)),
   ...thermos.map(cells => new Thermo(...cells)),
   new Palindrome(...palindromeCells),
-  new ContainAtLeast('1,2,3,4,5,6,7,8,9', ...palindromeCells),
+  new ContainAtLeast('1_2_3_4_5_6_7_8_9', ...palindromeCells),
   ...arrows.map(cells => new Arrow(...cells)),
   ...whiteDots.map(cells => new WhiteDot(...cells)),
   ...blackDots.map(cells => new BlackDot(...cells)),

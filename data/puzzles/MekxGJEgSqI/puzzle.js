@@ -3,38 +3,42 @@
 // Video: https://www.youtube.com/watch?v=MekxGJEgSqI
 // Source: https://sudokupad.app/zm4m78m9xh
 
-// Normal sudoku, with no given digits.
-//
-// A one-cell-wide snake of orthogonally connected cells is drawn; it does not
-// branch and does not touch itself. The cells off the snake form a single
-// orthogonally connected area. No 2x2 region is entirely snake or entirely
-// non-snake.
-//
-// Digits separated by a white dot are consecutive, and the two cells of a dot
-// are one snake cell and one non-snake cell.
-//
-// Box borders divide the snake into segments, and every segment has the same
-// sum.
-//
-// The fog covering the grid, and the digits that clear it, are display only:
-// they change nothing about the finished grid, so nothing is encoded for them.
-//
-// "Touch itself" is read as orthogonal contact. Read as including diagonal
-// contact it would forbid every 90-degree turn, since the two cells either
-// side of a turn are diagonally adjacent while being two apart along the
-// snake. The snake would then be a straight line lying inside one row or one
-// column, and every 2x2 region missing that row or column would be entirely
-// non-snake, which the rules forbid; so that reading admits no solution.
-//
-// Solver-discovered state:
-//   YY   the shading, from the YinYang constraint: 1 = snake, 2 = non-snake
-//   VN1, VN2  the common segment sum N, as 9*VN1 + VN2 - 9 (see below)
+// Rules encoded:
+// - Normal sudoku (engine baseline). Fog is solving UI only.
+// - Snake / non-snake shading is the YinYang YY layer: SNAKE and NON_SNAKE
+//   each form one orthogonally connected area, and no 2x2 is monochrome.
+// - The snake is one cell wide, does not branch and does not touch itself:
+//   every snake cell has at most two orthogonal snake neighbours.
+// - White dots: consecutive digits, and one snake plus one non-snake cell.
+// - Box borders cut the snake into segments of equal sum.
 
-const SNAKE = 1;      // YinYang shades are the grid's two lowest values,
-const NONSNAKE = 2;   // and every YY cell holds one of them.
+const SNAKE = 1;
+const NON_SNAKE = 2;
 
-// The twelve white dots drawn in the source, each as its two cells.
-const DOTS = [
+const graph = cellGraph('9x9');
+const shade = graph.makeOverlay('YY');
+
+// A connected snake whose cells all have at most two snake neighbours is a
+// path or a cycle; a cycle either leaves non-snake cells on both sides of it
+// or fills a 2x2, so the yin-yang rules already exclude it and no explicit
+// end-cell count is needed.
+const noBranch = graph.cells().flatMap(cell => {
+  const ns = graph.neighbours(cell);
+  const triples = [];
+  for (let i = 0; i < ns.length; i++) {
+    for (let j = i + 1; j < ns.length; j++) {
+      for (let k = j + 1; k < ns.length; k++) {
+        triples.push([ns[i], ns[j], ns[k]]);
+      }
+    }
+  }
+  // A snake cell and three of its neighbours cannot all be snake.
+  return triples.map(t => new ContainAtLeast(
+    String(NON_SNAKE), ...shade.at([cell, ...t])));
+});
+
+// White dots, from the drawn difference markers (no value = consecutive).
+const dots = [
   ['R1C1', 'R2C1'],
   ['R7C2', 'R7C1'],
   ['R8C2', 'R7C2'],
@@ -48,122 +52,80 @@ const DOTS = [
   ['R7C4', 'R7C5'],
   ['R8C5', 'R9C5'],
 ];
-
-const shape = new Shape('9x9');
-const graph = cellGraph(shape);
-const cells = graph.cells();
-const shade = graph.makeOverlay('YY');
-
-const range = (lo, hi) => Array.from({ length: hi - lo + 1 }, (_, i) => lo + i);
-const repeat = (value, n) => Array(n).fill(value).join(',');
-
-// -- The segments of a box -------------------------------------------------
-
-// A segment is a maximal run of consecutive snake cells lying inside one box.
-// The snake never touches itself, so two snake cells that are orthogonally
-// adjacent are consecutive along it; two different runs inside one box are
-// therefore never adjacent, and the segments of a box are exactly the
-// orthogonally connected components of the snake within that box. A component
-// of the snake is also a path: no branching means at most two neighbours, and
-// a cycle would be a snake with no ends.
-//
-// So enumerate every subset of a box that induces a path. Such a subset is a
-// segment exactly when all its cells are snake and every box cell touching it
-// is not, and the constraint below is that implication.
-const pathSubsetsOf = (boxCells) => {
-  const inBox = new Set(boxCells);
-  const neighbours = new Map(boxCells.map(
-    (cell) => [cell, graph.neighbours(cell).filter((n) => inBox.has(n))]));
-  const subsets = [];
-  for (let mask = 1; mask < (1 << boxCells.length); mask++) {
-    const subset = boxCells.filter((_, i) => mask & (1 << i));
-    const chosen = new Set(subset);
-    const degrees = subset.map(
-      (cell) => neighbours.get(cell).filter((n) => chosen.has(n)).length);
-    if (degrees.some((d) => d > 2)) continue;              // no branching
-    if (degrees.reduce((a, b) => a + b, 0) / 2 !== subset.length - 1) continue;
-    if (!graph.connected(subset)) continue;                // one run, no cycle
-    subsets.push(subset);
-  }
-  return subsets;
-};
-
-const segmentCandidates = graph.boxes().flatMap((boxCells) => {
-  const inBox = new Set(boxCells);
-  return pathSubsetsOf(boxCells).map((subset) => {
-    const chosen = new Set(subset);
-    const touching = boxCells.filter((cell) => !chosen.has(cell)
-      && graph.neighbours(cell).some((n) => chosen.has(n)));
-    return { subset, touching };
-  });
-});
-
-// Segment sums are held as 9*VN1 + VN2 - 9 so that both Vars stay inside the
-// grid's 1-9 range: VN2 is the low base-9 place plus one, VN1 the high place
-// plus one. One Var cannot hold N directly (a Var takes the grid's nine
-// values, and N reaches the largest segment sum below).
-const BASE = 9;
-const MAX_SEGMENT_CELLS = Math.max(
-  ...segmentCandidates.map(({ subset }) => subset.length));
-// The cells of a segment lie in one box, so they hold distinct digits.
-const MAX_SEGMENT_SUM = range(10 - MAX_SEGMENT_CELLS, 9)
-  .reduce((a, b) => a + b, 0);
-const hiOf = (n) => Math.floor((n - 1) / BASE) + 1;
-
-const targetDomain = [
-  new Given('VN1', ...range(1, hiOf(MAX_SEGMENT_SUM))),
-  new Given('VN2', ...range(1, BASE)),
-];
-
-const equalSegmentSums = segmentCandidates.map(({ subset, touching }) => new Or([
-  ...shade.at(subset).map((cell) => new Given(cell, NONSNAKE)),
-  ...shade.at(touching).map((cell) => new Given(cell, SNAKE)),
-  new Sum(BASE, ['VN1', BASE], ['VN2', 1], ...subset.map((cell) => [cell, -1])),
-]));
-
-// -- The snake -------------------------------------------------------------
-
-// The snake does not branch and does not touch itself: no snake cell has three
-// snake neighbours. Stated as the count of non-snake neighbours it forces.
-const noBranchOrTouch = cells.flatMap((cell) => {
-  const neighbours = graph.neighbours(cell);
-  if (neighbours.length < 3) return [];
-  return [new Or([
-    new Given(shade.at(cell), NONSNAKE),
-    new ContainAtLeast(repeat(NONSNAKE, neighbours.length - 2),
-      ...shade.at(neighbours)),
-  ])];
-});
-
-// A snake has two ends, so some snake cell has at most one snake neighbour.
-// With the shaded region connected and no cell over two neighbours, that is
-// what separates a snake from a closed loop.
-const hasAnEnd = new Or(cells.map((cell) => {
-  const neighbours = graph.neighbours(cell);
-  return new And([
-    new Given(shade.at(cell), SNAKE),
-    new ContainAtLeast(repeat(NONSNAKE, neighbours.length - 1),
-      ...shade.at(neighbours)),
-  ]);
-}));
-
-// -- White dots ------------------------------------------------------------
-
-const dotRules = DOTS.flatMap(([a, b]) => [
+const dotRules = dots.flatMap(([a, b]) => [
   new WhiteDot(a, b),
-  // With two shades, "one snake cell and one non-snake cell" is all-different.
   new AllDifferent(...shade.at([a, b])),
 ]);
 
+// Segment sums. Because the snake never touches itself, two snake cells in
+// one box that are orthogonally adjacent are consecutive along the snake, so
+// the segments inside a box are exactly the orthogonally connected
+// components of that box's snake cells (a box the snake revisits holds
+// several). For every cell set C in a box that could be such a component,
+// if C is all snake and its other in-box neighbours are all non-snake, C
+// sums to the common target.
+//
+// Only sets forming a path (connected, acyclic, at most two neighbours per
+// cell within C) are enumerated: a component of a non-branching snake is a
+// piece of the snake, hence a path.
+//
+// The common target S is held in two Var cells [hi, lo] as
+// S = 9*(hi - 1) + lo. A path in a 3x3 box has at most 7 cells, whose
+// distinct digits total at most 42, so hi <= 5.
+const target = new Var('S', 'segment sum', 2);
+const [hi, lo] = target.cells();
+
+function pathSubsets(boxCells) {
+  const n = boxCells.length;
+  const inBox = new Set(boxCells);
+  const adj = boxCells.map(c =>
+    graph.neighbours(c).filter(x => inBox.has(x)).map(x => boxCells.indexOf(x)));
+  const result = [];
+  for (let mask = 1; mask < (1 << n); mask++) {
+    const members = [];
+    for (let i = 0; i < n; i++) if (mask & (1 << i)) members.push(i);
+    let edges = 0;
+    let maxDeg = 0;
+    for (const i of members) {
+      const d = adj[i].filter(j => mask & (1 << j)).length;
+      edges += d;
+      maxDeg = Math.max(maxDeg, d);
+    }
+    edges /= 2;
+    if (maxDeg > 2 || edges !== members.length - 1) continue;
+    // Connectivity: flood fill within the subset.
+    const seen = new Set([members[0]]);
+    const stack = [members[0]];
+    while (stack.length) {
+      const i = stack.pop();
+      for (const j of adj[i]) {
+        if ((mask & (1 << j)) && !seen.has(j)) { seen.add(j); stack.push(j); }
+      }
+    }
+    if (seen.size !== members.length) continue;
+    const border = [...new Set(members.flatMap(i => adj[i]))]
+      .filter(j => !(mask & (1 << j)));
+    result.push({
+      cells: members.map(i => boxCells[i]),
+      border: border.map(j => boxCells[j]),
+    });
+  }
+  return result;
+}
+
+const segmentSums = graph.boxes().flatMap(box =>
+  pathSubsets(box).map(({ cells, border }) => new Or([
+    ...shade.at(cells).map(c => new Given(c, NON_SNAKE)),
+    ...shade.at(border).map(c => new Given(c, SNAKE)),
+    new Sum(-9, ...cells, [hi, -9], [lo, -1]),
+  ])));
+
 return [
-  shape,
-  // The shading: both shades one orthogonally connected region, and no 2x2
-  // region entirely one shade.
+  new Shape('9x9'),
   new YinYang(),
-  new Var('N', 'segment sum', 2),
-  ...targetDomain,
-  ...noBranchOrTouch,
-  hasAnEnd,
+  target,
+  new Given(hi, 1, 2, 3, 4, 5),
+  ...noBranch,
   ...dotRules,
-  ...equalSegmentSums,
+  ...segmentSums,
 ];

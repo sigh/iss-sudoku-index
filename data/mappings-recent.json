@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-09-25T08:30:23.175286+00:00",
+  "generated_at": "2026-09-27T01:21:47.655327+00:00",
   "rows": [
     {
       "puzzle_id": "NEHtRZBNU28",
@@ -2383,8 +2383,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 391143,
-      "solve_ms": 158132.5,
+      "guesses": 143276,
+      "solve_ms": 23365.6,
       "iss_size": 299144,
       "iss_url_length": 300659,
       "script_size": 5378
@@ -2737,8 +2737,8 @@
       "hit_cap": true,
       "unique_solution": null,
       "solutions_found": 0,
-      "guesses": 682641,
-      "solve_ms": 16485.6,
+      "guesses": 244545,
+      "solve_ms": 2601.0,
       "iss_size": 23635,
       "iss_url_length": 23289,
       "script_size": 6370
