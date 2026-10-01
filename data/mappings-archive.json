@@ -1,6 +1,439 @@
 {
-  "generated_at": "2026-09-27T01:21:47.655327+00:00",
+  "generated_at": "2026-10-01T08:31:41.766124+00:00",
   "rows": [
+    {
+      "puzzle_id": "q43M_ngwQtw",
+      "puzzle_title": "Reborn hooligan ghost",
+      "video_title": "Brilliant Grid Simplicity",
+      "author": "Lithium-Ion",
+      "sources": [
+        "https://sudokupad.app/1b5i3a2d2d"
+      ],
+      "date": "2026-06-23",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Replicate",
+        "NFA: not-circle"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 493,
+      "solve_ms": 68.6,
+      "iss_size": 2987,
+      "iss_url_length": 3015,
+      "script_size": 2996
+    },
+    {
+      "puzzle_id": "t7cZjAyU50s",
+      "puzzle_title": "Good and Plenty",
+      "video_title": "Do You Need Sudoku Theory To Solve This?",
+      "author": "Blobz",
+      "sources": [
+        "https://sudokupad.app/blobz/good-and-plenty"
+      ],
+      "date": "2026-06-23",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "Quad",
+        "Pair: consecutive"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 329,
+      "solve_ms": 15.6,
+      "iss_size": 244,
+      "iss_url_length": 291,
+      "script_size": 847
+    },
+    {
+      "puzzle_id": "sTWSFmpOhTs",
+      "puzzle_title": "Slow Arrows",
+      "video_title": "Slow Arrows ... Slow Solve!",
+      "author": "billybeth",
+      "sources": [
+        "https://sudokupad.app/5542oxal82"
+      ],
+      "date": "2026-06-22",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Arrow",
+        "Pair: slow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 20,
+      "solve_ms": 7.8,
+      "iss_size": 1906,
+      "iss_url_length": 1849,
+      "script_size": 2203
+    },
+    {
+      "puzzle_id": "GSyQiFEF_3w",
+      "puzzle_title": "Rising Regions",
+      "video_title": "A New (And Blue) Sudoku Line!",
+      "author": "Derek LeClair",
+      "sources": [
+        "https://sudokupad.app/pyvvk21c84"
+      ],
+      "date": "2026-06-22",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "BlackDot",
+        "NFA: rising-sum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 246455,
+      "solve_ms": 44428.1,
+      "iss_size": 21058,
+      "iss_url_length": 21096,
+      "script_size": 1666
+    },
+    {
+      "puzzle_id": "sZ-KRO-82og",
+      "puzzle_title": "\"SIGMA\"tized",
+      "video_title": "In Plenty of Ways, this Puzzle is Approachable",
+      "author": "Purab Pal",
+      "sources": [
+        "https://sudokupad.app/yffxa7cuz1"
+      ],
+      "date": "2026-06-21",
+      "status": "validated",
+      "constraint_types": [
+        "Diagonal",
+        "X",
+        "V",
+        "BlackDot",
+        "WhiteDot",
+        "Replicate",
+        "Whisper",
+        "Renban",
+        "Pair: not a hidden V",
+        "Pair: exactly 5 apart"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1,
+      "solve_ms": 6.6,
+      "iss_size": 794,
+      "iss_url_length": 829,
+      "script_size": 3173
+    },
+    {
+      "puzzle_id": "8e8NrFkUqT8",
+      "puzzle_title": "The reckoning",
+      "video_title": "Another Candidate For Sudoku Of The Year",
+      "author": "Nicolas Duhail",
+      "sources": [
+        "https://sudokupad.app/9702l0djmf"
+      ],
+      "date": "2026-06-21",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "Or",
+        "And",
+        "NFA: only cage sums 3,4,5,11",
+        "NFA: exactly 4 cages sum 4",
+        "NFA: exactly 3 cages sum 3",
+        "NFA: exactly 5 cages sum 5",
+        "NFA: exactly 11 cages sum 11",
+        "NFA: only cage sums 3,4,6,10",
+        "NFA: exactly 6 cages sum 6",
+        "NFA: exactly 10 cages sum 10",
+        "NFA: only cage sums 3,4,7,9",
+        "NFA: exactly 7 cages sum 7",
+        "NFA: exactly 9 cages sum 9",
+        "NFA: only cage sums 3,4,16",
+        "NFA: exactly 16 cages sum 16",
+        "NFA: only cage sums 3,5,6,9",
+        "NFA: only cage sums 3,5,7,8",
+        "NFA: exactly 8 cages sum 8",
+        "NFA: only cage sums 3,5,15",
+        "NFA: exactly 15 cages sum 15",
+        "NFA: only cage sums 3,6,14",
+        "NFA: exactly 14 cages sum 14",
+        "NFA: only cage sums 3,7,13",
+        "NFA: exactly 13 cages sum 13",
+        "NFA: only cage sums 3,8,12",
+        "NFA: exactly 12 cages sum 12",
+        "NFA: only cage sums 3,9,11",
+        "NFA: only cage sums 3,20",
+        "NFA: exactly 20 cages sum 20",
+        "NFA: only cage sums 4,5,6,8",
+        "NFA: only cage sums 4,5,14",
+        "NFA: only cage sums 4,6,13",
+        "NFA: only cage sums 4,7,12",
+        "NFA: only cage sums 4,8,11",
+        "NFA: only cage sums 4,9,10",
+        "NFA: only cage sums 4,19",
+        "NFA: exactly 19 cages sum 19",
+        "NFA: only cage sums 5,6,12",
+        "NFA: only cage sums 5,7,11",
+        "NFA: only cage sums 5,8,10",
+        "NFA: only cage sums 5,18",
+        "NFA: exactly 18 cages sum 18",
+        "NFA: only cage sums 6,7,10",
+        "NFA: only cage sums 6,8,9",
+        "NFA: only cage sums 6,17",
+        "NFA: exactly 17 cages sum 17",
+        "NFA: only cage sums 7,16",
+        "NFA: only cage sums 8,15",
+        "NFA: only cage sums 9,14",
+        "NFA: only cage sums 10,13",
+        "NFA: only cage sums 11,12",
+        "NFA: only cage sums 23",
+        "NFA: exactly 23 cages sum 23"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 38753,
+      "solve_ms": 44694.4,
+      "iss_size": 318467,
+      "iss_url_length": 319346,
+      "script_size": 2931
+    },
+    {
+      "puzzle_id": "TB1CIfZeOyU",
+      "puzzle_title": "No, the other side",
+      "video_title": "No - Look on The Other Side!",
+      "author": "Scott Strosahl",
+      "sources": [
+        "https://sudokupad.app/znt0i5zouc"
+      ],
+      "date": "2026-06-20",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Sum",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 24,
+      "solve_ms": 14.2,
+      "iss_size": 7631,
+      "iss_url_length": 7076,
+      "script_size": 1162
+    },
+    {
+      "puzzle_id": "qrLbRCZQeSk",
+      "puzzle_title": "Forty-Four",
+      "video_title": "The 44 Sudoku Challenge",
+      "author": "James Sinclair",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/forty-four"
+      ],
+      "date": "2026-06-20",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Renban"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 16,
+      "solve_ms": 9.6,
+      "iss_size": 569,
+      "iss_url_length": 606,
+      "script_size": 1427
+    },
+    {
+      "puzzle_id": "4OJFWdvh_Mw",
+      "puzzle_title": "Red Dead Difference",
+      "video_title": "Football or Sudoku? Easy Decision!",
+      "author": "Mateo99",
+      "sources": [
+        "https://sudokupad.app/30nule6bb2"
+      ],
+      "date": "2026-06-19",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "AllDifferent",
+        "Or",
+        "And",
+        "Sum",
+        "WhiteDot",
+        "BlackDot",
+        "Pair: slow thermo",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 534,
+      "solve_ms": 26.9,
+      "iss_size": 1477,
+      "iss_url_length": 1474,
+      "script_size": 1526
+    },
+    {
+      "puzzle_id": "Qd8cn82k5nk",
+      "puzzle_title": "Kelowna",
+      "video_title": "Brainteasers In Sudoku Form!",
+      "author": "Oddlyeven",
+      "sources": [
+        "https://sudokupad.app/vrblr4abgp"
+      ],
+      "date": "2026-06-19",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "Sum",
+        "AllDifferent",
+        "NFA: doubled-2",
+        "NFA: doubled-1",
+        "NFA: doubled-4",
+        "NFA: doubled-6",
+        "NFA: doubled-8",
+        "NFA: doubled-9",
+        "NFA: doubled-7",
+        "NFA: doubled-5",
+        "NFA: doubled-3",
+        "NFA: sum-line-10",
+        "NFA: value-sum-13",
+        "NFA: black-dot-values",
+        "NFA: value-sum-19",
+        "NFA: value-sum-22",
+        "NFA: value-sum-26",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 121340,
+      "solve_ms": 50728.4,
+      "iss_size": 14295,
+      "iss_url_length": 14299,
+      "script_size": 4170
+    },
+    {
+      "puzzle_id": "-c9lo7lYxp8",
+      "puzzle_title": "Medium Kropki Sudoku",
+      "video_title": "So Much Sudoku to Do!",
+      "author": "Adrian Klausen",
+      "sources": [
+        "https://sudokupad.app/abqgxi5fg2"
+      ],
+      "date": "2026-06-18",
+      "status": "validated",
+      "constraint_types": [
+        "BlackDot",
+        "WhiteDot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 0,
+      "solve_ms": 5.5,
+      "iss_size": 758,
+      "iss_url_length": 776,
+      "script_size": 1444
+    },
+    {
+      "puzzle_id": "_M5lRitViHo",
+      "puzzle_title": "Quiet Room",
+      "video_title": "Where Has This Sudoku Maker Been All This Time?",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/mea9u6amrt"
+      ],
+      "date": "2026-06-18",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 2,
+      "solve_ms": 3.6,
+      "iss_size": 348,
+      "iss_url_length": 390,
+      "script_size": 889
+    },
+    {
+      "puzzle_id": "ovnLIQzpdDY",
+      "puzzle_title": "chi",
+      "video_title": "Feeling the Chi despite the Pressure",
+      "author": "MOORESUDOKU90",
+      "sources": [
+        "https://sudokupad.app/6jqxfbbrtz"
+      ],
+      "date": "2026-06-17",
+      "status": "validated",
+      "constraint_types": [
+        "And",
+        "AllDifferent",
+        "Sum",
+        "X",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 3,
+      "solve_ms": 4.7,
+      "iss_size": 1328,
+      "iss_url_length": 1375,
+      "script_size": 1949
+    },
+    {
+      "puzzle_id": "z9T9kUTum1M",
+      "puzzle_title": "Nabnerfel",
+      "video_title": "Trust Me. This Sudoku Will ASTONISH You.",
+      "author": "Antiknight",
+      "sources": [
+        "https://sudokupad.app/6y7vhnhdof"
+      ],
+      "date": "2026-06-17",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "WhiteDot",
+        "PairX: nabner"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 8490,
+      "solve_ms": 131.1,
+      "iss_size": 448,
+      "iss_url_length": 485,
+      "script_size": 1295
+    },
     {
       "puzzle_id": "yGgZHkP2lFs",
       "puzzle_title": "Dueling Cages",

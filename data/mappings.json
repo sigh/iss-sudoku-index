@@ -1,6 +1,410 @@
 {
-  "generated_at": "2026-09-27T01:21:47.655327+00:00",
+  "generated_at": "2026-10-01T08:31:41.766124+00:00",
   "rows": [
+    {
+      "puzzle_id": "umnaVobkFvA",
+      "puzzle_title": "Hang in the Balance",
+      "video_title": "Don't Leave me Hanging!",
+      "author": "James Kopp",
+      "sources": [
+        "https://sudokupad.app/0mapot84dm"
+      ],
+      "date": "2026-09-30",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "Renban",
+        "Whisper",
+        "BlackDot",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1033,
+      "solve_ms": 9.0,
+      "iss_size": 490,
+      "iss_url_length": 522,
+      "script_size": 1754
+    },
+    {
+      "puzzle_id": "-1o9QtxG91E",
+      "puzzle_title": "Wekiera",
+      "video_title": "How Would A Mathematician Solve This?",
+      "author": "Kaktuslav",
+      "sources": [
+        "https://sudokupad.app/9mnu386ybb"
+      ],
+      "date": "2026-09-30",
+      "status": "too-slow",
+      "constraint_types": [
+        "6x6",
+        "1-9",
+        "NoBoxes",
+        "ChaosConstruction",
+        "RegionSameValues",
+        "PillArrow",
+        "Var",
+        "NFA: EqualSegments",
+        "NFA: SegmentIncrease",
+        "NFA: RegionBorder"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 28758,
+      "solve_ms": 10603.4,
+      "iss_size": 23715,
+      "iss_url_length": 23761,
+      "script_size": 4300
+    },
+    {
+      "puzzle_id": "Q85moM1MEio",
+      "puzzle_title": "Reflective Vortex",
+      "video_title": "Straight into the Vortex ... and Back out Again!",
+      "author": "Julink",
+      "sources": [
+        "https://sudokupad.app/5ea8g3bxow"
+      ],
+      "date": "2026-09-29",
+      "status": "validated",
+      "constraint_types": [
+        "RegionSumLine",
+        "Or",
+        "AllDifferent"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 272,
+      "solve_ms": 5.7,
+      "iss_size": 849,
+      "iss_url_length": 875,
+      "script_size": 2194
+    },
+    {
+      "puzzle_id": "eEFfs2AV39o",
+      "puzzle_title": "Zero Sum",
+      "video_title": "What If A Sudoku Contained Zeroes? Lots Of Zeroes??!",
+      "author": "Invi",
+      "sources": [
+        "https://sudokupad.app/9iskh68h4z"
+      ],
+      "date": "2026-09-29",
+      "status": "too-slow",
+      "constraint_types": [
+        "Raw 9x9",
+        "0-9",
+        "Var",
+        "Sum",
+        "EqualSum",
+        "X",
+        "GreaterThan",
+        "PairX: 1-9 at most once",
+        "Pair: zero flag"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 1,
+      "guesses": 1123631,
+      "solve_ms": 4112.9,
+      "iss_size": 5627,
+      "iss_url_length": 5716,
+      "script_size": 3426
+    },
+    {
+      "puzzle_id": "8s3fskojJfw",
+      "puzzle_title": "Par(i)ty lines",
+      "video_title": "Party Time",
+      "author": "Quiriqui",
+      "sources": [
+        "https://sudokupad.app/soggzcehcz"
+      ],
+      "date": "2026-09-28",
+      "status": "validated",
+      "constraint_types": [
+        "Modular",
+        "Or",
+        "And",
+        "SameValues",
+        "AntiKnight",
+        "BlackDot",
+        "Replicate",
+        "WhiteDot",
+        "Pair: not 1:2"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 5,
+      "solve_ms": 1.3,
+      "iss_size": 1586,
+      "iss_url_length": 1583,
+      "script_size": 2972
+    },
+    {
+      "puzzle_id": "H5BTHIevdqw",
+      "puzzle_title": "Border Thermos",
+      "video_title": "The Sudoku With Nearly 4 Given Digits?!",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/lrechjs7h8"
+      ],
+      "date": "2026-09-28",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKing",
+        "Thermo",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 34,
+      "solve_ms": 1.6,
+      "iss_size": 341,
+      "iss_url_length": 380,
+      "script_size": 1008
+    },
+    {
+      "puzzle_id": "bEQPVdSvu9A",
+      "puzzle_title": "Wet Blankets",
+      "video_title": "Don't Worry about the Wet Blankets!",
+      "author": "Jorava",
+      "sources": [
+        "https://sudokupad.app/tdzmfngyfp"
+      ],
+      "date": "2026-09-27",
+      "status": "validated",
+      "constraint_types": [
+        "0-9",
+        "Replicate",
+        "Var",
+        "ContainExact",
+        "ContainAtLeast",
+        "Sum",
+        "X",
+        "BlackDot",
+        "Or",
+        "And",
+        "Pair: negative",
+        "Pair: negative black dot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 1509,
+      "solve_ms": 9.2,
+      "iss_size": 2604,
+      "iss_url_length": 2618,
+      "script_size": 4254
+    },
+    {
+      "puzzle_id": "Fb1oDVYythc",
+      "puzzle_title": "Wickerwork",
+      "video_title": "Phistomefel: \"I Find This One Very Difficult\"!!",
+      "author": "Phistomefel",
+      "sources": [
+        "https://sudokupad.app/20ag6yhrrg"
+      ],
+      "date": "2026-09-27",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 329,
+      "solve_ms": 5.6,
+      "iss_size": 267,
+      "iss_url_length": 307,
+      "script_size": 912
+    },
+    {
+      "puzzle_id": "YzDgl24P4B8",
+      "puzzle_title": "Waterfall",
+      "video_title": "Just Dots, but we're going Dotty!",
+      "author": "Salidom",
+      "sources": [
+        "https://sudokupad.app/uolc3f9l8q"
+      ],
+      "date": "2026-09-26",
+      "status": "validated",
+      "constraint_types": [
+        "BlackDot",
+        "WhiteDot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 997,
+      "solve_ms": 7.5,
+      "iss_size": 574,
+      "iss_url_length": 598,
+      "script_size": 1194
+    },
+    {
+      "puzzle_id": "q8eZpyr23mc",
+      "puzzle_title": "Rainbow Arrows in Fog",
+      "video_title": "No Complicated Rules So How Can This Solve?",
+      "author": "Jigokuro",
+      "sources": [
+        "https://sudokupad.app/297mtjab6j"
+      ],
+      "date": "2026-09-26",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 163,
+      "solve_ms": 3.9,
+      "iss_size": 264,
+      "iss_url_length": 307,
+      "script_size": 1110
+    },
+    {
+      "puzzle_id": "bGmfwg4PrIM",
+      "puzzle_title": "No Peeking - Markov's Order",
+      "video_title": "No Peeking - I Mean it!",
+      "author": "Belamis",
+      "sources": [
+        "https://sudokupad.app/llgqh0kzve"
+      ],
+      "date": "2026-09-25",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Cage",
+        "Var",
+        "SameValues",
+        "Pair: Factor or multiple",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 165280,
+      "solve_ms": 559.7,
+      "iss_size": 1272,
+      "iss_url_length": 1302,
+      "script_size": 2905
+    },
+    {
+      "puzzle_id": "WtF_PfobSVs",
+      "puzzle_title": "Beetle, Beetle",
+      "video_title": "Have You Ever Seen A Better Killer Sudoku?",
+      "author": "Walter Gr\u00f6nholm",
+      "sources": [
+        "https://sudokupad.app/rnvc88bijs"
+      ],
+      "date": "2026-09-25",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "guesses": 333,
+      "solve_ms": 5.6,
+      "iss_size": 295,
+      "iss_url_length": 335,
+      "script_size": 935
+    },
+    {
+      "puzzle_id": "a5CBygZYSFY",
+      "puzzle_title": "Switching circuit",
+      "video_title": "A Short Circuit in my Brain",
+      "author": "Neil Armchair",
+      "sources": [
+        "https://sudokupad.app/fplfqjp556"
+      ],
+      "date": "2026-09-24",
+      "status": "partial",
+      "constraint_types": [
+        "0-15",
+        "Replicate",
+        "Var",
+        "Or",
+        "And",
+        "Sum",
+        "Pair: line link",
+        "NFA: rotation switch",
+        "NFA: successor count",
+        "NFA: position counter",
+        "NFA: blue square count",
+        "NFA: yellow arrow count",
+        "NFA: piece origin",
+        "Pair: successor count",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 178270,
+      "solve_ms": 6345.5,
+      "iss_size": 124229,
+      "iss_url_length": 122878,
+      "script_size": 17377
+    },
+    {
+      "puzzle_id": "yhcIWlw5dD8",
+      "puzzle_title": "Maverick and Simon",
+      "video_title": "Sudoku Expert Gets Destroyed By Tom Cruise Character?!",
+      "author": "Deckatron",
+      "sources": [
+        "https://sudokupad.app/f9jwzjz6ug"
+      ],
+      "date": "2026-09-24",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "CountingCircles",
+        "X",
+        "GreaterThan",
+        "Pair: loop-edge",
+        "Pair: simons-house",
+        "Pair: loop-cell",
+        "NFA: simons-segments",
+        "NFA: no-cross",
+        "NFA: arc-position",
+        "NFA: one-house",
+        "NFA: arc-label",
+        "NFA: segment-sum",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "guesses": 52071,
+      "solve_ms": 4485.2,
+      "iss_size": 502266,
+      "iss_url_length": 502161,
+      "script_size": 17626
+    },
     {
       "puzzle_id": "NEHtRZBNU28",
       "puzzle_title": "What's in a Name",
