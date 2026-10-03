@@ -10,11 +10,9 @@
 //   Along a thermometer, digits increase from the bulb to the tip.
 //   A white dot connects consecutive digits.
 //
-// The chosen total is fixed by the solver before solving, and nothing drawn
-// says which of the four values it is. The encoding therefore disjoins over the
-// four choices, which is weaker than the rule as a solver applies it: it admits
-// one completed grid per choosable total instead of the single grid that
-// follows once a value has been picked.
+// The total is the solver's own choice, so the puzzle is four puzzles sharing
+// one clue set. The cage rule is an Or over the four totals, each branch putting
+// the same total on every cage: one completed grid per choice.
 
 // The 16 cages drawn on the board, each a domino, in the payload's order.
 const cages = [
