@@ -11,10 +11,7 @@
 //   - The values along an arrow sum to the value in its circle.
 //   - Values in shaded (even) cells are even.
 //   - The three printed cage products: 63, 64 and 17.
-// Omitted: the cross-cage half of the product rule -- that all fourteen cage
-//   products are distinct and each is consecutive with exactly one other. That
-//   is what determines the eleven unprinted products, so with it dropped those
-//   cages carry only their digit-distinctness.
+//   - All cage products are distinct and each has exactly one consecutive partner.
 
 // Representation. The main grid holds one digit of each cell; the VS overlay
 // holds that cell's second digit, or the sentinel 10 where the cell has only
@@ -87,6 +84,70 @@ const products = PRINTED_PRODUCTS.map(([cageIndex, target]) =>
   new NFA(cageProduct(target), `cage-product-${target}`,
     ...valueCells(CAGES[cageIndex])));
 
+// Each cage product is written in five base-11 digits, least significant first.
+// Five small modular machines bind that number to the product: their coprime
+// moduli multiply to 323323, exceeding the largest possible product 17^4.
+const MODULI = [7, 11, 13, 17, 19];
+const productVars = CAGES.map((_, i) => new Var(`P${String.fromCharCode(65+i)}`, 'cage product', 5));
+const productCells = productVars.map(v => v.cells());
+const productBindings = CAGES.flatMap((cage, i) => MODULI.map(mod => {
+  const len = cage.length * 2;
+  const spec = NFA.encodeSpec({
+    startState: {pos: 0, residue: 1, primary: -1},
+    transition: (s, x) => {
+      if (s.pos >= len + 5) return undefined;
+      let residue = s.residue, primary = s.primary;
+      if (s.pos < len) {
+        if (x > 9) return undefined;
+        if (s.pos % 2 === 0) primary = x;
+        else { residue = residue * (primary + x) % mod; primary = -1; }
+      } else residue = (residue - x * (11 ** (s.pos-len) % mod) % mod + mod) % mod;
+      return {pos:s.pos+1, residue, primary};
+    },
+    accept: s => s.pos === len+5 && s.residue === 0,
+    maxDepth: len+5,
+  }, shape);
+  return new NFA(spec, `product-mod-${mod}`, ...valueCells(cage), ...productCells[i]);
+}));
+// Bounds forbid a congruent product outside the range of the cage's values.
+const productBounds = CAGES.map((cage, i) => {
+  const limit = 17 ** cage.length;
+  const digits = Array.from({length:5}, (_,j)=>Math.floor(limit / 11**j)%11);
+  const spec = NFA.encodeSpec({
+    startState:{pos:0, comparison:0},
+    transition:(s,x)=> s.pos < 5 ? {pos:s.pos+1,
+      comparison:x===digits[s.pos]?s.comparison:(x<digits[s.pos]?-1:1)} : undefined,
+    accept:s=>s.pos===5 && s.comparison<=0, maxDepth:5,
+  },shape);
+  return new NFA(spec,'product-bound',...productCells[i]);
+});
+// The three carries test A-B = 0, 1, -1 in base 11. A failed candidate
+// remains null; the final bit records consecutiveness while equality is rejected.
+const relationSpec = NFA.encodeSpec({
+  startState:{pos:0,a:-1,carries:[0,-1,1]},
+  transition:(s,x)=> {
+    if(s.pos>10) return undefined;
+    if(s.pos===10) {
+      const equal=s.carries[0]===0;
+      const consecutive=s.carries[1]===0 || s.carries[2]===0;
+      return !equal && x===(consecutive?1:0) ? {pos:11,a:-1,carries:[]} : undefined;
+    }
+    if(s.pos%2===0) return {pos:s.pos+1,a:x,carries:s.carries};
+    return {pos:s.pos+1,a:-1,carries:s.carries.map(c=>c===null?null:
+      ((s.a-x+c)%11===0?(s.a-x+c)/11:null))};
+  },accept:s=>s.pos===11,maxDepth:11,
+},shape);
+const flags=[], relations=[], incident=CAGES.map(()=>[]);
+for(let i=0;i<CAGES.length;i++) for(let j=i+1;j<CAGES.length;j++) {
+  const flag = new Var(`F${String.fromCharCode(65+i)}${String.fromCharCode(65+j)}`,'consecutive cages',1);
+  const id=flag.cell(1);
+  flags.push(flag,new Given(id,0,1));
+  incident[i].push(id);incident[j].push(id);
+  const read=productCells[i].flatMap((cell,k)=>[cell,productCells[j][k]]);
+  relations.push(new NFA(relationSpec,'product relation',...read,id));
+}
+const partnerCounts=incident.map(list=>new ContainExact('1',...list));
+
 // Circle cell, then the arm of each arrow line drawn from it: the R4C1 circle
 // carries three separate lines, each of which sums to it on its own.
 const ARROWS = [
@@ -112,4 +173,6 @@ return [
   ...cells.map(cell => new Pair(canonicalOrder, 'canonical digit order',
     cell, VS.at(cell))),
   ...houses, ...cageDigits, ...products, ...arrows, ...shaded,
+  ...productVars, ...productBindings, ...productBounds,
+  ...flags, ...relations, ...partnerCounts,
 ];

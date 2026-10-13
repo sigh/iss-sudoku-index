@@ -18,19 +18,11 @@
 //  * Interaction 3: one of a region's two clues equals the exact count of
 //    shaded cells in that region (either clue may be the one that matches).
 //
-// Omitted: the app's answer-check convention ("enter the region's size, last
-// digit only, in every unshaded cell with no printed clue") is not modelled.
-// It is a digit-transcription of the partition/shading already enforced
-// below, not additional solving content, and broadcasting a region's
-// discovered size to every one of its cells (some regions run past 90 cells)
-// has no construction that fits inside ISS's per-build cell budget on this
-// 156-cell board. The main grid therefore only carries the five single-digit
-// printed givens; every other cell is pinned to a filler value with no
-// meaning of its own.
+// In unshaded clue-free cells, enter the region size modulo ten.
 
 const GRID = '12x13';
 
-// The 22 printed clue numbers, transcribed from the payload as [row, col,
+// The 22 printed numbers in the grid and text overlays, as [row, col,
 // value]: R2C2/R2C3/R3C2/R3C3/R9C11 are real single-digit grid givens; the
 // other 17 print 10 or more and are drawn as floating text overlays instead,
 // since a cell given cannot exceed 9. Row/column go through makeCellId,
@@ -71,9 +63,7 @@ const DISTINCT_VALUES = [...new Set(clueValues)].sort((a, b) => a - b);
 
 // Shape carries three auxiliary layers -- the region label (1..NUM_REGIONS),
 // and the region label masked to each shade (0..NUM_REGIONS, 0 meaning "not
-// this shade") -- so its value range is widened to 0-11 and every main-grid
-// cell is pinned below; none of the puzzle's own logic lives on the main
-// grid.
+// this shade"). The value range also covers main-grid output digits 0..9.
 const shape = new Shape(GRID, '0-11', 'Raw');
 
 const lb = graph.makeOverlay('VB'); // this cell's region label, 1..NUM_REGIONS
@@ -84,13 +74,31 @@ const ur = graph.makeOverlay('VU'); // label if unshaded, else 0
 const SHADED = 0;
 const UNSHADED = 1; // YinYang() uses the grid's two lowest values, in order.
 
-// --- Main grid: no logic, just the five real givens plus a filler value ---
+// Single-digit clues retain their printed values; overlay clues and shaded
+// clue-free cells use 0. Unshaded clue-free cells carry the size's last digit.
 const singleDigitClueCells = clueCells.filter((c) => CLUES[c] <= 9);
-const fillerCells = cells.filter((c) => !singleDigitClueCells.includes(c));
+const outputCells = cells.filter((c) => !isClue(c));
 const mainGrid = [
-  ...singleDigitClueCells.map((c) => new Given(c, CLUES[c])),
-  graph.makeReplicate(new Given(fillerCells[0], 0), fillerCells),
+  ...clueCells.map((c) => new Given(c, CLUES[c] <= 9 ? CLUES[c] : 0)),
+  graph.makeReplicate(new Given(cells[0], ...range(0, 9))),
 ];
+// A shaded output cell has no entered digit; zero also remains possible for
+// unshaded cells in a region whose size ends in zero.
+const shadedOutputKey = Pair.fnToKey((shade, digit) => shade !== SHADED || digit === 0, shape);
+const shadedOutputs = outputCells.map((c) => new Pair(shadedOutputKey, 'blank-shaded', yy.at(c), c));
+// State carries the count residue while scanning labels, then checks each
+// (unshaded-region-label, output) pair. Only this region's outputs are checked.
+const outputSizes = labels.map((label) => new NFA(NFA.encodeSpec({
+  startState: {phase: 'count', residue: 0, hit: false},
+  transition: (s, v) => {
+    if (v === SEGMENT_BREAK) return {phase: 'mask', residue: s.residue, hit: false};
+    if (s.phase === 'count') return {phase: 'count', residue: (s.residue + (v === label ? 1 : 0)) % 10, hit: false};
+    if (s.phase === 'mask') return {phase: 'digit', residue: s.residue, hit: v === label};
+    if (s.hit && v !== s.residue) return undefined;
+    return {phase: 'mask', residue: s.residue, hit: false};
+  },
+  accept: (s) => s.phase === 'mask',
+}, shape, {multiSegment: true}), 'region-size-output', lb.cells(), ...outputCells.map((c) => [ur.at(c), c])));
 
 // --- Region label: every cell takes a label 1..NUM_REGIONS ----------------
 const labelDomain = lb.makeReplicate(new Given(lb.cells()[0], ...labels));
@@ -138,12 +146,7 @@ const sizeInsidePair = labels.map((label) => new Or(
       (c) => CLUES[c] > size))),
   ]))));
 
-// --- Shading: global Yin-Yang, plus a symmetry pin -------------------------
-// The rules never anchor "shaded" to a physical cell, so the whole grid's
-// shading can be swapped end to end and still satisfy every rule below.
-// Pin one representative: the first clue in reading order is shaded.
 const yinYang = new YinYang();
-const shadeSwapPin = new Given(yy.at(clueCells[0]), SHADED);
 
 // --- Region label combined with shade, split across two masked layers -----
 // SR holds this cell's label when it is shaded, else 0; UR mirrors it for
@@ -203,7 +206,8 @@ return [
   ur.toVar('unshadedLabel'),
   labelDomain,
   yinYang,
-  shadeSwapPin,
+  ...shadedOutputs,
+  ...outputSizes,
   ...regionConnected,
   twoCluesPerRegion,
   labelOrder,

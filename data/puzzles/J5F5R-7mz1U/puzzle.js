@@ -3,126 +3,80 @@
 // Video: https://www.youtube.com/watch?v=J5F5R-7mz1U
 // Source: https://sudokupad.app/Tqfg9qNd2L
 
-// Rules encoded here:
-//  1. A snake: a single self-avoiding, 1-cell-wide path with two distinct
-//     ends. Every non-end path cell has exactly two orthogonal
-//     path-neighbours and every end has exactly one; the path may not touch
-//     itself beyond that (no revisits, no orthogonal touch other than
-//     consecutive steps), but two non-consecutive path cells may still be
-//     diagonally adjacent -- nothing here forbids that.
-//  2. Three grey dots are given; each sits on a lattice corner where two
-//     diagonal cell pairs cross, and the geometry offers no way to pin only
-//     one of the two pairs. So each dot forces at least one of its two
-//     diagonal pairs onto the snake (both members of that pair), not
-//     necessarily both pairs at once.
-//  3. Every row and every column holds exactly two stars, and no two stars
-//     share an edge or a corner. A star may only occupy a cell the snake
-//     does not occupy. One four-valued cell carries both layers at once
-//     (EMPTY/STAR/BODY/END) so a cell can never be both a star and on the
-//     snake.
-//
-// Omitted: "every region the snake's body divides the grid into holds
-// exactly two stars." That partition's region count, sizes and shapes are
-// not fixed by anything drawn -- they fall out of whichever path the solver
-// draws -- and no known construction attaches a per-region count to a
-// partition that is itself unanchored, unbounded, AND derived from a
-// second, also-unknown structure (the snake). This is the rule that
-// actually pins the puzzle's answer down, so the snake's shape and the
-// stars' exact positions are both left far more open here than in the
-// source puzzle.
-
-const EMPTY = 1, STAR = 2, BODY = 3, END = 4;
-const onPath = v => v === BODY || v === END;
-
-const graph = cellGraph(new Shape('10x10', 4, 'Raw'));
-
-// --- Snake shape. Each cell's own value names its required path-degree
-// (BODY 2, END 1); an off-path cell (EMPTY/STAR) is unconstrained. Reads a
-// cell then its orthogonal neighbours (2-4 depending on position).
-const degreeMachine = NFA.encodeSpec({
-  startState: { phase: 'start' },
-  transition: ({ phase, count, target }, value) => {
-    if (phase === 'start') {
-      if (value === BODY) return { phase: 'count', count: 0, target: 2 };
-      if (value === END) return { phase: 'count', count: 0, target: 1 };
-      return { phase: 'off' };
-    }
-    if (phase === 'off') return { phase: 'off' };
-    const next = count + (onPath(value) ? 1 : 0);
-    return next > target ? undefined : { phase: 'count', count: next, target };
-  },
-  accept: ({ phase, count, target }) => phase === 'off' || count === target,
-}, 4);
-// The machine's own transitions never look at *which* direction a neighbour
-// came from, only how many are on-path, so cells that expose the same set of
-// fixed (dRow, dCol) steps can share one Replicate template. Group cells by
-// that shape (interior: all four; each edge/corner: whichever steps exist).
-const FIXED_STEPS = [[0, -1], [0, 1], [-1, 0], [1, 0]];  // left, right, up, down
-const shapeGroups = new Map();
-for (const cell of graph.cells()) {
-  const steps = FIXED_STEPS.filter(([dr, dc]) => graph.step(cell, dr, dc) !== null);
-  const key = steps.map(String).join(';');
-  (shapeGroups.get(key) ?? shapeGroups.set(key, { steps, cells: [] }).get(key))
-    .cells.push(cell);
-}
-const degrees = [...shapeGroups.values()].flatMap(({ steps, cells }) => {
-  const origin = cells[0];
-  const template = steps.map(([dr, dc]) => graph.step(origin, dr, dc));
-  const nfa = new NFA(degreeMachine, 'degree', origin, ...template);
-  return cells.length === 1 ? [nfa] : [new Replicate(
-    [nfa], Replicate.encodeTargetCells(cells, origin, graph), origin)];
+// A single orthogonal snake has two ends, no orthogonal self-touch or revisits,
+// and contains a diagonal pair at each grey circle. Stars occupy its complement:
+// two per row, column, and connected complement region, with no king adjacency.
+const shape = new Shape('10x10', '0-15', 'Raw');
+const g = cellGraph(shape), cells = g.cells();
+const snake = g.makeOverlay('VS');
+const rr = g.makeOverlay('VR'), rc = g.makeOverlay('VC');
+const da = g.makeOverlay('VA'), db = g.makeOverlay('VB');
+const pair = (fn, label, a, b) => new Pair(Pair.fnToKey(fn, shape), label, a, b);
+const or = (...args) => new Or(args), and = (...args) => new And(args);
+const same = (a,b) => new SameValues(2,a,b);
+const nfa = (spec,name,list) => new NFA(NFA.encodeSpec(spec,shape),name,list);
+const edges = cells.flatMap(a => g.neighbours(a).filter(b => cells.indexOf(a)<cells.indexOf(b)).map(b=>[a,b]));
+const degreeGroups = Map.groupBy(cells,c=>JSON.stringify(g.neighbours(c).map(n=>{const a=parseCellId(c),b=parseCellId(n);return [b.row-a.row,b.col-a.col]})));
+const degrees = [...degreeGroups.values()].map(origins => { const c=origins[0]; const clue=nfa({
+  startState:{type:null,count:0},
+  transition:({type,count},v)=>type===null ? (v<=2?{type:v,count:0}:undefined) :
+    (v<=2 && (type===0 || count+(v!==0)<=2) ? {type,count:type===0?0:count+(v!==0)}:undefined),
+  accept:({type,count})=>type===0 || count===(type===2?1:2),
+},'snake degree',[snake.at(c),...snake.at(g.neighbours(c))]);
+ return new Replicate([clue],Replicate.encodeTargetCells(snake.at(origins),snake.at(c),snake),snake.at(c));
 });
-
-// One connected path: the degree machine above makes on-path cells 1-or-2
-// -regular under orthogonal adjacency; connectivity over the same adjacency
-// then rules out a second, disjoint path fragment. Off-path cells are free
-// to fall into as many disconnected pieces as the star layer needs.
-const snakeConnected = new ConnectedValues('', [BODY, END]);
-
-// Exactly two path ends (a path, not a closed loop).
-const snakeEnds = new ContainExact(`${END}_${END}`, ...graph.cells());
-
-// Grey-dot givens: at each corner, the mark's two candidate diagonal pairs
-// are disjoined (at least one pair on-path) rather than both forced, since
-// the geometry alone cannot select between them. Row/column pairs, not
-// hand-written ids -- row/col 10 is not "R.C10".
-const GREY_DOT_CORNERS = [
-  [[[3, 2], [4, 3]], [[3, 3], [4, 2]]],
-  [[[7, 9], [8, 10]], [[7, 10], [8, 9]]],
-  [[[9, 6], [10, 7]], [[9, 7], [10, 6]]],
-];
-const onPathGiven = ([row, col]) => new Given(makeCellId(row, col), BODY, END);
-const greyDots = GREY_DOT_CORNERS.map(pairs =>
-  new Or(pairs.map(pair => new And(pair.map(onPathGiven)))));
-
-// --- Star battle over whichever cells are not on the snake: two stars per
-// row and per column.
-const starRows = graph.rows().map(row => new ContainExact(`${STAR}_${STAR}`, ...row));
-const starCols = graph.columns().map(col => new ContainExact(`${STAR}_${STAR}`, ...col));
-
-// No two stars share an edge or a corner: one Pair template per king
-// direction, replicated over every in-grid origin for that offset, so each
-// king-move edge of the grid is covered exactly once.
-const noStarTouchKey = Pair.fnToKey((a, b) => !(a === STAR && b === STAR), 4);
-const KING_TEMPLATE_OFFSETS = [[0, 1], [1, 0], [1, 1], [1, -1]];
-const starNoTouch = KING_TEMPLATE_OFFSETS.map(([dr, dc]) => {
-  const targets = graph.cells().filter(cell => graph.step(cell, dr, dc) !== null);
-  const origin = targets[0];
-  const template = graph.step(origin, dr, dc);
-  return new Replicate(
-    [new Pair(noStarTouchKey, 'star-no-touch', origin, template)],
-    Replicate.encodeTargetCells(targets, origin, graph),
-    origin,
-  );
+// These corner positions come from the three drawn grey circles. A self-touch
+// has opposite snake cells and the other two cells empty; three occupied cells
+// would instead be an ordinary bend, without two separate snake sections.
+const dots = [[3,2],[7,9],[9,6]].map(([r,c])=>{
+  const a=makeCellId(r,c), b=makeCellId(r,c+1),
+    d=makeCellId(r+1,c), e=makeCellId(r+1,c+1);
+  return or(and(new Given(snake.at(a),1,2),new Given(snake.at(e),1,2),new Given(snake.at(b),0),new Given(snake.at(d),0)),
+    and(new Given(snake.at(b),1,2),new Given(snake.at(d),1,2),new Given(snake.at(a),0),new Given(snake.at(e),0)));
 });
-
-return [
-  new Shape('10x10', 4, 'Raw'),
-  ...degrees,
-  snakeConnected,
-  snakeEnds,
-  ...greyDots,
-  ...starRows,
-  ...starCols,
-  ...starNoTouch,
-];
+// The first complement cell in reading order is its root. Root coordinates are
+// constant across complement edges; zero coordinates and depths mark snake cells.
+const roots = cells.map(c=>{
+  const {row,col}=parseCellId(c);
+  const earlier=pair((r,k)=>r>=1&&r<=row&&k>=1&&k<=10&&(r<row||k<col),'earlier root',rr.at(c),rc.at(c));
+  return or(
+    and(new Given(snake.at(c),1,2),new Given(rr.at(c),0),new Given(rc.at(c),0),new Given(da.at(c),0),new Given(db.at(c),0)),
+    and(new Given(snake.at(c),0),new Given(rr.at(c),row),new Given(rc.at(c),col),new Given(da.at(c),0),new Given(db.at(c),0)),
+    and(new Given(snake.at(c),0),earlier,or(new Given(da.at(c),...Array.from({length:10},(_,i)=>i+1)),new Given(db.at(c),...Array.from({length:12},(_,i)=>i+1)))));
+});
+// Depth residues use coprime 11 and 13: their product 143 exceeds 100 cells,
+// excluding cyclic descent. Edge differences and descent fix true BFS distance.
+const depthStep=(a,b,delta)=>and(
+  pair((x,y)=>y===(x+delta+11)%11,'distance 11',da.at(a),da.at(b)),
+  pair((x,y)=>y===(x+delta+13)%13,'distance 13',db.at(a),db.at(b)));
+const descent=cells.map(c=>or(new Given(snake.at(c),1,2),
+  and(new Given(da.at(c),0),new Given(db.at(c),0)),
+  ...g.neighbours(c).map(n=>and(new Given(snake.at(n),0),same(rr.at(c),rr.at(n)),same(rc.at(c),rc.at(n)),depthStep(c,n,-1)))));
+const regionEdges=edges.map(([a,b])=>or(new Given(snake.at(a),1,2),new Given(snake.at(b),1,2),
+  and(same(rr.at(a),rr.at(b)),same(rc.at(a),rc.at(b)),or(depthStep(a,b,-1),depthStep(a,b,0),depthStep(a,b,1)))));
+// A scan for each possible root counts stars naming it, and records whether that
+// component exists. An absent root counts zero; every present root counts two.
+const regionCounts=cells.map(c=>{
+ const {row,col}=parseCellId(c);
+ return nfa({startState:{phase:0,hit:false,exists:false,count:0},
+ transition:(s,v)=>{
+   if(s.phase===0)return {...s,phase:1,hit:v===row};
+   if(s.phase===1)return {...s,phase:2,hit:s.hit&&v===col};
+   if(v>1)return undefined;
+   const count=s.count+(s.hit&&v===1);
+   if(count>2)return undefined;
+   return {phase:0,hit:false,exists:s.exists||s.hit,count};
+ },accept:s=>s.phase===0&&(s.exists?s.count===2:s.count===0)},'two stars per complement component',
+ cells.flatMap(x=>[rr.at(x),rc.at(x),x]));
+});
+return [shape,snake.toVar('snake'),rr.toVar('component root row'),rc.toVar('component root column'),da.toVar('distance mod 11'),db.toVar('distance mod 13'),
+ g.makeReplicate(new Given(cells[0],0,1)),
+ snake.makeReplicate(new Given(snake.at(cells[0]),0,1,2)),
+ ...[rr,rc,da].map(layer=>layer.makeReplicate(new Given(layer.at(cells[0]),...Array.from({length:11},(_,i)=>i)))),
+ db.makeReplicate(new Given(db.at(cells[0]),...Array.from({length:13},(_,i)=>i))),
+ ...cells.map(c=>pair((s,v)=>s===0||v===0,'star outside snake',snake.at(c),c)),
+ new ConnectedValues('VS',[1,2]),new ContainExact('2_2',...snake.at(cells)),...degrees,...dots,
+ ...[...g.rows(),...g.columns()].map(line=>new ContainExact('1_1',...line)),
+ ...[[0,1],[1,-1],[1,0],[1,1]].map(([dr,dc])=>{const origins=cells.filter(c=>g.step(c,dr,dc)!==null),a=origins[0];
+  return new Replicate([pair((x,y)=>x!==1||y!==1,'stars do not touch',a,g.step(a,dr,dc))],Replicate.encodeTargetCells(origins,a,g),a);}),
+ ...roots,...descent,...regionEdges,...regionCounts];
