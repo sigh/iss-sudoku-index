@@ -1,6 +1,177 @@
 {
-  "generated_at": "2026-10-13T11:00:16.931685+00:00",
+  "generated_at": "2026-10-14T08:51:31.858781+00:00",
   "rows": [
+    {
+      "puzzle_id": "ExZgbRqlkcY",
+      "puzzle_title": "Cross-Threaded",
+      "video_title": "The Things that Parity Lines Can Do!",
+      "author": "Erin Toler",
+      "sources": [
+        "https://sudokupad.app/erin-toler/cross-threaded"
+      ],
+      "date": "2026-10-13",
+      "status": "validated",
+      "constraint_types": [
+        "Modular",
+        "Arrow",
+        "Cage",
+        "WhiteDot",
+        "BlackDot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 217,
+      "solve_ms": 4.5,
+      "iss_size": 443,
+      "iss_url_length": 479,
+      "script_size": 1298
+    },
+    {
+      "puzzle_id": "c_n1Xkn2G-M",
+      "puzzle_title": "Quartet",
+      "video_title": "The Return Of A Sudoku Legend",
+      "author": "Qodec",
+      "sources": [
+        "https://sudokupad.app/rf7exik4cu"
+      ],
+      "date": "2026-10-13",
+      "status": "too-slow",
+      "constraint_types": [
+        "NFA: Greatest Cell"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 800011,
+      "solve_ms": 5232.9,
+      "iss_size": 986,
+      "iss_url_length": 1041,
+      "script_size": 1713
+    },
+    {
+      "puzzle_id": "mKzm3hMF_VA",
+      "puzzle_title": "Wet Blankets 2: Soggy Monday",
+      "video_title": "The Soggy Foggy Blanket Puzzle",
+      "author": "Jorava",
+      "sources": [
+        "https://sudokupad.app/hkzobuop6w"
+      ],
+      "date": "2026-10-12",
+      "status": "validated",
+      "constraint_types": [
+        "0-9",
+        "Replicate",
+        "Var",
+        "ContainExact",
+        "Pair: digit or zero",
+        "NFA: V signed edge",
+        "NFA: X signed edge",
+        "NFA: W signed edge",
+        "NFA: blank signed edge",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 33,
+      "solve_ms": 5.3,
+      "iss_size": 7141,
+      "iss_url_length": 7181,
+      "script_size": 3981
+    },
+    {
+      "puzzle_id": "tLWSJG4PG84",
+      "puzzle_title": "Split At Birth",
+      "video_title": "The AI-Resistant Homework!!",
+      "author": "MathGuy_12 & Chinstrap",
+      "sources": [
+        "https://sudokupad.app/fvdkiaq6vi?setting-nogrid=true"
+      ],
+      "date": "2026-10-12",
+      "status": "too-slow",
+      "constraint_types": [
+        "Raw 10x10",
+        "0-9",
+        "Replicate",
+        "ContainExact",
+        "Var",
+        "Or",
+        "And",
+        "Sum",
+        "ConnectedValues",
+        "Pair: ordered slots",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 442498,
+      "solve_ms": 3270.1,
+      "iss_size": 34779,
+      "iss_url_length": 32129,
+      "script_size": 3609
+    },
+    {
+      "puzzle_id": "HEJDSZGS3iw",
+      "puzzle_title": "Range Circles",
+      "video_title": "Strange Circles - and that's all!",
+      "author": "RockyRoer",
+      "sources": [
+        "https://sudokupad.app/8mn0c13uyk"
+      ],
+      "date": "2026-10-11",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "NFA: Range circle"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 85,
+      "solve_ms": 5.1,
+      "iss_size": 636,
+      "iss_url_length": 689,
+      "script_size": 1166
+    },
+    {
+      "puzzle_id": "BknIQDO7Pog",
+      "puzzle_title": "Odd Blockade Runners 3",
+      "video_title": "All My Sudoku's Odd Digits Touch!?",
+      "author": "Jeff Wajes",
+      "sources": [
+        "https://sudokupad.app/h57xhdfzi8"
+      ],
+      "date": "2026-10-11",
+      "status": "validated",
+      "constraint_types": [
+        "ConnectedValues",
+        "CountingCircles",
+        "GreaterThan"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 186,
+      "solve_ms": 7.3,
+      "iss_size": 287,
+      "iss_url_length": 337,
+      "script_size": 994
+    },
     {
       "puzzle_id": "S7877RVBpIc",
       "puzzle_title": "Wedding Day",
@@ -6104,185 +6275,6 @@
       "iss_size": 5444,
       "iss_url_length": 5529,
       "script_size": 6102
-    },
-    {
-      "puzzle_id": "STXQn26IVHs",
-      "puzzle_title": "250!",
-      "video_title": "250 Years Young!",
-      "author": "RockyRoer",
-      "sources": [
-        "https://sudokupad.app/q5iopoxvbm"
-      ],
-      "date": "2026-07-06",
-      "status": "validated",
-      "constraint_types": [
-        "Raw 9x9",
-        "0-5",
-        "ContainExact",
-        "Replicate",
-        "NFA: bulb 1",
-        "NFA: bulb 10",
-        "NFA: bulb 11",
-        "NFA: bulb 12",
-        "NFA: bulb 2",
-        "NFA: bulb 3",
-        "NFA: bulb 4",
-        "NFA: bulb 5",
-        "NFA: bulb 6",
-        "NFA: bulb 7",
-        "NFA: bulb 8",
-        "NFA: bulb 9",
-        "Given"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "expected_solutions": null,
-      "guesses": 1793,
-      "solve_ms": 33.4,
-      "iss_size": 3252,
-      "iss_url_length": 3296,
-      "script_size": 5295
-    },
-    {
-      "puzzle_id": "MYpoIPhevoI",
-      "puzzle_title": "Dutch Flat Mates: Multiple Lines",
-      "video_title": "Why Doesn't This Sudoku Have Two Solutions?",
-      "author": "Marty Sears",
-      "sources": [
-        "https://sudokupad.app/191t7peym8"
-      ],
-      "date": "2026-07-06",
-      "status": "validated",
-      "constraint_types": [
-        "DutchFlatmates",
-        "Pair: multiples",
-        "Given"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "expected_solutions": null,
-      "guesses": 1737,
-      "solve_ms": 36.3,
-      "iss_size": 275,
-      "iss_url_length": 325,
-      "script_size": 970
-    },
-    {
-      "puzzle_id": "moRsJVncQps",
-      "puzzle_title": "Counting Killer Cells",
-      "video_title": "At least the Cage Cells have already been Counted!",
-      "author": "Sir Algee",
-      "sources": [
-        "https://sudokupad.app/zxy9eyqoob"
-      ],
-      "date": "2026-07-05",
-      "status": "validated",
-      "constraint_types": [
-        "AntiKnight",
-        "Cage",
-        "AllDifferent",
-        "SameValues",
-        "ContainExact"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "expected_solutions": null,
-      "guesses": 1831,
-      "solve_ms": 58.1,
-      "iss_size": 2618,
-      "iss_url_length": 2648,
-      "script_size": 2263
-    },
-    {
-      "puzzle_id": "_RKTa9QVEwA",
-      "puzzle_title": "Coldulo",
-      "video_title": "You're A Better Man Than I Am, Sudoku Genius (aka Kaktuslav!).",
-      "author": "Kaktuslav",
-      "sources": [
-        "https://sudokupad.app/8spurrnmcc"
-      ],
-      "date": "2026-07-05",
-      "status": "validated",
-      "constraint_types": [
-        "AllDifferent",
-        "Or",
-        "Modular",
-        "Given"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "expected_solutions": null,
-      "guesses": 211,
-      "solve_ms": 42.9,
-      "iss_size": 5611,
-      "iss_url_length": 5410,
-      "script_size": 1834
-    },
-    {
-      "puzzle_id": "xlk19YzgMCM",
-      "puzzle_title": "Sulla Via Della Gloria",
-      "video_title": "A Viewer Solves Sudoku With Simon: Episode 13",
-      "author": "Playmaker6174",
-      "sources": [
-        "https://sudokupad.app/et4mh85g07"
-      ],
-      "date": "2026-07-05",
-      "status": "validated",
-      "constraint_types": [
-        "SameValues",
-        "Cage",
-        "Arrow",
-        "DoubleArrow",
-        "Whisper",
-        "RegionSumLine",
-        "Given"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "expected_solutions": null,
-      "guesses": 310,
-      "solve_ms": 19.9,
-      "iss_size": 352,
-      "iss_url_length": 394,
-      "script_size": 1619
-    },
-    {
-      "puzzle_id": "a-jajrZJXr0",
-      "puzzle_title": "Sums and differences",
-      "video_title": "This Kind of Line might only Appear this Once",
-      "author": "alarark50",
-      "sources": [
-        "https://sudokupad.app/qj4kzxhp02"
-      ],
-      "date": "2026-07-04",
-      "status": "validated",
-      "constraint_types": [
-        "Thermo",
-        "BlackDot",
-        "LittleKiller",
-        "NFA: sum-period",
-        "NFA: diff-period"
-      ],
-      "search_completed": true,
-      "hit_cap": false,
-      "unique_solution": true,
-      "solutions_found": 1,
-      "expected_solutions": null,
-      "guesses": 8,
-      "solve_ms": 10.8,
-      "iss_size": 2508,
-      "iss_url_length": 2549,
-      "script_size": 3107
     }
   ]
 }
