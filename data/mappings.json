@@ -1,6 +1,532 @@
 {
-  "generated_at": "2026-11-08T08:24:08.351150+00:00",
+  "generated_at": "2026-11-17T14:15:04.707771+00:00",
   "rows": [
+    {
+      "puzzle_id": "QKv9jdTNfN8",
+      "puzzle_title": "Long Multiplication",
+      "video_title": "The Mad Thermometer [Sudoku Of The Year?]",
+      "author": "basilicon",
+      "sources": [
+        "https://sudokupad.app/1emqz1uqso"
+      ],
+      "date": "2026-11-16",
+      "status": "too-slow",
+      "constraint_types": [
+        "NoBoxes",
+        "ChaosConstruction",
+        "Var",
+        "AllDifferent",
+        "Or",
+        "And",
+        "SameValues",
+        "NFA: Increasing products",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 229373,
+      "solve_ms": 13044.1,
+      "iss_size": 49919,
+      "iss_url_length": 46485,
+      "script_size": 2828
+    },
+    {
+      "puzzle_id": "TkXy7kna-M8",
+      "puzzle_title": "The Greatest Loop",
+      "video_title": "Is this one of the Greatest Loops?",
+      "author": "ThePedallingPianist",
+      "sources": [
+        "https://sudokupad.app/1xuvxocdoi"
+      ],
+      "date": "2026-11-15",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "1-7",
+        "Var",
+        "Or",
+        "And",
+        "Pair: edge agreement",
+        "NFA: BFS edge",
+        "NFA: BFS descent",
+        "NFA: corner greater than neighbour sum",
+        "NFA: circle visited count",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 212,
+      "solve_ms": 17.3,
+      "iss_size": 61825,
+      "iss_url_length": 61598,
+      "script_size": 4369
+    },
+    {
+      "puzzle_id": "-FBs5D3GiII",
+      "puzzle_title": "Chaos Construction: Region Sum Rows",
+      "video_title": "Phistomefel Warned Me NOT To Do This Sudoku Live!!",
+      "author": "Phistomefel",
+      "sources": [
+        "https://sudokupad.app/yo9wdwnp03"
+      ],
+      "date": "2026-11-15",
+      "status": "too-slow",
+      "constraint_types": [
+        "8x8",
+        "NoBoxes",
+        "ChaosConstruction",
+        "Var",
+        "Arrow",
+        "Or",
+        "SameValues",
+        "NFA: Region border",
+        "NFA: Equal row segment sums"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 92007,
+      "solve_ms": 7949.7,
+      "iss_size": 4253,
+      "iss_url_length": 4234,
+      "script_size": 2320
+    },
+    {
+      "puzzle_id": "2iuTTurVKy0",
+      "puzzle_title": "Cornered",
+      "video_title": "That's ME in the Corner!",
+      "author": "Derek LeClair",
+      "sources": [
+        "https://sudokupad.app/tfk5cgsl3q"
+      ],
+      "date": "2026-11-14",
+      "status": "validated",
+      "constraint_types": [
+        "7x7",
+        "0-9",
+        "NoBoxes",
+        "AntiKnight",
+        "Var",
+        "AllDifferent",
+        "Or",
+        "And",
+        "WhiteDot",
+        "BlackDot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 19,
+      "solve_ms": 1.9,
+      "iss_size": 219793,
+      "iss_url_length": 218893,
+      "script_size": 2359
+    },
+    {
+      "puzzle_id": "iTH7WS5A4xw",
+      "puzzle_title": "Bits of Whispers",
+      "video_title": "\"I Can't Describe How Beautiful This Puzzle Is.\"",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/g372z0dhli"
+      ],
+      "date": "2026-11-14",
+      "status": "too-slow",
+      "constraint_types": [
+        "6x6",
+        "1-9",
+        "NoBoxes",
+        "RegionSize",
+        "ChaosConstruction",
+        "Whisper",
+        "ChaosCount",
+        "Pair: Nonconsecutive"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 595255,
+      "solve_ms": 4635.4,
+      "iss_size": 873,
+      "iss_url_length": 912,
+      "script_size": 1417
+    },
+    {
+      "puzzle_id": "3Yy2aM1CLNY",
+      "puzzle_title": "Magic Centre",
+      "video_title": "Finding the Weakest Link!",
+      "author": "James Kopp",
+      "sources": [
+        "https://sudokupad.app/pp1t6f58l1"
+      ],
+      "date": "2026-11-13",
+      "status": "validated",
+      "constraint_types": [
+        "EqualSum",
+        "Whisper",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 37,
+      "solve_ms": 2.2,
+      "iss_size": 591,
+      "iss_url_length": 631,
+      "script_size": 1728
+    },
+    {
+      "puzzle_id": "fiC4eKirLuM",
+      "puzzle_title": "Killer Cage Chaos Construction",
+      "video_title": "An Hour Of Logical Pleasure",
+      "author": "Jonesy",
+      "sources": [
+        "https://sudokupad.app/w4wnsq4p8k"
+      ],
+      "date": "2026-11-13",
+      "status": "validated",
+      "constraint_types": [
+        "NoBoxes",
+        "ChaosConstruction",
+        "Cage",
+        "ChaosArrow",
+        "Or",
+        "And",
+        "SameValues",
+        "AllDifferent",
+        "BlackDot",
+        "Pair: Same parity",
+        "Pair: Different parity"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 723,
+      "solve_ms": 23.8,
+      "iss_size": 2332,
+      "iss_url_length": 2293,
+      "script_size": 1924
+    },
+    {
+      "puzzle_id": "CyrgjIdoiEw",
+      "puzzle_title": "Counting Shadows",
+      "video_title": "Chasing Shadows all the way to the End!",
+      "author": "Andrea Acciatelli",
+      "sources": [
+        "https://sudokupad.app/1vyiko0v3g"
+      ],
+      "date": "2026-11-12",
+      "status": "validated",
+      "constraint_types": [
+        "WhiteDot",
+        "BlackDot",
+        "Quad",
+        "NFA: Shaded count",
+        "Pair: No cross-line dot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 159,
+      "solve_ms": 6.6,
+      "iss_size": 8322,
+      "iss_url_length": 8359,
+      "script_size": 3400
+    },
+    {
+      "puzzle_id": "YrJZmCMXWZE",
+      "puzzle_title": "Duplicitous Arrows",
+      "video_title": "This Sudoku's Official Rating = 100% !!!",
+      "author": "Calvinball",
+      "sources": [
+        "https://sudokupad.app/4x1yza1olm"
+      ],
+      "date": "2026-11-12",
+      "status": "too-slow",
+      "constraint_types": [
+        "Var",
+        "Or",
+        "And",
+        "SameValues",
+        "AllDifferent",
+        "EqualSum",
+        "Sum",
+        "Pair: liar",
+        "Pair: truth",
+        "Pair: different boxes",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 456633,
+      "solve_ms": 4117.1,
+      "iss_size": 16962,
+      "iss_url_length": 15768,
+      "script_size": 2693
+    },
+    {
+      "puzzle_id": "fE7lEtG-L_8",
+      "puzzle_title": "Poppy",
+      "video_title": "Solve your Poppy with Pride",
+      "author": "jsmirob",
+      "sources": [
+        "https://sudokupad.app/yimdu5tbmu"
+      ],
+      "date": "2026-11-11",
+      "status": "validated",
+      "constraint_types": [
+        "NoBoxes",
+        "Jigsaw",
+        "Cage",
+        "Thermo"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 59,
+      "solve_ms": 3.0,
+      "iss_size": 357,
+      "iss_url_length": 398,
+      "script_size": 1330
+    },
+    {
+      "puzzle_id": "4GBy8DfWYXU",
+      "puzzle_title": "Gold Bar",
+      "video_title": "My Sudoku Has Only 3 Given Digits?!",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/c2f1n9ks0w"
+      ],
+      "date": "2026-11-11",
+      "status": "validated",
+      "constraint_types": [
+        "Regex",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 5,
+      "solve_ms": 2.4,
+      "iss_size": 3575,
+      "iss_url_length": 3624,
+      "script_size": 1893
+    },
+    {
+      "puzzle_id": "LQTSLwmpt1s",
+      "puzzle_title": "Not the same",
+      "video_title": "Getting Shot Twice in one Sudoku?",
+      "author": "Thenonymous",
+      "sources": [
+        "https://sudokupad.app/2jde6ar5zq"
+      ],
+      "date": "2026-11-10",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Renban",
+        "PairX: anti-renban"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 26,
+      "solve_ms": 2.0,
+      "iss_size": 487,
+      "iss_url_length": 529,
+      "script_size": 1217
+    },
+    {
+      "puzzle_id": "EKsVsYAlK7A",
+      "puzzle_title": "Straightjacket",
+      "video_title": "Why Does My 3-cell Sudoku Cage Sum to 27?!",
+      "author": "Isamook",
+      "sources": [
+        "https://sudokupad.app/vxtt08627z"
+      ],
+      "date": "2026-11-10",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Or",
+        "And",
+        "SameValues",
+        "Sum",
+        "Zipper",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 7,
+      "solve_ms": 3.0,
+      "iss_size": 10036,
+      "iss_url_length": 9166,
+      "script_size": 1939
+    },
+    {
+      "puzzle_id": "hG78DysLCC8",
+      "puzzle_title": "Trees of Green",
+      "video_title": "I See Trees of Green ...",
+      "author": "Sir Algee",
+      "sources": [
+        "https://sudokupad.app/c0bi1ltgtf"
+      ],
+      "date": "2026-11-09",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "Replicate",
+        "ConnectedValues",
+        "ContainAtLeast",
+        "Sum",
+        "Or",
+        "BlackDot",
+        "V",
+        "NFA: no diagonal touch",
+        "NFA: loop degree",
+        "Pair: loop whisper",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 74,
+      "solve_ms": 9.5,
+      "iss_size": 13950,
+      "iss_url_length": 13559,
+      "script_size": 2390
+    },
+    {
+      "puzzle_id": "GWVGqz0DObQ",
+      "puzzle_title": "San Francisco Summer",
+      "video_title": "The Most Surprising Fog Sudoku Ever!",
+      "author": "Michael Lefkowitz",
+      "sources": [
+        "https://sudokupad.app/zquz3i6htm"
+      ],
+      "date": "2026-11-09",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "0-6",
+        "Var",
+        "Or",
+        "And",
+        "SameValues",
+        "EqualSum",
+        "NFA: arrow cell",
+        "Pair: reciprocal ports",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 31866,
+      "solve_ms": 545.7,
+      "iss_size": 22697,
+      "iss_url_length": 21173,
+      "script_size": 4050
+    },
+    {
+      "puzzle_id": "cfww7T7b6pw",
+      "puzzle_title": "Foggy Kropki",
+      "video_title": "A Foggy Puzzle - but not Fog of War",
+      "author": "Ogotu",
+      "sources": [
+        "https://sudokupad.app/st10obdov4"
+      ],
+      "date": "2026-11-08",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "WhiteDot",
+        "BlackDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 34,
+      "solve_ms": 3.1,
+      "iss_size": 1910,
+      "iss_url_length": 1807,
+      "script_size": 1719
+    },
+    {
+      "puzzle_id": "ppw8JnNcpTw",
+      "puzzle_title": "Chaos Construction: Binary Whisper",
+      "video_title": "Phistomefel: The Sudoku Genius",
+      "author": "Phistomefel",
+      "sources": [
+        "https://sudokupad.app/mvk3xv23yc"
+      ],
+      "date": "2026-11-08",
+      "status": "too-slow",
+      "constraint_types": [
+        "8x8",
+        "NoBoxes",
+        "Var",
+        "ContainExact",
+        "Or",
+        "And",
+        "AllDifferent",
+        "Arrow",
+        "Pair: root column",
+        "Pair: different",
+        "Pair: distance bound",
+        "Pair: equal",
+        "Pair: small-large",
+        "Pair: root depth",
+        "Pair: predecessor",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 30665,
+      "solve_ms": 10910.9,
+      "iss_size": 225203,
+      "iss_url_length": 215194,
+      "script_size": 3323
+    },
     {
       "puzzle_id": "_7vUNhgHMvI",
       "puzzle_title": "Greatest Lies",

@@ -1,6 +1,488 @@
 {
-  "generated_at": "2026-11-08T08:24:08.351150+00:00",
+  "generated_at": "2026-11-17T14:15:04.707771+00:00",
   "rows": [
+    {
+      "puzzle_id": "nCURkXEf87Q",
+      "puzzle_title": "Broken 358 tears",
+      "video_title": "A First Ever Puzzle - a Remarkable One!",
+      "author": "Bha-Gu",
+      "sources": [
+        "https://sudokupad.app/83zpp5gwpt"
+      ],
+      "date": "2026-08-08",
+      "status": "validated",
+      "constraint_types": [
+        "Replicate",
+        "Pair: no 358 king clash",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 43,
+      "solve_ms": 7.1,
+      "iss_size": 474,
+      "iss_url_length": 538,
+      "script_size": 2292
+    },
+    {
+      "puzzle_id": "kM6Kwwkv3aM",
+      "puzzle_title": "Homogeneous",
+      "video_title": "That's No Sudoku! It's A \"Marty Sears\" Puzzle!!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/0htle6wxey"
+      ],
+      "date": "2026-08-08",
+      "status": "too-slow",
+      "constraint_types": [
+        "Raw 10x10",
+        "0-9",
+        "ConnectedValues",
+        "ContainExact",
+        "Arrow",
+        "BlackDot",
+        "Whisper"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 1916941,
+      "solve_ms": 5264.6,
+      "iss_size": 1238,
+      "iss_url_length": 1265,
+      "script_size": 2651
+    },
+    {
+      "puzzle_id": "sdzoFUAFMIc",
+      "puzzle_title": "Maximum Effort",
+      "video_title": "Take sudoku to the Max",
+      "author": "Chris Napolitano",
+      "sources": [
+        "https://sudokupad.app/qs53ivj39n"
+      ],
+      "date": "2026-08-07",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Arrow",
+        "DoubleArrow",
+        "Whisper",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 39,
+      "solve_ms": 7.8,
+      "iss_size": 401,
+      "iss_url_length": 439,
+      "script_size": 1429
+    },
+    {
+      "puzzle_id": "EHFxYwyOEE8",
+      "puzzle_title": "Whispering Cube",
+      "video_title": "The \"Whispering Cube\" Sudoku [Aad van de Wetering]",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/3eipqnv8xm"
+      ],
+      "date": "2026-08-07",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 8,
+      "solve_ms": 3.9,
+      "iss_size": 279,
+      "iss_url_length": 328,
+      "script_size": 1640
+    },
+    {
+      "puzzle_id": "bMlMnsKH4zs",
+      "puzzle_title": "Anti & Pro Knights",
+      "video_title": "Do Not Always Be Anti Knight!",
+      "author": "Eric Bader",
+      "sources": [
+        "https://sudokupad.app/n837muu8j6"
+      ],
+      "date": "2026-08-06",
+      "status": "validated",
+      "constraint_types": [
+        "Cage",
+        "Whisper",
+        "Renban",
+        "Replicate",
+        "Or",
+        "ContainAtLeast",
+        "Pair: Anti-knight (9)",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 61,
+      "solve_ms": 30.5,
+      "iss_size": 9334,
+      "iss_url_length": 9045,
+      "script_size": 6042
+    },
+    {
+      "puzzle_id": "_FC2zpPDiZ4",
+      "puzzle_title": "Consecutive Regional Constraints",
+      "video_title": "A Quite Astonishing Fog-Of-War Sudoku",
+      "author": "Belamis",
+      "sources": [
+        "https://sudokupad.app/zt3l4bqwuj"
+      ],
+      "date": "2026-08-06",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "RegionSumLine",
+        "Renban",
+        "Whisper",
+        "Entropic",
+        "Modular",
+        "WhiteDot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 134,
+      "solve_ms": 15.3,
+      "iss_size": 585,
+      "iss_url_length": 618,
+      "script_size": 3937
+    },
+    {
+      "puzzle_id": "MAL2QLszGjE",
+      "puzzle_title": "2 Truths and a Quibble",
+      "video_title": "Would I Lie to You (sudoku style)?",
+      "author": "Zombie Hunter",
+      "sources": [
+        "https://sudokupad.app/9tt24bqtnq"
+      ],
+      "date": "2026-08-05",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 4,
+      "solve_ms": 12.1,
+      "iss_size": 3640,
+      "iss_url_length": 3180,
+      "script_size": 3425
+    },
+    {
+      "puzzle_id": "G7g0QQBG5ZQ",
+      "puzzle_title": "Dorlir's unsquished sudoku",
+      "video_title": "A 5x5 Sudoku Grows To Be 9x9?!!",
+      "author": "Jonesy",
+      "sources": [
+        "https://sudokupad.app/01lue6wf81"
+      ],
+      "date": "2026-08-05",
+      "status": "validated",
+      "constraint_types": [
+        "CountingCircles",
+        "AllDifferent",
+        "X"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 10,
+      "solve_ms": 7.9,
+      "iss_size": 693,
+      "iss_url_length": 731,
+      "script_size": 1468
+    },
+    {
+      "puzzle_id": "iPVL06VmAr8",
+      "puzzle_title": "Floating Through Space",
+      "video_title": "Floating in a Most Peculiar Way",
+      "author": "gdc",
+      "sources": [
+        "https://sudokupad.app/3cnbyztbq0"
+      ],
+      "date": "2026-08-04",
+      "status": "validated",
+      "constraint_types": [
+        "7x7",
+        "NoBoxes",
+        "ChaosConstruction",
+        "NFA: Cave",
+        "NFA: UpToNSum"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 825,
+      "solve_ms": 159.2,
+      "iss_size": 7658,
+      "iss_url_length": 7701,
+      "script_size": 6200
+    },
+    {
+      "puzzle_id": "tgt5Gs9dBNA",
+      "puzzle_title": "Drafting Strategy",
+      "video_title": "An EPIC \"Blue Prince\" Sudoku Attempted",
+      "author": "Sudoku Joker",
+      "sources": [
+        "https://sudokupad.app/qbx29s7dud"
+      ],
+      "date": "2026-08-04",
+      "status": "partial",
+      "constraint_types": [
+        "Replicate",
+        "Sum",
+        "GreaterThan",
+        "AllDifferent",
+        "Pair: no doubling",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": false,
+      "solutions_found": 42973,
+      "expected_solutions": null,
+      "guesses": 327875,
+      "solve_ms": 6639.8,
+      "iss_size": 507,
+      "iss_url_length": 543,
+      "script_size": 3567
+    },
+    {
+      "puzzle_id": "dm_JmuQT2Wk",
+      "puzzle_title": "Region Tessellation",
+      "video_title": "How can ANYONE call this a SUDOKU?",
+      "author": "Michael Lefkowitz",
+      "sources": [
+        "https://sudokupad.app/vmnal5hbuj?setting-nogrid=1"
+      ],
+      "date": "2026-08-03",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 9x9",
+        "AllDifferent",
+        "Renban",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 40,
+      "solve_ms": 6.4,
+      "iss_size": 3594,
+      "iss_url_length": 3522,
+      "script_size": 4747
+    },
+    {
+      "puzzle_id": "bVB6D4T-g9k",
+      "puzzle_title": "Unusually Hot",
+      "video_title": "The Unusually Hot Thermo Sudoku!",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/pvo44ijd8p"
+      ],
+      "date": "2026-08-03",
+      "status": "validated",
+      "constraint_types": [
+        "YinYang",
+        "Or",
+        "And",
+        "Pair: thermo",
+        "Pair: dot",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 35,
+      "solve_ms": 12.8,
+      "iss_size": 5353,
+      "iss_url_length": 4964,
+      "script_size": 3572
+    },
+    {
+      "puzzle_id": "Lw7SG_Hjg-Q",
+      "puzzle_title": "Massive W, Little L",
+      "video_title": "Don't Disconnect my Line!",
+      "author": "Mr.Menace",
+      "sources": [
+        "https://sudokupad.app/rdahf4598m"
+      ],
+      "date": "2026-08-02",
+      "status": "validated",
+      "constraint_types": [
+        "Or",
+        "And",
+        "SameValues",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 550,
+      "solve_ms": 21.2,
+      "iss_size": 782,
+      "iss_url_length": 790,
+      "script_size": 2555
+    },
+    {
+      "puzzle_id": "NZVZA5yZPEI",
+      "puzzle_title": "Turbulence",
+      "video_title": "How To Deal With Sudoku Turbulence",
+      "author": "Scojo",
+      "sources": [
+        "https://sudokupad.app/prg8idgvw2"
+      ],
+      "date": "2026-08-02",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "DoubleArrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 531,
+      "solve_ms": 20.6,
+      "iss_size": 366,
+      "iss_url_length": 408,
+      "script_size": 2135
+    },
+    {
+      "puzzle_id": "UaD4_AskOFo",
+      "puzzle_title": "poLo",
+      "video_title": "A Polo Field with Tumbleweed?",
+      "author": "Mattisahuman",
+      "sources": [
+        "https://sudokupad.app/w3ve69np9y"
+      ],
+      "date": "2026-08-01",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "WhiteDot",
+        "GreaterThan",
+        "Replicate",
+        "ConnectedValues",
+        "Pair: step",
+        "NFA: no-touch",
+        "NFA: touch",
+        "NFA: seg-digit-min",
+        "NFA: seg-pos-min",
+        "NFA: degree",
+        "NFA: entry",
+        "NFA: index",
+        "NFA: off-digit-max",
+        "NFA: position",
+        "NFA: seg-digit-max",
+        "NFA: seg-pos-max",
+        "NFA: off-digit-min",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 14754,
+      "solve_ms": 7933.8,
+      "iss_size": 33374,
+      "iss_url_length": 33369,
+      "script_size": 14982
+    },
+    {
+      "puzzle_id": "nP7somL53Wk",
+      "puzzle_title": "Bends",
+      "video_title": "Easy Rules & Exquisite Logic = Sudoku Heaven",
+      "author": "Kaktuslav",
+      "sources": [
+        "https://sudokupad.app/z3vyld3vm7"
+      ],
+      "date": "2026-08-01",
+      "status": "validated",
+      "constraint_types": [
+        "RegionSumLine",
+        "CountDistinct"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 3076,
+      "solve_ms": 67.1,
+      "iss_size": 874,
+      "iss_url_length": 909,
+      "script_size": 1010
+    },
+    {
+      "puzzle_id": "WQN2Ej_LF7c",
+      "puzzle_title": "Magical Constellation",
+      "video_title": "A Poor Performance - the Curse of the White Knight?",
+      "author": "Daniel Hanson",
+      "sources": [
+        "https://sudokupad.app/fc9t0o7etr"
+      ],
+      "date": "2026-07-31",
+      "status": "validated",
+      "constraint_types": [
+        "AntiKnight",
+        "BlackDot",
+        "Replicate",
+        "EqualSum",
+        "Pair: no-undrawn-black-dot"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 35,
+      "solve_ms": 8.8,
+      "iss_size": 581,
+      "iss_url_length": 613,
+      "script_size": 1994
+    },
     {
       "puzzle_id": "ZDZHyLa2Dus",
       "puzzle_title": "In-Between Extra",
