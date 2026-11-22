@@ -1,6 +1,357 @@
 {
-  "generated_at": "2026-11-17T14:15:04.707771+00:00",
+  "generated_at": "2026-11-22T11:11:05.664302+00:00",
   "rows": [
+    {
+      "puzzle_id": "meg_-y9c_A0",
+      "puzzle_title": "Scattered",
+      "video_title": "A Viewer Solves Sudoku With Simon: Episode 16",
+      "author": "Tallcat",
+      "sources": [
+        "https://sudokupad.app/7v57yvn5vf"
+      ],
+      "date": "2026-11-22",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 105,
+      "solve_ms": 14.1,
+      "iss_size": 309,
+      "iss_url_length": 348,
+      "script_size": 882
+    },
+    {
+      "puzzle_id": "gDLn258-VmY",
+      "puzzle_title": "Hidden Rubies",
+      "video_title": "Can we Find the Hidden Rubies?",
+      "author": "AlbinS",
+      "sources": [
+        "https://sudokupad.app/wc3wlqryel"
+      ],
+      "date": "2026-11-21",
+      "status": "validated",
+      "constraint_types": [
+        "Var",
+        "AllDifferent",
+        "Or",
+        "And",
+        "WhiteDot",
+        "BlackDot",
+        "V",
+        "X",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 11738,
+      "solve_ms": 257.0,
+      "iss_size": 6178,
+      "iss_url_length": 5572,
+      "script_size": 1885
+    },
+    {
+      "puzzle_id": "JrfO9kvNFSU",
+      "puzzle_title": "Hitting a Good Balance",
+      "video_title": "Sudoku Can Help You Achieve Balance",
+      "author": "Marty Sears",
+      "sources": [
+        "https://sudokupad.app/gg3jmhuwel"
+      ],
+      "date": "2026-11-21",
+      "status": "validated",
+      "constraint_types": [
+        "AllDifferent",
+        "NFA: hit1",
+        "NFA: hit2",
+        "NFA: hit3",
+        "NFA: hit4",
+        "NFA: hit5",
+        "NFA: hit6",
+        "NFA: hit7",
+        "NFA: hit8",
+        "NFA: hit9"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 24,
+      "solve_ms": 9.4,
+      "iss_size": 2789,
+      "iss_url_length": 2832,
+      "script_size": 1792
+    },
+    {
+      "puzzle_id": "xFvwpuUhWRo",
+      "puzzle_title": "Thirteens",
+      "video_title": "Thirteens are not Unlucky",
+      "author": "Bram Cohen",
+      "sources": [
+        "https://sudokupad.app/3o8j3x2kzc"
+      ],
+      "date": "2026-11-20",
+      "status": "validated",
+      "constraint_types": [
+        "Cage"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 2,
+      "solve_ms": 5.7,
+      "iss_size": 527,
+      "iss_url_length": 558,
+      "script_size": 1284
+    },
+    {
+      "puzzle_id": "JYoaJ74y6lc",
+      "puzzle_title": "Product 36",
+      "video_title": "The Sudoku With Just 4 Given Digits?!!",
+      "author": "Aad van de Wetering",
+      "sources": [
+        "https://sudokupad.app/xei72tt12o"
+      ],
+      "date": "2026-11-20",
+      "status": "validated",
+      "constraint_types": [
+        "Arrow",
+        "NFA: product 36",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 11,
+      "solve_ms": 6.6,
+      "iss_size": 330,
+      "iss_url_length": 379,
+      "script_size": 1556
+    },
+    {
+      "puzzle_id": "AreE1plfGYQ",
+      "puzzle_title": "Balanced X-Sums",
+      "video_title": "Balanced Thinking",
+      "author": "Ambrose",
+      "sources": [
+        "https://sudokupad.app/g0gb6ifc1r"
+      ],
+      "date": "2026-11-19",
+      "status": "validated",
+      "constraint_types": [
+        "Raw 7x7",
+        "0-6",
+        "Var",
+        "AllDifferent",
+        "Or",
+        "And",
+        "Sum",
+        "Pair: abs of signed",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 3,
+      "solve_ms": 4.9,
+      "iss_size": 4385,
+      "iss_url_length": 4148,
+      "script_size": 2982
+    },
+    {
+      "puzzle_id": "OiN9ckp_Yio",
+      "puzzle_title": "Mercury Drop",
+      "video_title": "My Sudoku Has Short Thermometers!?",
+      "author": "Antiknight",
+      "sources": [
+        "https://sudokupad.app/9afnh3qgsf"
+      ],
+      "date": "2026-11-19",
+      "status": "validated",
+      "constraint_types": [
+        "Thermo",
+        "Arrow"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 126,
+      "solve_ms": 11.3,
+      "iss_size": 295,
+      "iss_url_length": 336,
+      "script_size": 1211
+    },
+    {
+      "puzzle_id": "UUXu4Rg2U6E",
+      "puzzle_title": "The Little Robot's Crayon",
+      "video_title": "Steer my Crazy Little Robot",
+      "author": "Kainapple",
+      "sources": [
+        "https://sudokupad.app/05toqchwta"
+      ],
+      "date": "2026-11-18",
+      "status": "too-slow",
+      "constraint_types": [
+        "1-11",
+        "Var",
+        "Replicate",
+        "X",
+        "Or",
+        "And",
+        "BlackDot",
+        "WhiteDot",
+        "Pair: not-seam",
+        "Pair: stop-vs-counter-a",
+        "Pair: stop-vs-counter-b",
+        "Pair: counter-b-step",
+        "Pair: counter-a-step",
+        "Given"
+      ],
+      "search_completed": false,
+      "hit_cap": true,
+      "unique_solution": null,
+      "solutions_found": 0,
+      "expected_solutions": null,
+      "guesses": 23757,
+      "solve_ms": 8070.2,
+      "iss_size": 267588,
+      "iss_url_length": 247753,
+      "script_size": 8437
+    },
+    {
+      "puzzle_id": "js9dWMaJtzk",
+      "puzzle_title": "Rooms and Regions",
+      "video_title": "The \"Single Line\" Miracle Sudoku",
+      "author": "Matt Tressel",
+      "sources": [
+        "https://sudokupad.app/wtfa2dqnkz"
+      ],
+      "date": "2026-11-18",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "1-9",
+        "ChaosConstruction",
+        "RegionSize",
+        "NoBoxes",
+        "Var",
+        "NFA: Border",
+        "NFA: RingClue",
+        "NFA: SegmentSum",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 7348,
+      "solve_ms": 1593.5,
+      "iss_size": 8681,
+      "iss_url_length": 8724,
+      "script_size": 5686
+    },
+    {
+      "puzzle_id": "9aUog-R-Hwg",
+      "puzzle_title": "10K",
+      "video_title": "Solve A Variant Sudoku In Under 3 Minutes?!",
+      "author": "James Sinclair",
+      "sources": [
+        "https://sudokupad.app/james-sinclair/10k"
+      ],
+      "date": "2026-11-18",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "Or",
+        "NFA: product 10000",
+        "Given"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 69,
+      "solve_ms": 6.6,
+      "iss_size": 220,
+      "iss_url_length": 267,
+      "script_size": 981
+    },
+    {
+      "puzzle_id": "7bZLNVACXLw",
+      "puzzle_title": "Unwound",
+      "video_title": "Unwind with Sudoku!",
+      "author": "Daniel Hanson",
+      "sources": [
+        "https://sudokupad.app/cdk4bdfoqp"
+      ],
+      "date": "2026-11-17",
+      "status": "validated",
+      "constraint_types": [
+        "Whisper",
+        "X",
+        "V",
+        "StrictXV"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 48,
+      "solve_ms": 10.1,
+      "iss_size": 418,
+      "iss_url_length": 445,
+      "script_size": 1543
+    },
+    {
+      "puzzle_id": "zw7F0fIrnLs",
+      "puzzle_title": "Ballroom",
+      "video_title": "The Ballroom: Another Sudoku Gem!",
+      "author": "ChinStrap",
+      "sources": [
+        "https://sudokupad.app/mvn7atnxaz"
+      ],
+      "date": "2026-11-17",
+      "status": "validated",
+      "constraint_types": [
+        "6x6",
+        "1-9",
+        "NoBoxes",
+        "RegionSize",
+        "ChaosConstruction",
+        "Var",
+        "CountingCircles",
+        "NFA: numbered room with region run"
+      ],
+      "search_completed": true,
+      "hit_cap": false,
+      "unique_solution": true,
+      "solutions_found": 1,
+      "expected_solutions": null,
+      "guesses": 110348,
+      "solve_ms": 5091.1,
+      "iss_size": 17580,
+      "iss_url_length": 17638,
+      "script_size": 3670
+    },
     {
       "puzzle_id": "QKv9jdTNfN8",
       "puzzle_title": "Long Multiplication",
